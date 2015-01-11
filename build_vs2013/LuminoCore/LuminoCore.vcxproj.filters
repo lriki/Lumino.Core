@@ -1,0 +1,237 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Base">
+      <UniqueIdentifier>{3f3a5ff6-1e33-4655-a737-f3e5cdbaf649}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IO">
+      <UniqueIdentifier>{4b08918d-602f-4f55-b946-f66cdefcbdc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{e431dcdc-3407-4b67-89e3-bf2add6e4839}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Testing">
+      <UniqueIdentifier>{c8aa3271-52e0-477c-bbd6-d30c1e8fce16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Threading">
+      <UniqueIdentifier>{f93d0832-198a-4df8-b256-3eb526fb8717}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base\Win32">
+      <UniqueIdentifier>{dca0f09c-0000-4d16-9384-4211142e7961}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Win32">
+      <UniqueIdentifier>{c4df2b1e-bf1c-4efe-b071-c2b24e322d7d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\Lumino\Base\CRT.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Base\Delegate.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Base\Encoding.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Base\Exception.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Base\List.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Base\Memory.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Base\NonCopyable.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Base\RefBuffer.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Base\RefObject.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Base\Size.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Base\STLUtils.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Base\String.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Base\StringUtils.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Base\Typedef.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Base\UnicodeUtils.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Base\Array.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Base\Common.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\IO\FileStream.h">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\IO\FileUtils.h">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\IO\PathName.h">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\IO\PathUtils.h">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\IO\Stream.h">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\IO\DirectoryUtils.h">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Platform\EventArgs.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Platform\EventListener.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Platform\Window.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Platform\Application.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Platform\Environment.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Base\Win32\BackTrace.h">
+      <Filter>Base\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Platform\WindowBase.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Platform\ApplicationBase.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Platform\Win32\Win32Application.h">
+      <Filter>Platform\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Platform\Win32\Win32Window.h">
+      <Filter>Platform\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Platform\Win32\Win32WindowBase.h">
+      <Filter>Platform\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Threading\Atomic.h">
+      <Filter>Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Threading\EventFlag.h">
+      <Filter>Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Threading\Mutex.h">
+      <Filter>Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Threading\ReadWriteMutex.h">
+      <Filter>Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Threading\Thread.h">
+      <Filter>Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Threading\ThreadingExceptions.h">
+      <Filter>Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Testing\TestUtils.h">
+      <Filter>Testing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Common.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\include\Lumino\Base\Delegate.inl">
+      <Filter>Base</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\Base\Encoding.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Base\Exception.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Base\Memory.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Base\RefObject.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Base\String.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Base\StringUtils.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Base\UnicodeUtils.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\IO\FileStream.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\IO\FileUtils.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\IO\PathName.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\IO\PathUtils.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\IO\DirectoryUtils.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Platform\WindowBase.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Platform\ApplicationBase.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Platform\Window.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Platform\Win32\Win32Window.cpp">
+      <Filter>Platform\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Platform\Win32\Win32WindowBase.cpp">
+      <Filter>Platform\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Platform\Win32\Environment.cpp">
+      <Filter>Platform\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Platform\Win32\Win32Application.cpp">
+      <Filter>Platform\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Threading\ThreadingExceptions.cpp">
+      <Filter>Threading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Testing\TestUtils.cpp">
+      <Filter>Testing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Threading\EventFlag.cpp">
+      <Filter>Threading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Threading\Mutex.cpp">
+      <Filter>Threading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Threading\ReadWriteMutex.cpp">
+      <Filter>Threading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Threading\Thread.cpp">
+      <Filter>Threading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Threading\Atomic.cpp">
+      <Filter>Threading</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

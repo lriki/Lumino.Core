@@ -1,0 +1,245 @@
+
+#pragma once
+
+#include "String.h"
+
+// exp の条件が満たされなかった場合、type に指定した例外を throw する
+#define LN_THROW( exp, type, ... )	{ if (!(exp)) { type e = type(__VA_ARGS__); e.SetSourceLocationInfo(__FILE__, __LINE__); throw e; } }
+
+namespace Lumino
+{
+
+/**
+	@brief	例外ベースクラス
+*/
+class LUMINO_EXPORT Exception : public std::exception
+{
+public:
+	Exception();
+	virtual ~Exception() throw();
+	Exception& SetSourceLocationInfo( const char* filePath, int fileLine );
+
+public:
+
+	/**
+		@brief		例外発生時に詳細情報をダンプするファイルを初期化する
+		@param[in]	filePath	: ダンプ先ファイル (文字数は LN_MAX_PATH 以内)
+		@return		false の場合、ファイルアクセスに失敗した
+		@details	指定されたパスで、ファイルを新規作成します。
+					以降、この例外クラスのコンストラクタが呼ばれるたびに、詳細情報が追記されます。
+	*/
+	static bool InitDumpFile(const char* filePath);
+
+	/**
+		@brief		例外のコピーを作成する
+		@note		別スレッドで発生した例外を保持するために使用する。
+	*/
+	virtual Exception* Copy() const { return LN_NEW Exception( *this ); }
+
+public:
+	// override std::exception
+	virtual const char* what() const  throw() { return mSymbolBuffer; }
+
+private:
+	TCHAR		mSourceFilePath[LN_MAX_PATH];
+	int			mSourceFileLine;
+	void*		mStackBuffer[32];
+	int			mStackBufferSize;
+	char		mSymbolBuffer[2048];
+};
+
+/**
+	@brief	メモリ不足例外
+
+*/
+class OutOfMemoryException 
+	: public Exception
+{
+public:
+	OutOfMemoryException() {}
+	virtual ~OutOfMemoryException() throw() {}
+
+public:
+	// override Exception
+	virtual Exception* Copy() const { return LN_NEW OutOfMemoryException( *this ); }
+};
+
+/**
+	@brief		その他のIO例外
+	@details	読み取り属性のファイルを書き込みモードでオープンしようとした時等。
+*/
+class IOException 
+	: public Exception
+{
+public:
+	IOException() {}
+	virtual ~IOException() throw() {}
+
+public:
+	// override Exception
+	virtual Exception* Copy() const { return LN_NEW IOException( *this ); }
+};
+
+/**
+	@brief	メソッドに渡された引数のいずれかが無効な場合にスローされる例外。
+*/
+class ArgumentException
+	: public Exception
+{
+public:
+	ArgumentException() {}
+	virtual ~ArgumentException() throw() {}
+
+public:
+	// override Exception
+	virtual Exception* Copy() const { return LN_NEW ArgumentException( *this ); }
+};
+
+/**
+	@brief	オブジェクトの現在の状態に対して無効な呼び出しが行われた
+*/
+class InvalidOperationException
+	: public Exception
+{
+public:
+	InvalidOperationException() {}
+	virtual ~InvalidOperationException() throw() {}
+
+public:
+	// override Exception
+	virtual Exception* Copy() const { return LN_NEW InvalidOperationException(*this); }
+};
+
+/**
+	@brief		サポートされない機能を呼び出そうとした
+	@details	読み取り専用ストリームに対して書き込みを行った場合等。
+*/
+class NotSupportedException 
+	: public Exception
+{
+public:
+	NotSupportedException() {}
+	virtual ~NotSupportedException() throw() {}
+
+public:
+	// override Exception
+	virtual Exception* Copy() const { return LN_NEW NotSupportedException( *this ); }
+};
+
+/**
+	@brief	ディスク上に存在しないファイルにアクセスしようとして失敗したときにスローされる例外
+*/
+class FileNotFoundException
+	: public Exception
+{
+public:
+	FileNotFoundException() {}
+	virtual ~FileNotFoundException() throw() {}
+
+public:
+	// override Exception
+	virtual Exception* Copy() const { return LN_NEW FileNotFoundException( *this ); }
+};
+
+/**
+	@brief	無効なディレクトリにアクセスしようとしたときにスローされる例外
+*/
+class DirectoryNotFoundException
+	: public Exception
+{
+public:
+	DirectoryNotFoundException() {}
+	virtual ~DirectoryNotFoundException() throw() {}
+
+public:
+	// override Exception
+	virtual Exception* Copy() const { return LN_NEW DirectoryNotFoundException( *this ); }
+};
+
+/**
+	@brief	ファイルや文字列等の形式が不正
+*/
+class InvalidFormatException
+	: public Exception
+{
+public:
+	InvalidFormatException() {}
+	virtual ~InvalidFormatException() throw() {}
+
+public:
+	// override Exception
+	virtual Exception* Copy() const { return LN_NEW InvalidFormatException(*this); }
+};
+
+/**
+	@brief	未実装の機能を呼び出した
+*/
+class NotImplementedException
+	: public Exception
+{
+public:
+	NotImplementedException() {}
+	virtual ~NotImplementedException() throw() {}
+
+public:
+	// override Exception
+	virtual Exception* Copy() const { return LN_NEW NotImplementedException( *this ); }
+};
+
+/**
+	@brief	C/C++ランタイムAPI等でエラーが発生した
+*/
+class RuntimeException
+	: public Exception
+{
+public:
+	RuntimeException() {}
+	virtual ~RuntimeException() throw() {}
+
+public:
+	// override Exception
+	virtual Exception* Copy() const { return LN_NEW RuntimeException(*this); }
+};
+
+/**
+	@brief	文字コードの変換中、マッピングできない文字または不正シーケンスが見つかった
+*/
+class EncodingFallbackException
+	: public Exception
+{
+public:
+	EncodingFallbackException() {}
+	virtual ~EncodingFallbackException() throw() {}
+
+public:
+	// override Exception
+	virtual Exception* Copy() const { return LN_NEW EncodingFallbackException(*this); }
+};
+
+
+#ifdef LN_WIN32
+/**
+	@brief	WindowsAPI のエラーを示す例外クラス (GetLastError())
+*/
+class Win32Exception 
+	: public Exception
+{
+public:
+	Win32Exception( DWORD dwLastError );
+	virtual ~Win32Exception() throw() {}
+
+public:
+	DWORD			GetLastErrorCode() const { return m_dwLastErrorCode; }
+	const TCHAR*	GetFormatMessage() const { return m_pFormatMessage; }
+
+public:
+	// override Exception
+	virtual Exception* Copy() const { return LN_NEW Win32Exception( *this ); }
+
+private:
+	DWORD		m_dwLastErrorCode;
+	TCHAR		m_pFormatMessage[512];	///< FormatMessage() で取得したメッセージ
+};
+#endif
+
+} // namespace Lumino
