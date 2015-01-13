@@ -88,12 +88,12 @@
 
 //----------------------------------------------------------------------
 // include
+#include <assert.h>
 
 #if defined(LN_WIN32)
 	#define NOMINMAX
 	#include <windows.h>
 	#include <process.h>
-	#include <assert.h>
 #else
 #endif
 

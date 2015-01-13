@@ -19,6 +19,7 @@ namespace Lumino
 #define ERANGE          34
 //#define EILSEQ          42
 #define STRUNCATE       80
+#define _TRUNCATE ((size_t)-1)
 
 typedef int errno_t;
 typedef size_t rsize_t;
