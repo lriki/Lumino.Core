@@ -1,6 +1,6 @@
 
 #include "../../Internal.h"
-#include <Platform/Environment.h>
+#include "../../../include/Lumino/Platform/Environment.h"
 
 namespace Lumino
 {

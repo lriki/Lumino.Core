@@ -1,6 +1,6 @@
 
 #include "../Internal.h"
-#include <Threading/Atomic.h>
+#include "../../include/Lumino/Threading/Atomic.h"
 
 namespace Lumino
 {

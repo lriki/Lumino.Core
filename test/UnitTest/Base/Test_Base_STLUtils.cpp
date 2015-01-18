@@ -89,7 +89,8 @@ TEST_F(Test_Base_STLUtils, Foreach)
 		}
 		ASSERT_EQ(_T("abc"), result);
 	}
-	// 2重ループ
+	// 2重ループ
+
 	{
 		Array<String> ary1;
 		ary1.Add(_T("a"));

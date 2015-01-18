@@ -1,7 +1,7 @@
 
 #include "../Internal.h"
-#include <Base/StringUtils.h>
-#include <IO/PathUtils.h>
+#include "../../include/Lumino/Base/StringUtils.h"
+#include "../../include/Lumino/IO/PathUtils.h"
 
 namespace Lumino
 {

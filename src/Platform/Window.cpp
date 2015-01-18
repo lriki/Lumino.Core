@@ -1,7 +1,7 @@
 
 #include "../Internal.h"
-#include <Platform/Application.h>
-#include <Platform/Window.h>
+#include "../../include/Lumino/Platform/Application.h"
+#include "../../include/Lumino/Platform/Window.h"
 
 namespace Lumino
 {

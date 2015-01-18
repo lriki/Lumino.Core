@@ -1,9 +1,9 @@
 
 #include "../Internal.h"
-#include <Base/RefObject.h>
-#include <Base/RefBuffer.h>
-#include <Base/UnicodeUtils.h>
-#include <Base/Encoding.h>
+#include "../../include/Lumino/Base/RefObject.h"
+#include "../../include/Lumino/Base/RefBuffer.h"
+#include "../../include/Lumino/Base/UnicodeUtils.h"
+#include "../../include/Lumino/Base/Encoding.h"
 
 namespace Lumino
 {

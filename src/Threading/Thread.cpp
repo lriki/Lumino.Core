@@ -8,8 +8,8 @@
 #include <iostream>
 #include <process.h>
 #include "../Internal.h"
-#include <Threading/Thread.h>
-#include <Threading/ThreadingExceptions.h>
+#include "../../include/Lumino/Threading/Thread.h"
+#include "../../include/Lumino/Threading/ThreadingExceptions.h"
 
 namespace Lumino
 {

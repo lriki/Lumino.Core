@@ -1,5 +1,5 @@
 
-#include <Threading/ThreadingExceptions.h>
+#include "../../include/Lumino/Threading/ThreadingExceptions.h"
 
 namespace Lumino
 {

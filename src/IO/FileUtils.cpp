@@ -2,10 +2,10 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include "../Internal.h"
-#include <Base/RefBuffer.h>
-#include <Base/Encoding.h>
-#include <IO/FileStream.h>
-#include <IO/FileUtils.h>
+#include "../../include/Lumino/Base/RefBuffer.h"
+#include "../../include/Lumino/Base/Encoding.h"
+#include "../../include/Lumino/IO/FileStream.h"
+#include "../../include/Lumino/IO/FileUtils.h"
 
 namespace Lumino
 {

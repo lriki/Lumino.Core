@@ -1,11 +1,11 @@
 
 #include "../Internal.h"
 #include <sstream>
-#include <Base/RefBuffer.h>
-#include <Base/Encoding.h>
-#include <Base/StringUtils.h>
-#include <Base/String.h>
-#include <Platform/Environment.h>
+#include "../../include/Lumino/Base/RefBuffer.h"
+#include "../../include/Lumino/Base/Encoding.h"
+#include "../../include/Lumino/Base/StringUtils.h"
+#include "../../include/Lumino/Base/String.h"
+#include "../../include/Lumino/Platform/Environment.h"
 
 namespace Lumino
 {

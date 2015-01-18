@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include <Base/Common.h>
-#include <Base/Exception.h>
+#include "../include/Lumino/Base/Common.h"
+#include "../include/Lumino/Base/Exception.h"
 
 #if defined(LN_GNUC) || defined(__CYGWIN__)
 #include <unistd.h>

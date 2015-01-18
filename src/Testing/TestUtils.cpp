@@ -1,5 +1,5 @@
 
-#include <Testing/TestUtils.h>
+#include "../../include/Lumino/Testing/TestUtils.h"
 
 namespace Lumino
 {

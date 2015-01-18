@@ -1,7 +1,7 @@
 
 #include "../Internal.h"
-#include <IO/PathName.h>
-#include <IO/DirectoryUtils.h>
+#include "../../include/Lumino/IO/PathName.h"
+#include "../../include/Lumino/IO/DirectoryUtils.h"
 
 namespace Lumino
 {

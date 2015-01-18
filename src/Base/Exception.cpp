@@ -1,8 +1,8 @@
 
 #include <time.h>
 #include "../Internal.h"
-#include <Base/CRT.h>
-#include <Base/Exception.h>
+#include "../../include/Lumino/Base/CRT.h"
+#include "../../include/Lumino/Base/Exception.h"
 
 #if defined(LN_WIN32)	// Cygwin ‚à‚±‚Á‚¿
 	#include "Win32/BackTrace.h"

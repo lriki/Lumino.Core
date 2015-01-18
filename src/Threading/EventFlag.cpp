@@ -1,6 +1,6 @@
 
 #include "../Internal.h"
-#include <Threading/EventFlag.h>
+#include "../../include/Lumino/Threading/EventFlag.h"
 
 namespace Lumino
 {

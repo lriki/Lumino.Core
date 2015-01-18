@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include <Platform/Window.h>
+#include "../../../include/Lumino/Platform/Window.h"
 #include "../WindowBase.h"
 
 namespace Lumino

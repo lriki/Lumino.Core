@@ -1,7 +1,7 @@
 ﻿
 #include <new>
 #include "../Internal.h"
-#include <Base/Memory.h>
+#include "../../include/Lumino/Base/Memory.h"
 
 //-----------------------------------------------------------------------------
 //

@@ -1,9 +1,9 @@
 
 #include <time.h>
 #include "../Internal.h"
-#include <Base/StringUtils.h>
-#include <IO/FileUtils.h>
-#include <IO/PathName.h>
+#include "../../include/Lumino/Base/StringUtils.h"
+#include "../../include/Lumino/IO/FileUtils.h"
+#include "../../include/Lumino/IO/PathName.h"
 
 namespace Lumino
 {

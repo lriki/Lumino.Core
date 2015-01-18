@@ -1,6 +1,6 @@
 
 #include "../Internal.h"
-#include <Threading/Mutex.h>
+#include "../../include/Lumino/Threading/Mutex.h"
 
 namespace Lumino
 {

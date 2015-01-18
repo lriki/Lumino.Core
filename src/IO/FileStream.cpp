@@ -1,7 +1,7 @@
 
 #include "../Internal.h"
-#include <IO/FileUtils.h>
-#include <IO/FileStream.h>
+#include "../../include/Lumino/IO/FileUtils.h"
+#include "../../include/Lumino/IO/FileStream.h"
 
 namespace Lumino
 {

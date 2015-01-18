@@ -1,8 +1,8 @@
 
 #pragma once
 
-#include <Base/Array.h>
-#include <Platform/Application.h>
+#include "../../include/Lumino/Base/Array.h"
+#include "../../include/Lumino/Platform/Application.h"
 
 namespace Lumino
 {

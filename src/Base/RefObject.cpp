@@ -1,6 +1,6 @@
 
 #include "../Internal.h"
-#include <Base/RefObject.h>
+#include "../../include/Lumino/Base/RefObject.h"
 
 namespace Lumino
 {

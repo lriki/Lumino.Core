@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include <Platform/Application.h>
+#include "../../../include/Lumino/Platform/Application.h"
 #include "../ApplicationBase.h"
 #include "Win32WindowBase.h"
 

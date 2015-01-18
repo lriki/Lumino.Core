@@ -1,8 +1,8 @@
 
 #pragma once
 
-#include <Base/String.h>
-#include <Base/Size.h>
+#include "../../../include/Lumino/Base/String.h"
+#include "../../../include/Lumino/Base/Size.h"
 #include "Win32WindowBase.h"
 
 namespace Lumino
