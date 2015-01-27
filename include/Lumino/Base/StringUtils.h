@@ -59,6 +59,10 @@ public:
 	/** @copydoc	IsSpace */
 	static bool IsSpace(wchar_t ch) { return iswspace(ch) != 0; }
 
+	/// strncmp の overload 実装
+	static int StrNCmp(const char* str1, const char* str2, size_t count) { return strncmp(str1, str2, count); }
+	static int StrNCmp(const wchar_t* str1, const wchar_t* str2, size_t count) { return wcsncmp(str1, str2, count); }
+
 	/**
 		@brief		文字列を検索し、見つかった最初の文字のインデックスを返す
 		@param[in]	str1		: 検索対象文字列
