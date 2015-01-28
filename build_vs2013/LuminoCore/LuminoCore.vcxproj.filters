@@ -148,6 +148,9 @@
       <Filter>Testing</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Lumino\Common.h" />
+    <ClInclude Include="..\..\src\Base\EncodingDetector.h">
+      <Filter>Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\include\Lumino\Base\Delegate.inl">
@@ -232,6 +235,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\Threading\Atomic.cpp">
       <Filter>Threading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Base\EncodingDetector.cpp">
+      <Filter>Base</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

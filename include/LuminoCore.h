@@ -17,6 +17,7 @@
 #include "Lumino/Base/NonCopyable.h"
 #include "Lumino/Base/Delegate.h"
 
+#include "Lumino/IO/FileUtils.h"
 
 #include "Lumino/Threading/Atomic.h"
 #include "Lumino/Threading/EventFlag.h"

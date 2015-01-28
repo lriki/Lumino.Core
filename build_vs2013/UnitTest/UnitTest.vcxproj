@@ -84,6 +84,7 @@
     <ClCompile Include="..\..\test\gtest\src\gtest_main.cc" />
     <ClCompile Include="..\..\test\UnitTest\Base\Test_Base_Delegate.cpp" />
     <ClCompile Include="..\..\test\UnitTest\Base\Test_Base_Encoding.cpp" />
+    <ClCompile Include="..\..\test\UnitTest\Base\Test_Base_EncodingDetector.cpp" />
     <ClCompile Include="..\..\test\UnitTest\Base\Test_Base_Encoding_UTF8.cpp" />
     <ClCompile Include="..\..\test\UnitTest\Base\Test_Base_STLUtils.cpp" />
     <ClCompile Include="..\..\test\UnitTest\Base\Test_Base_String.cpp" />

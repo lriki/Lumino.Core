@@ -60,6 +60,9 @@
     <ClCompile Include="..\..\test\UnitTest\Threading\Test_Threading_EventFlag.cpp">
       <Filter>UnitTest\Threading</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\test\UnitTest\Base\Test_Base_EncodingDetector.cpp">
+      <Filter>UnitTest\Base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\test\UnitTest\TestConfig.h">
