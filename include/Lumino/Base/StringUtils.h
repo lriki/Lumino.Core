@@ -123,6 +123,11 @@ public:
 	template<typename TChar>
 	static Array< BasicString<TChar> > Split(const BasicString<TChar>& str, const TChar* delim, StringSplitOptions option = StringSplitOptions_None);
 
+	/**
+		@brief		[start] ` [end - 1] ‚Ì”ÍˆÍ‚Ìæ“ª‚ª‰üs‚©‚ğ”»•Ê‚µAˆê’v‚µ‚½‚ç•¶š”‚ğ•Ô‚· ("\r" ‚© "\n" ‚È‚ç 1A"\r\n" ‚È‚ç 2)
+	*/
+	template<typename TChar>
+	static int CheckNewLineSequence(const TChar* start, const TChar* end);
 };
 
 } // namespace Lumino

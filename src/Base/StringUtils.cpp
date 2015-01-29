@@ -228,4 +228,30 @@ Array< BasicString<TChar> > StringUtils::Split(const BasicString<TChar>& str, co
 template Array< BasicString<char> > StringUtils::Split(const BasicString<char>& str, const char* delim, StringSplitOptions option);
 template Array< BasicString<wchar_t> > StringUtils::Split(const BasicString<wchar_t>& str, const wchar_t* delim, StringSplitOptions option);
 
+//----------------------------------------------------------------------
+//
+//----------------------------------------------------------------------
+template<typename T>
+int StringUtils::CheckNewLineSequence(const T* start, const T* end)
+{
+	if (start < end)
+	{
+		if (start[0] == '\r') {
+			if ((start + 1) < end && start[1] == '\n') {
+				return 2;	// CR+LF
+			}
+			else {
+				return 1;	// CR
+			}
+		}
+		else if (start[0] == '\n') {
+			return 1;		// LF
+		}
+	}
+	return 0;
+}
+template int StringUtils::CheckNewLineSequence<byte_t>(const byte_t* start, const byte_t* end);
+template int StringUtils::CheckNewLineSequence<char>(const char* start, const char* end);
+template int StringUtils::CheckNewLineSequence<wchar_t>(const wchar_t* start, const wchar_t* end);
+
 } // namespace Lumino
