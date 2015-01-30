@@ -16,6 +16,9 @@
     <Filter Include="UnitTest\Threading">
       <UniqueIdentifier>{2b9f9c36-100a-4124-949b-6ba017b1bd44}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UnitTest\Text">
+      <UniqueIdentifier>{d8316252-7a85-41ab-9944-caf7f396591f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\test\gtest\src\gtest-all.cc">
@@ -62,6 +65,9 @@
     </ClCompile>
     <ClCompile Include="..\..\test\UnitTest\Base\Test_Base_EncodingDetector.cpp">
       <Filter>UnitTest\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\test\UnitTest\Text\Test_Text_DBCSEncoding.cpp">
+      <Filter>UnitTest\Text</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

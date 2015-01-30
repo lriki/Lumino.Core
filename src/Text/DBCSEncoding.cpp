@@ -11,9 +11,25 @@ namespace Lumino
 // DBCSEncoding
 //=============================================================================
 
+// SJIS
 extern "C" const unsigned char g_SJISLeadBytePairs[];
 extern "C" const unsigned short g_SJISToUTF16Table[];
 extern "C" const unsigned short g_UTF16ToSJISTable[];
+
+// GB2312
+extern "C" const unsigned char g_GB2312LeadBytePairs[];
+extern "C" const unsigned short g_GB2312ToUTF16Table[];
+extern "C" const unsigned short g_UTF16ToGB2312Table[];
+
+// EUC-KR
+extern "C" const unsigned char g_EUCKRLeadBytePairs[];
+extern "C" const unsigned short g_EUCKRToUTF16Table[];
+extern "C" const unsigned short g_UTF16ToEUCKRTable[];
+
+// Big5
+extern "C" const unsigned char g_Big5LeadBytePairs[];
+extern "C" const unsigned short g_Big5ToUTF16Table[];
+extern "C" const unsigned short g_UTF16ToBig5Table[];
 
 const DBCSEncoding::TableInfo DBCSEncoding::Tables[EncodingType_Max] =
 {
@@ -29,7 +45,10 @@ const DBCSEncoding::TableInfo DBCSEncoding::Tables[EncodingType_Max] =
 	//{ NULL, NULL, NULL }	// EncodingType_UTF32LN,
 	//{ NULL, NULL, NULL }	// EncodingType_UTF32BN,
 
-	{ g_SJISLeadBytePairs, g_SJISToUTF16Table, g_UTF16ToSJISTable },	// EncodingType_SJIS,
+	{ g_SJISLeadBytePairs, g_SJISToUTF16Table, g_UTF16ToSJISTable },		// EncodingType_SJIS,
+	{ g_GB2312LeadBytePairs, g_GB2312ToUTF16Table, g_UTF16ToGB2312Table },	// EncodingType_GB2312
+	{ g_EUCKRLeadBytePairs, g_EUCKRToUTF16Table, g_UTF16ToEUCKRTable },		// EncodingType_EUCKR
+	{ g_Big5LeadBytePairs, g_Big5ToUTF16Table, g_UTF16ToBig5Table },		// EncodingType_BIG5
 };
 
 //-----------------------------------------------------------------------------
@@ -96,9 +115,10 @@ void DBCSEncoding::DBCSDecoder::ConvertToUTF16(const byte_t* inBuffer, size_t in
 		// 直前の文字が先行バイトの場合
 		else
 		{
-			if (CheckDBCSLeadByte(m_tableInfo, b)) {	// 先行バイトが連続で来るはず無い
-				LN_THROW(0, EncodingFallbackException);	// 不正文字
-			}
+			// 先行バイトが連続することもある。"＝" は 0x81 0x81 である。
+			//if (CheckDBCSLeadByte(m_tableInfo, b)) {	// 先行バイトが連続で来るはず無い
+			//	LN_THROW(0, EncodingFallbackException);	// 不正文字
+			//}
 
 			// マルチバイト文字。先行バイトを上位バイトにして変換する。
 			outBuffer[outBufPos] = m_tableInfo->DBCSToUTF16Table[(m_lastLeadByte << 8) | (b & 0xFF)];
@@ -144,12 +164,14 @@ void DBCSEncoding::DBCSEncoder::ConvertFromUTF16(const UTF16* inBuffer, size_t i
 		// シングルバイト文字
 		if ((dbBytes & 0xFF00) == 0x0000) {
 			outBuffer[outBufPos] = dbBytes & 0xFF;
-			outBufPos += 1;
+			++outBufPos;
 		}
 		// マルチバイト文字
 		else {
-			outBuffer[outBufPos] = ((dbBytes & 0xFF00) >> 8) | (dbBytes & 0xFF);
-			outBufPos += 2;
+			outBuffer[outBufPos] = ((dbBytes & 0xFF00) >> 8);
+			++outBufPos;
+			outBuffer[outBufPos] = (dbBytes & 0xFF);
+			++outBufPos;
 		}
 	}
 

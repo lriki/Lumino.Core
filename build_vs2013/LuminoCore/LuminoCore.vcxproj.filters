@@ -248,7 +248,16 @@
     <ClCompile Include="..\..\src\Text\DBCSEncoding.cpp">
       <Filter>Text</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Text\SJISConvertTable.c">
+    <ClCompile Include="..\..\src\Text\ConvertTable_GB2312.c">
+      <Filter>Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Text\ConvertTable_SJIS.c">
+      <Filter>Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Text\ConvertTable_Big5.c">
+      <Filter>Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Text\ConvertTable_EUCKR.c">
       <Filter>Text</Filter>
     </ClCompile>
   </ItemGroup>

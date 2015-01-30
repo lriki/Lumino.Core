@@ -92,6 +92,7 @@
     <ClCompile Include="..\..\test\UnitTest\Base\Test_Base_UnicodeUtils.cpp" />
     <ClCompile Include="..\..\test\UnitTest\Platform\Test_Platform_Application.cpp" />
     <ClCompile Include="..\..\test\UnitTest\Platform\Test_Platform_Environment.cpp" />
+    <ClCompile Include="..\..\test\UnitTest\Text\Test_Text_DBCSEncoding.cpp" />
     <ClCompile Include="..\..\test\UnitTest\Threading\Test_Threading_Atomic.cpp" />
     <ClCompile Include="..\..\test\UnitTest\Threading\Test_Threading_EventFlag.cpp" />
     <ClCompile Include="..\..\test\UnitTest\Threading\Test_Threading_Thread.cpp" />

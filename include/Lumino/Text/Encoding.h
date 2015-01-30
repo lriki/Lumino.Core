@@ -25,7 +25,10 @@ enum EncodingType
 	//EncodingType_UTF32LN,
 	//EncodingType_UTF32BN,
 
-	EncodingType_SJIS,
+	EncodingType_SJIS,		///< 日本語 (シフト JIS) -- cp932(MS932) Windows-31J ※MS実装
+	EncodingType_GB2312,	///< 簡体字中国語 (GB2312) -- cp936(MS936)
+	EncodingType_EUCKR,		///< 韓国語 (EUC-KR)(=KSX1001) -- cp949(MS949)
+	EncodingType_BIG5,		///< 繁体字中国語 (Big5) -- cp950(MS950)
 
 	EncodingType_Max,		// terminator
 };
@@ -78,6 +81,12 @@ public:
 		@details	返されるポインタはグローバルなインスタンスです。このポインタは解放しないでください。
 	*/
 	static Encoding* GetUTF16Encoding();
+
+	/**
+		@brief		種類を指定してエンコーディングを取得します。
+		@details	返されるポインタはグローバルなインスタンスです。このポインタは解放しないでください。
+	*/
+	static Encoding* GetEncoding(EncodingType type);
 
 	/**
 		@brief		文字コードを変換する (不正シーケンスがあったら例外)

@@ -68,8 +68,8 @@ private:
 		virtual bool CanRemain() { return true; }
 		virtual void ConvertFromUTF16(const UTF16* inBuffer, size_t inBufferCharCount, byte_t* outBuffer, size_t outBufferByteCount, size_t* outBytesUsed, size_t* outCharsUsed);
 		virtual int UsedDefaultCharCount() { return m_usedDefaultCharCount; }
-		virtual bool Completed() { return m_lastSurrogateHigh == 0; }
-		virtual void Reset() { m_usedDefaultCharCount = 0; m_lastSurrogateHigh = 0; }
+		virtual bool Completed() { return true; }
+		virtual void Reset() { m_usedDefaultCharCount = 0; }
 
 	private:
 		const TableInfo*	m_tableInfo;

@@ -4,6 +4,7 @@
 #include "../../include/Lumino/Base/RefBuffer.h"
 #include "../../include/Lumino/Text/UnicodeUtils.h"
 #include "../../include/Lumino/Text/Encoding.h"
+#include "DBCSEncoding.h"
 
 namespace Lumino
 {
@@ -65,6 +66,37 @@ Encoding* Encoding::GetUTF16Encoding()
 {
 	static UTF16Encoding encoding;
 	return &encoding;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+Encoding* Encoding::GetEncoding(EncodingType type)
+{
+	switch (type)
+	{
+		case EncodingType_SJIS:
+		{
+			static DBCSEncoding sjisEncoding(EncodingType_SJIS);
+			return &sjisEncoding;
+		}
+		case EncodingType_GB2312:
+		{
+			static DBCSEncoding gb2312Encoding(EncodingType_GB2312);
+			return &gb2312Encoding;
+		}
+		case EncodingType_EUCKR:
+		{
+			static DBCSEncoding euckrEncoding(EncodingType_EUCKR);
+			return &euckrEncoding;
+		}
+		case EncodingType_BIG5:
+		{
+			static DBCSEncoding big5Encoding(EncodingType_BIG5);
+			return &big5Encoding;
+		}
+	}
+	LN_THROW(0, ArgumentException);
 }
 
 //-----------------------------------------------------------------------------
