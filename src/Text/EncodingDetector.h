@@ -1,24 +1,9 @@
 #pragma once
 
+#include "../../include/Lumino/Text/Encoding.h"
+
 namespace Lumino
 {
-
-enum EncodingType
-{
-	EncodingType_Unknown = 0,	///< 不明な文字コード (判別失敗。またはバイナリファイル)
-	EncodingType_UTF8,
-	EncodingType_UTF8N,
-	EncodingType_UTF16L,
-	EncodingType_UTF16B,
-	EncodingType_UTF16LN,
-	EncodingType_UTF16BN,
-	EncodingType_UTF32L,
-	EncodingType_UTF32B,
-	EncodingType_UTF32LN,
-	EncodingType_UTF32BN,
-
-	EncodingType_SJIS,
-};
 
 class IMBSCodeDetector
 {

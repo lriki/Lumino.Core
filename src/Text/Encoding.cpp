@@ -2,8 +2,8 @@
 #include "../Internal.h"
 #include "../../include/Lumino/Base/RefObject.h"
 #include "../../include/Lumino/Base/RefBuffer.h"
-#include "../../include/Lumino/Base/UnicodeUtils.h"
-#include "../../include/Lumino/Base/Encoding.h"
+#include "../../include/Lumino/Text/UnicodeUtils.h"
+#include "../../include/Lumino/Text/Encoding.h"
 
 namespace Lumino
 {
@@ -117,14 +117,14 @@ RefBuffer* Encoding::Convert(
 	decoder->ConvertToUTF16(
 		(const byte_t*)src,
 		srcByteCount,
-		tmpBuf->GetPointer(),
-		utf16MaxByteCount,			// \0 強制格納に備え、1文字分余裕のあるサイズを指定する
+		(UTF16*)tmpBuf->GetPointer(),
+		utf16MaxByteCount / sizeof(UTF16),			// \0 強制格納に備え、1文字分余裕のあるサイズを指定する
 		&bytesUsed,
 		&charsUsed);
 	// 中間フォーマットからターゲットフォーマットへ
 	encoder->ConvertFromUTF16(
-		(const byte_t*)tmpBuf->GetPointer(),
-		bytesUsed,
+		(const UTF16*)tmpBuf->GetPointer(),
+		bytesUsed / sizeof(UTF16),
 		(byte_t*)targetBuf->GetPointer(),
 		targetBuf->GetSize(),		// \0 強制格納に備え、1文字分余裕のあるサイズを指定する
 		&bytesUsed,
@@ -181,13 +181,13 @@ int SystemMultiByteEncoding::GetMaxByteCount() const
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void SystemMultiByteEncoding::SystemMultiByteDecoder::ConvertToUTF16(const byte_t* inBuffer, size_t inByteCount, byte_t* outBuffer, size_t outByteCount, size_t* outBytesUsed, size_t* outCharsUsed)
+void SystemMultiByteEncoding::SystemMultiByteDecoder::ConvertToUTF16(const byte_t* inBuffer, size_t inBufferByteCount, UTF16* outBuffer, size_t outBufferCharCount, size_t* outBytesUsed, size_t* outCharsUsed)
 {
 #ifdef LN_WIN32	/* Windows 環境で setlocale しなくても使えるようにする */
 	// 入力が 0 文字の場合は何もしない
 	// (MultiByteToWideChar の戻り値がエラーなのか成功なのかわからなくなる)
-	if (inByteCount == 0) {
-		if (outByteCount > 0) {
+	if (inBufferByteCount == 0) {
+		if (outBufferCharCount > 0) {
 			outBuffer[0] = '\0';
 		}
 		*outBytesUsed = 0;
@@ -195,7 +195,12 @@ void SystemMultiByteEncoding::SystemMultiByteDecoder::ConvertToUTF16(const byte_
 		return;
 	}
 
-	int len = ::MultiByteToWideChar(CP_THREAD_ACP, MB_ERR_INVALID_CHARS, (LPCSTR)inBuffer, inByteCount, (LPWSTR)outBuffer, outByteCount);
+	int len = ::MultiByteToWideChar(
+		CP_THREAD_ACP, MB_ERR_INVALID_CHARS, 
+		(LPCSTR)inBuffer, 
+		inBufferByteCount,		// lpMultiByteStr が指す文字列のサイズをバイト単位で渡します。
+		(LPWSTR)outBuffer, 
+		outBufferCharCount);	// lpWideCharStr が指すバッファのサイズをワイド文字数の単位で指定します。
 	LN_THROW(len > 0, EncodingFallbackException);
 
 	// mbstowcs じゃ文字数カウントはできないので UnicodeUtils を使う
@@ -244,13 +249,13 @@ void SystemMultiByteEncoding::SystemMultiByteDecoder::ConvertToUTF16(const byte_
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void SystemMultiByteEncoding::SystemMultiByteEncoder::ConvertFromUTF16(const byte_t* inBuffer, size_t inByteCount, byte_t* outBuffer, size_t outByteCount, size_t* outBytesUsed, size_t* outCharsUsed)
+void SystemMultiByteEncoding::SystemMultiByteEncoder::ConvertFromUTF16(const UTF16* inBuffer, size_t inBufferCharCount, byte_t* outBuffer, size_t outBufferByteCount, size_t* outBytesUsed, size_t* outCharsUsed)
 {
 #ifdef LN_WIN32	/* Windows 環境で setlocale しなくても使えるようにする */
 	// 入力が 0 文字の場合は何もしない
 	// (MultiByteToWideChar の戻り値がエラーなのか成功なのかわからなくなる)
-	if (inByteCount == 0) {
-		if (outByteCount > 0) {
+	if (inBufferCharCount == 0) {
+		if (outBufferByteCount > 0) {
 			outBuffer[0] = '\0';
 		}
 		*outBytesUsed = 0;
@@ -273,9 +278,9 @@ void SystemMultiByteEncoding::SystemMultiByteEncoder::ConvertFromUTF16(const byt
 		CP_THREAD_ACP,
 		dwFlags,
 		(const wchar_t*)inBuffer,
-		inByteCount / sizeof(wchar_t),
+		inBufferCharCount,		// ワイド文字列の文字数
 		(LPSTR )outBuffer,
-		outByteCount,
+		outBufferByteCount,		// 新しい文字列を受け取るバッファのサイズ
 		pDefault,
 		&bUsedDefaultChar);
 	LN_THROW(!(chDefault == '\0' && bUsedDefaultChar == TRUE), EncodingFallbackException);	// デフォルト文字未指定でマッピングできない文字があった
@@ -283,7 +288,7 @@ void SystemMultiByteEncoding::SystemMultiByteEncoder::ConvertFromUTF16(const byt
 
 	// 文字数カウント
 	int count;
-	UTFConversionResult r = UnicodeUtils::GetUTF16CharCount((UnicodeUtils::UTF16*)inBuffer, inByteCount / sizeof(UnicodeUtils::UTF16), true, &count);
+	UTFConversionResult r = UnicodeUtils::GetUTF16CharCount((UnicodeUtils::UTF16*)inBuffer, inBufferCharCount, true, &count);
 	LN_THROW(r == UTFConversionResult_Success, EncodingFallbackException);
 
 	*outBytesUsed = len;		// len は「書き込まれたバイト数」なのでこれでOK
@@ -355,7 +360,7 @@ byte_t* UTF8Encoding::GetPreamble() const
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void UTF8Encoding::UTF8Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t inByteCount, byte_t* outBuffer, size_t outByteCount, size_t* outBytesUsed, size_t* outCharsUsed)
+void UTF8Encoding::UTF8Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t inBufferByteCount, UTF16* outBuffer, size_t outBufferCharCount, size_t* outBytesUsed, size_t* outCharsUsed)
 {
 	// 変換設定
 	UTFConversionOptions options;
@@ -365,9 +370,9 @@ void UTF8Encoding::UTF8Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t in
 	// 変換
 	UTFConversionResult result = UnicodeUtils::ConvertUTF8toUTF16(
 		(UnicodeUtils::UTF8*)inBuffer, 
-		inByteCount / sizeof(UnicodeUtils::UTF8),
+		inBufferByteCount,
 		(UnicodeUtils::UTF16*)outBuffer, 
-		outByteCount / sizeof(UnicodeUtils::UTF16),
+		outBufferCharCount,
 		&options);
 	LN_THROW(result == UTFConversionResult_Success, EncodingFallbackException);
 
@@ -379,7 +384,7 @@ void UTF8Encoding::UTF8Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t in
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void UTF8Encoding::UTF8Encoder::ConvertFromUTF16(const byte_t* inBuffer, size_t inByteCount, byte_t* outBuffer, size_t outByteCount, size_t* outBytesUsed, size_t* outCharsUsed)
+void UTF8Encoding::UTF8Encoder::ConvertFromUTF16(const UTF16* inBuffer, size_t inBufferCharCount, byte_t* outBuffer, size_t outBufferByteCount, size_t* outBytesUsed, size_t* outCharsUsed)
 {
 	// 変換設定
 	UTFConversionOptions options;
@@ -389,9 +394,9 @@ void UTF8Encoding::UTF8Encoder::ConvertFromUTF16(const byte_t* inBuffer, size_t 
 	// 変換
 	UTFConversionResult result = UnicodeUtils::ConvertUTF16toUTF8(
 		(UnicodeUtils::UTF16*)inBuffer, 
-		inByteCount / sizeof(UnicodeUtils::UTF16),
+		inBufferCharCount,
 		(UnicodeUtils::UTF8*)outBuffer, 
-		outByteCount / sizeof(UnicodeUtils::UTF8),
+		outBufferByteCount,
 		&options);
 	LN_THROW(result == UTFConversionResult_Success, EncodingFallbackException);
 
@@ -418,36 +423,36 @@ byte_t* UTF16Encoding::GetPreamble() const
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void UTF16Encoding::UTF16Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t inByteCount, byte_t* outBuffer, size_t outByteCount, size_t* outBytesUsed, size_t* outCharsUsed)
+void UTF16Encoding::UTF16Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t inBufferByteCount, UTF16* outBuffer, size_t outBufferCharCount, size_t* outBytesUsed, size_t* outCharsUsed)
 {
 	// UTF16 から UTF16 への変換。そのままコピーでよい
-	errno_t err = memcpy_s(outBuffer, outByteCount, inBuffer, inByteCount);
+	errno_t err = memcpy_s(outBuffer, outBufferCharCount * sizeof(UTF16), inBuffer, inBufferByteCount);
 	LN_THROW(err == 0, ArgumentException);
 
 	// 文字数はカウントする
 	int count;
-	UTFConversionResult r = UnicodeUtils::GetUTF16CharCount((UnicodeUtils::UTF16*)inBuffer, inByteCount / sizeof(UnicodeUtils::UTF16), true, &count);
+	UTFConversionResult r = UnicodeUtils::GetUTF16CharCount((UnicodeUtils::UTF16*)inBuffer, inBufferByteCount / sizeof(UnicodeUtils::UTF16), true, &count);
 	LN_THROW(r == UTFConversionResult_Success, EncodingFallbackException);
 
-	*outBytesUsed = inByteCount;
+	*outBytesUsed = inBufferByteCount;
 	*outCharsUsed = count;
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void UTF16Encoding::UTF16Encoder::ConvertFromUTF16(const byte_t* inBuffer, size_t inByteCount, byte_t* outBuffer, size_t outByteCount, size_t* outBytesUsed, size_t* outCharsUsed)
+void UTF16Encoding::UTF16Encoder::ConvertFromUTF16(const UTF16* inBuffer, size_t inBufferCharCount, byte_t* outBuffer, size_t outBufferByteCount, size_t* outBytesUsed, size_t* outCharsUsed)
 {
 	// UTF16 から UTF16 への変換。そのままコピーでよい
-	errno_t err = memcpy_s(outBuffer, outByteCount, inBuffer, inByteCount);
+	errno_t err = memcpy_s(outBuffer, outBufferByteCount, inBuffer, inBufferCharCount * sizeof(UTF16));
 	LN_THROW(err == 0, ArgumentException);
 
 	// 文字数はカウントする
 	int count;
-	UTFConversionResult r = UnicodeUtils::GetUTF16CharCount((UnicodeUtils::UTF16*)inBuffer, inByteCount / sizeof(UnicodeUtils::UTF16), true, &count);
+	UTFConversionResult r = UnicodeUtils::GetUTF16CharCount((UnicodeUtils::UTF16*)inBuffer, inBufferCharCount, true, &count);
 	LN_THROW(r == UTFConversionResult_Success, EncodingFallbackException);
 
-	*outBytesUsed = inByteCount;
+	*outBytesUsed = inBufferCharCount * sizeof(UTF16);
 	*outCharsUsed = count;
 }
 

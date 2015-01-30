@@ -3,7 +3,9 @@
 
 #include "Lumino/Base/Common.h"
 
-#include "Lumino/Base/Encoding.h"
+#include "Lumino/Text/Encoding.h"
+#include "Lumino/Text/UnicodeUtils.h"
+
 #include "Lumino/Base/String.h"
 #include "Lumino/Base/StringUtils.h"
 #include "Lumino/Base/RefObject.h"

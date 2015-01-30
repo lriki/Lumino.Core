@@ -15,7 +15,6 @@
     <ClInclude Include="..\..\include\Lumino\Base\Common.h" />
     <ClInclude Include="..\..\include\Lumino\Base\CRT.h" />
     <ClInclude Include="..\..\include\Lumino\Base\Delegate.h" />
-    <ClInclude Include="..\..\include\Lumino\Base\Encoding.h" />
     <ClInclude Include="..\..\include\Lumino\Base\Exception.h" />
     <ClInclude Include="..\..\include\Lumino\Base\List.h" />
     <ClInclude Include="..\..\include\Lumino\Base\Memory.h" />
@@ -27,7 +26,6 @@
     <ClInclude Include="..\..\include\Lumino\Base\String.h" />
     <ClInclude Include="..\..\include\Lumino\Base\StringUtils.h" />
     <ClInclude Include="..\..\include\Lumino\Base\Typedef.h" />
-    <ClInclude Include="..\..\include\Lumino\Base\UnicodeUtils.h" />
     <ClInclude Include="..\..\include\Lumino\Common.h" />
     <ClInclude Include="..\..\include\Lumino\IO\DirectoryUtils.h" />
     <ClInclude Include="..\..\include\Lumino\IO\FileStream.h" />
@@ -41,32 +39,32 @@
     <ClInclude Include="..\..\include\Lumino\Platform\EventListener.h" />
     <ClInclude Include="..\..\include\Lumino\Platform\Window.h" />
     <ClInclude Include="..\..\include\Lumino\Testing\TestUtils.h" />
+    <ClInclude Include="..\..\include\Lumino\Text\Encoding.h" />
+    <ClInclude Include="..\..\include\Lumino\Text\UnicodeUtils.h" />
     <ClInclude Include="..\..\include\Lumino\Threading\Atomic.h" />
     <ClInclude Include="..\..\include\Lumino\Threading\EventFlag.h" />
     <ClInclude Include="..\..\include\Lumino\Threading\Mutex.h" />
     <ClInclude Include="..\..\include\Lumino\Threading\ReadWriteMutex.h" />
     <ClInclude Include="..\..\include\Lumino\Threading\Thread.h" />
     <ClInclude Include="..\..\include\Lumino\Threading\ThreadingExceptions.h" />
-    <ClInclude Include="..\..\src\Base\EncodingDetector.h" />
     <ClInclude Include="..\..\src\Base\Win32\BackTrace.h" />
     <ClInclude Include="..\..\src\Platform\ApplicationBase.h" />
     <ClInclude Include="..\..\src\Platform\Win32\Win32Application.h" />
     <ClInclude Include="..\..\src\Platform\Win32\Win32Window.h" />
     <ClInclude Include="..\..\src\Platform\Win32\Win32WindowBase.h" />
     <ClInclude Include="..\..\src\Platform\WindowBase.h" />
+    <ClInclude Include="..\..\src\Text\DBCSEncoding.h" />
+    <ClInclude Include="..\..\src\Text\EncodingDetector.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\include\Lumino\Base\Delegate.inl" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\Base\Encoding.cpp" />
-    <ClCompile Include="..\..\src\Base\EncodingDetector.cpp" />
     <ClCompile Include="..\..\src\Base\Exception.cpp" />
     <ClCompile Include="..\..\src\Base\Memory.cpp" />
     <ClCompile Include="..\..\src\Base\RefObject.cpp" />
     <ClCompile Include="..\..\src\Base\String.cpp" />
     <ClCompile Include="..\..\src\Base\StringUtils.cpp" />
-    <ClCompile Include="..\..\src\Base\UnicodeUtils.cpp" />
     <ClCompile Include="..\..\src\IO\DirectoryUtils.cpp" />
     <ClCompile Include="..\..\src\IO\FileStream.cpp" />
     <ClCompile Include="..\..\src\IO\FileUtils.cpp" />
@@ -80,6 +78,11 @@
     <ClCompile Include="..\..\src\Platform\Window.cpp" />
     <ClCompile Include="..\..\src\Platform\WindowBase.cpp" />
     <ClCompile Include="..\..\src\Testing\TestUtils.cpp" />
+    <ClCompile Include="..\..\src\Text\DBCSEncoding.cpp" />
+    <ClCompile Include="..\..\src\Text\Encoding.cpp" />
+    <ClCompile Include="..\..\src\Text\EncodingDetector.cpp" />
+    <ClCompile Include="..\..\src\Text\SJISConvertTable.c" />
+    <ClCompile Include="..\..\src\Text\UnicodeUtils.cpp" />
     <ClCompile Include="..\..\src\Threading\Atomic.cpp" />
     <ClCompile Include="..\..\src\Threading\EventFlag.cpp" />
     <ClCompile Include="..\..\src\Threading\Mutex.cpp" />

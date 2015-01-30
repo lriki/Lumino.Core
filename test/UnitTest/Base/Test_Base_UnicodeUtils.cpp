@@ -1,5 +1,4 @@
 ﻿#include <TestConfig.h>
-#include <Lumino/Base/UnicodeUtils.h>
 
 class Test_Base_UnicodeUtils : public ::testing::Test
 {

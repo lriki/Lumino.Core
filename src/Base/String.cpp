@@ -2,7 +2,7 @@
 #include "../Internal.h"
 #include <sstream>
 #include "../../include/Lumino/Base/RefBuffer.h"
-#include "../../include/Lumino/Base/Encoding.h"
+#include "../../include/Lumino/Text/Encoding.h"
 #include "../../include/Lumino/Base/StringUtils.h"
 #include "../../include/Lumino/Base/String.h"
 #include "../../include/Lumino/Platform/Environment.h"

@@ -1,5 +1,5 @@
 #include <TestConfig.h>
-#include "../../../src/Base/EncodingDetector.h"
+#include "../../../src/Text/EncodingDetector.h"
 
 class Test_Base_EncodingDetector : public ::testing::Test
 {
@@ -24,7 +24,4 @@ TEST_F(Test_Base_EncodingDetector, UTF8BOM)
 	ASSERT_EQ(EncodingType_UTF32B, detector.Detect(buf5->GetPointer(), buf5->GetSize()));
 
 
-	RefPtr<RefBuffer> buf(FileUtils::ReadAllBytes(_T("C:\\Proj\\DynaVision\\DT10_ResDivSln\\DYNAVISION_MAIN\\DynaVision\\MainFrame\\MainFrm - ƒRƒs[.cpp")));
-	EncodingType t = detector.Detect(buf->GetPointer(), buf->GetSize());
-	printf("%d\n", t);
 }

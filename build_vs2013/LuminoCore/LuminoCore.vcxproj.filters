@@ -22,15 +22,15 @@
     <Filter Include="Platform\Win32">
       <UniqueIdentifier>{c4df2b1e-bf1c-4efe-b071-c2b24e322d7d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Text">
+      <UniqueIdentifier>{57775013-676e-4b39-88f2-ab297acbc0e4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\Lumino\Base\CRT.h">
       <Filter>Base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Lumino\Base\Delegate.h">
-      <Filter>Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Lumino\Base\Encoding.h">
       <Filter>Base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Lumino\Base\Exception.h">
@@ -64,9 +64,6 @@
       <Filter>Base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Lumino\Base\Typedef.h">
-      <Filter>Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Lumino\Base\UnicodeUtils.h">
       <Filter>Base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Lumino\Base\Array.h">
@@ -148,8 +145,17 @@
       <Filter>Testing</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Lumino\Common.h" />
-    <ClInclude Include="..\..\src\Base\EncodingDetector.h">
-      <Filter>Base</Filter>
+    <ClInclude Include="..\..\include\Lumino\Text\UnicodeUtils.h">
+      <Filter>Text</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Text\Encoding.h">
+      <Filter>Text</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Text\EncodingDetector.h">
+      <Filter>Text</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Text\DBCSEncoding.h">
+      <Filter>Text</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -158,9 +164,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\Base\Encoding.cpp">
-      <Filter>Base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\Base\Exception.cpp">
       <Filter>Base</Filter>
     </ClCompile>
@@ -174,9 +177,6 @@
       <Filter>Base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\Base\StringUtils.cpp">
-      <Filter>Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Base\UnicodeUtils.cpp">
       <Filter>Base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\IO\FileStream.cpp">
@@ -236,8 +236,20 @@
     <ClCompile Include="..\..\src\Threading\Atomic.cpp">
       <Filter>Threading</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Base\EncodingDetector.cpp">
-      <Filter>Base</Filter>
+    <ClCompile Include="..\..\src\Text\UnicodeUtils.cpp">
+      <Filter>Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Text\EncodingDetector.cpp">
+      <Filter>Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Text\Encoding.cpp">
+      <Filter>Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Text\DBCSEncoding.cpp">
+      <Filter>Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Text\SJISConvertTable.c">
+      <Filter>Text</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

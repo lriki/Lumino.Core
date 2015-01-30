@@ -1,6 +1,6 @@
 
 #include <stdio.h>
-#include "../../include/Lumino/Base/UnicodeUtils.h"
+#include "../../include/Lumino/Text/UnicodeUtils.h"
 
 namespace Lumino
 {

@@ -3,7 +3,7 @@
 #include <string.h>
 #include "../Internal.h"
 #include "../../include/Lumino/Base/StringUtils.h"
-#include "../../include/Lumino/Base/UnicodeUtils.h"
+#include "../../include/Lumino/Text/UnicodeUtils.h"
 #include "EncodingDetector.h"
 
 namespace Lumino
@@ -123,7 +123,7 @@ void UTF8NDetector::Detect(const void* bytes, size_t bytesSize)
 	m_score = 0;
 	m_unmatch = false;
 
-	for (int pos = 0; pos < bytesSize; ++pos)
+	for (size_t pos = 0; pos < bytesSize; ++pos)
 	{
 		byte_t b1 = data[pos];
 		if (b1 <= 0x7F)	// ASCII (0x00-0x7F)
@@ -168,7 +168,7 @@ void SJISDetector::Detect(const void* bytes, size_t bytesSize)
 	m_score = 0;
 	m_unmatch = false;
 
-	for (int pos = 0; pos < bytesSize; ++pos)
+	for (size_t pos = 0; pos < bytesSize; ++pos)
 	{
 		byte_t b1 = data[pos];
 		if (b1 <= 0x7F)	// ASCII (0x00-0x7F)

@@ -3,7 +3,7 @@
 #include <sys/stat.h>
 #include "../Internal.h"
 #include "../../include/Lumino/Base/RefBuffer.h"
-#include "../../include/Lumino/Base/Encoding.h"
+#include "../../include/Lumino/Text/Encoding.h"
 #include "../../include/Lumino/IO/FileStream.h"
 #include "../../include/Lumino/IO/FileUtils.h"
 
