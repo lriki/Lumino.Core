@@ -103,6 +103,8 @@ public:
 
 	BackTrace()
 	{
+		m_bIsSymbolEngineReady = false;
+
 		// プロセスを記録
 		m_hProcess = ::GetCurrentProcess();
 

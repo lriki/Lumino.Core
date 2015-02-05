@@ -1,5 +1,6 @@
 
 #include <time.h>
+#include <algorithm>
 #include "../Internal.h"
 #include "../../include/Lumino/Base/CRT.h"
 #include "../../include/Lumino/Base/Exception.h"
@@ -33,7 +34,11 @@ Exception::Exception()
 	mStackBufferSize = BackTrace::GetInstance()->Backtrace(mStackBuffer, LN_ARRAY_SIZE_OF(mStackBuffer));
 
 	// バックトレース文字列取得
-	BackTrace::GetInstance()->AddressToFullSymbolString(mStackBuffer, mStackBufferSize, mSymbolBuffer, LN_ARRAY_SIZE_OF(mSymbolBuffer));
+	BackTrace::GetInstance()->AddressToFullSymbolString(
+		mStackBuffer, 
+		std::min(mStackBufferSize, 32),
+		mSymbolBuffer, 
+		LN_ARRAY_SIZE_OF(mSymbolBuffer));
 
 	// ファイルに保存
 	if (strlen(gDumpFilePath) > 0) 
