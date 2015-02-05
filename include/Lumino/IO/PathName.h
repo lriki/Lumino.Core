@@ -63,7 +63,8 @@ public:
 
 	// operators
 	BasicPathName& operator = (const BasicStringT& str)	{ Assign(str.c_str()); return (*this); }
-	BasicPathName& operator = (const TChar* str) { Assign(str); return (*this); }
+	BasicPathName& operator = (const char* str) { Assign(str); return (*this); }
+	BasicPathName& operator = (const wchar_t* str) { Assign(str); return (*this); }
 	bool operator < (const BasicPathName& right) const { return PathUtils::Compare(m_path.GetCStr(), right.m_path.GetCStr()) < 0; }
 	bool operator < (const TChar* right) const { return PathUtils::Compare(m_path.GetCStr(), right) < 0; }
 	operator const TChar*() const { return m_path.c_str(); }

@@ -19,6 +19,11 @@
 #include "Lumino/Base/NonCopyable.h"
 #include "Lumino/Base/Delegate.h"
 
+#include "Lumino/IO/PathName.h"
+#include "Lumino/IO/PathUtils.h"
+#include "Lumino/IO/Stream.h"
+#include "Lumino/IO/DirectoryUtils.h"
+#include "Lumino/IO/FileStream.h"
 #include "Lumino/IO/FileUtils.h"
 
 #include "Lumino/Threading/Atomic.h"

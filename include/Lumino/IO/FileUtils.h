@@ -2,9 +2,11 @@
 
 #include <stdio.h>
 #include "../Base/RefObject.h"
+#include "../Base/String.h"
 
 namespace Lumino
 {
+class RefBuffer;
 class Encoding;
 
 /// ファイルとディレクトリの属性
@@ -72,7 +74,8 @@ public:
 	static size_t GetFileSize( FILE* stream );
 
 	/// ファイルの内容をすべて読み込む (バイナリ形式)
-	static RefBuffer* ReadAllBytes(const TCHAR* filePath);
+	static RefBuffer* ReadAllBytes(const char* filePath);
+	static RefBuffer* ReadAllBytes(const wchar_t* filePath);
 
 	/// ファイルの内容をすべて読み込み、文字列として返す
 	static String ReadAllText(const TCHAR* filePath, const Encoding* encoding = NULL);

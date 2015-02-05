@@ -198,16 +198,32 @@ size_t FileUtils::GetFileSize( FILE* stream )
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-RefBuffer* FileUtils::ReadAllBytes(const TCHAR* filePath)
+RefBuffer* FileUtils::ReadAllBytes(const char* filePath)
 {
-	FileStream stream;
-	stream.Open(filePath, FileMode_Open, FileAccess_Read);
+	FILE* fp;
+	errno_t err = fopen_s(&fp, filePath, "rb");
+	LN_THROW(err == 0, FileNotFoundException);
+	size_t size = GetFileSize(fp);
 
-	size_t size = stream.GetSize();
 	
 	RefPtr<RefBuffer> buffer(LN_NEW RefBuffer());
 	buffer->Reserve( size );
-	stream.Read(buffer->GetPointer(), size, size);
+	fread(buffer->GetPointer(), 1, size, fp);
+
+	buffer.SafeAddRef();
+	return buffer;
+}
+RefBuffer* FileUtils::ReadAllBytes(const wchar_t* filePath)
+{
+	FILE* fp;
+	errno_t err = _wfopen_s(&fp, filePath, L"rb");
+	LN_THROW(err == 0, FileNotFoundException);
+
+	size_t size = GetFileSize(fp);
+
+	RefPtr<RefBuffer> buffer(LN_NEW RefBuffer());
+	buffer->Reserve(size);
+	fread(buffer->GetPointer(), 1, size, fp);
 
 	buffer.SafeAddRef();
 	return buffer;
