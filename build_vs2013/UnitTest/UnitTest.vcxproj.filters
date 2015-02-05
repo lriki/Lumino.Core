@@ -63,10 +63,10 @@
     <ClCompile Include="..\..\test\UnitTest\Threading\Test_Threading_EventFlag.cpp">
       <Filter>UnitTest\Threading</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\test\UnitTest\Base\Test_Base_EncodingDetector.cpp">
-      <Filter>UnitTest\Base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\test\UnitTest\Text\Test_Text_DBCSEncoding.cpp">
+      <Filter>UnitTest\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\test\UnitTest\Text\Test_Text_EncodingDetector.cpp">
       <Filter>UnitTest\Text</Filter>
     </ClCompile>
   </ItemGroup>

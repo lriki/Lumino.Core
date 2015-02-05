@@ -84,7 +84,6 @@
     <ClCompile Include="..\..\test\gtest\src\gtest_main.cc" />
     <ClCompile Include="..\..\test\UnitTest\Base\Test_Base_Delegate.cpp" />
     <ClCompile Include="..\..\test\UnitTest\Base\Test_Base_Encoding.cpp" />
-    <ClCompile Include="..\..\test\UnitTest\Base\Test_Base_EncodingDetector.cpp" />
     <ClCompile Include="..\..\test\UnitTest\Base\Test_Base_Encoding_UTF8.cpp" />
     <ClCompile Include="..\..\test\UnitTest\Base\Test_Base_STLUtils.cpp" />
     <ClCompile Include="..\..\test\UnitTest\Base\Test_Base_String.cpp" />
@@ -92,6 +91,7 @@
     <ClCompile Include="..\..\test\UnitTest\Base\Test_Base_UnicodeUtils.cpp" />
     <ClCompile Include="..\..\test\UnitTest\Platform\Test_Platform_Application.cpp" />
     <ClCompile Include="..\..\test\UnitTest\Platform\Test_Platform_Environment.cpp" />
+    <ClCompile Include="..\..\test\UnitTest\Text\Test_Text_EncodingDetector.cpp" />
     <ClCompile Include="..\..\test\UnitTest\Text\Test_Text_DBCSEncoding.cpp" />
     <ClCompile Include="..\..\test\UnitTest\Threading\Test_Threading_Atomic.cpp" />
     <ClCompile Include="..\..\test\UnitTest\Threading\Test_Threading_EventFlag.cpp" />

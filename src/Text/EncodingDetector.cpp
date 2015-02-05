@@ -19,7 +19,8 @@ namespace Lumino
 EncodingType EncodingDetector::Detect(const void* bytes, size_t bytesSize)
 {
 	if (bytes == NULL || bytesSize == 0) {
-		return EncodingType_Unknown;
+		m_type = EncodingType_Unknown;
+		return m_type;
 	}
 	m_buffer = (const Byte*)bytes;
 	m_bufferSize = bytesSize;
@@ -27,12 +28,13 @@ EncodingType EncodingDetector::Detect(const void* bytes, size_t bytesSize)
 	// UTF 系の BOM チェック
 	EncodingType type = CheckUTFBom();
 	if (type != EncodingType_Unknown) {
-		return type;	// ★ UTF系確定
+		m_type = type;	// ★ UTF系確定
+		return m_type;
 	}
 
 	// マルチバイト文字コードのチェック
-	SJISDetector sjisDetector;
-	UTF8NDetector utf8NDetector;
+	SJISDetector sjisDetector(m_buffer, m_bufferSize);
+	UTF8NDetector utf8NDetector(m_buffer, m_bufferSize);
 	IMBSCodeDetector* mbsDetectors[] = {
 		&utf8NDetector,
 		&sjisDetector,
@@ -40,7 +42,7 @@ EncodingType EncodingDetector::Detect(const void* bytes, size_t bytesSize)
 	const int mbsDetectorsCount = LN_ARRAY_SIZE_OF(mbsDetectors);
 	for (int i = 0; i < mbsDetectorsCount; ++i)
 	{
-		mbsDetectors[i]->Detect(m_buffer, m_bufferSize);
+		mbsDetectors[i]->Detect(true);
 	}
 
 	// 有効 Detector の中で一番スコアの大きいものを選択する
@@ -48,7 +50,7 @@ EncodingType EncodingDetector::Detect(const void* bytes, size_t bytesSize)
 	IMBSCodeDetector* maxScoreDetector = NULL;
 	for (int i = 0; i < mbsDetectorsCount; ++i)
 	{
-		if (!mbsDetectors[i]->IsUnMatch())
+		if (mbsDetectors[i]->GetUnMatchCount() == 0)
 		{
 			// まだひとつも見つかっていなければ、とりあえずマッチしたものを保持する
 			if (maxScoreDetector == NULL)
@@ -63,10 +65,12 @@ EncodingType EncodingDetector::Detect(const void* bytes, size_t bytesSize)
 		}
 	}
 	if (maxScoreDetector != NULL) {
-		return maxScoreDetector->GetEncodingType();
+		m_type = maxScoreDetector->GetEncodingType();
+		return m_type;
 	}
 
-	return EncodingType_Unknown;	// 判別失敗
+	m_type = EncodingType_Unknown;	// 判別失敗
+	return m_type;
 }
 
 //-----------------------------------------------------------------------------
@@ -111,71 +115,90 @@ EncodingType EncodingDetector::CheckUTFBom()
 //=============================================================================
 // UTF8NDetector
 //=============================================================================
+
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void UTF8NDetector::Detect(const void* bytes, size_t bytesSize)
+UTF8NDetector::UTF8NDetector(const void* bytes, size_t bytesSize)
+	: m_buffer((byte_t*)bytes)
+	, m_bufferSize(bytesSize)
+	, m_pos(0)
+	, m_lineNum(0)
+	, m_score(0)
+	, m_unmatch(0)
 {
-	byte_t* data = (byte_t*)bytes;
-	byte_t* dataEnd = data + bytesSize;
-	int pos = 0;
-	m_lineNum = 0;
-	m_score = 0;
-	m_unmatch = false;
+}
 
-	for (size_t pos = 0; pos < bytesSize; ++pos)
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void UTF8NDetector::Detect(bool untilUnmatch)
+{
+	byte_t* bufferEnd = m_buffer + m_bufferSize;
+	for (; m_pos < m_bufferSize; ++m_pos)
 	{
-		byte_t b1 = data[pos];
+		byte_t b1 = m_buffer[m_pos];
 		if (b1 <= 0x7F)	// ASCII (0x00-0x7F)
 		{
-			int n = StringUtils::CheckNewLineSequence(&data[pos], dataEnd);
+			int n = StringUtils::CheckNewLineSequence(&m_buffer[m_pos], bufferEnd);
 			if (n > 0) {
-				pos += n - 1;
+				m_pos += n - 1;
 				++m_lineNum;
 			}
 		}
 		else
 		{
 			int extra;	// 追加で読むべきバイト数。pos の分は含まない
-			if (UnicodeUtils::CheckUTF8TrailingBytes(&data[pos], dataEnd, true, &extra) == UTFConversionResult_Success)
+			if (UnicodeUtils::CheckUTF8TrailingBytes(&m_buffer[m_pos], bufferEnd, true, &extra) == UTFConversionResult_Success)
 			{
-				pos += extra;
+				m_pos += extra;
 				m_score += 1 + extra;
 			}
 			else {
-				m_unmatch = true;
+				m_unmatch++;
 			}
 		}
 
 		// 不正文字が見つかったので終了
-		if (m_unmatch) { break; }
+		if (untilUnmatch && m_unmatch > 0) { break; }
 	}
 }
-
 
 //=============================================================================
 // SJISDetector
 //=============================================================================
+
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void SJISDetector::Detect(const void* bytes, size_t bytesSize)
+SJISDetector::SJISDetector(const void* bytes, size_t bytesSize)
+	: m_buffer((byte_t*)bytes)
+	, m_bufferSize(bytesSize)
+	, m_pos(0)
+	, m_lineNum(0)
+	, m_score(0)
+	, m_unmatch(0)
 {
-	byte_t* data = (byte_t*)bytes;
-	byte_t* dataEnd = data + bytesSize;
-	int pos = 0;
-	m_lineNum = 0;
-	m_score = 0;
-	m_unmatch = false;
+}
 
-	for (size_t pos = 0; pos < bytesSize; ++pos)
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void SJISDetector::Detect(bool untilUnmatch)
+{
+	for (; m_pos < m_bufferSize; ++m_pos)
 	{
-		byte_t b1 = data[pos];
-		if (b1 <= 0x7F)	// ASCII (0x00-0x7F)
+		byte_t b1 = m_buffer[m_pos];
+		if (b1 <= 0x7F ||	// ASCII (0x00-0x7F)
+			b1 == 0x80 ||	// cp932 では 0x80 のマッピングが存在する。グリフがあるわけではないが…。。
+			b1 == 0xA0 ||	// cp932
+			b1 == 0xFD ||	// cp932
+			b1 == 0xFE ||	// cp932
+			b1 == 0xFF)		// cp932
 		{
-			int n = StringUtils::CheckNewLineSequence(&data[pos], dataEnd);
+			int n = StringUtils::CheckNewLineSequence(&m_buffer[m_pos], m_buffer + m_bufferSize);
 			if (n > 0) {
-				pos += n - 1;
+				m_pos += n - 1;
 				++m_lineNum;
 			}
 		}
@@ -183,31 +206,32 @@ void SJISDetector::Detect(const void* bytes, size_t bytesSize)
 		{
 			++m_score;
 		}
-		else if (pos + 1 < bytesSize)
+		else if (m_pos + 1 < m_bufferSize)
 		{
-			byte_t b2 = data[pos];
+			byte_t b2 = m_buffer[m_pos];
 			if ((0x81 <= b1 && b1 <= 0x9F) ||		// 先行バイト
 				(0xE0 <= b1 && b1 <= 0xFC))
 			{
 				if ((0x40 <= b2 && b2 <= 0x7E) ||	// 2byte目
 					(0x80 <= b2 && b2 <= 0xFC))
 				{
-					++pos;
+					++m_pos;
+					m_score += 2;
 				}
 				else {
-					m_unmatch = true;
+					m_unmatch++;
 				}
 			}
 			else {
-				m_unmatch = true;
+				m_unmatch++;
 			}
 		}
 		else { // バッファ末尾でマルチバイト文字が途切れている
-			m_unmatch = true;
+			m_unmatch++;
 		}
 
 		// 不正文字が見つかったので終了
-		if (m_unmatch) { break; }
+		if (untilUnmatch && m_unmatch > 0) { break; }
 	}
 }
 
