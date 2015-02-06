@@ -55,24 +55,16 @@ public:
 	/**
 		@brief		このウィンドウにイベントリスナーをアタッチします。(priority が大きいものが先に処理される。必ずデタッチすること)
 	*/
-	void AttachEventListener(IEventListener* listener, int priority) { mListenerEntryArray.Add(priority, listener); }
+	virtual void AttachEventListener(IEventListener* listener, int priority) = 0;
 
 	/**
 		@brief		このウィンドウからイベントリスナーをデタッチします。
 	*/
-	void DetachEventListener(IEventListener* listener) { return mListenerEntryArray.Remove(listener); }
-
-
-	/// このウィンドウに割り当てられている全てのイベントリスナーにイベントを送信する
-	/// (ウィンドウシステムに送信するのではない点に注意)
-	bool SendEventToAllListener(const EventArgs& e);
+	virtual void DetachEventListener(IEventListener* listener) = 0;
 
 protected:
 	Window() {}
 	virtual ~Window() {}
-
-protected:
-	SortedMultiArray<int, IEventListener*>	mListenerEntryArray;
 };
 
 } // namespace Platform

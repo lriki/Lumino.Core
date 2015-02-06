@@ -200,9 +200,6 @@
     <ClCompile Include="..\..\src\Platform\ApplicationBase.cpp">
       <Filter>Platform</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Platform\Window.cpp">
-      <Filter>Platform</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\Platform\Win32\Win32Window.cpp">
       <Filter>Platform\Win32</Filter>
     </ClCompile>

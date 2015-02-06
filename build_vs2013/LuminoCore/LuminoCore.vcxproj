@@ -75,7 +75,6 @@
     <ClCompile Include="..\..\src\Platform\Win32\Win32Application.cpp" />
     <ClCompile Include="..\..\src\Platform\Win32\Win32Window.cpp" />
     <ClCompile Include="..\..\src\Platform\Win32\Win32WindowBase.cpp" />
-    <ClCompile Include="..\..\src\Platform\Window.cpp" />
     <ClCompile Include="..\..\src\Platform\WindowBase.cpp" />
     <ClCompile Include="..\..\src\Testing\TestUtils.cpp" />
     <ClCompile Include="..\..\src\Text\ConvertTable_Big5.c" />

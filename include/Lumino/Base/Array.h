@@ -44,7 +44,7 @@ public:
 	@brief		キーの "operator <" の実装により値を並べ替える動的配列
 */
 template<typename TKey, typename TValue, typename TAllocator = STLAllocator< std::pair<TKey, TValue> > >
-class SortedMultiArray
+class SortedArray
 {
 public:
 
@@ -112,7 +112,7 @@ private:
 //
 //-----------------------------------------------------------------------------
 template<typename TKey, typename TValue, typename TAllocator>
-inline void SortedMultiArray<TKey, TValue, TAllocator>::Add(const TKey& key, const TValue& value)
+inline void SortedArray<TKey, TValue, TAllocator>::Add(const TKey& key, const TValue& value)
 {
 	struct Cmp
 	{
@@ -134,7 +134,7 @@ inline void SortedMultiArray<TKey, TValue, TAllocator>::Add(const TKey& key, con
 //
 //-----------------------------------------------------------------------------
 template<typename TKey, typename TValue, typename TAllocator>
-inline void SortedMultiArray<TKey, TValue, TAllocator>::Remove(const TValue& item)
+inline void SortedArray<TKey, TValue, TAllocator>::Remove(const TValue& item)
 {
 	typename InternalArray::iterator itr = mArray.begin();
 	typename InternalArray::iterator end = mArray.end();
