@@ -62,6 +62,10 @@ if (WIN32)
 	
 	# link librarys.
 	list(APPEND LN_LINK_LIBS "imagehlp.lib")
+	
+	# platform sources.
+	set(LN_PLATFORM_SOURCES
+		src/Platform/Win32/Environment.cpp)
 
 elseif (APPLE)
 	set(LN_UNIT_TEST_LINK_LIBS "pthread")
@@ -80,21 +84,32 @@ endif()
 #------------------------------
 # Source files.
 set(LN_MATH_SOURCES
-	src/Base/Encoding.cpp
 	src/Base/Exception.cpp
 	src/Base/Memory.cpp
 	src/Base/RefObject.cpp
 	src/Base/String.cpp
 	src/Base/StringUtils.cpp
-	src/Base/UnicodeUtils.cpp
+	src/IO/DirectoryUtils.cpp
+	src/IO/FileStream.cpp
+	src/IO/FileUtils.cpp
+	src/IO/PathName.cpp
+	src/IO/PathUtils.cpp
+	src/Text/DBCSEncoding.cpp
+	src/Text/Encoding.cpp
+	src/Text/EncodingDetector.cpp
+	src/Text/UnicodeUtils.cpp
+	src/Text/ConvertTable_Big5.c
+	src/Text/ConvertTable_EUCKR.c
+	src/Text/ConvertTable_GB2312.c
+	src/Text/ConvertTable_SJIS.c
 	src/Threading/ThreadingExceptions.cpp
 	src/Threading/Thread.cpp
 	src/Threading/Atomic.cpp
 	src/Threading/EventFlag.cpp
 	src/Threading/Mutex.cpp
 	src/Threading/ReadWriteMutex.cpp
-	src/Platform/Win32/Environment.cpp)
-	
+	${LN_PLATFORM_SOURCES})
+
 #------------------------------
 # Test source files.
 set(LN_TEST_SOURCES
