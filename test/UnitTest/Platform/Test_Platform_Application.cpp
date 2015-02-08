@@ -11,8 +11,8 @@ protected:
 //---------------------------------------------------------------------
 TEST_F(Test_Platform_Application, Basic)
 {
-	RefPtr<Application> app(Application::Create());
-	app->CreateMainWindow(_T("test"), Size(640, 480));
+	PlatformManagerSettings s;
+	PlatformManager m(s);
 #if 0
 	while (app->DoEvents())
 	{
@@ -21,16 +21,30 @@ TEST_F(Test_Platform_Application, Basic)
 }
 
 //---------------------------------------------------------------------
-TEST_F(Test_Platform_Application, DoEvents)
-{
-	RefPtr<Application> app(Application::Create());
+//TEST_F(Test_Platform_Application, DoEvents)
+//{
+//	PlatformManagerSettings s;
+//	PlatformManager m(s);
+//
+//	int i = 0;
+//	while (m.DoEvents())
+//	{
+//		++i;
+//		if (i > 10) {	// 適当に回したら終了通知を送る
+//			app->Exit();
+//		}
+//	}
+//}
 
-	int i = 0;
+//---------------------------------------------------------------------
+TEST_F(Test_Platform_Application, OnThread)
+{
+	PlatformManagerSettings s;
+	s.UseInternalUIThread = true;
+	PlatformManager m(s);
+#if 0
 	while (app->DoEvents())
 	{
-		++i;
-		if (i > 10) {	// 適当に回したら終了通知を送る
-			app->Exit();
-		}
 	}
+#endif
 }

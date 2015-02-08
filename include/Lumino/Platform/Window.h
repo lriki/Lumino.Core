@@ -3,7 +3,6 @@
 
 #include "../Base/RefObject.h"
 #include "../Base/Size.h"
-#include "Application.h"
 #include "EventListener.h"
 
 namespace Lumino

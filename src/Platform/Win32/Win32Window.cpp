@@ -19,8 +19,8 @@ const DWORD		Win32Window::FULLSCREEN_STYLE = WS_POPUP;
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-Win32Window::Win32Window(Win32Application* app, const SettingData& settingData)
-	: Win32WindowBase(app)
+Win32Window::Win32Window(Win32WindowManager* windowManager, const SettingData& settingData)
+	: Win32WindowBase(windowManager)
 	, mOrginalWidth(640)
 	, mOrginalHeight(480)
 	, mWindowHandle(NULL)
@@ -73,7 +73,7 @@ Win32Window::Win32Window(Win32Application* app, const SettingData& settingData)
 		dwExStyle,
 		(settingData.WinClassName) ? settingData.WinClassName : WINDOW_CLASS_NAME,
 		mTitleText.c_str(),
-		(settingData.Windowed) ? mWindowedStyle : FULLSCREEN_STYLE,
+		(settingData.Fullscreen) ? FULLSCREEN_STYLE : mWindowedStyle,
 		CW_USEDEFAULT, CW_USEDEFAULT,
 		CW_USEDEFAULT, CW_USEDEFAULT,
 		NULL, NULL, inst, NULL);
@@ -95,7 +95,7 @@ Win32Window::Win32Window(Win32Application* app, const SettingData& settingData)
 	::ValidateRect(mWindowHandle, 0);
 
 	// ウィンドウの大きさを変更する
-	Resize(!settingData.Windowed);
+	Resize(settingData.Fullscreen);
 }
 
 //-----------------------------------------------------------------------------
@@ -106,7 +106,8 @@ Win32Window::~Win32Window()
 	if (mWindowHandle)
 	{
 		::DestroyWindow(mWindowHandle);
-		//UnregisterClass( WINDOW_CLASS_NAME, mInstanceHandle );
+		HINSTANCE inst = (HINSTANCE)::GetModuleHandle(NULL);
+		UnregisterClass(WINDOW_CLASS_NAME, inst);
 		mWindowHandle = NULL;
 	}
 }

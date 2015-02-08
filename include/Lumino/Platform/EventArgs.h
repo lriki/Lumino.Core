@@ -141,55 +141,49 @@ enum Key
 	key_Max = 256,
 };
 
+
 /**
-	@brief		イベント引数の基底クラス
-	@details	イベント固有の引数にアクセスする場合は、イベントの種類に対応する派生クラスにキャストします。
+	@brief		イベント引数
+	@note		以前は EventArgs クラスから派生した MouseEventArgs や KeyEventArgs を定義するスタイルを取っていた。
+				しかし、メインスレッドと UI スレッドを分ける場合イベントは一度キューに積む必要があり、
+				そのためにはメモリの動的確保(new)が必須となる。頻繁に飛んでくるメッセージに対して new はできればやりたくない。
+				new しない場合にできなくなるのは継承を使ったオブジェクト指向的なユーザー拡張イベント引数の実装。
+				…であるが、別の Lumino.GUI であればともかく、Platform イベントを拡張したい、しかもこのライブラリを使って、
+				ということがあるのかというと、まずないと思われる。
+				例えあったとしても相当レアケースなので、new のコストと天秤に掛けると却下するべき。ユーザーデータとして void* 持っておくだけで十分。
 */
-class EventArgs
+struct EventArgs
 {
-public:
-	EventType	Type;		///< イベントの種類
-	Window*		Sender;		///< イベントの送信元ウィンドウ
+	EventType	Type;			///< イベントの種類
+	Window*		Sender;			///< イベントの送信元ウィンドウ
+
+	/// マウスイベントの引数
+	union 
+	{
+		MouseButton	Button;		///< ボタン番号
+		short		Delta;		///< マウスホイールの回転回数 (windows では 1 回につき 120 が格納されるが、これは正または負の回数で、1単位)
+		short		X;			///< マウスイベント生成時のマウスの X 座標 (クライアント領域外は -1)
+		short		Y;			///< マウスイベント生成時のマウスの Y 座標 (クライアント領域外は -1)
+		short		MoveX;	    ///< X 座標の移動量
+		short		MoveY;      ///< Y 座標の移動量
+
+	} Mouse;
+
+	/// キーボードイベントの引数
+	union
+	{
+		Key			KeyCode;	///< キーコード
+		bool		IsAlt;		///< Alt キーが押されている場合 true
+		bool		IsShift;	///< Shift キーが押されている場合 true
+		bool		IsControl;	///< Ctrl キーが押されている場合 true
+
+	} Key;
 
 public:
+
+	/// 種類と送信元ウィンドウを指定して初期化する
+	EventArgs(EventType type, Window* sender) { Type = type; Sender = sender; }
 	EventArgs() {}
-	virtual ~EventArgs() {}
-};
-
-/**
-	@brief		マウスイベントの引数情報です。
-*/
-class MouseEventArgs
-	: public EventArgs
-{
-public:
-	MouseButton	Button;		///< ボタン番号
-	short		Delta;		///< マウスホイールの回転回数 (windows では 1 回につき 120 が格納されるが、これは正または負の回数で、1単位)
-	short		X;			///< マウスイベント生成時のマウスの X 座標 (クライアント領域外は -1)
-	short		Y;			///< マウスイベント生成時のマウスの Y 座標 (クライアント領域外は -1)
-	short		MoveX;	    ///< X 座標の移動量
-	short		MoveY;      ///< Y 座標の移動量
-
-public:
-	MouseEventArgs() {}
-	virtual ~MouseEventArgs() {}
-};
-
-/**
-	@brief		キーボードイベントの引数情報です。
-*/
-class KeyEventArgs
-	: public EventArgs
-{
-public:
-	Key			KeyCode;	///< キーコード
-	bool		IsAlt;		///< Alt キーが押されている場合 true
-	bool		IsShift;	///< Shift キーが押されている場合 true
-	bool		IsControl;	///< Ctrl キーが押されている場合 true
-
-public:
-	KeyEventArgs() {}
-	virtual ~KeyEventArgs() {}
 };
 
 } // namespace Platform

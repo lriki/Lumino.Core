@@ -8,7 +8,7 @@ namespace Lumino
 {
 namespace Platform
 {
-class Win32Application;
+class Win32WindowManager;
 
 /**
 	@brief	
@@ -17,7 +17,7 @@ class Win32WindowBase
 	: public WindowBase
 {
 public:
-	Win32WindowBase(Win32Application* app);
+	Win32WindowBase(Win32WindowManager* app);
 	virtual ~Win32WindowBase();
 
 public:
@@ -30,6 +30,8 @@ public:
 	///		ホストの場合、ライブラリのユーザーが直接この関数を呼び出し、windows メッセージをライブラリに知らせる必要がある。
 	///		ホストの場合、メッセージループおよび DefWndProc はユーザー側で呼ぶことになるのでこの中では行わない。代わりに handled でメッセージを処理したことを伝える。
 	LRESULT WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam, bool* handled);
+
+	bool NortifyEvent(const EventArgs& e);
 
 	/// ウィンドウハンドルの取得
 	virtual HWND GetWindowHandle() = 0;

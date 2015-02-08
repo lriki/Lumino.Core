@@ -20,7 +20,7 @@ public:
 		const TCHAR*	        TitleText;		///< ウィンドウタイトルの文字列
 		int				        Width;			///< クライアント領域の幅
 		int				        Height;			///< クライアント領域の高さ
-		bool			        Windowed;		///< ウィンドウモードで初期化する場合 true
+		bool			        Fullscreen;		///< フルスクリーンモードで初期化する場合 true
 		const TCHAR*	        WinClassName;   ///< ウィンドウクラスの名前 または NULL ( NULL の場合、L"_LNote_" が使われる )
 		int                     IconResourceID; ///< タイトルバーのアイコン識別子 (IDI_ICON1 等)
 		bool					Resizable;
@@ -33,7 +33,7 @@ public:
 	static const DWORD		FULLSCREEN_STYLE;
 
 public:
-	Win32Window(Win32Application* app, const SettingData& settingData);
+	Win32Window(Win32WindowManager* windowManager, const SettingData& settingData);
 	virtual ~Win32Window();
 
 public:

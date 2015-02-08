@@ -32,5 +32,5 @@
 #include "Lumino/Threading/ReadWriteMutex.h"
 #include "Lumino/Threading/Thread.h"
 
-#include "Lumino/Platform/Application.h"
+#include "Lumino/Platform/PlatformManager.h"
 #include "Lumino/Platform/Window.h"

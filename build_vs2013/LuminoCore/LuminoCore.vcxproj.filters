@@ -99,9 +99,6 @@
     <ClInclude Include="..\..\include\Lumino\Platform\Window.h">
       <Filter>Platform</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Lumino\Platform\Application.h">
-      <Filter>Platform</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Lumino\Platform\Environment.h">
       <Filter>Platform</Filter>
     </ClInclude>
@@ -110,12 +107,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\Platform\WindowBase.h">
       <Filter>Platform</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Platform\ApplicationBase.h">
-      <Filter>Platform</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Platform\Win32\Win32Application.h">
-      <Filter>Platform\Win32</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Platform\Win32\Win32Window.h">
       <Filter>Platform\Win32</Filter>
@@ -157,6 +148,15 @@
     <ClInclude Include="..\..\src\Text\DBCSEncoding.h">
       <Filter>Text</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\Platform\WindowManagerBase.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Platform\Win32\Win32WindowManager.h">
+      <Filter>Platform\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Platform\PlatformManager.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\include\Lumino\Base\Delegate.inl">
@@ -197,9 +197,6 @@
     <ClCompile Include="..\..\src\Platform\WindowBase.cpp">
       <Filter>Platform</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Platform\ApplicationBase.cpp">
-      <Filter>Platform</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\Platform\Win32\Win32Window.cpp">
       <Filter>Platform\Win32</Filter>
     </ClCompile>
@@ -207,9 +204,6 @@
       <Filter>Platform\Win32</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\Platform\Win32\Environment.cpp">
-      <Filter>Platform\Win32</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Platform\Win32\Win32Application.cpp">
       <Filter>Platform\Win32</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\Threading\ThreadingExceptions.cpp">
@@ -256,6 +250,15 @@
     </ClCompile>
     <ClCompile Include="..\..\src\Text\ConvertTable_EUCKR.c">
       <Filter>Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Platform\PlatformManager.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Platform\WindowManagerBase.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Platform\Win32\Win32WindowManager.cpp">
+      <Filter>Platform\Win32</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,7 +1,7 @@
 
 #include "../../Internal.h"
 #include "Win32Window.h"
-#include "Win32Application.h"
+#include "Win32WindowManager.h"
 
 namespace Lumino
 {
@@ -10,34 +10,33 @@ namespace Platform
 //=============================================================================
 // Application
 //=============================================================================
-Application* Application::Create()
-{
-	return LN_NEW Win32Application();
-}
+//PlatformManager* PlatformManager::Create()
+//{
+//	return LN_NEW Win32WindowManager();
+//}
 
 //=============================================================================
-// Win32Application
+// Win32WindowManager
 //=============================================================================
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-Win32Application::Win32Application()
-	: mEndRequested(false)
+Win32WindowManager::Win32WindowManager()
 {
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-Win32Application::~Win32Application()
+Win32WindowManager::~Win32WindowManager()
 {
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-//void Win32Application::OnClosedWindow(Window* closedWindow)
+//void Win32WindowManager::OnClosedWindow(Window* closedWindow)
 //{
 //	// èzä¬éQè∆ñhé~ÇÃÇΩÇﬂÅAClose Ç≥ÇÍÇΩÇÁéQè∆ÇäOÇ∑
 //	if (closedWindo/*w == mMainWindow) {
@@ -48,23 +47,32 @@ Win32Application::~Win32Application()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void Win32Application::CreateMainWindow(const TCHAR* title, Size clienSize, bool windowed, bool resizable)
+//void Win32WindowManager::Exit()
+//{
+//	::PostQuitMessage(0);
+//	PlatformManager::Exit();
+//}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void Win32WindowManager::CreateMainWindow(const WindowCreationSettings& settings)
 {
 	Win32Window::SettingData data;
-	data.TitleText = title;
-	data.Width = clienSize.Width;
-	data.Height = clienSize.Height;
-	data.Windowed = windowed;
+	data.TitleText = settings.Title;
+	data.Width = settings.ClientSize.Width;
+	data.Height = settings.ClientSize.Height;
+	data.Fullscreen = settings.Fullscreen;
 	data.WinClassName = NULL;
 	data.IconResourceID = NULL;
-	data.Resizable = resizable;
+	data.Resizable = settings.Resizable;
 	mMainWindow.Attach(LN_NEW Win32Window(this, data));
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-bool Win32Application::DoEvents()
+void Win32WindowManager::DoEvents()
 {
 	MSG msg;
 	while (::PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE))
@@ -72,22 +80,20 @@ bool Win32Application::DoEvents()
 		if (::GetMessage(&msg, NULL, 0, 0))
 		{
 			if (msg.message == WM_QUIT){
-				mEndRequested = true;
+				m_endRequested = true;
 			}
 			::TranslateMessage(&msg);
 			::DispatchMessage(&msg);
 		}
 	}
-	return !mEndRequested;
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void Win32Application::Exit()
+void Win32WindowManager::Finalize()
 {
-	::PostQuitMessage(0);
-	mEndRequested = true;
+	mMainWindow.SafeRelease();
 }
 
 } // namespace Platform

@@ -18,7 +18,7 @@
 
 
 #include "../../Internal.h"
-#include "Win32Application.h"
+#include "Win32WindowManager.h"
 #include "Win32WindowBase.h"
 
 namespace Lumino
@@ -33,7 +33,7 @@ namespace Platform
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-Win32WindowBase::Win32WindowBase(Win32Application* app)
+Win32WindowBase::Win32WindowBase(Win32WindowManager* app)
 	: WindowBase(app)
 	, mLastMouseX(-1)
 	, mLastMouseY(-1)
@@ -88,17 +88,16 @@ LRESULT Win32WindowBase::WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 				その後の finalize() 呼び出しで DestroyWindow() を呼び出す。
 				*/
 
-				EventArgs e;
-				e.Type = EventType_Close;
-				e.Sender = this;
-
-				//mApplication->PostEvent(&e);	// 非同期処理の場合は一度キューに入れる
-				if (SendEventToAllListener(e)) {		// 同期処理の場合はこの場で通知
+				EventArgs e(EventType_Close, this);
+				if (NortifyEvent(e)) {
 					*handled = true;
 					return 0;
 				}
 
-				mApplication->Exit();
+				// TODO
+				if (this == m_windowManager->GetMainWindow()) {
+					m_windowManager->Exit();
+				}
 
 				*handled = true;
 				return 0;
@@ -164,47 +163,46 @@ LRESULT Win32WindowBase::WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 			case WM_MBUTTONDOWN:
 			case WM_MBUTTONUP:
 			{
-				MouseEventArgs e;
+				EventArgs e;
 				e.Sender = this;
 
 				switch (msg)
 				{
 				case WM_LBUTTONDOWN:
 					e.Type = EventType_MouseDown;
-					e.Button = MouseButton_Left;
+					e.Mouse.Button = MouseButton_Left;
 					break;
 				case WM_LBUTTONUP:
 					e.Type = EventType_MouseUp;
-					e.Button = MouseButton_Left;
+					e.Mouse.Button = MouseButton_Left;
 					break;
 				case WM_RBUTTONDOWN:
 					e.Type = EventType_MouseDown;
-					e.Button = MouseButton_Right;
+					e.Mouse.Button = MouseButton_Right;
 					break;
 				case WM_RBUTTONUP:
 					e.Type = EventType_MouseUp;
-					e.Button = MouseButton_Right;
+					e.Mouse.Button = MouseButton_Right;
 					break;
 				case WM_MBUTTONDOWN:
 					e.Type = EventType_MouseDown;
-					e.Button = MouseButton_Middle;
+					e.Mouse.Button = MouseButton_Middle;
 					break;
 				case WM_MBUTTONUP:
 					e.Type = EventType_MouseUp;
-					e.Button = MouseButton_Middle;
+					e.Mouse.Button = MouseButton_Middle;
 					break;
 				}
 
-				e.X = LOWORD(lparam);
-				e.Y = HIWORD(lparam);
-				e.Delta = 0;
-				e.MoveX = (mLastMouseX >= 0) ? e.X - mLastMouseX : 0;
-				e.MoveY = (mLastMouseY >= 0) ? e.Y - mLastMouseY : 0;
-				SendEventToAllListener(e);		// 同期処理の場合はこの場で通知
-				//mApplication->PostEvent(&e);	// 非同期処理の場合は一度キューに入れる
+				e.Mouse.X = LOWORD(lparam);
+				e.Mouse.Y = HIWORD(lparam);
+				e.Mouse.Delta = 0;
+				e.Mouse.MoveX = (mLastMouseX >= 0) ? e.Mouse.X - mLastMouseX : 0;
+				e.Mouse.MoveY = (mLastMouseY >= 0) ? e.Mouse.Y - mLastMouseY : 0;
+				NortifyEvent(e);
 
-				mLastMouseX = e.X;
-				mLastMouseY = e.Y;
+				mLastMouseX = e.Mouse.X;
+				mLastMouseY = e.Mouse.Y;
 
 				*handled = true;
 				return 0;
@@ -212,20 +210,19 @@ LRESULT Win32WindowBase::WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 			/////////////////////////////////////////////// マウス移動
 			case WM_MOUSEMOVE:
 			{
-				MouseEventArgs e;
+				EventArgs e;
 				e.Type = EventType_MouseMove;
 				e.Sender = this;
-				e.Button = MouseButton_None;
-				e.Delta = 0;
-				e.X = static_cast< short >(LOWORD(lparam));     // 一度 short にキャストしないと、
-				e.Y = static_cast< short >(HIWORD(lparam));     // マイナス値になったとき 65535 とか値が入る
-				e.MoveX = (mLastMouseX >= 0) ? e.X - mLastMouseX : 0;
-				e.MoveY = (mLastMouseY >= 0) ? e.Y - mLastMouseY : 0;
-				SendEventToAllListener(e);		// 同期処理の場合はこの場で通知
-				//mApplication->PostEvent(&e);	// 非同期処理の場合は一度キューに入れる
+				e.Mouse.Button = MouseButton_None;
+				e.Mouse.Delta = 0;
+				e.Mouse.X = static_cast< short >(LOWORD(lparam));     // 一度 short にキャストしないと、
+				e.Mouse.Y = static_cast< short >(HIWORD(lparam));     // マイナス値になったとき 65535 とか値が入る
+				e.Mouse.MoveX = (mLastMouseX >= 0) ? e.Mouse.X - mLastMouseX : 0;
+				e.Mouse.MoveY = (mLastMouseY >= 0) ? e.Mouse.Y - mLastMouseY : 0;
+				NortifyEvent(e);
 
-				mLastMouseX = e.X;
-				mLastMouseY = e.Y;
+				mLastMouseX = e.Mouse.X;
+				mLastMouseY = e.Mouse.Y;
 
 				*handled = true;
 				return 0;
@@ -236,20 +233,19 @@ LRESULT Win32WindowBase::WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 				// 念のためホントにクライアント領域外かチェック
 				if (wparam != HTCLIENT)
 				{
-					MouseEventArgs e;
+					EventArgs e;
 					e.Type = EventType_MouseMove;
 					e.Sender = this;
-					e.Button = MouseButton_None;
-					e.Delta = 0;
-					e.X = -1;
-					e.Y = -1;
-					e.MoveX = (mLastMouseX >= 0) ? e.X - mLastMouseX : 0;
-					e.MoveY = (mLastMouseY >= 0) ? e.Y - mLastMouseY : 0;
-					SendEventToAllListener(e);		// 同期処理の場合はこの場で通知
-					//mApplication->PostEvent(&e);	// 非同期処理の場合は一度キューに入れる
+					e.Mouse.Button = MouseButton_None;
+					e.Mouse.Delta = 0;
+					e.Mouse.X = -1;
+					e.Mouse.Y = -1;
+					e.Mouse.MoveX = (mLastMouseX >= 0) ? e.Mouse.X - mLastMouseX : 0;
+					e.Mouse.MoveY = (mLastMouseY >= 0) ? e.Mouse.Y - mLastMouseY : 0;
+					NortifyEvent(e);
 
-					mLastMouseX = e.X;
-					mLastMouseY = e.Y;
+					mLastMouseX = e.Mouse.X;
+					mLastMouseY = e.Mouse.Y;
 
 					*handled = true;
 					return 0;
@@ -258,20 +254,19 @@ LRESULT Win32WindowBase::WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 			///////////////////////////////////////////// マウスホイールが操作された
 			case WM_MOUSEWHEEL:
 			{
-				MouseEventArgs e;
+				EventArgs e;
 				e.Type = EventType_MouseWheel;
 				e.Sender = this;
-				e.Button = MouseButton_None;
-				e.Delta = GET_WHEEL_DELTA_WPARAM(wparam) / WHEEL_DELTA;
-				e.X = static_cast< short >(LOWORD(lparam));
-				e.Y = static_cast< short >(HIWORD(lparam));
-				e.MoveX = (mLastMouseX >= 0) ? e.X - mLastMouseX : 0;
-				e.MoveY = (mLastMouseY >= 0) ? e.Y - mLastMouseY : 0;
-				SendEventToAllListener(e);		// 同期処理の場合はこの場で通知
-				//mApplication->PostEvent(&e);	// 非同期処理の場合は一度キューに入れる
+				e.Mouse.Button = MouseButton_None;
+				e.Mouse.Delta = GET_WHEEL_DELTA_WPARAM(wparam) / WHEEL_DELTA;
+				e.Mouse.X = static_cast< short >(LOWORD(lparam));
+				e.Mouse.Y = static_cast< short >(HIWORD(lparam));
+				e.Mouse.MoveX = (mLastMouseX >= 0) ? e.Mouse.X - mLastMouseX : 0;
+				e.Mouse.MoveY = (mLastMouseY >= 0) ? e.Mouse.Y - mLastMouseY : 0;
+				NortifyEvent(e);
 
-				mLastMouseX = e.X;
-				mLastMouseY = e.Y;
+				mLastMouseX = e.Mouse.X;
+				mLastMouseY = e.Mouse.Y;
 
 				*handled = true;
 				return 0;
@@ -279,15 +274,14 @@ LRESULT Win32WindowBase::WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 			///////////////////////////////////////////// キー↓
 			case WM_KEYDOWN:
 			{
-				KeyEventArgs e;
+				EventArgs e;
 				e.Type = EventType_KeyDown;
 				e.Sender = this;
-				e.KeyCode = ConvertVirtualKeyCode(wparam);	// 仮想キーコード
-				e.IsAlt = ::GetKeyState(VK_MENU) < 0;
-				e.IsShift = ::GetKeyState(VK_SHIFT) < 0;
-				e.IsControl = ::GetKeyState(VK_CONTROL) < 0;
-				SendEventToAllListener(e);		// 同期処理の場合はこの場で通知
-				//mApplication->PostEvent(&e);	// 非同期処理の場合は一度キューに入れる
+				e.Key.KeyCode = ConvertVirtualKeyCode(wparam);	// 仮想キーコード
+				e.Key.IsAlt = ::GetKeyState(VK_MENU) < 0;
+				e.Key.IsShift = ::GetKeyState(VK_SHIFT) < 0;
+				e.Key.IsControl = ::GetKeyState(VK_CONTROL) < 0;
+				NortifyEvent(e);
 
 				*handled = true;
 				return 0;
@@ -295,15 +289,14 @@ LRESULT Win32WindowBase::WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 			///////////////////////////////////////////// キー↑
 			case WM_KEYUP:
 			{
-				KeyEventArgs e;
+				EventArgs e;
 				e.Type = EventType_KeyUp;
 				e.Sender = this;
-				e.KeyCode = ConvertVirtualKeyCode(wparam);	// 仮想キーコード
-				e.IsAlt = ::GetKeyState(VK_MENU) < 0;
-				e.IsShift = ::GetKeyState(VK_SHIFT) < 0;
-				e.IsControl = ::GetKeyState(VK_CONTROL) < 0;
-				SendEventToAllListener(e);		// 同期処理の場合はこの場で通知
-				//mApplication->PostEvent(&e);	// 非同期処理の場合は一度キューに入れる
+				e.Key.KeyCode = ConvertVirtualKeyCode(wparam);	// 仮想キーコード
+				e.Key.IsAlt = ::GetKeyState(VK_MENU) < 0;
+				e.Key.IsShift = ::GetKeyState(VK_SHIFT) < 0;
+				e.Key.IsControl = ::GetKeyState(VK_CONTROL) < 0;
+				NortifyEvent(e);
 
 				*handled = true;
 				return 0;
@@ -311,15 +304,14 @@ LRESULT Win32WindowBase::WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 			///////////////////////////////////////////// Alt + KeyDown
 			case WM_SYSKEYDOWN:
 			{
-				KeyEventArgs e;
+				EventArgs e;
 				e.Type = EventType_KeyDown;
 				e.Sender = this;
-				e.KeyCode = ConvertVirtualKeyCode(wparam);	// 仮想キーコード
-				e.IsAlt = true;								// Alt on
-				e.IsShift = ::GetKeyState(VK_SHIFT) < 0;
-				e.IsControl = ::GetKeyState(VK_CONTROL) < 0;
-				SendEventToAllListener(e);		// 同期処理の場合はこの場で通知
-				//mApplication->PostEvent(&e);	// 非同期処理の場合は一度キューに入れる
+				e.Key.KeyCode = ConvertVirtualKeyCode(wparam);	// 仮想キーコード
+				e.Key.IsAlt = true;								// Alt on
+				e.Key.IsShift = ::GetKeyState(VK_SHIFT) < 0;
+				e.Key.IsControl = ::GetKeyState(VK_CONTROL) < 0;
+				NortifyEvent(e);
 
 				*handled = true;
 				return 0;
@@ -327,15 +319,14 @@ LRESULT Win32WindowBase::WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 			///////////////////////////////////////////// Alt + KeyUp
 			case WM_SYSKEYUP:
 			{
-				KeyEventArgs e;
+				EventArgs e;
 				e.Type = EventType_KeyUp;
 				e.Sender = this;
-				e.KeyCode = ConvertVirtualKeyCode(wparam);	// 仮想キーコード
-				e.IsAlt = true;								// Alt on
-				e.IsShift = ::GetKeyState(VK_SHIFT) < 0;
-				e.IsControl = ::GetKeyState(VK_CONTROL) < 0;
-				SendEventToAllListener(e);		// 同期処理の場合はこの場で通知
-				//mApplication->PostEvent(&e);	// 非同期処理の場合は一度キューに入れる
+				e.Key.KeyCode = ConvertVirtualKeyCode(wparam);	// 仮想キーコード
+				e.Key.IsAlt = true;								// Alt on
+				e.Key.IsShift = ::GetKeyState(VK_SHIFT) < 0;
+				e.Key.IsControl = ::GetKeyState(VK_CONTROL) < 0;
+				NortifyEvent(e);
 				break;	// WM_SYSKEYUPを捕まえた場合、必ずDefWindowProcに行くようにする
 			}
 			///////////////////////////////////////////// 文字入力
@@ -360,6 +351,14 @@ LRESULT Win32WindowBase::WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 	}
 
 	return 0;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+bool Win32WindowBase::NortifyEvent(const EventArgs& e)
+{
+	return SendEventToAllListener(e);
 }
 
 //-----------------------------------------------------------------------------
