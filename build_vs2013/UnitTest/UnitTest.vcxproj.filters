@@ -19,6 +19,9 @@
     <Filter Include="UnitTest\Text">
       <UniqueIdentifier>{d8316252-7a85-41ab-9944-caf7f396591f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UnitTest\IO">
+      <UniqueIdentifier>{dc6b7f36-f085-444d-9af0-ccaa09816e2d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\test\gtest\src\gtest-all.cc">
@@ -68,6 +71,9 @@
     </ClCompile>
     <ClCompile Include="..\..\test\UnitTest\Text\Test_Text_EncodingDetector.cpp">
       <Filter>UnitTest\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\test\UnitTest\IO\Test_IO_FileUtils.cpp">
+      <Filter>UnitTest\IO</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

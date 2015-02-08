@@ -7,25 +7,62 @@
 #include "../../include/Lumino/IO/FileStream.h"
 #include "../../include/Lumino/IO/FileUtils.h"
 
+#define MBCS_FILEPATH(mbcsPath, srcWPath) \
+	char mbcsPath[LN_MAX_PATH + 1]; \
+	if (wcstombs(mbcsPath, srcWPath, LN_MAX_PATH) < 0) { \
+		LN_THROW(0, IOException); \
+	}
+
 namespace Lumino
 {
+#ifdef _WIN32
+#else
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+static bool is_stat_writable(struct stat *st, const char *path)
+{
+	// 制限なしに書き込み可であるか
+	if (st->st_mode & S_IWOTH)
+		return 1;
+	// 現在のユーザーIDに許可されているか
+	if ((st->st_uid == geteuid()) && (st->st_mode & S_IWUSR))
+		return 1;
+	// 現在のグループIDに許可されているか
+	if ((st->st_gid == getegid()) && (st->st_mode & S_IWGRP))
+		return 1;
+	// もうここに来ることはほとんどないはずだが念のため
+	return access(path, W_OK) == 0;
+}
+#endif
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-#if 1	// fopen によるチェックはNG。ファイルが排他ロックで開かれていた時に失敗する。
-
 bool FileUtils::Exists(const char* filePath)
 {
+	// ※fopen によるチェックはNG。ファイルが排他ロックで開かれていた時に失敗する。
 #ifdef _WIN32
 	DWORD attr = ::GetFileAttributesA(filePath);
 	return ((attr != -1) &&
 			(attr & FILE_ATTRIBUTE_DIRECTORY) == 0);
 #else
 	// http://www.ie.u-ryukyu.ac.jp/~kono/lecture/1999/os/info1/file-2.html
-	struct stat st;
-	int ret = ::stat(file, &st);
-	st.st_mode
+	//struct stat st;
+	//int ret = ::stat(file, &st);
+	//st.st_mode
+	int ret = access(path, F_OK);
+	if (ret == -1) {
+		if (errno == ENOENT) {
+			return false;
+		}
+		else {
+			// パスが長い、メモリが足りない等理由は様々。
+			// http://linuxjm.sourceforge.jp/html/LDP_man-pages/man2/faccessat.2.html
+			LN_THROW(0, IOException, strerror(errno));
+		}
+	}
+	return true;
 #endif
 }
 bool FileUtils::Exists(const wchar_t* filePath)
@@ -35,26 +72,10 @@ bool FileUtils::Exists(const wchar_t* filePath)
 	return ((attr != -1) &&
 			(attr & FILE_ATTRIBUTE_DIRECTORY) == 0);
 #else
-	// http://www.ie.u-ryukyu.ac.jp/~kono/lecture/1999/os/info1/file-2.html
-	struct stat st;
-	int ret = ::stat(file, &st);
-	st.st_mode
+	MBCS_FILEPATH(mbcsFilePath, filePath);
+	return Exists(mbcsFilePath);
 #endif
 }
-
-#else
-template<typename TChar>
-bool FileUtils::Exists(const TChar* filePath)
-{
-	if (!filePath) return false; 
-	FILE* fp = FileUtils::fopen( filePath, LN_T(TChar, "rb") );
-	if (!fp) return false; 
-	fclose(fp);
-	return true;
-}
-template bool FileUtils::Exists<char>(const char* filePath);
-template bool FileUtils::Exists<wchar_t>(const wchar_t* filePath);
-#endif
 
 //-----------------------------------------------------------------------------
 //
@@ -71,9 +92,35 @@ uint32_t FileUtils::GetAttribute(const char* filePath)
 	if (attr & FILE_ATTRIBUTE_HIDDEN)    flags |= FileAttribute_Hidden;
 	return flags;
 #else
-#error
 	// Unix 系の場合、ファイルの先頭が . であれば隠しファイルである。
 	// mono-master/mono/io-layer/io.c の、_wapi_stat_to_file_attributes が参考になる。
+	struct stat st;
+	int ret = ::stat(file, &st);
+	if (ret == -1) {
+		LN_THROW(0, IOException);
+	}
+
+	uint32_t attrs = 0;
+	if (S_ISDIR(buf->st_mode))
+	{
+		attrs |= FileAttribute_Directory;
+		if (!is_stat_writable()) {
+			attrs |= FileAttribute_ReadOnly;
+		}
+		if (filename[0] == '.') {
+			attrs |= FileAttribute_Hidden;
+		}
+	}
+	else
+	{
+		if (!is_stat_writable()) {
+			attrs |= FileAttribute_ReadOnly;
+		}
+		if (filename[0] == '.') {
+			attrs |= FileAttribute_Hidden;
+		}
+	}
+	return attrs;
 #endif
 }
 
@@ -89,9 +136,8 @@ uint32_t FileUtils::GetAttribute(const wchar_t* filePath)
 	if (attr & FILE_ATTRIBUTE_HIDDEN)    flags |= FileAttribute_Hidden;
 	return flags;
 #else
-#error
-	// Unix 系の場合、ファイルの先頭が . であれば隠しファイルである。
-	// mono-master/mono/io-layer/io.c の、_wapi_stat_to_file_attributes が参考になる。
+	MBCS_FILEPATH(mbcsFilePath, filePath);
+	return GetAttribute(mbcsFilePath);
 #endif
 }
 
@@ -105,7 +151,36 @@ void FileUtils::Copy(const char* sourceFileName, const char* destFileName, bool 
 	LN_THROW(bRes, Win32Exception, ::GetLastError());
 #else
 	// http://ppp-lab.sakura.ne.jp/ProgrammingPlacePlus/c/044.html
-#error
+	FILE* fpSrc = fopen(sourceFileName, "rb");
+	if (fpSrc == NULL){
+		LN_THROW(0, IOException);
+	}
+
+	FILE* fpDest = fopen(destFileName, "wb");
+	if (fpDest == NULL){
+		LN_THROW(0, IOException);
+	}
+
+	// バイナリデータとして 1byte ずつコピー
+	// (windows ではバッファリングが効くけど、それ以外はわからない。
+	//  Linux とかで極端に遅くなるようならここでバッファリングも考える)
+	while (1)
+	{
+		byte_t b;
+		fread(&b, 1, 1, fpSrc);
+		if (feof(fpSrc)){
+			break;
+		}
+		if (ferror(fpSrc)){
+			LN_THROW(0, IOException);
+		}
+
+		fwrite(&c, sizeof(c), 1, fpDest);
+	}
+
+	fclose(fpDest);
+	fclose(fpSrc);
+	return 0;
 #endif
 }
 
@@ -115,8 +190,9 @@ void FileUtils::Copy(const wchar_t* sourceFileName, const wchar_t* destFileName,
 	BOOL bRes = ::CopyFileW(sourceFileName, destFileName, (overwrite) ? FALSE : TRUE);
 	LN_THROW(bRes, Win32Exception, ::GetLastError());
 #else
-	// http://ppp-lab.sakura.ne.jp/ProgrammingPlacePlus/c/044.html
-#error
+	MBCS_FILEPATH(mbcsSrc, sourceFileName);
+	MBCS_FILEPATH(mbcsDest, destFileName);
+	Copy(mbcsSrc, mbcsDest, overwrite);
 #endif
 }
 
@@ -129,7 +205,8 @@ void FileUtils::Delete(const char* filePath)
 	BOOL r = ::DeleteFileA(filePath);
 	LN_THROW(r != FALSE, Win32Exception, ::GetLastError());
 #else
-#error
+	int ret = remove(path);
+	if (ret == -1) LN_THROW(IOException, strerror(errno));
 #endif
 }
 void FileUtils::Delete(const wchar_t* filePath)
@@ -138,7 +215,8 @@ void FileUtils::Delete(const wchar_t* filePath)
 	BOOL r = ::DeleteFileW(filePath);
 	LN_THROW(r != FALSE, Win32Exception, ::GetLastError());
 #else
-#error
+	MBCS_FILEPATH(mbcsFilePath, filePath);
+	Delete(mbcsFilePath);
 #endif
 }
 

@@ -7,7 +7,7 @@
 #include <string.h>
 #include <dlfcn.h>
 #include <cxxabi.h>
-#include <bfd.h>		// install binutils-devel
+#include <bfd.h>		// [$ sudo apt-get install binutils-dev] or [binutils-devel]
 
 namespace Lumino
 {
@@ -52,11 +52,11 @@ public:
 		if (!mSymbols) {
 			return;
 		}
-		this->NSymbols = bfd_canonicalize_symtab(mAbfd, mSymbols);
+		mNSymbols = bfd_canonicalize_symtab(mAbfd, mSymbols);
 		if (!mNSymbols) {
 			return ;
 		}
-		this->Section = bfd_get_section_by_name(mAbfd, ".debug_info");
+		mSection = bfd_get_section_by_name(mAbfd, ".debug_info");
 		if (!mSection) {
 			return;
 		}
@@ -64,7 +64,7 @@ public:
 		mIsSymbolEngineReady = true;
 	}
 
-	~BackTrace()
+	?BackTrace()
 	{
 		if (mSymbols)
 		{
@@ -87,7 +87,7 @@ public:
 	}
 	
 	//ƒVƒ“ƒ{ƒ‹‚Ì‰ðŒˆ
-	void addressToSymbolString(void* address, char* outBuffer, int len) const
+	void AddressToSymbolString(void* address, char* outBuffer, int len) const
 	{
 		//see http://d.hatena.ne.jp/syuu1228/20100215/1266262848
 		Dl_info info;
@@ -115,9 +115,9 @@ public:
 		if (!mIsSymbolEngineReady)
 		{
 			snprintf(outBuffer ,len , "0x%p @ %s @ %s @ %s+0x%p" ,
-					address , info.dli_fname , (demangled ? demangled : info.dli_sname),
-											   (demangled ? demangled : info.dli_sname), 
-											   (unsigned int) ((char *)address - (char *)info.dli_saddr) );
+				address , info.dli_fname , (demangled ? demangled : info.dli_sname),
+				(demangled ? demangled : info.dli_sname), 
+				(unsigned int) ((char *)address - (char *)info.dli_saddr) );
 			free(demangled);
 			return ;
 		}
@@ -166,7 +166,7 @@ public:
 			writesize += (int)strlen(outBuffer + writesize);
 
 			if (len - writesize >= 2) {
-				strncat_s(outBuffer + writesize, len - writesize, "\r\n", 2);
+				strncat_s(outBuffer + writesize, len - writesize, "?r?n", 2);
 				writesize += 2;
 			}
 

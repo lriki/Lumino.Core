@@ -181,6 +181,48 @@ inline errno_t strcpy_s(
 	return 0;
 }
 
+//-----------------------------------------------------------------------------
+// https://msdn.microsoft.com/ja-jp/library/z5hh6ee9.aspx
+//-----------------------------------------------------------------------------
+errno_t _fopen_s(
+	FILE** pFile,
+	const char *filename,
+	const char *mode )
+{
+	if (!pFile || !filename || !mode) {
+		return EINVAL;
+	}
+
+	*pFile = fopen(filename, mode);
+	return 0;
+}
+
+//-----------------------------------------------------------------------------
+// https://msdn.microsoft.com/ja-jp/library/z5hh6ee9.aspx
+//-----------------------------------------------------------------------------
+errno_t _wfopen_s(
+	FILE** pFile,
+	const wchar_t *filename,
+	const wchar_t *mode )
+{
+	if (!pFile || !filename || !mode) {
+		return EINVAL;
+	}
+
+	char mbcsFilename[LN_MAX_PATH + 1];	// linux なら UTF8
+	char mbcsMode[LN_MAX_PATH + 1];	// linux なら UTF8
+	if (wcstombs(mbcsFilename, filename, LN_MAX_PATH) < 0) {
+		return EINVAL;
+	}
+	if (wcstombs(mbcsMode, mode, LN_MAX_PATH) < 0) {
+		return EINVAL;
+	}
+
+	*pFile = fopen(mbcsFilename, mbcsMode);
+	return 0;
+	// http://www.linuxquestions.org/questions/programming-9/_wfopen-does-not-work-on-linux-692380/
+}
+
 } // namespace Lumino
 
 #endif

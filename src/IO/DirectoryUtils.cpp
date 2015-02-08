@@ -57,8 +57,13 @@ Array<String> DirectoryUtils::GetFiles(const TCHAR* drPath, const TCHAR* pattern
 }
 
 #else
-#error Not impl.
-// http://www.syuhitu.org/other/dir.html
+Array<String> DirectoryUtils::GetFiles(const TCHAR* drPath, const TCHAR* pattern)
+{
+	LN_THROW(0, NotImplementedException);
+	// http://www.syuhitu.org/other/dir.html
+	Array<String> fileList;
+	return fileList;
+}
 #endif
 
 } // namespace Lumino
