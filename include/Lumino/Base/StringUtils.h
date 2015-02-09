@@ -67,6 +67,9 @@ public:
 	/** @copydoc	IsSpace */
 	static bool IsSpace(wchar_t ch) { return iswspace(ch) != 0; }
 
+	static void StrNCpy(char* dest, size_t destSize, const char* src, int count) { strncpy_s(dest, destSize, src, count); }
+	static void StrNCpy(wchar_t* dest, size_t destElementsSize, const wchar_t* src, int count) { wcsncpy_s(dest, destElementsSize, src, count); }	// 文字単位。バイト単位ではない
+
 	/// strncmp の overload 実装
 	static int StrNCmp(const char* str1, const char* str2, size_t count) { return strncmp(str1, str2, count); }
 	static int StrNCmp(const wchar_t* str1, const wchar_t* str2, size_t count) { return wcsncmp(str1, str2, count); }
