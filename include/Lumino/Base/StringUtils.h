@@ -41,6 +41,14 @@ public:
 
 	/** @copydoc	ToUpper */
 	static wchar_t ToUpper(wchar_t ch) { return (wchar_t)::towupper(ch); }
+	
+	/**
+		@brief		
+		@attention	文字数を計る機能は保障しない。linux では wchar_t 用に文字列を計る関数が無いため。
+	*/
+	static int VSPrintf(char* out, int charCount, const char* format, va_list args);
+	static int VSPrintf(wchar_t* out, int charCount, const wchar_t* format, va_list args);
+
 
 	/**
 		@brief		マルチバイト文字列をワイド文字列に変換する

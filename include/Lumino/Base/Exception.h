@@ -6,6 +6,23 @@
 // exp の条件が満たされなかった場合、type に指定した例外を throw する
 #define LN_THROW( exp, type, ... )	{ if (!(exp)) { type e = type(__VA_ARGS__); e.SetSourceLocationInfo(__FILE__, __LINE__); throw e; } }
 
+/// 例外クラスの基本的なコンストラクタを宣言する
+#define LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(className) \
+	className(const char* message, ...) \
+	{ \
+		va_list args; \
+		va_start(args, message); \
+		SetMessage(message, args); \
+		va_end(args); \
+	} \
+	className(const wchar_t* message, ...) \
+	{ \
+		va_list args; \
+		va_start(args, message); \
+		SetMessage(message, args); \
+		va_end(args); \
+	}
+
 namespace Lumino
 {
 
@@ -20,6 +37,11 @@ public:
 	Exception& SetSourceLocationInfo( const char* filePath, int fileLine );
 
 public:
+	
+	/**
+		@brief	例外の詳細メッセージを取得します。
+	*/
+	const TCHAR* GetMessage() const { return mMessage; }
 
 	/**
 		@brief		例外発生時に詳細情報をダンプするファイルを初期化する
@@ -40,12 +62,19 @@ public:
 	// override std::exception
 	virtual const char* what() const  throw() { return mSymbolBuffer; }
 
+protected:
+	void SetMessage(const char* format, va_list args);
+	void SetMessage(const wchar_t* format, va_list args);
+
 private:
+	static const int MaxMessageBufferSize = 1024;
+
 	TCHAR		mSourceFilePath[LN_MAX_PATH];
 	int			mSourceFileLine;
 	void*		mStackBuffer[32];
 	int			mStackBufferSize;
 	char		mSymbolBuffer[2048];
+	TCHAR		mMessage[MaxMessageBufferSize];
 };
 
 /**
@@ -56,6 +85,7 @@ class OutOfMemoryException
 	: public Exception
 {
 public:
+	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(OutOfMemoryException);
 	OutOfMemoryException() {}
 	virtual ~OutOfMemoryException() throw() {}
 
@@ -72,6 +102,7 @@ class IOException
 	: public Exception
 {
 public:
+	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(IOException);
 	IOException() {}
 	virtual ~IOException() throw() {}
 
@@ -87,6 +118,7 @@ class ArgumentException
 	: public Exception
 {
 public:
+	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(ArgumentException);
 	ArgumentException() {}
 	virtual ~ArgumentException() throw() {}
 
@@ -102,6 +134,7 @@ class InvalidOperationException
 	: public Exception
 {
 public:
+	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(InvalidOperationException);
 	InvalidOperationException() {}
 	virtual ~InvalidOperationException() throw() {}
 
@@ -118,6 +151,7 @@ class NotSupportedException
 	: public Exception
 {
 public:
+	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(NotSupportedException);
 	NotSupportedException() {}
 	virtual ~NotSupportedException() throw() {}
 
@@ -133,6 +167,7 @@ class FileNotFoundException
 	: public Exception
 {
 public:
+	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(FileNotFoundException);
 	FileNotFoundException() {}
 	virtual ~FileNotFoundException() throw() {}
 
@@ -148,6 +183,7 @@ class DirectoryNotFoundException
 	: public Exception
 {
 public:
+	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(DirectoryNotFoundException);
 	DirectoryNotFoundException() {}
 	virtual ~DirectoryNotFoundException() throw() {}
 
@@ -163,6 +199,7 @@ class InvalidFormatException
 	: public Exception
 {
 public:
+	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(InvalidFormatException);
 	InvalidFormatException() {}
 	virtual ~InvalidFormatException() throw() {}
 
@@ -178,6 +215,7 @@ class NotImplementedException
 	: public Exception
 {
 public:
+	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(NotImplementedException);
 	NotImplementedException() {}
 	virtual ~NotImplementedException() throw() {}
 
@@ -193,6 +231,7 @@ class RuntimeException
 	: public Exception
 {
 public:
+	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(RuntimeException);
 	RuntimeException() {}
 	virtual ~RuntimeException() throw() {}
 
@@ -208,6 +247,7 @@ class EncodingFallbackException
 	: public Exception
 {
 public:
+	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(EncodingFallbackException);
 	EncodingFallbackException() {}
 	virtual ~EncodingFallbackException() throw() {}
 
@@ -225,7 +265,7 @@ class Win32Exception
 	: public Exception
 {
 public:
-	Win32Exception( DWORD dwLastError );
+	Win32Exception(DWORD dwLastError);
 	virtual ~Win32Exception() throw() {}
 
 public:

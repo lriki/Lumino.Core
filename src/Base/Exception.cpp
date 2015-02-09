@@ -4,6 +4,7 @@
 #include "../Internal.h"
 #include "../../include/Lumino/Base/CRT.h"
 #include "../../include/Lumino/Base/Exception.h"
+#include "../../include/Lumino/Base/StringUtils.h"
 
 #if defined(LN_WIN32)	// Cygwin もこっち
 	#include "Win32/BackTrace.h"
@@ -100,6 +101,59 @@ bool Exception::InitDumpFile(const char* filePath)
 	return false;
 }
 
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void Exception::SetMessage(const char* format, va_list args)
+{
+	static const int BUFFER_SIZE = MaxMessageBufferSize;
+	char buf[BUFFER_SIZE];
+
+	int len = StringUtils::VSPrintf(buf, BUFFER_SIZE, format, args);
+	if (len >= BUFFER_SIZE)
+	{
+		// バッファに収まりきらない場合は終端を ... にして切る
+		buf[BUFFER_SIZE - 4] = '.';
+		buf[BUFFER_SIZE - 3] = '.';
+		buf[BUFFER_SIZE - 2] = '.';
+		buf[BUFFER_SIZE - 1] = '\0';
+	}
+
+	// TCHAR に合わせてメンバに格納
+#ifdef LN_UNICODE
+	size_t wlen;
+	mbstowcs_s(&wlen, mMessage, BUFFER_SIZE, buf, _TRUNCATE);
+#else
+	strcpy_s(mMessage, BUFFER_SIZE, buf);
+#endif
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void Exception::SetMessage(const wchar_t* format, va_list args)
+{
+	static const int BUFFER_SIZE = MaxMessageBufferSize;
+	wchar_t buf[BUFFER_SIZE];
+
+	int len = StringUtils::VSPrintf(buf, BUFFER_SIZE, format, args);
+	if (len >= BUFFER_SIZE)
+	{
+		// バッファに収まりきらない場合は終端を ... にして切る
+		buf[BUFFER_SIZE - 4] = L'.';
+		buf[BUFFER_SIZE - 3] = L'.';
+		buf[BUFFER_SIZE - 2] = L'.';
+		buf[BUFFER_SIZE - 1] = L'\0';
+	}
+
+	// TCHAR に合わせてメンバに格納
+#ifdef LN_UNICODE
+	wcscpy_s(mMessage, BUFFER_SIZE, buf);
+#else
+	size_t mbcslen;
+	wcstombs_s(&mbcslen, mMessage, BUFFER_SIZE, buf, _TRUNCATE);
+#endif
+}
 
 #ifdef LN_WIN32
 //=============================================================================

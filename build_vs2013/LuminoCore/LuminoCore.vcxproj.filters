@@ -25,6 +25,9 @@
     <Filter Include="Text">
       <UniqueIdentifier>{57775013-676e-4b39-88f2-ab297acbc0e4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="IO\Win32">
+      <UniqueIdentifier>{2b69a502-ad1f-4e16-832d-e3444abc9796}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\Lumino\Base\CRT.h">
@@ -259,6 +262,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\Platform\Win32\Win32WindowManager.cpp">
       <Filter>Platform\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\IO\Win32\FileUtils_win32.cpp">
+      <Filter>IO\Win32</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

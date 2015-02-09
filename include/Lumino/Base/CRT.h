@@ -182,6 +182,25 @@ inline errno_t strcpy_s(
 }
 
 //-----------------------------------------------------------------------------
+// https://msdn.microsoft.com/ja-jp/library/td1esda9.aspx
+//-----------------------------------------------------------------------------
+inline errno_t wcscpy_s(
+	wchar_t *strDestination,
+	size_t numberOfElements,
+	const wchar_t *strSource)
+{
+	if (!strDestination || !strSource) {
+		return EINVAL;
+	}
+	int len = wcslen(strSource);
+	if (numberOfElements < len + 1) {
+		return ERANGE;
+	}
+	wcscpy(strDestination, strSource);
+	return 0;
+}
+
+//-----------------------------------------------------------------------------
 // https://msdn.microsoft.com/ja-jp/library/z5hh6ee9.aspx
 //-----------------------------------------------------------------------------
 errno_t _fopen_s(

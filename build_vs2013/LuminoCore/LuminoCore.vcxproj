@@ -70,6 +70,7 @@
     <ClCompile Include="..\..\src\IO\FileUtils.cpp" />
     <ClCompile Include="..\..\src\IO\PathName.cpp" />
     <ClCompile Include="..\..\src\IO\PathUtils.cpp" />
+    <ClCompile Include="..\..\src\IO\Win32\FileUtils_win32.cpp" />
     <ClCompile Include="..\..\src\Platform\PlatformManager.cpp" />
     <ClCompile Include="..\..\src\Platform\Win32\Environment.cpp" />
     <ClCompile Include="..\..\src\Platform\Win32\Win32WindowManager.cpp" />

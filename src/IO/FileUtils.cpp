@@ -7,14 +7,18 @@
 #include "../../include/Lumino/IO/FileStream.h"
 #include "../../include/Lumino/IO/FileUtils.h"
 
+namespace Lumino
+{
+#if 0
+
+
 #define MBCS_FILEPATH(mbcsPath, srcWPath) \
 	char mbcsPath[LN_MAX_PATH + 1]; \
 	if (wcstombs(mbcsPath, srcWPath, LN_MAX_PATH) < 0) { \
 		LN_THROW(0, IOException); \
-	}
+		}
 
-namespace Lumino
-{
+
 #ifdef _WIN32
 #else
 //-----------------------------------------------------------------------------
@@ -272,6 +276,8 @@ size_t FileUtils::GetFileSize( FILE* stream )
 	return stbuf.st_size;
 #endif
 }
+
+#endif
 
 //-----------------------------------------------------------------------------
 //
