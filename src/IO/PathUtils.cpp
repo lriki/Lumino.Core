@@ -29,7 +29,8 @@ bool PathUtils::IsRootPath(const TChar* path)
 	return false;
 #else
 	// UNIX ÇÃèÍçáÅA/ ÇæÇØÇ≈Ç†ÇÈÇ©
-	if (len == 1 && path[0] == L"/") {
+	size_t len = StringUtils::GetLength(path);
+	if (len == 1 && path[0] == '/') {
 		return true;
 	}
 	return false;
@@ -162,7 +163,18 @@ void PathUtils::CanonicalizePath(const wchar_t* srcPath, wchar_t* outPath)
 #ifdef _WIN32
 	wchar_t* canonPath = _wfullpath(outPath, srcPath, LN_MAX_PATH);
 #else
-	char* canonPath = realpath(srcPath, outPath);
+	char mbcsSrc[PATH_MAX];
+	if (wcstombs(mbcsSrc, srcPath, PATH_MAX) < 0) {
+		LN_THROW(0, IOException);
+	}
+
+	char mbcsOut[PATH_MAX];
+	char* canonPath = realpath(mbcsSrc, mbcsOut);
+	
+	//char mbcsSrc[PATH_MAX];
+	if (mbstowcs(outPath, mbcsOut, LN_MAX_PATH) < 0) {
+		LN_THROW(0, IOException);
+	}
 #endif
 	LN_THROW(canonPath != NULL, ArgumentException);
 }

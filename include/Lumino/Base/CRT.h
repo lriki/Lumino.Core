@@ -201,6 +201,80 @@ inline errno_t wcscpy_s(
 }
 
 //-----------------------------------------------------------------------------
+// https://msdn.microsoft.com/ja-jp/library/5dae5d43.aspx
+//-----------------------------------------------------------------------------
+errno_t strncpy_s(
+	char *strDest,
+	size_t numberOfElements,
+	const char *strSource,
+	size_t count)
+{
+	if (strDest == NULL || numberOfElements == 0) {
+		return EINVAL;
+	}
+	if (strSource == NULL) {
+		strDest[0] = 0;
+		return EINVAL;
+	}
+	if (count != _TRUNCATE && numberOfElements < count) {
+		strDest[0] = 0;
+		return ERANGE;
+	}
+	errno_t r = 0;
+	size_t len = strlen(strSource);
+	if (count == _TRUNCATE) {
+		count = len;
+		if (numberOfElements < len) {
+			r = STRUNCATE;	// 切り捨てられる
+		}
+	}
+	else {
+		if (count < len) {
+			r = STRUNCATE;	// 切り捨てられる
+		}
+	}
+	strncpy(strDest, strSource, count);
+	return r;
+}
+
+//-----------------------------------------------------------------------------
+// https://msdn.microsoft.com/ja-jp/library/5dae5d43.aspx
+//-----------------------------------------------------------------------------
+errno_t wcsncpy_s(
+	wchar_t *strDest,
+	size_t numberOfElements,
+	const wchar_t *strSource,
+	size_t count)
+{
+	if (strDest == NULL || numberOfElements == 0) {
+		return EINVAL;
+	}
+	if (strSource == NULL) {
+		strDest[0] = 0;
+		return EINVAL;
+	}
+	if (count != _TRUNCATE && numberOfElements < count) {
+		strDest[0] = 0;
+		return ERANGE;
+	}
+	errno_t r = 0;
+	size_t len = wcslen(strSource);
+	if (count == _TRUNCATE) {
+		count = len;
+		if (numberOfElements < len) {
+			r = STRUNCATE;	// 切り捨てられる
+		}
+	}
+	else {
+		if (count < len) {
+			r = STRUNCATE;	// 切り捨てられる
+		}
+	}
+	wcsncpy(strDest, strSource, count);
+	return r;
+}
+
+//-----------------------------------------------------------------------------
 // https://msdn.microsoft.com/ja-jp/library/z5hh6ee9.aspx
 //-----------------------------------------------------------------------------
 errno_t _fopen_s(

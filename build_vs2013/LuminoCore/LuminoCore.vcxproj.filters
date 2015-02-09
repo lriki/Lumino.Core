@@ -160,6 +160,9 @@
     <ClInclude Include="..\..\include\Lumino\Platform\PlatformManager.h">
       <Filter>Platform</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\Text\UTF32Encoding.h">
+      <Filter>Text</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\include\Lumino\Base\Delegate.inl">
@@ -265,6 +268,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\IO\Win32\FileUtils_win32.cpp">
       <Filter>IO\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Text\UTF32Encoding.cpp">
+      <Filter>Text</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

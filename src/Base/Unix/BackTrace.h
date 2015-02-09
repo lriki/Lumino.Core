@@ -64,7 +64,7 @@ public:
 		mIsSymbolEngineReady = true;
 	}
 
-	?BackTrace()
+	~BackTrace()
 	{
 		if (mSymbols)
 		{

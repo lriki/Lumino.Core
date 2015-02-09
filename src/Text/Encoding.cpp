@@ -5,6 +5,7 @@
 #include "../../include/Lumino/Text/UnicodeUtils.h"
 #include "../../include/Lumino/Text/Encoding.h"
 #include "DBCSEncoding.h"
+#include "UTF32Encoding.h"
 
 namespace Lumino
 {
@@ -31,7 +32,7 @@ Encoding* Encoding::GetWideCharEncoding()
 	static UTF16Encoding wideEncoding;
 	return &wideEncoding;
 #elif defined(LN_WCHAR_32)
-	static UTF32Encoding wideEncoding;
+	static UTF32Encoding wideEncoding(false, false);
 	return &wideEncoding;
 #else
 #error "Invalid wchar_t size."
@@ -123,10 +124,11 @@ RefBuffer* Encoding::Convert(
 	LN_THROW(src != NULL, ArgumentException);
 	LN_THROW(decoder != NULL, ArgumentException);
 	LN_THROW(encoder != NULL, ArgumentException);
-	LN_THROW(srcByteCount >= (size_t)decoder->GetMinByteCount(), ArgumentException);	// バッファのバイト数は、そのバッファのエンコーディングの最低バイト数以上でなければならない
+	//LN_THROW(srcByteCount >= (size_t)decoder->GetMinByteCount(), ArgumentException);	// バッファのバイト数は、そのバッファのエンコーディングの最低バイト数以上でなければならない
 
 	// src に入っている最悪パターンの文字数
 	int srcMaxCharCount = srcByteCount / decoder->GetMinByteCount();
+	srcMaxCharCount += 1;	// Decoder・Encoder の状態保存により前回のあまり文字が1つ追加されるかもしれない
 
 	// 中間バッファに必要な最大バイト数
 	int utf16MaxByteCount = srcMaxCharCount * 4;	// UTF16 は1文字最大4バイト

@@ -78,6 +78,9 @@
     <ClCompile Include="..\..\test\UnitTest\Base\Test_Base_Exception.cpp">
       <Filter>UnitTest\Base</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\test\UnitTest\Base\Test_Base_UTF32Encoding.cpp">
+      <Filter>UnitTest\Base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\test\UnitTest\TestConfig.h">

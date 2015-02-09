@@ -55,6 +55,7 @@
     <ClInclude Include="..\..\src\Platform\WindowManagerBase.h" />
     <ClInclude Include="..\..\src\Text\DBCSEncoding.h" />
     <ClInclude Include="..\..\src\Text\EncodingDetector.h" />
+    <ClInclude Include="..\..\src\Text\UTF32Encoding.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\include\Lumino\Base\Delegate.inl" />
@@ -87,6 +88,7 @@
     <ClCompile Include="..\..\src\Text\Encoding.cpp" />
     <ClCompile Include="..\..\src\Text\EncodingDetector.cpp" />
     <ClCompile Include="..\..\src\Text\UnicodeUtils.cpp" />
+    <ClCompile Include="..\..\src\Text\UTF32Encoding.cpp" />
     <ClCompile Include="..\..\src\Threading\Atomic.cpp" />
     <ClCompile Include="..\..\src\Threading\EventFlag.cpp" />
     <ClCompile Include="..\..\src\Threading\Mutex.cpp" />

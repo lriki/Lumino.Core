@@ -21,8 +21,8 @@ struct UTFConversionOptions
 {
 	unsigned long	ReplacementChar;		///< [in] 不正文字を見つけた時、この文字に置換する (ASCII で指定すること。'\0' を指定した状態で不正文字を見つけると、変換は失敗する)
 
-	int				ConvertedSourceLength;	///< [out] 変換に使用したソースバッファのバイト数が格納される
-	int				ConvertedTargetLength;	///< [out] 変換されたターゲットバッファのバイト数が格納される
+	int				ConvertedSourceLength;	///< [out] 変換に使用したソースバッファの要素数が格納される (バイト数や文字数ではない)
+	int				ConvertedTargetLength;	///< [out] 変換されたターゲットバッファの要素数が格納される (バイト数や文字数ではない)
 	int				CharCount;				///< [out] 文字数が格納される (マルチバイト文字を1文字とみなした文字数)
 	int				IllegalCharCount;		///< [out] 見つけた不正文字の数
 };

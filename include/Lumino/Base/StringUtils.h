@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include <ctype.h>
+#include <wctype.h>
 #include <string>
 //#include "TChar.h"
 #include "STLUtils.h"

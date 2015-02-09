@@ -46,10 +46,12 @@ TEST_F(Test_Base_Encoding, Convert)
 	ASSERT_THROW(
 		Encoding::Convert(buf1, 0, decoder, NULL, NULL),
 		ArgumentException);
-	// 最低でも必要なバイト数が無い
-	ASSERT_THROW(
-		Encoding::Convert(buf1, 0, decoder, encoder, NULL),
-		ArgumentException);
+
+	// ↓ストリーミング用状態記憶対応のため、許可する
+	// ×最低でも必要なバイト数が無い
+	//ASSERT_THROW(
+	//	Encoding::Convert(buf1, 0, decoder, encoder, NULL),
+	//	ArgumentException);
 }
 
 //---------------------------------------------------------------------
