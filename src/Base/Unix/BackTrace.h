@@ -165,9 +165,9 @@ public:
 			AddressToSymbolString(p, outBuffer + writesize, len - writesize);
 			writesize += (int)strlen(outBuffer + writesize);
 
-			if (len - writesize >= 2) {
-				strncat_s(outBuffer + writesize, len - writesize, "?r?n", 2);
-				writesize += 2;
+			if (len - writesize >= 1) {
+				strncat_s(outBuffer + writesize, len - writesize, "\n", 1);
+				writesize += 1;
 			}
 
 			if (len <= writesize) {

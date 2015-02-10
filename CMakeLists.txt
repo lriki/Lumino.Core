@@ -73,9 +73,14 @@ elseif (APPLE)
 elseif (UNIX)
 	set(LN_UNIT_TEST_LINK_LIBS "pthread")
 	
+	# link librarys.
+	list(APPEND LN_LINK_LIBS "dl")
+	list(APPEND LN_LINK_LIBS "bfd")
+	
 	# platform sources.
 	set(LN_PLATFORM_SOURCES
-		src/IO/Unix/FileUtils_unix.cpp)
+		src/IO/Unix/FileUtils_unix.cpp
+		src/Platform/Environment_unix.cpp)
 	
 else()
 	# Not support.

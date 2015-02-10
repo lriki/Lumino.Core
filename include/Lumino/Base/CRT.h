@@ -203,7 +203,7 @@ inline errno_t wcscpy_s(
 //-----------------------------------------------------------------------------
 // https://msdn.microsoft.com/ja-jp/library/5dae5d43.aspx
 //-----------------------------------------------------------------------------
-errno_t strncpy_s(
+inline errno_t strncpy_s(
 	char *strDest,
 	size_t numberOfElements,
 	const char *strSource,
@@ -240,7 +240,7 @@ errno_t strncpy_s(
 //-----------------------------------------------------------------------------
 // https://msdn.microsoft.com/ja-jp/library/5dae5d43.aspx
 //-----------------------------------------------------------------------------
-errno_t wcsncpy_s(
+inline errno_t wcsncpy_s(
 	wchar_t *strDest,
 	size_t numberOfElements,
 	const wchar_t *strSource,
@@ -277,7 +277,7 @@ errno_t wcsncpy_s(
 //-----------------------------------------------------------------------------
 // https://msdn.microsoft.com/ja-jp/library/z5hh6ee9.aspx
 //-----------------------------------------------------------------------------
-errno_t _fopen_s(
+inline errno_t _fopen_s(
 	FILE** pFile,
 	const char *filename,
 	const char *mode )
@@ -293,7 +293,7 @@ errno_t _fopen_s(
 //-----------------------------------------------------------------------------
 // https://msdn.microsoft.com/ja-jp/library/z5hh6ee9.aspx
 //-----------------------------------------------------------------------------
-errno_t _wfopen_s(
+inline errno_t _wfopen_s(
 	FILE** pFile,
 	const wchar_t *filename,
 	const wchar_t *mode )

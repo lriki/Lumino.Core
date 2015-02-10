@@ -278,7 +278,7 @@ bool Thread::IsFinished()
 //-----------------------------------------------------------------------------
 intptr_t Thread::GetThreadID() const
 { 
-	return reinterpret_cast<intptr_t>(mThread);
+	return (intptr_t)(mThread);
 }
 
 //-----------------------------------------------------------------------------
@@ -286,7 +286,7 @@ intptr_t Thread::GetThreadID() const
 //-----------------------------------------------------------------------------
 intptr_t Thread::GetCurrentThreadID()
 {
-    return reinterpret_cast<intptr_t>(pthread_self());
+	return (intptr_t)(pthread_self());
 }
 
 //-----------------------------------------------------------------------------
