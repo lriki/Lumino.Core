@@ -316,7 +316,7 @@ RefBuffer* FileUtils::ReadAllBytes(const wchar_t* filePath)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-String FileUtils::ReadAllText(const TCHAR* filePath, const Encoding* encoding)
+String FileUtils::ReadAllText(const TCHAR* filePath, const Text::Encoding* encoding)
 {
 	// TODO: BOM
 	RefPtr<RefBuffer> buffer(FileUtils::ReadAllBytes(filePath));
@@ -325,7 +325,7 @@ String FileUtils::ReadAllText(const TCHAR* filePath, const Encoding* encoding)
 		str.ConvertFrom(buffer->GetPointer(), buffer->GetSize(), encoding);
 	}
 	else {
-		str.ConvertFrom(buffer->GetPointer(), buffer->GetSize(), Encoding::GetTCharEncoding());
+		str.ConvertFrom(buffer->GetPointer(), buffer->GetSize(), Text::Encoding::GetTCharEncoding());
 	}
 	return str;
 }
@@ -343,7 +343,7 @@ void FileUtils::WriteAllBytes(const TCHAR* filePath, const void* buffer, size_t 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void FileUtils::WriteAllText(const TCHAR* filePath, const String& str, const Encoding* encoding)
+void FileUtils::WriteAllText(const TCHAR* filePath, const String& str, const Text::Encoding* encoding)
 {
 	RefPtr<RefBuffer> buffer(str.ConvertTo(encoding));
 	WriteAllBytes(filePath, buffer->GetPointer(), buffer->GetSize());

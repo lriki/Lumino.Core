@@ -1,5 +1,6 @@
 #include <TestConfig.h>
 #include "../../../src/Text/EncodingDetector.h"
+using namespace Text;
 
 class Test_Text_EncodingDetector : public ::testing::Test
 {

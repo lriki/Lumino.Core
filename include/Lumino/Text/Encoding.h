@@ -6,6 +6,9 @@
 namespace Lumino
 {
 class RefBuffer;
+
+namespace Text
+{
 class Decoder;
 class Encoder;
 
@@ -488,4 +491,5 @@ private:
 };
 #endif
 
+} // namespace Text
 } // namespace Lumino

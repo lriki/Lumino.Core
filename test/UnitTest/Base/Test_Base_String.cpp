@@ -117,7 +117,7 @@ TEST_F(Test_Base_String, ConvertTo)
 {
 	{
 		StringA str1("test");
-		RefPtr<RefBuffer> buf(str1.ConvertTo(Encoding::GetWideCharEncoding()));
+		RefPtr<RefBuffer> buf(str1.ConvertTo(Text::Encoding::GetWideCharEncoding()));
 		wchar_t* wstr = (wchar_t*)buf->GetPointer();
 		ASSERT_EQ(8, buf->GetSize());
 		ASSERT_EQ(L't', wstr[0]);
@@ -128,7 +128,7 @@ TEST_F(Test_Base_String, ConvertTo)
 
 	{
 		StringW str1(L"test");
-		RefPtr<RefBuffer> buf(str1.ConvertTo(Encoding::GetSystemMultiByteEncoding()));
+		RefPtr<RefBuffer> buf(str1.ConvertTo(Text::Encoding::GetSystemMultiByteEncoding()));
 		char* astr = (char*)buf->GetPointer();
 		ASSERT_EQ(4, buf->GetSize());
 		ASSERT_EQ('t', astr[0]);

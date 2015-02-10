@@ -1,5 +1,6 @@
 #include <TestConfig.h>
 #include "../../../src/Text/UTF32Encoding.h"
+using namespace Text;
 
 class Test_Base_UTF32Encoding : public ::testing::Test
 {

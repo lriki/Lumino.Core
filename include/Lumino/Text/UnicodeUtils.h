@@ -6,6 +6,8 @@
 
 namespace Lumino
 {
+namespace Text
+{
 
 /// •¶šƒR[ƒh•ÏŠ·‚Ìˆ—Œ‹‰Ê
 enum UTFConversionResult
@@ -220,4 +222,5 @@ private:
 
 };
 
+} // namespace Text
 } // namespace Lumino

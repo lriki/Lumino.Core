@@ -51,7 +51,7 @@ void BasicString<TChar>::AssignCStr(const char* str, size_type begin, size_type 
 		SetEmpty();
 	}
 	else {
-		ConvertFrom(str + begin, len, Encoding::GetSystemMultiByteEncoding());
+		ConvertFrom(str + begin, len, Text::Encoding::GetSystemMultiByteEncoding());
 	}
 }
 
@@ -74,7 +74,7 @@ void BasicString<TChar>::AssignCStr(const wchar_t* str, size_type begin, size_ty
 		SetEmpty();
 	}
 	else {
-		ConvertFrom(str + begin, len, Encoding::GetWideCharEncoding());
+		ConvertFrom(str + begin, len, Text::Encoding::GetWideCharEncoding());
 	}
 }
 
@@ -82,11 +82,11 @@ void BasicString<TChar>::AssignCStr(const wchar_t* str, size_type begin, size_ty
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-void BasicString<TChar>::ConvertFrom(const void* buffer, int byteCount, const Encoding* encoding, bool* outUsedDefaultChar)
+void BasicString<TChar>::ConvertFrom(const void* buffer, int byteCount, const Text::Encoding* encoding, bool* outUsedDefaultChar)
 {
 	LN_THROW(encoding, ArgumentException);
 
-	Encoding* thisTypeEncoding = GetThisTypeEncoding();
+	Text::Encoding* thisTypeEncoding = GetThisTypeEncoding();
 
 	// 全く同じエンコーディングなら変換の必要は無い
 	if (thisTypeEncoding == encoding) 
@@ -98,9 +98,9 @@ void BasicString<TChar>::ConvertFrom(const void* buffer, int byteCount, const En
 		//size_t bytesUsed;
 		//size_t charsUsed;
 		//bool usedDefaultChar;
-		EncodingConversionResult info;
+		Text::EncodingConversionResult info;
 		RefPtr<RefBuffer> tmpBuffer(
-			Encoding::Convert(buffer, byteCount, encoding, thisTypeEncoding,
+			Text::Encoding::Convert(buffer, byteCount, encoding, thisTypeEncoding,
 			&info));
 		if (outUsedDefaultChar != NULL) {
 			*outUsedDefaultChar = info.UsedDefaultChar;
@@ -114,14 +114,14 @@ void BasicString<TChar>::ConvertFrom(const void* buffer, int byteCount, const En
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-RefBuffer* BasicString<TChar>::ConvertTo(const Encoding* encoding, bool* outUsedDefaultChar) const
+RefBuffer* BasicString<TChar>::ConvertTo(const Text::Encoding* encoding, bool* outUsedDefaultChar) const
 {
 	//size_t bytesUsed;
 	//size_t charsUsed;
 	//bool usedDefaultChar;
-	EncodingConversionResult info;
+	Text::EncodingConversionResult info;
 
-	RefBuffer* buf = Encoding::Convert(
+	RefBuffer* buf = Text::Encoding::Convert(
 		std_basic_string::c_str(), GetByteCount(), GetThisTypeEncoding(),
 		encoding,
 		&info);
@@ -244,17 +244,17 @@ const BasicString<TChar>& BasicString<TChar>::GetNewLine()
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-Encoding* BasicString<TChar>::GetThisTypeEncoding() const
+Text::Encoding* BasicString<TChar>::GetThisTypeEncoding() const
 {
 	if (sizeof(TChar) == sizeof(char))
 	{
 		// this のエンコーディングはシステム依存である
-		return Encoding::GetSystemMultiByteEncoding();
+		return Text::Encoding::GetSystemMultiByteEncoding();
 	}
 	else if (sizeof(TChar) == sizeof(wchar_t))
 	{
 		// this のエンコーディングは wchar_t である
-		return Encoding::GetWideCharEncoding();
+		return Text::Encoding::GetWideCharEncoding();
 	}
 	else
 	{

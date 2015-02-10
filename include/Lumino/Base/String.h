@@ -8,7 +8,8 @@
 
 namespace Lumino
 {
-class Encoding;
+namespace Text { class Encoding; }
+
 class RefBuffer;
 
 /// String::Split() の出力方法
@@ -125,7 +126,7 @@ public:
 		@param[in]	encoding			: 変換元文字エンコーディング
 		@param[out]	usedDefaultChar		: 変換不可文字をデフォルト文字 ('?') に変換したかどうか
 	*/
-	void ConvertFrom(const void* buffer, int byteCount, const Encoding* encoding, bool* usedDefaultChar = NULL);
+	void ConvertFrom(const void* buffer, int byteCount, const Text::Encoding* encoding, bool* usedDefaultChar = NULL);
 
 	/**
 		@brief		指定したエンコーディングを使用し、変換した文字列バッファを取得する
@@ -134,7 +135,7 @@ public:
 		@return		\0終端文字は付加されません。GetSize() により使用バイト数を確認できます。
 					使用後、Release() で開放する必要があります。
 	*/
-	RefBuffer* ConvertTo(const Encoding* encoding, bool* usedDefaultChar = NULL) const;
+	RefBuffer* ConvertTo(const Text::Encoding* encoding, bool* usedDefaultChar = NULL) const;
 
 	/**
 		@brief		空文字列を設定する
@@ -208,7 +209,7 @@ public:
 	static const StringT& GetNewLine();
 
 private:
-	Encoding* GetThisTypeEncoding() const;
+	Text::Encoding* GetThisTypeEncoding() const;
 };
 
 template<typename TChar>

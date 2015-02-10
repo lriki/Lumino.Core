@@ -4,7 +4,8 @@
 
 namespace Lumino
 {
-
+namespace Text
+{
 /**
 	@brief	最大 2byte(DoubleByte) のマルチバイト文字コードのエンコーディング
 */
@@ -77,4 +78,5 @@ private:
 	};
 };
 
+} // namespace Text
 } // namespace Lumino

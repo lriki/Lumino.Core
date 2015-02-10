@@ -10,6 +10,8 @@
 
 namespace Lumino
 {
+namespace Text
+{
 
 //=============================================================================
 // Encoding
@@ -30,7 +32,7 @@ Encoding* Encoding::GetSystemMultiByteEncoding()
 Encoding* Encoding::GetWideCharEncoding()
 {
 #if defined(LN_WCHAR_16)
-	static Text::UTF16Encoding wideEncoding(false, false);
+	static UTF16Encoding wideEncoding(false, false);
 	return &wideEncoding;
 #elif defined(LN_WCHAR_32)
 	static UTF32Encoding wideEncoding(false, false);
@@ -66,7 +68,7 @@ Encoding* Encoding::GetUTF8Encoding()
 //-----------------------------------------------------------------------------
 Encoding* Encoding::GetUTF16Encoding()
 {
-	static Text::UTF16Encoding encoding(false, false);
+	static UTF16Encoding encoding(false, false);
 	return &encoding;
 }
 
@@ -493,4 +495,5 @@ void UTF16Encoding::UTF16Encoder::ConvertFromUTF16(const UTF16* inBuffer, size_t
 }
 #endif
 
+} // namespace Text
 } // namespace Lumino

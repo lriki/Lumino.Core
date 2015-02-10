@@ -8,6 +8,8 @@
 
 namespace Lumino
 {
+namespace Text
+{
 
 //=============================================================================
 // Encoding
@@ -235,5 +237,6 @@ void SJISDetector::Detect(bool untilUnmatch)
 	}
 }
 
+} // namespace Text
 } // namespace Lumino
 
