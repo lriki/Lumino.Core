@@ -26,7 +26,6 @@
     <ClInclude Include="..\..\include\Lumino\Base\String.h" />
     <ClInclude Include="..\..\include\Lumino\Base\StringUtils.h" />
     <ClInclude Include="..\..\include\Lumino\Base\Typedef.h" />
-    <ClInclude Include="..\..\include\Lumino\Common.h" />
     <ClInclude Include="..\..\include\Lumino\IO\DirectoryUtils.h" />
     <ClInclude Include="..\..\include\Lumino\IO\FileStream.h" />
     <ClInclude Include="..\..\include\Lumino\IO\FileUtils.h" />
@@ -55,6 +54,7 @@
     <ClInclude Include="..\..\src\Platform\WindowManagerBase.h" />
     <ClInclude Include="..\..\src\Text\DBCSEncoding.h" />
     <ClInclude Include="..\..\src\Text\EncodingDetector.h" />
+    <ClInclude Include="..\..\src\Text\UTF16Encoding.h" />
     <ClInclude Include="..\..\src\Text\UTF32Encoding.h" />
   </ItemGroup>
   <ItemGroup>
@@ -88,6 +88,7 @@
     <ClCompile Include="..\..\src\Text\Encoding.cpp" />
     <ClCompile Include="..\..\src\Text\EncodingDetector.cpp" />
     <ClCompile Include="..\..\src\Text\UnicodeUtils.cpp" />
+    <ClCompile Include="..\..\src\Text\UTF16Encoding.cpp" />
     <ClCompile Include="..\..\src\Text\UTF32Encoding.cpp" />
     <ClCompile Include="..\..\src\Threading\Atomic.cpp" />
     <ClCompile Include="..\..\src\Threading\EventFlag.cpp" />

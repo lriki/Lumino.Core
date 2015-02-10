@@ -5,6 +5,7 @@
 #include "../../include/Lumino/Text/UnicodeUtils.h"
 #include "../../include/Lumino/Text/Encoding.h"
 #include "DBCSEncoding.h"
+#include "UTF16Encoding.h"
 #include "UTF32Encoding.h"
 
 namespace Lumino
@@ -29,7 +30,7 @@ Encoding* Encoding::GetSystemMultiByteEncoding()
 Encoding* Encoding::GetWideCharEncoding()
 {
 #if defined(LN_WCHAR_16)
-	static UTF16Encoding wideEncoding;
+	static Text::UTF16Encoding wideEncoding(false, false);
 	return &wideEncoding;
 #elif defined(LN_WCHAR_32)
 	static UTF32Encoding wideEncoding(false, false);
@@ -65,7 +66,7 @@ Encoding* Encoding::GetUTF8Encoding()
 //-----------------------------------------------------------------------------
 Encoding* Encoding::GetUTF16Encoding()
 {
-	static UTF16Encoding encoding;
+	static Text::UTF16Encoding encoding(false, false);
 	return &encoding;
 }
 
@@ -440,6 +441,7 @@ void UTF8Encoding::UTF8Encoder::ConvertFromUTF16(const UTF16* inBuffer, size_t i
 }
 
 
+#if 0
 //=============================================================================
 // UTF16Encoding
 //=============================================================================
@@ -489,5 +491,6 @@ void UTF16Encoding::UTF16Encoder::ConvertFromUTF16(const UTF16* inBuffer, size_t
 	*outBytesUsed = inBufferCharCount * sizeof(UTF16);
 	*outCharsUsed = count;
 }
+#endif
 
 } // namespace Lumino

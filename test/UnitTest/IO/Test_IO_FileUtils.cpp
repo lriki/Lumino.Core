@@ -21,17 +21,25 @@ TEST_F(Test_IO_FileUtils, GetAttribute)
 {
 	uint32_t attr;
 
+	// 
+	attr = FileUtils::GetAttribute(LOCALFILE("TestData/readonly.txt"));
+	attr |= FileAttribute_ReadOnly;
+	FileUtils::SetAttribute(LOCALFILE("TestData/readonly.txt"), attr);
+
 	// ディレクトリ
-	attr = FileUtils::GetAttribute(LN_TEST_GET_FILE_PATH("TestData"));
+	attr = FileUtils::GetAttribute(LOCALFILE("TestData"));
 	ASSERT_EQ(FileAttribute_Directory, attr);
 
 	// 読み取り専用
-	attr = FileUtils::GetAttribute(LN_TEST_GET_FILE_PATH("TestData/readonly.txt"));
+	attr = FileUtils::GetAttribute(LOCALFILE("TestData/readonly.txt"));
 	ASSERT_EQ(FileAttribute_ReadOnly, attr);
 
+#ifdef LN_WIN32
+#else
 	// 隠しファイル
-	attr = FileUtils::GetAttribute(LN_TEST_GET_FILE_PATH("TestData/.test"));
+	attr = FileUtils::GetAttribute(LOCALFILE("TestData/.test"));
 	ASSERT_EQ(FileAttribute_Hidden, attr);
+#endif
 
 	//try
 	//{

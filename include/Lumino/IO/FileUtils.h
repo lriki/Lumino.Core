@@ -15,7 +15,7 @@ enum FileAttribute
 	FileAttribute_Normal		= 0x0000,	///< 特に属性を持たない通常のファイル
 	FileAttribute_Directory		= 0x0001,	///< ディレクトリ
 	FileAttribute_ReadOnly		= 0x0002,	///< 読み取り専用
-	FileAttribute_Hidden		= 0x0003,	///< 隠しファイル
+	FileAttribute_Hidden		= 0x0004,	///< 隠しファイル
 };
 
 /**

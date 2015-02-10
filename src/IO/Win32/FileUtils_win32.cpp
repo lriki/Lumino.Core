@@ -95,6 +95,29 @@ uint32_t FileUtils::GetAttribute(const wchar_t* filePath)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+void FileUtils::SetAttribute(const char* filePath, uint32_t attr)
+{
+	DWORD dwAttr = 0;
+	if (attr & FileAttribute_Directory) dwAttr |= FILE_ATTRIBUTE_DIRECTORY;
+	if (attr & FileAttribute_ReadOnly)  dwAttr |= FILE_ATTRIBUTE_READONLY;
+	if (attr & FileAttribute_Hidden)    dwAttr |= FILE_ATTRIBUTE_HIDDEN;
+	BOOL r = ::SetFileAttributesA(filePath, dwAttr);
+	if (r == FALSE) { Win32IOErrorToExceptionThrow(::GetLastError(), filePath); }
+}
+
+void FileUtils::SetAttribute(const wchar_t* filePath, uint32_t attr)
+{
+	DWORD dwAttr = 0;
+	if (attr & FileAttribute_Directory) dwAttr |= FILE_ATTRIBUTE_DIRECTORY;
+	if (attr & FileAttribute_ReadOnly)  dwAttr |= FILE_ATTRIBUTE_READONLY;
+	if (attr & FileAttribute_Hidden)    dwAttr |= FILE_ATTRIBUTE_HIDDEN;
+	BOOL r = ::SetFileAttributesW(filePath, dwAttr);
+	if (r == FALSE) { Win32IOErrorToExceptionThrow(::GetLastError(), filePath); }
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 void FileUtils::Copy(const char* sourceFileName, const char* destFileName, bool overwrite)
 {
 	BOOL bRes = ::CopyFileA(sourceFileName, destFileName, (overwrite) ? FALSE : TRUE);

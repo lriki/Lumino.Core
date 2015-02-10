@@ -73,6 +73,10 @@ elseif (APPLE)
 elseif (UNIX)
 	set(LN_UNIT_TEST_LINK_LIBS "pthread")
 	
+	# platform sources.
+	set(LN_PLATFORM_SOURCES
+		src/IO/Unix/FileUtils_unix.cpp)
+	
 else()
 	# Not support.
     message(FATAL_ERROR "No supported platform was detected.")
@@ -95,6 +99,8 @@ set(LN_MATH_SOURCES
 	src/IO/PathName.cpp
 	src/IO/PathUtils.cpp
 	src/Text/DBCSEncoding.cpp
+	src/Text/UTF16Encoding.cpp
+	src/Text/UTF32Encoding.cpp
 	src/Text/Encoding.cpp
 	src/Text/EncodingDetector.cpp
 	src/Text/UnicodeUtils.cpp

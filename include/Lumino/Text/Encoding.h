@@ -429,6 +429,7 @@ private:
 	};
 };
 
+#if 0
 /**
 	@brief		UTF16 エンコーディング
 	@details	変換時のバイトオーダーは規定しません。(Big/Little どちらでもOK)
@@ -485,6 +486,6 @@ private:
 		bool		mCompleted;
 	};
 };
-
+#endif
 
 } // namespace Lumino

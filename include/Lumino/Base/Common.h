@@ -95,6 +95,7 @@
 	#include <windows.h>
 	#include <process.h>
 #else
+	#include <limits.h>		// for _PC_PATH_MAX (on Ubuntu)
 #endif
 
 //----------------------------------------------------------------------
@@ -102,9 +103,13 @@
 
 // ファイルパスの最大文字数
 #if defined(LN_WIN32)
-	#define LN_MAX_PATH		260
+	#define LN_MAX_PATH		MAX_PATH	// 260
+#elif defined(PATH_MAX)
+	#define LN_MAX_PATH		PATH_MAX
+#elif defined(_PC_PATH_MAX)
+	#define LN_MAX_PATH		_PC_PATH_MAX
 #else
-	#define LN_MAX_PATH		255
+	#error invalid LN_MAX_PATH
 #endif
 
 #ifdef LN_DEBUG

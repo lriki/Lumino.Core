@@ -1,0 +1,66 @@
+
+#include "../../include/Lumino/Text/Encoding.h"
+
+namespace Lumino
+{
+namespace Text
+{
+
+/**
+	@brief		UTF16 エンコーディング
+*/
+class UTF16Encoding : public Encoding
+{
+public:
+	UTF16Encoding(bool bigEndian, bool byteOrderMark);
+	virtual ~UTF16Encoding() {};
+
+public:
+	// override Encoding
+	virtual int GetMinByteCount() const { return 4; }
+	virtual int GetMaxByteCount() const { return 4; }
+	virtual Decoder* CreateDecoder() const { return LN_NEW UTF16Decoder(); }
+	virtual Encoder* CreateEncoder() const { return LN_NEW UTF16Encoder(); }
+	virtual byte_t* GetPreamble() const;
+
+private:
+	bool m_bigEndian;
+	bool m_byteOrderMark;
+
+private:
+	// Decoder
+	class UTF16Decoder : public Decoder
+	{
+	public:
+		UTF16Decoder() { Reset(); }
+		virtual int GetMinByteCount() { return 2; }
+		virtual int GetMaxByteCount() { return 4; }
+		virtual bool CanRemain() { return true; }
+		virtual void ConvertToUTF16(const byte_t* inBuffer, size_t inBufferByteCount, UTF16* outBuffer, size_t outBufferCharCount, size_t* outBytesUsed, size_t* outCharsUsed);
+		virtual int UsedDefaultCharCount() { return mUsedDefaultCharCount; }
+		virtual bool Completed() { return m_lastLeadWord == 0x0000 && m_lastLeadWord == 0x0000; }
+		virtual void Reset() { mUsedDefaultCharCount = 0; m_lastLeadByte = 0x00; m_lastLeadWord = 0x0000; }
+
+	private:
+		int			mUsedDefaultCharCount;
+		byte_t		m_lastLeadByte;
+		uint16_t	m_lastLeadWord;
+	};
+
+	// Encoder
+	class UTF16Encoder : public Encoder
+	{
+	public:
+		UTF16Encoder() { Reset(); }
+		virtual int GetMinByteCount() { return 2; }
+		virtual int GetMaxByteCount() { return 4; }
+		virtual bool CanRemain() { return true; }
+		virtual void ConvertFromUTF16(const UTF16* inBuffer, size_t inBufferCharCount, byte_t* outBuffer, size_t outBufferByteCount, size_t* outBytesUsed, size_t* outCharsUsed);
+		virtual int UsedDefaultCharCount() { return 0; }
+		virtual bool Completed() { return true; }
+		virtual void Reset() { }
+	};
+};
+
+} // namespace Text
+} // namespace Lumino

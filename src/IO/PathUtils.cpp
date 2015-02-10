@@ -163,12 +163,12 @@ void PathUtils::CanonicalizePath(const wchar_t* srcPath, wchar_t* outPath)
 #ifdef _WIN32
 	wchar_t* canonPath = _wfullpath(outPath, srcPath, LN_MAX_PATH);
 #else
-	char mbcsSrc[PATH_MAX];
-	if (wcstombs(mbcsSrc, srcPath, PATH_MAX) < 0) {
+	char mbcsSrc[LN_MAX_PATH];
+	if (wcstombs(mbcsSrc, srcPath, LN_MAX_PATH) < 0) {
 		LN_THROW(0, IOException);
 	}
 
-	char mbcsOut[PATH_MAX];
+	char mbcsOut[LN_MAX_PATH];
 	char* canonPath = realpath(mbcsSrc, mbcsOut);
 	
 	//char mbcsSrc[PATH_MAX];

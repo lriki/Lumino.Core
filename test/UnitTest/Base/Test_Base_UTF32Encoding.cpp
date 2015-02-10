@@ -89,7 +89,7 @@ TEST_F(Test_Base_UTF32Encoding, Basic)
 		RefPtr<Encoder> encoder(utf32Enc.CreateEncoder());
 		EncodingConversionResult info;
 
-		// 1回目の変換。2byte分。出てくるのは何もない。encoder に状態記憶される。
+		// 1回目の変換。2byte分。出てくるのは何もない。状態記憶される。
 		RefPtr<RefBuffer> result1(Encoding::Convert(&uttf16buf[0], 2, decoder, encoder, &info));
 		ASSERT_EQ(0, info.BytesUsed);
 		ASSERT_EQ(0, info.CharsUsed);
@@ -99,6 +99,47 @@ TEST_F(Test_Base_UTF32Encoding, Basic)
 		RefPtr<RefBuffer> result2(Encoding::Convert(&uttf16buf[2], 2, decoder, encoder, &info));
 
 		byte_t* utf32buf = (byte_t*)result2->GetPointer();
+		ASSERT_EQ(4, info.BytesUsed);
+		ASSERT_EQ(1, info.CharsUsed);
+		ASSERT_EQ(false, info.UsedDefaultChar);
+		ASSERT_EQ(0x3D, utf32buf[0]);
+		ASSERT_EQ(0x9E, utf32buf[1]);
+		ASSERT_EQ(0x02, utf32buf[2]);
+		ASSERT_EQ(0x00, utf32buf[3]);
+	}
+
+	// UTF-16 → UTF-32 (1byteずつ分割)
+	{
+		// 'ほっけ' little
+		byte_t uttf16buf[] = { 0x67, 0xD8, 0x3D, 0xDE };
+
+		Text::UTF32Encoding utf32Enc(false, false);
+		RefPtr<Decoder> decoder(Encoding::GetUTF16Encoding()->CreateDecoder());
+		RefPtr<Encoder> encoder(utf32Enc.CreateEncoder());
+		EncodingConversionResult info;
+
+		// 1回目の変換。1byte分。出てくるのは何もない。状態記憶される。
+		RefPtr<RefBuffer> result1(Encoding::Convert(&uttf16buf[0], 1, decoder, encoder, &info));
+		ASSERT_EQ(0, info.BytesUsed);
+		ASSERT_EQ(0, info.CharsUsed);
+		ASSERT_EQ(false, info.UsedDefaultChar);
+
+		// 2回目の変換。1byte分。出てくるのは何もない。状態記憶される。
+		RefPtr<RefBuffer> result2(Encoding::Convert(&uttf16buf[1], 1, decoder, encoder, &info));
+		ASSERT_EQ(0, info.BytesUsed);
+		ASSERT_EQ(0, info.CharsUsed);
+		ASSERT_EQ(false, info.UsedDefaultChar);
+
+		// 3回目の変換。1byte分。出てくるのは何もない。状態記憶される。
+		RefPtr<RefBuffer> result3(Encoding::Convert(&uttf16buf[2], 1, decoder, encoder, &info));
+		ASSERT_EQ(0, info.BytesUsed);
+		ASSERT_EQ(0, info.CharsUsed);
+		ASSERT_EQ(false, info.UsedDefaultChar);
+
+		// 4回目の変換。ここで1文字完成して出てくる。
+		RefPtr<RefBuffer> result4(Encoding::Convert(&uttf16buf[3], 1, decoder, encoder, &info));
+
+		byte_t* utf32buf = (byte_t*)result4->GetPointer();
 		ASSERT_EQ(4, info.BytesUsed);
 		ASSERT_EQ(1, info.CharsUsed);
 		ASSERT_EQ(false, info.UsedDefaultChar);

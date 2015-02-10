@@ -123,7 +123,7 @@ void UTF32Encoding::UTF32Encoder::ConvertFromUTF16(const UTF16* inBuffer, size_t
 	}
 
 	// 前回途中で途切れたワードがあれば先に変換する (とりあえずエンディアン考慮せず、サロゲートなら取っておく)
-	if (UnicodeUtils::CheckUTF16HighSurrogate(inBuffer[inBufferCharCount]) || UnicodeUtils::CheckUTF16LowSurrogate(inBuffer[inBufferCharCount]))
+	if (UnicodeUtils::CheckUTF16HighSurrogate(inBuffer[inBufferCharCount - 1])/* || UnicodeUtils::CheckUTF16LowSurrogate(inBuffer[inBufferCharCount])*/)
 	{
 		m_lastLeadWord = inBuffer[inBufferCharCount];
 		inBufferCharCount -= 1;
