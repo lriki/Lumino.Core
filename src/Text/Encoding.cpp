@@ -248,7 +248,42 @@ void SystemMultiByteEncoding::SystemMultiByteDecoder::ConvertToUTF16(const byte_
 	*outBytesUsed = len * sizeof(wchar_t);
 	*outCharsUsed = count;
 #else
+
 #ifdef LN_WCHAR_16
+	LN_THROW(0, NotImplementedException);
+#else
+	// 一時メモリ確保 (char[] → UTF-8 で最悪のパターンは、すべてASCIIの場合)
+	size_t tmpUTF32BufferLen = inBufferByteCount * sizeof(UnicodeUtils::UTF32);
+	RefBuffer tmpUTF32Buffer;
+	tmpUTF32Buffer.Reserve(inBufferByteCount);
+
+	// wchar_t (UTF-32) へ変換する
+	const char* str_ptr = (const char*)inBuffer;
+	mbstate_t state;
+	memset(&state, 0, sizeof(state));
+	mbsrtowcs((wchar_t*)tmpUTF32Buffer.GetPointer(), &str_ptr, tmpUTF32Buffer.GetSize(), &state);
+
+	// UTF-32 から UTF-16 へ変換する
+	UTFConversionOptions options;
+	memset(&options, 0, sizeof(options));
+	options.ReplacementChar = mFallbackReplacementChar;
+	UTFConversionResult result = UnicodeUtils::ConvertUTF32toUTF16(
+		(UnicodeUtils::UTF32*)tmpUTF32Buffer.GetPointer(),
+		inBufferByteCount,
+		outBuffer,
+		outBufferCharCount,
+		&options);
+	LN_THROW(result == UTFConversionResult_Success, EncodingFallbackException);
+
+	*outBytesUsed = options.ConvertedTargetLength * sizeof(UnicodeUtils::UTF16);
+	*outCharsUsed = options.CharCount;
+#endif
+
+#endif
+
+
+	/*
+	
 	// mbstowcs_s は変換したいサイズを指定することができず、基本的に \0 まで変換することになる。
 	// そのため、一度別バッファに移して \0 を付ける
 	RefBuffer tmpInBuffer;
@@ -277,10 +312,42 @@ void SystemMultiByteEncoding::SystemMultiByteDecoder::ConvertToUTF16(const byte_
 
 	*outBytesUsed = len * sizeof(wchar_t);
 	*outCharsUsed = count;
-#else
+	*/
+	/*
+
+	#ifdef LN_WCHAR_16
+	// mbstowcs_s は変換したいサイズを指定することができず、基本的に \0 まで変換することになる。
+	// そのため、一度別バッファに移して \0 を付ける
+	RefBuffer tmpInBuffer;
+	tmpInBuffer.Reserve(inByteCount + sizeof(char));	// NULL 文字分 + 1
+	tmpInBuffer.Copy(inBuffer, inByteCount);
+	char* tmpStr = (char*)tmpInBuffer.GetPointer();
+	tmpStr[inByteCount] = '\0';
+
+	// Multi → Wide
+	size_t len;
+	errno_t err = mbstowcs_s(
+	&len,										// 変換された文字数
+	(wchar_t*)outBuffer,						// 出力先バッファ
+	(outByteCount / sizeof(wchar_t)) + 1,// 出力先バッファのサイズ (文字数 = wchar_t としての要素数)
+	tmpStr,										// 変換元バッファ
+	outByteCount / sizeof(wchar_t));		// outBuffer に格納する wchar_t の最大数
+	LN_THROW(err == 0, EncodingFallbackException);
+
+	// 終端には \0 が強制的に付加される。純粋な文字部分のサイズが欲しいので -1 する。
+	len--;
+
+	// mbstowcs じゃ文字数カウントはできないので UnicodeUtils を使う
+	int count;
+	UTFConversionResult_t r = UnicodeUtils::GetUTF16CharCount((UnicodeUtils::UTF16*)outBuffer, len, true, &count);
+	LN_THROW(r == UTFConversionResult_Success, EncodingFallbackException);
+
+	*outBytesUsed = len * sizeof(wchar_t);
+	*outCharsUsed = count;
+	#else
 	LN_THROW(0, NotImplementedException);
-#endif
-#endif
+	#endif
+	*/
 }
 
 //-----------------------------------------------------------------------------
@@ -332,6 +399,40 @@ void SystemMultiByteEncoding::SystemMultiByteEncoder::ConvertFromUTF16(const UTF
 	*outCharsUsed = count;
 #else
 #ifdef LN_WCHAR_16
+	LN_THROW(0, NotImplementedException);
+#else
+	// UTF-16 のサロゲートを考慮し、最悪パターン(すべてサロゲート)でメモリ確保
+	RefBuffer tmpUTF32Buffer;
+	tmpUTF32Buffer.Reserve(sizeof(wchar_t) * (inBufferCharCount * 2));
+
+	// UTF-32 へ変換する
+	UTFConversionOptions options;
+	memset(&options, 0, sizeof(options));
+	options.ReplacementChar = mFallbackReplacementChar;
+	UTFConversionResult result = UnicodeUtils::ConvertUTF16toUTF32(
+		inBuffer,
+		inBufferCharCount,
+		(UnicodeUtils::UTF32*)tmpUTF32Buffer.GetPointer(),
+		tmpUTF32Buffer.GetSize(),
+		&options);
+	LN_THROW(result == UTFConversionResult_Success, EncodingFallbackException);
+
+	// UTF-32 を char[] へ変換する (wcsrtombs() は出力バッファにあまりがあるときは '\0' をつけるが、一杯の時はつけない)
+	const wchar_t* wstr_ptr = (const wchar_t*)tmpUTF32Buffer.GetPointer();
+	mbstate_t state;
+	memset(&state, 0, sizeof(state));
+	size_t t = wcsrtombs((char*)outBuffer, &wstr_ptr, outBufferByteCount, &state);
+
+	*outBytesUsed = options.ConvertedTargetLength * sizeof(UnicodeUtils::UTF32);
+	*outCharsUsed = options.CharCount;
+#endif
+
+#endif
+
+	/*
+	
+#if 0
+#ifdef LN_WCHAR_16
 	// wcsrtombs_s は変換したいサイズを指定することができず、基本的に \0 まで変換することになる。
 	// そのため、一度別バッファに移して \0 を付ける
 	RefBuffer tmpWideBuffer;
@@ -379,6 +480,7 @@ void SystemMultiByteEncoding::SystemMultiByteEncoder::ConvertFromUTF16(const UTF
 	LN_THROW(0, NotImplementedException);
 #endif
 #endif
+	*/
 }
 
 //=============================================================================
