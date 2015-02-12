@@ -13,6 +13,8 @@ MemoryStream::MemoryStream()
 	, m_fixedBuffer(NULL)
 	, m_fixedBufferSize(0)
 {
+	// 要素が1つ以上無いと [0] にもアクセスできない (assert が発生する)
+	m_buffer.resize(1);
 }
 
 //-----------------------------------------------------------------------------
@@ -72,8 +74,8 @@ void MemoryStream::Write(const void* data, size_t byteCount)
 	else
 	{
 		// 必要があれば拡張
-		if (newPos > m_buffer.size()) {
-			m_buffer.resize(newPos);
+		if (newPos >= m_buffer.size()) {
+			m_buffer.resize(newPos + 1);
 		}
 		void* p = &(m_buffer[m_seekPos]);
 		memcpy_s(p, m_buffer.size(), data, byteCount);

@@ -2,6 +2,7 @@
 #pragma once
 
 #include <vector>
+#include "../Base/Exception.h"
 #include "Stream.h"
 
 namespace Lumino

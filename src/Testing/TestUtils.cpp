@@ -43,4 +43,21 @@ PathNameW TestUtils::GetFilePathW(const char* baseFilePath, const wchar_t* fileN
 	return path;
 }
 
+//---------------------------------------------------------------------
+//
+//---------------------------------------------------------------------
+bool TestUtils::CheckArrays(void* ary1, void* ary2, size_t count)
+{
+	byte_t* b1 = (byte_t*)ary1;
+	byte_t* b2 = (byte_t*)ary2;
+	for (size_t i = 0; i < count; ++i)
+	{
+		if (b1[i] != b2[i]) {
+			printf("not match arrays [%d]\n", i);
+			return false;
+		}
+	}
+	return true;
+}
+
 } // namespace Lumino

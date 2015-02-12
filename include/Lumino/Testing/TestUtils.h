@@ -18,6 +18,9 @@ public:
 	/// baseFilePath のファイルと同じディレクトリの fileName を指すパスを得る
 	static PathNameA GetFilePathA(const char* baseFilePath, const char* fileName);
 	static PathNameW GetFilePathW(const char* baseFilePath, const wchar_t* fileName);
+
+	/// 2 つの配列をバイト単位で比較する
+	static bool CheckArrays(void* ary1, void* ary2, size_t count);
 };
 
 // __FILE__ のあるフォルダパス (PathName) を取得する

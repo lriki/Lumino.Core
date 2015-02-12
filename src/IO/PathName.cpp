@@ -142,7 +142,7 @@ template<typename TChar>
 BasicPathName<TChar> BasicPathName<TChar>::GetParent() const
 {
 	/* 参考：他のライブラリの、空文字やセパレータが無いなどで親ディレクトリが取れない時の動作
-		- Qt (QFileInfo)			… "." を返す
+		- Qt (QFileInfo::dir())		… "." を返す
 		- wxWidgets (wxFileName)	… "" を返す
 		- Python (os.path)			… "" を返す
 		- Ruby (Pathname)			… ".." を返す
