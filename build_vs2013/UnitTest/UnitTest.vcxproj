@@ -92,6 +92,7 @@
     <ClCompile Include="..\..\test\UnitTest\Base\Test_Base_UnicodeUtils.cpp" />
     <ClCompile Include="..\..\test\UnitTest\Base\Test_Base_UTF32Encoding.cpp" />
     <ClCompile Include="..\..\test\UnitTest\IO\Test_IO_FileUtils.cpp" />
+    <ClCompile Include="..\..\test\UnitTest\IO\Test_IO_MemoryStream.cpp" />
     <ClCompile Include="..\..\test\UnitTest\Platform\Test_Platform_Application.cpp" />
     <ClCompile Include="..\..\test\UnitTest\Platform\Test_Platform_Environment.cpp" />
     <ClCompile Include="..\..\test\UnitTest\Text\Test_Text_EncodingDetector.cpp" />

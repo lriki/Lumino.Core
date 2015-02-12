@@ -165,6 +165,10 @@
     <ClInclude Include="..\..\src\Text\UTF16Encoding.h">
       <Filter>Text</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\IO\MemoryStream.h">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\LuminoCore.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\include\Lumino\Base\Delegate.inl">
@@ -276,6 +280,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\Text\UTF16Encoding.cpp">
       <Filter>Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\IO\MemoryStream.cpp">
+      <Filter>IO</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -24,6 +24,7 @@
 #include "Lumino/IO/Stream.h"
 #include "Lumino/IO/DirectoryUtils.h"
 #include "Lumino/IO/FileStream.h"
+#include "Lumino/IO/MemoryStream.h"
 #include "Lumino/IO/FileUtils.h"
 
 #include "Lumino/Threading/Atomic.h"

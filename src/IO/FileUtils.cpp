@@ -349,4 +349,34 @@ void FileUtils::WriteAllText(const TCHAR* filePath, const String& str, const Tex
 	WriteAllBytes(filePath, buffer->GetPointer(), buffer->GetSize());
 }
 
+//----------------------------------------------------------------------
+//
+//----------------------------------------------------------------------
+size_t FileUtils::CalcSeekPoint(size_t curPoint, size_t maxSize, size_t offset, int origin)
+{
+	size_t newPoint = curPoint;
+	switch (origin)
+	{
+	case SEEK_CUR:
+		newPoint += offset;
+		break;
+
+	case SEEK_END:
+		newPoint = maxSize + offset;
+		break;
+
+	default:
+		newPoint = offset;
+		break;
+	}
+
+	if (newPoint < 0) {
+		newPoint = 0;
+	}
+	if (newPoint > maxSize) {
+		newPoint = maxSize;
+	}
+	return newPoint;
+}
+
 } // namespace Lumino
