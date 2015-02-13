@@ -17,6 +17,9 @@ typedef unsigned short UTF16;
 enum EncodingType
 {
 	EncodingType_Unknown = 0,	///< 不明な文字コード (判別失敗。またはバイナリファイル)
+
+	EncodingType_ASCII,			///< ASCII (拡張アスキーは含まない http://www.asciitable.com/)
+
 	EncodingType_UTF8,
 	EncodingType_UTF8N,
 	EncodingType_UTF16L,
@@ -90,6 +93,14 @@ public:
 		@details	返されるポインタはグローバルなインスタンスです。このポインタは解放しないでください。
 	*/
 	static Encoding* GetEncoding(EncodingType type);
+
+	/**
+		@brief		テンプレート引数によってエンコーディングを取得します。
+		@details	指定できる型は char または wchar_t です。
+					それぞれ GetSystemMultiByteEncoding()、GetWideCharEncoding() を返します。
+	*/
+	template<typename TChar>
+	static Encoding* GetEncodingTemplate();
 
 	/**
 		@brief		文字コードを変換する (不正シーケンスがあったら例外)

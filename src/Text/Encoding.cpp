@@ -4,6 +4,7 @@
 #include "../../include/Lumino/Base/RefBuffer.h"
 #include "../../include/Lumino/Text/UnicodeUtils.h"
 #include "../../include/Lumino/Text/Encoding.h"
+#include "ASCIIEncoding.h"
 #include "DBCSEncoding.h"
 #include "UTF16Encoding.h"
 #include "UTF32Encoding.h"
@@ -79,6 +80,11 @@ Encoding* Encoding::GetEncoding(EncodingType type)
 {
 	switch (type)
 	{
+		case EncodingType_ASCII:
+		{
+			static ASCIIEncoding asciiEncoding;
+			return &asciiEncoding;
+		}
 		case EncodingType_SJIS:
 		{
 			static DBCSEncoding sjisEncoding(EncodingType_SJIS);
@@ -106,6 +112,20 @@ Encoding* Encoding::GetEncoding(EncodingType type)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+template<>
+static Encoding* Encoding::GetEncodingTemplate<char>()
+{
+	return GetSystemMultiByteEncoding();
+}
+template<>
+static Encoding* Encoding::GetEncodingTemplate<wchar_t>()
+{
+	return GetWideCharEncoding();
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 RefBuffer* Encoding::Convert(
 	const void* src, size_t srcByteCount, const Encoding* srcEncoding,
 	const Encoding* targetEncoding,
@@ -113,7 +133,7 @@ RefBuffer* Encoding::Convert(
 {
 	RefPtr<Decoder> decoder(srcEncoding->CreateDecoder());
 	RefPtr<Encoder> encoder(targetEncoding->CreateEncoder());
-	return Convert(src, srcByteCount, decoder.GetPtr(), encoder.GetPtr(), result);
+	return Convert(src, srcByteCount, decoder.GetObjectPtr(), encoder.GetObjectPtr(), result);
 }
 
 //-----------------------------------------------------------------------------

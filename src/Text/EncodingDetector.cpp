@@ -4,7 +4,7 @@
 #include "../Internal.h"
 #include "../../include/Lumino/Base/StringUtils.h"
 #include "../../include/Lumino/Text/UnicodeUtils.h"
-#include "EncodingDetector.h"
+#include "../../include/Lumino/Text/EncodingDetector.h"
 
 namespace Lumino
 {
@@ -30,7 +30,13 @@ EncodingType EncodingDetector::Detect(const void* bytes, size_t bytesSize)
 	// UTF 系の BOM チェック
 	EncodingType type = CheckUTFBom();
 	if (type != EncodingType_Unknown) {
-		m_type = type;	// ★ UTF系確定
+		m_type = type;
+		return m_type;
+	}
+
+	// ASCII チェック
+	if (CheckASCII()) {
+		m_type = EncodingType_ASCII;
 		return m_type;
 	}
 
@@ -73,6 +79,30 @@ EncodingType EncodingDetector::Detect(const void* bytes, size_t bytesSize)
 
 	m_type = EncodingType_Unknown;	// 判別失敗
 	return m_type;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+bool EncodingDetector::CheckASCII() const
+{
+	const Byte* bufferEnd = m_buffer + m_bufferSize;
+	for (size_t pos = 0; pos < m_bufferSize; ++pos)
+	{
+		byte_t b1 = m_buffer[pos];
+		if (b1 <= 0x7F)	// ASCII (0x00-0x7F)
+		{
+			int n = StringUtils::CheckNewLineSequence(&m_buffer[pos], bufferEnd);
+			if (n > 0) {
+				pos += n - 1;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	return true;
 }
 
 //-----------------------------------------------------------------------------

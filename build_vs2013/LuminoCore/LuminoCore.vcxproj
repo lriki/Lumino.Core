@@ -41,6 +41,7 @@
     <ClInclude Include="..\..\include\Lumino\Platform\Window.h" />
     <ClInclude Include="..\..\include\Lumino\Testing\TestUtils.h" />
     <ClInclude Include="..\..\include\Lumino\Text\Encoding.h" />
+    <ClInclude Include="..\..\include\Lumino\Text\EncodingDetector.h" />
     <ClInclude Include="..\..\include\Lumino\Text\UnicodeUtils.h" />
     <ClInclude Include="..\..\include\Lumino\Threading\Atomic.h" />
     <ClInclude Include="..\..\include\Lumino\Threading\EventFlag.h" />
@@ -54,8 +55,8 @@
     <ClInclude Include="..\..\src\Platform\Win32\Win32WindowBase.h" />
     <ClInclude Include="..\..\src\Platform\WindowBase.h" />
     <ClInclude Include="..\..\src\Platform\WindowManagerBase.h" />
+    <ClInclude Include="..\..\src\Text\ASCIIEncoding.h" />
     <ClInclude Include="..\..\src\Text\DBCSEncoding.h" />
-    <ClInclude Include="..\..\src\Text\EncodingDetector.h" />
     <ClInclude Include="..\..\src\Text\UTF16Encoding.h" />
     <ClInclude Include="..\..\src\Text\UTF32Encoding.h" />
   </ItemGroup>
@@ -83,6 +84,7 @@
     <ClCompile Include="..\..\src\Platform\WindowBase.cpp" />
     <ClCompile Include="..\..\src\Platform\WindowManagerBase.cpp" />
     <ClCompile Include="..\..\src\Testing\TestUtils.cpp" />
+    <ClCompile Include="..\..\src\Text\ASCIIEncoding.cpp" />
     <ClCompile Include="..\..\src\Text\ConvertTable_Big5.c" />
     <ClCompile Include="..\..\src\Text\ConvertTable_EUCKR.c" />
     <ClCompile Include="..\..\src\Text\ConvertTable_GB2312.c" />

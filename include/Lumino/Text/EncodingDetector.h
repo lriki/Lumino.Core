@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../include/Lumino/Text/Encoding.h"
+#include "Encoding.h"
 
 namespace Lumino
 {
@@ -94,6 +94,7 @@ public:
 	EncodingType GetEncodingType() const { return m_type; }
 
 private:
+	bool CheckASCII() const;
 	EncodingType CheckUTFBom();
 
 private:

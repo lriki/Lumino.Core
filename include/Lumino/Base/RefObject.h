@@ -84,7 +84,7 @@ public:
 		@brief		コピーコンストラクタ
 		@param[in]	obj		:
 	*/
-	explicit RefPtr( const RefPtr<T>& obj )
+	RefPtr( const RefPtr<T>& obj )
 		: mPtr( obj.mPtr )
 	{
 		LN_SAFE_ADDREF( mPtr );
@@ -138,12 +138,12 @@ public:
 	/**
 		@brief		管理対象オブジェクトへのポインタを取得する
 	*/
-	const T* GetPtr() const	{ return mPtr; }
+	const T* GetObjectPtr() const	{ return mPtr; }
 
 	/**
 		@brief		管理対象オブジェクトへのポインタを取得する
 	*/
-	T* GetPtr() { return mPtr; }
+	T* GetObjectPtr() { return mPtr; }
 
 public:
 
