@@ -208,6 +208,7 @@ int PathUtils::Compare(const TChar* path1, const TChar* path2)
 	TChar* s2 = absPath2;
 
 	// ‘å•¶š¬•¶š‹æ•Ê‚¹‚¸A•¶š‚ª“™‚µ‚¢ŠÔŒJ‚è•Ô‚·
+#ifdef LN_WIN32
 	while (*s1 && *s2)
 	{
 		if (StringUtils::ToUpper(*s1) != StringUtils::ToUpper(*s2))
@@ -227,6 +228,9 @@ int PathUtils::Compare(const TChar* path1, const TChar* path2)
 	}
 
 	return ((StringUtils::ToUpper(*s1) - StringUtils::ToUpper(*s2)));
+#else
+#error
+#endif
 }
 
 //-----------------------------------------------------------------------------

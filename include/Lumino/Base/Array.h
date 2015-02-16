@@ -38,6 +38,8 @@ public:
 	/// item ‚Éˆê’v‚·‚é‘S‚Ä‚Ì—v‘f‚ğíœ‚·‚é
 	void RemoveAll(const T& item) { STLUtils::RemoveAll(*this, item); }
 
+	/// ‚ ‚é—v‘f‚ª‚±‚Ì”z—ñ“à‚É‘¶İ‚·‚é‚©‚Ç‚¤‚©‚ğ”»’f‚µ‚Ü‚·B
+	bool Contains(const T& item) const { return std::find(begin(), end(), item) != end(); }
 };
 
 /**

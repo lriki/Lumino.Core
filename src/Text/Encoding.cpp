@@ -60,7 +60,7 @@ Encoding* Encoding::GetTCharEncoding()
 //-----------------------------------------------------------------------------
 Encoding* Encoding::GetUTF8Encoding()
 {
-	static UTF8Encoding encoding;
+	static UTF8Encoding encoding(false);
 	return &encoding;
 }
 
@@ -104,6 +104,11 @@ Encoding* Encoding::GetEncoding(EncodingType type)
 		{
 			static DBCSEncoding big5Encoding(EncodingType_BIG5);
 			return &big5Encoding;
+		}
+		case EncodingType_UTF8:
+		{
+			static UTF8Encoding utf8BOMEncoding(true);
+			return &utf8BOMEncoding;
 		}
 	}
 	LN_THROW(0, ArgumentException);
@@ -510,6 +515,14 @@ void SystemMultiByteEncoding::SystemMultiByteEncoder::ConvertFromUTF16(const UTF
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+UTF8Encoding::UTF8Encoding(bool byteOrderMark)
+	: m_byteOrderMark(byteOrderMark)
+{
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 byte_t* UTF8Encoding::GetPreamble() const
 {
 	static byte_t bom[] = { 0xEF, 0xBB, 0xBF, NULL };
@@ -525,6 +538,15 @@ void UTF8Encoding::UTF8Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t in
 	UTFConversionOptions options;
 	memset(&options, 0, sizeof(options));
 	options.ReplacementChar = mFallbackReplacementChar;
+
+	// BOM 付きの場合は取り除く (バッファ縮小)
+	if (m_byteOrderMark) {
+		static byte_t bom[] = { 0xEF, 0xBB, 0xBF };
+		int r = memcmp(inBuffer, bom, 3);
+		LN_THROW(r == 0, EncodingFallbackException);
+		inBuffer += 3;
+		inBufferByteCount -= 3;
+	}
 	
 	// 変換
 	UTFConversionResult result = UnicodeUtils::ConvertUTF8toUTF16(

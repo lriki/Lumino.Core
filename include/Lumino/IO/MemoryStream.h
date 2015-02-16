@@ -44,7 +44,7 @@ public:
 	void* GetBuffer();
 
 public:
-	// override CHLDStream
+	// override Stream
 	virtual bool CanRead() { return true; }
 	virtual bool CanWrite() { return true; }
 	virtual size_t GetSize() { return m_buffer.size(); }

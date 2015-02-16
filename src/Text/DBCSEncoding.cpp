@@ -36,6 +36,7 @@ extern "C" const unsigned short g_UTF16ToBig5Table[];
 const DBCSEncoding::TableInfo DBCSEncoding::Tables[EncodingType_Max] =
 {
 	{ NULL, NULL, NULL },	// EncodingType_Unknown
+	{ NULL, NULL, NULL },	// EncodingType_ASCII
 	{ NULL, NULL, NULL },	// EncodingType_UTF8,
 	{ NULL, NULL, NULL },	// EncodingType_UTF8N,
 	{ NULL, NULL, NULL },	// EncodingType_UTF16L,

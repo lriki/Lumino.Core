@@ -180,6 +180,8 @@ public:
 	bool Equals(const PathNameT& path) const { return PathUtils::Equals(m_path.c_str(), path.GetCStr()); }
 	/// @copydoc Equals
 	bool Equals(const BasicStringT& path) const { return PathUtils::Equals(m_path.c_str(), path.c_str()); }
+	/// @copydoc Equals
+	bool operator == (const PathNameT& path) const { return Equals(path); }
 
 public:
 

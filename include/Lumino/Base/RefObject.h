@@ -148,6 +148,13 @@ public:
 public:
 
 	/// operator=
+	RefPtr<T>& operator =(const RefPtr<T>& ptr)
+	{
+		LN_REFOBJ_SET(mPtr, ptr.mPtr);
+		return *this;
+	}
+
+	/// operator=
 	RefPtr<T>& operator =( T* ptr )
 	{
 		LN_REFOBJ_SET( mPtr, ptr );
