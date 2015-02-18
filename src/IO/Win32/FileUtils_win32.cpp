@@ -50,6 +50,9 @@ bool FileUtils::Exists(const char* filePath)
 {
 	// ※fopen によるチェックはNG。ファイルが排他ロックで開かれていた時に失敗する。
 	DWORD attr = ::GetFileAttributesA(filePath);
+	// 他ユーザーフォルダ内のファイルにアクセスしようとすると attr = -1 になる。
+	// このとき GetLastError() は ERROR_ACCESS_DENIED である。
+	// .NET の仕様にあわせ、エラーは一律 false で返している。
 	return ((attr != -1) &&
 			(attr & FILE_ATTRIBUTE_DIRECTORY) == 0);
 }

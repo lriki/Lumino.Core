@@ -28,7 +28,14 @@ public:
 	//template<typename TChar>
 	//static FILE* fopen(const TChar* filePath, const TChar* pMode);
 	
-	/// 指定されたファイルが存在するか確認する (パスが空文字や NULL の場合も false を返す)
+	/**
+		@brief		指定されたファイルが存在するか確認します。
+		@details	この関数は指定されたファイルにアクセスできる場合に true を返します。
+					例えば Windows では、実際にファイルが存在していてもそのファイルが
+					別のパスワードロックされたユーザーフォルダ内に存在している場合は false を返します。
+					(ユーザーA は ユーザーB の "マイドキュメント" フォルダのファイルにアクセスできない)
+					また、パスが空文字や NULL の場合も false を返します。
+	*/
 	static bool Exists(const char* filePath);
 	static bool Exists(const wchar_t* filePath);
 

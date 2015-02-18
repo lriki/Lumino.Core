@@ -10,10 +10,20 @@ protected:
 //-----------------------------------------------------------------------------
 TEST_F(Test_IO_FileUtils, Exists)
 {
-	//LN_THROW(0, IOException, "test");
+	// Windows 別ユーザーフォルダは false
+	//ASSERT_FALSE(FileUtils::Exists("C:/Users/user2/Documents/Visual Studio 2013/Settings/CurrentSettings.vssettings"));
+
 	ASSERT_TRUE(FileUtils::Exists(LN_TEST_GET_FILE_PATH("TestData/test1.txt")));
 	// ディレクトリは false
 	ASSERT_FALSE(FileUtils::Exists(LN_TEST_GET_FILE_PATH("TestData")));
+	// 空文字列は false
+	ASSERT_FALSE(FileUtils::Exists(""));
+	// 空文字列は false
+	ASSERT_FALSE(FileUtils::Exists(L""));
+	// NULL は false
+	ASSERT_FALSE(FileUtils::Exists((char*)NULL));
+	// NULL は false
+	ASSERT_FALSE(FileUtils::Exists((wchar_t*)NULL));
 }
 
 //-----------------------------------------------------------------------------
