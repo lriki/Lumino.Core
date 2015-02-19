@@ -160,8 +160,8 @@ template<typename TChar>
 BasicString<TChar> BasicString<TChar>::Replace(const TChar* from, const TChar* to) const
 {
 	size_type pos = 0;
-	size_t from_length = StringUtils::GetLength(from);
-	size_t to_length = StringUtils::GetLength(to);
+	size_t from_length = StringUtils::StrLen(from);
+	size_t to_length = StringUtils::StrLen(to);
 
 	StringT output(*this);
 

@@ -14,7 +14,7 @@ bool PathUtils::IsRootPath(const TChar* path)
 {
 #ifdef LN_WIN32
 	// windows の場合
-	size_t len = StringUtils::GetLength(path);
+	size_t len = StringUtils::StrLen(path);
 	if (IsAbsolutePath(path) && len >= 2)
 	{
 		if (path[len - 1] == VolumeSeparatorChar) {
@@ -84,7 +84,7 @@ BasicString<TChar> PathUtils::GetDirectoryPath(const TChar* path)
 	*/
 
 	// 後ろから前に調べて、最初に \\ か / が見つかるところを探す
-	int pos = StringUtils::GetLength(path);
+	int pos = StringUtils::StrLen(path);
 	TChar lastSep = 0;
 	for ( ; pos >= 0; --pos ) {
 		if ( path[pos] == '\\' || path[pos] == '/' ) {
@@ -130,7 +130,7 @@ template BasicString<wchar_t> PathUtils::GetDirectoryPath<wchar_t>(const wchar_t
 template<typename TChar>
 BasicString<TChar> PathUtils::GetFileName(const TChar* path)
 {
-	int len = StringUtils::GetLength(path);
+	int len = StringUtils::StrLen(path);
 	int pos = len - 1;
 
 	// 後ろから前に調べて、最初にセパレータが見つかるところを探す

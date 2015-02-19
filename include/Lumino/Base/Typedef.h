@@ -82,6 +82,20 @@ namespace Lumino
 #error "size of wchar_t is too large."
 #endif
 
+
+namespace Lumino
+{
+#ifdef LN_WCHAR_16
+	typedef char		UTF8;
+	typedef	wchar_t		UTF16;	// デバッガで見ることができるので wchar_t にしておく
+	typedef uint32_t	UTF32;
+#else
+	typedef char		UTF8;
+	typedef	uint16_t	UTF16;
+	typedef wchar_t		UTF32;
+#endif
+}
+
 //----------------------------------------------------------------------
 // LN_T … テンプレート引数による _T マクロ
 

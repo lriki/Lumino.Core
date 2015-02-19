@@ -29,21 +29,25 @@ class StringUtils
 public:
 
 	/**
-		@brief		NULL 終端文字列の長さを求める
+		@brief	NULL 終端文字列の長さを求めます。
 	*/
-	static size_t GetLength(const char* str) { return ::strlen(str); }
-
-	/** @copydoc	GetLength */
-	static size_t GetLength(const wchar_t* str) { return ::wcslen(str); }
+	template<typename TChar>
+	static size_t StrLen(const TChar* str);
 
 	/**
-		@brief		文字を大文字化する
+		@brief	ASCII の小文字を大文字に変換します。
 	*/
-	static char ToUpper(char ch) { return (char)::toupper(ch); }
+	template<typename TChar>
+	static TChar ToUpper(TChar ch);
 
-	/** @copydoc	ToUpper */
-	static wchar_t ToUpper(wchar_t ch) { return (wchar_t)::towupper(ch); }
-	
+	/**
+		@brief		文字が空白文字であるかを確認します。
+		@details	標準空白類文字 ： 水平タブ（'\t'）、改行（'\n'）、垂直タブ（'\v'）、書式送り（'\f'）、復帰（'\r'）、空白（' '）
+					ロケールの影響を受けます。(例：日本語環境であれば、wchar_t の全角スペースもスペースとして扱われます。)
+	*/
+	template<typename TChar>
+	static bool IsSpace(TChar ch);
+
 	/**
 		@brief		
 		@attention	文字数を計る機能は保障しない。linux では wchar_t 用に文字列を計る関数が無いため。
@@ -59,15 +63,6 @@ public:
 	*/
 	static void ConvertMultiToWide(std::wstring* out, const char* input, int inputLength);
 
-	/**
-		@brief		文字が空白文字であるかを確認する
-		@details	標準空白類文字 ： 水平タブ（'\t'）、改行（'\n'）、垂直タブ（'\v'）、書式送り（'\f'）、復帰（'\r'）、空白（' '）
-					ロケールの影響を受けます。(例：日本語環境であれば、wchar_t の全角スペースもスペースとして扱われます。)
-	*/
-	static bool IsSpace(char ch) { return isspace(ch) != 0; }
-
-	/** @copydoc	IsSpace */
-	static bool IsSpace(wchar_t ch) { return iswspace(ch) != 0; }
 
 	static void StrNCpy(char* dest, size_t destSize, const char* src, int count) { strncpy_s(dest, destSize, src, count); }
 	static void StrNCpy(wchar_t* dest, size_t destElementsSize, const wchar_t* src, int count) { wcsncpy_s(dest, destElementsSize, src, count); }	// 文字単位。バイト単位ではない

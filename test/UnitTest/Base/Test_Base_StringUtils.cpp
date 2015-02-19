@@ -8,6 +8,68 @@ protected:
 };
 
 //-----------------------------------------------------------------------------
+TEST_F(Test_Base_StringUtils, StrLen)
+{
+	UTF8 str_u8[] = { 'A', 'B', 'C', 0x00 };
+	UTF16 str_u16[] = { 'A', 'B', 'C', 0x00 };
+	UTF32 str_u32[] = { 'A', 'B', 'C', 0x00 };
+
+	ASSERT_EQ(3, StringUtils::StrLen(str_u8));
+	ASSERT_EQ(3, StringUtils::StrLen(str_u16));
+	ASSERT_EQ(3, StringUtils::StrLen(str_u32));
+}
+
+//-----------------------------------------------------------------------------
+TEST_F(Test_Base_StringUtils, ToUpper)
+{
+	{
+		UTF8 ch_u8 = 'a';
+		UTF16 ch_u16 = 'a';
+		UTF32 ch_u32 = 'a';
+
+		ASSERT_EQ(0x41, StringUtils::ToUpper(ch_u8));
+		ASSERT_EQ(0x41, StringUtils::ToUpper(ch_u16));
+		ASSERT_EQ(0x41, StringUtils::ToUpper(ch_u32));
+	}
+	{
+		UTF8 ch_u8 = '+';
+		UTF16 ch_u16 = '+';
+		UTF32 ch_u32 = '+';
+
+		ASSERT_EQ(0x2B, StringUtils::ToUpper(ch_u8));
+		ASSERT_EQ(0x2B, StringUtils::ToUpper(ch_u16));
+		ASSERT_EQ(0x2B, StringUtils::ToUpper(ch_u32));
+	}
+}
+
+//-----------------------------------------------------------------------------
+TEST_F(Test_Base_StringUtils, IsSpace)
+{
+	{
+		UTF8 str_u8[] = { '\t', '\n', '\v', '\f', '\r', ' ' };
+		UTF16 str_u16[] = { '\t', '\n', '\v', '\f', '\r', ' ' };
+		UTF32 str_u32[] = { '\t', '\n', '\v', '\f', '\r', ' ' };
+		for (int i = 0; i < LN_ARRAY_SIZE_OF(str_u8); i++)
+		{
+			ASSERT_TRUE(StringUtils::IsSpace(str_u8[i]));
+			ASSERT_TRUE(StringUtils::IsSpace(str_u16[i]));
+			ASSERT_TRUE(StringUtils::IsSpace(str_u32[i]));
+		}
+	}
+	{
+		UTF8 str_u8[] = { 'A' };
+		UTF16 str_u16[] = { 'A' };
+		UTF32 str_u32[] = { 'A' };
+		for (int i = 0; i < LN_ARRAY_SIZE_OF(str_u8); i++)
+		{
+			ASSERT_FALSE(StringUtils::IsSpace(str_u8[i]));
+			ASSERT_FALSE(StringUtils::IsSpace(str_u16[i]));
+			ASSERT_FALSE(StringUtils::IsSpace(str_u32[i]));
+		}
+	}
+}
+
+//-----------------------------------------------------------------------------
 TEST_F(Test_Base_StringUtils, EndsWith)
 {
 	// 普通に比較

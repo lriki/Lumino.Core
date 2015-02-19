@@ -9,9 +9,53 @@
 namespace Lumino
 {
 
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+size_t StringUtils::StrLen(const TChar* str)
+{
+	const TChar* s;
+	for (s = str; *s; ++s);
+	return (s - str);
+}
+template size_t StringUtils::StrLen<UTF8>(const UTF8* str);
+template size_t StringUtils::StrLen<UTF16>(const UTF16* str);
+template size_t StringUtils::StrLen<UTF32>(const UTF32* str);
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+TChar StringUtils::ToUpper(TChar ch)
+{
+	return (TChar)toupper((int)ch);
+}
+template UTF8 StringUtils::ToUpper<UTF8>(UTF8 ch);
+template UTF16 StringUtils::ToUpper<UTF16>(UTF16 ch);
+template UTF32 StringUtils::ToUpper<UTF32>(UTF32 ch);
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+bool StringUtils::IsSpace(TChar ch)
+{
+	return isspace((int)ch) != 0;
+}
+template bool StringUtils::IsSpace(UTF8 ch);
+template bool StringUtils::IsSpace(UTF16 ch);
+template bool StringUtils::IsSpace(UTF32 ch);
+
+
+
+
+
+
 // 標準関数をオーバーロードするための実装
-static size_t			StrLen(const char* input) { return ::strlen(input); }
-static size_t			StrLen(const wchar_t* input) { return ::wcslen(input); }
+//static size_t			StrLen(const char* input) { return ::strlen(input); }
+//static size_t			StrLen(const wchar_t* input) { return ::wcslen(input); }
 static const char*		StrStr(const char* s1, const char* s2) { return ::strstr(s1, s2); }
 static const wchar_t*	StrStr(const wchar_t* s1, const wchar_t* s2) { return ::wcsstr(s1, s2); }
 
