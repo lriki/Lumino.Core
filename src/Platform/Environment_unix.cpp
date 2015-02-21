@@ -1,4 +1,4 @@
-
+﻿
 #include "../Internal.h"
 #include "../../include/Lumino/Platform/Environment.h"
 
@@ -27,12 +27,12 @@ uint64_t Environment::GetTickCountNS()
 template<>
 const char* Environment::GetNewLine<char>()
 {
-	return "?n";
+	return "\n";
 }
 template<>
 const wchar_t* Environment::GetNewLine<wchar_t>()
 {
-	return L"?n";
+	return L"\n";
 }
 
 } // namespace Lumino

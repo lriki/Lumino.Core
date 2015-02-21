@@ -6,7 +6,11 @@
 
 #include <sstream>
 #include <iostream>
+
+#ifdef LN_THREAD_WIN32
 #include <process.h>
+#endif
+
 #include "../Internal.h"
 #include "../../include/Lumino/Threading/Thread.h"
 #include "../../include/Lumino/Threading/ThreadingExceptions.h"

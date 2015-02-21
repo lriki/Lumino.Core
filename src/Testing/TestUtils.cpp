@@ -46,7 +46,7 @@ PathNameW TestUtils::GetFilePathW(const char* baseFilePath, const wchar_t* fileN
 //---------------------------------------------------------------------
 //
 //---------------------------------------------------------------------
-bool TestUtils::CheckArrays(void* ary1, void* ary2, size_t count)
+bool TestUtils::CheckArrays(const void* ary1, const void* ary2, size_t count)
 {
 	byte_t* b1 = (byte_t*)ary1;
 	byte_t* b2 = (byte_t*)ary2;

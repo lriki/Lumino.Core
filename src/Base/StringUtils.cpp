@@ -64,7 +64,11 @@ int				StringUtils::VSPrintf(char* out, int charCount, const char* format, va_li
 int				StringUtils::VSPrintf(wchar_t* out, int charCount, const wchar_t* format, va_list args) { return vswprintf(out, charCount, format, args); }
 #else
 int				StringUtils::VSPrintf(char* out, int charCount, const char* format, va_list args) { return vsnprintf(out, charCount, format, args); }
-int				StringUtils::VSPrintf(wchar_t* out, int charCount, const wchar_t* format, va_list args) { return vswprintf(out, charCount, format, args); }
+int				StringUtils::VSPrintf(wchar_t* out, int charCount, const wchar_t* format, va_list args) 
+{
+	LN_THROW(0, NotImplementedException);	// vswprintf ÇÕìÆçÏï€è·ñ≥Çµ
+	return vswprintf(out, charCount, format, args);
+}
 #endif
 
 //-----------------------------------------------------------------------------

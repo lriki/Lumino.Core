@@ -1,4 +1,4 @@
-
+ï»¿
 #include <sys/types.h>
 #include <sys/stat.h>
 #include "../../Internal.h"
@@ -10,10 +10,10 @@
 namespace Lumino
 {
 
-#define MBCS_FILEPATH(mbcsPath, srcWPath) ?
-	char mbcsPath[LN_MAX_PATH + 1]; ?
-	if (wcstombs(mbcsPath, srcWPath, LN_MAX_PATH) < 0) { ?
-		LN_THROW(0, IOException); ?
+#define MBCS_FILEPATH(mbcsPath, srcWPath) \
+	char mbcsPath[LN_MAX_PATH + 1]; \
+	if (wcstombs(mbcsPath, srcWPath, LN_MAX_PATH) < 0) { \
+		LN_THROW(0, IOException); \
 		}
 
 //-----------------------------------------------------------------------------
@@ -21,16 +21,16 @@ namespace Lumino
 //-----------------------------------------------------------------------------
 static bool is_stat_writable(struct stat *st, const char *path)
 {
-	// §ŒÀ‚È‚µ‚É‘‚«‚İ‰Â‚Å‚ ‚é‚©
+	// åˆ¶é™ãªã—ã«æ›¸ãè¾¼ã¿å¯ã§ã‚ã‚‹ã‹
 	if (st->st_mode & S_IWOTH)
 		return 1;
-	// Œ»İ‚Ìƒ†[ƒU[ID‚É‹–‰Â‚³‚ê‚Ä‚¢‚é‚©
+	// ç¾åœ¨ã®ãƒ¦ãƒ¼ã‚¶ãƒ¼IDã«è¨±å¯ã•ã‚Œã¦ã„ã‚‹ã‹
 	if ((st->st_uid == geteuid()) && (st->st_mode & S_IWUSR))
 		return 1;
-	// Œ»İ‚ÌƒOƒ‹[ƒvID‚É‹–‰Â‚³‚ê‚Ä‚¢‚é‚©
+	// ç¾åœ¨ã®ã‚°ãƒ«ãƒ¼ãƒ—IDã«è¨±å¯ã•ã‚Œã¦ã„ã‚‹ã‹
 	if ((st->st_gid == getegid()) && (st->st_mode & S_IWGRP))
 		return 1;
-	// ‚à‚¤‚±‚±‚É—ˆ‚é‚±‚Æ‚Í‚Ù‚Æ‚ñ‚Ç‚È‚¢‚Í‚¸‚¾‚ª”O‚Ì‚½‚ß
+	// ã‚‚ã†ã“ã“ã«æ¥ã‚‹ã“ã¨ã¯ã»ã¨ã‚“ã©ãªã„ã¯ãšã ãŒå¿µã®ãŸã‚
 	return access(path, W_OK) == 0;
 }
 
@@ -39,7 +39,7 @@ static bool is_stat_writable(struct stat *st, const char *path)
 //-----------------------------------------------------------------------------
 bool FileUtils::Exists(const char* filePath)
 {
-	// ¦fopen ‚É‚æ‚éƒ`ƒFƒbƒN‚ÍNGBƒtƒ@ƒCƒ‹‚ª”r‘¼ƒƒbƒN‚ÅŠJ‚©‚ê‚Ä‚¢‚½‚É¸”s‚·‚éB
+	// â€»fopen ã«ã‚ˆã‚‹ãƒã‚§ãƒƒã‚¯ã¯NGã€‚ãƒ•ã‚¡ã‚¤ãƒ«ãŒæ’ä»–ãƒ­ãƒƒã‚¯ã§é–‹ã‹ã‚Œã¦ã„ãŸæ™‚ã«å¤±æ•—ã™ã‚‹ã€‚
 	
 	// http://www.ie.u-ryukyu.ac.jp/?kono/lecture/1999/os/info1/file-2.html
 	//struct stat st;
@@ -51,7 +51,7 @@ bool FileUtils::Exists(const char* filePath)
 			return false;
 		}
 		else {
-			// ƒpƒX‚ª’·‚¢Aƒƒ‚ƒŠ‚ª‘«‚è‚È‚¢“™——R‚Í—lXB
+			// ãƒ‘ã‚¹ãŒé•·ã„ã€ãƒ¡ãƒ¢ãƒªãŒè¶³ã‚Šãªã„ç­‰ç†ç”±ã¯æ§˜ã€…ã€‚
 			// http://linuxjm.sourceforge.jp/html/LDP_man-pages/man2/faccessat.2.html
 			LN_THROW(0, IOException, strerror(errno));
 		}
@@ -69,8 +69,8 @@ bool FileUtils::Exists(const wchar_t* filePath)
 //-----------------------------------------------------------------------------
 uint32_t FileUtils::GetAttribute(const char* filePath)
 {
-	// Unix Œn‚Ìê‡Aƒtƒ@ƒCƒ‹‚Ìæ“ª‚ª . ‚Å‚ ‚ê‚Î‰B‚µƒtƒ@ƒCƒ‹‚Å‚ ‚éB
-	// mono-master/mono/io-layer/io.c ‚ÌA_wapi_stat_to_file_attributes ‚ªQl‚É‚È‚éB
+	// Unix ç³»ã®å ´åˆã€ãƒ•ã‚¡ã‚¤ãƒ«ã®å…ˆé ­ãŒ . ã§ã‚ã‚Œã°éš ã—ãƒ•ã‚¡ã‚¤ãƒ«ã§ã‚ã‚‹ã€‚
+	// mono-master/mono/io-layer/io.c ã®ã€_wapi_stat_to_file_attributes ãŒå‚è€ƒã«ãªã‚‹ã€‚
 	struct stat st;
 	int ret = ::stat(filePath, &st);
 	if (ret == -1) {
@@ -122,9 +122,9 @@ void FileUtils::Copy(const char* sourceFileName, const char* destFileName, bool 
 		LN_THROW(0, IOException);
 	}
 
-	// ƒoƒCƒiƒŠƒf[ƒ^‚Æ‚µ‚Ä 1byte ‚¸‚ÂƒRƒs[
-	// (windows ‚Å‚Íƒoƒbƒtƒ@ƒŠƒ“ƒO‚ªŒø‚­‚¯‚ÇA‚»‚êˆÈŠO‚Í‚í‚©‚ç‚È‚¢B
-	//  Linux ‚Æ‚©‚Å‹É’[‚É’x‚­‚È‚é‚æ‚¤‚È‚ç‚±‚±‚Åƒoƒbƒtƒ@ƒŠƒ“ƒO‚àl‚¦‚é)
+	// ãƒã‚¤ãƒŠãƒªãƒ‡ãƒ¼ã‚¿ã¨ã—ã¦ 1byte ãšã¤ã‚³ãƒ”ãƒ¼
+	// (windows ã§ã¯ãƒãƒƒãƒ•ã‚¡ãƒªãƒ³ã‚°ãŒåŠ¹ãã‘ã©ã€ãã‚Œä»¥å¤–ã¯ã‚ã‹ã‚‰ãªã„ã€‚
+	//  Linux ã¨ã‹ã§æ¥µç«¯ã«é…ããªã‚‹ã‚ˆã†ãªã‚‰ã“ã“ã§ãƒãƒƒãƒ•ã‚¡ãƒªãƒ³ã‚°ã‚‚è€ƒãˆã‚‹)
 	while (1)
 	{
 		byte_t b;

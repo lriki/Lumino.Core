@@ -29,7 +29,7 @@ bool PathUtils::IsRootPath(const TChar* path)
 	return false;
 #else
 	// UNIX の場合、/ だけであるか
-	size_t len = StringUtils::GetLength(path);
+	size_t len = StringUtils::StrLen(path);
 	if (len == 1 && path[0] == '/') {
 		return true;
 	}
@@ -207,8 +207,8 @@ int PathUtils::Compare(const TChar* path1, const TChar* path2)
 	TChar* s1 = absPath1;
 	TChar* s2 = absPath2;
 
-	// 大文字小文字区別せず、文字が等しい間繰り返す
 #ifdef LN_WIN32
+	// 大文字小文字区別せず、文字が等しい間繰り返す
 	while (*s1 && *s2)
 	{
 		if (StringUtils::ToUpper(*s1) != StringUtils::ToUpper(*s2))
@@ -229,7 +229,25 @@ int PathUtils::Compare(const TChar* path1, const TChar* path2)
 
 	return ((StringUtils::ToUpper(*s1) - StringUtils::ToUpper(*s2)));
 #else
-#error
+	while (*s1 && *s2)
+	{
+		if (*s1 != *s2)
+		{
+			// セパレータの差は区別しない
+			if ((*s1 == DirectorySeparatorChar || *s1 == AltDirectorySeparatorChar) &&
+				(*s2 == DirectorySeparatorChar || *s2 == AltDirectorySeparatorChar)
+				){
+				// 継続
+			}
+			else {
+				return ((StringUtils::ToUpper(*s1) - StringUtils::ToUpper(*s2)));
+			}
+		}
+		s1++;
+		s2++;
+	}
+
+	return (*s1 - *s2);
 #endif
 }
 

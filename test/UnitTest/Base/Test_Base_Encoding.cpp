@@ -1,5 +1,6 @@
 #include <TestConfig.h>
 #include "../../../src/Text/UTF16Encoding.h"
+#include "../../../src/Text/UTF32Encoding.h"
 using namespace Lumino::Text;
 
 class Test_Base_Encoding : public ::testing::Test
@@ -18,9 +19,13 @@ TEST_F(Test_Base_Encoding, Basic)
 	// TCHAR エンコーディング
 	{
 #ifdef LN_UNICODE
-		ASSERT_NE((UTF16Encoding*)NULL, dynamic_cast<UTF16Encoding*>(Encoding::GetTCharEncoding()));
+#ifdef _WIN32
+		ASSERT_TRUE(dynamic_cast<UTF16Encoding*>(Encoding::GetTCharEncoding()) != NULL);
 #else
-		ASSERT_NE(NULL, dynamic_cast<SystemMultiByteEncoding*>(Encoding::GetTCharEncoding()));
+		ASSERT_TRUE(dynamic_cast<UTF32Encoding*>(Encoding::GetTCharEncoding()) != NULL);
+#endif
+#else
+		ASSERT_TRUE(dynamic_cast<SystemMultiByteEncoding*>(Encoding::GetTCharEncoding()) != NULL);
 #endif
 	}
 	// UTF16Encoding
@@ -59,6 +64,12 @@ TEST_F(Test_Base_Encoding, Convert)
 //---------------------------------------------------------------------
 TEST_F(Test_Base_Encoding, SystemEncodingTest)
 {
+	// "日本語"
+#ifdef _WIN32
+	byte_t str1[] = { 0x93, 0xFA, 0x96, 0x7B, 0x8C, 0xEA, 0x00 };	// sjis
+#else
+	byte_t str1[] = { 0xE6, 0x97, 0xA5, 0xE6, 0x9C, 0xAC, 0xE8, 0xAA, 0x9E, 0x00 };	// utf8
+#endif
 
 	// std::wstring resize テスト
 
@@ -93,28 +104,14 @@ TEST_F(Test_Base_Encoding, SystemEncodingTest)
 
 	// 同一エンコーディング
 	{
-		// "日本語表示"
-		byte_t str1[] = { 0x93, 0xFA, 0x96, 0x7B, 0x8C, 0xEA, 0x00 };
-
 		StringA str2;
 		str2.ConvertFrom(str1, 6, Encoding::GetSystemMultiByteEncoding());
 
 		ASSERT_EQ(6, str2.size());
-
-
-		//std::string ws = "日本語表示";
-
-		//StringA str;
-		//str.ConvertFrom("日本語表示", 10, Encoding::GetSystemEncoding());
-
-		//printf(str.c_str());
 	}
 
 	// Multi → Wide
 	{
-		// "日本語"
-		byte_t str1[] = { 0x93, 0xFA, 0x96, 0x7B, 0x8C, 0xEA, 0x00 };
-
 		StringW str2;
 		str2.ConvertFrom(str1, 6, Encoding::GetSystemMultiByteEncoding());
 
@@ -132,21 +129,20 @@ TEST_F(Test_Base_Encoding, SystemEncodingTest)
 
 	// Wide → Multi 
 	{
-		std::string s = "日本語";
-
 		// "日本語"
-		wchar_t str1[] = { 0x65E5, 0x672C, 0x8A9e, 0x0000 };
+		wchar_t wstr1[] = { 0x65E5, 0x672C, 0x8A9e, 0x0000 };
 
 		StringA str2;
-		str2.ConvertFrom(str1, 3 * sizeof(wchar_t), Encoding::GetWideCharEncoding());
+		str2.ConvertFrom(wstr1, 3 * sizeof(wchar_t), Encoding::GetWideCharEncoding());
 
 		ASSERT_EQ(6, str2.size());
-		ASSERT_EQ(0x93, (byte_t)str2.at(0));	// '日'	※ unsingned char で比較しないと一致が取れない
-		ASSERT_EQ(0xFA, (byte_t)str2.at(1));	// '日'
-		ASSERT_EQ(0x96, (byte_t)str2.at(2));	// '本'
-		ASSERT_EQ(0x7B, (byte_t)str2.at(3));	// '本'
-		ASSERT_EQ(0x8C, (byte_t)str2.at(4));	// '語'
-		ASSERT_EQ(0xEA, (byte_t)str2.at(5));	// '語'
+		//ASSERT_EQ(0x93, (byte_t)str2.at(0));	// '日'	※ unsingned char で比較しないと一致が取れない
+		//ASSERT_EQ(0xFA, (byte_t)str2.at(1));	// '日'
+		//ASSERT_EQ(0x96, (byte_t)str2.at(2));	// '本'
+		//ASSERT_EQ(0x7B, (byte_t)str2.at(3));	// '本'
+		//ASSERT_EQ(0x8C, (byte_t)str2.at(4));	// '語'
+		//ASSERT_EQ(0xEA, (byte_t)str2.at(5));	// '語'
+		ASSERT_TRUE(TestUtils::CheckArrays(str2.GetCStr(), str1, strlen((char*)str1)));
 
 		// 1文字だけ
 		StringA str3;

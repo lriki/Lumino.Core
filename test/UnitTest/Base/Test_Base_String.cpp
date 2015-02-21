@@ -33,10 +33,10 @@ TEST_F(Test_Base_String, AssignCStr)
 		StringW wstr2;
 		wstr2.AssignCStr(L"test");
 
-		EXPECT_EQ("test", str1);
-		EXPECT_EQ("test", str2);
-		EXPECT_EQ(L"test", wstr1);
-		EXPECT_EQ(L"test", wstr2);
+		ASSERT_STREQ("test", str1.GetCStr());
+		ASSERT_STREQ("test", str2.GetCStr());
+		ASSERT_STREQ(L"test", wstr1.GetCStr());
+		ASSERT_STREQ(L"test", wstr2.GetCStr());
 
 		StringW tstr3;
 		tstr3.AssignCStr("f");
@@ -95,6 +95,7 @@ TEST_F(Test_Base_String, Format)
 			ArgumentException);
 	}
 
+#if _WIN32	// unix not impl
 	// StringW Max 文字数チェック
 	{
 		wchar_t buf1[2048 + 1] = { 0 };
@@ -104,12 +105,13 @@ TEST_F(Test_Base_String, Format)
 
 		StringW str1;
 		str1.Format(L"%s", buf1);
-		EXPECT_EQ(str1, buf1);	// 同じ文字ができていればOK
+		ASSERT_TRUE(str1 == buf1);	// 同じ文字ができていればOK
 
 		ASSERT_THROW(
 			str1.Format(L"%sb", buf1),	// 1文字多い。失敗する
 			ArgumentException);
 	}
+#endif
 }
 
 //---------------------------------------------------------------------
@@ -119,7 +121,7 @@ TEST_F(Test_Base_String, ConvertTo)
 		StringA str1("test");
 		RefPtr<RefBuffer> buf(str1.ConvertTo(Text::Encoding::GetWideCharEncoding()));
 		wchar_t* wstr = (wchar_t*)buf->GetPointer();
-		ASSERT_EQ(8, buf->GetSize());
+		ASSERT_EQ(sizeof(wchar_t) * 4, buf->GetSize());
 		ASSERT_EQ(L't', wstr[0]);
 		ASSERT_EQ(L'e', wstr[1]);
 		ASSERT_EQ(L's', wstr[2]);

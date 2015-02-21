@@ -20,7 +20,7 @@ public:
 	static PathNameW GetFilePathW(const char* baseFilePath, const wchar_t* fileName);
 
 	/// 2 つの配列をバイト単位で比較する
-	static bool CheckArrays(void* ary1, void* ary2, size_t count);
+	static bool CheckArrays(const void* ary1, const void* ary2, size_t count);
 };
 
 // __FILE__ のあるフォルダパス (PathName) を取得する

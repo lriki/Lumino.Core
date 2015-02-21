@@ -118,12 +118,12 @@ Encoding* Encoding::GetEncoding(EncodingType type)
 //
 //-----------------------------------------------------------------------------
 template<>
-static Encoding* Encoding::GetEncodingTemplate<char>()
+Encoding* Encoding::GetEncodingTemplate<char>()
 {
 	return GetSystemMultiByteEncoding();
 }
 template<>
-static Encoding* Encoding::GetEncodingTemplate<wchar_t>()
+Encoding* Encoding::GetEncodingTemplate<wchar_t>()
 {
 	return GetWideCharEncoding();
 }
@@ -286,7 +286,7 @@ void SystemMultiByteEncoding::SystemMultiByteDecoder::ConvertToUTF16(const byte_
 	const char* str_ptr = (const char*)inBuffer;
 	mbstate_t state;
 	memset(&state, 0, sizeof(state));
-	mbsrtowcs((wchar_t*)tmpUTF32Buffer.GetPointer(), &str_ptr, tmpUTF32Buffer.GetSize(), &state);
+	size_t len = mbsrtowcs((wchar_t*)tmpUTF32Buffer.GetPointer(), &str_ptr, tmpUTF32Buffer.GetSize(), &state);
 
 	// UTF-32 ‚©‚ç UTF-16 ‚Ö•ÏŠ·‚·‚é
 	UTFConversionOptions options;
@@ -294,7 +294,7 @@ void SystemMultiByteEncoding::SystemMultiByteDecoder::ConvertToUTF16(const byte_
 	options.ReplacementChar = mFallbackReplacementChar;
 	UTFConversionResult result = UnicodeUtils::ConvertUTF32toUTF16(
 		(UnicodeUtils::UTF32*)tmpUTF32Buffer.GetPointer(),
-		inBufferByteCount,
+		len,
 		outBuffer,
 		outBufferCharCount,
 		&options);
@@ -448,7 +448,7 @@ void SystemMultiByteEncoding::SystemMultiByteEncoder::ConvertFromUTF16(const UTF
 	memset(&state, 0, sizeof(state));
 	size_t t = wcsrtombs((char*)outBuffer, &wstr_ptr, outBufferByteCount, &state);
 
-	*outBytesUsed = options.ConvertedTargetLength * sizeof(UnicodeUtils::UTF32);
+	*outBytesUsed = t;//options.ConvertedTargetLength * sizeof(UnicodeUtils::UTF32);
 	*outCharsUsed = options.CharCount;
 #endif
 
