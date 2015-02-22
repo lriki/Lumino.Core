@@ -15,11 +15,11 @@ class STLUtils
 public:
 
 	/// item と一致する最初の要素を削除する
-	template <class T, typename TAllocator>
-	static void Remove(std::vector<T, TAllocator>& vec, const T& item)
+	template <class T, typename TItem/*, typename TAllocator*/>
+	static void Remove(T& vec, const TItem& item)
 	{
-		typename std::vector<T>::iterator itr = vec.begin();
-		typename std::vector<T>::iterator end = vec.end();
+		typename T::iterator itr = vec.begin();
+		typename T::iterator end = vec.end();
 		for (; itr != end; ++itr)
 		{
 			if (*itr == item) {
@@ -30,8 +30,8 @@ public:
 	}
 
 	/// vector から等しい要素をすべて削除する
-    template <class T>
-	static bool RemoveAll(std::vector<T>& vec, const T& value)
+	template <class T, typename TAllocator>
+	static bool RemoveAll(std::vector<T, TAllocator>& vec, const T& value)
     {
         size_t n = vec.size();
         vec.erase( std::remove( vec.begin(), vec.end(), value ), vec.end() );

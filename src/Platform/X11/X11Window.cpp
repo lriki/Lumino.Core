@@ -1,5 +1,11 @@
 
+/*
+	GLX 参考ソース:
+	http://www.cl.cam.ac.uk/~cs448/git/trunk/src/progs/xdemos/overlay.c
+*/
+#include <GL/glx.h>
 #include "../../Internal.h"
+#include "X11WindowManager.h"
 #include "X11Window.h"
 
 namespace Lumino
@@ -16,13 +22,13 @@ namespace Platform
 //-----------------------------------------------------------------------------
 X11Window::X11Window(X11WindowManager* windowManager, const SettingData& settingData)
 	: WindowBase(windowManager)
-	, m_x11Window(NULL)
+	//, m_x11Window(NULL)
 {
 	m_titleText = settingData.TitleText;
-	m_clientSize = ClientSize;
+	m_clientSize = settingData.ClientSize;
 	
 	Display*	x11Display			= GetWindowManager()->GetX11Display();
-	Screen*		x11DefaultScreen	= GetWindowManager()->GetX11DefaultScreen();
+	int			x11DefaultScreen	= GetWindowManager()->GetX11DefaultScreen();
 	::Window	x11RootWindow		= GetWindowManager()->GetX11RootWindow();
 	
 	//---------------------------------------------------------
@@ -53,11 +59,12 @@ X11Window::X11Window(X11WindowManager* windowManager, const SettingData& setting
 		//GLX_SAMPLES,        MultiSamples,	// マルチサンプリング (アンチエイリアス)
 		None
 	};
-	
+	printf("1\n");
 	// http://manpages.ubuntu.com/manpages/gutsy/ja/man3/glXChooseVisual.3x.html
 	// http://www.wakhok.ac.jp/~tatsuo/sen96/4shuu/section1.html
 	XVisualInfo* visual = glXChooseVisual(x11Display, x11DefaultScreen, attributes);
 	
+	printf("2 %p\n", visual);
 	//---------------------------------------------------------
 	// カラーマップを選択する。
 	// 		カラーマップとは、ピクセルフォーマットのようなもので、256色 とか 65535色等様々なパレットが存在している。
@@ -89,7 +96,7 @@ X11Window::X11Window(X11WindowManager* windowManager, const SettingData& setting
 		InputOutput,
 		visual->visual,
 		CWBorderPixel | CWColormap | CWEventMask | CWOverrideRedirect,	// XSetWindowAttributes のどの部分を考慮するか
-		&mWindowAttributes );
+		&winAttr );
 	
 	
 	XFree( visual );
@@ -135,16 +142,18 @@ void X11Window::ReleaseMouseCapture()
 //-----------------------------------------------------------------------------
 void X11Window::SetVisible(bool show)
 {
+	Display* x11Display = GetWindowManager()->GetX11Display();
+
 	// http://homepage3.nifty.com/rio_i/lab/xlib/001window.htm
 	if (show)
 	{
-		XMapWindow( mXDisplay, mXWindow );
-		XFlush( mXDisplay );
+		XMapWindow( x11Display, m_x11Window );
+		XFlush( x11Display );
 	}
 	else
 	{
-		XUnmapWindow( mXDisplay, mXWindow );
-		XFlush( mXDisplay );
+		XUnmapWindow( x11Display, m_x11Window );
+		XFlush( x11Display );
 	}
 }
 

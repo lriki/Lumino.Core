@@ -32,7 +32,12 @@
 */
 
 #include "../Internal.h"
-#include "Win32/Win32WindowManager.h"
+#ifdef LN_WIN32
+	#include "Win32/Win32WindowManager.h"
+#endif
+#ifdef LN_X11
+	#include "X11/X11WindowManager.h"
+#endif
 #include "../../include/Lumino/Platform/PlatformManager.h"
 
 
@@ -96,9 +101,10 @@ void PlatformManager::Initialize(const PlatformManagerSettings& settings)
 	m_useThread = settings.UseInternalUIThread;
 
 #ifdef LN_WIN32
-	{
-		m_windowManager = LN_NEW Win32WindowManager();
-	}
+	m_windowManager = LN_NEW Win32WindowManager();
+#endif
+#ifdef LN_X11
+	m_windowManager = LN_NEW X11WindowManager();
 #endif
 
 	if (m_useThread) {

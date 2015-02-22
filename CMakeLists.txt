@@ -24,6 +24,8 @@ if (LN_USE_UNICODE_CHAR_SET)
 	add_definitions(-D_UNICODE)
 endif()
 
+find_package(OpenGL REQUIRED)
+
 if (WIN32)
 	# MSVC Version name
 	if (MSVC_VERSION EQUAL 1400)
@@ -76,11 +78,20 @@ elseif (UNIX)
 	# link librarys.
 	list(APPEND LN_LINK_LIBS "dl")
 	list(APPEND LN_LINK_LIBS "bfd")
-	
+    find_package(X11 REQUIRED)
+
+    #list(APPEND glfw_INCLUDE_DIRS ${X11_X11_INCLUDE_PATH})
+    list(APPEND LN_LINK_LIBS ${X11_X11_LIB})
+
+	#list(APPEND glfw_INCLUDE_DIRS ${OPENGL_INCLUDE_DIR})
+    list(APPEND LN_LINK_LIBS ${OPENGL_gl_LIBRARY})
+
 	# platform sources.
 	set(LN_PLATFORM_SOURCES
 		src/IO/Unix/FileUtils_unix.cpp
-		src/Platform/Environment_unix.cpp)
+		src/Platform/Environment_unix.cpp
+		src/Platform/X11/X11WindowManager.cpp
+		src/Platform/X11/X11Window.cpp)
 	
 else()
 	# Not support.
@@ -120,6 +131,10 @@ set(LN_MATH_SOURCES
 	src/Threading/EventFlag.cpp
 	src/Threading/Mutex.cpp
 	src/Threading/ReadWriteMutex.cpp
+	src/Platform/WindowManagerBase.cpp
+	src/Platform/WindowBase.cpp
+	src/Platform/PlatformManager.cpp
+	src/Testing/TestUtils.cpp
 	${LN_PLATFORM_SOURCES})
 
 #------------------------------
@@ -134,7 +149,8 @@ set(LN_TEST_SOURCES
 	test/UnitTest/Base/Test_Base_UnicodeUtils.cpp
 	test/UnitTest/Base/Test_Base_Delegate.cpp
 	test/UnitTest/Base/Test_Base_Encoding.cpp
-	test/UnitTest/Base/Test_Base_Encoding_UTF8.cpp)
+	test/UnitTest/Base/Test_Base_Encoding_UTF8.cpp
+	test/UnitTest/Platform/Test_Platform_Application.cpp)
 
 #------------------------------------------------------------------------------
 # Output

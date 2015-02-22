@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 
 #include "../Base/Common.h"
@@ -13,13 +13,13 @@ class Exception;
 namespace Threading
 {
 /**
-	@brief		ƒXƒŒƒbƒhƒNƒ‰ƒX‚ÌŠî’êƒNƒ‰ƒX
-	@details	g‚¢•û
-				‡@‚±‚ÌƒNƒ‰ƒX‚ğŒp³‚µ‚½V‚µ‚¢ƒNƒ‰ƒX‚ğì¬‚µAExecute() ‚ğÀ‘•‚µ‚Ü‚·B
-				‡AStart() ‚ÅƒXƒŒƒbƒh‚ğŠJn‚µ‚Ü‚·B
-				‡BWait() ‚ÅI—¹‚ğ‘Ò‚¿‚Ü‚·B
-				  I—¹‚µ‚½Û‚É Execute() ‚Å”­¶‚µ‚½—áŠO‚ª‚ ‚éê‡AWait() ‚©‚çÛ throw ‚³‚ê‚Ü‚·B
-				‡CƒCƒ“ƒXƒ^ƒ“ƒX‚ğ”jŠü‚µ‚Ü‚·B
+	@brief		ã‚¹ãƒ¬ãƒƒãƒ‰ã‚¯ãƒ©ã‚¹ã®åŸºåº•ã‚¯ãƒ©ã‚¹
+	@details	ä½¿ã„æ–¹
+				â‘ ã“ã®ã‚¯ãƒ©ã‚¹ã‚’ç¶™æ‰¿ã—ãŸæ–°ã—ã„ã‚¯ãƒ©ã‚¹ã‚’ä½œæˆã—ã€Execute() ã‚’å®Ÿè£…ã—ã¾ã™ã€‚
+				â‘¡Start() ã§ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’é–‹å§‹ã—ã¾ã™ã€‚
+				â‘¢Wait() ã§çµ‚äº†ã‚’å¾…ã¡ã¾ã™ã€‚
+				  çµ‚äº†ã—ãŸéš›ã« Execute() ã§ç™ºç”Ÿã—ãŸä¾‹å¤–ãŒã‚ã‚‹å ´åˆã€Wait() ã‹ã‚‰éš› throw ã•ã‚Œã¾ã™ã€‚
+				â‘£ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç ´æ£„ã—ã¾ã™ã€‚
 */
 class LUMINO_EXPORT Thread
     : private NonCopyable
@@ -31,44 +31,44 @@ public:
 public:
 
 	/**
-		@brief	ƒXƒŒƒbƒhŠÖ” (‚±‚ê‚ğ©g‚ÅÀ‘•‚·‚é)
+		@brief	ã‚¹ãƒ¬ãƒƒãƒ‰é–¢æ•° (ã“ã‚Œã‚’è‡ªèº«ã§å®Ÿè£…ã™ã‚‹)
 	*/
 	virtual void Execute() = 0;
 
 public:
 
 	/**
-		@brief	ÀsŠJn
+		@brief	å®Ÿè¡Œé–‹å§‹
 	*/
 	void Start();
 
 	/**
-		@brief		ƒXƒŒƒbƒh‚ÌI—¹‚ğ‘Ò‚Â
-		@details	ƒXƒŒƒbƒh‚ªƒnƒ“ƒhƒ‹‚³‚ê‚È‚¢—áŠO‚ÅI—¹‚µ‚½ê‡A
-					‚±‚ÌŠÖ”‚Í‚»‚Ì—áŠO‚ğÄthrow‚µ‚Ü‚·B
+		@brief		ã‚¹ãƒ¬ãƒƒãƒ‰ã®çµ‚äº†ã‚’å¾…ã¤
+		@details	ã‚¹ãƒ¬ãƒƒãƒ‰ãŒãƒãƒ³ãƒ‰ãƒ«ã•ã‚Œãªã„ä¾‹å¤–ã§çµ‚äº†ã—ãŸå ´åˆã€
+					ã“ã®é–¢æ•°ã¯ãã®ä¾‹å¤–ã‚’å†throwã—ã¾ã™ã€‚
 	*/
 	void Wait();
 
 	/**
-		@brief	I—¹‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©‚Ì”»’è
+		@brief	çµ‚äº†ã—ã¦ã„ã‚‹ã‹ã©ã†ã‹ã®åˆ¤å®š
 	*/
 	bool IsFinished();
 
 	/**
-		@brief	ƒXƒŒƒbƒh¯•Êq‚Ìæ“¾ (start() Œã‚ÉŒÄ‚Ô‚±‚Æ)
+		@brief	ã‚¹ãƒ¬ãƒƒãƒ‰è­˜åˆ¥å­ã®å–å¾— (start() å¾Œã«å‘¼ã¶ã“ã¨)
 	*/
 	intptr_t GetThreadID() const;
 
 public:
 
 	/**
-		@brief	Œ»İÀs’†‚ÌƒXƒŒƒbƒh‚ÌID‚ğæ“¾
+		@brief	ç¾åœ¨å®Ÿè¡Œä¸­ã®ã‚¹ãƒ¬ãƒƒãƒ‰ã®IDã‚’å–å¾—
 	*/
 	static intptr_t GetCurrentThreadID();
 
 	/**
-		@brief	w’è‚µ‚½ŠÔ‚¾‚¯Œ»İ‚ÌƒXƒŒƒbƒh‚ğƒXƒŠ[ƒv
-		@param	msTime	: ‘Ò‹@ŠÔ (ƒ~ƒŠ•b)
+		@brief	æŒ‡å®šã—ãŸæ™‚é–“ã ã‘ç¾åœ¨ã®ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’ã‚¹ãƒªãƒ¼ãƒ—
+		@param	msTime	: å¾…æ©Ÿæ™‚é–“ (ãƒŸãƒªç§’)
 	*/
 	static void Sleep(int msTime);
 
@@ -93,7 +93,7 @@ private:
 
 
 /**
-	@brief	Delegate ‚ğƒXƒŒƒbƒhŠÖ”‚Æ‚µ‚ÄÀs‚·‚éƒXƒŒƒbƒh
+	@brief	Delegate ã‚’ã‚¹ãƒ¬ãƒƒãƒ‰é–¢æ•°ã¨ã—ã¦å®Ÿè¡Œã™ã‚‹ã‚¹ãƒ¬ãƒƒãƒ‰
 	@code
 			class Test
 			{
@@ -101,12 +101,12 @@ private:
 				DelegateThread	m_Thread;
 				void ThreadFunc()
 				{
-					// •Ê‚ÌƒXƒŒƒbƒh‚ÅÀs‚³‚ê‚éƒƒ“ƒoŠÖ”
+					// åˆ¥ã®ã‚¹ãƒ¬ãƒƒãƒ‰ã§å®Ÿè¡Œã•ã‚Œã‚‹ãƒ¡ãƒ³ãƒé–¢æ•°
 				}
 			public:
 				void Run()
 				{
-					// ƒXƒŒƒbƒh‹N“®
+					// ã‚¹ãƒ¬ãƒƒãƒ‰èµ·å‹•
 					m_Thread.Start(LN_CreateDelegate(this, &Test::ThreadFunc));
 				}
 			};
@@ -116,7 +116,7 @@ class LUMINO_EXPORT DelegateThread
     : public Thread
 {
 public:
-	void Start(Delegate00& func);
+	void Start(Delegate00 func);
 
 protected:
 	virtual void Execute();

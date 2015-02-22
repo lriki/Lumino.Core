@@ -281,12 +281,14 @@ void SystemMultiByteEncoding::SystemMultiByteDecoder::ConvertToUTF16(const byte_
 	size_t tmpUTF32BufferLen = inBufferByteCount * sizeof(UnicodeUtils::UTF32);
 	RefBuffer tmpUTF32Buffer;
 	tmpUTF32Buffer.Reserve(inBufferByteCount);
+	tmpUTF32Buffer.Clear();
 
 	// wchar_t (UTF-32) へ変換する
 	const char* str_ptr = (const char*)inBuffer;
 	mbstate_t state;
 	memset(&state, 0, sizeof(state));
 	size_t len = mbsrtowcs((wchar_t*)tmpUTF32Buffer.GetPointer(), &str_ptr, tmpUTF32Buffer.GetSize(), &state);
+	LN_THROW(len != -1, EncodingFallbackException);
 
 	// UTF-32 から UTF-16 へ変換する
 	UTFConversionOptions options;
@@ -429,6 +431,7 @@ void SystemMultiByteEncoding::SystemMultiByteEncoder::ConvertFromUTF16(const UTF
 	// UTF-16 のサロゲートを考慮し、最悪パターン(すべてサロゲート)でメモリ確保
 	RefBuffer tmpUTF32Buffer;
 	tmpUTF32Buffer.Reserve(sizeof(wchar_t) * (inBufferCharCount * 2));
+	tmpUTF32Buffer.Clear();
 
 	// UTF-32 へ変換する
 	UTFConversionOptions options;

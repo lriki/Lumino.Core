@@ -16,8 +16,9 @@
 // プラットフォーム
 #if defined(__WIN32__) || defined(_WIN32) || defined(__CYGWIN__)
 	#define LN_WIN32
-#else	// とりあえず	
+#else	// とりあえず
 	#define LN_LINUX
+	#define LN_X11
 #endif
 
 // コンパイラ

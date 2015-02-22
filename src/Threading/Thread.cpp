@@ -1,7 +1,7 @@
-
+ï»¿
 /*
-	ˆÈ‘O‚Í Thread_Win32.cpp ‚Æ Thread_Unix.cpp ‚É•ª‚¯‚Ä‚¢‚½‚ªA
-	Cygwin ‚Å‚Í _beginthreadex
+	ä»¥å‰ã¯ Thread_Win32.cpp ã¨ Thread_Unix.cpp ã«åˆ†ã‘ã¦ã„ãŸãŒã€
+	Cygwin ã§ã¯ _beginthreadex
 */
 
 #include <sstream>
@@ -35,7 +35,7 @@ public:
 	{
 		Thread* obj = static_cast<Thread*>( ptr );
 
-		// Às
+		// å®Ÿè¡Œ
 		try
 		{
 			obj->Execute();
@@ -49,7 +49,7 @@ public:
 			obj->mLastException = LN_NEW ThreadException();
 		}
 
-		// I—¹ƒtƒ‰ƒO‚ğ—§‚Ä‚é
+		// çµ‚äº†ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹
 		obj->mFinished.SetTrue();
 		return 0;
 	}
@@ -81,8 +81,8 @@ Thread::~Thread()
     {
 		// TODO:
         //printf( "< Thread::~Thread >\n" );
-        //printf( "ƒXƒŒƒbƒh‚ªI—¹‚µ‚Ä‚¢‚Ü‚¹‚ñBwait() ‚Å‘Ò‹@‚µ‚Ü‚·B\n" );
-        //printf( "‚à‚µ‰“š‚ª–³‚­‚È‚Á‚½ê‡‚ÍƒXƒŒƒbƒh‚ª–³ŒÀƒ‹[ƒv‚É‚È‚Á‚Ä‚¢‚È‚¢‚©Šm”F‚µ‚Ä‚­‚¾‚³‚¢B" );
+        //printf( "ã‚¹ãƒ¬ãƒƒãƒ‰ãŒçµ‚äº†ã—ã¦ã„ã¾ã›ã‚“ã€‚wait() ã§å¾…æ©Ÿã—ã¾ã™ã€‚\n" );
+        //printf( "ã‚‚ã—å¿œç­”ãŒç„¡ããªã£ãŸå ´åˆã¯ã‚¹ãƒ¬ãƒƒãƒ‰ãŒç„¡é™ãƒ«ãƒ¼ãƒ—ã«ãªã£ã¦ã„ãªã„ã‹ç¢ºèªã—ã¦ãã ã•ã„ã€‚" );
         Wait();
     }
 
@@ -94,7 +94,7 @@ Thread::~Thread()
 //-----------------------------------------------------------------------------
 void Thread::Reset()
 {
-	// ‘O‚Ì‚ªI—¹‚µ‚Ä‚¢‚È‚¢ê‡‚Í‘Ò‚Â
+	// å‰ã®ãŒçµ‚äº†ã—ã¦ã„ãªã„å ´åˆã¯å¾…ã¤
 	Wait();
 
 	LN_SAFE_DELETE( mLastException );
@@ -114,16 +114,16 @@ void Thread::Start()
 
 		DWORD threadID;
 		mThread = CreateThread(
-			NULL, //ƒZƒLƒ…ƒŠƒeƒB‘®«
-			0, //ƒXƒ^ƒbƒNƒTƒCƒY
-			internal_thr_execute::_execute_static_winapi, //ƒXƒŒƒbƒhŠÖ”
-			this, //ƒXƒŒƒbƒhŠÖ”‚É“n‚·ˆø”
-			0, //ì¬ƒIƒvƒVƒ‡ƒ“(0‚Ü‚½‚ÍCREATE_SUSPENDED)
-			&threadID);//ƒXƒŒƒbƒhID
+			NULL, //ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£å±æ€§
+			0, //ã‚¹ã‚¿ãƒƒã‚¯ã‚µã‚¤ã‚º
+			internal_thr_execute::_execute_static_winapi, //ã‚¹ãƒ¬ãƒƒãƒ‰é–¢æ•°
+			this, //ã‚¹ãƒ¬ãƒƒãƒ‰é–¢æ•°ã«æ¸¡ã™å¼•æ•°
+			0, //ä½œæˆã‚ªãƒ—ã‚·ãƒ§ãƒ³(0ã¾ãŸã¯CREATE_SUSPENDED)
+			&threadID);//ã‚¹ãƒ¬ãƒƒãƒ‰ID
 		mThreadID = threadID;
 
-		// TODO :‹N“®‚Å‚«‚È‚©‚Á‚½—áŠO
-		// TODO :Šù‚É‹N“®‚µ‚Ä‚¢‚é—áŠO
+		// TODO :èµ·å‹•ã§ããªã‹ã£ãŸä¾‹å¤–
+		// TODO :æ—¢ã«èµ·å‹•ã—ã¦ã„ã‚‹ä¾‹å¤–
 	}
 	else
 	{
@@ -147,7 +147,7 @@ void Thread::Wait()
 		}
 		mThread = NULL;
 
-		// ƒXƒŒƒbƒh‚Å—áŠO‚ª”­¶‚µ‚Ä‚¢‚ê‚Î throw ‚·‚é
+		// ã‚¹ãƒ¬ãƒƒãƒ‰ã§ä¾‹å¤–ãŒç™ºç”Ÿã—ã¦ã„ã‚Œã° throw ã™ã‚‹
 		if ( mLastException != NULL ) {
 			throw *mLastException;
 		}
@@ -200,7 +200,7 @@ public:
 	{
 		Thread* obj = static_cast<Thread*>( ptr );
 		
-		// Às
+		// å®Ÿè¡Œ
 		try
 		{
 			obj->Execute();
@@ -214,7 +214,7 @@ public:
 			obj->mLastException = LN_NEW ThreadException();
 		}
 
-		// I—¹ƒtƒ‰ƒO‚ğ—§‚Ä‚é
+		// çµ‚äº†ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹
 		obj->mFinished.SetTrue();
 		return 0;
 	}
@@ -240,14 +240,14 @@ Thread::~Thread()
 //-----------------------------------------------------------------------------
 void Thread::Start()
 {
-	// ‘O‚Ì‚ªI—¹‚µ‚Ä‚¢‚È‚¢ê‡‚Í‘Ò‚Â
+	// å‰ã®ãŒçµ‚äº†ã—ã¦ã„ãªã„å ´åˆã¯å¾…ã¤
 	Wait();
 
-	// ‰Šú‰»
+	// åˆæœŸåŒ–
 	LN_SAFE_DELETE( mLastException );
 	mFinished.SetFalse();
 
-	// ŠJn
+	// é–‹å§‹
 	pthread_create( &mThread,  NULL, internal_thr_execute::_execute_static, this );
 }
 
@@ -258,11 +258,11 @@ void Thread::Wait()
 {
 	if ( mThread )
 	{
-		// ‘Ò‹@
+		// å¾…æ©Ÿ
 		pthread_join(mThread, NULL);
 		mThread = NULL;
 
-		// ƒXƒŒƒbƒh‚Å—áŠO‚ª”­¶‚µ‚Ä‚¢‚ê‚Î throw ‚·‚é
+		// ã‚¹ãƒ¬ãƒƒãƒ‰ã§ä¾‹å¤–ãŒç™ºç”Ÿã—ã¦ã„ã‚Œã° throw ã™ã‚‹
 		if ( mLastException != NULL ) {
 			throw *mLastException;
 		}
@@ -310,7 +310,7 @@ void Thread::Sleep(int msTime)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void DelegateThread::Start(Delegate00& func)
+void DelegateThread::Start(Delegate00 func)
 {
 	m_ThreadFunc = func;
 	Thread::Start();

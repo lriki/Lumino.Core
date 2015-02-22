@@ -1,6 +1,5 @@
 
 #include "../../Internal.h"
-#include "Win32Window.h"
 #include "X11WindowManager.h"
 
 // http://homepage3.nifty.com/rio_i/lab/xlib/013wm.htm
@@ -19,8 +18,8 @@ namespace Platform
 //-----------------------------------------------------------------------------
 X11WindowManager::X11WindowManager()
 	: m_x11Display(NULL)
-	, m_x11DefaultScreen(NULL)
-	, m_x11RootWindow(NULL)
+	//, m_x11DefaultScreen(NULL)
+	//, m_x11RootWindow(NULL)
 {
 	// X11 の API をスレッド対応にする。他の API 呼び出し前に呼んでおく必要がある。
 	XInitThreads();
@@ -28,9 +27,9 @@ X11WindowManager::X11WindowManager()
 	m_x11Display = XOpenDisplay(NULL);
 	LN_THROW(m_x11Display != NULL, InvalidOperationException);
 	
-	m_x11Screen = DefaultScreen(m_x11Display);
-	m_x11Root = RootWindow(m_x11Display, m_x11Screen);
-	m_x11Context = XUniqueContext();
+	m_x11DefaultScreen = DefaultScreen(m_x11Display);
+	m_x11RootWindow = RootWindow(m_x11Display, m_x11DefaultScreen);
+	//m_x11Context = XUniqueContext();
 	
 	
 	// ※X11 における「アトム」とは、タイトル等のウィンドウプロパティを表すユニークID
@@ -152,7 +151,7 @@ void X11WindowManager::DoEvents()
 //-----------------------------------------------------------------------------
 void X11WindowManager::Finalize()
 {
-	mMainWindow.SafeRelease();
+	m_mainWindow.SafeRelease();
 }
 
 } // namespace Platform
