@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 2.8.4)
+cmake_minimum_required (VERSION 2.8.7)
 project (LuminoCore)
 
 set(LN_STATIC_LIB_OUTPUT_NAME "LuminoCore")
@@ -67,7 +67,11 @@ if (WIN32)
 	
 	# platform sources.
 	set(LN_PLATFORM_SOURCES
-		src/Platform/Win32/Environment.cpp)
+		src/IO/Win32/FileUtils_win32.cpp
+		src/Platform/Win32/Environment.cpp
+		src/Platform/Win32/Win32WindowManager.cpp
+		src/Platform/Win32/Win32WindowBase.cpp
+		src/Platform/Win32/Win32Window.cpp)
 
 elseif (APPLE)
 	set(LN_UNIT_TEST_LINK_LIBS "pthread")
@@ -191,22 +195,9 @@ add_custom_command(
 	POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_LINKER_FILE:LuminoCore_Shared> "${PROJECT_SOURCE_DIR}/lib")
 
-#------------------------------
+
 # Unit test.
-add_executable(UnitTest ${LN_TEST_SOURCES})
-set(LIST_OF_DIRECTORIES
-	"${PROJECT_SOURCE_DIR}/include"
-	"${PROJECT_SOURCE_DIR}/test/gtest/include"
-	"${PROJECT_SOURCE_DIR}/test/gtest"
-	"${PROJECT_SOURCE_DIR}/test/UnitTest")
-set_target_properties(
-	UnitTest
-	PROPERTIES INCLUDE_DIRECTORIES
-	"${LIST_OF_DIRECTORIES}")
-# gtest for VS2012.
-set_target_properties(UnitTest PROPERTIES COMPILE_DEFINITIONS "GTEST_HAS_TR1_TUPLE=0")
-target_link_libraries(UnitTest LuminoCore_Static ${LN_UNIT_TEST_LINK_LIBS})
-add_dependencies(UnitTest LuminoCore_Static)
+add_subdirectory(test)
 
 # samples.
 #add_subdirectory(sample)

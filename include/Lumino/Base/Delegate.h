@@ -32,7 +32,7 @@ namespace Lumino
 				}
 	@endcode
  */
-class Delegate00
+class LUMINO_EXPORT Delegate00
 {
 private:
 
