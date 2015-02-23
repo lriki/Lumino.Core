@@ -6,10 +6,12 @@
 #include "../../include/Lumino/Base/Exception.h"
 #include "../../include/Lumino/Base/StringUtils.h"
 
-#if defined(LN_WIN32)	// Cygwin もこっち
-	#include "Win32/BackTrace.h"
-#else
-	#include "Unix/BackTrace.h"
+#ifdef LN_EXCEPTION_BACKTRACE
+	#ifdef LN_WIN32	// Cygwin もこっち
+		#include "Win32/BackTrace.h"
+	#else
+		#include "Unix/BackTrace.h"
+	#endif
 #endif
 
 namespace Lumino
@@ -31,6 +33,7 @@ Exception::Exception()
 	memset(mStackBuffer, 0, sizeof(mStackBuffer));
 	memset(mSymbolBuffer, 0, sizeof(mSymbolBuffer));
 
+#ifdef LN_EXCEPTION_BACKTRACE
 	// バックトレース記録
 	mStackBufferSize = BackTrace::GetInstance()->Backtrace(mStackBuffer, LN_ARRAY_SIZE_OF(mStackBuffer));
 
@@ -40,6 +43,7 @@ Exception::Exception()
 		std::min(mStackBufferSize, 32),
 		mSymbolBuffer, 
 		LN_ARRAY_SIZE_OF(mSymbolBuffer));
+#endif
 
 	// ファイルに保存
 	if (strlen(gDumpFilePath) > 0) 
@@ -71,6 +75,12 @@ Exception::~Exception() throw()
 //-----------------------------------------------------------------------------
 Exception& Exception::SetSourceLocationInfo(const char* filePath, int fileLine)
 {
+	// もしバックトレースが取れていなかったらそれ用の文字列バッファに入れてしまう
+	if (mSymbolBuffer[0] == 0x00)
+	{
+		sprintf_s(mSymbolBuffer, LN_ARRAY_SIZE_OF(mSymbolBuffer), "File:%s Line:%d", filePath, fileLine);
+	}
+
 	// ワイド文字列へ変換 (文字コードは考慮しない)
 	memset(mSourceFilePath, 0, sizeof(mSourceFilePath));
 	size_t size;

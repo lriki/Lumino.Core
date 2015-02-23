@@ -280,7 +280,7 @@ void SystemMultiByteEncoding::SystemMultiByteDecoder::ConvertToUTF16(const byte_
 	// 一時メモリ確保 (char[] → UTF-8 で最悪のパターンは、すべてASCIIの場合)
 	size_t tmpUTF32BufferLen = inBufferByteCount * sizeof(UnicodeUtils::UTF32);
 	RefBuffer tmpUTF32Buffer;
-	tmpUTF32Buffer.Reserve(inBufferByteCount);
+	tmpUTF32Buffer.Reserve(sizeof(wchar_t) * inBufferByteCount);
 	tmpUTF32Buffer.Clear();
 
 	// wchar_t (UTF-32) へ変換する

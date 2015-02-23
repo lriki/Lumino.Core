@@ -15,5 +15,16 @@ TEST_F(Test_Base_Array, Contains)
 	Array<PathNameA> pathes;
 	pathes.Add(p1);
 	ASSERT_TRUE(pathes.Contains(p2));
+
+	/*
+	try
+	{
+		LN_THROW(0, ArgumentException);
+	}
+	catch (ArgumentException& e)
+	{
+		printf(e.what());
+	}
+	*/
 }
 

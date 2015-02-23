@@ -15,6 +15,10 @@ option(LN_USE_UNICODE_CHAR_SET "Use unicode char set." ON)
 # MSVC Runtime library.
 option(MSVC_LINK_MULTI_THREAD_STATIC_RUNTIME "static runtime (/MT, /MTd) or DLL runtime (/MD, /MDd) or to link either." ON)
 
+# Exceprion Backtrace.
+option(LN_EXCEPTION_BACKTRACE "In some unix environment there is a possibility that can not be compiled." ON)
+
+
 #------------------------------------------------------------------------------
 # Apply options
 #------------------------------------------------------------------------------
@@ -161,6 +165,10 @@ set(LN_TEST_SOURCES
 #------------------------------------------------------------------------------
 
 
+if (LN_EXCEPTION_BACKTRACE)
+	add_definitions(-DLN_EXCEPTION_BACKTRACE)
+endif()
+
 #------------------------------
 # Static library.
 set(LN_STATIC_LIB_OUTPUT_NAME "${LN_STATIC_LIB_OUTPUT_NAME}-static")
@@ -175,6 +183,7 @@ add_custom_command(
 	TARGET LuminoCore_Static
 	POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:LuminoCore_Static> "${PROJECT_SOURCE_DIR}/lib")
+
 
 #------------------------------
 # Shared library.
