@@ -1,5 +1,6 @@
 ﻿
 #include "../../Internal.h"
+#include <X11/Xresource.h>		// for XUniqueContext
 #include "X11WindowManager.h"
 
 // http://homepage3.nifty.com/rio_i/lab/xlib/013wm.htm
@@ -184,7 +185,7 @@ X11Window* X11WindowManager::FindX11Window(::Window x11Window)
 			m_x11Context,
 			(XPointer*)&window) != 0)
 	{
-		LN_THROW(result == 0, InvalidOperationException);	// 現在の用途としてはあり得ない
+		LN_THROW(0, InvalidOperationException);	// 現在の用途としてはあり得ない
 	}
     return window;
 }

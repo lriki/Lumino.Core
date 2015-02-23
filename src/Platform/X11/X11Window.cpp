@@ -104,7 +104,7 @@ X11Window::X11Window(X11WindowManager* windowManager, const SettingData& setting
 		x11Display,
 		m_x11Window,
 		GetWindowManager()->GetX11Context(),
-		(XPointer) window);
+		(XPointer)this);
 	LN_THROW(result == 0, InvalidOperationException);
 	
 	// WM_DELETE_WINDOW が通知されるようにする
