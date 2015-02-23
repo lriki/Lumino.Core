@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 #include "../../include/Lumino/Text/Encoding.h"
 
@@ -7,7 +7,7 @@ namespace Lumino
 namespace Text
 {
 /**
-	@brief	Å‘å 2byte(DoubleByte) ‚Ìƒ}ƒ‹ƒ`ƒoƒCƒg•¶šƒR[ƒh‚ÌƒGƒ“ƒR[ƒfƒBƒ“ƒO
+	@brief	æœ€å¤§ 2byte(DoubleByte) ã®ãƒãƒ«ãƒãƒã‚¤ãƒˆæ–‡å­—ã‚³ãƒ¼ãƒ‰ã®ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°
 */
 class DBCSEncoding : public Encoding
 {
@@ -17,7 +17,7 @@ public:
 
 	struct TableInfo
 	{
-		const unsigned char*	LeadBytePairs;		// size = LeadBytePairsSize (NULL ‚Ìê‡A‚±‚Ì•¶šƒR[ƒh‚Í DB ‚Å‚Í‚È‚¢)
+		const unsigned char*	LeadBytePairs;		// size = LeadBytePairsSize (NULL ã®å ´åˆã€ã“ã®æ–‡å­—ã‚³ãƒ¼ãƒ‰ã¯ DB ã§ã¯ãªã„)
 		const unsigned short*	DBCSToUTF16Table;	// size = TableSize
 		const unsigned short*	UTF16ToDBCSTable;	// size = TableSize
 	};
@@ -55,8 +55,8 @@ private:
 
 	private:
 		const TableInfo*	m_tableInfo;
-		byte_t				m_lastLeadByte;			///< ‘O‰ñ‚Ì Convert ‚Å––”ö‚ÉŒ©‚Â‚©‚Á‚½æsƒoƒCƒg‚ğ•Û‘¶‚·‚é
-		int					m_usedDefaultCharCount;	///< ˆê˜A‚Ì ConvertToUTF16() ‚ÌŒÄ‚Ño‚µ‚Ì’†‚ÅA•ÏŠ·‚Å‚«‚È‚¢•¶š‚ğ‹K’è•¶š‚É•ÏŠ·‚µ‚½•¶š”
+		byte_t				m_lastLeadByte;			///< å‰å›ã® Convert ã§æœ«å°¾ã«è¦‹ã¤ã‹ã£ãŸå…ˆè¡Œãƒã‚¤ãƒˆã‚’ä¿å­˜ã™ã‚‹
+		int					m_usedDefaultCharCount;	///< ä¸€é€£ã® ConvertToUTF16() ã®å‘¼ã³å‡ºã—ã®ä¸­ã§ã€å¤‰æ›ã§ããªã„æ–‡å­—ã‚’è¦å®šæ–‡å­—ã«å¤‰æ›ã—ãŸæ–‡å­—æ•°
 	};
 
 	// Encoder
@@ -74,7 +74,7 @@ private:
 
 	private:
 		const TableInfo*	m_tableInfo;
-		int					m_usedDefaultCharCount;	///< ˆê˜A‚Ì ConvertFromUTF16() ‚ÌŒÄ‚Ño‚µ‚Ì’†‚ÅA•ÏŠ·‚Å‚«‚È‚¢•¶š‚ğ‹K’è•¶š‚É•ÏŠ·‚µ‚½•¶š”
+		int					m_usedDefaultCharCount;	///< ä¸€é€£ã® ConvertFromUTF16() ã®å‘¼ã³å‡ºã—ã®ä¸­ã§ã€å¤‰æ›ã§ããªã„æ–‡å­—ã‚’è¦å®šæ–‡å­—ã«å¤‰æ›ã—ãŸæ–‡å­—æ•°
 	};
 };
 

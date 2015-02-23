@@ -1,19 +1,19 @@
-
+ï»¿
 /*
-	[2015/01/10] ƒƒbƒZ[ƒWˆ—‚Í”ñ“¯Šú‚É‚·‚é‚×‚«‚©H
+	[2015/01/10] ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‡¦ç†ã¯éåŒæœŸã«ã™ã‚‹ã¹ãã‹ï¼Ÿ
 
-		‚·‚é‚×‚«‚Å‚Í‚È‚¢BƒEƒBƒ“ƒhƒEƒhƒ‰ƒbƒO’†‚É•`‰æXV‚È‚Ç‚ª‚Å‚«‚é‚ªA
-		”ÏG‚ÈƒƒbƒZ[ƒWŠÇ—‚âƒR[ƒ‹ƒoƒbƒN‚ª•K—v‚ÅAƒƒŠƒbƒg‚æ‚è‚àƒfƒƒŠƒbƒg‚Ì•û‚ª‘å‚«‚¢B
+		ã™ã‚‹ã¹ãã§ã¯ãªã„ã€‚ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ‰ãƒ©ãƒƒã‚°ä¸­ã«æç”»æ›´æ–°ãªã©ãŒã§ãã‚‹ãŒã€
+		ç…©é›‘ãªãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ç®¡ç†ã‚„ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ãŒå¿…è¦ã§ã€ãƒ¡ãƒªãƒƒãƒˆã‚ˆã‚Šã‚‚ãƒ‡ãƒ¡ãƒªãƒƒãƒˆã®æ–¹ãŒå¤§ãã„ã€‚
 
-		ƒfƒƒŠƒbƒg
-		EƒCƒxƒ“ƒg‚Í•K‚¸ PostEvent ‚Åˆê“xƒƒCƒ“ƒXƒŒƒbƒh‚É“n‚µ‚½ŒãA
-		  ƒƒCƒ“‘¤‚©‚çŠe Window ‚ÉƒAƒ^ƒbƒ`‚³‚ê‚Ä‚¢‚é Listener ‚É‘—M‚·‚é•K—v‚ª‚ ‚éB­‚µ•¡GB
-		EPostEvent ‚µ‚È‚¯‚ê‚Î‚È‚ç‚È‚¢‚Æ‚¢‚¤‚±‚Æ‚ÍAƒLƒ…[‚É“ü‚ê‚éƒCƒxƒ“ƒgƒf[ƒ^‚Í
-		  new ‚µ‚½ƒIƒuƒWƒFƒNƒg‚©ƒTƒCƒYŒÅ’è‚Ì\‘¢‘Ì‚Å‚È‚¯‚ê‚Î‚È‚ç‚È‚¢B
-		  ƒCƒxƒ“ƒg1‚Â‚²‚Æ‚É new ‚ÍƒRƒXƒg‚ª‚‚¢‚µAƒTƒCƒYŒÅ’è\‘¢‘Ì‚ÍŠg’£«‚ª–³‚¢B
-		EClosing ƒCƒxƒ“ƒg‚ÅƒAƒvƒŠ‚ÌI—¹Šm”FƒƒbƒZ[ƒWƒ{ƒbƒNƒX‚Æ‚©‚ªo‚¹‚È‚¢B
-		  ƒc[ƒ‹Œn‚Å‚ÍƒƒCƒ“ƒXƒŒƒbƒh‚ª“®‚¢‚½‚Ü‚Ü‚¾‚Æ“s‡‚ªˆ«‚¢B
-		  ¨ƒQ[ƒ€‚È‚ç‚Ü‚Ÿ‚¢‚¢‚¯‚ÇB
+		ãƒ‡ãƒ¡ãƒªãƒƒãƒˆ
+		ãƒ»ã‚¤ãƒ™ãƒ³ãƒˆã¯å¿…ãš PostEvent ã§ä¸€åº¦ãƒ¡ã‚¤ãƒ³ã‚¹ãƒ¬ãƒƒãƒ‰ã«æ¸¡ã—ãŸå¾Œã€
+		  ãƒ¡ã‚¤ãƒ³å´ã‹ã‚‰å„ Window ã«ã‚¢ã‚¿ãƒƒãƒã•ã‚Œã¦ã„ã‚‹ Listener ã«é€ä¿¡ã™ã‚‹å¿…è¦ãŒã‚ã‚‹ã€‚å°‘ã—è¤‡é›‘ã€‚
+		ãƒ»PostEvent ã—ãªã‘ã‚Œã°ãªã‚‰ãªã„ã¨ã„ã†ã“ã¨ã¯ã€ã‚­ãƒ¥ãƒ¼ã«å…¥ã‚Œã‚‹ã‚¤ãƒ™ãƒ³ãƒˆãƒ‡ãƒ¼ã‚¿ã¯
+		  new ã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‹ã‚µã‚¤ã‚ºå›ºå®šã®æ§‹é€ ä½“ã§ãªã‘ã‚Œã°ãªã‚‰ãªã„ã€‚
+		  ã‚¤ãƒ™ãƒ³ãƒˆ1ã¤ã”ã¨ã« new ã¯ã‚³ã‚¹ãƒˆãŒé«˜ã„ã—ã€ã‚µã‚¤ã‚ºå›ºå®šæ§‹é€ ä½“ã¯æ‹¡å¼µæ€§ãŒç„¡ã„ã€‚
+		ãƒ»Closing ã‚¤ãƒ™ãƒ³ãƒˆã§ã‚¢ãƒ—ãƒªã®çµ‚äº†ç¢ºèªãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒœãƒƒã‚¯ã‚¹ã¨ã‹ãŒå‡ºã›ãªã„ã€‚
+		  ãƒ„ãƒ¼ãƒ«ç³»ã§ã¯ãƒ¡ã‚¤ãƒ³ã‚¹ãƒ¬ãƒƒãƒ‰ãŒå‹•ã„ãŸã¾ã¾ã ã¨éƒ½åˆãŒæ‚ªã„ã€‚
+		  â†’ã‚²ãƒ¼ãƒ ãªã‚‰ã¾ãã„ã„ã‘ã©ã€‚
 */
 
 
@@ -55,10 +55,10 @@ LRESULT Win32WindowBase::WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 {
 	*handled = false;
 
-	// WM_SYSKEYDOWN ŠÖŒW‚ğ‚Ş‚â‚İ‚É postMessage() ‚·‚é‚Æ‹­§I—¹‚·‚é‚Ì‚Å•K—v‚È‚à‚Ì‚¾‚¯ƒtƒBƒ‹ƒ^ƒŠƒ“ƒO
+	// WM_SYSKEYDOWN é–¢ä¿‚ã‚’ã‚€ã‚„ã¿ã« postMessage() ã™ã‚‹ã¨å¼·åˆ¶çµ‚äº†ã™ã‚‹ã®ã§å¿…è¦ãªã‚‚ã®ã ã‘ãƒ•ã‚£ãƒ«ã‚¿ãƒªãƒ³ã‚°
 	//if ( msg != WM_SYSKEYDOWN || (msg == WM_SYSKEYDOWN && wparam == VK_RETURN) )
 	{
-		// ƒ}ƒEƒXƒLƒƒƒvƒ`ƒƒ‚Ìˆ—
+		// ãƒã‚¦ã‚¹ã‚­ãƒ£ãƒ—ãƒãƒ£ã®å‡¦ç†
 		switch (msg)
 		{
 		case WM_LBUTTONDOWN:
@@ -75,17 +75,17 @@ LRESULT Win32WindowBase::WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 
 		switch (msg)
 		{
-			/////////////////// ƒEƒBƒ“ƒhƒE‚ª•Â‚¶‚ç‚ê‚æ‚¤‚Æ‚µ‚Ä‚¢‚é
+			/////////////////// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãŒé–‰ã˜ã‚‰ã‚Œã‚ˆã†ã¨ã—ã¦ã„ã‚‹
 			case WM_CLOSE:
 			{
 				/*
-				‚±‚±‚Í DefWindowProc() ‚ğŒÄ‚Î‚È‚¢‚ÅI—¹‚·‚éB
-				‚±‚¤‚µ‚È‚¢‚ÆA~ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½uŠÔ‚ÉƒEƒBƒ“ƒhƒE‚ª”jŠü‚³‚ê‚ÄA
-				I—¹’¼‘O‚ÌÅŒã‚Ì•`‰æ‚É DirectX ‚Ì EndScene() ‚Å
-				u•`‰ææ‚ÌƒEƒBƒ“ƒhƒE‚ª‚ ‚è‚Ü‚¹‚ñv‚Æ‚¢‚¤‚±‚Æ‚ÅƒGƒ‰[‚ªo‚éB
+				ã“ã“ã¯ DefWindowProc() ã‚’å‘¼ã°ãªã„ã§çµ‚äº†ã™ã‚‹ã€‚
+				ã“ã†ã—ãªã„ã¨ã€Ã—ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸç¬é–“ã«ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãŒç ´æ£„ã•ã‚Œã¦ã€
+				çµ‚äº†ç›´å‰ã®æœ€å¾Œã®æç”»æ™‚ã« DirectX ã® EndScene() ã§
+				ã€Œæç”»å…ˆã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãŒã‚ã‚Šã¾ã›ã‚“ã€ã¨ã„ã†ã“ã¨ã§ã‚¨ãƒ©ãƒ¼ãŒå‡ºã‚‹ã€‚
 
-				‘ã‚í‚è‚ÉI—¹ƒtƒ‰ƒO‚¾‚¯‚ğ—§‚Ä‚ÄA‚»‚ê‚ğƒƒCƒ“ƒ‹[ƒv‚ÅŒŸoA
-				‚»‚ÌŒã‚Ì finalize() ŒÄ‚Ño‚µ‚Å DestroyWindow() ‚ğŒÄ‚Ño‚·B
+				ä»£ã‚ã‚Šã«çµ‚äº†ãƒ•ãƒ©ã‚°ã ã‘ã‚’ç«‹ã¦ã¦ã€ãã‚Œã‚’ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒ—ã§æ¤œå‡ºã€
+				ãã®å¾Œã® finalize() å‘¼ã³å‡ºã—ã§ DestroyWindow() ã‚’å‘¼ã³å‡ºã™ã€‚
 				*/
 
 				EventArgs e(EventType_Close, this);
@@ -103,7 +103,7 @@ LRESULT Win32WindowBase::WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 				return 0;
 			}
 
-			/////////////////// ƒEƒBƒ“ƒhƒE‚ªƒAƒNƒeƒBƒuE”ñƒAƒNƒeƒBƒu‚É‚È‚Á‚½ê‡
+			/////////////////// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãŒã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãƒ»éã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã«ãªã£ãŸå ´åˆ
 			case WM_ACTIVATE:
 			{
 				bool active = ((wparam & 0xffff) != 0);
@@ -114,25 +114,25 @@ LRESULT Win32WindowBase::WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 					//EventArgs e;
 					//e.Type = (mIsActive) ? LN_EVENT_APP_ACTIVATE : LN_EVENT_APP_DEACTIVATE;
 					//e.Sender = this;
-					//SendEventToAllListener(e);		// “¯Šúˆ—‚Ìê‡‚Í‚±‚Ìê‚Å’Ê’m
-					//mApplication->PostEvent(&e);	// ”ñ“¯Šúˆ—‚Ìê‡‚Íˆê“xƒLƒ…[‚É“ü‚ê‚é
+					//SendEventToAllListener(e);		// åŒæœŸå‡¦ç†ã®å ´åˆã¯ã“ã®å ´ã§é€šçŸ¥
+					//mApplication->PostEvent(&e);	// éåŒæœŸå‡¦ç†ã®å ´åˆã¯ä¸€åº¦ã‚­ãƒ¥ãƒ¼ã«å…¥ã‚Œã‚‹
 				}
 				*handled = true;
 				return 0;
 			}
-			/////////////////////////////////////////////// ƒEƒBƒ“ƒhƒEƒTƒCƒY‚ª•ÏX‚³‚ê‚½
+			/////////////////////////////////////////////// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚µã‚¤ã‚ºãŒå¤‰æ›´ã•ã‚ŒãŸ
 			case WM_SIZE:
 			{
 				//EventArgs e;
 				//e.Type = LN_EVENT_WINDOW_SIZE_CHANGED;
 				//e.Sender = this;
-				//SendEventToAllListener(e);		// “¯Šúˆ—‚Ìê‡‚Í‚±‚Ìê‚Å’Ê’m
-				//mApplication->PostEvent(&e);	// ”ñ“¯Šúˆ—‚Ìê‡‚Íˆê“xƒLƒ…[‚É“ü‚ê‚é
+				//SendEventToAllListener(e);		// åŒæœŸå‡¦ç†ã®å ´åˆã¯ã“ã®å ´ã§é€šçŸ¥
+				//mApplication->PostEvent(&e);	// éåŒæœŸå‡¦ç†ã®å ´åˆã¯ä¸€åº¦ã‚­ãƒ¥ãƒ¼ã«å…¥ã‚Œã‚‹
 
 				//*handled = true;
 				return 0;
 			}
-			/////////////////////////////////////////////// Alt + Enter Šm”F
+			/////////////////////////////////////////////// Alt + Enter ç¢ºèª
 			//case WM_SYSKEYDOWN:
 			//{
 			//	if ( wparam == VK_RETURN )
@@ -143,19 +143,19 @@ LRESULT Win32WindowBase::WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 			//		e.StructSize	= sizeof(EventArgs);
 			//		mWindowManager->getManager()->postEventFromWindowThread( &e );
 
-			//		return MAKELONG( -1, MNC_EXECUTE );     // ‘æˆêˆø”‚Íƒƒjƒ…[‚Ì‘®«B¡‰ñ‚Íƒƒjƒ…[g‚Á‚Ä‚È‚¢‚Ì‚Å‚Æ‚è‚ ‚¦‚¸‚±‚Ì‚Ü‚Ü
+			//		return MAKELONG( -1, MNC_EXECUTE );     // ç¬¬ä¸€å¼•æ•°ã¯ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®å±æ€§ã€‚ä»Šå›ã¯ãƒ¡ãƒ‹ãƒ¥ãƒ¼ä½¿ã£ã¦ãªã„ã®ã§ã¨ã‚Šã‚ãˆãšã“ã®ã¾ã¾
 			//	}
-			//	// ‚±‚±‚ÍˆÈ~‚É DefWindowProc() ‚ğŒÄ‚ÔB
-			//	// ‚±‚¤‚µ‚È‚¢‚Æ Alt + F4 ‚Æ‚©‚ª–³Œø‚É‚È‚Á‚Ä‚»‚ê‚ÅI—¹‚Å‚«‚È‚­‚È‚éB
+			//	// ã“ã“ã¯ä»¥é™ã« DefWindowProc() ã‚’å‘¼ã¶ã€‚
+			//	// ã“ã†ã—ãªã„ã¨ Alt + F4 ã¨ã‹ãŒç„¡åŠ¹ã«ãªã£ã¦ãã‚Œã§çµ‚äº†ã§ããªããªã‚‹ã€‚
 			//	return 0;
 			//}
-			/////////////////////////////////////////////// Alt + Enter ‚ÌŒx‰¹ƒJƒbƒg http://www26.atwiki.jp/gunsyu3/pages/11.html
+			/////////////////////////////////////////////// Alt + Enter ã®è­¦å‘ŠéŸ³ã‚«ãƒƒãƒˆ http://www26.atwiki.jp/gunsyu3/pages/11.html
 			case WM_SYSCHAR:
 			{
 				*handled = true;
 				return 0;
 			}
-			/////////////////////////////////////////////// ƒ}ƒEƒXƒ{ƒ^ƒ““ü—Í
+			/////////////////////////////////////////////// ãƒã‚¦ã‚¹ãƒœã‚¿ãƒ³å…¥åŠ›
 			case WM_LBUTTONDOWN:
 			case WM_LBUTTONUP:
 			case WM_RBUTTONDOWN:
@@ -207,7 +207,7 @@ LRESULT Win32WindowBase::WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 				*handled = true;
 				return 0;
 			}
-			/////////////////////////////////////////////// ƒ}ƒEƒXˆÚ“®
+			/////////////////////////////////////////////// ãƒã‚¦ã‚¹ç§»å‹•
 			case WM_MOUSEMOVE:
 			{
 				EventArgs e;
@@ -215,8 +215,8 @@ LRESULT Win32WindowBase::WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 				e.Sender = this;
 				e.Mouse.Button = MouseButton_None;
 				e.Mouse.Delta = 0;
-				e.Mouse.X = static_cast< short >(LOWORD(lparam));     // ˆê“x short ‚ÉƒLƒƒƒXƒg‚µ‚È‚¢‚ÆA
-				e.Mouse.Y = static_cast< short >(HIWORD(lparam));     // ƒ}ƒCƒiƒX’l‚É‚È‚Á‚½‚Æ‚« 65535 ‚Æ‚©’l‚ª“ü‚é
+				e.Mouse.X = static_cast< short >(LOWORD(lparam));     // ä¸€åº¦ short ã«ã‚­ãƒ£ã‚¹ãƒˆã—ãªã„ã¨ã€
+				e.Mouse.Y = static_cast< short >(HIWORD(lparam));     // ãƒã‚¤ãƒŠã‚¹å€¤ã«ãªã£ãŸã¨ã 65535 ã¨ã‹å€¤ãŒå…¥ã‚‹
 				e.Mouse.MoveX = (mLastMouseX >= 0) ? e.Mouse.X - mLastMouseX : 0;
 				e.Mouse.MoveY = (mLastMouseY >= 0) ? e.Mouse.Y - mLastMouseY : 0;
 				NortifyEvent(e);
@@ -227,10 +227,10 @@ LRESULT Win32WindowBase::WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 				*handled = true;
 				return 0;
 			}
-			/////////////////////////////////////////////// ƒNƒ‰ƒCƒAƒ“ƒg—ÌˆæŠO‚Åƒ}ƒEƒX‚ªˆÚ“®‚µ‚½
+			/////////////////////////////////////////////// ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆé ˜åŸŸå¤–ã§ãƒã‚¦ã‚¹ãŒç§»å‹•ã—ãŸ
 			case WM_NCMOUSEMOVE:
 			{
-				// ”O‚Ì‚½‚ßƒzƒ“ƒg‚ÉƒNƒ‰ƒCƒAƒ“ƒg—ÌˆæŠO‚©ƒ`ƒFƒbƒN
+				// å¿µã®ãŸã‚ãƒ›ãƒ³ãƒˆã«ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆé ˜åŸŸå¤–ã‹ãƒã‚§ãƒƒã‚¯
 				if (wparam != HTCLIENT)
 				{
 					EventArgs e;
@@ -251,7 +251,7 @@ LRESULT Win32WindowBase::WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 					return 0;
 				}
 			}
-			///////////////////////////////////////////// ƒ}ƒEƒXƒzƒC[ƒ‹‚ª‘€ì‚³‚ê‚½
+			///////////////////////////////////////////// ãƒã‚¦ã‚¹ãƒ›ã‚¤ãƒ¼ãƒ«ãŒæ“ä½œã•ã‚ŒãŸ
 			case WM_MOUSEWHEEL:
 			{
 				EventArgs e;
@@ -271,13 +271,13 @@ LRESULT Win32WindowBase::WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 				*handled = true;
 				return 0;
 			}
-			///////////////////////////////////////////// ƒL[«
+			///////////////////////////////////////////// ã‚­ãƒ¼â†“
 			case WM_KEYDOWN:
 			{
 				EventArgs e;
 				e.Type = EventType_KeyDown;
 				e.Sender = this;
-				e.Key.KeyCode = ConvertVirtualKeyCode(wparam);	// ‰¼‘zƒL[ƒR[ƒh
+				e.Key.KeyCode = ConvertVirtualKeyCode(wparam);	// ä»®æƒ³ã‚­ãƒ¼ã‚³ãƒ¼ãƒ‰
 				e.Key.IsAlt = ::GetKeyState(VK_MENU) < 0;
 				e.Key.IsShift = ::GetKeyState(VK_SHIFT) < 0;
 				e.Key.IsControl = ::GetKeyState(VK_CONTROL) < 0;
@@ -286,13 +286,13 @@ LRESULT Win32WindowBase::WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 				*handled = true;
 				return 0;
 			}
-			///////////////////////////////////////////// ƒL[ª
+			///////////////////////////////////////////// ã‚­ãƒ¼â†‘
 			case WM_KEYUP:
 			{
 				EventArgs e;
 				e.Type = EventType_KeyUp;
 				e.Sender = this;
-				e.Key.KeyCode = ConvertVirtualKeyCode(wparam);	// ‰¼‘zƒL[ƒR[ƒh
+				e.Key.KeyCode = ConvertVirtualKeyCode(wparam);	// ä»®æƒ³ã‚­ãƒ¼ã‚³ãƒ¼ãƒ‰
 				e.Key.IsAlt = ::GetKeyState(VK_MENU) < 0;
 				e.Key.IsShift = ::GetKeyState(VK_SHIFT) < 0;
 				e.Key.IsControl = ::GetKeyState(VK_CONTROL) < 0;
@@ -307,7 +307,7 @@ LRESULT Win32WindowBase::WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 				EventArgs e;
 				e.Type = EventType_KeyDown;
 				e.Sender = this;
-				e.Key.KeyCode = ConvertVirtualKeyCode(wparam);	// ‰¼‘zƒL[ƒR[ƒh
+				e.Key.KeyCode = ConvertVirtualKeyCode(wparam);	// ä»®æƒ³ã‚­ãƒ¼ã‚³ãƒ¼ãƒ‰
 				e.Key.IsAlt = true;								// Alt on
 				e.Key.IsShift = ::GetKeyState(VK_SHIFT) < 0;
 				e.Key.IsControl = ::GetKeyState(VK_CONTROL) < 0;
@@ -322,17 +322,17 @@ LRESULT Win32WindowBase::WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 				EventArgs e;
 				e.Type = EventType_KeyUp;
 				e.Sender = this;
-				e.Key.KeyCode = ConvertVirtualKeyCode(wparam);	// ‰¼‘zƒL[ƒR[ƒh
+				e.Key.KeyCode = ConvertVirtualKeyCode(wparam);	// ä»®æƒ³ã‚­ãƒ¼ã‚³ãƒ¼ãƒ‰
 				e.Key.IsAlt = true;								// Alt on
 				e.Key.IsShift = ::GetKeyState(VK_SHIFT) < 0;
 				e.Key.IsControl = ::GetKeyState(VK_CONTROL) < 0;
 				NortifyEvent(e);
-				break;	// WM_SYSKEYUP‚ğ•ß‚Ü‚¦‚½ê‡A•K‚¸DefWindowProc‚És‚­‚æ‚¤‚É‚·‚é
+				break;	// WM_SYSKEYUPã‚’æ•ã¾ãˆãŸå ´åˆã€å¿…ãšDefWindowProcã«è¡Œãã‚ˆã†ã«ã™ã‚‹
 			}
-			///////////////////////////////////////////// •¶š“ü—Í
+			///////////////////////////////////////////// æ–‡å­—å…¥åŠ›
 			//case WM_CHAR:
 			//{
-			//	// •¶š‚Ì‚İ‘—‚é
+			//	// æ–‡å­—ã®ã¿é€ã‚‹
 			//	if (0x20 <= wparam && wparam <= 0x7E)
 			//	{
 			//		KeyEventArgs e;

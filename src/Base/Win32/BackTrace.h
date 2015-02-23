@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 
 #include <stdio.h>
@@ -12,7 +12,7 @@ class BackTrace
 {
 private:
 
-	//dll“Ç‚İ‚İƒwƒ‹ƒp[
+	//dllèª­ã¿è¾¼ã¿ãƒ˜ãƒ«ãƒ‘ãƒ¼
 	class LoadLibraryHelper
 	{
 	private:
@@ -61,35 +61,35 @@ private:
 	RtlCaptureStackBackTraceDef mRtlCaptureStackBackTraceProc;
 
 #if (_WIN64 || __x86_64__)
-	//ƒAƒhƒŒƒX‚©‚çƒ‚ƒWƒ…[ƒ‹‚ğ‹‚ß‚é
+	//ã‚¢ãƒ‰ãƒ¬ã‚¹ã‹ã‚‰ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã‚’æ±‚ã‚ã‚‹
 	typedef BOOL(WINAPI *SymGetModuleInfo64Def) (HANDLE hProcess, DWORD64 dwAddr, PIMAGEHLP_MODULE64 ModuleInfo);
 	SymGetModuleInfo64Def mSymGetModuleInfo64Proc;
-	//ƒAƒhƒŒƒX‚©‚çƒVƒ“ƒ{ƒ‹‚ğ‹‚ß‚é
+	//ã‚¢ãƒ‰ãƒ¬ã‚¹ã‹ã‚‰ã‚·ãƒ³ãƒœãƒ«ã‚’æ±‚ã‚ã‚‹
 	typedef BOOL(WINAPI *SymGetSymFromAddr64Def) (HANDLE hProcess, DWORD64 Address, PDWORD64 Displacement, PIMAGEHLP_SYMBOL64 Symbol);
 	SymGetSymFromAddr64Def mSymGetSymFromAddr64Proc;
-	//ƒAƒhƒŒƒX‚©‚çƒtƒ@ƒCƒ‹‚Æs”Ô†‚ğ‹‚ß‚é
+	//ã‚¢ãƒ‰ãƒ¬ã‚¹ã‹ã‚‰ãƒ•ã‚¡ã‚¤ãƒ«ã¨è¡Œç•ªå·ã‚’æ±‚ã‚ã‚‹
 	typedef BOOL(WINAPI *SymGetLineFromAddr64Def) (HANDLE hProcess, DWORD64 Address, PDWORD64 Displacement, PIMAGEHLP_LINE64 Line);
 	SymGetLineFromAddr64Def mSymGetLineFromAddr64Proc;
 #else
-	//ƒAƒhƒŒƒX‚©‚çƒ‚ƒWƒ…[ƒ‹‚ğ‹‚ß‚é
+	//ã‚¢ãƒ‰ãƒ¬ã‚¹ã‹ã‚‰ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã‚’æ±‚ã‚ã‚‹
 	typedef BOOL(WINAPI *SymGetModuleInfoDef) (HANDLE hProcess, DWORD dwAddr, PIMAGEHLP_MODULE ModuleInfo);
 	SymGetModuleInfoDef mSymGetModuleInfoProc;
-	//ƒAƒhƒŒƒX‚©‚çƒVƒ“ƒ{ƒ‹‚ğ‹‚ß‚é
+	//ã‚¢ãƒ‰ãƒ¬ã‚¹ã‹ã‚‰ã‚·ãƒ³ãƒœãƒ«ã‚’æ±‚ã‚ã‚‹
 	typedef BOOL(WINAPI *SymGetSymFromAddrDef) (HANDLE hProcess, DWORD Address, PDWORD Displacement, PIMAGEHLP_SYMBOL Symbol);
 	SymGetSymFromAddrDef mSymGetSymFromAddrProc;
-	//ƒAƒhƒŒƒX‚©‚çƒtƒ@ƒCƒ‹‚Æs”Ô†‚ğ‹‚ß‚é
+	//ã‚¢ãƒ‰ãƒ¬ã‚¹ã‹ã‚‰ãƒ•ã‚¡ã‚¤ãƒ«ã¨è¡Œç•ªå·ã‚’æ±‚ã‚ã‚‹
 	typedef BOOL(WINAPI *SymGetLineFromAddrDef) (HANDLE hProcess, DWORD dwAddr, PDWORD pdwDisplacement, PIMAGEHLP_LINE Line);
 	SymGetLineFromAddrDef mSymGetLineFromAddrProc;
 #endif
-	//ƒVƒ“ƒ{ƒ‹ƒGƒ“ƒWƒ“‚ÌƒIƒvƒVƒ‡ƒ“
+	//ã‚·ãƒ³ãƒœãƒ«ã‚¨ãƒ³ã‚¸ãƒ³ã®ã‚ªãƒ—ã‚·ãƒ§ãƒ³
 	typedef BOOL(WINAPI *SymSetOptionsDef) (DWORD SymOptions);
 	SymSetOptionsDef mSymSetOptionsProc;
 
-	//ƒVƒ“ƒ{ƒ‹ƒGƒ“ƒWƒ“‚Ì‰Šú‰»
+	//ã‚·ãƒ³ãƒœãƒ«ã‚¨ãƒ³ã‚¸ãƒ³ã®åˆæœŸåŒ–
 	typedef BOOL(WINAPI *SymInitializeDef) (HANDLE hProcess, PSTR UserSearchPath, BOOL fInvadeProcess);
 	SymInitializeDef mSymInitializeProc;
 
-	//ƒVƒ“ƒ{ƒ‹ƒGƒ“ƒWƒ“‚ÌI—¹
+	//ã‚·ãƒ³ãƒœãƒ«ã‚¨ãƒ³ã‚¸ãƒ³ã®çµ‚äº†
 	typedef BOOL(WINAPI *SymCleanupDef) (HANDLE hProcess);
 	SymCleanupDef mSymCleanupProc;
 
@@ -105,7 +105,7 @@ public:
 	{
 		m_bIsSymbolEngineReady = false;
 
-		// ƒvƒƒZƒX‚ğ‹L˜^
+		// ãƒ—ãƒ­ã‚»ã‚¹ã‚’è¨˜éŒ²
 		m_hProcess = ::GetCurrentProcess();
 
 		if (!mKernel32Librsry.Load("kernel32.dll")) {
@@ -129,11 +129,11 @@ public:
 		mSymInitializeProc = (SymInitializeDef)mDbgHelpLibrsry.GetProcAddress("SymInitialize");
 		mSymCleanupProc = (SymCleanupDef)mDbgHelpLibrsry.GetProcAddress("SymCleanup");
 
-		// ƒVƒ“ƒ{ƒ‹ƒGƒ“ƒWƒ“‚Ì‰Šú‰»
+		// ã‚·ãƒ³ãƒœãƒ«ã‚¨ãƒ³ã‚¸ãƒ³ã®åˆæœŸåŒ–
 		mSymSetOptionsProc(SYMOPT_DEFERRED_LOADS | SYMOPT_LOAD_LINES | SYMOPT_UNDNAME);
 		if (mSymInitializeProc(m_hProcess, NULL, TRUE))
 		{
-			// ƒVƒ“ƒ{ƒ‹ƒGƒ“ƒWƒ“€”õŠ®—¹
+			// ã‚·ãƒ³ãƒœãƒ«ã‚¨ãƒ³ã‚¸ãƒ³æº–å‚™å®Œäº†
 			m_bIsSymbolEngineReady = true;
 		}
 	}
@@ -149,7 +149,7 @@ public:
 
 public:
 
-	/// ƒXƒ^ƒbƒNƒgƒŒ[ƒX‚ğæ“¾‚·‚é
+	/// ã‚¹ã‚¿ãƒƒã‚¯ãƒˆãƒ¬ãƒ¼ã‚¹ã‚’å–å¾—ã™ã‚‹
 	int Backtrace(void** buffer, int n) const
 	{
 		if (n >= 63) {
@@ -159,18 +159,18 @@ public:
 	}
 
 #ifdef LN_X64 //for64bit
-#error –¢ƒeƒXƒg
-	//ƒVƒ“ƒ{ƒ‹‚Ì‰ğŒˆ
+#error æœªãƒ†ã‚¹ãƒˆ
+	//ã‚·ãƒ³ãƒœãƒ«ã®è§£æ±º
 	void addressToSymbolString(void* address, char * outBuffer, int len) const
 	{
 		if (!this->IsSymbolEngineReady)
 		{
-			//ƒVƒ“ƒ{ƒ‹ƒGƒ“ƒWƒ“‚ª€”õ‚Å‚«‚Ä‚¢‚È‚¢.
+			//ã‚·ãƒ³ãƒœãƒ«ã‚¨ãƒ³ã‚¸ãƒ³ãŒæº–å‚™ã§ãã¦ã„ãªã„.
 			_snprintf_s(outBuffer, len, _TRUNCATE, "0x%p @ ??? @ ??? @ ???:???", address);
 			return;
 		}
 
-		//ƒ‚ƒWƒ…[ƒ‹–¼
+		//ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«å
 		IMAGEHLP_MODULE64 imageModule = { sizeof(IMAGEHLP_MODULE64) };
 		BOOL r = this->SymGetModuleInfo64Proc(this->Process, (DWORD64)address, &imageModule);
 		if (!r)
@@ -179,47 +179,47 @@ public:
 			return;
 		}
 
-		//ƒVƒ“ƒ{ƒ‹î•ñŠi”[ƒoƒbƒtƒ@.
+		//ã‚·ãƒ³ãƒœãƒ«æƒ…å ±æ ¼ç´ãƒãƒƒãƒ•ã‚¡.
 		IMAGEHLP_SYMBOL64 * imageSymbol;
 		char buffer[MAX_PATH + sizeof(IMAGEHLP_SYMBOL64)] = { 0 };
 		imageSymbol = (IMAGEHLP_SYMBOL64*)buffer;
 		imageSymbol->SizeOfStruct = sizeof(IMAGEHLP_SYMBOL64);
 		imageSymbol->MaxNameLength = MAX_PATH;
 
-		//ŠÖ”–¼‚Ìæ“¾...
+		//é–¢æ•°åã®å–å¾—...
 		DWORD64 disp = 0;
 		r = this->SymGetSymFromAddr64Proc(this->Process, (DWORD64)address, &disp, imageSymbol);
 		if (!r)
-		{//ŠÖ”–¼‚ª‚í‚©‚è‚Ü‚¹‚ñ
+		{//é–¢æ•°åãŒã‚ã‹ã‚Šã¾ã›ã‚“
 			_snprintf_s(outBuffer, len, _TRUNCATE, "0x%p @ %s @ ??? @ ???:???", address, imageModule.ModuleName);
 			return;
 		}
 
-		//s”Ô†‚Ìæ“¾
+		//è¡Œç•ªå·ã®å–å¾—
 		IMAGEHLP_LINE64 line = { sizeof(IMAGEHLP_LINE64) };
 		r = this->SymGetLineFromAddr64Proc(this->Process, (DWORD64)address, &disp, &line);
 		if (!r)
-		{//s”Ô†‚ª•ª‚©‚è‚Ü‚¹‚ñ
+		{//è¡Œç•ªå·ãŒåˆ†ã‹ã‚Šã¾ã›ã‚“
 			_snprintf_s(outBuffer, len, _TRUNCATE, "0x%p @ %s @ %s @ %s+%d", address,
 				imageModule.ModuleName, imageSymbol->Name, imageSymbol->Name, (int)((char*)address - (char*)line.Address));
 			return;
 		}
 
-		//s”Ô†‚ª‚í‚©‚è‚Ü‚µ‚½.
+		//è¡Œç•ªå·ãŒã‚ã‹ã‚Šã¾ã—ãŸ.
 		_snprintf_s(outBuffer, len, _TRUNCATE, "0x%p @ %s @ %s @ %s:%d", address, imageModule.ModuleName, imageSymbol->Name, line.FileName, line.LineNumber);
 	}
 #else // #ifdef LN_X64
-	//ƒVƒ“ƒ{ƒ‹‚Ì‰ğŒˆ
+	//ã‚·ãƒ³ãƒœãƒ«ã®è§£æ±º
 	void AddressToSymbolString(void* address, char * outBuffer, int len) const
 	{
 		if (!m_bIsSymbolEngineReady)
 		{
-			// ƒVƒ“ƒ{ƒ‹ƒGƒ“ƒWƒ“‚ª€”õ‚Å‚«‚Ä‚¢‚È‚¢
+			// ã‚·ãƒ³ãƒœãƒ«ã‚¨ãƒ³ã‚¸ãƒ³ãŒæº–å‚™ã§ãã¦ã„ãªã„
 			_snprintf_s(outBuffer, len, _TRUNCATE, "0x%p @ ??? @ ??? @ ???:???", address);
 			return;
 		}
 
-		// ƒ‚ƒWƒ…[ƒ‹–¼
+		// ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«å
 		IMAGEHLP_MODULE imageModule = { sizeof(IMAGEHLP_MODULE) };
 		BOOL r = mSymGetModuleInfoProc(m_hProcess, (DWORD)address, &imageModule);
 		if (!r) {
@@ -227,14 +227,14 @@ public:
 			return;
 		}
 
-		// ƒVƒ“ƒ{ƒ‹î•ñŠi”[ƒoƒbƒtƒ@
+		// ã‚·ãƒ³ãƒœãƒ«æƒ…å ±æ ¼ç´ãƒãƒƒãƒ•ã‚¡
 		IMAGEHLP_SYMBOL * imageSymbol;
 		char buffer[MAX_PATH + sizeof(IMAGEHLP_SYMBOL)] = { 0 };
 		imageSymbol = (IMAGEHLP_SYMBOL*)buffer;
 		imageSymbol->SizeOfStruct = sizeof(IMAGEHLP_SYMBOL);
 		imageSymbol->MaxNameLength = MAX_PATH;
 
-		// ŠÖ”–¼‚Ìæ“¾
+		// é–¢æ•°åã®å–å¾—
 		DWORD disp = 0;
 		r = mSymGetSymFromAddrProc(m_hProcess, (DWORD)address, &disp, imageSymbol);
 		if (!r) {
@@ -242,7 +242,7 @@ public:
 			return;
 		}
 
-		// s”Ô†‚Ìæ“¾
+		// è¡Œç•ªå·ã®å–å¾—
 		IMAGEHLP_LINE line = { sizeof(IMAGEHLP_LINE) };
 		r = mSymGetLineFromAddrProc(m_hProcess, (DWORD)address, &disp, &line);
 		if (!r) {
@@ -251,13 +251,13 @@ public:
 			return;
 		}
 
-		// ˆê’Ê‚è‘µ‚Á‚½ (ƒtƒ@ƒCƒ‹–¼‚Ío‚³‚È‚¢‚Å‚¨‚­Bƒtƒ‹ƒpƒX‚Åo‚é‚Ì‚Åƒ[ƒJƒ‹‚ÌƒtƒHƒ‹ƒ_\¬ŠÛ‚í‚©‚è‚¾‚µc ŠÖ”–¼‚Æs”Ô†‚ª‚ ‚ê‚Î\•ª)
+		// ä¸€é€šã‚Šæƒã£ãŸ (ãƒ•ã‚¡ã‚¤ãƒ«åã¯å‡ºã•ãªã„ã§ãŠãã€‚ãƒ•ãƒ«ãƒ‘ã‚¹ã§å‡ºã‚‹ã®ã§ãƒ­ãƒ¼ã‚«ãƒ«ã®ãƒ•ã‚©ãƒ«ãƒ€æ§‹æˆä¸¸ã‚ã‹ã‚Šã ã—â€¦ é–¢æ•°åã¨è¡Œç•ªå·ãŒã‚ã‚Œã°ååˆ†)
 		_snprintf_s(outBuffer, len, _TRUNCATE, "0x%p @ %s @ %s @ XXXX:%d", address, imageModule.ModuleName, imageSymbol->Name, line.LineNumber);
 		//_snprintf_s(outBuffer, len, _TRUNCATE, "0x%p @ %s @ %s @ %s:%d", address, imageModule.ModuleName, imageSymbol->Name, line.FileName, line.LineNumber);
 	}
 #endif // #ifdef LN_X64
 
-	// ƒVƒ“ƒ{ƒ‹‚ğ‚Ü‚Æ‚ß‚Ä‰ğŒˆ
+	// ã‚·ãƒ³ãƒœãƒ«ã‚’ã¾ã¨ã‚ã¦è§£æ±º
 	void AddressToFullSymbolString(void** address, int size, char* outBuffer, int len) const
 	{
 		int writesize = 0;
@@ -284,7 +284,7 @@ public:
 		}
 	}
 
-	//ƒoƒbƒNƒgƒŒ[ƒX‚Ìæ“¾‚µ‚Ä‰æ–Ê‚É•\¦
+	//ãƒãƒƒã‚¯ãƒˆãƒ¬ãƒ¼ã‚¹ã®å–å¾—ã—ã¦ç”»é¢ã«è¡¨ç¤º
 	//void printBackTrace() const
 	//{
 	//	void* stackBuffer[50];

@@ -1,4 +1,4 @@
-#include <TestConfig.h>
+ï»¿#include <TestConfig.h>
 using namespace Platform;
 
 class Test_Platform_Application : public ::testing::Test
@@ -30,7 +30,7 @@ TEST_F(Test_Platform_Application, Basic)
 //	while (m.DoEvents())
 //	{
 //		++i;
-//		if (i > 10) {	// “K“–‚É‰ñ‚µ‚½‚çI—¹’Ê’m‚ð‘—‚é
+//		if (i > 10) {	// é©å½“ã«å›žã—ãŸã‚‰çµ‚äº†é€šçŸ¥ã‚’é€ã‚‹
 //			app->Exit();
 //		}
 //	}

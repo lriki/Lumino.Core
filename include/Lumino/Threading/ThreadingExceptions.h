@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 
 #include "../Base/Common.h"
@@ -11,7 +11,7 @@ namespace Threading
 {
 
 /**
-	@brief	ƒXƒŒƒbƒhŽÀs’†‚Éƒnƒ“ƒhƒ‹‚³‚ê‚È‚¢—áŠO(‚±‚Ìƒ‰ƒCƒuƒ‰ƒŠˆÈŠO‚Ì—áŠO)‚ª”­¶‚µ‚½
+	@brief	ã‚¹ãƒ¬ãƒƒãƒ‰å®Ÿè¡Œä¸­ã«ãƒãƒ³ãƒ‰ãƒ«ã•ã‚Œãªã„ä¾‹å¤–(ã“ã®ãƒ©ã‚¤ãƒ–ãƒ©ãƒªä»¥å¤–ã®ä¾‹å¤–)ãŒç™ºç”Ÿã—ãŸ
 */
 class LUMINO_EXPORT ThreadException 
 	: public Exception

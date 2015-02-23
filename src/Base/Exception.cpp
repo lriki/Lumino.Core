@@ -1,4 +1,4 @@
-
+ï»¿
 #include <time.h>
 #include <algorithm>
 #include "../Internal.h"
@@ -7,7 +7,7 @@
 #include "../../include/Lumino/Base/StringUtils.h"
 
 #ifdef LN_EXCEPTION_BACKTRACE
-	#ifdef LN_WIN32	// Cygwin ‚à‚±‚Á‚¿
+	#ifdef LN_WIN32	// Cygwin ã‚‚ã“ã£ã¡
 		#include "Win32/BackTrace.h"
 	#else
 		#include "Unix/BackTrace.h"
@@ -34,10 +34,10 @@ Exception::Exception()
 	memset(mSymbolBuffer, 0, sizeof(mSymbolBuffer));
 
 #ifdef LN_EXCEPTION_BACKTRACE
-	// ƒoƒbƒNƒgƒŒ[ƒX‹L˜^
+	// ãƒãƒƒã‚¯ãƒˆãƒ¬ãƒ¼ã‚¹è¨˜éŒ²
 	mStackBufferSize = BackTrace::GetInstance()->Backtrace(mStackBuffer, LN_ARRAY_SIZE_OF(mStackBuffer));
 
-	// ƒoƒbƒNƒgƒŒ[ƒX•¶š—ñæ“¾
+	// ãƒãƒƒã‚¯ãƒˆãƒ¬ãƒ¼ã‚¹æ–‡å­—åˆ—å–å¾—
 	BackTrace::GetInstance()->AddressToFullSymbolString(
 		mStackBuffer, 
 		std::min(mStackBufferSize, 32),
@@ -45,7 +45,7 @@ Exception::Exception()
 		LN_ARRAY_SIZE_OF(mSymbolBuffer));
 #endif
 
-	// ƒtƒ@ƒCƒ‹‚É•Û‘¶
+	// ãƒ•ã‚¡ã‚¤ãƒ«ã«ä¿å­˜
 	if (strlen(gDumpFilePath) > 0) 
 	{
 		FILE* fp;
@@ -75,13 +75,13 @@ Exception::~Exception() throw()
 //-----------------------------------------------------------------------------
 Exception& Exception::SetSourceLocationInfo(const char* filePath, int fileLine)
 {
-	// ‚à‚µƒoƒbƒNƒgƒŒ[ƒX‚ªæ‚ê‚Ä‚¢‚È‚©‚Á‚½‚ç‚»‚ê—p‚Ì•¶š—ñƒoƒbƒtƒ@‚É“ü‚ê‚Ä‚µ‚Ü‚¤
+	// ã‚‚ã—ãƒãƒƒã‚¯ãƒˆãƒ¬ãƒ¼ã‚¹ãŒå–ã‚Œã¦ã„ãªã‹ã£ãŸã‚‰ãã‚Œç”¨ã®æ–‡å­—åˆ—ãƒãƒƒãƒ•ã‚¡ã«å…¥ã‚Œã¦ã—ã¾ã†
 	if (mSymbolBuffer[0] == 0x00)
 	{
 		sprintf_s(mSymbolBuffer, LN_ARRAY_SIZE_OF(mSymbolBuffer), "File:%s Line:%d", filePath, fileLine);
 	}
 
-	// ƒƒCƒh•¶š—ñ‚Ö•ÏŠ· (•¶šƒR[ƒh‚Íl—¶‚µ‚È‚¢)
+	// ãƒ¯ã‚¤ãƒ‰æ–‡å­—åˆ—ã¸å¤‰æ› (æ–‡å­—ã‚³ãƒ¼ãƒ‰ã¯è€ƒæ…®ã—ãªã„)
 	memset(mSourceFilePath, 0, sizeof(mSourceFilePath));
 	size_t size;
 	errno_t err = mbstowcs_s(&size, mSourceFilePath, LN_MAX_PATH, filePath, LN_MAX_PATH - 1);
@@ -98,11 +98,11 @@ Exception& Exception::SetSourceLocationInfo(const char* filePath, int fileLine)
 //-----------------------------------------------------------------------------
 bool Exception::InitDumpFile(const char* filePath)
 {
-	// ƒtƒ@ƒCƒ‹ƒpƒX•Û
+	// ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ä¿æŒ
 	memset(gDumpFilePath, 0, sizeof(gDumpFilePath));
 	strcpy_s(gDumpFilePath, LN_MAX_PATH, filePath);
 
-	// ƒtƒ@ƒCƒ‹‰Šú‰»
+	// ãƒ•ã‚¡ã‚¤ãƒ«åˆæœŸåŒ–
 	FILE* fp;
 	if (fopen_s(&fp, filePath, "w") == 0) {
 		fclose(fp);
@@ -122,14 +122,14 @@ void Exception::SetMessage(const char* format, va_list args)
 	int len = StringUtils::VSPrintf(buf, BUFFER_SIZE, format, args);
 	if (len >= BUFFER_SIZE)
 	{
-		// ƒoƒbƒtƒ@‚Éû‚Ü‚è‚«‚ç‚È‚¢ê‡‚ÍI’[‚ğ ... ‚É‚µ‚ÄØ‚é
+		// ãƒãƒƒãƒ•ã‚¡ã«åã¾ã‚Šãã‚‰ãªã„å ´åˆã¯çµ‚ç«¯ã‚’ ... ã«ã—ã¦åˆ‡ã‚‹
 		buf[BUFFER_SIZE - 4] = '.';
 		buf[BUFFER_SIZE - 3] = '.';
 		buf[BUFFER_SIZE - 2] = '.';
 		buf[BUFFER_SIZE - 1] = '\0';
 	}
 
-	// TCHAR ‚É‡‚í‚¹‚Äƒƒ“ƒo‚ÉŠi”[
+	// TCHAR ã«åˆã‚ã›ã¦ãƒ¡ãƒ³ãƒã«æ ¼ç´
 #ifdef LN_UNICODE
 	size_t wlen;
 	mbstowcs_s(&wlen, mMessage, BUFFER_SIZE, buf, _TRUNCATE);
@@ -149,14 +149,14 @@ void Exception::SetMessage(const wchar_t* format, va_list args)
 	int len = StringUtils::VSPrintf(buf, BUFFER_SIZE, format, args);
 	if (len >= BUFFER_SIZE)
 	{
-		// ƒoƒbƒtƒ@‚Éû‚Ü‚è‚«‚ç‚È‚¢ê‡‚ÍI’[‚ğ ... ‚É‚µ‚ÄØ‚é
+		// ãƒãƒƒãƒ•ã‚¡ã«åã¾ã‚Šãã‚‰ãªã„å ´åˆã¯çµ‚ç«¯ã‚’ ... ã«ã—ã¦åˆ‡ã‚‹
 		buf[BUFFER_SIZE - 4] = L'.';
 		buf[BUFFER_SIZE - 3] = L'.';
 		buf[BUFFER_SIZE - 2] = L'.';
 		buf[BUFFER_SIZE - 1] = L'\0';
 	}
 
-	// TCHAR ‚É‡‚í‚¹‚Äƒƒ“ƒo‚ÉŠi”[
+	// TCHAR ã«åˆã‚ã›ã¦ãƒ¡ãƒ³ãƒã«æ ¼ç´
 #ifdef LN_UNICODE
 	wcscpy_s(mMessage, BUFFER_SIZE, buf);
 #else
@@ -176,7 +176,7 @@ void Exception::SetMessage(const wchar_t* format, va_list args)
 Win32Exception::Win32Exception( DWORD dwLastError )
 	: m_dwLastErrorCode( dwLastError )
 {
-	// ƒGƒ‰[ƒƒbƒZ[ƒWæ“¾
+	// ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å–å¾—
 
 	memset(m_pFormatMessage, 0, sizeof(m_pFormatMessage));
     :: FormatMessage(

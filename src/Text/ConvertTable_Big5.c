@@ -1,4 +1,4 @@
-// cp950 Big5
+﻿// cp950 Big5
 // Surrogate is not present in the character code.
 // To use the table, declare as follows.
 // extern "C" unsigned short g_Big5ToUTF16Table[];

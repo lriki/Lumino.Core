@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 
 #include <ctype.h>
@@ -13,108 +13,108 @@ namespace Lumino
 
 enum StringComparison
 {
-	StringComparison_Normal = 0,		///< ‘å•¶š¬•¶š‚ğ‹æ•Ê‚µ‚Ä”äŠr‚ğs‚¤
-	StringComparison_IgnoreCase,		///< ‘å•¶š¬•¶š‚ğ‹æ•Ê‚µ‚È‚¢‚Å”äŠr‚ğs‚¤
+	StringComparison_Normal = 0,		///< å¤§æ–‡å­—å°æ–‡å­—ã‚’åŒºåˆ¥ã—ã¦æ¯”è¼ƒã‚’è¡Œã†
+	StringComparison_IgnoreCase,		///< å¤§æ–‡å­—å°æ–‡å­—ã‚’åŒºåˆ¥ã—ãªã„ã§æ¯”è¼ƒã‚’è¡Œã†
 };
 
 /**
-	@brief		•¶š—ñƒ†[ƒeƒBƒŠƒeƒB
-	@details	char ‚¨‚æ‚Ñ wchar_t Œ^•¶š—ñ‚É‘Î‚·‚éŠe‘€ì‚ğs‚¤ƒ†[ƒeƒBƒŠƒeƒBŠÖ”ŒS‚Å‚·B
-				ˆ—‚Ì“à—e‚ÍŒ^‚ªˆá‚¤‚¾‚¯‚Å“¯ˆê‚È‚Ì‚Å template ŠÖ”‚ğg—p‚µ‚Ä‚¢‚Ü‚·B
-				‚½‚¾‚µAÀ‘•‚ğ cpp ‚É‰B•Á‚·‚é‚½‚ß–¾¦“IƒCƒ“ƒXƒ^ƒ“ƒX‰»‚ğs‚Á‚Ä‚¢‚Ü‚·B
-				‚±‚Ì‚½‚ß char ‚Ü‚Í‚½ wchar_t Œ^‚Ì‚İ‚É‚µ‚©g‚¦‚Ü‚¹‚ñB(‚Ù‚Æ‚ñ‚Ç–â‘è‚È‚¢‚Æv‚¢‚Ü‚·‚ª)
+	@brief		æ–‡å­—åˆ—ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£
+	@details	char ãŠã‚ˆã³ wchar_t å‹æ–‡å­—åˆ—ã«å¯¾ã™ã‚‹å„æ“ä½œã‚’è¡Œã†ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£é–¢æ•°éƒ¡ã§ã™ã€‚
+				å‡¦ç†ã®å†…å®¹ã¯å‹ãŒé•ã†ã ã‘ã§åŒä¸€ãªã®ã§ template é–¢æ•°ã‚’ä½¿ç”¨ã—ã¦ã„ã¾ã™ã€‚
+				ãŸã ã—ã€å®Ÿè£…ã‚’ cpp ã«éš è”½ã™ã‚‹ãŸã‚æ˜ç¤ºçš„ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–ã‚’è¡Œã£ã¦ã„ã¾ã™ã€‚
+				ã“ã®ãŸã‚ char ã¾ã¯ãŸ wchar_t å‹ã®ã¿ã«ã—ã‹ä½¿ãˆã¾ã›ã‚“ã€‚(ã»ã¨ã‚“ã©å•é¡Œãªã„ã¨æ€ã„ã¾ã™ãŒ)
 */
 class StringUtils
 {
 public:
 
 	/**
-		@brief	NULL I’[•¶š—ñ‚Ì’·‚³‚ğ‹‚ß‚Ü‚·B
+		@brief	NULL çµ‚ç«¯æ–‡å­—åˆ—ã®é•·ã•ã‚’æ±‚ã‚ã¾ã™ã€‚
 	*/
 	template<typename TChar>
 	static size_t StrLen(const TChar* str);
 
 	/**
-		@brief	ASCII ‚Ì¬•¶š‚ğ‘å•¶š‚É•ÏŠ·‚µ‚Ü‚·B
+		@brief	ASCII ã®å°æ–‡å­—ã‚’å¤§æ–‡å­—ã«å¤‰æ›ã—ã¾ã™ã€‚
 	*/
 	template<typename TChar>
 	static TChar ToUpper(TChar ch);
 
 	/**
-		@brief		•¶š‚ª‹ó”’•¶š‚Å‚ ‚é‚©‚ğŠm”F‚µ‚Ü‚·B
-		@details	•W€‹ó”’—Ş•¶š F …•½ƒ^ƒui'\t'jA‰üsi'\n'jA‚’¼ƒ^ƒui'\v'jA‘®‘—‚èi'\f'jA•œ‹Ai'\r'jA‹ó”’i' 'j
-					ƒƒP[ƒ‹‚Ì‰e‹¿‚ğó‚¯‚Ü‚·B(—áF“ú–{ŒêŠÂ‹«‚Å‚ ‚ê‚ÎAwchar_t ‚Ì‘SŠpƒXƒy[ƒX‚àƒXƒy[ƒX‚Æ‚µ‚Äˆµ‚í‚ê‚Ü‚·B)
+		@brief		æ–‡å­—ãŒç©ºç™½æ–‡å­—ã§ã‚ã‚‹ã‹ã‚’ç¢ºèªã—ã¾ã™ã€‚
+		@details	æ¨™æº–ç©ºç™½é¡æ–‡å­— ï¼š æ°´å¹³ã‚¿ãƒ–ï¼ˆ'\t'ï¼‰ã€æ”¹è¡Œï¼ˆ'\n'ï¼‰ã€å‚ç›´ã‚¿ãƒ–ï¼ˆ'\v'ï¼‰ã€æ›¸å¼é€ã‚Šï¼ˆ'\f'ï¼‰ã€å¾©å¸°ï¼ˆ'\r'ï¼‰ã€ç©ºç™½ï¼ˆ' 'ï¼‰
+					ãƒ­ã‚±ãƒ¼ãƒ«ã®å½±éŸ¿ã‚’å—ã‘ã¾ã™ã€‚(ä¾‹ï¼šæ—¥æœ¬èªç’°å¢ƒã§ã‚ã‚Œã°ã€wchar_t ã®å…¨è§’ã‚¹ãƒšãƒ¼ã‚¹ã‚‚ã‚¹ãƒšãƒ¼ã‚¹ã¨ã—ã¦æ‰±ã‚ã‚Œã¾ã™ã€‚)
 	*/
 	template<typename TChar>
 	static bool IsSpace(TChar ch);
 
 	/**
 		@brief		
-		@attention	•¶š”‚ğŒv‚é‹@”\‚Í•Ûá‚µ‚È‚¢Blinux ‚Å‚Í wchar_t —p‚É•¶š—ñ‚ğŒv‚éŠÖ”‚ª–³‚¢‚½‚ßB
+		@attention	æ–‡å­—æ•°ã‚’è¨ˆã‚‹æ©Ÿèƒ½ã¯ä¿éšœã—ãªã„ã€‚linux ã§ã¯ wchar_t ç”¨ã«æ–‡å­—åˆ—ã‚’è¨ˆã‚‹é–¢æ•°ãŒç„¡ã„ãŸã‚ã€‚
 	*/
 	static int VSPrintf(char* out, int charCount, const char* format, va_list args);
 	static int VSPrintf(wchar_t* out, int charCount, const wchar_t* format, va_list args);
 
 
 	/**
-		@brief		ƒ}ƒ‹ƒ`ƒoƒCƒg•¶š—ñ‚ğƒƒCƒh•¶š—ñ‚É•ÏŠ·‚·‚é
-		@details	input ‚Ì•¶šƒR[ƒh‚Í setlocale() ‚ÉˆË‘¶‚µ‚Ü‚·B
-					Šî–{“I‚ÉOS‚ÌAPI‚ª•Ô‚·•¶š—ñ‚ğ•ÏŠ·‚µ‚½‚¢‚Ég—p‚µ‚Ä‚­‚¾‚³‚¢B
+		@brief		ãƒãƒ«ãƒãƒã‚¤ãƒˆæ–‡å­—åˆ—ã‚’ãƒ¯ã‚¤ãƒ‰æ–‡å­—åˆ—ã«å¤‰æ›ã™ã‚‹
+		@details	input ã®æ–‡å­—ã‚³ãƒ¼ãƒ‰ã¯ setlocale() ã«ä¾å­˜ã—ã¾ã™ã€‚
+					åŸºæœ¬çš„ã«OSã®APIãŒè¿”ã™æ–‡å­—åˆ—ã‚’å¤‰æ›ã—ãŸã„æ™‚ã«ä½¿ç”¨ã—ã¦ãã ã•ã„ã€‚
 	*/
 	static void ConvertMultiToWide(std::wstring* out, const char* input, int inputLength);
 
 
 	static void StrNCpy(char* dest, size_t destSize, const char* src, int count) { strncpy_s(dest, destSize, src, count); }
-	static void StrNCpy(wchar_t* dest, size_t destElementsSize, const wchar_t* src, int count) { wcsncpy_s(dest, destElementsSize, src, count); }	// •¶š’PˆÊBƒoƒCƒg’PˆÊ‚Å‚Í‚È‚¢
+	static void StrNCpy(wchar_t* dest, size_t destElementsSize, const wchar_t* src, int count) { wcsncpy_s(dest, destElementsSize, src, count); }	// æ–‡å­—å˜ä½ã€‚ãƒã‚¤ãƒˆå˜ä½ã§ã¯ãªã„
 
-	/// strncmp ‚Ì overload À‘•
+	/// strncmp ã® overload å®Ÿè£…
 	static int StrNCmp(const char* str1, const char* str2, size_t count) { return strncmp(str1, str2, count); }
 	static int StrNCmp(const wchar_t* str1, const wchar_t* str2, size_t count) { return wcsncmp(str1, str2, count); }
 
 	/**
-		@brief		•¶š—ñ‚ğŒŸõ‚µAŒ©‚Â‚©‚Á‚½Å‰‚Ì•¶š‚ÌƒCƒ“ƒfƒbƒNƒX‚ğ•Ô‚·
-		@param[in]	str1		: ŒŸõ‘ÎÛ•¶š—ñ
-		@param[in]	str2		: ŒŸõ•¶š—ñ
-		@param[in]	startIndex	: ŒŸõ‚ğŠJn‚·‚éƒCƒ“ƒfƒbƒNƒX (È—ª‚µ‚½ê‡‚Íæ“ª‚©‚ç)
-		@return		Œ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡‚Í -1
+		@brief		æ–‡å­—åˆ—ã‚’æ¤œç´¢ã—ã€è¦‹ã¤ã‹ã£ãŸæœ€åˆã®æ–‡å­—ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’è¿”ã™
+		@param[in]	str1		: æ¤œç´¢å¯¾è±¡æ–‡å­—åˆ—
+		@param[in]	str2		: æ¤œç´¢æ–‡å­—åˆ—
+		@param[in]	startIndex	: æ¤œç´¢ã‚’é–‹å§‹ã™ã‚‹ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ (çœç•¥ã—ãŸå ´åˆã¯å…ˆé ­ã‹ã‚‰)
+		@return		è¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå ´åˆã¯ -1
 	*/
 	template<typename TChar>
 	static int IndexOf(const TChar* str1, const TChar* str2, int startIndex = 0);
 
 	/**
-		@brief		•¶š—ñ‚Ì‘OŒã‚É‚ ‚é‹ó”’‚ğœ‚¢‚½•¶š—ñ‚Ì”ÍˆÍ‚ğ’²‚×‚é
+		@brief		æ–‡å­—åˆ—ã®å‰å¾Œã«ã‚ã‚‹ç©ºç™½ã‚’é™¤ã„ãŸæ–‡å­—åˆ—ã®ç¯„å›²ã‚’èª¿ã¹ã‚‹
 		@param[in]	
 	*/
 	template<typename TChar>
 	static void Trim(const TChar* begin, int length, const TChar** outBegin, int* outLength);
 
 	/**
-		@brief		‘®•¶š—ñ‚Æ‰Â•Ï’·ˆø”ƒŠƒXƒg‚©‚ç•¶š—ñ‚ğ¶¬‚·‚é
-		@param[in]	format		: ‘®•¶š—ñ
-		@param[in]	...			: ˆø”ƒŠƒXƒg
-		@return		¶¬‚³‚ê‚½•¶š—ñ
-		@attention	¶¬‚³‚ê‚é•¶š”‚Í MaxFormatLength ˆÈ“à‚Éû‚Ü‚ç‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñB(‚ ‚Ó‚ê‚½ê‡A—áŠO‚ğthrow‚µ‚Ü‚·)
-					‚±‚ê‚ÍA_vsnwprintf ‚É‘Š“–‚·‚éŠÖ”‚ªWindowsˆÈŠO‚Å‚Íg—p‚Å‚«‚¸A‚ ‚ç‚©‚¶‚ß¶¬Œã‚Ì•K—vƒoƒbƒtƒ@ƒTƒCƒY‚ğ‘ª‚é‚±‚Æ‚ª‚Å‚«‚È‚¢‚½‚ß‚Å‚·B<br>
-					Format() ‚ÍŠî–{“I‚É”’l‚©‚ç‚Ì•ÏŠ·“™A’Z‚¢•¶š—ñ‚É‚Ì‚İg—p‚µA•¶š—ñ‚Ì˜AŒ‹‚Í += ‰‰Zq“™‚ğg—p‚µ‚Ä‚­‚¾‚³‚¢B
-					‚Ü‚½A‰Â•Ï’·ˆø”ƒŠƒXƒg‚É•¶š—ñƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğ’¼Úw’è‚·‚é‚±‚Æ‚Í‚Å‚«‚Ü‚¹‚ñB
-					GetCStr() “™‚Åæ“¾‚µ‚½•¶š—ñƒ|ƒCƒ“ƒ^Œ^‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢B
+		@brief		æ›¸å¼æ–‡å­—åˆ—ã¨å¯å¤‰é•·å¼•æ•°ãƒªã‚¹ãƒˆã‹ã‚‰æ–‡å­—åˆ—ã‚’ç”Ÿæˆã™ã‚‹
+		@param[in]	format		: æ›¸å¼æ–‡å­—åˆ—
+		@param[in]	...			: å¼•æ•°ãƒªã‚¹ãƒˆ
+		@return		ç”Ÿæˆã•ã‚ŒãŸæ–‡å­—åˆ—
+		@attention	ç”Ÿæˆã•ã‚Œã‚‹æ–‡å­—æ•°ã¯ MaxFormatLength ä»¥å†…ã«åã¾ã‚‰ãªã‘ã‚Œã°ãªã‚Šã¾ã›ã‚“ã€‚(ã‚ãµã‚ŒãŸå ´åˆã€ä¾‹å¤–ã‚’throwã—ã¾ã™)
+					ã“ã‚Œã¯ã€_vsnwprintf ã«ç›¸å½“ã™ã‚‹é–¢æ•°ãŒWindowsä»¥å¤–ã§ã¯ä½¿ç”¨ã§ããšã€ã‚ã‚‰ã‹ã˜ã‚ç”Ÿæˆå¾Œã®å¿…è¦ãƒãƒƒãƒ•ã‚¡ã‚µã‚¤ã‚ºã‚’æ¸¬ã‚‹ã“ã¨ãŒã§ããªã„ãŸã‚ã§ã™ã€‚<br>
+					Format() ã¯åŸºæœ¬çš„ã«æ•°å€¤ã‹ã‚‰ã®å¤‰æ›ç­‰ã€çŸ­ã„æ–‡å­—åˆ—ã«ã®ã¿ä½¿ç”¨ã—ã€æ–‡å­—åˆ—ã®é€£çµã¯ += æ¼”ç®—å­ç­‰ã‚’ä½¿ç”¨ã—ã¦ãã ã•ã„ã€‚
+					ã¾ãŸã€å¯å¤‰é•·å¼•æ•°ãƒªã‚¹ãƒˆã«æ–‡å­—åˆ—ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç›´æ¥æŒ‡å®šã™ã‚‹ã“ã¨ã¯ã§ãã¾ã›ã‚“ã€‚
+					GetCStr() ç­‰ã§å–å¾—ã—ãŸæ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿å‹ã‚’æŒ‡å®šã—ã¦ãã ã•ã„ã€‚
 	*/
 	template<typename TChar>
 	static BasicString<TChar> Format(const TChar* format, ...);
 
 	/**
-		@brief		‘®•¶š—ñ‚Æ‰Â•Ï’·ˆø”ƒŠƒXƒg‚©‚ç•¶š—ñ‚ğ¶¬‚·‚é
+		@brief		æ›¸å¼æ–‡å­—åˆ—ã¨å¯å¤‰é•·å¼•æ•°ãƒªã‚¹ãƒˆã‹ã‚‰æ–‡å­—åˆ—ã‚’ç”Ÿæˆã™ã‚‹
 	*/
 	template<typename TChar>
 	static void FormatVAList(const TChar* format, va_list args, BasicString<TChar>* out);
 
 	/**
-		@brief		•¶š—ñ‚Ì––”ö‚ªˆê’v‚·‚é‚©‚ğ’²‚×‚é
-		@details	str2 ‚ª‹ó•¶š‚Ìê‡‚Í•K‚¸ true ‚ª•Ô‚è‚Ü‚·B
+		@brief		æ–‡å­—åˆ—ã®æœ«å°¾ãŒä¸€è‡´ã™ã‚‹ã‹ã‚’èª¿ã¹ã‚‹
+		@details	str2 ãŒç©ºæ–‡å­—ã®å ´åˆã¯å¿…ãš true ãŒè¿”ã‚Šã¾ã™ã€‚
 		@code
 		str = "abc def";
 		if (EndsWith(str, -1, "def", -1)) {
-			// ˆê’v‚µ‚½
+			// ä¸€è‡´ã—ãŸ
 		}
 		@endcodes
 	*/
@@ -122,17 +122,17 @@ public:
 	static bool EndsWith(const TChar* str1, int len1, const TChar* str2, int len2, StringComparison comparisonType);
 	
 	/**
-		@brief		•¶š—ñ‚ğƒfƒŠƒ~ƒ^‚Å•ªŠ„‚·‚é
-		@param[in]	str		: •ªŠ„‘ÎÛ‚Ì•¶š—ñ
-		@param[in]	delim	: ƒfƒŠƒ~ƒ^•¶š—ñ
-		@param[in]	option	: •ªŠ„•û–@
-		@return		•ªŠ„Œ‹‰Ê‚Ì•¶š—ñ”z—ñ
+		@brief		æ–‡å­—åˆ—ã‚’ãƒ‡ãƒªãƒŸã‚¿ã§åˆ†å‰²ã™ã‚‹
+		@param[in]	str		: åˆ†å‰²å¯¾è±¡ã®æ–‡å­—åˆ—
+		@param[in]	delim	: ãƒ‡ãƒªãƒŸã‚¿æ–‡å­—åˆ—
+		@param[in]	option	: åˆ†å‰²æ–¹æ³•
+		@return		åˆ†å‰²çµæœã®æ–‡å­—åˆ—é…åˆ—
 	*/
 	template<typename TChar>
 	static Array< BasicString<TChar> > Split(const BasicString<TChar>& str, const TChar* delim, StringSplitOptions option = StringSplitOptions_None);
 
 	/**
-		@brief		[start] ` [end - 1] ‚Ì”ÍˆÍ‚Ìæ“ª‚ª‰üs‚©‚ğ”»•Ê‚µAˆê’v‚µ‚½‚ç•¶š”‚ğ•Ô‚· ("\r" ‚© "\n" ‚È‚ç 1A"\r\n" ‚È‚ç 2)
+		@brief		[start] ï½ [end - 1] ã®ç¯„å›²ã®å…ˆé ­ãŒæ”¹è¡Œã‹ã‚’åˆ¤åˆ¥ã—ã€ä¸€è‡´ã—ãŸã‚‰æ–‡å­—æ•°ã‚’è¿”ã™ ("\r" ã‹ "\n" ãªã‚‰ 1ã€"\r\n" ãªã‚‰ 2)
 	*/
 	template<typename TChar>
 	static int CheckNewLineSequence(const TChar* start, const TChar* end);

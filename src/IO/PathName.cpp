@@ -1,4 +1,4 @@
-
+ï»¿
 #include <time.h>
 #include "../Internal.h"
 #include "../../include/Lumino/Base/StringUtils.h"
@@ -32,20 +32,20 @@ void BasicPathName<TChar>::Assign(const wchar_t* path)
 template<typename TChar>
 void BasicPathName<TChar>::AssignUnderBasePath(const PathNameT& basePath, const char* relativePath)
 {
-	// ƒtƒ‹ƒpƒX‚Ìê‡‚Í‚»‚Ì‚Ü‚ÜŠ„‚è“–‚Ä‚é
+	// ãƒ•ãƒ«ãƒ‘ã‚¹ã®å ´åˆã¯ãã®ã¾ã¾å‰²ã‚Šå½“ã¦ã‚‹
 	if (PathUtils::IsAbsolutePath(relativePath))
 	{
 		m_path.AssignCStr(relativePath);
 	}
-	// ƒtƒ‹ƒpƒX‚Å‚È‚¯‚ê‚ÎŒ‹‡‚·‚é
+	// ãƒ•ãƒ«ãƒ‘ã‚¹ã§ãªã‘ã‚Œã°çµåˆã™ã‚‹
 	else
 	{
 		m_path = basePath.m_path;
-		if ((*m_path.rbegin()) != Separator) {	// ––”öƒZƒpƒŒ[ƒ^
+		if ((*m_path.rbegin()) != Separator) {	// æœ«å°¾ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿
 			m_path += Separator;
 		}
 
-		// relativePath Œ‹‡
+		// relativePath çµåˆ
 		BasicStringT rel;
 		rel.AssignCStr(relativePath);
 		m_path += rel;
@@ -58,20 +58,20 @@ void BasicPathName<TChar>::AssignUnderBasePath(const PathNameT& basePath, const 
 template<typename TChar>
 void BasicPathName<TChar>::AssignUnderBasePath(const PathNameT& basePath, const wchar_t* relativePath)
 {
-	// ƒtƒ‹ƒpƒX‚Ìê‡‚Í‚»‚Ì‚Ü‚ÜŠ„‚è“–‚Ä‚é
+	// ãƒ•ãƒ«ãƒ‘ã‚¹ã®å ´åˆã¯ãã®ã¾ã¾å‰²ã‚Šå½“ã¦ã‚‹
 	if (PathUtils::IsAbsolutePath(relativePath))
 	{
 		m_path.AssignCStr(relativePath);
 	}
-	// ƒtƒ‹ƒpƒX‚Å‚È‚¯‚ê‚ÎŒ‹‡‚·‚é
+	// ãƒ•ãƒ«ãƒ‘ã‚¹ã§ãªã‘ã‚Œã°çµåˆã™ã‚‹
 	else
 	{
 		m_path = basePath.m_path;
-		if ((*m_path.rbegin()) != Separator) {	// ––”öƒZƒpƒŒ[ƒ^
+		if ((*m_path.rbegin()) != Separator) {	// æœ«å°¾ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿
 			m_path += Separator;
 		}
 
-		// relativePath Œ‹‡
+		// relativePath çµåˆ
 		BasicStringT rel;
 		rel.AssignCStr(relativePath);
 		m_path += rel;
@@ -88,7 +88,7 @@ void BasicPathName<TChar>::Append(const TChar* path)
 		m_path = path;
 	}
 	else {
-		if (m_path.size() > 0 && (*m_path.rbegin()) != Separator) {	// ––”öƒZƒpƒŒ[ƒ^
+		if (m_path.size() > 0 && (*m_path.rbegin()) != Separator) {	// æœ«å°¾ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿
 			m_path += Separator;
 		}
 		m_path += path;
@@ -102,7 +102,7 @@ template<typename TChar>
 const BasicString<TChar> BasicPathName<TChar>::GetStrEndSeparator() const
 {
 	BasicStringT newStr = m_path;
-	if (!newStr.IsEmpty() && (*newStr.rbegin()) != Separator) {	// ––”öƒZƒpƒŒ[ƒ^
+	if (!newStr.IsEmpty() && (*newStr.rbegin()) != Separator) {	// æœ«å°¾ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿
 		newStr += Separator;
 	}
 	return newStr;
@@ -141,13 +141,13 @@ bool BasicPathName<TChar>::CheckExt(const TChar* ext) const
 template<typename TChar>
 BasicPathName<TChar> BasicPathName<TChar>::GetParent() const
 {
-	/* QlF‘¼‚Ìƒ‰ƒCƒuƒ‰ƒŠ‚ÌA‹ó•¶š‚âƒZƒpƒŒ[ƒ^‚ª–³‚¢‚È‚Ç‚ÅeƒfƒBƒŒƒNƒgƒŠ‚ªæ‚ê‚È‚¢‚Ì“®ì
-		- Qt (QFileInfo::dir())		c "." ‚ğ•Ô‚·
-		- wxWidgets (wxFileName)	c "" ‚ğ•Ô‚·
-		- Python (os.path)			c "" ‚ğ•Ô‚·
-		- Ruby (Pathname)			c ".." ‚ğ•Ô‚·
-		- Java (os.nio.Paths)		c null ‚ğ•Ô‚·
-		- C# (Path, Uri)			c "" ‚ğ•Ô‚· (“ü—Í‚ª "" ‚¾‚Á‚½ê‡‚Í—áŠO)
+	/* å‚è€ƒï¼šä»–ã®ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®ã€ç©ºæ–‡å­—ã‚„ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿ãŒç„¡ã„ãªã©ã§è¦ªãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãŒå–ã‚Œãªã„æ™‚ã®å‹•ä½œ
+		- Qt (QFileInfo::dir())		â€¦ "." ã‚’è¿”ã™
+		- wxWidgets (wxFileName)	â€¦ "" ã‚’è¿”ã™
+		- Python (os.path)			â€¦ "" ã‚’è¿”ã™
+		- Ruby (Pathname)			â€¦ ".." ã‚’è¿”ã™
+		- Java (os.nio.Paths)		â€¦ null ã‚’è¿”ã™
+		- C# (Path, Uri)			â€¦ "" ã‚’è¿”ã™ (å…¥åŠ›ãŒ "" ã ã£ãŸå ´åˆã¯ä¾‹å¤–)
 	*/
 	return BasicPathName(PathUtils::GetDirectoryPath(m_path.c_str()).c_str());
 }
@@ -184,7 +184,7 @@ BasicPathName<TChar> BasicPathName<TChar>::GetUniqueFilePathInDirectory(const Pa
 	BasicStringT dirPath = directory.GetStrEndSeparator();
 	uint64_t key = static_cast<uint64_t>(::time(NULL));
 
-	// “¯”Ô†‚Ìƒtƒ@ƒCƒ‹‚ª‚ ‚ê‚ÎƒCƒ“ƒNƒŠƒƒ“ƒg‚µ‚Â‚Â‹ó‚«”Ô†‚ğ’²‚×‚é
+	// åŒç•ªå·ã®ãƒ•ã‚¡ã‚¤ãƒ«ãŒã‚ã‚Œã°ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ãƒˆã—ã¤ã¤ç©ºãç•ªå·ã‚’èª¿ã¹ã‚‹
 	int number = 1;
 	BasicStringT filePath;
 	BasicStringT work;
@@ -210,14 +210,14 @@ BasicPathName<TChar> BasicPathName<TChar>::GetUniqueFilePathInDirectory(const Pa
 }
 
 
-/// (‚±‚¿‚ç‚Íƒtƒ@ƒCƒ‹–¼‚¾‚¯‚ğ•Ô‚·)
+/// (ã“ã¡ã‚‰ã¯ãƒ•ã‚¡ã‚¤ãƒ«åã ã‘ã‚’è¿”ã™)
 template<typename TChar>
 BasicString<TChar> BasicPathName<TChar>::GetUniqueFileNameInDirectory(const PathNameT& directory, const TChar* filePrefix, const TChar* extName)
 {
 	return GetUniqueFilePathInDirectory(directory,filePrefix, extName).GetFileName();
 }
 
-// ƒeƒ“ƒvƒŒ[ƒg‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+// ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
 template class BasicPathName<char>;
 template class BasicPathName<wchar_t>;
 

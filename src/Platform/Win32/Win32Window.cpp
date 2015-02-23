@@ -1,4 +1,4 @@
-
+ï»¿
 #include "../../Internal.h"
 #include "Win32Window.h"
 
@@ -38,37 +38,37 @@ Win32Window::Win32Window(Win32WindowManager* windowManager, const SettingData& s
 
 	HINSTANCE inst = (HINSTANCE)::GetModuleHandle(NULL);
 
-	// ƒEƒBƒ“ƒhƒEƒAƒCƒRƒ“
+	// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¢ã‚¤ã‚³ãƒ³
 	DWORD dwExStyle = 0;
 	HICON icon = NULL;
 	if (settingData.IconResourceID) {
 		icon = ::LoadIcon(inst, MAKEINTRESOURCE(settingData.IconResourceID));
 	}
 	else {
-		dwExStyle = WS_EX_DLGMODALFRAME;	// ƒAƒCƒRƒ“‚Ì–³‚¢ƒXƒ^ƒCƒ‹
+		dwExStyle = WS_EX_DLGMODALFRAME;	// ã‚¢ã‚¤ã‚³ãƒ³ã®ç„¡ã„ã‚¹ã‚¿ã‚¤ãƒ«
 	}
 
-	// ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX‚ÌÝ’è
+	// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ã®è¨­å®š
 	WNDCLASSEX	wcex = {
-		sizeof(WNDCLASSEX),			    // ‚±‚Ì\‘¢‘Ì‚ÌƒTƒCƒY
-		NULL,							    // ƒEƒCƒ“ƒhƒE‚ÌƒXƒ^ƒCƒ‹
-		StaticWndProc,					    // ƒƒbƒZ[ƒWˆ—ŠÖ”
-		0, 0,							    // ’Êí‚ÍŽg‚í‚È‚¢‚Ì‚Åí‚É0
-		inst,				                // ƒCƒ“ƒXƒ^ƒ“ƒXƒnƒ“ƒhƒ‹
-		icon,							    // ƒAƒCƒRƒ“
-		::LoadCursor(NULL, IDC_ARROW),	// ƒJ[ƒ\ƒ‹‚ÌŒ`
-		(HBRUSH)(COLOR_WINDOW + 1),	    // ”wŒiF
-		NULL,							    // ƒƒjƒ…[‚È‚µ
-		(settingData.WinClassName) ? settingData.WinClassName : WINDOW_CLASS_NAME,				// ƒNƒ‰ƒX–¼‚ÌŽw’è
-		NULL };							    // ¬ƒAƒCƒRƒ“i‚È‚µj
+		sizeof(WNDCLASSEX),			    // ã“ã®æ§‹é€ ä½“ã®ã‚µã‚¤ã‚º
+		NULL,							    // ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ã®ã‚¹ã‚¿ã‚¤ãƒ«
+		StaticWndProc,					    // ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‡¦ç†é–¢æ•°
+		0, 0,							    // é€šå¸¸ã¯ä½¿ã‚ãªã„ã®ã§å¸¸ã«0
+		inst,				                // ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒãƒ³ãƒ‰ãƒ«
+		icon,							    // ã‚¢ã‚¤ã‚³ãƒ³
+		::LoadCursor(NULL, IDC_ARROW),	// ã‚«ãƒ¼ã‚½ãƒ«ã®å½¢
+		(HBRUSH)(COLOR_WINDOW + 1),	    // èƒŒæ™¯è‰²
+		NULL,							    // ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãªã—
+		(settingData.WinClassName) ? settingData.WinClassName : WINDOW_CLASS_NAME,				// ã‚¯ãƒ©ã‚¹åã®æŒ‡å®š
+		NULL };							    // å°ã‚¢ã‚¤ã‚³ãƒ³ï¼ˆãªã—ï¼‰
 
-	// ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX‚Ì“o˜^
+	// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ã®ç™»éŒ²
 	if (!::RegisterClassEx(&wcex))
 	{
 		LN_THROW(0, Win32Exception, GetLastError());
 	}
 
-	// ƒEƒBƒ“ƒhƒE‚Ìì¬
+	// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ä½œæˆ
 	mWindowHandle = ::CreateWindowEx(
 		dwExStyle,
 		(settingData.WinClassName) ? settingData.WinClassName : WINDOW_CLASS_NAME,
@@ -79,11 +79,11 @@ Win32Window::Win32Window(Win32WindowManager* windowManager, const SettingData& s
 		NULL, NULL, inst, NULL);
 	LN_THROW(mWindowHandle, Win32Exception, GetLastError());
 
-	// ƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹‚Æ‚±‚ÌƒNƒ‰ƒX‚Ìƒ|ƒCƒ“ƒ^‚ðŠÖ˜A•t‚¯‚é
+	// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ«ã¨ã“ã®ã‚¯ãƒ©ã‚¹ã®ãƒã‚¤ãƒ³ã‚¿ã‚’é–¢é€£ä»˜ã‘ã‚‹
 	BOOL r = ::SetProp(mWindowHandle, PROP_WINPROC, this);
 	LN_THROW((r != FALSE), Win32Exception, GetLastError());
 
-	// ƒAƒNƒZƒ‰ƒŒ[ƒ^‚Ìì¬
+	// ã‚¢ã‚¯ã‚»ãƒ©ãƒ¬ãƒ¼ã‚¿ã®ä½œæˆ
 	ACCEL accels[1] =
 	{
 		{ FALT | FVIRTKEY, VK_RETURN, 0 }
@@ -91,10 +91,10 @@ Win32Window::Win32Window(Win32WindowManager* windowManager, const SettingData& s
 	mAccelerators = ::CreateAcceleratorTable(accels, 1);
 	LN_THROW(mAccelerators, Win32Exception, GetLastError());
 
-	// WM_PAINT‚ªŒÄ‚Î‚ê‚È‚¢‚æ‚¤‚É‚·‚é
+	// WM_PAINTãŒå‘¼ã°ã‚Œãªã„ã‚ˆã†ã«ã™ã‚‹
 	::ValidateRect(mWindowHandle, 0);
 
-	// ƒEƒBƒ“ƒhƒE‚Ì‘å‚«‚³‚ð•ÏX‚·‚é
+	// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®å¤§ãã•ã‚’å¤‰æ›´ã™ã‚‹
 	Resize(settingData.Fullscreen);
 }
 
@@ -117,7 +117,7 @@ Win32Window::~Win32Window()
 //-----------------------------------------------------------------------------
 void Win32Window::SetFullScreenEnabled(bool flag)
 {
-	// ƒtƒ‹ƒXƒNƒŠ[ƒ“‚É‚·‚éê‡
+	// ãƒ•ãƒ«ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã«ã™ã‚‹å ´åˆ
 	if (flag)
 	{
 		mFullScreen = true;
@@ -125,7 +125,7 @@ void Win32Window::SetFullScreenEnabled(bool flag)
 		::SetWindowLong(mWindowHandle, GWL_EXSTYLE, 0);
 		Resize(true);
 	}
-	// ƒEƒBƒ“ƒhƒEƒ‚[ƒh‚É‚·‚éê‡
+	// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ¢ãƒ¼ãƒ‰ã«ã™ã‚‹å ´åˆ
 	else
 	{
 		mFullScreen = false;
@@ -159,11 +159,11 @@ void Win32Window::Resize(bool fullscreen)
 	int win_w = mOrginalWidth;
 	int win_h = mOrginalHeight;
 
-	// ƒtƒ‹ƒXƒNƒŠ[ƒ“ƒ‚[ƒh‚Ìê‡
+	// ãƒ•ãƒ«ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ãƒ¢ãƒ¼ãƒ‰ã®å ´åˆ
 	if (fullscreen)
 	{
 		/*
-		// ˆêu“h‚è‚Â‚Ô‚·
+		// ä¸€çž¬å¡—ã‚Šã¤ã¶ã™
 		HDC hdc;
 		PAINTSTRUCT ps;
 		hdc = BeginPaint(mWindowHandle , &ps);
@@ -179,7 +179,7 @@ void Win32Window::Resize(bool fullscreen)
 		EndPaint(mWindowHandle , &ps);
 		*/
 
-		// ‰æ–Ê‚¢‚Á‚Ï‚¢
+		// ç”»é¢ã„ã£ã±ã„
 		mClientSize.Width = ::GetSystemMetrics(SM_CXSCREEN);
 		mClientSize.Height = ::GetSystemMetrics(SM_CYSCREEN);
 
@@ -191,37 +191,37 @@ void Win32Window::Resize(bool fullscreen)
 		//res = ::SetWindowPos( mWindowHandle, HWND_TOP, 0, 0, mWidth, mHeight, SWP_SHOWWINDOW );
 		::SetWindowPos(mWindowHandle, NULL, x, y, mClientSize.Width, mClientSize.Height, SWP_SHOWWINDOW);
 	}
-	// ƒEƒBƒ“ƒhƒEƒ‚[ƒh‚Ìê‡‚ÍŽÀÛ‚ÉƒEƒBƒ“ƒhƒE‚ÌˆÊ’u‚ðÝ’è‚·‚é
+	// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ¢ãƒ¼ãƒ‰ã®å ´åˆã¯å®Ÿéš›ã«ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ä½ç½®ã‚’è¨­å®šã™ã‚‹
 	else
 	{
 		mClientSize.Width = mOrginalWidth;
 		mClientSize.Height = mOrginalHeight;
 
-		// V‚µ‚¢ƒNƒ‰ƒCƒAƒ“ƒg—Ìˆæ‚Ì‹éŒ`‚ðì¬
+		// æ–°ã—ã„ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆé ˜åŸŸã®çŸ©å½¢ã‚’ä½œæˆ
 		mWindowRect.left = 0;
 		mWindowRect.top = 0;
 		mWindowRect.right = win_w;
 		mWindowRect.bottom = win_h;
 
-		// ”O‚Ì‚½‚ß
+		// å¿µã®ãŸã‚
 		::SetWindowLong(mWindowHandle, GWL_STYLE, mWindowedStyle);
 
-		// ˜g‚Ì‘å‚«‚³‚àŠÜ‚ß‚½ƒEƒBƒ“ƒhƒEƒTƒCƒY‚ðŽæ“¾
+		// æž ã®å¤§ãã•ã‚‚å«ã‚ãŸã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚µã‚¤ã‚ºã‚’å–å¾—
 		res = ::AdjustWindowRect(&mWindowRect, mWindowedStyle, FALSE);
 
-		// •K—v‚ÈƒEƒBƒ“ƒhƒE‚Ì•‚Æ‚‚³‚ðŒvŽZ
+		// å¿…è¦ãªã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®å¹…ã¨é«˜ã•ã‚’è¨ˆç®—
 		win_w = mWindowRect.right - mWindowRect.left;
 		win_h = mWindowRect.bottom - mWindowRect.top;
 
-		// ƒfƒBƒXƒvƒŒƒC‘S‘Ì‚ÌƒTƒCƒY‚ðŽæ“¾
+		// ãƒ‡ã‚£ã‚¹ãƒ—ãƒ¬ã‚¤å…¨ä½“ã®ã‚µã‚¤ã‚ºã‚’å–å¾—
 		sw = ::GetSystemMetrics(SM_CXSCREEN);
 		sh = ::GetSystemMetrics(SM_CYSCREEN);
 
-		// ƒfƒBƒXƒvƒŒƒC‚Ì’†‰›‚É•\Ž¦‚Å‚«‚éÀ•W‚ðŒvŽZ
+		// ãƒ‡ã‚£ã‚¹ãƒ—ãƒ¬ã‚¤ã®ä¸­å¤®ã«è¡¨ç¤ºã§ãã‚‹åº§æ¨™ã‚’è¨ˆç®—
 		x = (sw - win_w) / 2;
 		y = (sh - win_h) / 2;
 
-		// ˆÊ’u‚Æ‘å‚«‚³‚ð•ÏX (SWP_SHOWWINDOW ‚ðŽw’è‚µ‚È‚¢‚ÆAƒtƒ‹ƒXƒNƒŠ[ƒ“‚©‚ç‚Ì•œ‹AŽž‚É‰½‚à•`‰æ‚³‚ê‚È‚­‚È‚Á‚½)
+		// ä½ç½®ã¨å¤§ãã•ã‚’å¤‰æ›´ (SWP_SHOWWINDOW ã‚’æŒ‡å®šã—ãªã„ã¨ã€ãƒ•ãƒ«ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã‹ã‚‰ã®å¾©å¸°æ™‚ã«ä½•ã‚‚æç”»ã•ã‚Œãªããªã£ãŸ)
 		res = ::SetWindowPos(mWindowHandle, NULL, x, y, win_w, win_h, SWP_SHOWWINDOW);
 	}
 }
@@ -243,7 +243,7 @@ LRESULT CALLBACK Win32Window::StaticWndProc(HWND hwnd, UINT msg, WPARAM wparam, 
 
 	if (window) {
 		if (msg == WM_SIZE) {
-			// ƒEƒBƒ“ƒhƒEƒTƒCƒY‚ðE‚Á‚Ä‚¨‚­
+			// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚µã‚¤ã‚ºã‚’æ‹¾ã£ã¦ãŠã
 			RECT rc;
 			::GetClientRect(window->mWindowHandle, &rc);
 			window->mClientSize.Set(rc.right, rc.bottom);

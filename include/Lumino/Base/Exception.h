@@ -1,12 +1,12 @@
-
+﻿
 #pragma once
 
 #include "String.h"
 
-// exp �̏�������������Ȃ������ꍇ�Atype �Ɏw�肵����O�� throw ����
+// exp の条件が満たされなかった場合、type に指定した例外を throw する
 #define LN_THROW( exp, type, ... )	{ if (!(exp)) { type e = type(__VA_ARGS__); e.SetSourceLocationInfo(__FILE__, __LINE__); throw e; } }
 
-/// ��O�N���X�̊�{�I�ȃR���X�g���N�^��錾����
+/// 例外クラスの基本的なコンストラクタを宣言する
 #define LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(className) \
 	className(const char* message, ...) \
 	{ \
@@ -27,7 +27,7 @@ namespace Lumino
 {
 
 /**
-	@brief	��O�x�[�X�N���X
+	@brief	例外ベースクラス
 */
 class LUMINO_EXPORT Exception : public std::exception
 {
@@ -39,22 +39,22 @@ public:
 public:
 	
 	/**
-		@brief	��O�̏ڍ׃��b�Z�[�W���擾���܂��B
+		@brief	例外の詳細メッセージを取得します。
 	*/
 	const TCHAR* GetMessage() const { return mMessage; }
 
 	/**
-		@brief		��O�������ɏڍ׏����_���v����t�@�C��������������
-		@param[in]	filePath	: �_���v��t�@�C�� (�������� LN_MAX_PATH �ȓ�)
-		@return		false �̏ꍇ�A�t�@�C���A�N�Z�X�Ɏ��s����
-		@details	�w�肳�ꂽ�p�X�ŁA�t�@�C����V�K�쐬���܂��B
-					�ȍ~�A���̗�O�N���X�̃R���X�g���N�^���Ă΂�邽�тɁA�ڍ׏�񂪒ǋL����܂��B
+		@brief		例外発生時に詳細情報をダンプするファイルを初期化する
+		@param[in]	filePath	: ダンプ先ファイル (文字数は LN_MAX_PATH 以内)
+		@return		false の場合、ファイルアクセスに失敗した
+		@details	指定されたパスで、ファイルを新規作成します。
+					以降、この例外クラスのコンストラクタが呼ばれるたびに、詳細情報が追記されます。
 	*/
 	static bool InitDumpFile(const char* filePath);
 
 	/**
-		@brief		��O�̃R�s�[���쐬����
-		@note		�ʃX���b�h�Ŕ���������O��ێ����邽�߂Ɏg�p����B
+		@brief		例外のコピーを作成する
+		@note		別スレッドで発生した例外を保持するために使用する。
 	*/
 	virtual Exception* Copy() const { return LN_NEW Exception( *this ); }
 
@@ -78,7 +78,7 @@ private:
 };
 
 /**
-	@brief	�������s����O
+	@brief	メモリ不足例外
 
 */
 class OutOfMemoryException 
@@ -95,8 +95,8 @@ public:
 };
 
 /**
-	@brief		���̑���IO��O
-	@details	�ǂݎ�葮���̃t�@�C�����������݃��[�h�ŃI�[�v�����悤�Ƃ��������B
+	@brief		その他のIO例外
+	@details	読み取り属性のファイルを書き込みモードでオープンしようとした時等。
 */
 class IOException 
 	: public Exception
@@ -112,7 +112,7 @@ public:
 };
 
 /**
-	@brief	���\�b�h�ɓn���ꂽ�����̂����ꂩ�������ȏꍇ�ɃX���[������O�B
+	@brief	メソッドに渡された引数のいずれかが無効な場合にスローされる例外。
 */
 class ArgumentException
 	: public Exception
@@ -128,7 +128,7 @@ public:
 };
 
 /**
-	@brief	�I�u�W�F�N�g�̌��݂̏�Ԃɑ΂��Ė����ȌĂяo�����s��ꂽ
+	@brief	オブジェクトの現在の状態に対して無効な呼び出しが行われた
 */
 class InvalidOperationException
 	: public Exception
@@ -144,8 +144,8 @@ public:
 };
 
 /**
-	@brief		�T�|�[�g����Ȃ��@�\���Ăяo�����Ƃ���
-	@details	�ǂݎ���p�X�g���[���ɑ΂��ď������݂��s�����ꍇ���B
+	@brief		サポートされない機能を呼び出そうとした
+	@details	読み取り専用ストリームに対して書き込みを行った場合等。
 */
 class NotSupportedException 
 	: public Exception
@@ -161,7 +161,7 @@ public:
 };
 
 /**
-	@brief	�f�B�X�N��ɑ��݂��Ȃ��t�@�C���ɃA�N�Z�X���悤�Ƃ��Ď��s�����Ƃ��ɃX���[������O
+	@brief	ディスク上に存在しないファイルにアクセスしようとして失敗したときにスローされる例外
 */
 class FileNotFoundException
 	: public Exception
@@ -177,7 +177,7 @@ public:
 };
 
 /**
-	@brief	�����ȃf�B���N�g���ɃA�N�Z�X���悤�Ƃ����Ƃ��ɃX���[������O
+	@brief	無効なディレクトリにアクセスしようとしたときにスローされる例外
 */
 class DirectoryNotFoundException
 	: public Exception
@@ -193,7 +193,7 @@ public:
 };
 
 /**
-	@brief	�t�@�C���╶���񓙂̌`�����s��
+	@brief	ファイルや文字列等の形式が不正
 */
 class InvalidFormatException
 	: public Exception
@@ -209,7 +209,7 @@ public:
 };
 
 /**
-	@brief	�������̋@�\���Ăяo����
+	@brief	未実装の機能を呼び出した
 */
 class NotImplementedException
 	: public Exception
@@ -225,7 +225,7 @@ public:
 };
 
 /**
-	@brief	C/C++�����^�C��API���ŃG���[����������
+	@brief	C/C++ランタイムAPI等でエラーが発生した
 */
 class RuntimeException
 	: public Exception
@@ -241,7 +241,7 @@ public:
 };
 
 /**
-	@brief	�����R�[�h�̕ϊ����A�}�b�s���O�ł��Ȃ������܂��͕s���V�[�P���X����������
+	@brief	文字コードの変換中、マッピングできない文字または不正シーケンスが見つかった
 */
 class EncodingFallbackException
 	: public Exception
@@ -259,7 +259,7 @@ public:
 
 #ifdef LN_WIN32
 /**
-	@brief	WindowsAPI �̃G���[��������O�N���X (GetLastError())
+	@brief	WindowsAPI のエラーを示す例外クラス (GetLastError())
 */
 class Win32Exception 
 	: public Exception
@@ -278,7 +278,7 @@ public:
 
 private:
 	DWORD		m_dwLastErrorCode;
-	TCHAR		m_pFormatMessage[512];	///< FormatMessage() �Ŏ擾�������b�Z�[�W
+	TCHAR		m_pFormatMessage[512];	///< FormatMessage() で取得したメッセージ
 };
 #endif
 

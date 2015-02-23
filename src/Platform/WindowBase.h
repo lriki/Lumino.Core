@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 
 #include "../../include/Lumino/Platform/Window.h"
@@ -22,8 +22,8 @@ public:
 public:
 	//void SetApplication(Win32WindowManager* app) { m_windowManager = app; }
 
-	/// ‚±‚ÌƒEƒBƒ“ƒhƒE‚ÉŠ„‚è“–‚Ä‚ç‚ê‚Ä‚¢‚é‘S‚Ä‚ÌƒCƒxƒ“ƒgƒŠƒXƒi[‚ÉƒCƒxƒ“ƒg‚ğ‘—M‚·‚é
-	/// (ƒEƒBƒ“ƒhƒEƒVƒXƒeƒ€‚É‘—M‚·‚é‚Ì‚Å‚Í‚È‚¢“_‚É’ˆÓ)
+	/// ã“ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã«å‰²ã‚Šå½“ã¦ã‚‰ã‚Œã¦ã„ã‚‹å…¨ã¦ã®ã‚¤ãƒ™ãƒ³ãƒˆãƒªã‚¹ãƒŠãƒ¼ã«ã‚¤ãƒ™ãƒ³ãƒˆã‚’é€ä¿¡ã™ã‚‹
+	/// (ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚·ã‚¹ãƒ†ãƒ ã«é€ä¿¡ã™ã‚‹ã®ã§ã¯ãªã„ç‚¹ã«æ³¨æ„)
 	bool SendEventToAllListener(const EventArgs& e);
 
 public:
@@ -32,7 +32,7 @@ public:
 	virtual void DetachEventListener(IEventListener* listener) { return m_listenerEntryArray.Remove(listener); }
 
 protected:
-	WindowManagerBase*					m_windowManager;	///< (zŠÂQÆ–h~‚Ì‚½‚ßAQÆƒJƒEƒ“ƒg‚Í‘€ì‚µ‚È‚¢)
+	WindowManagerBase*					m_windowManager;	///< (å¾ªç’°å‚ç…§é˜²æ­¢ã®ãŸã‚ã€å‚ç…§ã‚«ã‚¦ãƒ³ãƒˆã¯æ“ä½œã—ãªã„)
 	SortedArray<int, IEventListener*>	m_listenerEntryArray;
 };
 

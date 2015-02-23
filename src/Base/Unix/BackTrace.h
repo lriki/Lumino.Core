@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 
 #include <execinfo.h>
@@ -80,13 +80,13 @@ public:
 
 public:
 
-	/// ƒXƒ^ƒbƒNƒgƒŒ[ƒX‚ğæ“¾‚·‚é
+	/// ã‚¹ã‚¿ãƒƒã‚¯ãƒˆãƒ¬ãƒ¼ã‚¹ã‚’å–å¾—ã™ã‚‹
 	int Backtrace(void** buffer, int n) const
 	{
 		return ::backtrace(buffer , n);
 	}
 	
-	//ƒVƒ“ƒ{ƒ‹‚Ì‰ğŒˆ
+	//ã‚·ãƒ³ãƒœãƒ«ã®è§£æ±º
 	void AddressToSymbolString(void* address, char* outBuffer, int len) const
 	{
 		//see http://d.hatena.ne.jp/syuu1228/20100215/1266262848
@@ -107,11 +107,11 @@ public:
 			return ;
 		}
 
-		//ƒfƒ}ƒ“ƒOƒ‹‚µ‚ÄŠÖ”–¼‚ğ“Ç‚ß‚éŒ`®‚É
+		//ãƒ‡ãƒãƒ³ã‚°ãƒ«ã—ã¦é–¢æ•°åã‚’èª­ã‚ã‚‹å½¢å¼ã«
 		int status = 0;
 		char * demangled = abi::__cxa_demangle(info.dli_sname,0,0,&status);
 
-		//ƒVƒ“ƒ{ƒ‹ƒGƒ“ƒWƒ“‚Íg‚¦‚é‚ÌH
+		//ã‚·ãƒ³ãƒœãƒ«ã‚¨ãƒ³ã‚¸ãƒ³ã¯ä½¿ãˆã‚‹ã®ï¼Ÿ
 		if (!mIsSymbolEngineReady)
 		{
 			snprintf(outBuffer ,len , "0x%p @ %s @ %s @ %s+0x%p" ,
@@ -122,7 +122,7 @@ public:
 			return ;
 		}
 		
-		//ƒtƒ@ƒCƒ‹–¼‚Æs”‚ğ‹‚ß‚é.
+		//ãƒ•ã‚¡ã‚¤ãƒ«åã¨è¡Œæ•°ã‚’æ±‚ã‚ã‚‹.
 		const char* filename = NULL;
 		const char* functionname = NULL;
 		unsigned int line = 0;
@@ -149,7 +149,7 @@ public:
 		return;
 	}
 	
-	// ƒVƒ“ƒ{ƒ‹‚ğ‚Ü‚Æ‚ß‚Ä‰ğŒˆ
+	// ã‚·ãƒ³ãƒœãƒ«ã‚’ã¾ã¨ã‚ã¦è§£æ±º
 	void AddressToFullSymbolString(void** address, int size, char* outBuffer, int len) const
 	{
 		int writesize = 0;

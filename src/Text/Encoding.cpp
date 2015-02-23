@@ -1,4 +1,4 @@
-
+ï»¿
 #include "../Internal.h"
 #include "../../include/Lumino/Base/RefObject.h"
 #include "../../include/Lumino/Base/RefBuffer.h"
@@ -152,43 +152,43 @@ RefBuffer* Encoding::Convert(
 	LN_THROW(src != NULL, ArgumentException);
 	LN_THROW(decoder != NULL, ArgumentException);
 	LN_THROW(encoder != NULL, ArgumentException);
-	//LN_THROW(srcByteCount >= (size_t)decoder->GetMinByteCount(), ArgumentException);	// ƒoƒbƒtƒ@‚ÌƒoƒCƒg”‚ÍA‚»‚Ìƒoƒbƒtƒ@‚ÌƒGƒ“ƒR[ƒfƒBƒ“ƒO‚ÌÅ’áƒoƒCƒg”ˆÈã‚Å‚È‚¯‚ê‚Î‚È‚ç‚È‚¢
+	//LN_THROW(srcByteCount >= (size_t)decoder->GetMinByteCount(), ArgumentException);	// ãƒãƒƒãƒ•ã‚¡ã®ãƒã‚¤ãƒˆæ•°ã¯ã€ãã®ãƒãƒƒãƒ•ã‚¡ã®ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°ã®æœ€ä½ãƒã‚¤ãƒˆæ•°ä»¥ä¸Šã§ãªã‘ã‚Œã°ãªã‚‰ãªã„
 
-	// src ‚É“ü‚Á‚Ä‚¢‚éÅˆ«ƒpƒ^[ƒ“‚Ì•¶š”
+	// src ã«å…¥ã£ã¦ã„ã‚‹æœ€æ‚ªãƒ‘ã‚¿ãƒ¼ãƒ³ã®æ–‡å­—æ•°
 	int srcMaxCharCount = srcByteCount / decoder->GetMinByteCount();
-	srcMaxCharCount += 1;	// DecoderEEncoder ‚Ìó‘Ô•Û‘¶‚É‚æ‚è‘O‰ñ‚Ì‚ ‚Ü‚è•¶š‚ª1‚Â’Ç‰Á‚³‚ê‚é‚©‚à‚µ‚ê‚È‚¢
+	srcMaxCharCount += 1;	// Decoderãƒ»Encoder ã®çŠ¶æ…‹ä¿å­˜ã«ã‚ˆã‚Šå‰å›ã®ã‚ã¾ã‚Šæ–‡å­—ãŒ1ã¤è¿½åŠ ã•ã‚Œã‚‹ã‹ã‚‚ã—ã‚Œãªã„
 
-	// ’†ŠÔƒoƒbƒtƒ@‚É•K—v‚ÈÅ‘åƒoƒCƒg”
-	int utf16MaxByteCount = srcMaxCharCount * 4;	// UTF16 ‚Í1•¶šÅ‘å4ƒoƒCƒg
+	// ä¸­é–“ãƒãƒƒãƒ•ã‚¡ã«å¿…è¦ãªæœ€å¤§ãƒã‚¤ãƒˆæ•°
+	int utf16MaxByteCount = srcMaxCharCount * 4;	// UTF16 ã¯1æ–‡å­—æœ€å¤§4ãƒã‚¤ãƒˆ
 
-	// o—Íƒoƒbƒtƒ@‚É•K—v‚ÈÅ‘åƒoƒCƒg”
+	// å‡ºåŠ›ãƒãƒƒãƒ•ã‚¡ã«å¿…è¦ãªæœ€å¤§ãƒã‚¤ãƒˆæ•°
 	int outputMaxByteCount = srcMaxCharCount * encoder->GetMaxByteCount();
 
-	// ’†ŠÔƒoƒbƒtƒ@ì¬
+	// ä¸­é–“ãƒãƒƒãƒ•ã‚¡ä½œæˆ
 	RefPtr<RefBuffer> tmpBuf(LN_NEW RefBuffer());
-	tmpBuf->Reserve(utf16MaxByteCount + sizeof(uint16_t));	// I’[ \0 l—¶ (mbstowcs_s ‚Í \0 ‚ğ‘‚«‚à‚¤‚Æ‚·‚é)
+	tmpBuf->Reserve(utf16MaxByteCount + sizeof(uint16_t));	// çµ‚ç«¯ \0 è€ƒæ…® (mbstowcs_s ã¯ \0 ã‚’æ›¸ãè¾¼ã‚‚ã†ã¨ã™ã‚‹)
 
-	// •ÏŠ·æƒoƒbƒtƒ@‚ğAÅ‘å—v‘f”‚ÅŠm•Û
+	// å¤‰æ›å…ˆãƒãƒƒãƒ•ã‚¡ã‚’ã€æœ€å¤§è¦ç´ æ•°ã§ç¢ºä¿
 	RefPtr<RefBuffer> targetBuf(LN_NEW RefBuffer());
-	targetBuf->Reserve(outputMaxByteCount + encoder->GetMaxByteCount());	// I’[ \0 l—¶ (mbstowcs_s ‚Í \0 ‚ğ‘‚«‚à‚¤‚Æ‚·‚é)
+	targetBuf->Reserve(outputMaxByteCount + encoder->GetMaxByteCount());	// çµ‚ç«¯ \0 è€ƒæ…® (mbstowcs_s ã¯ \0 ã‚’æ›¸ãè¾¼ã‚‚ã†ã¨ã™ã‚‹)
 
-	// •ÏŠ·Às
+	// å¤‰æ›å®Ÿè¡Œ
 	size_t bytesUsed;
 	size_t charsUsed;
-	// ƒ\[ƒXƒtƒH[ƒ}ƒbƒg‚©‚ç’†ŠÔƒtƒH[ƒ}ƒbƒg‚Ö
+	// ã‚½ãƒ¼ã‚¹ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã‹ã‚‰ä¸­é–“ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã¸
 	decoder->ConvertToUTF16(
 		(const byte_t*)src,
 		srcByteCount,
 		(UTF16*)tmpBuf->GetPointer(),
-		utf16MaxByteCount / sizeof(UTF16),			// \0 ‹­§Ši”[‚É”õ‚¦A1•¶š•ª—]—T‚Ì‚ ‚éƒTƒCƒY‚ğw’è‚·‚é
+		utf16MaxByteCount / sizeof(UTF16),			// \0 å¼·åˆ¶æ ¼ç´ã«å‚™ãˆã€1æ–‡å­—åˆ†ä½™è£•ã®ã‚ã‚‹ã‚µã‚¤ã‚ºã‚’æŒ‡å®šã™ã‚‹
 		&bytesUsed,
 		&charsUsed);
-	// ’†ŠÔƒtƒH[ƒ}ƒbƒg‚©‚çƒ^[ƒQƒbƒgƒtƒH[ƒ}ƒbƒg‚Ö
+	// ä¸­é–“ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã‹ã‚‰ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã¸
 	encoder->ConvertFromUTF16(
 		(const UTF16*)tmpBuf->GetPointer(),
 		bytesUsed / sizeof(UTF16),
 		(byte_t*)targetBuf->GetPointer(),
-		targetBuf->GetSize(),		// \0 ‹­§Ši”[‚É”õ‚¦A1•¶š•ª—]—T‚Ì‚ ‚éƒTƒCƒY‚ğw’è‚·‚é
+		targetBuf->GetSize(),		// \0 å¼·åˆ¶æ ¼ç´ã«å‚™ãˆã€1æ–‡å­—åˆ†ä½™è£•ã®ã‚ã‚‹ã‚µã‚¤ã‚ºã‚’æŒ‡å®šã™ã‚‹
 		&bytesUsed,
 		&charsUsed);
 
@@ -198,7 +198,7 @@ RefBuffer* Encoding::Convert(
 		result->CharsUsed = charsUsed;
 		result->UsedDefaultChar = (decoder->UsedDefaultCharCount() > 0 || encoder->UsedDefaultCharCount() > 0);
 	}
-	targetBuf->Resize(bytesUsed);	// o—Íƒoƒbƒtƒ@‚ÌŒ©‚©‚¯ã‚ÌƒTƒCƒY‚ğAÀÛ‚Ég—p‚µ‚½ƒoƒCƒg”‚É‚·‚é
+	targetBuf->Resize(bytesUsed);	// å‡ºåŠ›ãƒãƒƒãƒ•ã‚¡ã®è¦‹ã‹ã‘ä¸Šã®ã‚µã‚¤ã‚ºã‚’ã€å®Ÿéš›ã«ä½¿ç”¨ã—ãŸãƒã‚¤ãƒˆæ•°ã«ã™ã‚‹
 	targetBuf.SafeAddRef();
 	return targetBuf;
 }
@@ -221,11 +221,11 @@ int SystemMultiByteEncoding::GetMinByteCount() const
 int SystemMultiByteEncoding::GetMaxByteCount() const
 {
 #if 1
-	// mbstowcs ‚Í setlocale() ‚É‚æ‚Á‚Ä“®ì‚ª•Ï‚í‚é‚ªA
-	// ‚Ç‚ñ‚Èƒ}ƒ‹ƒ`ƒoƒCƒgƒR[ƒh‚ªg‚í‚ê‚é‚Ì‚©A‚»‚ÌƒR[ƒh‚ÌÅ‘åƒoƒCƒg”‚Í‚¢‚­‚Â‚©‚Í“¾‚é‚±‚Æ‚ª‚Å‚«‚È‚¢B
-	// ¦ WinAPI ‚Å‚Í GetCPInfoEx() ‚ÅƒR[ƒhƒy[ƒW‚²‚Æ‚ÌÅ‘åƒoƒCƒg”‚ğ“¾‚é‚±‚Æ‚ª‚Å‚«‚é‚ªA
-	//    setlocale() ‚ğg—p‚µ‚Ä‚à _getmbcp ‚â CP_THREAD_ACP ‚Å“¾‚ç‚ê‚éƒR[ƒhƒy[ƒW‚É•Ï‰»‚ª–³‚¢B
-	// ‘ã‚í‚è‚ÉAÅˆ«‚ÌƒTƒCƒY‚Æ‚µ‚Ä UTF-8 ‚ÌÅ‘åƒTƒCƒY‚ğ‘z’è‚·‚éB
+	// mbstowcs ã¯ setlocale() ã«ã‚ˆã£ã¦å‹•ä½œãŒå¤‰ã‚ã‚‹ãŒã€
+	// ã©ã‚“ãªãƒãƒ«ãƒãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ãŒä½¿ã‚ã‚Œã‚‹ã®ã‹ã€ãã®ã‚³ãƒ¼ãƒ‰ã®æœ€å¤§ãƒã‚¤ãƒˆæ•°ã¯ã„ãã¤ã‹ã¯å¾—ã‚‹ã“ã¨ãŒã§ããªã„ã€‚
+	// â€» WinAPI ã§ã¯ GetCPInfoEx() ã§ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸ã”ã¨ã®æœ€å¤§ãƒã‚¤ãƒˆæ•°ã‚’å¾—ã‚‹ã“ã¨ãŒã§ãã‚‹ãŒã€
+	//    setlocale() ã‚’ä½¿ç”¨ã—ã¦ã‚‚ _getmbcp ã‚„ CP_THREAD_ACP ã§å¾—ã‚‰ã‚Œã‚‹ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸ã«å¤‰åŒ–ãŒç„¡ã„ã€‚
+	// ä»£ã‚ã‚Šã«ã€æœ€æ‚ªã®ã‚µã‚¤ã‚ºã¨ã—ã¦ UTF-8 ã®æœ€å¤§ã‚µã‚¤ã‚ºã‚’æƒ³å®šã™ã‚‹ã€‚
 	return 6;
 #else
 #ifdef LN_WIN32
@@ -245,9 +245,9 @@ int SystemMultiByteEncoding::GetMaxByteCount() const
 //-----------------------------------------------------------------------------
 void SystemMultiByteEncoding::SystemMultiByteDecoder::ConvertToUTF16(const byte_t* inBuffer, size_t inBufferByteCount, UTF16* outBuffer, size_t outBufferCharCount, size_t* outBytesUsed, size_t* outCharsUsed)
 {
-#ifdef LN_WIN32	/* Windows ŠÂ‹«‚Å setlocale ‚µ‚È‚­‚Ä‚àg‚¦‚é‚æ‚¤‚É‚·‚é */
-	// “ü—Í‚ª 0 •¶š‚Ìê‡‚Í‰½‚à‚µ‚È‚¢
-	// (MultiByteToWideChar ‚Ì–ß‚è’l‚ªƒGƒ‰[‚È‚Ì‚©¬Œ÷‚È‚Ì‚©‚í‚©‚ç‚È‚­‚È‚é)
+#ifdef LN_WIN32	/* Windows ç’°å¢ƒã§ setlocale ã—ãªãã¦ã‚‚ä½¿ãˆã‚‹ã‚ˆã†ã«ã™ã‚‹ */
+	// å…¥åŠ›ãŒ 0 æ–‡å­—ã®å ´åˆã¯ä½•ã‚‚ã—ãªã„
+	// (MultiByteToWideChar ã®æˆ»ã‚Šå€¤ãŒã‚¨ãƒ©ãƒ¼ãªã®ã‹æˆåŠŸãªã®ã‹ã‚ã‹ã‚‰ãªããªã‚‹)
 	if (inBufferByteCount == 0) {
 		if (outBufferCharCount > 0) {
 			outBuffer[0] = '\0';
@@ -260,12 +260,12 @@ void SystemMultiByteEncoding::SystemMultiByteDecoder::ConvertToUTF16(const byte_
 	int len = ::MultiByteToWideChar(
 		CP_THREAD_ACP, MB_ERR_INVALID_CHARS, 
 		(LPCSTR)inBuffer, 
-		inBufferByteCount,		// lpMultiByteStr ‚ªw‚·•¶š—ñ‚ÌƒTƒCƒY‚ğƒoƒCƒg’PˆÊ‚Å“n‚µ‚Ü‚·B
+		inBufferByteCount,		// lpMultiByteStr ãŒæŒ‡ã™æ–‡å­—åˆ—ã®ã‚µã‚¤ã‚ºã‚’ãƒã‚¤ãƒˆå˜ä½ã§æ¸¡ã—ã¾ã™ã€‚
 		(LPWSTR)outBuffer, 
-		outBufferCharCount);	// lpWideCharStr ‚ªw‚·ƒoƒbƒtƒ@‚ÌƒTƒCƒY‚ğƒƒCƒh•¶š”‚Ì’PˆÊ‚Åw’è‚µ‚Ü‚·B
+		outBufferCharCount);	// lpWideCharStr ãŒæŒ‡ã™ãƒãƒƒãƒ•ã‚¡ã®ã‚µã‚¤ã‚ºã‚’ãƒ¯ã‚¤ãƒ‰æ–‡å­—æ•°ã®å˜ä½ã§æŒ‡å®šã—ã¾ã™ã€‚
 	LN_THROW(len > 0, EncodingFallbackException);
 
-	// mbstowcs ‚¶‚á•¶š”ƒJƒEƒ“ƒg‚Í‚Å‚«‚È‚¢‚Ì‚Å UnicodeUtils ‚ğg‚¤
+	// mbstowcs ã˜ã‚ƒæ–‡å­—æ•°ã‚«ã‚¦ãƒ³ãƒˆã¯ã§ããªã„ã®ã§ UnicodeUtils ã‚’ä½¿ã†
 	int count;
 	UTFConversionResult r = UnicodeUtils::GetUTF16CharCount((UnicodeUtils::UTF16*)outBuffer, len, true, &count);
 	LN_THROW(r == UTFConversionResult_Success, EncodingFallbackException);
@@ -277,20 +277,20 @@ void SystemMultiByteEncoding::SystemMultiByteDecoder::ConvertToUTF16(const byte_
 #ifdef LN_WCHAR_16
 	LN_THROW(0, NotImplementedException);
 #else
-	// ˆêƒƒ‚ƒŠŠm•Û (char[] ¨ UTF-8 ‚ÅÅˆ«‚Ìƒpƒ^[ƒ“‚ÍA‚·‚×‚ÄASCII‚Ìê‡)
+	// ä¸€æ™‚ãƒ¡ãƒ¢ãƒªç¢ºä¿ (char[] â†’ UTF-8 ã§æœ€æ‚ªã®ãƒ‘ã‚¿ãƒ¼ãƒ³ã¯ã€ã™ã¹ã¦ASCIIã®å ´åˆ)
 	size_t tmpUTF32BufferLen = inBufferByteCount * sizeof(UnicodeUtils::UTF32);
 	RefBuffer tmpUTF32Buffer;
 	tmpUTF32Buffer.Reserve(sizeof(wchar_t) * inBufferByteCount);
 	tmpUTF32Buffer.Clear();
 
-	// wchar_t (UTF-32) ‚Ö•ÏŠ·‚·‚é
+	// wchar_t (UTF-32) ã¸å¤‰æ›ã™ã‚‹
 	const char* str_ptr = (const char*)inBuffer;
 	mbstate_t state;
 	memset(&state, 0, sizeof(state));
-	size_t len = mbsrtowcs((wchar_t*)tmpUTF32Buffer.GetPointer(), &str_ptr, tmpUTF32Buffer.GetSize(), &state);
+	size_t len = mbsrtowcs((wchar_t*)tmpUTF32Buffer.GetPointer(), &str_ptr, inBufferByteCount, &state);
 	LN_THROW(len != -1, EncodingFallbackException);
 
-	// UTF-32 ‚©‚ç UTF-16 ‚Ö•ÏŠ·‚·‚é
+	// UTF-32 ã‹ã‚‰ UTF-16 ã¸å¤‰æ›ã™ã‚‹
 	UTFConversionOptions options;
 	memset(&options, 0, sizeof(options));
 	options.ReplacementChar = mFallbackReplacementChar;
@@ -311,28 +311,28 @@ void SystemMultiByteEncoding::SystemMultiByteDecoder::ConvertToUTF16(const byte_
 
 	/*
 	
-	// mbstowcs_s ‚Í•ÏŠ·‚µ‚½‚¢ƒTƒCƒY‚ğw’è‚·‚é‚±‚Æ‚ª‚Å‚«‚¸AŠî–{“I‚É \0 ‚Ü‚Å•ÏŠ·‚·‚é‚±‚Æ‚É‚È‚éB
-	// ‚»‚Ì‚½‚ßAˆê“x•Êƒoƒbƒtƒ@‚ÉˆÚ‚µ‚Ä \0 ‚ğ•t‚¯‚é
+	// mbstowcs_s ã¯å¤‰æ›ã—ãŸã„ã‚µã‚¤ã‚ºã‚’æŒ‡å®šã™ã‚‹ã“ã¨ãŒã§ããšã€åŸºæœ¬çš„ã« \0 ã¾ã§å¤‰æ›ã™ã‚‹ã“ã¨ã«ãªã‚‹ã€‚
+	// ãã®ãŸã‚ã€ä¸€åº¦åˆ¥ãƒãƒƒãƒ•ã‚¡ã«ç§»ã—ã¦ \0 ã‚’ä»˜ã‘ã‚‹
 	RefBuffer tmpInBuffer;
-	tmpInBuffer.Reserve(inByteCount + sizeof(char));	// NULL •¶š•ª + 1
+	tmpInBuffer.Reserve(inByteCount + sizeof(char));	// NULL æ–‡å­—åˆ† + 1
 	tmpInBuffer.Copy(inBuffer, inByteCount);
 	char* tmpStr = (char*)tmpInBuffer.GetPointer();
 	tmpStr[inByteCount] = '\0';
 
-	// Multi ¨ Wide
+	// Multi â†’ Wide
 	size_t len;
 	errno_t err = mbstowcs_s(
-		&len,										// •ÏŠ·‚³‚ê‚½•¶š”
-		(wchar_t*)outBuffer,						// o—Íæƒoƒbƒtƒ@
-		(outByteCount / sizeof(wchar_t)) + 1,// o—Íæƒoƒbƒtƒ@‚ÌƒTƒCƒY (•¶š” = wchar_t ‚Æ‚µ‚Ä‚Ì—v‘f”)
-		tmpStr,										// •ÏŠ·Œ³ƒoƒbƒtƒ@
-		outByteCount / sizeof(wchar_t));		// outBuffer ‚ÉŠi”[‚·‚é wchar_t ‚ÌÅ‘å”
+		&len,										// å¤‰æ›ã•ã‚ŒãŸæ–‡å­—æ•°
+		(wchar_t*)outBuffer,						// å‡ºåŠ›å…ˆãƒãƒƒãƒ•ã‚¡
+		(outByteCount / sizeof(wchar_t)) + 1,// å‡ºåŠ›å…ˆãƒãƒƒãƒ•ã‚¡ã®ã‚µã‚¤ã‚º (æ–‡å­—æ•° = wchar_t ã¨ã—ã¦ã®è¦ç´ æ•°)
+		tmpStr,										// å¤‰æ›å…ƒãƒãƒƒãƒ•ã‚¡
+		outByteCount / sizeof(wchar_t));		// outBuffer ã«æ ¼ç´ã™ã‚‹ wchar_t ã®æœ€å¤§æ•°
 	LN_THROW(err == 0, EncodingFallbackException);
 
-	// I’[‚É‚Í \0 ‚ª‹­§“I‚É•t‰Á‚³‚ê‚éBƒˆ‚È•¶š•”•ª‚ÌƒTƒCƒY‚ª—~‚µ‚¢‚Ì‚Å -1 ‚·‚éB
+	// çµ‚ç«¯ã«ã¯ \0 ãŒå¼·åˆ¶çš„ã«ä»˜åŠ ã•ã‚Œã‚‹ã€‚ç´”ç²‹ãªæ–‡å­—éƒ¨åˆ†ã®ã‚µã‚¤ã‚ºãŒæ¬²ã—ã„ã®ã§ -1 ã™ã‚‹ã€‚
 	len--;
 
-	// mbstowcs ‚¶‚á•¶š”ƒJƒEƒ“ƒg‚Í‚Å‚«‚È‚¢‚Ì‚Å UnicodeUtils ‚ğg‚¤
+	// mbstowcs ã˜ã‚ƒæ–‡å­—æ•°ã‚«ã‚¦ãƒ³ãƒˆã¯ã§ããªã„ã®ã§ UnicodeUtils ã‚’ä½¿ã†
 	int count;
 	UTFConversionResult_t r = UnicodeUtils::GetUTF16CharCount((UnicodeUtils::UTF16*)outBuffer, len, true, &count);
 	LN_THROW(r == UTFConversionResult_Success, EncodingFallbackException);
@@ -343,28 +343,28 @@ void SystemMultiByteEncoding::SystemMultiByteDecoder::ConvertToUTF16(const byte_
 	/*
 
 	#ifdef LN_WCHAR_16
-	// mbstowcs_s ‚Í•ÏŠ·‚µ‚½‚¢ƒTƒCƒY‚ğw’è‚·‚é‚±‚Æ‚ª‚Å‚«‚¸AŠî–{“I‚É \0 ‚Ü‚Å•ÏŠ·‚·‚é‚±‚Æ‚É‚È‚éB
-	// ‚»‚Ì‚½‚ßAˆê“x•Êƒoƒbƒtƒ@‚ÉˆÚ‚µ‚Ä \0 ‚ğ•t‚¯‚é
+	// mbstowcs_s ã¯å¤‰æ›ã—ãŸã„ã‚µã‚¤ã‚ºã‚’æŒ‡å®šã™ã‚‹ã“ã¨ãŒã§ããšã€åŸºæœ¬çš„ã« \0 ã¾ã§å¤‰æ›ã™ã‚‹ã“ã¨ã«ãªã‚‹ã€‚
+	// ãã®ãŸã‚ã€ä¸€åº¦åˆ¥ãƒãƒƒãƒ•ã‚¡ã«ç§»ã—ã¦ \0 ã‚’ä»˜ã‘ã‚‹
 	RefBuffer tmpInBuffer;
-	tmpInBuffer.Reserve(inByteCount + sizeof(char));	// NULL •¶š•ª + 1
+	tmpInBuffer.Reserve(inByteCount + sizeof(char));	// NULL æ–‡å­—åˆ† + 1
 	tmpInBuffer.Copy(inBuffer, inByteCount);
 	char* tmpStr = (char*)tmpInBuffer.GetPointer();
 	tmpStr[inByteCount] = '\0';
 
-	// Multi ¨ Wide
+	// Multi â†’ Wide
 	size_t len;
 	errno_t err = mbstowcs_s(
-	&len,										// •ÏŠ·‚³‚ê‚½•¶š”
-	(wchar_t*)outBuffer,						// o—Íæƒoƒbƒtƒ@
-	(outByteCount / sizeof(wchar_t)) + 1,// o—Íæƒoƒbƒtƒ@‚ÌƒTƒCƒY (•¶š” = wchar_t ‚Æ‚µ‚Ä‚Ì—v‘f”)
-	tmpStr,										// •ÏŠ·Œ³ƒoƒbƒtƒ@
-	outByteCount / sizeof(wchar_t));		// outBuffer ‚ÉŠi”[‚·‚é wchar_t ‚ÌÅ‘å”
+	&len,										// å¤‰æ›ã•ã‚ŒãŸæ–‡å­—æ•°
+	(wchar_t*)outBuffer,						// å‡ºåŠ›å…ˆãƒãƒƒãƒ•ã‚¡
+	(outByteCount / sizeof(wchar_t)) + 1,// å‡ºåŠ›å…ˆãƒãƒƒãƒ•ã‚¡ã®ã‚µã‚¤ã‚º (æ–‡å­—æ•° = wchar_t ã¨ã—ã¦ã®è¦ç´ æ•°)
+	tmpStr,										// å¤‰æ›å…ƒãƒãƒƒãƒ•ã‚¡
+	outByteCount / sizeof(wchar_t));		// outBuffer ã«æ ¼ç´ã™ã‚‹ wchar_t ã®æœ€å¤§æ•°
 	LN_THROW(err == 0, EncodingFallbackException);
 
-	// I’[‚É‚Í \0 ‚ª‹­§“I‚É•t‰Á‚³‚ê‚éBƒˆ‚È•¶š•”•ª‚ÌƒTƒCƒY‚ª—~‚µ‚¢‚Ì‚Å -1 ‚·‚éB
+	// çµ‚ç«¯ã«ã¯ \0 ãŒå¼·åˆ¶çš„ã«ä»˜åŠ ã•ã‚Œã‚‹ã€‚ç´”ç²‹ãªæ–‡å­—éƒ¨åˆ†ã®ã‚µã‚¤ã‚ºãŒæ¬²ã—ã„ã®ã§ -1 ã™ã‚‹ã€‚
 	len--;
 
-	// mbstowcs ‚¶‚á•¶š”ƒJƒEƒ“ƒg‚Í‚Å‚«‚È‚¢‚Ì‚Å UnicodeUtils ‚ğg‚¤
+	// mbstowcs ã˜ã‚ƒæ–‡å­—æ•°ã‚«ã‚¦ãƒ³ãƒˆã¯ã§ããªã„ã®ã§ UnicodeUtils ã‚’ä½¿ã†
 	int count;
 	UTFConversionResult_t r = UnicodeUtils::GetUTF16CharCount((UnicodeUtils::UTF16*)outBuffer, len, true, &count);
 	LN_THROW(r == UTFConversionResult_Success, EncodingFallbackException);
@@ -382,9 +382,9 @@ void SystemMultiByteEncoding::SystemMultiByteDecoder::ConvertToUTF16(const byte_
 //-----------------------------------------------------------------------------
 void SystemMultiByteEncoding::SystemMultiByteEncoder::ConvertFromUTF16(const UTF16* inBuffer, size_t inBufferCharCount, byte_t* outBuffer, size_t outBufferByteCount, size_t* outBytesUsed, size_t* outCharsUsed)
 {
-#ifdef LN_WIN32	/* Windows ŠÂ‹«‚Å setlocale ‚µ‚È‚­‚Ä‚àg‚¦‚é‚æ‚¤‚É‚·‚é */
-	// “ü—Í‚ª 0 •¶š‚Ìê‡‚Í‰½‚à‚µ‚È‚¢
-	// (MultiByteToWideChar ‚Ì–ß‚è’l‚ªƒGƒ‰[‚È‚Ì‚©¬Œ÷‚È‚Ì‚©‚í‚©‚ç‚È‚­‚È‚é)
+#ifdef LN_WIN32	/* Windows ç’°å¢ƒã§ setlocale ã—ãªãã¦ã‚‚ä½¿ãˆã‚‹ã‚ˆã†ã«ã™ã‚‹ */
+	// å…¥åŠ›ãŒ 0 æ–‡å­—ã®å ´åˆã¯ä½•ã‚‚ã—ãªã„
+	// (MultiByteToWideChar ã®æˆ»ã‚Šå€¤ãŒã‚¨ãƒ©ãƒ¼ãªã®ã‹æˆåŠŸãªã®ã‹ã‚ã‹ã‚‰ãªããªã‚‹)
 	if (inBufferCharCount == 0) {
 		if (outBufferByteCount > 0) {
 			outBuffer[0] = '\0';
@@ -394,7 +394,7 @@ void SystemMultiByteEncoding::SystemMultiByteEncoder::ConvertFromUTF16(const UTF
 		return;
 	}
 
-	// ƒ}ƒbƒsƒ“ƒO‚Å‚«‚È‚¢•¶š‚ğƒfƒtƒHƒ‹ƒg•¶š‚É•ÏŠ·‚·‚éİ’è‚ğ‚¢‚ë‚¢‚ë
+	// ãƒãƒƒãƒ”ãƒ³ã‚°ã§ããªã„æ–‡å­—ã‚’ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆæ–‡å­—ã«å¤‰æ›ã™ã‚‹è¨­å®šã‚’ã„ã‚ã„ã‚
 	DWORD dwFlags = 0;
 	char chDefault = (char)mFallbackReplacementChar;
 	BOOL bUsedDefaultChar = FALSE;
@@ -404,36 +404,36 @@ void SystemMultiByteEncoding::SystemMultiByteEncoder::ConvertFromUTF16(const UTF
 		pDefault = &chDefault;
 	}
 
-	// •ÏŠ·
+	// å¤‰æ›
 	int len = ::WideCharToMultiByte(
 		CP_THREAD_ACP,
 		dwFlags,
 		(const wchar_t*)inBuffer,
-		inBufferCharCount,		// ƒƒCƒh•¶š—ñ‚Ì•¶š”
+		inBufferCharCount,		// ãƒ¯ã‚¤ãƒ‰æ–‡å­—åˆ—ã®æ–‡å­—æ•°
 		(LPSTR )outBuffer,
-		outBufferByteCount,		// V‚µ‚¢•¶š—ñ‚ğó‚¯æ‚éƒoƒbƒtƒ@‚ÌƒTƒCƒY
+		outBufferByteCount,		// æ–°ã—ã„æ–‡å­—åˆ—ã‚’å—ã‘å–ã‚‹ãƒãƒƒãƒ•ã‚¡ã®ã‚µã‚¤ã‚º
 		pDefault,
 		&bUsedDefaultChar);
-	LN_THROW(!(chDefault == '\0' && bUsedDefaultChar == TRUE), EncodingFallbackException);	// ƒfƒtƒHƒ‹ƒg•¶š–¢w’è‚Åƒ}ƒbƒsƒ“ƒO‚Å‚«‚È‚¢•¶š‚ª‚ ‚Á‚½
+	LN_THROW(!(chDefault == '\0' && bUsedDefaultChar == TRUE), EncodingFallbackException);	// ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆæ–‡å­—æœªæŒ‡å®šã§ãƒãƒƒãƒ”ãƒ³ã‚°ã§ããªã„æ–‡å­—ãŒã‚ã£ãŸ
 	LN_THROW(len > 0, EncodingFallbackException);
 
-	// •¶š”ƒJƒEƒ“ƒg
+	// æ–‡å­—æ•°ã‚«ã‚¦ãƒ³ãƒˆ
 	int count;
 	UTFConversionResult r = UnicodeUtils::GetUTF16CharCount((UnicodeUtils::UTF16*)inBuffer, inBufferCharCount, true, &count);
 	LN_THROW(r == UTFConversionResult_Success, EncodingFallbackException);
 
-	*outBytesUsed = len;		// len ‚Íu‘‚«‚Ü‚ê‚½ƒoƒCƒg”v‚È‚Ì‚Å‚±‚ê‚ÅOK
+	*outBytesUsed = len;		// len ã¯ã€Œæ›¸ãè¾¼ã¾ã‚ŒãŸãƒã‚¤ãƒˆæ•°ã€ãªã®ã§ã“ã‚Œã§OK
 	*outCharsUsed = count;
 #else
 #ifdef LN_WCHAR_16
 	LN_THROW(0, NotImplementedException);
 #else
-	// UTF-16 ‚ÌƒTƒƒQ[ƒg‚ğl—¶‚µAÅˆ«ƒpƒ^[ƒ“(‚·‚×‚ÄƒTƒƒQ[ƒg)‚Åƒƒ‚ƒŠŠm•Û
+	// UTF-16 ã®ã‚µãƒ­ã‚²ãƒ¼ãƒˆã‚’è€ƒæ…®ã—ã€æœ€æ‚ªãƒ‘ã‚¿ãƒ¼ãƒ³(ã™ã¹ã¦ã‚µãƒ­ã‚²ãƒ¼ãƒˆ)ã§ãƒ¡ãƒ¢ãƒªç¢ºä¿
 	RefBuffer tmpUTF32Buffer;
 	tmpUTF32Buffer.Reserve(sizeof(wchar_t) * (inBufferCharCount * 2));
 	tmpUTF32Buffer.Clear();
 
-	// UTF-32 ‚Ö•ÏŠ·‚·‚é
+	// UTF-32 ã¸å¤‰æ›ã™ã‚‹
 	UTFConversionOptions options;
 	memset(&options, 0, sizeof(options));
 	options.ReplacementChar = mFallbackReplacementChar;
@@ -445,7 +445,7 @@ void SystemMultiByteEncoding::SystemMultiByteEncoder::ConvertFromUTF16(const UTF
 		&options);
 	LN_THROW(result == UTFConversionResult_Success, EncodingFallbackException);
 
-	// UTF-32 ‚ğ char[] ‚Ö•ÏŠ·‚·‚é (wcsrtombs() ‚Ío—Íƒoƒbƒtƒ@‚É‚ ‚Ü‚è‚ª‚ ‚é‚Æ‚«‚Í '\0' ‚ğ‚Â‚¯‚é‚ªAˆê”t‚Ì‚Í‚Â‚¯‚È‚¢)
+	// UTF-32 ã‚’ char[] ã¸å¤‰æ›ã™ã‚‹ (wcsrtombs() ã¯å‡ºåŠ›ãƒãƒƒãƒ•ã‚¡ã«ã‚ã¾ã‚ŠãŒã‚ã‚‹ã¨ãã¯ '\0' ã‚’ã¤ã‘ã‚‹ãŒã€ä¸€æ¯ã®æ™‚ã¯ã¤ã‘ãªã„)
 	const wchar_t* wstr_ptr = (const wchar_t*)tmpUTF32Buffer.GetPointer();
 	mbstate_t state;
 	memset(&state, 0, sizeof(state));
@@ -461,43 +461,43 @@ void SystemMultiByteEncoding::SystemMultiByteEncoder::ConvertFromUTF16(const UTF
 	
 #if 0
 #ifdef LN_WCHAR_16
-	// wcsrtombs_s ‚Í•ÏŠ·‚µ‚½‚¢ƒTƒCƒY‚ğw’è‚·‚é‚±‚Æ‚ª‚Å‚«‚¸AŠî–{“I‚É \0 ‚Ü‚Å•ÏŠ·‚·‚é‚±‚Æ‚É‚È‚éB
-	// ‚»‚Ì‚½‚ßAˆê“x•Êƒoƒbƒtƒ@‚ÉˆÚ‚µ‚Ä \0 ‚ğ•t‚¯‚é
+	// wcsrtombs_s ã¯å¤‰æ›ã—ãŸã„ã‚µã‚¤ã‚ºã‚’æŒ‡å®šã™ã‚‹ã“ã¨ãŒã§ããšã€åŸºæœ¬çš„ã« \0 ã¾ã§å¤‰æ›ã™ã‚‹ã“ã¨ã«ãªã‚‹ã€‚
+	// ãã®ãŸã‚ã€ä¸€åº¦åˆ¥ãƒãƒƒãƒ•ã‚¡ã«ç§»ã—ã¦ \0 ã‚’ä»˜ã‘ã‚‹
 	RefBuffer tmpWideBuffer;
-	tmpWideBuffer.Reserve(inByteCount + sizeof(wchar_t));	// NULL •¶š•ª
+	tmpWideBuffer.Reserve(inByteCount + sizeof(wchar_t));	// NULL æ–‡å­—åˆ†
 	tmpWideBuffer.Copy(inBuffer, inByteCount);
 	wchar_t* wideStr = (wchar_t*)tmpWideBuffer.GetPointer();
 	wideStr[inByteCount / sizeof(wchar_t)] = L'\0';
 
-	// Wide ¨ Multi
+	// Wide â†’ Multi
 #if 1
 	size_t convertedLen;
 	errno_t err = wcstombs_s(
 		&convertedLen,
-		(char*)outBuffer,			// o—Íæƒoƒbƒtƒ@
-		outByteCount,		// o—Íæƒoƒbƒtƒ@‚ÌƒTƒCƒY (ƒoƒCƒg”)
-		wideStr,					// •ÏŠ·Œ³
-		_TRUNCATE);					// o—Íæƒoƒbƒtƒ@‚ÉŠi”[‚Å‚«‚éÅ‘åƒoƒCƒg” (À¿ªª‚Æ“¯‚¶B_TRUNCATE ‚Å \0 ‚Ü‚Å)
-	LN_THROW(err == 0, EncodingFallbackException);	// ‚±‚±‚Åˆø‚Á‚©‚©‚éê‡‚Í setlocale ‚µ‚Ä‚¢‚È‚¢‚©‚à‚µ‚ê‚È‚¢
+		(char*)outBuffer,			// å‡ºåŠ›å…ˆãƒãƒƒãƒ•ã‚¡
+		outByteCount,		// å‡ºåŠ›å…ˆãƒãƒƒãƒ•ã‚¡ã®ã‚µã‚¤ã‚º (ãƒã‚¤ãƒˆæ•°)
+		wideStr,					// å¤‰æ›å…ƒ
+		_TRUNCATE);					// å‡ºåŠ›å…ˆãƒãƒƒãƒ•ã‚¡ã«æ ¼ç´ã§ãã‚‹æœ€å¤§ãƒã‚¤ãƒˆæ•° (å®Ÿè³ªâ†‘â†‘ã¨åŒã˜ã€‚_TRUNCATE ã§ \0 ã¾ã§)
+	LN_THROW(err == 0, EncodingFallbackException);	// ã“ã“ã§å¼•ã£ã‹ã‹ã‚‹å ´åˆã¯ setlocale ã—ã¦ã„ãªã„ã‹ã‚‚ã—ã‚Œãªã„
 #else
 	size_t convertedLen;
 	mbstate_t mbstate = 0;
 	::memset((void*)&mbstate, 0, sizeof(mbstate));
 	errno_t err = wcsrtombs_s(
-		&convertedLen,				// •ÏŠ·‚³‚ê‚½•¶š”‚ªŠi”[‚³‚ê‚é (Multi ‚Ö‚Ì•ÏŠ·‚È‚Ì‚ÅAƒoƒCƒg”)
-		(char*)outBuffer,			// o—Íæƒoƒbƒtƒ@
-		outByteCount,		// o—Íæƒoƒbƒtƒ@‚ÌƒTƒCƒY (ƒoƒCƒg”)
-		(const wchar_t**)&wideStr,	// •ÏŠ·Œ³
-		_TRUNCATE,					// o—Íæƒoƒbƒtƒ@‚ÉŠi”[‚Å‚«‚éÅ‘åƒoƒCƒg” (À¿ªª‚Æ“¯‚¶B_TRUNCATE ‚Å \0 ‚Ü‚Å)
+		&convertedLen,				// å¤‰æ›ã•ã‚ŒãŸæ–‡å­—æ•°ãŒæ ¼ç´ã•ã‚Œã‚‹ (Multi ã¸ã®å¤‰æ›ãªã®ã§ã€ãƒã‚¤ãƒˆæ•°)
+		(char*)outBuffer,			// å‡ºåŠ›å…ˆãƒãƒƒãƒ•ã‚¡
+		outByteCount,		// å‡ºåŠ›å…ˆãƒãƒƒãƒ•ã‚¡ã®ã‚µã‚¤ã‚º (ãƒã‚¤ãƒˆæ•°)
+		(const wchar_t**)&wideStr,	// å¤‰æ›å…ƒ
+		_TRUNCATE,					// å‡ºåŠ›å…ˆãƒãƒƒãƒ•ã‚¡ã«æ ¼ç´ã§ãã‚‹æœ€å¤§ãƒã‚¤ãƒˆæ•° (å®Ÿè³ªâ†‘â†‘ã¨åŒã˜ã€‚_TRUNCATE ã§ \0 ã¾ã§)
 		&mbstate);
 	LN_THROW(err == 0, ArgumentException);
 #endif
 
-	// I’[‚É‚Í \0 ‚ª‹­§“I‚É•t‰Á‚³‚ê‚éBƒˆ‚È•¶š•”•ª‚ÌƒTƒCƒY‚ª—~‚µ‚¢‚Ì‚Å -1 ‚·‚éB
-	// TODO: ‚Â‚Ü‚èAo—Íƒoƒbƒtƒ@‚Í ª‚Ì‘æ2ˆø” +1ƒ[ƒh•ª Šm•Û‚µ‚Ä‚¨‚­•K—v‚ª‚ ‚é
+	// çµ‚ç«¯ã«ã¯ \0 ãŒå¼·åˆ¶çš„ã«ä»˜åŠ ã•ã‚Œã‚‹ã€‚ç´”ç²‹ãªæ–‡å­—éƒ¨åˆ†ã®ã‚µã‚¤ã‚ºãŒæ¬²ã—ã„ã®ã§ -1 ã™ã‚‹ã€‚
+	// TODO: ã¤ã¾ã‚Šã€å‡ºåŠ›ãƒãƒƒãƒ•ã‚¡ã¯ â†‘ã®ç¬¬2å¼•æ•° +1ãƒ¯ãƒ¼ãƒ‰åˆ† ç¢ºä¿ã—ã¦ãŠãå¿…è¦ãŒã‚ã‚‹
 	convertedLen--;
 
-	// wcsrtombs_s ‚¶‚á•¶š”ƒJƒEƒ“ƒg‚Í‚Å‚«‚È‚¢‚Ì‚Å UnicodeUtils ‚ğg‚¤
+	// wcsrtombs_s ã˜ã‚ƒæ–‡å­—æ•°ã‚«ã‚¦ãƒ³ãƒˆã¯ã§ããªã„ã®ã§ UnicodeUtils ã‚’ä½¿ã†
 	int count;
 	UTFConversionResult_t r = UnicodeUtils::GetUTF16CharCount((UnicodeUtils::UTF16*)inBuffer, inByteCount / sizeof(UnicodeUtils::UTF16), true, &count);
 	LN_THROW(r == UTFConversionResult_Success, EncodingFallbackException);
@@ -537,12 +537,12 @@ byte_t* UTF8Encoding::GetPreamble() const
 //-----------------------------------------------------------------------------
 void UTF8Encoding::UTF8Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t inBufferByteCount, UTF16* outBuffer, size_t outBufferCharCount, size_t* outBytesUsed, size_t* outCharsUsed)
 {
-	// •ÏŠ·İ’è
+	// å¤‰æ›è¨­å®š
 	UTFConversionOptions options;
 	memset(&options, 0, sizeof(options));
 	options.ReplacementChar = mFallbackReplacementChar;
 
-	// BOM •t‚«‚Ìê‡‚Íæ‚èœ‚­ (ƒoƒbƒtƒ@k¬)
+	// BOM ä»˜ãã®å ´åˆã¯å–ã‚Šé™¤ã (ãƒãƒƒãƒ•ã‚¡ç¸®å°)
 	if (m_byteOrderMark) {
 		static byte_t bom[] = { 0xEF, 0xBB, 0xBF };
 		int r = memcmp(inBuffer, bom, 3);
@@ -551,7 +551,7 @@ void UTF8Encoding::UTF8Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t in
 		inBufferByteCount -= 3;
 	}
 	
-	// •ÏŠ·
+	// å¤‰æ›
 	UTFConversionResult result = UnicodeUtils::ConvertUTF8toUTF16(
 		(UnicodeUtils::UTF8*)inBuffer, 
 		inBufferByteCount,
@@ -560,7 +560,7 @@ void UTF8Encoding::UTF8Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t in
 		&options);
 	LN_THROW(result == UTFConversionResult_Success, EncodingFallbackException);
 
-	// o—Í
+	// å‡ºåŠ›
 	*outBytesUsed = options.ConvertedTargetLength * sizeof(UnicodeUtils::UTF16);
 	*outCharsUsed = options.CharCount;
 }
@@ -570,12 +570,12 @@ void UTF8Encoding::UTF8Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t in
 //-----------------------------------------------------------------------------
 void UTF8Encoding::UTF8Encoder::ConvertFromUTF16(const UTF16* inBuffer, size_t inBufferCharCount, byte_t* outBuffer, size_t outBufferByteCount, size_t* outBytesUsed, size_t* outCharsUsed)
 {
-	// •ÏŠ·İ’è
+	// å¤‰æ›è¨­å®š
 	UTFConversionOptions options;
 	memset(&options, 0, sizeof(options));
 	options.ReplacementChar = mFallbackReplacementChar;
 	
-	// •ÏŠ·
+	// å¤‰æ›
 	UTFConversionResult result = UnicodeUtils::ConvertUTF16toUTF8(
 		(UnicodeUtils::UTF16*)inBuffer, 
 		inBufferCharCount,
@@ -584,7 +584,7 @@ void UTF8Encoding::UTF8Encoder::ConvertFromUTF16(const UTF16* inBuffer, size_t i
 		&options);
 	LN_THROW(result == UTFConversionResult_Success, EncodingFallbackException);
 
-	// o—Í
+	// å‡ºåŠ›
 	*outBytesUsed = options.ConvertedTargetLength;
 	*outCharsUsed = options.CharCount;
 }
@@ -610,11 +610,11 @@ byte_t* UTF16Encoding::GetPreamble() const
 //-----------------------------------------------------------------------------
 void UTF16Encoding::UTF16Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t inBufferByteCount, UTF16* outBuffer, size_t outBufferCharCount, size_t* outBytesUsed, size_t* outCharsUsed)
 {
-	// UTF16 ‚©‚ç UTF16 ‚Ö‚Ì•ÏŠ·B‚»‚Ì‚Ü‚ÜƒRƒs[‚Å‚æ‚¢
+	// UTF16 ã‹ã‚‰ UTF16 ã¸ã®å¤‰æ›ã€‚ãã®ã¾ã¾ã‚³ãƒ”ãƒ¼ã§ã‚ˆã„
 	errno_t err = memcpy_s(outBuffer, outBufferCharCount * sizeof(UTF16), inBuffer, inBufferByteCount);
 	LN_THROW(err == 0, ArgumentException);
 
-	// •¶š”‚ÍƒJƒEƒ“ƒg‚·‚é
+	// æ–‡å­—æ•°ã¯ã‚«ã‚¦ãƒ³ãƒˆã™ã‚‹
 	int count;
 	UTFConversionResult r = UnicodeUtils::GetUTF16CharCount((UnicodeUtils::UTF16*)inBuffer, inBufferByteCount / sizeof(UnicodeUtils::UTF16), true, &count);
 	LN_THROW(r == UTFConversionResult_Success, EncodingFallbackException);
@@ -628,11 +628,11 @@ void UTF16Encoding::UTF16Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t 
 //-----------------------------------------------------------------------------
 void UTF16Encoding::UTF16Encoder::ConvertFromUTF16(const UTF16* inBuffer, size_t inBufferCharCount, byte_t* outBuffer, size_t outBufferByteCount, size_t* outBytesUsed, size_t* outCharsUsed)
 {
-	// UTF16 ‚©‚ç UTF16 ‚Ö‚Ì•ÏŠ·B‚»‚Ì‚Ü‚ÜƒRƒs[‚Å‚æ‚¢
+	// UTF16 ã‹ã‚‰ UTF16 ã¸ã®å¤‰æ›ã€‚ãã®ã¾ã¾ã‚³ãƒ”ãƒ¼ã§ã‚ˆã„
 	errno_t err = memcpy_s(outBuffer, outBufferByteCount, inBuffer, inBufferCharCount * sizeof(UTF16));
 	LN_THROW(err == 0, ArgumentException);
 
-	// •¶š”‚ÍƒJƒEƒ“ƒg‚·‚é
+	// æ–‡å­—æ•°ã¯ã‚«ã‚¦ãƒ³ãƒˆã™ã‚‹
 	int count;
 	UTFConversionResult r = UnicodeUtils::GetUTF16CharCount((UnicodeUtils::UTF16*)inBuffer, inBufferCharCount, true, &count);
 	LN_THROW(r == UTFConversionResult_Success, EncodingFallbackException);

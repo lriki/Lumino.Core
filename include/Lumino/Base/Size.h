@@ -1,34 +1,34 @@
-
+ï»¿
 #pragma once
 
 namespace Lumino
 {
 
 /**
-	@brief		2ŸŒ³ã‚ÌƒIƒuƒWƒFƒNƒgƒTƒCƒY‚ğ•\‚·ƒNƒ‰ƒX
+	@brief		2æ¬¡å…ƒä¸Šã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚µã‚¤ã‚ºã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
 */
 class Size
 {
 public:
 
-	int		Width;		///< X •ûŒü‚Ì‘å‚«‚³
-	int		Height;		///< Y •ûŒü‚Ì‘å‚«‚³
+	int		Width;		///< X æ–¹å‘ã®å¤§ãã•
+	int		Height;		///< Y æ–¹å‘ã®å¤§ãã•
 
 public:
 
-	/// ƒfƒtƒHƒ‹ƒgƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	/// ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	Size() { Set(0, 0); }
 
-	/// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	Size(int w, int h) { Set(w, h); }
 
-	/// Še—v‘f‚ğİ’è‚µ‚Ü‚·B
+	/// å„è¦ç´ ã‚’è¨­å®šã—ã¾ã™ã€‚
 	void Set(int w, int h) { Width = w; Height = h; }
 
-	/// —v‘f‚ª‚·‚×‚Ä 0 ‚©‚ğ”»’è‚µ‚Ü‚·B
+	/// è¦ç´ ãŒã™ã¹ã¦ 0 ã‹ã‚’åˆ¤å®šã—ã¾ã™ã€‚
 	bool IsZero() const { return (Width == 0 && Height == 0); }
 
-	/// ‚¢‚¸‚ê‚©‚Ì—v‘f‚ª 0 ‚©‚ğ”»’è‚µ‚Ü‚·B
+	/// ã„ãšã‚Œã‹ã®è¦ç´ ãŒ 0 ã‹ã‚’åˆ¤å®šã—ã¾ã™ã€‚
 	bool IsAnyZero() const { return (Width == 0 || Height == 0); }
 
 public:

@@ -1,32 +1,32 @@
-#pragma once
+ï»¿#pragma once
 
 #include "Stream.h"
 
 namespace Lumino
 {
 
-/// ƒtƒ@ƒCƒ‹‚ğŠJ‚­•û–@‚Ü‚½‚Íì¬‚·‚é•û–@
+/// ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ãæ–¹æ³•ã¾ãŸã¯ä½œæˆã™ã‚‹æ–¹æ³•
 enum FileMode
 {
-	FileMode_Create = 0,		///< V‚µ‚¢ƒtƒ@ƒCƒ‹‚ğì¬‚·‚éBŠù‚É‘¶İ‚·‚éê‡‚Íã‘‚«‚³‚ê‚é
-	FileMode_Open,				///< Šù‘¶‚Ìƒtƒ@ƒCƒ‹‚ğŠJ‚­
-	FileMode_Append,			///< ƒtƒ@ƒCƒ‹‚ğŠJ‚«Aƒtƒ@ƒCƒ‹‚Ì––”ö‚ğƒV[ƒN‚·‚éB‘¶İ‚µ‚È‚¢ê‡‚ÍV‚µ‚¢ƒtƒ@ƒCƒ‹‚ğì¬B
+	FileMode_Create = 0,		///< æ–°ã—ã„ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆã™ã‚‹ã€‚æ—¢ã«å­˜åœ¨ã™ã‚‹å ´åˆã¯ä¸Šæ›¸ãã•ã‚Œã‚‹
+	FileMode_Open,				///< æ—¢å­˜ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã
+	FileMode_Append,			///< ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ãã€ãƒ•ã‚¡ã‚¤ãƒ«ã®æœ«å°¾ã‚’ã‚·ãƒ¼ã‚¯ã™ã‚‹ã€‚å­˜åœ¨ã—ãªã„å ´åˆã¯æ–°ã—ã„ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆã€‚
 
 	FileMode_Max,
 };
 
-/// ƒtƒ@ƒCƒ‹‚ÉƒAƒNƒZƒX‚·‚é•û–@
+/// ãƒ•ã‚¡ã‚¤ãƒ«ã«ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹æ–¹æ³•
 enum FileAccess
 {
-	FileAccess_Read = 0,		///< “Ç‚İæ‚èƒAƒNƒZƒX
-	FileAccess_ReadWrite,		///< “Ç‚İæ‚è‹y‚Ñ‘‚«‚İƒAƒNƒZƒX
-	FileAccess_Write,			///< ‘‚«‚İƒAƒNƒZƒX
+	FileAccess_Read = 0,		///< èª­ã¿å–ã‚Šã‚¢ã‚¯ã‚»ã‚¹
+	FileAccess_ReadWrite,		///< èª­ã¿å–ã‚ŠåŠã³æ›¸ãè¾¼ã¿ã‚¢ã‚¯ã‚»ã‚¹
+	FileAccess_Write,			///< æ›¸ãè¾¼ã¿ã‚¢ã‚¯ã‚»ã‚¹
 
 	FileAccess_Max,
 };
 
 /**
-	@brief	ƒtƒ@ƒCƒ‹—pƒXƒgƒŠ[ƒ€
+	@brief	ãƒ•ã‚¡ã‚¤ãƒ«ç”¨ã‚¹ãƒˆãƒªãƒ¼ãƒ 
 */
 class FileStream
     : public Stream
@@ -35,10 +35,10 @@ public:
 	FileStream();
 
 	/**
-		@brief	ƒtƒ@ƒCƒ‹‚ğƒoƒCƒiƒŠƒ‚[ƒh‚ÅŠJ‚­
-		@param	filePath	: ƒtƒ@ƒCƒ‹–¼
-		@param	fileMode	: ƒtƒ@ƒCƒ‹‚ğŠJ‚­•û–@‚Ü‚½‚Íì¬‚·‚é•û–@
-		@param	fileAccess	: ƒtƒ@ƒCƒ‹‚ÉƒAƒNƒZƒX‚·‚é•û–@
+		@brief	ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ãƒã‚¤ãƒŠãƒªãƒ¢ãƒ¼ãƒ‰ã§é–‹ã
+		@param	filePath	: ãƒ•ã‚¡ã‚¤ãƒ«å
+		@param	fileMode	: ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ãæ–¹æ³•ã¾ãŸã¯ä½œæˆã™ã‚‹æ–¹æ³•
+		@param	fileAccess	: ãƒ•ã‚¡ã‚¤ãƒ«ã«ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹æ–¹æ³•
 	*/
 	FileStream(const TCHAR* filePath, FileMode fileMode, FileAccess fileAccess);
 
@@ -47,15 +47,15 @@ public:
 public:
 
 	/**
-		@brief	ƒtƒ@ƒCƒ‹‚ğƒoƒCƒiƒŠƒ‚[ƒh‚ÅŠJ‚­
-		@param	filePath	: ƒtƒ@ƒCƒ‹–¼
-		@param	fileMode	: ƒtƒ@ƒCƒ‹‚ğŠJ‚­•û–@‚Ü‚½‚Íì¬‚·‚é•û–@
-		@param	fileAccess	: ƒtƒ@ƒCƒ‹‚ÉƒAƒNƒZƒX‚·‚é•û–@
+		@brief	ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ãƒã‚¤ãƒŠãƒªãƒ¢ãƒ¼ãƒ‰ã§é–‹ã
+		@param	filePath	: ãƒ•ã‚¡ã‚¤ãƒ«å
+		@param	fileMode	: ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ãæ–¹æ³•ã¾ãŸã¯ä½œæˆã™ã‚‹æ–¹æ³•
+		@param	fileAccess	: ãƒ•ã‚¡ã‚¤ãƒ«ã«ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹æ–¹æ³•
 	*/
 	void Open(const TCHAR* filePath, FileMode fileMode, FileAccess fileAccess);
 
 	/**
-		@brief	ƒtƒ@ƒCƒ‹‚ğ•Â‚¶‚é
+		@brief	ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‰ã˜ã‚‹
 	*/
 	void Close();
 

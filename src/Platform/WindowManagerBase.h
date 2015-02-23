@@ -1,4 +1,4 @@
-
+﻿
 #pragma once
 
 #include "../../include/Lumino/Platform/PlatformManager.h"
@@ -11,23 +11,23 @@ class Window;
 
 /**
 	@note	[2015/2/8]
-			�Ȃ�₩���� PlatformManager �� WindowManager �𕪂�������ɂ����B
+			なんやかんやで PlatformManager と WindowManager を分ける方向にした。
 			
-			PlatformManager �ɑS���܂Ƃ߂�Ƃ���ƁA������p������ Win32Manager �Ƃ���
-			��邱�ƂɂȂ�A�E�B���h�E�쐬�⃁�b�Z�[�W���[�v�̓T�u�N���X�Œ�`����B
-			�v���b�g�t�H�[���̈Ⴂ���|�����[�t�B�Y���ŕ\������Ȃ炱�ꂪ���R�B
+			PlatformManager に全部まとめるとすると、それを継承した Win32Manager とかを
+			作ることになり、ウィンドウ作成やメッセージループはサブクラスで定義する。
+			プラットフォームの違いをポリモーフィズムで表現するならこれが自然。
 
-			�����A���̕��@���Ƃ���ɏ�̃��x���Ńv���b�g�t�H�[�����l������
-			new �����Ȃ���΂Ȃ�Ȃ��B(����̓t�@�N�g���֐��g���΂܂����Ƃ��Ȃ邪)
-			����ɁA�I���������f�X�g���N�^�ōs�����Ƃ��ł��Ȃ��B
-			�udelete ����O�ɂ͕K�� Finalize() �̂悤�ȏI���������Ă�ł��������ˁv�ɂȂ�B
+			ただ、この方法だとさらに上のレベルでプラットフォームを考慮した
+			new をしなければならない。(これはファクトリ関数使えばまぁ何とかなるが)
+			さらに、終了処理をデストラクタで行うことができない。
+			「delete する前には必ず Finalize() のような終了処理を呼んでくださいね」になる。
 
-			���ɁA�X���b�h�֐����牼�z�֐����Ăяo���Ă��鎞�A�f�X�g���N�^�ŃX���b�h�I���҂��Ȃ�Ă��Ƃ�����ƁA
-			pre call virtual function �Ƃ��ꌩ�킯�킩��Ȃ��G���[����������B
+			特に、スレッド関数から仮想関数を呼び出している時、デストラクタでスレッド終了待ちなんてことをすると、
+			pre call virtual function とか一見わけわからないエラーが発生する。
 
-			LightNote �� Lumino �Ŋe���W���[�����ו������Č��J���邱�Ƃɂ����ȏ�A
-			PlatformManager �͒P�̂Ŏg�����Ƃ�����B(���ɁA�����_�Ŏd���Ŏg�����Ă�����)
-			�O���Ɍ��J����ȏ�A�\�Ȍ���V���v���ł���ׂ��B
+			LightNote → Lumino で各モジュールを細分化して公開することにした以上、
+			PlatformManager は単体で使うことがある。(既に、現時点で仕事で使うあてがある)
+			外部に公開する以上、可能な限りシンプルであるべき。
 */
 class WindowManagerBase
 	: public RefObject

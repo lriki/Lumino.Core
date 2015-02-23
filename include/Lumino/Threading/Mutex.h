@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 
 #include "../Base/NonCopyable.h"
@@ -11,24 +11,24 @@ namespace Threading
 	@page	Doc_Threading
 		- @ref Doc_Mutex_1
 
-	@page	Doc_Mutex_1	’Pƒ‚È”r‘¼§Œä‚ğs‚¤
+	@page	Doc_Mutex_1	å˜ç´”ãªæ’ä»–åˆ¶å¾¡ã‚’è¡Œã†
 
 	@code
 		Mutex	m_Mutex;
-		EEE
+		ãƒ»ãƒ»ãƒ»
 		m_Mutex.Lock();
-		// ƒNƒŠƒeƒBƒJƒ‹ƒZƒNƒVƒ‡ƒ“
+		// ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ã‚»ã‚¯ã‚·ãƒ§ãƒ³
 		m_Mutex.Unlock();
 	@endcode
 */
 
 /**
-	@brief	’Pƒ‚È”r‘¼§Œä‚ğs‚¤ƒ~ƒ…[ƒeƒbƒNƒX
+	@brief	å˜ç´”ãªæ’ä»–åˆ¶å¾¡ã‚’è¡Œã†ãƒŸãƒ¥ãƒ¼ãƒ†ãƒƒã‚¯ã‚¹
 	@code
 			Mutex	m_Mutex;
-			EEE
+			ãƒ»ãƒ»ãƒ»
 			m_Mutex.Lock();
-			// ƒNƒŠƒeƒBƒJƒ‹ƒZƒNƒVƒ‡ƒ“
+			// ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ã‚»ã‚¯ã‚·ãƒ§ãƒ³
 			m_Mutex.Unlock();
 	@endcode
  */
@@ -41,10 +41,10 @@ public:
 
 public:
 	
-	/// ƒƒbƒN
+	/// ãƒ­ãƒƒã‚¯
     void Lock();
 
-	/// ƒAƒ“ƒƒbƒN
+	/// ã‚¢ãƒ³ãƒ­ãƒƒã‚¯
     void Unlock();
 
 private:
@@ -56,15 +56,15 @@ private:
 };
 
 /**
-	@brief	ƒXƒR[ƒv“à‚Åƒ~ƒ…[ƒeƒbƒNƒX‚ğƒƒbƒN‚·‚é
+	@brief	ã‚¹ã‚³ãƒ¼ãƒ—å†…ã§ãƒŸãƒ¥ãƒ¼ãƒ†ãƒƒã‚¯ã‚¹ã‚’ãƒ­ãƒƒã‚¯ã™ã‚‹
 	@code
 			Mutex	m_Mutex;
-			EEE
+			ãƒ»ãƒ»ãƒ»
 			try {
 				ScopedLock lock(m_Mutex);
-				// ƒNƒŠƒeƒBƒJƒ‹ƒZƒNƒVƒ‡ƒ““à‚Å return ‚â throw ‚µ‚Ä‚à
+				// ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ã‚»ã‚¯ã‚·ãƒ§ãƒ³å†…ã§ return ã‚„ throw ã—ã¦ã‚‚
 
-				// ƒXƒR[ƒvI’[‚Å Unlock ‚³‚ê‚é
+				// ã‚¹ã‚³ãƒ¼ãƒ—çµ‚ç«¯ã§ Unlock ã•ã‚Œã‚‹
 
 				throw 0;
 			}

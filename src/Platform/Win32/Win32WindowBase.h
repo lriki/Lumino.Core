@@ -1,4 +1,4 @@
-
+﻿
 #pragma once
 
 #include "../../../include/Lumino/Platform/Window.h"
@@ -25,15 +25,15 @@ public:
 	virtual bool IsActive() const { return mIsActive; }
 
 public:
-	/// ���b�Z�[�W�����̃x�[�X
-	///		���̏����̓��C���E�B���h�E�̑��A���[�U�[�E�B���h�E�̃z�X�g�N���X�ł��g�p����B
-	///		�z�X�g�̏ꍇ�A���C�u�����̃��[�U�[�����ڂ��̊֐����Ăяo���Awindows ���b�Z�[�W�����C�u�����ɒm�点��K�v������B
-	///		�z�X�g�̏ꍇ�A���b�Z�[�W���[�v����� DefWndProc �̓��[�U�[���ŌĂԂ��ƂɂȂ�̂ł��̒��ł͍s��Ȃ��B����� handled �Ń��b�Z�[�W�������������Ƃ�`����B
+	/// メッセージ処理のベース
+	///		この処理はメインウィンドウの他、ユーザーウィンドウのホストクラスでも使用する。
+	///		ホストの場合、ライブラリのユーザーが直接この関数を呼び出し、windows メッセージをライブラリに知らせる必要がある。
+	///		ホストの場合、メッセージループおよび DefWndProc はユーザー側で呼ぶことになるのでこの中では行わない。代わりに handled でメッセージを処理したことを伝える。
 	LRESULT WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam, bool* handled);
 
 	bool NortifyEvent(const EventArgs& e);
 
-	/// �E�B���h�E�n���h���̎擾
+	/// ウィンドウハンドルの取得
 	virtual HWND GetWindowHandle() = 0;
 
 public:

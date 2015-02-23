@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 #include "../Base/NonCopyable.h"
 #include "../Base/RefObject.h"
@@ -16,9 +16,9 @@ typedef unsigned short UTF16;
 
 enum EncodingType
 {
-	EncodingType_Unknown = 0,	///< •s–¾‚È•¶šƒR[ƒh (”»•Ê¸”sB‚Ü‚½‚ÍƒoƒCƒiƒŠƒtƒ@ƒCƒ‹)
+	EncodingType_Unknown = 0,	///< ä¸æ˜ãªæ–‡å­—ã‚³ãƒ¼ãƒ‰ (åˆ¤åˆ¥å¤±æ•—ã€‚ã¾ãŸã¯ãƒã‚¤ãƒŠãƒªãƒ•ã‚¡ã‚¤ãƒ«)
 
-	EncodingType_ASCII,			///< ASCII (Šg’£ƒAƒXƒL[‚ÍŠÜ‚Ü‚È‚¢ http://www.asciitable.com/)
+	EncodingType_ASCII,			///< ASCII (æ‹¡å¼µã‚¢ã‚¹ã‚­ãƒ¼ã¯å«ã¾ãªã„ http://www.asciitable.com/)
 
 	EncodingType_UTF8,
 	EncodingType_UTF8N,
@@ -31,24 +31,24 @@ enum EncodingType
 	//EncodingType_UTF32LN,
 	//EncodingType_UTF32BN,
 
-	EncodingType_SJIS,		///< “ú–{Œê (ƒVƒtƒg JIS) -- cp932(MS932) Windows-31J ¦MSÀ‘•
-	EncodingType_GB2312,	///< ŠÈ‘Ìš’†‘Œê (GB2312) -- cp936(MS936)
-	EncodingType_EUCKR,		///< ŠØ‘Œê (EUC-KR)(=KSX1001) -- cp949(MS949)
-	EncodingType_BIG5,		///< ”É‘Ìš’†‘Œê (Big5) -- cp950(MS950)
+	EncodingType_SJIS,		///< æ—¥æœ¬èª (ã‚·ãƒ•ãƒˆ JIS) -- cp932(MS932) Windows-31J â€»MSå®Ÿè£…
+	EncodingType_GB2312,	///< ç°¡ä½“å­—ä¸­å›½èª (GB2312) -- cp936(MS936)
+	EncodingType_EUCKR,		///< éŸ“å›½èª (EUC-KR)(=KSX1001) -- cp949(MS949)
+	EncodingType_BIG5,		///< ç¹ä½“å­—ä¸­å›½èª (Big5) -- cp950(MS950)
 
 	EncodingType_Max,		// terminator
 };
 
-/// •¶šƒR[ƒh•ÏŠ·‚ÌŒ‹‰Ê‚ğó‚¯æ‚é‚½‚ß‚Ì\‘¢‘Ì
+/// æ–‡å­—ã‚³ãƒ¼ãƒ‰å¤‰æ›ã®çµæœã‚’å—ã‘å–ã‚‹ãŸã‚ã®æ§‹é€ ä½“
 struct EncodingConversionResult
 {
-	size_t	BytesUsed;			///< •ÏŠ·Œã‚Ì—LŒøƒoƒCƒg”
-	size_t	CharsUsed;			///< •ÏŠ·Œã‚Ì—LŒø•¶š”(ƒ}ƒ‹ƒ`ƒoƒCƒg•¶š‚ğl—¶‚µ‚½•¶š”)
-	bool	UsedDefaultChar;	///< •ÏŠ·•s‰Â•¶š‚ğƒfƒtƒHƒ‹ƒg•¶š('?') ‚É•ÏŠ·‚µ‚½‚©‚Ç‚¤‚©
+	size_t	BytesUsed;			///< å¤‰æ›å¾Œã®æœ‰åŠ¹ãƒã‚¤ãƒˆæ•°
+	size_t	CharsUsed;			///< å¤‰æ›å¾Œã®æœ‰åŠ¹æ–‡å­—æ•°(ãƒãƒ«ãƒãƒã‚¤ãƒˆæ–‡å­—ã‚’è€ƒæ…®ã—ãŸæ–‡å­—æ•°)
+	bool	UsedDefaultChar;	///< å¤‰æ›ä¸å¯æ–‡å­—ã‚’ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆæ–‡å­—('?') ã«å¤‰æ›ã—ãŸã‹ã©ã†ã‹
 };
 
 /**
-	@brief		•¶šƒGƒ“ƒR[ƒfƒBƒ“ƒO
+	@brief		æ–‡å­—ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°
 */
 class Encoding : public RefObject
 {
@@ -59,58 +59,58 @@ public:
 public:
 
 	/**
-		@brief		ŠÂ‹«ˆË‘¶‚Ìƒ}ƒ‹ƒ`ƒoƒCƒg•¶šƒR[ƒh‚ÌƒGƒ“ƒR[ƒfƒBƒ“ƒO‚ğæ“¾‚·‚éB
-		@details	•Ô‚³‚ê‚éƒ|ƒCƒ“ƒ^‚ÍƒOƒ[ƒoƒ‹‚ÈƒCƒ“ƒXƒ^ƒ“ƒX‚Å‚·B‚±‚Ìƒ|ƒCƒ“ƒ^‚Í‰ğ•ú‚µ‚È‚¢‚Å‚­‚¾‚³‚¢B
+		@brief		ç’°å¢ƒä¾å­˜ã®ãƒãƒ«ãƒãƒã‚¤ãƒˆæ–‡å­—ã‚³ãƒ¼ãƒ‰ã®ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°ã‚’å–å¾—ã™ã‚‹ã€‚
+		@details	è¿”ã•ã‚Œã‚‹ãƒã‚¤ãƒ³ã‚¿ã¯ã‚°ãƒ­ãƒ¼ãƒãƒ«ãªã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã§ã™ã€‚ã“ã®ãƒã‚¤ãƒ³ã‚¿ã¯è§£æ”¾ã—ãªã„ã§ãã ã•ã„ã€‚
 	*/
 	static Encoding* GetSystemMultiByteEncoding();
 
 	/**
-		@brief		ƒƒCƒh•¶š‚ÌƒGƒ“ƒR[ƒfƒBƒ“ƒO‚ğæ“¾‚·‚éB
-		@details	•Ô‚³‚ê‚éƒ|ƒCƒ“ƒ^‚ÍƒOƒ[ƒoƒ‹‚ÈƒCƒ“ƒXƒ^ƒ“ƒX‚Å‚·B‚±‚Ìƒ|ƒCƒ“ƒ^‚Í‰ğ•ú‚µ‚È‚¢‚Å‚­‚¾‚³‚¢B
+		@brief		ãƒ¯ã‚¤ãƒ‰æ–‡å­—ã®ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°ã‚’å–å¾—ã™ã‚‹ã€‚
+		@details	è¿”ã•ã‚Œã‚‹ãƒã‚¤ãƒ³ã‚¿ã¯ã‚°ãƒ­ãƒ¼ãƒãƒ«ãªã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã§ã™ã€‚ã“ã®ãƒã‚¤ãƒ³ã‚¿ã¯è§£æ”¾ã—ãªã„ã§ãã ã•ã„ã€‚
 	*/
 	static Encoding* GetWideCharEncoding();
 
 	/**
-		@brief		TCHAR Œ^•¶š‚ÌƒGƒ“ƒR[ƒfƒBƒ“ƒO‚ğæ“¾‚·‚éB
-		@details	•Ô‚³‚ê‚éƒ|ƒCƒ“ƒ^‚ÍƒOƒ[ƒoƒ‹‚ÈƒCƒ“ƒXƒ^ƒ“ƒX‚Å‚·B‚±‚Ìƒ|ƒCƒ“ƒ^‚Í‰ğ•ú‚µ‚È‚¢‚Å‚­‚¾‚³‚¢B
+		@brief		TCHAR å‹æ–‡å­—ã®ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°ã‚’å–å¾—ã™ã‚‹ã€‚
+		@details	è¿”ã•ã‚Œã‚‹ãƒã‚¤ãƒ³ã‚¿ã¯ã‚°ãƒ­ãƒ¼ãƒãƒ«ãªã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã§ã™ã€‚ã“ã®ãƒã‚¤ãƒ³ã‚¿ã¯è§£æ”¾ã—ãªã„ã§ãã ã•ã„ã€‚
 	*/
 	static Encoding* GetTCharEncoding();
 
 	/**
-		@brief		UTF-8 ƒGƒ“ƒR[ƒfƒBƒ“ƒO‚ğæ“¾‚·‚éB
-		@details	•Ô‚³‚ê‚éƒ|ƒCƒ“ƒ^‚ÍƒOƒ[ƒoƒ‹‚ÈƒCƒ“ƒXƒ^ƒ“ƒX‚Å‚·B‚±‚Ìƒ|ƒCƒ“ƒ^‚Í‰ğ•ú‚µ‚È‚¢‚Å‚­‚¾‚³‚¢B
+		@brief		UTF-8 ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°ã‚’å–å¾—ã™ã‚‹ã€‚
+		@details	è¿”ã•ã‚Œã‚‹ãƒã‚¤ãƒ³ã‚¿ã¯ã‚°ãƒ­ãƒ¼ãƒãƒ«ãªã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã§ã™ã€‚ã“ã®ãƒã‚¤ãƒ³ã‚¿ã¯è§£æ”¾ã—ãªã„ã§ãã ã•ã„ã€‚
 	*/
 	static Encoding* GetUTF8Encoding();
 
 	/**
-		@brief		UTF-16 (Little) ƒGƒ“ƒR[ƒfƒBƒ“ƒO‚ğæ“¾‚·‚éB
-		@details	•Ô‚³‚ê‚éƒ|ƒCƒ“ƒ^‚ÍƒOƒ[ƒoƒ‹‚ÈƒCƒ“ƒXƒ^ƒ“ƒX‚Å‚·B‚±‚Ìƒ|ƒCƒ“ƒ^‚Í‰ğ•ú‚µ‚È‚¢‚Å‚­‚¾‚³‚¢B
+		@brief		UTF-16 (Little) ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°ã‚’å–å¾—ã™ã‚‹ã€‚
+		@details	è¿”ã•ã‚Œã‚‹ãƒã‚¤ãƒ³ã‚¿ã¯ã‚°ãƒ­ãƒ¼ãƒãƒ«ãªã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã§ã™ã€‚ã“ã®ãƒã‚¤ãƒ³ã‚¿ã¯è§£æ”¾ã—ãªã„ã§ãã ã•ã„ã€‚
 	*/
 	static Encoding* GetUTF16Encoding();
 
 	/**
-		@brief		í—Ş‚ğw’è‚µ‚ÄƒGƒ“ƒR[ƒfƒBƒ“ƒO‚ğæ“¾‚µ‚Ü‚·B
-		@details	•Ô‚³‚ê‚éƒ|ƒCƒ“ƒ^‚ÍƒOƒ[ƒoƒ‹‚ÈƒCƒ“ƒXƒ^ƒ“ƒX‚Å‚·B‚±‚Ìƒ|ƒCƒ“ƒ^‚Í‰ğ•ú‚µ‚È‚¢‚Å‚­‚¾‚³‚¢B
+		@brief		ç¨®é¡ã‚’æŒ‡å®šã—ã¦ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°ã‚’å–å¾—ã—ã¾ã™ã€‚
+		@details	è¿”ã•ã‚Œã‚‹ãƒã‚¤ãƒ³ã‚¿ã¯ã‚°ãƒ­ãƒ¼ãƒãƒ«ãªã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã§ã™ã€‚ã“ã®ãƒã‚¤ãƒ³ã‚¿ã¯è§£æ”¾ã—ãªã„ã§ãã ã•ã„ã€‚
 	*/
 	static Encoding* GetEncoding(EncodingType type);
 
 	/**
-		@brief		ƒeƒ“ƒvƒŒ[ƒgˆø”‚É‚æ‚Á‚ÄƒGƒ“ƒR[ƒfƒBƒ“ƒO‚ğæ“¾‚µ‚Ü‚·B
-		@details	w’è‚Å‚«‚éŒ^‚Í char ‚Ü‚½‚Í wchar_t ‚Å‚·B
-					‚»‚ê‚¼‚ê GetSystemMultiByteEncoding()AGetWideCharEncoding() ‚ğ•Ô‚µ‚Ü‚·B
+		@brief		ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆå¼•æ•°ã«ã‚ˆã£ã¦ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°ã‚’å–å¾—ã—ã¾ã™ã€‚
+		@details	æŒ‡å®šã§ãã‚‹å‹ã¯ char ã¾ãŸã¯ wchar_t ã§ã™ã€‚
+					ãã‚Œãã‚Œ GetSystemMultiByteEncoding()ã€GetWideCharEncoding() ã‚’è¿”ã—ã¾ã™ã€‚
 	*/
 	template<typename TChar>
 	static Encoding* GetEncodingTemplate();
 
 	/**
-		@brief		•¶šƒR[ƒh‚ğ•ÏŠ·‚·‚é (•s³ƒV[ƒPƒ“ƒX‚ª‚ ‚Á‚½‚ç—áŠO)
-		@param[in]	src				: •ÏŠ·Œ³
-		@param[in]	srcByteCount	: •ÏŠ·Œ³‚ÌƒoƒCƒg”
-		@param[in]	srcEncoding		: •ÏŠ·Œ³‚ÌƒGƒ“ƒR[ƒfƒBƒ“ƒO
-		@param[in]	targetEncoding	: •ÏŠ·æ‚ÌƒGƒ“ƒR[ƒfƒBƒ“ƒO
-		@param[out]	result			: •ÏŠ·‚ÌŒ‹‰Êî•ñ
-		@return		\0I’[•¶š‚Í•t‰Á‚³‚ê‚Ü‚¹‚ñBGetSize() ‚É‚æ‚èg—pƒoƒCƒg”‚ğŠm”F‚Å‚«‚Ü‚·B
-					g—pŒãARelease() ‚ÅŠJ•ú‚·‚é•K—v‚ª‚ ‚è‚Ü‚·B
+		@brief		æ–‡å­—ã‚³ãƒ¼ãƒ‰ã‚’å¤‰æ›ã™ã‚‹ (ä¸æ­£ã‚·ãƒ¼ã‚±ãƒ³ã‚¹ãŒã‚ã£ãŸã‚‰ä¾‹å¤–)
+		@param[in]	src				: å¤‰æ›å…ƒ
+		@param[in]	srcByteCount	: å¤‰æ›å…ƒã®ãƒã‚¤ãƒˆæ•°
+		@param[in]	srcEncoding		: å¤‰æ›å…ƒã®ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°
+		@param[in]	targetEncoding	: å¤‰æ›å…ˆã®ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°
+		@param[out]	result			: å¤‰æ›ã®çµæœæƒ…å ±
+		@return		\0çµ‚ç«¯æ–‡å­—ã¯ä»˜åŠ ã•ã‚Œã¾ã›ã‚“ã€‚GetSize() ã«ã‚ˆã‚Šä½¿ç”¨ãƒã‚¤ãƒˆæ•°ã‚’ç¢ºèªã§ãã¾ã™ã€‚
+					ä½¿ç”¨å¾Œã€Release() ã§é–‹æ”¾ã™ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚
 	*/
 	static RefBuffer* Convert(
 		const void* src, size_t srcByteCount, const Encoding* srcEncoding,
@@ -118,15 +118,15 @@ public:
 		EncodingConversionResult* result);
 
 	/**
-		@brief		Encoder ‚Æ Decoder ‚ğw’è‚µ‚Ä•¶šƒR[ƒh‚ğ•ÏŠ·‚·‚é (•s³ƒV[ƒPƒ“ƒX‚ª‚ ‚Á‚½‚ç—áŠO)
-		@param[in]	src				: •ÏŠ·Œ³
-		@param[in]	srcByteCount	: •ÏŠ·Œ³‚ÌƒoƒCƒg”
-		@param[in]	decoder			: src ‚ğ’†ŠÔƒtƒH[ƒ}ƒbƒg‚É•ÏŠ·‚·‚éƒfƒR[ƒ_
-		@param[in]	encoder			: ’†ŠÔƒtƒH[ƒ}ƒbƒg‚ğƒ^[ƒQƒbƒg‚É•ÏŠ·‚·‚éƒGƒ“ƒR[ƒ_
-		@param[out]	result			: •ÏŠ·‚ÌŒ‹‰Êî•ñ
-		@details	w’è‚³‚ê‚½ Encoder ‚Æ Decoder ‚ÍA•ÏŠ·ƒXƒe[ƒ^ƒX‚ğ•Û‚Å‚«‚éê‡‚Í•Û‚µ‚Ü‚·B
-		@return		\0I’[•¶š‚Í•t‰Á‚³‚ê‚Ü‚¹‚ñBGetSize() ‚É‚æ‚èg—pƒoƒCƒg”‚ğŠm”F‚Å‚«‚Ü‚·B
-					g—pŒãARelease() ‚ÅŠJ•ú‚·‚é•K—v‚ª‚ ‚è‚Ü‚·B
+		@brief		Encoder ã¨ Decoder ã‚’æŒ‡å®šã—ã¦æ–‡å­—ã‚³ãƒ¼ãƒ‰ã‚’å¤‰æ›ã™ã‚‹ (ä¸æ­£ã‚·ãƒ¼ã‚±ãƒ³ã‚¹ãŒã‚ã£ãŸã‚‰ä¾‹å¤–)
+		@param[in]	src				: å¤‰æ›å…ƒ
+		@param[in]	srcByteCount	: å¤‰æ›å…ƒã®ãƒã‚¤ãƒˆæ•°
+		@param[in]	decoder			: src ã‚’ä¸­é–“ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã«å¤‰æ›ã™ã‚‹ãƒ‡ã‚³ãƒ¼ãƒ€
+		@param[in]	encoder			: ä¸­é–“ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã‚’ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã«å¤‰æ›ã™ã‚‹ã‚¨ãƒ³ã‚³ãƒ¼ãƒ€
+		@param[out]	result			: å¤‰æ›ã®çµæœæƒ…å ±
+		@details	æŒ‡å®šã•ã‚ŒãŸ Encoder ã¨ Decoder ã¯ã€å¤‰æ›ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚’ä¿æŒã§ãã‚‹å ´åˆã¯ä¿æŒã—ã¾ã™ã€‚
+		@return		\0çµ‚ç«¯æ–‡å­—ã¯ä»˜åŠ ã•ã‚Œã¾ã›ã‚“ã€‚GetSize() ã«ã‚ˆã‚Šä½¿ç”¨ãƒã‚¤ãƒˆæ•°ã‚’ç¢ºèªã§ãã¾ã™ã€‚
+					ä½¿ç”¨å¾Œã€Release() ã§é–‹æ”¾ã™ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚
 	*/
 	static RefBuffer* Convert(
 		const void* src, size_t srcByteCount, Decoder* decoder,
@@ -136,38 +136,38 @@ public:
 public:
 
 	/**
-		@brief		1 •¶š‚ÌÅ¬ƒoƒCƒg”‚ğæ“¾‚·‚é
+		@brief		1 æ–‡å­—ã®æœ€å°ãƒã‚¤ãƒˆæ•°ã‚’å–å¾—ã™ã‚‹
 	*/
 	virtual int GetMinByteCount() const = 0;
 
 	/**
-		@brief		1 •¶š‚ÌÅ‘åƒoƒCƒg”‚ğæ“¾‚·‚é
+		@brief		1 æ–‡å­—ã®æœ€å¤§ãƒã‚¤ãƒˆæ•°ã‚’å–å¾—ã™ã‚‹
 	*/
 	virtual int GetMaxByteCount() const = 0;
 	
 	/**
-		@brief		ƒfƒR[ƒh‚Ü‚½‚ÍƒGƒ“ƒR[ƒhæ‚Éƒ}ƒbƒsƒ“ƒO‚Å‚«‚È‚¢•¶š‚ªŒ©‚Â‚©‚Á‚½‚É’uŠ·‚·‚é•¶š‚Ìİ’è
+		@brief		ãƒ‡ã‚³ãƒ¼ãƒ‰ã¾ãŸã¯ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰å…ˆã«ãƒãƒƒãƒ”ãƒ³ã‚°ã§ããªã„æ–‡å­—ãŒè¦‹ã¤ã‹ã£ãŸæ™‚ã«ç½®æ›ã™ã‚‹æ–‡å­—ã®è¨­å®š
 	*/
 	virtual void SetFallbackReplacementChar(uint32_t ch) { mFallbackReplacementChar = ch; }
 
 	/**
-		@brief		ƒfƒR[ƒh‚Ü‚½‚ÍƒGƒ“ƒR[ƒhæ‚Éƒ}ƒbƒsƒ“ƒO‚Å‚«‚È‚¢•¶š‚ªŒ©‚Â‚©‚Á‚½‚É’uŠ·‚·‚é•¶š‚Ìæ“¾
+		@brief		ãƒ‡ã‚³ãƒ¼ãƒ‰ã¾ãŸã¯ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰å…ˆã«ãƒãƒƒãƒ”ãƒ³ã‚°ã§ããªã„æ–‡å­—ãŒè¦‹ã¤ã‹ã£ãŸæ™‚ã«ç½®æ›ã™ã‚‹æ–‡å­—ã®å–å¾—
 	*/
 	virtual uint32_t GetFallbackReplacementChar() { return mFallbackReplacementChar; }
 
 	/**
-		@brief		ƒoƒCƒgƒV[ƒPƒ“ƒX‚ğ“à•”•¶š—ñ‚Ö•ÏŠ·‚·‚éƒfƒR[ƒ_‚ğì¬‚·‚é
+		@brief		ãƒã‚¤ãƒˆã‚·ãƒ¼ã‚±ãƒ³ã‚¹ã‚’å†…éƒ¨æ–‡å­—åˆ—ã¸å¤‰æ›ã™ã‚‹ãƒ‡ã‚³ãƒ¼ãƒ€ã‚’ä½œæˆã™ã‚‹
 	*/
 	virtual Decoder* CreateDecoder() const = 0;
 
 	/**
-		@brief		“à•”•¶š—ñ‚ğƒoƒCƒgƒV[ƒPƒ“ƒX‚Ö•ÏŠ·‚·‚éƒGƒ“ƒR[ƒ_‚ğì¬‚·‚é
+		@brief		å†…éƒ¨æ–‡å­—åˆ—ã‚’ãƒã‚¤ãƒˆã‚·ãƒ¼ã‚±ãƒ³ã‚¹ã¸å¤‰æ›ã™ã‚‹ã‚¨ãƒ³ã‚³ãƒ¼ãƒ€ã‚’ä½œæˆã™ã‚‹
 	*/
 	virtual Encoder* CreateEncoder() const = 0;
 
 	/**
-		@brief		‚±‚ÌƒGƒ“ƒR[ƒh‚ğ¯•Ê‚·‚é‚½‚ß‚Ì‘O•¶•¶š—ñ (BOM) ‚ğæ“¾‚·‚é
-		@return		NULL ‚ÅI‚í‚éƒoƒCƒg—ñBBOM ‚ğ‚½‚È‚¢ƒGƒ“ƒR[ƒh‚Ìê‡‚Í NULL
+		@brief		ã“ã®ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰ã‚’è­˜åˆ¥ã™ã‚‹ãŸã‚ã®å‰æ–‡æ–‡å­—åˆ— (BOM) ã‚’å–å¾—ã™ã‚‹
+		@return		NULL ã§çµ‚ã‚ã‚‹ãƒã‚¤ãƒˆåˆ—ã€‚BOM ã‚’æŒãŸãªã„ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰ã®å ´åˆã¯ NULL
 	*/
 	virtual byte_t* GetPreamble() const = 0;
 
@@ -179,22 +179,22 @@ protected:
 
 
 /*===============================================================================
-	ˆÈ‰º‚Í“à•”—pƒNƒ‰ƒXBV‚µ‚¢•¶šƒR[ƒh‚É‘Î‰‚·‚éê‡‚ÍŠg’£‚·‚é•K—v‚ª‚ ‚é‚ªA
-	Šî–{“I‚É‚ÍˆÓ¯‚µ‚È‚­‚ÄOKB
+	ä»¥ä¸‹ã¯å†…éƒ¨ç”¨ã‚¯ãƒ©ã‚¹ã€‚æ–°ã—ã„æ–‡å­—ã‚³ãƒ¼ãƒ‰ã«å¯¾å¿œã™ã‚‹å ´åˆã¯æ‹¡å¼µã™ã‚‹å¿…è¦ãŒã‚ã‚‹ãŒã€
+	åŸºæœ¬çš„ã«ã¯æ„è­˜ã—ãªãã¦OKã€‚
 ===============================================================================*/
 
 /**
-	@brief		ƒGƒ“ƒR[ƒhÏ‚İƒoƒCƒgƒV[ƒPƒ“ƒX‚©‚ç“à•”•¶šƒR[ƒh (UTF16) ‚Ö‚Ì•ÏŠ·‚ğs‚¤ƒNƒ‰ƒX
-	@details	Decoder ‚Í1‚Â‚Ì•¶š—ñƒXƒgƒŠ[ƒ€‚Ì•ÏŠ·’†A”CˆÓ‚Ì‰ñ” ConvertToUTF16() ‚ğŒÄ‚Ño‚·‚±‚Æ‚ª‚Å‚«‚Ü‚·B
-				‚»‚ÌŠÔA•ÏŠ·ƒXƒe[ƒ^ƒX‚ğ•Û‘¶‚µ‚Ü‚·B
-				‚Â‚Ü‚èAƒoƒbƒtƒ@ƒŠƒ“ƒOIO“™‚Å’·‘å‚È•¶Í‚ğ•¡”‚Ìƒƒ‚ƒŠƒoƒbƒtƒ@‚É•ªŠ„‚µ‚Ä“Ç‚İæ‚éê‡‚ÉA
-				ƒoƒbƒtƒ@‚Ì‹«ŠE‚Åƒ}ƒ‹ƒ`ƒoƒCƒg•¶š‚ª•ª‚©‚ê‚Ä‚µ‚Ü‚Á‚Ä‚àAŒp‘±‚µ‚Ä•ÏŠ·‚ğs‚¤‚±‚Æ‚ª‚Å‚«‚Ü‚·B
+	@brief		ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰æ¸ˆã¿ãƒã‚¤ãƒˆã‚·ãƒ¼ã‚±ãƒ³ã‚¹ã‹ã‚‰å†…éƒ¨æ–‡å­—ã‚³ãƒ¼ãƒ‰ (UTF16) ã¸ã®å¤‰æ›ã‚’è¡Œã†ã‚¯ãƒ©ã‚¹
+	@details	Decoder ã¯1ã¤ã®æ–‡å­—åˆ—ã‚¹ãƒˆãƒªãƒ¼ãƒ ã®å¤‰æ›ä¸­ã€ä»»æ„ã®å›æ•° ConvertToUTF16() ã‚’å‘¼ã³å‡ºã™ã“ã¨ãŒã§ãã¾ã™ã€‚
+				ãã®é–“ã€å¤‰æ›ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚’ä¿å­˜ã—ã¾ã™ã€‚
+				ã¤ã¾ã‚Šã€ãƒãƒƒãƒ•ã‚¡ãƒªãƒ³ã‚°IOç­‰ã§é•·å¤§ãªæ–‡ç« ã‚’è¤‡æ•°ã®ãƒ¡ãƒ¢ãƒªãƒãƒƒãƒ•ã‚¡ã«åˆ†å‰²ã—ã¦èª­ã¿å–ã‚‹å ´åˆã«ã€
+				ãƒãƒƒãƒ•ã‚¡ã®å¢ƒç•Œã§ãƒãƒ«ãƒãƒã‚¤ãƒˆæ–‡å­—ãŒåˆ†ã‹ã‚Œã¦ã—ã¾ã£ã¦ã‚‚ã€ç¶™ç¶šã—ã¦å¤‰æ›ã‚’è¡Œã†ã“ã¨ãŒã§ãã¾ã™ã€‚
 
-				‚½‚¾‚µA‚±‚ÌƒXƒe[ƒ^ƒX•Û‘¶‚Í CanRemain() ‚ª true ‚ğ•Ô‚·ê‡‚Ì‚İg—p‰Â”\‚Å‚·B
-				false ‚ğ•Ô‚·ê‡‚Í‚ ‚ç‚©‚¶‚ß‘S‚Ä‚Ìƒ\[ƒX•¶š—ñ‚ğ1‚Â‚Ì˜A‘±‚µ‚½ƒƒ‚ƒŠƒoƒbƒtƒ@‚É“Ç‚İ‚İA
-				ConvertToUTF16() ‚É“n‚·•K—v‚ª‚ ‚è‚Ü‚·B
+				ãŸã ã—ã€ã“ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ä¿å­˜ã¯ CanRemain() ãŒ true ã‚’è¿”ã™å ´åˆã®ã¿ä½¿ç”¨å¯èƒ½ã§ã™ã€‚
+				false ã‚’è¿”ã™å ´åˆã¯ã‚ã‚‰ã‹ã˜ã‚å…¨ã¦ã®ã‚½ãƒ¼ã‚¹æ–‡å­—åˆ—ã‚’1ã¤ã®é€£ç¶šã—ãŸãƒ¡ãƒ¢ãƒªãƒãƒƒãƒ•ã‚¡ã«èª­ã¿è¾¼ã¿ã€
+				ConvertToUTF16() ã«æ¸¡ã™å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚
 
-				QlF.NET Decoder.Convert()
+				å‚è€ƒï¼š.NET Decoder.Convert()
 				http://msdn.microsoft.com/ja-jp/library/twte1yfs(v=vs.110).aspx
 */
 class Decoder : public RefObject
@@ -206,53 +206,53 @@ public:
 public:
 
 	/**
-		@brief		1 •¶š‚ÌÅ¬ƒoƒCƒg”‚ğæ“¾‚·‚é
+		@brief		1 æ–‡å­—ã®æœ€å°ãƒã‚¤ãƒˆæ•°ã‚’å–å¾—ã™ã‚‹
 	*/
 	virtual int GetMinByteCount() = 0;
 
 	/**
-		@brief		1 •¶š‚ÌÅ‘åƒoƒCƒg”‚ğæ“¾‚·‚é
+		@brief		1 æ–‡å­—ã®æœ€å¤§ãƒã‚¤ãƒˆæ•°ã‚’å–å¾—ã™ã‚‹
 	*/
 	virtual int GetMaxByteCount() = 0;
 
 	/**
-		@brief		Decoder ‚ª•ÏŠ·ó‘Ô‚ğ•Û‚Å‚«‚é‚©‚ğŠm”F‚·‚é
+		@brief		Decoder ãŒå¤‰æ›çŠ¶æ…‹ã‚’ä¿æŒã§ãã‚‹ã‹ã‚’ç¢ºèªã™ã‚‹
 	*/
 	virtual bool CanRemain() = 0;
 
 	/**
-		@brief		ƒfƒR[ƒhæ‚Éƒ}ƒbƒsƒ“ƒO‚Å‚«‚È‚¢•¶š‚ªŒ©‚Â‚©‚Á‚½‚É’uŠ·‚·‚é•¶š‚Ìİ’è
+		@brief		ãƒ‡ã‚³ãƒ¼ãƒ‰å…ˆã«ãƒãƒƒãƒ”ãƒ³ã‚°ã§ããªã„æ–‡å­—ãŒè¦‹ã¤ã‹ã£ãŸæ™‚ã«ç½®æ›ã™ã‚‹æ–‡å­—ã®è¨­å®š
 	*/
 	virtual void SetFallbackReplacementChar(uint32_t ch) { mFallbackReplacementChar = ch; }
 
 	/**
-		@brief		ƒfƒR[ƒhæ‚Éƒ}ƒbƒsƒ“ƒO‚Å‚«‚È‚¢•¶š‚ªŒ©‚Â‚©‚Á‚½‚É’uŠ·‚·‚é•¶š‚Ìæ“¾
+		@brief		ãƒ‡ã‚³ãƒ¼ãƒ‰å…ˆã«ãƒãƒƒãƒ”ãƒ³ã‚°ã§ããªã„æ–‡å­—ãŒè¦‹ã¤ã‹ã£ãŸæ™‚ã«ç½®æ›ã™ã‚‹æ–‡å­—ã®å–å¾—
 	*/
 	virtual uint32_t GetFallbackReplacementChar() { return mFallbackReplacementChar; }
 
 	/**
-		@brief		‚±‚ÌƒGƒ“ƒR[ƒfƒBƒ“ƒO‚Å•\Œ»‚³‚ê‚é•¶š—ñƒoƒbƒtƒ@‚ğAUTF16 ‚É•ÏŠ·‚·‚é
-		@param[in]	inBuffer			: ‚±‚ÌƒGƒ“ƒR[ƒfƒBƒ“ƒO‚Å•\Œ»‚³‚ê‚é•¶š—ñƒoƒbƒtƒ@
-		@param[in]	inBufferByteCount	: inBuffer ‚ÌƒoƒCƒg” (NULL •¶š‚ÍŠÜ‚Ü‚È‚¢‚±‚Æ)
-		@param[out]	outBuffer			: •ÏŠ·Œ‹‰Ê‚ÌŠi”[æƒoƒbƒtƒ@
-		@param[in]	outBufferCharCount	: outBuffer ‚ÌƒTƒCƒY (•¶š”’PˆÊ)
-		@param[out]	outBytesUsed		: •ÏŠ·Œ‹‰Ê‚ÌƒoƒCƒg”‚ğŠi”[‚·‚é•Ï”
-		@param[out]	outCharsUsed		: •ÏŠ·Œ‹‰Ê‚Ì•¶š”‚ğŠi”[‚·‚é•Ï”
+		@brief		ã“ã®ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°ã§è¡¨ç¾ã•ã‚Œã‚‹æ–‡å­—åˆ—ãƒãƒƒãƒ•ã‚¡ã‚’ã€UTF16 ã«å¤‰æ›ã™ã‚‹
+		@param[in]	inBuffer			: ã“ã®ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°ã§è¡¨ç¾ã•ã‚Œã‚‹æ–‡å­—åˆ—ãƒãƒƒãƒ•ã‚¡
+		@param[in]	inBufferByteCount	: inBuffer ã®ãƒã‚¤ãƒˆæ•° (NULL æ–‡å­—ã¯å«ã¾ãªã„ã“ã¨)
+		@param[out]	outBuffer			: å¤‰æ›çµæœã®æ ¼ç´å…ˆãƒãƒƒãƒ•ã‚¡
+		@param[in]	outBufferCharCount	: outBuffer ã®ã‚µã‚¤ã‚º (æ–‡å­—æ•°å˜ä½)
+		@param[out]	outBytesUsed		: å¤‰æ›çµæœã®ãƒã‚¤ãƒˆæ•°ã‚’æ ¼ç´ã™ã‚‹å¤‰æ•°
+		@param[out]	outCharsUsed		: å¤‰æ›çµæœã®æ–‡å­—æ•°ã‚’æ ¼ç´ã™ã‚‹å¤‰æ•°
 	*/
 	virtual void ConvertToUTF16(const byte_t* inBuffer, size_t inBufferByteCount, UTF16* outBuffer, size_t outBufferCharCount, size_t* outBytesUsed, size_t* outCharsUsed) = 0;
 
 	/**
-		@brief	ˆê˜A‚Ì ConvertToUTF16() ‚ÌŒÄ‚Ño‚µ‚Ì’†‚ÅA•ÏŠ·‚Å‚«‚È‚¢•¶š‚ğ‹K’è•¶š‚É•ÏŠ·‚µ‚½•¶š”‚ğæ“¾‚·‚é
+		@brief	ä¸€é€£ã® ConvertToUTF16() ã®å‘¼ã³å‡ºã—ã®ä¸­ã§ã€å¤‰æ›ã§ããªã„æ–‡å­—ã‚’è¦å®šæ–‡å­—ã«å¤‰æ›ã—ãŸæ–‡å­—æ•°ã‚’å–å¾—ã™ã‚‹
 	*/
 	virtual int UsedDefaultCharCount() = 0;
 
 	/**
-		@brief	ÅŒã‚Ì ConvertToUTF16() ‚ÅAƒoƒbƒtƒ@––”ö‚Åƒ}ƒ‹ƒ`ƒoƒCƒg•¶š‚ª“rØ‚ê‚Ä‚¢‚È‚¯‚ê‚Î true ‚ğ•Ô‚·
+		@brief	æœ€å¾Œã® ConvertToUTF16() ã§ã€ãƒãƒƒãƒ•ã‚¡æœ«å°¾ã§ãƒãƒ«ãƒãƒã‚¤ãƒˆæ–‡å­—ãŒé€”åˆ‡ã‚Œã¦ã„ãªã‘ã‚Œã° true ã‚’è¿”ã™
 	*/
 	virtual bool Completed() = 0;
 
 	/**
-		@brief	•ÏŠ·ƒXƒe[ƒ^ƒX‚ğƒNƒŠƒA‚µA‰Šúó‘Ô‚É–ß‚·
+		@brief	å¤‰æ›ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚’ã‚¯ãƒªã‚¢ã—ã€åˆæœŸçŠ¶æ…‹ã«æˆ»ã™
 	*/
 	virtual void Reset() = 0;
 
@@ -261,8 +261,8 @@ protected:
 };
 
 /**
-	@brief		“à•”•¶šƒR[ƒh (UTF16) ‚ğƒGƒ“ƒR[ƒh‚·‚éƒNƒ‰ƒX
-	@details	Decoder “¯—lACanRemain() ‚ª true ‚Ìê‡‚Í•ÏŠ·ƒXƒe[ƒ^ƒX‚ğ•Û‘¶‚µ‚Ü‚·B
+	@brief		å†…éƒ¨æ–‡å­—ã‚³ãƒ¼ãƒ‰ (UTF16) ã‚’ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰ã™ã‚‹ã‚¯ãƒ©ã‚¹
+	@details	Decoder åŒæ§˜ã€CanRemain() ãŒ true ã®å ´åˆã¯å¤‰æ›ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚’ä¿å­˜ã—ã¾ã™ã€‚
 */
 class Encoder : public RefObject
 {
@@ -273,53 +273,53 @@ public:
 public:
 
 	/**
-		@brief		1 •¶š‚ÌÅ¬ƒoƒCƒg”‚ğæ“¾‚·‚é
+		@brief		1 æ–‡å­—ã®æœ€å°ãƒã‚¤ãƒˆæ•°ã‚’å–å¾—ã™ã‚‹
 	*/
 	virtual int GetMinByteCount() = 0;
 
 	/**
-		@brief		1 •¶š‚ÌÅ‘åƒoƒCƒg”‚ğæ“¾‚·‚é
+		@brief		1 æ–‡å­—ã®æœ€å¤§ãƒã‚¤ãƒˆæ•°ã‚’å–å¾—ã™ã‚‹
 	*/
 	virtual int GetMaxByteCount() = 0;
 
 	/**
-		@brief		ƒGƒ“ƒR[ƒhæ‚Éƒ}ƒbƒsƒ“ƒO‚Å‚«‚È‚¢•¶š‚ªŒ©‚Â‚©‚Á‚½‚É’uŠ·‚·‚é•¶š‚Ìİ’è
+		@brief		ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰å…ˆã«ãƒãƒƒãƒ”ãƒ³ã‚°ã§ããªã„æ–‡å­—ãŒè¦‹ã¤ã‹ã£ãŸæ™‚ã«ç½®æ›ã™ã‚‹æ–‡å­—ã®è¨­å®š
 	*/
 	virtual void SetFallbackReplacementChar(uint32_t ch) { mFallbackReplacementChar = ch; }
 
 	/**
-		@brief		ƒGƒ“ƒR[ƒhæ‚Éƒ}ƒbƒsƒ“ƒO‚Å‚«‚È‚¢•¶š‚ªŒ©‚Â‚©‚Á‚½‚É’uŠ·‚·‚é•¶š‚Ìæ“¾
+		@brief		ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰å…ˆã«ãƒãƒƒãƒ”ãƒ³ã‚°ã§ããªã„æ–‡å­—ãŒè¦‹ã¤ã‹ã£ãŸæ™‚ã«ç½®æ›ã™ã‚‹æ–‡å­—ã®å–å¾—
 	*/
 	virtual uint32_t GetFallbackReplacementChar() { return mFallbackReplacementChar; }
 
 	/**
-		@brief	Decoder ‚ª•ÏŠ·ó‘Ô‚ğ•Û‚Å‚«‚é‚©‚ğŠm”F‚·‚é
+		@brief	Decoder ãŒå¤‰æ›çŠ¶æ…‹ã‚’ä¿æŒã§ãã‚‹ã‹ã‚’ç¢ºèªã™ã‚‹
 	*/
 	virtual bool CanRemain() = 0;
 
 	/**
-		@brief		UTF16 •¶š—ñ‚ğA‚±‚ÌƒGƒ“ƒR[ƒfƒBƒ“ƒO‚Å•\Œ»‚³‚ê‚é•¶š—ñ‚É•ÏŠ·‚·‚é
-		@param[in]	inBuffer			: ‚±‚ÌƒGƒ“ƒR[ƒfƒBƒ“ƒO‚Å•\Œ»‚³‚ê‚é•¶š—ñƒoƒbƒtƒ@
-		@param[in]	inBufferCharCount	: inBuffer ‚ÌƒTƒCƒY (•¶š”’PˆÊBNULL •¶š‚ÍŠÜ‚Ü‚È‚¢)
-		@param[out]	outBuffer			: •ÏŠ·Œ‹‰Ê‚ÌŠi”[æƒoƒbƒtƒ@
-		@param[in]	outBufferByteCount	: outBuffer ‚ÌƒoƒCƒg”
-		@param[out]	outBytesUsed		: •ÏŠ·Œ‹‰Ê‚ÌƒoƒCƒg”‚ğŠi”[‚·‚é•Ï”
-		@param[out]	outCharsUsed		: •ÏŠ·Œ‹‰Ê‚Ì•¶š”‚ğŠi”[‚·‚é•Ï”
+		@brief		UTF16 æ–‡å­—åˆ—ã‚’ã€ã“ã®ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°ã§è¡¨ç¾ã•ã‚Œã‚‹æ–‡å­—åˆ—ã«å¤‰æ›ã™ã‚‹
+		@param[in]	inBuffer			: ã“ã®ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°ã§è¡¨ç¾ã•ã‚Œã‚‹æ–‡å­—åˆ—ãƒãƒƒãƒ•ã‚¡
+		@param[in]	inBufferCharCount	: inBuffer ã®ã‚µã‚¤ã‚º (æ–‡å­—æ•°å˜ä½ã€‚NULL æ–‡å­—ã¯å«ã¾ãªã„)
+		@param[out]	outBuffer			: å¤‰æ›çµæœã®æ ¼ç´å…ˆãƒãƒƒãƒ•ã‚¡
+		@param[in]	outBufferByteCount	: outBuffer ã®ãƒã‚¤ãƒˆæ•°
+		@param[out]	outBytesUsed		: å¤‰æ›çµæœã®ãƒã‚¤ãƒˆæ•°ã‚’æ ¼ç´ã™ã‚‹å¤‰æ•°
+		@param[out]	outCharsUsed		: å¤‰æ›çµæœã®æ–‡å­—æ•°ã‚’æ ¼ç´ã™ã‚‹å¤‰æ•°
 	*/
 	virtual void ConvertFromUTF16(const UTF16* inBuffer, size_t inBufferCharCount, byte_t* outBuffer, size_t outBufferByteCount, size_t* outBytesUsed, size_t* outCharsUsed) = 0;
 
 	/**
-		@brief	ˆê˜A‚Ì ConvertToUTF16() ‚ÌŒÄ‚Ño‚µ‚Ì’†‚ÅA•ÏŠ·‚Å‚«‚È‚¢•¶š‚ğ‹K’è•¶š‚É•ÏŠ·‚µ‚½•¶š”‚ğæ“¾‚·‚é
+		@brief	ä¸€é€£ã® ConvertToUTF16() ã®å‘¼ã³å‡ºã—ã®ä¸­ã§ã€å¤‰æ›ã§ããªã„æ–‡å­—ã‚’è¦å®šæ–‡å­—ã«å¤‰æ›ã—ãŸæ–‡å­—æ•°ã‚’å–å¾—ã™ã‚‹
 	*/
 	virtual int UsedDefaultCharCount() = 0;
 
 	/**
-		@brief	ÅŒã‚Ì ConvertToUTF16() ‚ÅAƒoƒbƒtƒ@––”ö‚Åƒ}ƒ‹ƒ`ƒoƒCƒg•¶š‚ª“rØ‚ê‚Ä‚¢‚È‚¯‚ê‚Î true ‚ğ•Ô‚·
+		@brief	æœ€å¾Œã® ConvertToUTF16() ã§ã€ãƒãƒƒãƒ•ã‚¡æœ«å°¾ã§ãƒãƒ«ãƒãƒã‚¤ãƒˆæ–‡å­—ãŒé€”åˆ‡ã‚Œã¦ã„ãªã‘ã‚Œã° true ã‚’è¿”ã™
 	*/
 	virtual bool Completed() = 0;
 
 	/**
-		@brief	•ÏŠ·ƒXƒe[ƒ^ƒX‚ğƒNƒŠƒA‚µA‰Šúó‘Ô‚É–ß‚·
+		@brief	å¤‰æ›ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚’ã‚¯ãƒªã‚¢ã—ã€åˆæœŸçŠ¶æ…‹ã«æˆ»ã™
 	*/
 	virtual void Reset() = 0;
 
@@ -329,12 +329,12 @@ protected:
 
 
 /**
-	@brief		ƒvƒƒOƒ‰ƒ€‚ÌƒƒP[ƒ‹‚É‡‚í‚¹‚½ƒ}ƒ‹ƒ`ƒoƒCƒgƒR[ƒhƒGƒ“ƒR[ƒfƒBƒ“ƒO
-	@details	setlocale() ‚É‚Äw’è‚³‚ê‚½ƒƒP[ƒ‹‚Ì‹K’è•¶šƒR[ƒh‚ğ•\‚µ‚Ü‚·B
-				OS ‹K’è‚ÌƒƒP[ƒ‹‚ğg—p‚·‚é‚É‚ÍA‚ ‚ç‚©‚¶‚ß setlocale( LC_ALL, "" ); ‚Ì‚æ‚¤‚É‚·‚é‚É‚·‚é•K—v‚ª‚ ‚è‚Ü‚·B
-				—á‚¦‚ÎA“ú–{Œê Windws ‚Å‚ ‚ê‚Î ShiftJISALinux ‚Å‚ ‚ê‚Î UTF-8 ‚Æ‚È‚è‚Ü‚·B
-	@attention	ã‹L‰ğà‚Ì’Ê‚èAŠù’è‚Ì•¶šƒR[ƒh‚ÍŠÂ‹«ˆË‘¶‚Å‚·B
-				Šî–{“I‚É ASCII •¶š‚Ì‚İ‚Å\¬‚³‚ê‚éƒGƒ“ƒR[ƒfƒBƒ“ƒO‚Æl‚¦‚é‚Ì‚ª–³“ï‚Å‚·B
+	@brief		ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã®ãƒ­ã‚±ãƒ¼ãƒ«ã«åˆã‚ã›ãŸãƒãƒ«ãƒãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°
+	@details	setlocale() ã«ã¦æŒ‡å®šã•ã‚ŒãŸãƒ­ã‚±ãƒ¼ãƒ«ã®è¦å®šæ–‡å­—ã‚³ãƒ¼ãƒ‰ã‚’è¡¨ã—ã¾ã™ã€‚
+				OS è¦å®šã®ãƒ­ã‚±ãƒ¼ãƒ«ã‚’ä½¿ç”¨ã™ã‚‹ã«ã¯ã€ã‚ã‚‰ã‹ã˜ã‚ setlocale( LC_ALL, "" ); ã®ã‚ˆã†ã«ã™ã‚‹ã«ã™ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚
+				ä¾‹ãˆã°ã€æ—¥æœ¬èª Windws ã§ã‚ã‚Œã° ShiftJISã€Linux ã§ã‚ã‚Œã° UTF-8 ã¨ãªã‚Šã¾ã™ã€‚
+	@attention	ä¸Šè¨˜è§£èª¬ã®é€šã‚Šã€æ—¢å®šã®æ–‡å­—ã‚³ãƒ¼ãƒ‰ã¯ç’°å¢ƒä¾å­˜ã§ã™ã€‚
+				åŸºæœ¬çš„ã« ASCII æ–‡å­—ã®ã¿ã§æ§‹æˆã•ã‚Œã‚‹ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°ã¨è€ƒãˆã‚‹ã®ãŒç„¡é›£ã§ã™ã€‚
 */
 class SystemMultiByteEncoding : public Encoding
 {
@@ -389,7 +389,7 @@ private:
 };
 
 /**
-	@brief		UTF8 ƒGƒ“ƒR[ƒfƒBƒ“ƒO
+	@brief		UTF8 ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°
 */
 class UTF8Encoding : public Encoding
 {
@@ -423,8 +423,8 @@ private:
 		virtual void Reset() { mUsedDefaultCharCount = 0; mCompleted = false; }
 
 	private:
-		int		mUsedDefaultCharCount;	///< ˆê˜A‚Ì ConvertToUTF16() ‚ÌŒÄ‚Ño‚µ‚Ì’†‚ÅA•ÏŠ·‚Å‚«‚È‚¢•¶š‚ğ‹K’è•¶š‚É•ÏŠ·‚µ‚½•¶š”
-		bool	mCompleted;				///< ÅŒã‚Ì ConvertToUTF16() ‚ÅAƒoƒbƒtƒ@––”ö‚Åƒ}ƒ‹ƒ`ƒoƒCƒg•¶š‚ª“rØ‚ê‚Ä‚¢‚È‚¯‚ê‚Î true
+		int		mUsedDefaultCharCount;	///< ä¸€é€£ã® ConvertToUTF16() ã®å‘¼ã³å‡ºã—ã®ä¸­ã§ã€å¤‰æ›ã§ããªã„æ–‡å­—ã‚’è¦å®šæ–‡å­—ã«å¤‰æ›ã—ãŸæ–‡å­—æ•°
+		bool	mCompleted;				///< æœ€å¾Œã® ConvertToUTF16() ã§ã€ãƒãƒƒãƒ•ã‚¡æœ«å°¾ã§ãƒãƒ«ãƒãƒã‚¤ãƒˆæ–‡å­—ãŒé€”åˆ‡ã‚Œã¦ã„ãªã‘ã‚Œã° true
 		bool	m_byteOrderMark;
 	};
 
@@ -442,17 +442,17 @@ private:
 		virtual void Reset() { mUsedDefaultCharCount = 0; mCompleted = false; }
 
 	private:
-		int		mUsedDefaultCharCount;	///< ˆê˜A‚Ì ConvertFromUTF16() ‚ÌŒÄ‚Ño‚µ‚Ì’†‚ÅA•ÏŠ·‚Å‚«‚È‚¢•¶š‚ğ‹K’è•¶š‚É•ÏŠ·‚µ‚½•¶š”
-		bool	mCompleted;				///< ÅŒã‚Ì ConvertFromUTF16() ‚ÅAƒoƒbƒtƒ@––”ö‚Åƒ}ƒ‹ƒ`ƒoƒCƒg•¶š‚ª“rØ‚ê‚Ä‚¢‚È‚¯‚ê‚Î true
+		int		mUsedDefaultCharCount;	///< ä¸€é€£ã® ConvertFromUTF16() ã®å‘¼ã³å‡ºã—ã®ä¸­ã§ã€å¤‰æ›ã§ããªã„æ–‡å­—ã‚’è¦å®šæ–‡å­—ã«å¤‰æ›ã—ãŸæ–‡å­—æ•°
+		bool	mCompleted;				///< æœ€å¾Œã® ConvertFromUTF16() ã§ã€ãƒãƒƒãƒ•ã‚¡æœ«å°¾ã§ãƒãƒ«ãƒãƒã‚¤ãƒˆæ–‡å­—ãŒé€”åˆ‡ã‚Œã¦ã„ãªã‘ã‚Œã° true
 		bool	m_byteOrderMark;
 	};
 };
 
 #if 0
 /**
-	@brief		UTF16 ƒGƒ“ƒR[ƒfƒBƒ“ƒO
-	@details	•ÏŠ·‚ÌƒoƒCƒgƒI[ƒ_[‚Í‹K’è‚µ‚Ü‚¹‚ñB(Big/Little ‚Ç‚¿‚ç‚Å‚àOK)
-				GetPreamble() ‚ª•Ô‚· BOM ‚Í Little ‚Å‚·B
+	@brief		UTF16 ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°
+	@details	å¤‰æ›æ™‚ã®ãƒã‚¤ãƒˆã‚ªãƒ¼ãƒ€ãƒ¼ã¯è¦å®šã—ã¾ã›ã‚“ã€‚(Big/Little ã©ã¡ã‚‰ã§ã‚‚OK)
+				GetPreamble() ãŒè¿”ã™ BOM ã¯ Little ã§ã™ã€‚
 */
 class UTF16Encoding : public Encoding
 {

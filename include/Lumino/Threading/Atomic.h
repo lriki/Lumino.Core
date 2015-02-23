@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 
 #include "../Base/Common.h"
@@ -10,7 +10,7 @@ namespace Threading
 {
 	
 /**
-	@brief		ƒXƒŒƒbƒhƒZ[ƒt‚ÈƒCƒ“ƒNƒŠƒƒ“ƒgEƒfƒNƒŠƒƒ“ƒg‚ðs‚¤®”•Ï”‚ÌƒNƒ‰ƒX
+	@brief		ã‚¹ãƒ¬ãƒƒãƒ‰ã‚»ãƒ¼ãƒ•ãªã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ãƒˆãƒ»ãƒ‡ã‚¯ãƒªãƒ¡ãƒ³ãƒˆã‚’è¡Œã†æ•´æ•°å¤‰æ•°ã®ã‚¯ãƒ©ã‚¹
 */
 class LUMINO_EXPORT Atomic
     : private NonCopyable
@@ -21,16 +21,16 @@ public:
 
 public:
 
-    /// ’l‚ðŽæ“¾‚·‚é
+    /// å€¤ã‚’å–å¾—ã™ã‚‹
 	int32_t Get() const;
 
-    /// ’l‚ðÝ’è‚·‚é
+    /// å€¤ã‚’è¨­å®šã™ã‚‹
     void Set( int32_t value );
 
-    /// ’l‚ðƒCƒ“ƒNƒŠƒƒ“ƒg‚·‚é (ƒCƒ“ƒNƒŠƒƒ“ƒgŒã‚Ì’l ‚ð•Ô‚·)
+    /// å€¤ã‚’ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ãƒˆã™ã‚‹ (ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ãƒˆå¾Œã®å€¤ ã‚’è¿”ã™)
     int32_t Increment();
 
-    /// ’l‚ðƒfƒNƒŠƒƒ“ƒg‚·‚é (ƒfƒNƒŠƒƒ“ƒgŒã‚Ì’l ‚ð•Ô‚·)
+    /// å€¤ã‚’ãƒ‡ã‚¯ãƒªãƒ¡ãƒ³ãƒˆã™ã‚‹ (ãƒ‡ã‚¯ãƒªãƒ¡ãƒ³ãƒˆå¾Œã®å€¤ ã‚’è¿”ã™)
     int32_t Decrement();
 
 private:

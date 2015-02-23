@@ -1,4 +1,4 @@
-// cp936 GB2312
+﻿// cp936 GB2312
 // Surrogate is not present in the character code.
 // To use the table, declare as follows.
 // extern "C" unsigned short g_GB2312ToUTF16Table[];

@@ -1,4 +1,4 @@
-
+ï»¿
 #include "../Internal.h"
 #include <wctype.h>
 #include "../../include/Lumino/Base/RefObject.h"
@@ -53,7 +53,7 @@ template bool StringUtils::IsSpace(UTF32 ch);
 
 
 
-// •W€ŠÖ”‚ğƒI[ƒo[ƒ[ƒh‚·‚é‚½‚ß‚ÌÀ‘•
+// æ¨™æº–é–¢æ•°ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ãŸã‚ã®å®Ÿè£…
 //static size_t			StrLen(const char* input) { return ::strlen(input); }
 //static size_t			StrLen(const wchar_t* input) { return ::wcslen(input); }
 static const char*		StrStr(const char* s1, const char* s2) { return ::strstr(s1, s2); }
@@ -66,7 +66,7 @@ int				StringUtils::VSPrintf(wchar_t* out, int charCount, const wchar_t* format,
 int				StringUtils::VSPrintf(char* out, int charCount, const char* format, va_list args) { return vsnprintf(out, charCount, format, args); }
 int				StringUtils::VSPrintf(wchar_t* out, int charCount, const wchar_t* format, va_list args) 
 {
-	LN_THROW(0, NotImplementedException);	// vswprintf ‚Í“®ì•Ûá–³‚µ
+	LN_THROW(0, NotImplementedException);	// vswprintf ã¯å‹•ä½œä¿éšœç„¡ã—
 	return vswprintf(out, charCount, format, args);
 }
 #endif
@@ -118,7 +118,7 @@ void StringUtils::Trim(const TChar* begin, int length, const TChar** outBegin, i
 
 	const TChar* end = begin + length;
 
-	// Left •”•ª
+	// Left éƒ¨åˆ†
 	while (*begin)
 	{
 		if (!IsSpace(*begin)) {
@@ -127,7 +127,7 @@ void StringUtils::Trim(const TChar* begin, int length, const TChar** outBegin, i
 		++begin;
 	}
 
-	// Right •”•ª
+	// Right éƒ¨åˆ†
 	while (begin < end)
 	{
 		if (!IsSpace(*(end - 1))) {
@@ -188,14 +188,14 @@ template void StringUtils::FormatVAList<wchar_t>(const wchar_t* format, va_list 
 template<typename TChar>
 bool StringUtils::EndsWith(const TChar* str1, int len1, const TChar* str2, int len2, StringComparison comparisonType)
 {
-	// ’·‚³‚ª -1 ‚Ìê‡‚Í \0 ‚Ü‚ÅƒJƒEƒ“ƒg
+	// é•·ã•ãŒ -1 ã®å ´åˆã¯ \0 ã¾ã§ã‚«ã‚¦ãƒ³ãƒˆ
 	len1 = (len1 < 0) ? StrLen(str1) : len1;
 	len2 = (len2 < 0) ? StrLen(str2) : len2;
 
 	const TChar* p1 = str1 + len1;
 	const TChar* p2 = str2 + len2;
 	
-	// ‘å•¶š¬•¶š‚ğ‹æ•Ê‚·‚éê‡
+	// å¤§æ–‡å­—å°æ–‡å­—ã‚’åŒºåˆ¥ã™ã‚‹å ´åˆ
 	if (comparisonType == StringComparison_IgnoreCase)
 	{
 		while (str2 <= p2)
@@ -209,7 +209,7 @@ bool StringUtils::EndsWith(const TChar* str1, int len1, const TChar* str2, int l
 		}
 		return true;
 	}
-	// ‘å•¶š¬•¶š‚ğ‹æ•Ê‚µ‚È‚¢ê‡
+	// å¤§æ–‡å­—å°æ–‡å­—ã‚’åŒºåˆ¥ã—ãªã„å ´åˆ
 	else
 	{
 		while (str2 <= p2)
@@ -235,7 +235,7 @@ Array< BasicString<TChar> > StringUtils::Split(const BasicString<TChar>& str, co
 {
 	Array< BasicString<TChar> > result;
 
-	// Å‰‚Ì‹æØ‚è•¶š‚ğ’T‚·
+	// æœ€åˆã®åŒºåˆ‡ã‚Šæ–‡å­—ã‚’æ¢ã™
 	int tokenStart = 0;
 	int delimIndex = str.IndexOf(delim, 0);
 
@@ -246,11 +246,11 @@ Array< BasicString<TChar> > StringUtils::Split(const BasicString<TChar>& str, co
 	}
 	else {
 		if (option == StringSplitOptions_None || tokenStart != str.size()) {
-			result.push_back(str.SubString(tokenStart));	// c‚è‘S‚Ä
+			result.push_back(str.SubString(tokenStart));	// æ®‹ã‚Šå…¨ã¦
 		}
 		return result;
 	}
-	// Ÿ‚Ìƒg[ƒNƒ“ŠJnˆÊ’u‚ğw‚·
+	// æ¬¡ã®ãƒˆãƒ¼ã‚¯ãƒ³é–‹å§‹ä½ç½®ã‚’æŒ‡ã™
 	tokenStart = delimIndex + 1;
 
 	while (tokenStart <= ((int)str.size()))
@@ -263,11 +263,11 @@ Array< BasicString<TChar> > StringUtils::Split(const BasicString<TChar>& str, co
 		}
 		else {
 			if (option == StringSplitOptions_None || tokenStart != str.size()) {
-				result.push_back(str.SubString(tokenStart));	// c‚è‘S‚Ä
+				result.push_back(str.SubString(tokenStart));	// æ®‹ã‚Šå…¨ã¦
 			}
 			break;
 		}
-		// Ÿ‚Ìƒg[ƒNƒ“ŠJnˆÊ’u‚ğw‚·
+		// æ¬¡ã®ãƒˆãƒ¼ã‚¯ãƒ³é–‹å§‹ä½ç½®ã‚’æŒ‡ã™
 		tokenStart = delimIndex + 1;
 	}
 

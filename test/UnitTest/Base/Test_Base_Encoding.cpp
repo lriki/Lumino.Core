@@ -1,4 +1,4 @@
-#include <TestConfig.h>
+ï»¿#include <TestConfig.h>
 #include "../../../src/Text/UTF16Encoding.h"
 #include "../../../src/Text/UTF32Encoding.h"
 using namespace Lumino::Text;
@@ -16,7 +16,7 @@ protected:
 //---------------------------------------------------------------------
 TEST_F(Test_Base_Encoding, Basic)
 {
-	// TCHAR ƒGƒ“ƒR[ƒfƒBƒ“ƒO
+	// TCHAR ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°
 	{
 #ifdef LN_UNICODE
 #ifdef _WIN32
@@ -41,21 +41,21 @@ TEST_F(Test_Base_Encoding, Convert)
 	RefPtr<Decoder> decoder(Encoding::GetSystemMultiByteEncoding()->CreateDecoder());
 	RefPtr<Encoder> encoder(Encoding::GetWideCharEncoding()->CreateEncoder());
 
-	// src ‚ª–³‚¢
+	// src ãŒç„¡ã„
 	ASSERT_THROW(
 		Encoding::Convert(NULL, 0, (Decoder*)NULL, NULL, NULL),
 		ArgumentException);
-	// decoder ‚ª–³‚¢
+	// decoder ãŒç„¡ã„
 	ASSERT_THROW(
 		Encoding::Convert(buf1, 0, (Decoder*)NULL, NULL, NULL),
 		ArgumentException);
-	// encoder ‚ª–³‚¢
+	// encoder ãŒç„¡ã„
 	ASSERT_THROW(
 		Encoding::Convert(buf1, 0, decoder, NULL, NULL),
 		ArgumentException);
 
-	// «ƒXƒgƒŠ[ƒ~ƒ“ƒO—pó‘Ô‹L‰¯‘Î‰‚Ì‚½‚ßA‹–‰Â‚·‚é
-	// ~Å’á‚Å‚à•K—v‚ÈƒoƒCƒg”‚ª–³‚¢
+	// â†“ã‚¹ãƒˆãƒªãƒ¼ãƒŸãƒ³ã‚°ç”¨çŠ¶æ…‹è¨˜æ†¶å¯¾å¿œã®ãŸã‚ã€è¨±å¯ã™ã‚‹
+	// Ã—æœ€ä½ã§ã‚‚å¿…è¦ãªãƒã‚¤ãƒˆæ•°ãŒç„¡ã„
 	//ASSERT_THROW(
 	//	Encoding::Convert(buf1, 0, decoder, encoder, NULL),
 	//	ArgumentException);
@@ -64,33 +64,33 @@ TEST_F(Test_Base_Encoding, Convert)
 //---------------------------------------------------------------------
 TEST_F(Test_Base_Encoding, SystemEncodingTest)
 {
-	// "“ú–{Œê"
+	// "æ—¥æœ¬èª"
 #ifdef _WIN32
 	byte_t str1[] = { 0x93, 0xFA, 0x96, 0x7B, 0x8C, 0xEA, 0x00 };	// sjis
 #else
 	byte_t str1[] = { 0xE6, 0x97, 0xA5, 0xE6, 0x9C, 0xAC, 0xE8, 0xAA, 0x9E, 0x00 };	// utf8
 #endif
 
-	// std::wstring resize ƒeƒXƒg
+	// std::wstring resize ãƒ†ã‚¹ãƒˆ
 
 
-	//std::wstring s;// = L"‚ ‚¢‚¤‚¦‚¨";
+	//std::wstring s;// = L"ã‚ã„ã†ãˆãŠ";
 	////s.reserve(15);
 	//s.resize(15);
-	////s = L"‚ ‚¢‚¤‚¦‚¨‚ ‚¢‚¤‚¦‚¨‚ ‚¢‚¤‚¦‚¨";
+	////s = L"ã‚ã„ã†ãˆãŠã‚ã„ã†ãˆãŠã‚ã„ã†ãˆãŠ";
 	//wchar_t* p = &(s[0]);
-	//memcpy(p, L"‚ ‚¢‚¤‚¦‚¨‚ ‚¢‚¤‚¦‚¨‚ ‚¢‚¤‚¦‚¨", 15 * sizeof(wchar_t));
+	//memcpy(p, L"ã‚ã„ã†ãˆãŠã‚ã„ã†ãˆãŠã‚ã„ã†ãˆãŠ", 15 * sizeof(wchar_t));
 	//printf("%d\n", s.size());
 	//printf("%d\n", s.capacity());
 	//wprintf(L"%s\n", s.c_str());
 
-	// Å¬ƒoƒCƒg”
+	// æœ€å°ãƒã‚¤ãƒˆæ•°
 	{
 		Encoding* e = Encoding::GetSystemMultiByteEncoding();
 		ASSERT_EQ(1, e->GetMinByteCount());
 	}
 
-	// Å‘åƒoƒCƒg”
+	// æœ€å¤§ãƒã‚¤ãƒˆæ•°
 	{
 		//setlocale(LC_ALL, "en-US");
 		//char* a = setlocale(LC_ALL, ".65001");
@@ -102,7 +102,7 @@ TEST_F(Test_Base_Encoding, SystemEncodingTest)
 		ASSERT_EQ(6, e->GetMaxByteCount());
 	}
 
-	// “¯ˆêƒGƒ“ƒR[ƒfƒBƒ“ƒO
+	// åŒä¸€ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°
 	{
 		StringA str2;
 		str2.ConvertFrom(str1, 6, Encoding::GetSystemMultiByteEncoding());
@@ -110,58 +110,58 @@ TEST_F(Test_Base_Encoding, SystemEncodingTest)
 		ASSERT_EQ(6, str2.size());
 	}
 
-	// Multi ¨ Wide
+	// Multi â†’ Wide
 	{
 		StringW str2;
 		str2.ConvertFrom(str1, 6, Encoding::GetSystemMultiByteEncoding());
 
 		ASSERT_EQ(3, str2.size());
-		ASSERT_EQ(0x65E5, str2.at(0));	// L'“ú'
-		ASSERT_EQ(0x672C, str2.at(1));	// L'–{'
-		ASSERT_EQ(0x8A9e, str2.at(2));	// L'Œê'
+		ASSERT_EQ(0x65E5, str2.at(0));	// L'æ—¥'
+		ASSERT_EQ(0x672C, str2.at(1));	// L'æœ¬'
+		ASSERT_EQ(0x8A9e, str2.at(2));	// L'èª'
 
-		// 1•¶š‚¾‚¯
+		// 1æ–‡å­—ã ã‘
 		StringW str3;
 		str3.AssignCStr("A");
 		ASSERT_EQ(1, str3.size());
 		ASSERT_EQ('A', str3.at(0));
 	}
 
-	// Wide ¨ Multi 
+	// Wide â†’ Multi 
 	{
-		// "“ú–{Œê"
+		// "æ—¥æœ¬èª"
 		wchar_t wstr1[] = { 0x65E5, 0x672C, 0x8A9e, 0x0000 };
 
 		StringA str2;
 		str2.ConvertFrom(wstr1, 3 * sizeof(wchar_t), Encoding::GetWideCharEncoding());
 
 		ASSERT_EQ(strlen((char*)str1), str2.size());
-		//ASSERT_EQ(0x93, (byte_t)str2.at(0));	// '“ú'	¦ unsingned char ‚Å”äŠr‚µ‚È‚¢‚Æˆê’v‚ªæ‚ê‚È‚¢
-		//ASSERT_EQ(0xFA, (byte_t)str2.at(1));	// '“ú'
-		//ASSERT_EQ(0x96, (byte_t)str2.at(2));	// '–{'
-		//ASSERT_EQ(0x7B, (byte_t)str2.at(3));	// '–{'
-		//ASSERT_EQ(0x8C, (byte_t)str2.at(4));	// 'Œê'
-		//ASSERT_EQ(0xEA, (byte_t)str2.at(5));	// 'Œê'
+		//ASSERT_EQ(0x93, (byte_t)str2.at(0));	// 'æ—¥'	â€» unsingned char ã§æ¯”è¼ƒã—ãªã„ã¨ä¸€è‡´ãŒå–ã‚Œãªã„
+		//ASSERT_EQ(0xFA, (byte_t)str2.at(1));	// 'æ—¥'
+		//ASSERT_EQ(0x96, (byte_t)str2.at(2));	// 'æœ¬'
+		//ASSERT_EQ(0x7B, (byte_t)str2.at(3));	// 'æœ¬'
+		//ASSERT_EQ(0x8C, (byte_t)str2.at(4));	// 'èª'
+		//ASSERT_EQ(0xEA, (byte_t)str2.at(5));	// 'èª'
 		ASSERT_TRUE(TestUtils::CheckArrays(str2.GetCStr(), str1, strlen((char*)str1)));
 
-		// 1•¶š‚¾‚¯
+		// 1æ–‡å­—ã ã‘
 		StringA str3;
 		str3.AssignCStr(L"A");
 		ASSERT_EQ(1, str3.size());
 		ASSERT_EQ('A', str3.at(0));
 	}
 
-	// Multi ‚É•ÏŠ·‚Å‚«‚È‚¢•¶š‚ª‚ ‚Á‚½
+	// Multi ã«å¤‰æ›ã§ããªã„æ–‡å­—ãŒã‚ã£ãŸ
 	{
 		//wchar_t str1[] = L"";
-		wchar_t str1[] = { 0xD867, 0xDE3D, 0x0000 };	// ‚Ù‚Á‚¯
+		wchar_t str1[] = { 0xD867, 0xDE3D, 0x0000 };	// ã»ã£ã‘
 		StringA str2;
 		ASSERT_THROW(
 			str2.ConvertFrom(str1, wcslen(str1) * sizeof(wchar_t), Encoding::GetWideCharEncoding()),
 			EncodingFallbackException);
 	}
 
-	// Wide ‚É•ÏŠ·‚Å‚«‚È‚¢•¶š‚ª‚ ‚Á‚½
+	// Wide ã«å¤‰æ›ã§ããªã„æ–‡å­—ãŒã‚ã£ãŸ
 	{
 		byte_t str1[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0x00 };
 		StringW str2;

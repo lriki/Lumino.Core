@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <stdio.h>
 #include "../Base/RefObject.h"
@@ -9,91 +9,91 @@ namespace Lumino
 namespace Text { class Encoding; }
 class RefBuffer;
 
-/// ƒtƒ@ƒCƒ‹‚ÆƒfƒBƒŒƒNƒgƒŠ‚Ì‘®«
+/// ãƒ•ã‚¡ã‚¤ãƒ«ã¨ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®å±æ€§
 enum FileAttribute
 {
-	FileAttribute_Normal		= 0x0000,	///< “Á‚É‘®«‚ğ‚½‚È‚¢’Êí‚Ìƒtƒ@ƒCƒ‹
-	FileAttribute_Directory		= 0x0001,	///< ƒfƒBƒŒƒNƒgƒŠ
-	FileAttribute_ReadOnly		= 0x0002,	///< “Ç‚İæ‚èê—p
-	FileAttribute_Hidden		= 0x0004,	///< ‰B‚µƒtƒ@ƒCƒ‹
+	FileAttribute_Normal		= 0x0000,	///< ç‰¹ã«å±æ€§ã‚’æŒãŸãªã„é€šå¸¸ã®ãƒ•ã‚¡ã‚¤ãƒ«
+	FileAttribute_Directory		= 0x0001,	///< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+	FileAttribute_ReadOnly		= 0x0002,	///< èª­ã¿å–ã‚Šå°‚ç”¨
+	FileAttribute_Hidden		= 0x0004,	///< éš ã—ãƒ•ã‚¡ã‚¤ãƒ«
 };
 
 /**
-	@brief	ƒtƒ@ƒCƒ‹ƒ†[ƒeƒBƒŠƒeƒB
+	@brief	ãƒ•ã‚¡ã‚¤ãƒ«ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£
 */
 class FileUtils
 {
 public:
-	/// fopen ‚Ì template À‘•
+	/// fopen ã® template å®Ÿè£…
 	//template<typename TChar>
 	//static FILE* fopen(const TChar* filePath, const TChar* pMode);
 	
 	/**
-		@brief		w’è‚³‚ê‚½ƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚é‚©Šm”F‚µ‚Ü‚·B
-		@details	‚±‚ÌŠÖ”‚Íw’è‚³‚ê‚½ƒtƒ@ƒCƒ‹‚ÉƒAƒNƒZƒX‚Å‚«‚éê‡‚É true ‚ğ•Ô‚µ‚Ü‚·B
-					—á‚¦‚Î Windows ‚Å‚ÍAÀÛ‚Éƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚Ä‚¢‚Ä‚à‚»‚Ìƒtƒ@ƒCƒ‹‚ª
-					•Ê‚ÌƒpƒXƒ[ƒhƒƒbƒN‚³‚ê‚½ƒ†[ƒU[ƒtƒHƒ‹ƒ_“à‚É‘¶İ‚µ‚Ä‚¢‚éê‡‚Í false ‚ğ•Ô‚µ‚Ü‚·B
-					(ƒ†[ƒU[A ‚Í ƒ†[ƒU[B ‚Ì "ƒ}ƒCƒhƒLƒ…ƒƒ“ƒg" ƒtƒHƒ‹ƒ_‚Ìƒtƒ@ƒCƒ‹‚ÉƒAƒNƒZƒX‚Å‚«‚È‚¢)
-					‚Ü‚½AƒpƒX‚ª‹ó•¶š‚â NULL ‚Ìê‡‚à false ‚ğ•Ô‚µ‚Ü‚·B
+		@brief		æŒ‡å®šã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã™ã‚‹ã‹ç¢ºèªã—ã¾ã™ã€‚
+		@details	ã“ã®é–¢æ•°ã¯æŒ‡å®šã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«ã«ã‚¢ã‚¯ã‚»ã‚¹ã§ãã‚‹å ´åˆã« true ã‚’è¿”ã—ã¾ã™ã€‚
+					ä¾‹ãˆã° Windows ã§ã¯ã€å®Ÿéš›ã«ãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã—ã¦ã„ã¦ã‚‚ãã®ãƒ•ã‚¡ã‚¤ãƒ«ãŒ
+					åˆ¥ã®ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãƒ­ãƒƒã‚¯ã•ã‚ŒãŸãƒ¦ãƒ¼ã‚¶ãƒ¼ãƒ•ã‚©ãƒ«ãƒ€å†…ã«å­˜åœ¨ã—ã¦ã„ã‚‹å ´åˆã¯ false ã‚’è¿”ã—ã¾ã™ã€‚
+					(ãƒ¦ãƒ¼ã‚¶ãƒ¼A ã¯ ãƒ¦ãƒ¼ã‚¶ãƒ¼B ã® "ãƒã‚¤ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ" ãƒ•ã‚©ãƒ«ãƒ€ã®ãƒ•ã‚¡ã‚¤ãƒ«ã«ã‚¢ã‚¯ã‚»ã‚¹ã§ããªã„)
+					ã¾ãŸã€ãƒ‘ã‚¹ãŒç©ºæ–‡å­—ã‚„ NULL ã®å ´åˆã‚‚ false ã‚’è¿”ã—ã¾ã™ã€‚
 	*/
 	static bool Exists(const char* filePath);
 	static bool Exists(const wchar_t* filePath);
 
 	/**
-		@brief		ƒtƒ@ƒCƒ‹‚Ì‘®«‚ğæ“¾‚·‚é
-		@param[in]	filePath		: ƒtƒ@ƒCƒ‹–¼
-		@return		ƒtƒ@ƒCƒ‹‚Ì‘®« (FileAttribute ‚Ìƒrƒbƒg‚Ì‘g‚İ‡‚í‚¹)
+		@brief		ãƒ•ã‚¡ã‚¤ãƒ«ã®å±æ€§ã‚’å–å¾—ã™ã‚‹
+		@param[in]	filePath		: ãƒ•ã‚¡ã‚¤ãƒ«å
+		@return		ãƒ•ã‚¡ã‚¤ãƒ«ã®å±æ€§ (FileAttribute ã®ãƒ“ãƒƒãƒˆã®çµ„ã¿åˆã‚ã›)
 	*/
 	static uint32_t GetAttribute(const char* filePath);
 	static uint32_t GetAttribute(const wchar_t* filePath);
 
 	/**
-		@brief		ƒtƒ@ƒCƒ‹‚Ì‘®«‚ğİ’è‚·‚é
-		@param[in]	filePath		: ƒtƒ@ƒCƒ‹–¼
-		@param[in]	attr			: ƒtƒ@ƒCƒ‹‚Ì‘®« (FileAttribute ‚Ìƒrƒbƒg‚Ì‘g‚İ‡‚í‚¹)
+		@brief		ãƒ•ã‚¡ã‚¤ãƒ«ã®å±æ€§ã‚’è¨­å®šã™ã‚‹
+		@param[in]	filePath		: ãƒ•ã‚¡ã‚¤ãƒ«å
+		@param[in]	attr			: ãƒ•ã‚¡ã‚¤ãƒ«ã®å±æ€§ (FileAttribute ã®ãƒ“ãƒƒãƒˆã®çµ„ã¿åˆã‚ã›)
 		@details	
 	*/
 	static void SetAttribute(const char* filePath, uint32_t attr);
 	static void SetAttribute(const wchar_t* filePath, uint32_t attr);
 
 	/**
-		@brief		ƒtƒ@ƒCƒ‹‚ğƒRƒs[‚·‚é
-		@param[in]	sourceFileName	: ƒRƒs[Œ³ƒtƒ@ƒCƒ‹–¼
-		@param[in]	destFileName	: ƒRƒs[æƒtƒ@ƒCƒ‹–¼
-		@param[in]	overwrite		: ƒRƒs[æ‚ğã‘‚«‚·‚éê‡‚Í true
-		@details	“Ç‚İæ‚èê—pƒtƒ@ƒCƒ‹‚Éã‘‚«‚·‚é‚±‚Æ‚Í‚Å‚«‚Ü‚¹‚ñB
+		@brief		ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚³ãƒ”ãƒ¼ã™ã‚‹
+		@param[in]	sourceFileName	: ã‚³ãƒ”ãƒ¼å…ƒãƒ•ã‚¡ã‚¤ãƒ«å
+		@param[in]	destFileName	: ã‚³ãƒ”ãƒ¼å…ˆãƒ•ã‚¡ã‚¤ãƒ«å
+		@param[in]	overwrite		: ã‚³ãƒ”ãƒ¼å…ˆã‚’ä¸Šæ›¸ãã™ã‚‹å ´åˆã¯ true
+		@details	èª­ã¿å–ã‚Šå°‚ç”¨ãƒ•ã‚¡ã‚¤ãƒ«ã«ä¸Šæ›¸ãã™ã‚‹ã“ã¨ã¯ã§ãã¾ã›ã‚“ã€‚
 	*/
 	static void Copy(const char* sourceFileName, const char* destFileName, bool overwrite);
 	static void Copy(const wchar_t* sourceFileName, const wchar_t* destFileName, bool overwrite);
 
 	/**
-		@brief		ƒtƒ@ƒCƒ‹‚ğíœ‚·‚é
-		@param[in]	filePath		: íœ‚·‚éƒtƒ@ƒCƒ‹–¼
-		@details	íœ‚·‚éƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚È‚¢ê‡A—áŠO‚ÍƒXƒ[‚³‚ê‚Ü‚¹‚ñB
+		@brief		ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å‰Šé™¤ã™ã‚‹
+		@param[in]	filePath		: å‰Šé™¤ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«å
+		@details	å‰Šé™¤ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã—ãªã„å ´åˆã€ä¾‹å¤–ã¯ã‚¹ãƒ­ãƒ¼ã•ã‚Œã¾ã›ã‚“ã€‚
 	*/
 	static void Delete(const char* filePath);
 	static void Delete(const wchar_t* filePath);
 
-	/// ƒtƒ@ƒCƒ‹ƒTƒCƒY‚ğæ“¾‚·‚é
+	/// ãƒ•ã‚¡ã‚¤ãƒ«ã‚µã‚¤ã‚ºã‚’å–å¾—ã™ã‚‹
 	static size_t GetFileSize(const TCHAR* filePath);
 
-	/// ƒtƒ@ƒCƒ‹ƒTƒCƒY‚ğæ“¾‚·‚é
+	/// ãƒ•ã‚¡ã‚¤ãƒ«ã‚µã‚¤ã‚ºã‚’å–å¾—ã™ã‚‹
 	static size_t GetFileSize( FILE* stream );
 
-	/// ƒtƒ@ƒCƒ‹‚Ì“à—e‚ğ‚·‚×‚Ä“Ç‚İ‚Ş (ƒoƒCƒiƒŠŒ`®)
+	/// ãƒ•ã‚¡ã‚¤ãƒ«ã®å†…å®¹ã‚’ã™ã¹ã¦èª­ã¿è¾¼ã‚€ (ãƒã‚¤ãƒŠãƒªå½¢å¼)
 	static RefBuffer* ReadAllBytes(const char* filePath);
 	static RefBuffer* ReadAllBytes(const wchar_t* filePath);
 
-	/// ƒtƒ@ƒCƒ‹‚Ì“à—e‚ğ‚·‚×‚Ä“Ç‚İ‚İA•¶š—ñ‚Æ‚µ‚Ä•Ô‚·
+	/// ãƒ•ã‚¡ã‚¤ãƒ«ã®å†…å®¹ã‚’ã™ã¹ã¦èª­ã¿è¾¼ã¿ã€æ–‡å­—åˆ—ã¨ã—ã¦è¿”ã™
 	static String ReadAllText(const TCHAR* filePath, const Text::Encoding* encoding = NULL);
 
-	/// ”z—ñ‚Ì“à—e‚ğƒoƒCƒiƒŠƒtƒ@ƒCƒ‹‚Æ‚µ‚Ä‘‚«o‚·
+	/// é…åˆ—ã®å†…å®¹ã‚’ãƒã‚¤ãƒŠãƒªãƒ•ã‚¡ã‚¤ãƒ«ã¨ã—ã¦æ›¸ãå‡ºã™
 	static void WriteAllBytes(const TCHAR* filePath, const void* buffer, size_t size);
 
-	/// •¶š—ñ‚ğƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚Æ‚µ‚Ä‘‚«o‚·
+	/// æ–‡å­—åˆ—ã‚’ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã¨ã—ã¦æ›¸ãå‡ºã™
 	static void WriteAllText(const TCHAR* filePath, const String& str, const Text::Encoding* encoding = NULL);
 
-	/// Œ»İ‚ÌˆÊ’u‚Æƒf[ƒ^(ƒtƒ@ƒCƒ‹)ƒTƒCƒYAƒIƒtƒZƒbƒgAŠî€(SEEK_xxxx)‚ğó‚¯æ‚Á‚ÄAV‚µ‚¢ƒV[ƒNˆÊ’u‚ğ•Ô‚·
+	/// ç¾åœ¨ã®ä½ç½®ã¨ãƒ‡ãƒ¼ã‚¿(ãƒ•ã‚¡ã‚¤ãƒ«)ã‚µã‚¤ã‚ºã€ã‚ªãƒ•ã‚»ãƒƒãƒˆã€åŸºæº–(SEEK_xxxx)ã‚’å—ã‘å–ã£ã¦ã€æ–°ã—ã„ã‚·ãƒ¼ã‚¯ä½ç½®ã‚’è¿”ã™
 	size_t CalcSeekPoint(size_t curPoint, size_t maxSize, size_t offset, int origin);
 };
 

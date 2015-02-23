@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 
 #include "../Base/Common.h"
@@ -9,33 +9,33 @@ namespace Lumino
 namespace Threading
 {
 /**
-	@brief		‘Ò‚¿‡‚í‚¹‹@”\‚ğ‚ÂƒXƒŒƒbƒhƒZ[ƒt‚È bool Œ^•Ï”‚ÌƒNƒ‰ƒX
+	@brief		å¾…ã¡åˆã‚ã›æ©Ÿèƒ½ã‚’æŒã¤ã‚¹ãƒ¬ãƒƒãƒ‰ã‚»ãƒ¼ãƒ•ãª bool å‹å¤‰æ•°ã®ã‚¯ãƒ©ã‚¹
 */
 class LUMINO_EXPORT EventFlag
     : private NonCopyable
 {
 public:
-	/// ƒfƒtƒHƒ‹ƒgƒRƒ“ƒXƒgƒ‰ƒNƒ^ (‰Šú’l‚Í false)
+	/// ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ (åˆæœŸå€¤ã¯ false)
     EventFlag();
 
-	/// ƒRƒ“ƒXƒgƒ‰ƒNƒ^ (‰Šú’l‚ğw’è‚·‚é) 
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ (åˆæœŸå€¤ã‚’æŒ‡å®šã™ã‚‹) 
 	explicit EventFlag(bool initFlag);
 
-	/// ƒfƒXƒgƒ‰ƒNƒ^
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	virtual ~EventFlag();
 
 public:
 
-    /// ’l‚ğ true ‚É‚·‚é
+    /// å€¤ã‚’ true ã«ã™ã‚‹
 	void SetTrue();
 
-	/// ’l‚ğ false ‚É‚·‚é
+	/// å€¤ã‚’ false ã«ã™ã‚‹
 	void SetFalse();
 
-	/// ’l‚ª true ‚©‚ğ”»’è‚·‚é
+	/// å€¤ãŒ true ã‹ã‚’åˆ¤å®šã™ã‚‹
 	bool IsTrue() const;
 
-	/// ’l‚ª true ‚É‚È‚é‚Ü‚Å‘Ò‹@‚·‚é
+	/// å€¤ãŒ true ã«ãªã‚‹ã¾ã§å¾…æ©Ÿã™ã‚‹
     void Wait();
 
 private:

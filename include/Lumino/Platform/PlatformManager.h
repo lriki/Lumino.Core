@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 
 #include "../Base/RefObject.h"
@@ -13,25 +13,25 @@ namespace Platform
 {
 class WindowManagerBase;
 
-/// ƒEƒBƒ“ƒhƒEƒVƒXƒeƒ€‚Ég—p‚·‚éAPIEƒ‰ƒCƒuƒ‰ƒŠ
+/// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚·ã‚¹ãƒ†ãƒ ã«ä½¿ç”¨ã™ã‚‹APIãƒ»ãƒ©ã‚¤ãƒ–ãƒ©ãƒª
 enum WindowSystemAPI
 {
 	WindowSystemAPI_Win32API = 0,		///< WindowsAPI
 	WindowSystemAPI_GLFW,
 };
 
-/// ƒEƒBƒ“ƒhƒE‚ğì¬‚·‚é‚½‚ß‚Ìİ’è
+/// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’ä½œæˆã™ã‚‹ãŸã‚ã®è¨­å®š
 struct WindowCreationSettings
 {
-	String	Title;			///< ƒEƒBƒ“ƒhƒEƒ^ƒCƒgƒ‹ (default:"")
-	Size	ClientSize;		///< ƒNƒ‰ƒCƒAƒ“ƒg—Ìˆæ‚ÌƒsƒNƒZƒ‹ƒTƒCƒY (default:640,480)
-	bool	Fullscreen;		///< ƒtƒ‹ƒXƒNƒŠ[ƒ“ƒ‚[ƒh‚Åì¬‚·‚é‚©‚Ç‚¤‚© (default:false)
-	bool	Resizable;		///< ‰Â•ÏƒEƒBƒ“ƒhƒE‚Æ‚µ‚Äì¬‚·‚é‚©‚Ç‚¤‚© (default:true)
+	String	Title;			///< ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¿ã‚¤ãƒˆãƒ« (default:"")
+	Size	ClientSize;		///< ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆé ˜åŸŸã®ãƒ”ã‚¯ã‚»ãƒ«ã‚µã‚¤ã‚º (default:640,480)
+	bool	Fullscreen;		///< ãƒ•ãƒ«ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ãƒ¢ãƒ¼ãƒ‰ã§ä½œæˆã™ã‚‹ã‹ã©ã†ã‹ (default:false)
+	bool	Resizable;		///< å¯å¤‰ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã¨ã—ã¦ä½œæˆã™ã‚‹ã‹ã©ã†ã‹ (default:true)
 
 	WindowCreationSettings();
 };
 
-/// PlatformManager ‚ğ‰Šú‰»‚·‚é‚½‚ß‚Ìİ’è
+/// PlatformManager ã‚’åˆæœŸåŒ–ã™ã‚‹ãŸã‚ã®è¨­å®š
 struct PlatformManagerSettings
 {
 	WindowSystemAPI			API;

@@ -1,4 +1,4 @@
-
+ï»¿
 #include "../Internal.h"
 #include "ASCIIEncoding.h"
 
@@ -27,15 +27,15 @@ void ASCIIEncoding::ASCIIDecoder::ConvertToUTF16(const byte_t* inBuffer, size_t 
 	{
 		byte_t ch = inBuffer[i];
 
-		// •’Ê‚Ì ASCII •¶š
+		// æ™®é€šã® ASCII æ–‡å­—
 		if (ch <= 0x7F) {
 			outBuffer[i] = static_cast<UTF16>(ch);
 		}
-		// ‘ã‘Ö•¶š‚ªw’è‚³‚ê‚Ä‚¢‚ê‚Î‚»‚ê‚ğg‚¤
+		// ä»£æ›¿æ–‡å­—ãŒæŒ‡å®šã•ã‚Œã¦ã„ã‚Œã°ãã‚Œã‚’ä½¿ã†
 		else if (mFallbackReplacementChar != 0x00) {
 			outBuffer[i] = static_cast<UTF16>(mFallbackReplacementChar);
 		}
-		// ASCII ŠO‚Å‘ã‘Ö•¶š‚à–³‚¯‚ê‚ÎƒGƒ‰[
+		// ASCII å¤–ã§ä»£æ›¿æ–‡å­—ã‚‚ç„¡ã‘ã‚Œã°ã‚¨ãƒ©ãƒ¼
 		else {
 			LN_THROW(0, EncodingFallbackException);
 		}
@@ -54,21 +54,21 @@ void ASCIIEncoding::ASCIIEncoder::ConvertFromUTF16(const UTF16* inBuffer, size_t
 	{
 		UTF16 ch = inBuffer[i];
 
-		// •’Ê‚Ì ASCII •¶š
+		// æ™®é€šã® ASCII æ–‡å­—
 		if (ch <= 0x7F) {
 			outBuffer[i] = static_cast<byte_t>(ch);
 		}
-		// ‘ã‘Ö•¶š‚ªw’è‚³‚ê‚Ä‚¢‚ê‚Î‚»‚ê‚ğg‚¤
+		// ä»£æ›¿æ–‡å­—ãŒæŒ‡å®šã•ã‚Œã¦ã„ã‚Œã°ãã‚Œã‚’ä½¿ã†
 		else if (mFallbackReplacementChar != 0x00) {
 			outBuffer[i] = static_cast<byte_t>(mFallbackReplacementChar);
 		}
-		// ASCII ŠO‚Å‘ã‘Ö•¶š‚à–³‚¯‚ê‚ÎƒGƒ‰[
+		// ASCII å¤–ã§ä»£æ›¿æ–‡å­—ã‚‚ç„¡ã‘ã‚Œã°ã‚¨ãƒ©ãƒ¼
 		else {
 			LN_THROW(0, EncodingFallbackException);
 		}
 	}
 
-	(*outBytesUsed) = inBufferCharCount;	// •¶š”‚ª‚»‚Ì‚Ü‚ÜƒoƒCƒg”
+	(*outBytesUsed) = inBufferCharCount;	// æ–‡å­—æ•°ãŒãã®ã¾ã¾ãƒã‚¤ãƒˆæ•°
 	(*outCharsUsed) = inBufferCharCount;
 }
 

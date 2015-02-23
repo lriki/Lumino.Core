@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 
 #include "NonCopyable.h"
@@ -7,17 +7,17 @@
 namespace Lumino
 {
 
-/// QÆƒJƒEƒ“ƒg‚ÌƒCƒ“ƒNƒŠƒƒ“ƒg
+/// å‚ç…§ã‚«ã‚¦ãƒ³ãƒˆã®ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ãƒˆ
 #ifndef LN_SAFE_ADDREF
 	#define LN_SAFE_ADDREF( p ) { if ( p ) { p->AddRef(); } }
 #endif
 
-/// QÆƒJƒEƒ“ƒg‚ÌƒfƒNƒŠƒƒ“ƒg
+/// å‚ç…§ã‚«ã‚¦ãƒ³ãƒˆã®ãƒ‡ã‚¯ãƒªãƒ¡ãƒ³ãƒˆ
 #ifndef LN_SAFE_RELEASE
 	#define LN_SAFE_RELEASE( p ) { if ( p ) { ( p )->Release(); ( p ) = NULL; } }
 #endif
 
-/// a ‚É b ‚ğŠi”[‚·‚éƒ†[ƒeƒBƒŠƒeƒB
+/// a ã« b ã‚’æ ¼ç´ã™ã‚‹ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£
 #define LN_REFOBJ_SET( a, b ) \
 { \
     LN_SAFE_ADDREF( b ); \
@@ -26,7 +26,7 @@ namespace Lumino
 }
 
 /**
-	@brief	QÆƒJƒEƒ“ƒg‚ğ‚ÂƒNƒ‰ƒX‚ÌŠî’ê
+	@brief	å‚ç…§ã‚«ã‚¦ãƒ³ãƒˆã‚’æŒã¤ã‚¯ãƒ©ã‚¹ã®åŸºåº•
 */
 class RefObject
     : private NonCopyable
@@ -38,22 +38,22 @@ protected:
 
 public:
 
-	/// QÆƒJƒEƒ“ƒg‚Ìæ“¾
+	/// å‚ç…§ã‚«ã‚¦ãƒ³ãƒˆã®å–å¾—
 	virtual int32_t GetRefCount() const;
 
-	/// QÆƒJƒEƒ“ƒg‚ğƒCƒ“ƒNƒŠƒƒ“ƒg‚·‚é
+	/// å‚ç…§ã‚«ã‚¦ãƒ³ãƒˆã‚’ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ãƒˆã™ã‚‹
 	virtual int32_t AddRef();
 
-	/// QÆƒJƒEƒ“ƒg‚ğƒfƒNƒŠƒƒ“ƒg‚·‚é
+	/// å‚ç…§ã‚«ã‚¦ãƒ³ãƒˆã‚’ãƒ‡ã‚¯ãƒªãƒ¡ãƒ³ãƒˆã™ã‚‹
 	virtual int32_t Release();
 
 protected:
-    Threading::Atomic	mReferenceCount;	///< QÆƒJƒEƒ“ƒg
+    Threading::Atomic	mReferenceCount;	///< å‚ç…§ã‚«ã‚¦ãƒ³ãƒˆ
 };
 
 /**
-	@brief		RefObject —p ƒXƒ}[ƒgƒ|ƒCƒ“ƒ^
-	@attention	CArray ‚â std::vector “™‚ÌƒRƒ“ƒeƒi‚Ö‚ÌŠi”[‚Í–¢ƒ`ƒFƒbƒN
+	@brief		RefObject ç”¨ ã‚¹ãƒãƒ¼ãƒˆãƒã‚¤ãƒ³ã‚¿
+	@attention	CArray ã‚„ std::vector ç­‰ã®ã‚³ãƒ³ãƒ†ãƒŠã¸ã®æ ¼ç´ã¯æœªãƒã‚§ãƒƒã‚¯
 */
 template <class T>
 class RefPtr
@@ -61,16 +61,16 @@ class RefPtr
 public:
 
 	/**
-		@brief		ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		@brief		ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	*/
 	RefPtr()
 		: mPtr( NULL )
 	{ }
 
 	/**
-		@brief		ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-		@param[in]	ptr		: ŠÇ—‘ÎÛ‚Æ‚µ‚ÄƒZƒbƒg‚·‚é ReferenceObject ƒCƒ“ƒXƒ^ƒ“ƒX‚Ìƒ|ƒCƒ“ƒ^
-		@param[in]	addRef	: true ‚Ìê‡AƒZƒbƒg‚³‚ê‚½ ReferenceObject ‚ÌQÆƒJƒEƒ“ƒg‚ğƒCƒ“ƒNƒŠƒƒ“ƒg‚·‚é
+		@brief		ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		@param[in]	ptr		: ç®¡ç†å¯¾è±¡ã¨ã—ã¦ã‚»ãƒƒãƒˆã™ã‚‹ ReferenceObject ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®ãƒã‚¤ãƒ³ã‚¿
+		@param[in]	addRef	: true ã®å ´åˆã€ã‚»ãƒƒãƒˆã•ã‚ŒãŸ ReferenceObject ã®å‚ç…§ã‚«ã‚¦ãƒ³ãƒˆã‚’ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ãƒˆã™ã‚‹
 	*/
 	explicit RefPtr( T* ptr, bool addRef = false)
 		: mPtr( ptr )
@@ -81,7 +81,7 @@ public:
 	}
 
 	/**
-		@brief		ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		@brief		ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		@param[in]	obj		:
 	*/
 	RefPtr( const RefPtr<T>& obj )
@@ -91,7 +91,7 @@ public:
 	}
 
 	/**
-		@brief		ƒfƒXƒgƒ‰ƒNƒ^
+		@brief		ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	*/
 	virtual ~RefPtr()
 	{
@@ -101,9 +101,9 @@ public:
 public:
 
 	/**
-		@brief		ReferenceObject ƒCƒ“ƒXƒ^ƒ“ƒX‚Ìƒ|ƒCƒ“ƒ^‚ğŠÇ—‘ÎÛ‚Æ‚µ‚ÄƒZƒbƒg‚·‚é
-		@param[in]	ptr		: ŠÇ—‘ÎÛ‚Æ‚µ‚ÄƒZƒbƒg‚·‚é ReferenceObject ƒCƒ“ƒXƒ^ƒ“ƒX‚Ìƒ|ƒCƒ“ƒ^
-		@param[in]	addRef	: true ‚Ìê‡AƒZƒbƒg‚³‚ê‚½ ReferenceObject ‚ÌQÆƒJƒEƒ“ƒg‚ğƒCƒ“ƒNƒŠƒƒ“ƒg‚·‚é
+		@brief		ReferenceObject ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®ãƒã‚¤ãƒ³ã‚¿ã‚’ç®¡ç†å¯¾è±¡ã¨ã—ã¦ã‚»ãƒƒãƒˆã™ã‚‹
+		@param[in]	ptr		: ç®¡ç†å¯¾è±¡ã¨ã—ã¦ã‚»ãƒƒãƒˆã™ã‚‹ ReferenceObject ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®ãƒã‚¤ãƒ³ã‚¿
+		@param[in]	addRef	: true ã®å ´åˆã€ã‚»ãƒƒãƒˆã•ã‚ŒãŸ ReferenceObject ã®å‚ç…§ã‚«ã‚¦ãƒ³ãƒˆã‚’ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ãƒˆã™ã‚‹
 	*/
 	void Attach( T* ptr, bool addRef = false )
     { 
@@ -115,7 +115,7 @@ public:
     }
 
 	/**
-		@brief		ŠÇ—‘ÎÛƒIƒuƒWƒFƒNƒg‚ÌQÆƒJƒEƒ“ƒg‚ğƒCƒ“ƒNƒŠƒƒ“ƒg‚·‚é
+		@brief		ç®¡ç†å¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å‚ç…§ã‚«ã‚¦ãƒ³ãƒˆã‚’ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ãƒˆã™ã‚‹
 	*/
 	void SafeAddRef()
 	{ 
@@ -123,7 +123,7 @@ public:
 	}
 
 	/**
-		@brief		ŠÇ—‘ÎÛƒIƒuƒWƒFƒNƒg‚ÌQÆƒJƒEƒ“ƒg‚ğƒfƒNƒŠƒƒ“ƒg‚µAŠÇ—‘ÎÛ‚©‚çŠO‚·
+		@brief		ç®¡ç†å¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å‚ç…§ã‚«ã‚¦ãƒ³ãƒˆã‚’ãƒ‡ã‚¯ãƒªãƒ¡ãƒ³ãƒˆã—ã€ç®¡ç†å¯¾è±¡ã‹ã‚‰å¤–ã™
 	*/
     void SafeRelease()
 	{
@@ -131,17 +131,17 @@ public:
 	}
 
 	/**
-		@brief		ŠÇ—‘ÎÛƒIƒuƒWƒFƒNƒg‚Ö‚Ìƒ|ƒCƒ“ƒ^‚ª NULL ‚Å‚ ‚é‚©‚ğŠm”F‚·‚é
+		@brief		ç®¡ç†å¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¸ã®ãƒã‚¤ãƒ³ã‚¿ãŒ NULL ã§ã‚ã‚‹ã‹ã‚’ç¢ºèªã™ã‚‹
 	*/
 	bool IsNull() const { return (mPtr == NULL); }
 
 	/**
-		@brief		ŠÇ—‘ÎÛƒIƒuƒWƒFƒNƒg‚Ö‚Ìƒ|ƒCƒ“ƒ^‚ğæ“¾‚·‚é
+		@brief		ç®¡ç†å¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¸ã®ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—ã™ã‚‹
 	*/
 	const T* GetObjectPtr() const	{ return mPtr; }
 
 	/**
-		@brief		ŠÇ—‘ÎÛƒIƒuƒWƒFƒNƒg‚Ö‚Ìƒ|ƒCƒ“ƒ^‚ğæ“¾‚·‚é
+		@brief		ç®¡ç†å¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¸ã®ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—ã™ã‚‹
 	*/
 	T* GetObjectPtr() { return mPtr; }
 

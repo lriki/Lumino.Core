@@ -1,4 +1,4 @@
-
+﻿
 #include "../Internal.h"
 #include "../../include/Lumino/Threading/ReadWriteMutex.h"
 
@@ -48,8 +48,8 @@ void ReadWriteMutex::LockRead()
 	mReaderCount++;
 	if (mReaderCount == 1)
 	{
-		// ReadLock �X���b�h���� 0 �� 1 �ɂȂ����B
-		// �ЂƂȏ㑶�݂��Ă��邱�ƂɂȂ�B
+		// ReadLock スレッド数が 0 → 1 になった。
+		// ひとつ以上存在していることになる。
 		::ResetEvent(mNoReaders);
 	}
 	::LeaveCriticalSection(&mReaderCountLock);
@@ -67,9 +67,9 @@ void ReadWriteMutex::UnlockRead()
 		mReaderCount--;
 		if (mReaderCount == 0)
 		{
-			// ReadLock �X���b�h���� 1 �� 0 �ɂȂ����B
-			// ReadLock ���Ă���X���b�h�͑��݂��Ă��Ȃ��B
-			// ���� WriteLock �҂��̃X���b�h������΁A���̎��_�œ����o���B
+			// ReadLock スレッド数が 1 → 0 になった。
+			// ReadLock しているスレッドは存在していない。
+			// もし WriteLock 待ちのスレッドがいれば、この時点で動き出す。
 			::SetEvent(mNoReaders);
 		}
 	}
@@ -84,7 +84,7 @@ void ReadWriteMutex::LockWrite()
 	::EnterCriticalSection(&mWriterLock);
 	if (mReaderCount > 0)
 	{
-		// �����ЂƂȏ� ReadLock ����Ă���΁A�����ő҂B
+		// もしひとつ以上 ReadLock されていれば、ここで待つ。
 		::WaitForSingleObject(mNoReaders, INFINITE);
 	}
 }

@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 
 #include "../Base/Array.h"
@@ -10,15 +10,15 @@ namespace Platform
 {
 
 /**
-	@brief	ƒvƒ‰ƒbƒgƒtƒH[ƒ€ŒÅ—L‚ÌƒEƒBƒ“ƒhƒEƒVƒXƒeƒ€‚ÌƒEƒBƒ“ƒhƒE‚ğ’ŠÛ‰»‚µ‚Ü‚·B
+	@brief	ãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ å›ºæœ‰ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚·ã‚¹ãƒ†ãƒ ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’æŠ½è±¡åŒ–ã—ã¾ã™ã€‚
 */
 class IEventListener
 {
 public:
 
 	/**
-		@brief	ƒƒbƒZ[ƒWˆ—ƒR[ƒ‹ƒoƒbƒN
-		@return true ‚Ìê‡AŒÄ‚Ño‚µ‘¤‚Å‘¼‚Ìˆ—‚ğs‚í‚¸‚ÉA‚·‚®‚Éˆ—‚ğI—¹‚µ‚Ü‚·B
+		@brief	ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‡¦ç†ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
+		@return true ã®å ´åˆã€å‘¼ã³å‡ºã—å´ã§ä»–ã®å‡¦ç†ã‚’è¡Œã‚ãšã«ã€ã™ãã«å‡¦ç†ã‚’çµ‚äº†ã—ã¾ã™ã€‚
 	*/
 	virtual bool OnEvent(const EventArgs& e) = 0;
 

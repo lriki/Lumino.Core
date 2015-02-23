@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 
 #include <vector>
@@ -8,7 +8,7 @@ namespace Lumino
 {
 
 /**
-	@brief	“®“I”z—ñ (ƒfƒtƒHƒ‹ƒg‚ÌƒAƒƒP[ƒ^‚ÉƒJƒXƒ^ƒ€ƒAƒƒP[ƒ^‚ğw’è)
+	@brief	å‹•çš„é…åˆ— (ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ã‚¢ãƒ­ã‚±ãƒ¼ã‚¿ã«ã‚«ã‚¹ã‚¿ãƒ ã‚¢ãƒ­ã‚±ãƒ¼ã‚¿ã‚’æŒ‡å®š)
 */
 template<typename T, typename TAllocator = STLAllocator<T> >
 class Array : public std::vector<T, TAllocator >
@@ -17,43 +17,43 @@ public:
 	typedef std::vector<T, TAllocator> std_vector;
 
 public:
-	/// ”z—ñ‚ÌƒCƒ“ƒfƒbƒNƒX‚Æ‚µ‚Ä—LŒø‚È®”’l‚Å‚ ‚é‚©‚ğŠm”F‚·‚é
+	/// é…åˆ—ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã¨ã—ã¦æœ‰åŠ¹ãªæ•´æ•°å€¤ã§ã‚ã‚‹ã‹ã‚’ç¢ºèªã™ã‚‹
 	bool CheckValidIndex(int index) const { return (0 <= index && index < GetCount()); }
 	
-	/// —v‘f”‚ğæ“¾‚·‚é
+	/// è¦ç´ æ•°ã‚’å–å¾—ã™ã‚‹
 	int GetCount() const { return (int)std_vector::size(); }
 
-	/// ––”ö‚É—v‘f‚ğ’Ç‰Á‚·‚é
+	/// æœ«å°¾ã«è¦ç´ ã‚’è¿½åŠ ã™ã‚‹
 	void Add(const T& value) { std_vector::push_back(value); }
 
-	/// I’[—v‘f‚ÌQÆ‚ğ•Ô‚·
+	/// çµ‚ç«¯è¦ç´ ã®å‚ç…§ã‚’è¿”ã™
 	T& GetLast() { return *(std_vector::rbegin()); }
 
-	/// I’[—v‘f‚ÌQÆ‚ğ•Ô‚·
+	/// çµ‚ç«¯è¦ç´ ã®å‚ç…§ã‚’è¿”ã™
 	const T& GetLast() const { return *(std_vector::rbegin()); }
 
-	/// item ‚Éˆê’v‚·‚éÅ‰‚Ì—v‘f‚ğíœ‚·‚é
+	/// item ã«ä¸€è‡´ã™ã‚‹æœ€åˆã®è¦ç´ ã‚’å‰Šé™¤ã™ã‚‹
 	void Remove(const T& item) { STLUtils::Remove(*this, item); }
 
-	/// item ‚Éˆê’v‚·‚é‘S‚Ä‚Ì—v‘f‚ğíœ‚·‚é
+	/// item ã«ä¸€è‡´ã™ã‚‹å…¨ã¦ã®è¦ç´ ã‚’å‰Šé™¤ã™ã‚‹
 	void RemoveAll(const T& item) { STLUtils::RemoveAll(*this, item); }
 
-	/// ‚ ‚é—v‘f‚ª‚±‚Ì”z—ñ“à‚É‘¶İ‚·‚é‚©‚Ç‚¤‚©‚ğ”»’f‚µ‚Ü‚·B
+	/// ã‚ã‚‹è¦ç´ ãŒã“ã®é…åˆ—å†…ã«å­˜åœ¨ã™ã‚‹ã‹ã©ã†ã‹ã‚’åˆ¤æ–­ã—ã¾ã™ã€‚
 	bool Contains(const T& item) const { return std::find(std_vector::begin(), std_vector::end(), item) != std_vector::end(); }
 };
 
 /**
-	@brief		ƒL[‚Ì "operator <" ‚ÌÀ‘•‚É‚æ‚è’l‚ğ•À‚×‘Ö‚¦‚é“®“I”z—ñ
+	@brief		ã‚­ãƒ¼ã® "operator <" ã®å®Ÿè£…ã«ã‚ˆã‚Šå€¤ã‚’ä¸¦ã¹æ›¿ãˆã‚‹å‹•çš„é…åˆ—
 */
 template<typename TKey, typename TValue, typename TAllocator = STLAllocator< std::pair<TKey, TValue> > >
 class SortedArray
 {
 public:
 
-	/// ––”ö‚É—v‘f‚ğ’Ç‰Á‚·‚é
+	/// æœ«å°¾ã«è¦ç´ ã‚’è¿½åŠ ã™ã‚‹
 	void Add(const TKey& key, const TValue& value);
 
-	/// item ‚Éˆê’v‚·‚éÅ‰‚Ì—v‘f‚ğíœ‚·‚é
+	/// item ã«ä¸€è‡´ã™ã‚‹æœ€åˆã®è¦ç´ ã‚’å‰Šé™¤ã™ã‚‹
 	void Remove(const TValue& item);
 
 public:
@@ -124,7 +124,7 @@ inline void SortedArray<TKey, TValue, TAllocator>::Add(const TKey& key, const TV
 		}
 	};
 
-	// ’Ç‰ÁŒãAƒ\[ƒg‚ğŠ|‚¯‚é
+	// è¿½åŠ å¾Œã€ã‚½ãƒ¼ãƒˆã‚’æ›ã‘ã‚‹
 	Entry e;
 	e.first = key;
 	e.second = value;

@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 
 #include <vector>
@@ -12,25 +12,25 @@ namespace Text { class Encoding; }
 
 class RefBuffer;
 
-/// String::Split() ‚Ìo—Í•û–@
+/// String::Split() ã®å‡ºåŠ›æ–¹æ³•
 enum StringSplitOptions
 {
-	StringSplitOptions_None = 0,			///< o—Í‚Í‹ó‚Ì•¶š—ñ‚ğŠÜ‚Ş
-	StringSplitOptions_RemoveEmptyEntries,	///< o—Í‚Í‹ó‚Ì•¶š—ñ‚ğŠÜ‚Ü‚È‚¢
+	StringSplitOptions_None = 0,			///< å‡ºåŠ›ã¯ç©ºã®æ–‡å­—åˆ—ã‚’å«ã‚€
+	StringSplitOptions_RemoveEmptyEntries,	///< å‡ºåŠ›ã¯ç©ºã®æ–‡å­—åˆ—ã‚’å«ã¾ãªã„
 };
 
 /**
-	@brief		•¶š—ñ‚ğ•\‚·ƒNƒ‰ƒX
-	@details	std::basic_string ‚ğƒx[ƒX‚É‹@”\Šg’£‚ğs‚Á‚½•¶š—ñƒNƒ‰ƒX‚Å‚·B
+	@brief		æ–‡å­—åˆ—ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
+	@details	std::basic_string ã‚’ãƒ™ãƒ¼ã‚¹ã«æ©Ÿèƒ½æ‹¡å¼µã‚’è¡Œã£ãŸæ–‡å­—åˆ—ã‚¯ãƒ©ã‚¹ã§ã™ã€‚
 	
-	@note		MFC ‚Ì CString ‚Ì‚æ‚¤‚È ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Å‚Ì char Ì wchar_t •ÏŠ·‚Ís‚í‚È‚¢B
-				•Ê“rƒƒ“ƒoŠÖ” (AssignCStr) ‚ğŒÄ‚Ño‚·‚±‚Æ‚Ås‚¤B
-				‚±‚ê‚Íƒeƒ“ƒvƒŒ[ƒgŒ^ˆø”‚ÌƒfƒtƒHƒ‹ƒg’l‚ğl—¶‚µ‚½Œp³‚ª•K—v‚Å‚ ‚èAÀ‘•‚ª‚â‚â•¡G‚É‚È‚é‚½‚ßB
-				‚Ü‚½A‚±‚Ì‚æ‚¤‚Èƒeƒ“ƒvƒŒ[ƒg‚ÌÀ‘•‚Í Android —pƒlƒCƒeƒBƒuƒRƒ“ƒpƒCƒ‰‚Å‚Ío—ˆ‚È‚©‚Á‚½‚Í‚¸B(¡‚Í‚Å‚«‚é‚æ‚¤‚É‚È‚Á‚Ä‚¢‚é‚©‚àH)
+	@note		MFC ã® CString ã®ã‚ˆã†ãª ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã§ã® char â‡” wchar_t å¤‰æ›ã¯è¡Œã‚ãªã„ã€‚
+				åˆ¥é€”ãƒ¡ãƒ³ãƒé–¢æ•° (AssignCStr) ã‚’å‘¼ã³å‡ºã™ã“ã¨ã§è¡Œã†ã€‚
+				ã“ã‚Œã¯ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆå‹å¼•æ•°ã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ã‚’è€ƒæ…®ã—ãŸç¶™æ‰¿ãŒå¿…è¦ã§ã‚ã‚Šã€å®Ÿè£…ãŒã‚„ã‚„è¤‡é›‘ã«ãªã‚‹ãŸã‚ã€‚
+				ã¾ãŸã€ã“ã®ã‚ˆã†ãªãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã®å®Ÿè£…ã¯ Android ç”¨ãƒã‚¤ãƒ†ã‚£ãƒ–ã‚³ãƒ³ãƒ‘ã‚¤ãƒ©ã§ã¯å‡ºæ¥ãªã‹ã£ãŸã¯ãšã€‚(ä»Šã¯ã§ãã‚‹ã‚ˆã†ã«ãªã£ã¦ã„ã‚‹ã‹ã‚‚ï¼Ÿ)
 	
-	@note		Replace “™‚Ì•¶š—ñ‚ğ•ÏX‚·‚éŠÖ”‚ÍA‰Â“Ç«Œüã‚Ì‚½‚ß‚ÉŠî–{“I‚Éˆ—Œ‹‰Ê‚ğ–ß‚è’l‚Å•Ô‚µ‚Ä‚¢‚éB
-				VisualC++ ‚â GCC “™‚ÌƒƒWƒƒ[‚ÈƒRƒ“ƒpƒCƒ‰‚Å‚Í RVO ‚ª“K—p‚³‚ê‚é‚½‚ßA–w‚Ç‚Ìê‡ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ÍŒÄ‚Î‚ê‚È‚¢B
-				’l‚Å•Ô‚·‚±‚Æ‚ÌƒI[ƒo[ƒwƒbƒh‚ÍAƒRƒ“ƒXƒgƒ‰ƒNƒ^ŒÄ‚Ño‚µ1‰ñ‚Ì‚İB
+	@note		Replace ç­‰ã®æ–‡å­—åˆ—ã‚’å¤‰æ›´ã™ã‚‹é–¢æ•°ã¯ã€å¯èª­æ€§å‘ä¸Šã®ãŸã‚ã«åŸºæœ¬çš„ã«å‡¦ç†çµæœã‚’æˆ»ã‚Šå€¤ã§è¿”ã—ã¦ã„ã‚‹ã€‚
+				VisualC++ ã‚„ GCC ç­‰ã®ãƒ¡ã‚¸ãƒ£ãƒ¼ãªã‚³ãƒ³ãƒ‘ã‚¤ãƒ©ã§ã¯ RVO ãŒé©ç”¨ã•ã‚Œã‚‹ãŸã‚ã€æ®†ã©ã®å ´åˆã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã¯å‘¼ã°ã‚Œãªã„ã€‚
+				å€¤ã§è¿”ã™ã“ã¨ã®ã‚ªãƒ¼ãƒãƒ¼ãƒ˜ãƒƒãƒ‰ã¯ã€ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼ã³å‡ºã—1å›ã®ã¿ã€‚
 
 */
 template<typename TChar>
@@ -55,7 +55,7 @@ public:
 	explicit BasicString(const std_basic_string& str) : std_basic_string(str) {}
 			 BasicString(size_type count, TChar ch)	: std_basic_string(count, ch) {}
 	
-	// TChar Š„‚è“–‚Ä
+	// TChar å‰²ã‚Šå½“ã¦
 	BasicString(const TChar* str) : std_basic_string(str) {}
 	BasicString(const TChar* str, size_type length) : std_basic_string(str, length) {}
 	BasicString(const TChar* str, size_type begin, size_type length) : std_basic_string(str + begin, length) {}
@@ -72,35 +72,35 @@ public:
 
 public:
 
-	/// CŒ¾ŒêŒ`®‚Ì•¶š—ñƒ|ƒCƒ“ƒ^‚ğ•Ô‚·
+	/// Cè¨€èªå½¢å¼ã®æ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã™
 	const TChar* GetCStr() const { return std_basic_string::c_str(); }
 	
-	/// •¶š—ñ‚ª‹ó‚Ì‚Étrue‚ğ•Ô‚·
+	/// æ–‡å­—åˆ—ãŒç©ºã®æ™‚ã«trueã‚’è¿”ã™
 	bool IsEmpty() const { return std_basic_string::empty(); }
 
 	/**
-		@brief		‘®•¶š—ñ‚Æ‰Â•Ï’·ˆø”ƒŠƒXƒg‚©‚ç•¶š—ñ‚ğ¶¬‚·‚é
-		@param[in]	format		: ‘®•¶š—ñ
-		@param[in]	...			: ˆø”ƒŠƒXƒg
-		@attention	¶¬‚³‚ê‚é•¶š”‚Í MaxFormatLength ˆÈ“à‚Éû‚Ü‚ç‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñB(‚ ‚Ó‚ê‚½ê‡A—áŠO‚ğthrow‚µ‚Ü‚·)
-					‚±‚ê‚ÍA_vsnwprintf ‚É‘Š“–‚·‚éŠÖ”‚ªWindowsˆÈŠO‚Å‚Íg—p‚Å‚«‚¸A‚ ‚ç‚©‚¶‚ß¶¬Œã‚Ì•K—vƒoƒbƒtƒ@ƒTƒCƒY‚ğ‘ª‚é‚±‚Æ‚ª‚Å‚«‚È‚¢‚½‚ß‚Å‚·B<br>
-					Format() ‚ÍŠî–{“I‚É”’l‚©‚ç‚Ì•ÏŠ·“™A’Z‚¢•¶š—ñ‚É‚Ì‚İg—p‚µA•¶š—ñ‚Ì˜AŒ‹‚Í += ‰‰Zq“™‚ğg—p‚µ‚Ä‚­‚¾‚³‚¢B
-					‚Ü‚½A‰Â•Ï’·ˆø”ƒŠƒXƒg‚É‚±‚ÌƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğ’¼Úw’è‚·‚é‚±‚Æ‚Í‚Å‚«‚Ü‚¹‚ñB
-					GetCStr() “™‚Åæ“¾‚µ‚½•¶š—ñƒ|ƒCƒ“ƒ^Œ^‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢B
+		@brief		æ›¸å¼æ–‡å­—åˆ—ã¨å¯å¤‰é•·å¼•æ•°ãƒªã‚¹ãƒˆã‹ã‚‰æ–‡å­—åˆ—ã‚’ç”Ÿæˆã™ã‚‹
+		@param[in]	format		: æ›¸å¼æ–‡å­—åˆ—
+		@param[in]	...			: å¼•æ•°ãƒªã‚¹ãƒˆ
+		@attention	ç”Ÿæˆã•ã‚Œã‚‹æ–‡å­—æ•°ã¯ MaxFormatLength ä»¥å†…ã«åã¾ã‚‰ãªã‘ã‚Œã°ãªã‚Šã¾ã›ã‚“ã€‚(ã‚ãµã‚ŒãŸå ´åˆã€ä¾‹å¤–ã‚’throwã—ã¾ã™)
+					ã“ã‚Œã¯ã€_vsnwprintf ã«ç›¸å½“ã™ã‚‹é–¢æ•°ãŒWindowsä»¥å¤–ã§ã¯ä½¿ç”¨ã§ããšã€ã‚ã‚‰ã‹ã˜ã‚ç”Ÿæˆå¾Œã®å¿…è¦ãƒãƒƒãƒ•ã‚¡ã‚µã‚¤ã‚ºã‚’æ¸¬ã‚‹ã“ã¨ãŒã§ããªã„ãŸã‚ã§ã™ã€‚<br>
+					Format() ã¯åŸºæœ¬çš„ã«æ•°å€¤ã‹ã‚‰ã®å¤‰æ›ç­‰ã€çŸ­ã„æ–‡å­—åˆ—ã«ã®ã¿ä½¿ç”¨ã—ã€æ–‡å­—åˆ—ã®é€£çµã¯ += æ¼”ç®—å­ç­‰ã‚’ä½¿ç”¨ã—ã¦ãã ã•ã„ã€‚
+					ã¾ãŸã€å¯å¤‰é•·å¼•æ•°ãƒªã‚¹ãƒˆã«ã“ã®ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç›´æ¥æŒ‡å®šã™ã‚‹ã“ã¨ã¯ã§ãã¾ã›ã‚“ã€‚
+					GetCStr() ç­‰ã§å–å¾—ã—ãŸæ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿å‹ã‚’æŒ‡å®šã—ã¦ãã ã•ã„ã€‚
 	*/
 	void Format(const TChar* format, ...);
 
 	/**
-		@brief		ƒlƒCƒeƒBƒuŒ^•¶š—ñ‚ğŠ„‚è“–‚Ä‚é
-		@param[in]	str				: İ’è‚·‚é•¶š—ñ
-		@param[in]	begin			: ƒRƒs[”ÍˆÍ‚ÌŠJnƒCƒ“ƒfƒbƒNƒX (È—ª‚µ‚½ê‡‚Íæ“ª‚©‚ç)
-		@param[in]	length			: ƒRƒs[‚·‚é•¶š—ñ (È—ª‚µ‚½ê‡‚ÍI’[ \0 ‚Ü‚Å)
-		@param[in]	usedDefaultChar	: •ÏŠ·•s‰Â•¶š‚ğƒfƒtƒHƒ‹ƒg•¶š ('?') ‚É•ÏŠ·‚µ‚½‚©‚Ç‚¤‚©
-		@details	‚±‚ÌŠÖ”‚Í char —pAwchar_t —p‚»‚ê‚¼‚êƒI[ƒo[ƒ[ƒh‚³‚ê‚Ü‚·B
-					Œ^ˆø” TChar ‚É‘Î‚µ‚Ä•K—v‚Å‚ ‚ê‚ÎA
-					‚»‚ê‚¼‚ê Encoding::GetSystemMultiByteEncoding()AEncoding::GetWideCharEncoding() ‚Åæ“¾‚Å‚«‚éƒGƒ“ƒR[ƒfƒBƒ“ƒO‚ğg—p‚µ‚Ä
-					•¶šƒR[ƒh‚ğ‚Ì•ÏŠ·‚ğs‚¢‚Ü‚·B
-					TChar ‚Æ str ‚ÌŒ^‚ª“¯‚¶ê‡‚Í•¶šƒR[ƒh‚Ì•ÏŠ·‚ğs‚¢‚Ü‚¹‚ñB
+		@brief		ãƒã‚¤ãƒ†ã‚£ãƒ–å‹æ–‡å­—åˆ—ã‚’å‰²ã‚Šå½“ã¦ã‚‹
+		@param[in]	str				: è¨­å®šã™ã‚‹æ–‡å­—åˆ—
+		@param[in]	begin			: ã‚³ãƒ”ãƒ¼ç¯„å›²ã®é–‹å§‹ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ (çœç•¥ã—ãŸå ´åˆã¯å…ˆé ­ã‹ã‚‰)
+		@param[in]	length			: ã‚³ãƒ”ãƒ¼ã™ã‚‹æ–‡å­—åˆ— (çœç•¥ã—ãŸå ´åˆã¯çµ‚ç«¯ \0 ã¾ã§)
+		@param[in]	usedDefaultChar	: å¤‰æ›ä¸å¯æ–‡å­—ã‚’ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆæ–‡å­— ('?') ã«å¤‰æ›ã—ãŸã‹ã©ã†ã‹
+		@details	ã“ã®é–¢æ•°ã¯ char ç”¨ã€wchar_t ç”¨ãã‚Œãã‚Œã‚ªãƒ¼ãƒãƒ¼ãƒ­ãƒ¼ãƒ‰ã•ã‚Œã¾ã™ã€‚
+					å‹å¼•æ•° TChar ã«å¯¾ã—ã¦å¿…è¦ã§ã‚ã‚Œã°ã€
+					ãã‚Œãã‚Œ Encoding::GetSystemMultiByteEncoding()ã€Encoding::GetWideCharEncoding() ã§å–å¾—ã§ãã‚‹ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°ã‚’ä½¿ç”¨ã—ã¦
+					æ–‡å­—ã‚³ãƒ¼ãƒ‰ã‚’ã®å¤‰æ›ã‚’è¡Œã„ã¾ã™ã€‚
+					TChar ã¨ str ã®å‹ãŒåŒã˜å ´åˆã¯æ–‡å­—ã‚³ãƒ¼ãƒ‰ã®å¤‰æ›ã‚’è¡Œã„ã¾ã›ã‚“ã€‚
 	*/
 	void AssignCStr(const char* str, size_type begin, size_type length, bool* usedDefaultChar = NULL);
 
@@ -120,92 +120,92 @@ public:
 	void AssignCStr(const wchar_t* str, bool* usedDefaultChar = NULL) { AssignCStr(str, 0, std_basic_string::npos, usedDefaultChar); }
 
 	/**
-		@brief		w’è‚µ‚½ƒGƒ“ƒR[ƒfƒBƒ“ƒO‚ğg—p‚µA•¶š—ñ‚ğ•ÏŠ·‚µ‚Äİ’è‚·‚é
-		@param[in]	buffer				: •ÏŠ·Œ³•¶š—ñ‚ªŠi”[‚³‚ê‚Ä‚¢‚éƒoƒbƒtƒ@
-		@param[in]	byteCount			: buffer ‚ÌƒoƒCƒg” (-1 ‚Å \0 ‚Ü‚Å)
-		@param[in]	encoding			: •ÏŠ·Œ³•¶šƒGƒ“ƒR[ƒfƒBƒ“ƒO
-		@param[out]	usedDefaultChar		: •ÏŠ·•s‰Â•¶š‚ğƒfƒtƒHƒ‹ƒg•¶š ('?') ‚É•ÏŠ·‚µ‚½‚©‚Ç‚¤‚©
+		@brief		æŒ‡å®šã—ãŸã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°ã‚’ä½¿ç”¨ã—ã€æ–‡å­—åˆ—ã‚’å¤‰æ›ã—ã¦è¨­å®šã™ã‚‹
+		@param[in]	buffer				: å¤‰æ›å…ƒæ–‡å­—åˆ—ãŒæ ¼ç´ã•ã‚Œã¦ã„ã‚‹ãƒãƒƒãƒ•ã‚¡
+		@param[in]	byteCount			: buffer ã®ãƒã‚¤ãƒˆæ•° (-1 ã§ \0 ã¾ã§)
+		@param[in]	encoding			: å¤‰æ›å…ƒæ–‡å­—ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°
+		@param[out]	usedDefaultChar		: å¤‰æ›ä¸å¯æ–‡å­—ã‚’ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆæ–‡å­— ('?') ã«å¤‰æ›ã—ãŸã‹ã©ã†ã‹
 	*/
 	void ConvertFrom(const void* buffer, int byteCount, const Text::Encoding* encoding, bool* usedDefaultChar = NULL);
 
 	/**
-		@brief		w’è‚µ‚½ƒGƒ“ƒR[ƒfƒBƒ“ƒO‚ğg—p‚µA•ÏŠ·‚µ‚½•¶š—ñƒoƒbƒtƒ@‚ğæ“¾‚·‚é
-		@param[in]	encoding			: •ÏŠ·æ•¶šƒGƒ“ƒR[ƒfƒBƒ“ƒO
-		@param[out]	pUsedDefaultChar	: •ÏŠ·•s‰Â•¶š‚ğƒfƒtƒHƒ‹ƒg•¶š ('?') ‚É•ÏŠ·‚µ‚½‚©‚Ç‚¤‚©
-		@return		\0I’[•¶š‚Í•t‰Á‚³‚ê‚Ü‚¹‚ñBGetSize() ‚É‚æ‚èg—pƒoƒCƒg”‚ğŠm”F‚Å‚«‚Ü‚·B
-					g—pŒãARelease() ‚ÅŠJ•ú‚·‚é•K—v‚ª‚ ‚è‚Ü‚·B
+		@brief		æŒ‡å®šã—ãŸã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°ã‚’ä½¿ç”¨ã—ã€å¤‰æ›ã—ãŸæ–‡å­—åˆ—ãƒãƒƒãƒ•ã‚¡ã‚’å–å¾—ã™ã‚‹
+		@param[in]	encoding			: å¤‰æ›å…ˆæ–‡å­—ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°
+		@param[out]	pUsedDefaultChar	: å¤‰æ›ä¸å¯æ–‡å­—ã‚’ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆæ–‡å­— ('?') ã«å¤‰æ›ã—ãŸã‹ã©ã†ã‹
+		@return		\0çµ‚ç«¯æ–‡å­—ã¯ä»˜åŠ ã•ã‚Œã¾ã›ã‚“ã€‚GetSize() ã«ã‚ˆã‚Šä½¿ç”¨ãƒã‚¤ãƒˆæ•°ã‚’ç¢ºèªã§ãã¾ã™ã€‚
+					ä½¿ç”¨å¾Œã€Release() ã§é–‹æ”¾ã™ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚
 	*/
 	RefBuffer* ConvertTo(const Text::Encoding* encoding, bool* usedDefaultChar = NULL) const;
 
 	/**
-		@brief		‹ó•¶š—ñ‚ğİ’è‚·‚é
+		@brief		ç©ºæ–‡å­—åˆ—ã‚’è¨­å®šã™ã‚‹
 	*/
 	void SetEmpty() { this->clear(); }
 
 	/**
-		@brief		•”•ª•¶š—ñ‚ğæ“¾‚·‚é
-		@param[in]	startIndex	: •¶š—ñ‚Ì 0 ‚©‚çn‚Ü‚éŠJn•¶šˆÊ’u
-		@param[in]	length		: •”•ª•¶š—ñ‚Ì•¶š” (È—ª‚µ‚½ê‡‚Í––”ö‚Ü‚Å)
+		@brief		éƒ¨åˆ†æ–‡å­—åˆ—ã‚’å–å¾—ã™ã‚‹
+		@param[in]	startIndex	: æ–‡å­—åˆ—ã® 0 ã‹ã‚‰å§‹ã¾ã‚‹é–‹å§‹æ–‡å­—ä½ç½®
+		@param[in]	length		: éƒ¨åˆ†æ–‡å­—åˆ—ã®æ–‡å­—æ•° (çœç•¥ã—ãŸå ´åˆã¯æœ«å°¾ã¾ã§)
 	*/
 	StringT SubString(size_type startIndex = 0, size_type length = std::string::npos) const;
 
 	/**
-		@brief		•¶š—ñ‚Ìæ“ª‚Æ––”ö‚Ì‹ó”’‚ğ‘S‚Äíœ‚·‚é
-		@details	‹ó”’•¶š‚ÍƒƒP[ƒ‹‚ÉˆË‘¶‚µ‚Ü‚·B“ú–{ŒêŠÂ‹«‚Å‚ ‚ê‚Î‘SŠpƒXƒy[ƒX‚à‹ó”’ˆµ‚¢‚Å‚·B
+		@brief		æ–‡å­—åˆ—ã®å…ˆé ­ã¨æœ«å°¾ã®ç©ºç™½ã‚’å…¨ã¦å‰Šé™¤ã™ã‚‹
+		@details	ç©ºç™½æ–‡å­—ã¯ãƒ­ã‚±ãƒ¼ãƒ«ã«ä¾å­˜ã—ã¾ã™ã€‚æ—¥æœ¬èªç’°å¢ƒã§ã‚ã‚Œã°å…¨è§’ã‚¹ãƒšãƒ¼ã‚¹ã‚‚ç©ºç™½æ‰±ã„ã§ã™ã€‚
 
 	*/
 	StringT Trim() const;
 
 	/**
-		@brief		•¶š—ñ‚Ì’uŠ·‚ğs‚¤
+		@brief		æ–‡å­—åˆ—ã®ç½®æ›ã‚’è¡Œã†
 		@param[in]	from
 		@param[in]	to
-		@return		’uŠ·Œ‹‰Ê‚Ì•¶š—ñ
-		@details	from ‚Éˆê’v‚·‚é‚·‚×‚Ä‚Ì•¶š—ñ‚ğ to ‚É’uŠ·‚µ‚Ü‚·B
+		@return		ç½®æ›çµæœã®æ–‡å­—åˆ—
+		@details	from ã«ä¸€è‡´ã™ã‚‹ã™ã¹ã¦ã®æ–‡å­—åˆ—ã‚’ to ã«ç½®æ›ã—ã¾ã™ã€‚
 
 	*/
 	StringT Replace(const TChar* from, const TChar* to) const;
 
 	/**
-		@brief		•¶š—ñ‚ğŒŸõ‚µAŒ©‚Â‚©‚Á‚½Å‰‚Ì•¶š‚ÌƒCƒ“ƒfƒbƒNƒX‚ğ•Ô‚·
-		@param[in]	str			: ŒŸõ•¶š—ñ
-		@param[in]	startIndex	: ŒŸõ‚ğŠJn‚·‚éƒCƒ“ƒfƒbƒNƒX (È—ª‚µ‚½ê‡‚Íæ“ª‚©‚ç)
-		@return		Œ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡‚Í -1
+		@brief		æ–‡å­—åˆ—ã‚’æ¤œç´¢ã—ã€è¦‹ã¤ã‹ã£ãŸæœ€åˆã®æ–‡å­—ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’è¿”ã™
+		@param[in]	str			: æ¤œç´¢æ–‡å­—åˆ—
+		@param[in]	startIndex	: æ¤œç´¢ã‚’é–‹å§‹ã™ã‚‹ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ (çœç•¥ã—ãŸå ´åˆã¯å…ˆé ­ã‹ã‚‰)
+		@return		è¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå ´åˆã¯ -1
 	*/
 	int IndexOf(const TChar* str, int startIndex = 0) const;
 
 	/**
-		@brief		•¶š—ñ‚ğƒfƒŠƒ~ƒ^‚Å•ªŠ„‚·‚é
-		@param[in]	delim	: ƒfƒŠƒ~ƒ^•¶š—ñ
-		@param[in]	option	: •ªŠ„•û–@
-		@return		•ªŠ„Œ‹‰Ê‚Ì•¶š—ñ”z—ñ
+		@brief		æ–‡å­—åˆ—ã‚’ãƒ‡ãƒªãƒŸã‚¿ã§åˆ†å‰²ã™ã‚‹
+		@param[in]	delim	: ãƒ‡ãƒªãƒŸã‚¿æ–‡å­—åˆ—
+		@param[in]	option	: åˆ†å‰²æ–¹æ³•
+		@return		åˆ†å‰²çµæœã®æ–‡å­—åˆ—é…åˆ—
 	*/
 	Array< BasicString<TChar> > Split(const TChar* delim, StringSplitOptions option = StringSplitOptions_None) const;
 
 	/**
-		@brief		•¶š—ñ‚ğ\¬‚·‚éƒoƒCƒg”‚ğæ“¾‚·‚é
+		@brief		æ–‡å­—åˆ—ã‚’æ§‹æˆã™ã‚‹ãƒã‚¤ãƒˆæ•°ã‚’å–å¾—ã™ã‚‹
 	*/
 	int GetByteCount() const { return std_basic_string::size() * sizeof(TChar); }
 
 	/**
-		@brief		•¶š—ñ‚ğ®”’l‚É•ÏŠ·‚·‚é
-		@details	std::istringstream ‚É‚æ‚é•ÏŠ·‚Å‚·B
-					‘S‚Ä‚Ì•¶š‚ğƒp[ƒXo—ˆ‚¸“r’†‚Å¸”s‚µ‚½ê‡‚Í—áŠO‚ª throw ‚³‚ê‚Ü‚·B
+		@brief		æ–‡å­—åˆ—ã‚’æ•´æ•°å€¤ã«å¤‰æ›ã™ã‚‹
+		@details	std::istringstream ã«ã‚ˆã‚‹å¤‰æ›ã§ã™ã€‚
+					å…¨ã¦ã®æ–‡å­—ã‚’ãƒ‘ãƒ¼ã‚¹å‡ºæ¥ãšé€”ä¸­ã§å¤±æ•—ã—ãŸå ´åˆã¯ä¾‹å¤–ãŒ throw ã•ã‚Œã¾ã™ã€‚
 	*/
 	int ToInt() const;
 
 	/**
-		@brief		•¶š—ñ‚ğ®”’l‚É•ÏŠ·‚·‚é
-		@details	ƒp[ƒX‚É¸”s‚µ‚½ê‡‚Í—áŠO‚ğ throw ‚·‚é‚Ì‚Å‚Í‚È‚­ false ‚ğ•Ô‚µ‚Ü‚·B
-					‘å—Ê‚Ìƒ‹[ƒv“à•”“™A—áŠO‚É‚æ‚éƒpƒtƒH[ƒ}ƒ“ƒX‚Ö‚Ì‰e‹¿‚ªŒœ”O‚³‚ê‚éê‡‚Ég—p‚µ‚Ä‚­‚¾‚³‚¢B
+		@brief		æ–‡å­—åˆ—ã‚’æ•´æ•°å€¤ã«å¤‰æ›ã™ã‚‹
+		@details	ãƒ‘ãƒ¼ã‚¹ã«å¤±æ•—ã—ãŸå ´åˆã¯ä¾‹å¤–ã‚’ throw ã™ã‚‹ã®ã§ã¯ãªã false ã‚’è¿”ã—ã¾ã™ã€‚
+					å¤§é‡ã®ãƒ«ãƒ¼ãƒ—å†…éƒ¨ç­‰ã€ä¾‹å¤–ã«ã‚ˆã‚‹ãƒ‘ãƒ•ã‚©ãƒ¼ãƒãƒ³ã‚¹ã¸ã®å½±éŸ¿ãŒæ‡¸å¿µã•ã‚Œã‚‹å ´åˆã«ä½¿ç”¨ã—ã¦ãã ã•ã„ã€‚
 	*/
 	bool ToInt(int* value) const;
 
-	/// I’[ \0 ‚Ü‚Å‚Ì•¶š”‚ğ•Ô‚· (ƒ}ƒ‹ƒ`ƒoƒCƒg•¶š‚Íl—¶‚µ‚È‚¢BCString::GetLength ‚Æ“¯—l‚ÌŠÖ”‚Å‚·)
+	/// çµ‚ç«¯ \0 ã¾ã§ã®æ–‡å­—æ•°ã‚’è¿”ã™ (ãƒãƒ«ãƒãƒã‚¤ãƒˆæ–‡å­—ã¯è€ƒæ…®ã—ãªã„ã€‚CString::GetLength ã¨åŒæ§˜ã®é–¢æ•°ã§ã™)
 	int GetLength() const { return std_basic_string::size(); } 
 
 public:
-	/// Œ»İ‚ÌŠÂ‹«‚Å’è‹`‚³‚ê‚Ä‚¢‚é‰üs•¶š—ñ‚ğæ“¾‚·‚é
+	/// ç¾åœ¨ã®ç’°å¢ƒã§å®šç¾©ã•ã‚Œã¦ã„ã‚‹æ”¹è¡Œæ–‡å­—åˆ—ã‚’å–å¾—ã™ã‚‹
 	static const StringT& GetNewLine();
 
 private:

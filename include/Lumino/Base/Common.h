@@ -1,10 +1,10 @@
-
+ï»¿
 #pragma once
 
 //------------------------------------------------------------------------------
 // flags
 
-// Debug ƒrƒ‹ƒhƒtƒ‰ƒO
+// Debug ãƒ“ãƒ«ãƒ‰ãƒ•ãƒ©ã‚°
 #if defined(DEBUG) || defined(_DEBUG)
 	#define LN_DEBUG
 #endif
@@ -13,15 +13,15 @@
 	#define LN_WIN32
 #endif
 
-// ƒvƒ‰ƒbƒgƒtƒH[ƒ€
+// ãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ 
 #if defined(__WIN32__) || defined(_WIN32) || defined(__CYGWIN__)
 	#define LN_WIN32
-#else	// ‚Æ‚è‚ ‚¦‚¸
+#else	// ã¨ã‚Šã‚ãˆãš
 	#define LN_LINUX
 	#define LN_X11
 #endif
 
-// ƒRƒ“ƒpƒCƒ‰
+// ã‚³ãƒ³ãƒ‘ã‚¤ãƒ©
 #if defined(__GNUC__)
 	#define LN_GNUC
 #elif defined(_MSC_VER)
@@ -30,19 +30,19 @@
 	#error "invalid compiler"
 #endif
 
-// ƒA[ƒLƒeƒNƒ`ƒƒ
+// ã‚¢ãƒ¼ã‚­ãƒ†ã‚¯ãƒãƒ£
 #if defined(_WIN64) || defined(__x86_64__)
 	#define LN_X64
 #endif
 
-// ƒXƒŒƒbƒhƒ‰ƒCƒuƒ‰ƒŠ
+// ã‚¹ãƒ¬ãƒƒãƒ‰ãƒ©ã‚¤ãƒ–ãƒ©ãƒª
 #if defined(__CYGWIN__) || !defined(LN_WIN32)
 	#define LN_THREAD_POSIX
 #else
 	#define LN_THREAD_WIN32
 #endif
 
-// •¶šƒR[ƒhƒZƒbƒg
+// æ–‡å­—ã‚³ãƒ¼ãƒ‰ã‚»ãƒƒãƒˆ
 #if defined (UNICODE) || defined(_UNICODE)
 	#ifndef LN_UNICODE
 		#define LN_UNICODE
@@ -55,9 +55,9 @@
 
 // DLL exports
 #if defined(LUMINO_DLL) && defined(LUMINO_BUILD_DLL)
-	/* LUMINO_DLL ‚Æ LUMINO_BUILD_DLL ‚Ì“¯’è‹`‚Í‹Ö~B
-	* LUMINO_DLL ‚Íƒ‰ƒCƒuƒ‰ƒŠ‚ğDLL‚Æ‚µ‚Äg‚¤‚Æ‚«A
-	* LUMINO_BUILD_DLL ‚Íƒ‰ƒCƒuƒ‰ƒŠ–{‘Ì‚ğƒrƒ‹ƒh‚·‚é‚Æ‚«‚É‚Ì‚İg—p‚·‚éB
+	/* LUMINO_DLL ã¨ LUMINO_BUILD_DLL ã®åŒæ™‚å®šç¾©ã¯ç¦æ­¢ã€‚
+	* LUMINO_DLL ã¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’DLLã¨ã—ã¦ä½¿ã†ã¨ãã€
+	* LUMINO_BUILD_DLL ã¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªæœ¬ä½“ã‚’ãƒ“ãƒ«ãƒ‰ã™ã‚‹ã¨ãã«ã®ã¿ä½¿ç”¨ã™ã‚‹ã€‚
 	*/
 	#error "You must not have both LUMINO_DLL and LUMINO_BUILD_DLL defined"
 #endif
@@ -102,7 +102,7 @@
 //----------------------------------------------------------------------
 // const
 
-// ƒtƒ@ƒCƒ‹ƒpƒX‚ÌÅ‘å•¶š”
+// ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã®æœ€å¤§æ–‡å­—æ•°
 #if defined(LN_WIN32)
 	#define LN_MAX_PATH		MAX_PATH	// 260
 #elif defined(PATH_MAX)
@@ -131,7 +131,7 @@
 	#define LN_SAFE_DELETE_ARRAY( p ) { if ( p ) { delete[] ( p ); ( p ) = NULL; } }
 #endif
 
-/// ”z—ñ‚Ì—v‘f”‚ğ•Ô‚·ƒ}ƒNƒ
+/// é…åˆ—ã®è¦ç´ æ•°ã‚’è¿”ã™ãƒã‚¯ãƒ­
 #ifndef LN_ARRAY_SIZE_OF
 	#define LN_ARRAY_SIZE_OF(ary)     ( sizeof(ary) / sizeof( ary[0] ) )
 #endif

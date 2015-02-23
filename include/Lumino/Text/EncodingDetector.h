@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "Encoding.h"
 
@@ -13,28 +13,28 @@ public:
 
 	virtual ~IMBSCodeDetector() {}
 
-	/// ‰ğÍ
-	/// untilUnmatch ‚ª true ‚Ìê‡‚Í•sˆê’v‚ªŒ©‚Â‚©‚Á‚½‚ç‚»‚Ì“_‚Å‰ğÍ‚ğI—¹‚·‚éB
-	/// ‚»‚Ì‚Æ‚«A•sˆê’v•¶š‚Ü‚Å‚Í‰ğÍÏ‚İ‚Æ‚·‚éB(UnMatch Count ‚ª 1 ‚Å‚ ‚é‚±‚Æ)
-	/// ‚Ü‚½ADetector ‚Íó‘Ô‚ğ•Û‚·‚éBŒÄ‚Ño‚µ‘¤‚Í Detect(true) ¨ Detect(false) ‚Ì2‰ñ
-	/// ŒÄ‚Ño‚µ‚ğs‚¤‚ªA2‰ñ–Ú‚Í1‰ñ–Ú‚É‰ğÍI—¹‚µ‚½ˆÊ’u‚©‚çŠJn‚·‚éB(•‰‰×ŒyŒ¸‚Ì‚½‚ß)
+	/// è§£æ
+	/// untilUnmatch ãŒ true ã®å ´åˆã¯ä¸ä¸€è‡´ãŒè¦‹ã¤ã‹ã£ãŸã‚‰ãã®æ™‚ç‚¹ã§è§£æã‚’çµ‚äº†ã™ã‚‹ã€‚
+	/// ãã®ã¨ãã€ä¸ä¸€è‡´æ–‡å­—ã¾ã§ã¯è§£ææ¸ˆã¿ã¨ã™ã‚‹ã€‚(UnMatch Count ãŒ 1 ã§ã‚ã‚‹ã“ã¨)
+	/// ã¾ãŸã€Detector ã¯çŠ¶æ…‹ã‚’ä¿æŒã™ã‚‹ã€‚å‘¼ã³å‡ºã—å´ã¯ Detect(true) â†’ Detect(false) ã®2å›
+	/// å‘¼ã³å‡ºã—ã‚’è¡Œã†ãŒã€2å›ç›®ã¯1å›ç›®ã«è§£æçµ‚äº†ã—ãŸä½ç½®ã‹ã‚‰é–‹å§‹ã™ã‚‹ã€‚(è² è·è»½æ¸›ã®ãŸã‚)
 	virtual void Detect(bool untilUnmatch) = 0;
 
 	/// EncodingType
 	virtual EncodingType GetEncodingType() = 0;
 
-	/// ƒ}ƒbƒ`ƒ|ƒCƒ“ƒg
+	/// ãƒãƒƒãƒãƒã‚¤ãƒ³ãƒˆ
 	virtual int GetScore() = 0;
 
-	/// •s³‚ÈƒoƒCƒgƒV[ƒPƒ“ƒX‚ªŒ©‚Â‚©‚Á‚½‚©
+	/// ä¸æ­£ãªãƒã‚¤ãƒˆã‚·ãƒ¼ã‚±ãƒ³ã‚¹ãŒè¦‹ã¤ã‹ã£ãŸã‹
 	virtual int GetUnMatchCount() = 0;
 
-	/// •s³‚ÈƒoƒCƒgƒV[ƒPƒ“ƒX‚ğŒ©‚Â‚¯‚½‚Æ‚«‚Ìs”Ô†
+	/// ä¸æ­£ãªãƒã‚¤ãƒˆã‚·ãƒ¼ã‚±ãƒ³ã‚¹ã‚’è¦‹ã¤ã‘ãŸã¨ãã®è¡Œç•ªå·
 	virtual int GetUnMatchLine() = 0;
 };
 
 /**
-	@brief	UTF8N •]‰¿ƒNƒ‰ƒX
+	@brief	UTF8N è©•ä¾¡ã‚¯ãƒ©ã‚¹
 */
 class UTF8NDetector : public IMBSCodeDetector
 {
@@ -57,7 +57,7 @@ private:
 };
 
 /**
-	@brief	SJIS •]‰¿ƒNƒ‰ƒX
+	@brief	SJIS è©•ä¾¡ã‚¯ãƒ©ã‚¹
 */
 class SJISDetector : public IMBSCodeDetector
 {
@@ -80,7 +80,7 @@ private:
 };
 
 /**
-	@bfief		•¶šƒR[ƒh‚ğ©“®ŒŸo‚·‚éƒNƒ‰ƒX‚Å‚·B
+	@bfief		æ–‡å­—ã‚³ãƒ¼ãƒ‰ã‚’è‡ªå‹•æ¤œå‡ºã™ã‚‹ã‚¯ãƒ©ã‚¹ã§ã™ã€‚
 */
 class EncodingDetector
 {
@@ -90,7 +90,7 @@ public:
 public:
 	EncodingType Detect(const void* bytes, size_t bytesSize);
 
-	/// ‰Â”\«‚Ìˆê”Ô‚‚¢•¶šƒR[ƒh
+	/// å¯èƒ½æ€§ã®ä¸€ç•ªé«˜ã„æ–‡å­—ã‚³ãƒ¼ãƒ‰
 	EncodingType GetEncodingType() const { return m_type; }
 
 private:

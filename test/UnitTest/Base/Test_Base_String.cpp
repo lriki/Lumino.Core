@@ -1,4 +1,4 @@
-#include <TestConfig.h>
+ï»¿#include <TestConfig.h>
 
 class Test_Base_String : public ::testing::Test
 {
@@ -22,7 +22,7 @@ TEST_F(Test_Base_String, Constructor)
 //---------------------------------------------------------------------
 TEST_F(Test_Base_String, AssignCStr)
 {
-	// charAwchar_t ‚Ì‘ŠŒİ•ÏŠ·
+	// charã€wchar_t ã®ç›¸äº’å¤‰æ›
 	{ 
 		StringA str1;
 		str1.AssignCStr("test");
@@ -43,7 +43,7 @@ TEST_F(Test_Base_String, AssignCStr)
 		EXPECT_EQ(L"f", tstr3);
 	}
 
-	// •”•ª•ÏŠ·
+	// éƒ¨åˆ†å¤‰æ›
 	{
 		StringA str1;
 		str1.AssignCStr("test", 0, 2);
@@ -62,7 +62,7 @@ TEST_F(Test_Base_String, AssignCStr)
 		EXPECT_EQ(L"te", wstr1);
 	}
 
-	// —áŠO
+	// ä¾‹å¤–
 	{
 		StringA str1;
 		ASSERT_THROW(
@@ -78,7 +78,7 @@ TEST_F(Test_Base_String, AssignCStr)
 //---------------------------------------------------------------------
 TEST_F(Test_Base_String, Format)
 {
-	// StringA Max •¶š”ƒ`ƒFƒbƒN
+	// StringA Max æ–‡å­—æ•°ãƒã‚§ãƒƒã‚¯
 	{
 		char buf1[2048 + 1] = { 0 };
 		for (int i = 0; i < 2048; i++) {
@@ -87,16 +87,16 @@ TEST_F(Test_Base_String, Format)
 
 		StringA str1;
 		str1.Format("%s", buf1);
-		EXPECT_EQ(str1, buf1);	// “¯‚¶•¶š‚ª‚Å‚«‚Ä‚¢‚ê‚ÎOK
+		EXPECT_EQ(str1, buf1);	// åŒã˜æ–‡å­—ãŒã§ãã¦ã„ã‚Œã°OK
 		
 
 		ASSERT_THROW(
-			str1.Format("%sb", buf1),	// 1•¶š‘½‚¢B¸”s‚·‚é
+			str1.Format("%sb", buf1),	// 1æ–‡å­—å¤šã„ã€‚å¤±æ•—ã™ã‚‹
 			ArgumentException);
 	}
 
 #if _WIN32	// unix not impl
-	// StringW Max •¶š”ƒ`ƒFƒbƒN
+	// StringW Max æ–‡å­—æ•°ãƒã‚§ãƒƒã‚¯
 	{
 		wchar_t buf1[2048 + 1] = { 0 };
 		for (int i = 0; i < 2048; i++) {
@@ -105,10 +105,10 @@ TEST_F(Test_Base_String, Format)
 
 		StringW str1;
 		str1.Format(L"%s", buf1);
-		ASSERT_TRUE(str1 == buf1);	// “¯‚¶•¶š‚ª‚Å‚«‚Ä‚¢‚ê‚ÎOK
+		ASSERT_TRUE(str1 == buf1);	// åŒã˜æ–‡å­—ãŒã§ãã¦ã„ã‚Œã°OK
 
 		ASSERT_THROW(
-			str1.Format(L"%sb", buf1),	// 1•¶š‘½‚¢B¸”s‚·‚é
+			str1.Format(L"%sb", buf1),	// 1æ–‡å­—å¤šã„ã€‚å¤±æ•—ã™ã‚‹
 			ArgumentException);
 	}
 #endif
@@ -153,43 +153,43 @@ TEST_F(Test_Base_String, Replace)
 //---------------------------------------------------------------------
 TEST_F(Test_Base_String, Trim)
 {
-	// ‘OŒã
+	// å‰å¾Œ
 	{
 		String str1(_T(" abc def "));
 		String t = str1.Trim();
 		ASSERT_EQ(_T("abc def"), t);
 	}
-	// ‘O‚¾‚¯
+	// å‰ã ã‘
 	{
 		String str1(_T(" abc def"));
 		String t = str1.Trim();
 		ASSERT_EQ(_T("abc def"), t);
 	}
-	// Œã‚ë‚¾‚¯
+	// å¾Œã‚ã ã‘
 	{
 		String str1(_T("abc def "));
 		String t = str1.Trim();
 		ASSERT_EQ(_T("abc def"), t);
 	}
-	// ‹ó•¶š
+	// ç©ºæ–‡å­—
 	{
 		String str1(_T(""));
 		String t = str1.Trim();
 		ASSERT_EQ(_T(""), t);
 	}
-	// ‹ó”’‚¾‚¯
+	// ç©ºç™½ã ã‘
 	{
 		String str1(_T(" "));
 		String t = str1.Trim();
 		ASSERT_EQ(_T(""), t);
 	}
-	// ‹ó”’‚¾‚¯ * 2
+	// ç©ºç™½ã ã‘ * 2
 	{
 		String str1(_T("  "));
 		String t = str1.Trim();
 		ASSERT_EQ(_T(""), t);
 	}
-	// ‹ó”’‚¾‚¯ * 3
+	// ç©ºç™½ã ã‘ * 3
 	{
 		String str1(_T("   "));
 		String t = str1.Trim();
@@ -201,7 +201,7 @@ TEST_F(Test_Base_String, Trim)
 //---------------------------------------------------------------------
 TEST_F(Test_Base_String, Split)
 {
-	// •’Ê‚Ì•ªŠ„
+	// æ™®é€šã®åˆ†å‰²
 	{
 		String str(_T("a,b,c"));
 		Array<String> lines = str.Split(_T(","), StringSplitOptions_None);
@@ -211,63 +211,63 @@ TEST_F(Test_Base_String, Split)
 		EXPECT_EQ(_T("c"), lines[2]);
 	}
 
-	// ‹ó•¶š
+	// ç©ºæ–‡å­—
 	{
 		String str = _T("");
 		Array<String> lines = str.Split(_T(","), StringSplitOptions_None);
 		EXPECT_EQ(1, lines.size());
 	}
 
-	// ‹ó•¶š‚Ì RemoveEmptyEntries
+	// ç©ºæ–‡å­—ã® RemoveEmptyEntries
 	{
 		String str = _T("");
 		Array<String> lines = str.Split(_T(","), StringSplitOptions_RemoveEmptyEntries);
 		EXPECT_EQ(0, lines.size());
 	}
 
-	// ‹æØ‚è–³‚µ
+	// åŒºåˆ‡ã‚Šç„¡ã—
 	{
 		String str = _T("abc");
 		Array<String> lines = str.Split(_T(","), StringSplitOptions_None);
 		EXPECT_EQ(1, lines.size());
 	}
 
-	// ‹æØ‚è–³‚µ RemoveEmptyEntries
+	// åŒºåˆ‡ã‚Šç„¡ã— RemoveEmptyEntries
 	{
 		String str = _T("abc");
 		Array<String> lines = str.Split(_T(","), StringSplitOptions_RemoveEmptyEntries);
 		EXPECT_EQ(1, lines.size());
 	}
 
-	// ƒg[ƒNƒ“–³‚µ
+	// ãƒˆãƒ¼ã‚¯ãƒ³ç„¡ã—
 	{
 		String str = _T(",");
 		Array<String> lines = str.Split(_T(","), StringSplitOptions_None);
 		EXPECT_EQ(2, lines.size());
 	}
 
-	// ƒg[ƒNƒ“–³‚µ RemoveEmptyEntries
+	// ãƒˆãƒ¼ã‚¯ãƒ³ç„¡ã— RemoveEmptyEntries
 	{
 		String str = _T(",");
 		Array<String> lines = str.Split(_T(","), StringSplitOptions_RemoveEmptyEntries);
 		EXPECT_EQ(0, lines.size());
 	}
 
-	// ƒg[ƒNƒ“–³‚µ 2
+	// ãƒˆãƒ¼ã‚¯ãƒ³ç„¡ã— 2
 	{
 		String str = _T(",,");
 		Array<String> lines = str.Split(_T(","), StringSplitOptions_None);
 		EXPECT_EQ(3, lines.size());
 	}
 
-	// ƒg[ƒNƒ“–³‚µ 2 RemoveEmptyEntries
+	// ãƒˆãƒ¼ã‚¯ãƒ³ç„¡ã— 2 RemoveEmptyEntries
 	{
 		String str = _T(",,");
 		Array<String> lines = str.Split(_T(","), StringSplitOptions_RemoveEmptyEntries);
 		EXPECT_EQ(0, lines.size());
 	}
 
-	// ‹ó—v‘f•t‚«
+	// ç©ºè¦ç´ ä»˜ã
 	{
 		String str = _T("a,,c");
 		Array<String> lines = str.Split(_T(","), StringSplitOptions_None);
@@ -277,7 +277,7 @@ TEST_F(Test_Base_String, Split)
 		EXPECT_EQ(_T("c"), lines[2]);
 	}
 
-	// ‹ó—v‘f•t‚« RemoveEmptyEntries
+	// ç©ºè¦ç´ ä»˜ã RemoveEmptyEntries
 	{
 		String str = _T("a,,c");
 		Array<String> lines = str.Split(_T(","), StringSplitOptions_RemoveEmptyEntries);
@@ -286,7 +286,7 @@ TEST_F(Test_Base_String, Split)
 		EXPECT_EQ(_T("c"), lines[1]);
 	}
 
-	// æ“ª‹ó—v‘f•t‚«
+	// å…ˆé ­ç©ºè¦ç´ ä»˜ã
 	{
 		String str = _T(",b,c");
 		Array<String> lines = str.Split(_T(","), StringSplitOptions_None);
@@ -296,7 +296,7 @@ TEST_F(Test_Base_String, Split)
 		EXPECT_EQ(_T("c"), lines[2]);
 	}
 
-	// æ“ª‹ó—v‘f•t‚« RemoveEmptyEntries
+	// å…ˆé ­ç©ºè¦ç´ ä»˜ã RemoveEmptyEntries
 	{
 		String str = _T(",b,c");
 		Array<String> lines = str.Split(_T(","), StringSplitOptions_RemoveEmptyEntries);
@@ -305,7 +305,7 @@ TEST_F(Test_Base_String, Split)
 		EXPECT_EQ(_T("c"), lines[1]);
 	}
 
-	// I’[‹ó—v‘f•t‚«
+	// çµ‚ç«¯ç©ºè¦ç´ ä»˜ã
 	{
 		String str = _T("a,b,");
 		Array<String> lines = str.Split(_T(","), StringSplitOptions_None);
@@ -315,7 +315,7 @@ TEST_F(Test_Base_String, Split)
 		EXPECT_EQ(_T(""), lines[2]);
 	}
 
-	// I’[‹ó—v‘f•t‚« RemoveEmptyEntries
+	// çµ‚ç«¯ç©ºè¦ç´ ä»˜ã RemoveEmptyEntries
 	{
 		String str = _T("a,b,");
 		Array<String> lines = str.Split(_T(","), StringSplitOptions_RemoveEmptyEntries);
@@ -324,7 +324,7 @@ TEST_F(Test_Base_String, Split)
 		EXPECT_EQ(_T("b"), lines[1]);
 	}
 
-	// —¼’[‹ó—v‘f•t‚«
+	// ä¸¡ç«¯ç©ºè¦ç´ ä»˜ã
 	{
 		String str = _T(",b,");
 		Array<String> lines = str.Split(_T(","), StringSplitOptions_None);
@@ -334,7 +334,7 @@ TEST_F(Test_Base_String, Split)
 		EXPECT_EQ(_T(""), lines[2]);
 	}
 
-	// —¼’[‹ó—v‘f•t‚« RemoveEmptyEntries
+	// ä¸¡ç«¯ç©ºè¦ç´ ä»˜ã RemoveEmptyEntries
 	{
 		String str = _T(",b,");
 		Array<String> lines = str.Split(_T(","), StringSplitOptions_RemoveEmptyEntries);

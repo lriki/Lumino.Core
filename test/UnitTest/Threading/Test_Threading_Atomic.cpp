@@ -1,4 +1,4 @@
-#include <TestConfig.h>
+ï»¿#include <TestConfig.h>
 using namespace Lumino::Threading;
 
 class Test_Threading_Atomic : public ::testing::Test
@@ -41,12 +41,12 @@ TEST_F(Test_Threading_Atomic, Basic)
 		}
 	};
 
-	Atomic value;		// ++ ‚Æ -- ‚ğŒJ‚è•Ô‚·
-	Atomic valueIncr;	// ++ ‚¾‚¯
-	Atomic valueDecr;	// -- ‚¾‚¯
-	value.Set(10);			// ‰Šú’l
+	Atomic value;		// ++ ã¨ -- ã‚’ç¹°ã‚Šè¿”ã™
+	Atomic valueIncr;	// ++ ã ã‘
+	Atomic valueDecr;	// -- ã ã‘
+	value.Set(10);			// åˆæœŸå€¤
 
-	// ++ ‚Æ -- ƒXƒŒƒbƒh‚ğ 10 ŒÂ‚¸‚Â‘–‚ç‚¹‚é
+	// ++ ã¨ -- ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’ 10 å€‹ãšã¤èµ°ã‚‰ã›ã‚‹
 	const int ThreadCount = 10;
 	IncrThread incrThreads[ThreadCount];
 	DecrThread decrThreads[ThreadCount];
@@ -59,7 +59,7 @@ TEST_F(Test_Threading_Atomic, Basic)
 		decrThreads[i].valueDecr = &valueDecr;
 		decrThreads[i].Start();
 	}
-	// I—¹‘Ò‹@
+	// çµ‚äº†å¾…æ©Ÿ
 	for (int i = 0; i < ThreadCount; i++)
 	{
 		incrThreads[i].Wait();

@@ -1,4 +1,4 @@
-
+ï»¿
 #include "../../Internal.h"
 #include "../../../include/Lumino/Platform/Environment.h"
 
@@ -10,8 +10,8 @@ namespace Lumino
 //-----------------------------------------------------------------------------
 uint64_t Environment::GetTickCount()
 {
-	// timeGetTime() ‚Í timeBeginPeriod() ‚É‚æ‚Á‚Ä¸“x‚ª•Ï‚í‚é‚½‚ßA
-	// GetTickCount() ‚Ì•û‚ª–³“ï‚©‚à‚µ‚ê‚È‚¢
+	// timeGetTime() ã¯ timeBeginPeriod() ã«ã‚ˆã£ã¦ç²¾åº¦ãŒå¤‰ã‚ã‚‹ãŸã‚ã€
+	// GetTickCount() ã®æ–¹ãŒç„¡é›£ã‹ã‚‚ã—ã‚Œãªã„
 	return ::GetTickCount();
 }
 
@@ -23,7 +23,7 @@ uint64_t Environment::GetTickCountNS()
 	static LARGE_INTEGER freq = {};
 	static bool initGetTickCount = false;
 
-	// ‰‰ñŒÄ‚Ño‚µ‚É‰Šú‰»
+	// åˆå›å‘¼ã³å‡ºã—æ™‚ã«åˆæœŸåŒ–
 	if (!initGetTickCount)
 	{
 		::QueryPerformanceFrequency(&freq);
@@ -34,7 +34,7 @@ uint64_t Environment::GetTickCountNS()
 	::QueryPerformanceCounter( &current );
 
 	if (freq.QuadPart) {
-		return static_cast<long long>(((double)current.QuadPart) * 1000 * 1000 * 1000 / freq.QuadPart);		// ns ’PˆÊ
+		return static_cast<long long>(((double)current.QuadPart) * 1000 * 1000 * 1000 / freq.QuadPart);		// ns å˜ä½
 	}
 	return 0;
 }

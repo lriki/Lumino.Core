@@ -24,6 +24,8 @@ namespace Lumino
 typedef int errno_t;
 typedef size_t rsize_t;
 
+#define sprintf_s snprintf
+
 //-----------------------------------------------------------------------------
 // http://msdn.microsoft.com/ja-jp/library/wes2t00f.aspx
 //-----------------------------------------------------------------------------

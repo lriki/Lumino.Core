@@ -1,4 +1,4 @@
-#include <TestConfig.h>
+ï»¿#include <TestConfig.h>
 #include "../../../src/Text/UTF32Encoding.h"
 using namespace Text;
 
@@ -15,9 +15,9 @@ protected:
 //---------------------------------------------------------------------
 TEST_F(Test_Base_UTF32Encoding, Basic)
 {
-	// UTF-32 ¨ UTF-16
+	// UTF-32 â†’ UTF-16
 	{
-		// '‚ ' little
+		// 'ã‚' little
 		byte_t buf1[] = { 0x42, 0x30, 0x00, 0x00 };
 
 		Text::UTF32Encoding utf32Enc(false, false);
@@ -33,9 +33,9 @@ TEST_F(Test_Base_UTF32Encoding, Basic)
 		ASSERT_EQ(0x42, utf16buf[0]);
 		ASSERT_EQ(0x30, utf16buf[1]);
 	}
-	// UTF-32 ¨ UTF-16 (•ªŠ„)
+	// UTF-32 â†’ UTF-16 (åˆ†å‰²)
 	{
-		// '‚ ' little
+		// 'ã‚' little
 		byte_t buf1[] = { 0x42, 0x30, 0x00, 0x00 };
 
 		Text::UTF32Encoding utf32Enc(false, false);
@@ -43,13 +43,13 @@ TEST_F(Test_Base_UTF32Encoding, Basic)
 		RefPtr<Encoder> encoder(Encoding::GetUTF16Encoding()->CreateEncoder());
 		EncodingConversionResult info;
 
-		// 1‰ñ–Ú‚Ì•ÏŠ·B2byte•ªBo‚Ä‚­‚é‚Ì‚Í‰½‚à‚È‚¢Bdecoder ‚Éó‘Ô‹L‰¯‚³‚ê‚éB
+		// 1å›ç›®ã®å¤‰æ›ã€‚2byteåˆ†ã€‚å‡ºã¦ãã‚‹ã®ã¯ä½•ã‚‚ãªã„ã€‚decoder ã«çŠ¶æ…‹è¨˜æ†¶ã•ã‚Œã‚‹ã€‚
 		RefPtr<RefBuffer> result1(Encoding::Convert(&buf1[0], 2, decoder, encoder, &info));
 		ASSERT_EQ(0, info.BytesUsed);
 		ASSERT_EQ(0, info.CharsUsed);
 		ASSERT_EQ(false, info.UsedDefaultChar);
 
-		// 2‰ñ–Ú‚Ì•ÏŠ·B‚±‚±‚Å1•¶šŠ®¬‚µ‚Äo‚Ä‚­‚éB
+		// 2å›ç›®ã®å¤‰æ›ã€‚ã“ã“ã§1æ–‡å­—å®Œæˆã—ã¦å‡ºã¦ãã‚‹ã€‚
 		RefPtr<RefBuffer> result2(Encoding::Convert(&buf1[2], 2, decoder, encoder, &info));
 		byte_t* utf16buf = (byte_t*)result2->GetPointer();
 		ASSERT_EQ(2, info.BytesUsed);
@@ -59,9 +59,9 @@ TEST_F(Test_Base_UTF32Encoding, Basic)
 		ASSERT_EQ(0x30, utf16buf[1]);
 	}
 
-	// UTF-16 ¨ UTF-32
+	// UTF-16 â†’ UTF-32
 	{
-		// '‚ ' little
+		// 'ã‚' little
 		byte_t uttf16buf[] = { 0x42, 0x30 };
 
 		Text::UTF32Encoding utf32Enc(false, false);
@@ -80,9 +80,9 @@ TEST_F(Test_Base_UTF32Encoding, Basic)
 		ASSERT_EQ(0x00, utf32buf[3]);
 	}
 
-	// UTF-16 ¨ UTF-32 (•ªŠ„)
+	// UTF-16 â†’ UTF-32 (åˆ†å‰²)
 	{
-		// '‚Ù‚Á‚¯' little
+		// 'ã»ã£ã‘' little
 		byte_t uttf16buf[] = { 0x67, 0xD8, 0x3D, 0xDE };
 		
 		Text::UTF32Encoding utf32Enc(false, false);
@@ -90,13 +90,13 @@ TEST_F(Test_Base_UTF32Encoding, Basic)
 		RefPtr<Encoder> encoder(utf32Enc.CreateEncoder());
 		EncodingConversionResult info;
 
-		// 1‰ñ–Ú‚Ì•ÏŠ·B2byte•ªBo‚Ä‚­‚é‚Ì‚Í‰½‚à‚È‚¢Bó‘Ô‹L‰¯‚³‚ê‚éB
+		// 1å›ç›®ã®å¤‰æ›ã€‚2byteåˆ†ã€‚å‡ºã¦ãã‚‹ã®ã¯ä½•ã‚‚ãªã„ã€‚çŠ¶æ…‹è¨˜æ†¶ã•ã‚Œã‚‹ã€‚
 		RefPtr<RefBuffer> result1(Encoding::Convert(&uttf16buf[0], 2, decoder, encoder, &info));
 		ASSERT_EQ(0, info.BytesUsed);
 		ASSERT_EQ(0, info.CharsUsed);
 		ASSERT_EQ(false, info.UsedDefaultChar);
 
-		// 2‰ñ–Ú‚Ì•ÏŠ·B‚±‚±‚Å1•¶šŠ®¬‚µ‚Äo‚Ä‚­‚éB
+		// 2å›ç›®ã®å¤‰æ›ã€‚ã“ã“ã§1æ–‡å­—å®Œæˆã—ã¦å‡ºã¦ãã‚‹ã€‚
 		RefPtr<RefBuffer> result2(Encoding::Convert(&uttf16buf[2], 2, decoder, encoder, &info));
 
 		byte_t* utf32buf = (byte_t*)result2->GetPointer();
@@ -109,9 +109,9 @@ TEST_F(Test_Base_UTF32Encoding, Basic)
 		ASSERT_EQ(0x00, utf32buf[3]);
 	}
 
-	// UTF-16 ¨ UTF-32 (1byte‚¸‚Â•ªŠ„)
+	// UTF-16 â†’ UTF-32 (1byteãšã¤åˆ†å‰²)
 	{
-		// '‚Ù‚Á‚¯' little
+		// 'ã»ã£ã‘' little
 		byte_t uttf16buf[] = { 0x67, 0xD8, 0x3D, 0xDE };
 
 		Text::UTF32Encoding utf32Enc(false, false);
@@ -119,25 +119,25 @@ TEST_F(Test_Base_UTF32Encoding, Basic)
 		RefPtr<Encoder> encoder(utf32Enc.CreateEncoder());
 		EncodingConversionResult info;
 
-		// 1‰ñ–Ú‚Ì•ÏŠ·B1byte•ªBo‚Ä‚­‚é‚Ì‚Í‰½‚à‚È‚¢Bó‘Ô‹L‰¯‚³‚ê‚éB
+		// 1å›ç›®ã®å¤‰æ›ã€‚1byteåˆ†ã€‚å‡ºã¦ãã‚‹ã®ã¯ä½•ã‚‚ãªã„ã€‚çŠ¶æ…‹è¨˜æ†¶ã•ã‚Œã‚‹ã€‚
 		RefPtr<RefBuffer> result1(Encoding::Convert(&uttf16buf[0], 1, decoder, encoder, &info));
 		ASSERT_EQ(0, info.BytesUsed);
 		ASSERT_EQ(0, info.CharsUsed);
 		ASSERT_EQ(false, info.UsedDefaultChar);
 
-		// 2‰ñ–Ú‚Ì•ÏŠ·B1byte•ªBo‚Ä‚­‚é‚Ì‚Í‰½‚à‚È‚¢Bó‘Ô‹L‰¯‚³‚ê‚éB
+		// 2å›ç›®ã®å¤‰æ›ã€‚1byteåˆ†ã€‚å‡ºã¦ãã‚‹ã®ã¯ä½•ã‚‚ãªã„ã€‚çŠ¶æ…‹è¨˜æ†¶ã•ã‚Œã‚‹ã€‚
 		RefPtr<RefBuffer> result2(Encoding::Convert(&uttf16buf[1], 1, decoder, encoder, &info));
 		ASSERT_EQ(0, info.BytesUsed);
 		ASSERT_EQ(0, info.CharsUsed);
 		ASSERT_EQ(false, info.UsedDefaultChar);
 
-		// 3‰ñ–Ú‚Ì•ÏŠ·B1byte•ªBo‚Ä‚­‚é‚Ì‚Í‰½‚à‚È‚¢Bó‘Ô‹L‰¯‚³‚ê‚éB
+		// 3å›ç›®ã®å¤‰æ›ã€‚1byteåˆ†ã€‚å‡ºã¦ãã‚‹ã®ã¯ä½•ã‚‚ãªã„ã€‚çŠ¶æ…‹è¨˜æ†¶ã•ã‚Œã‚‹ã€‚
 		RefPtr<RefBuffer> result3(Encoding::Convert(&uttf16buf[2], 1, decoder, encoder, &info));
 		ASSERT_EQ(0, info.BytesUsed);
 		ASSERT_EQ(0, info.CharsUsed);
 		ASSERT_EQ(false, info.UsedDefaultChar);
 
-		// 4‰ñ–Ú‚Ì•ÏŠ·B‚±‚±‚Å1•¶šŠ®¬‚µ‚Äo‚Ä‚­‚éB
+		// 4å›ç›®ã®å¤‰æ›ã€‚ã“ã“ã§1æ–‡å­—å®Œæˆã—ã¦å‡ºã¦ãã‚‹ã€‚
 		RefPtr<RefBuffer> result4(Encoding::Convert(&uttf16buf[3], 1, decoder, encoder, &info));
 
 		byte_t* utf32buf = (byte_t*)result4->GetPointer();

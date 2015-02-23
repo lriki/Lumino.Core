@@ -1,10 +1,10 @@
-#pragma once
+ï»¿#pragma once
 
 namespace Lumino
 {
 
 /**
-	@brief	ƒlƒCƒeƒBƒu•¶š—ñ‚É‘Î‚·‚éƒpƒX•¶š—ñ‘€ì‚ğ‚Ü‚Æ‚ß‚½ƒNƒ‰ƒX
+	@brief	ãƒã‚¤ãƒ†ã‚£ãƒ–æ–‡å­—åˆ—ã«å¯¾ã™ã‚‹ãƒ‘ã‚¹æ–‡å­—åˆ—æ“ä½œã‚’ã¾ã¨ã‚ãŸã‚¯ãƒ©ã‚¹
 */
 class PathUtils
 {
@@ -21,64 +21,64 @@ public:
 
 public:
 
-	/// path ‚ªƒ‹[ƒgƒpƒX‚Å‚ ‚é‚©‚ğ”»’è‚·‚é ("C:/", "C:", "/" “™)
+	/// path ãŒãƒ«ãƒ¼ãƒˆãƒ‘ã‚¹ã§ã‚ã‚‹ã‹ã‚’åˆ¤å®šã™ã‚‹ ("C:/", "C:", "/" ç­‰)
 	template<typename TChar>
 	static bool IsRootPath(const TChar* path);
 
-	/// path ‚ªâ‘ÎƒpƒX‚Å‚ ‚é‚©‚ğ”»’è‚·‚é ("C:/AAA"A"/AAA" —¼•û”»’è)
+	/// path ãŒçµ¶å¯¾ãƒ‘ã‚¹ã§ã‚ã‚‹ã‹ã‚’åˆ¤å®šã™ã‚‹ ("C:/AAA"ã€"/AAA" ä¸¡æ–¹åˆ¤å®š)
 	template<typename TChar>
 	static bool IsAbsolutePath(const TChar* path);
 
 	/**
-		@brief		ƒpƒX•¶š—ñ‚©‚çƒfƒBƒŒƒNƒgƒŠ•”•ª‚ğæ‚èo‚·
-		@param[in]	path	: ƒtƒ@ƒCƒ‹‚Ü‚½‚ÍƒfƒBƒŒƒNƒgƒŠ‚ÌƒpƒX
-		@details	o—Í—á
-					- "C:\MyDir\MySubDir\myfile.ext" ¨ "C:\MyDir\MySubDir"
-					- "C:\MyDir\MySubDir" ¨ "C:\MyDir"
-					- "C:\MyDir\" ¨ "C:\MyDir"
-					- "C:\MyDir" ¨ "C:\"
-					- "C:\" ¨ ""
-					- "/MyDir/" ¨ "/MyDir"
-					- "/MyDir" ¨ "/"
-					- "/" ¨ ""
+		@brief		ãƒ‘ã‚¹æ–‡å­—åˆ—ã‹ã‚‰ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªéƒ¨åˆ†ã‚’å–ã‚Šå‡ºã™
+		@param[in]	path	: ãƒ•ã‚¡ã‚¤ãƒ«ã¾ãŸã¯ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ãƒ‘ã‚¹
+		@details	å‡ºåŠ›ä¾‹
+					- "C:\MyDir\MySubDir\myfile.ext" â†’ "C:\MyDir\MySubDir"
+					- "C:\MyDir\MySubDir" â†’ "C:\MyDir"
+					- "C:\MyDir\" â†’ "C:\MyDir"
+					- "C:\MyDir" â†’ "C:\"
+					- "C:\" â†’ ""
+					- "/MyDir/" â†’ "/MyDir"
+					- "/MyDir" â†’ "/"
+					- "/" â†’ ""
 	*/
 	template<typename TChar>
 	static BasicString<TChar> GetDirectoryPath(const TChar* path);
 
 	/**
-		@brief		ƒpƒX•¶š—ñ‚Ì’†‚©‚çŠg’£q‚ğŠÜ‚Şƒtƒ@ƒCƒ‹–¼‚Ì•”•ª‚ğ•Ô‚·
-		@param[in]	path	: ƒpƒX•¶š—ñ
-		@details	path ‚ª NULL ‚Ìê‡‚Í‹ó•¶š—ñ‚ğ•Ô‚µ‚Ü‚·B
+		@brief		ãƒ‘ã‚¹æ–‡å­—åˆ—ã®ä¸­ã‹ã‚‰æ‹¡å¼µå­ã‚’å«ã‚€ãƒ•ã‚¡ã‚¤ãƒ«åã®éƒ¨åˆ†ã‚’è¿”ã™
+		@param[in]	path	: ãƒ‘ã‚¹æ–‡å­—åˆ—
+		@details	path ãŒ NULL ã®å ´åˆã¯ç©ºæ–‡å­—åˆ—ã‚’è¿”ã—ã¾ã™ã€‚
 	*/
 	template<typename TChar>
 	static BasicString<TChar> GetFileName(const TChar* path);
 
 	/**
-		@brief		ƒpƒX‚ğ’Pƒ‰»‚·‚é
-		@param[in]	srcPath	: Œ³ƒtƒ@ƒCƒ‹ƒpƒX
-		@param[in]	outPath	: ’Pƒ‰»‚µ‚½ƒpƒX‚ÌŠi”[æ (LN_MAX_PATH + 1 ‚Ì—Ìˆæ‚ª‚ ‚é‚±‚Æ)
+		@brief		ãƒ‘ã‚¹ã‚’å˜ç´”åŒ–ã™ã‚‹
+		@param[in]	srcPath	: å…ƒãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹
+		@param[in]	outPath	: å˜ç´”åŒ–ã—ãŸãƒ‘ã‚¹ã®æ ¼ç´å…ˆ (LN_MAX_PATH + 1 ã®é ˜åŸŸãŒã‚ã‚‹ã“ã¨)
 	*/
 	template<typename TChar>
 	static void CanonicalizePath(const TChar* srcPath, TChar* outPath);
 
 	/**
-		@brief		2‚Â‚ÌƒpƒX•¶š—ñ‚ğ”äŠr‚·‚é
-		@param[in]	path1	: ƒpƒX•¶š—ñ
-		@param[in]	path2	: ƒpƒX•¶š—ñ
-		@return		•À‚×‘Ö‚¦‡˜‚ğ¦‚·®” (0 ‚Åˆê’v)
-		@details	DirectorySeparatorChar ‚Æ AltDirectorySeparatorChar ‚Í“™‰¿‚Æ‚İ‚È‚µ‚Ü‚·B
-					‚Ü‚½A‘å•¶š¬•¶š‚ğ‹æ•Ê‚µ‚Ü‚¹‚ñB
+		@brief		2ã¤ã®ãƒ‘ã‚¹æ–‡å­—åˆ—ã‚’æ¯”è¼ƒã™ã‚‹
+		@param[in]	path1	: ãƒ‘ã‚¹æ–‡å­—åˆ—
+		@param[in]	path2	: ãƒ‘ã‚¹æ–‡å­—åˆ—
+		@return		ä¸¦ã¹æ›¿ãˆé †åºã‚’ç¤ºã™æ•´æ•° (0 ã§ä¸€è‡´)
+		@details	DirectorySeparatorChar ã¨ AltDirectorySeparatorChar ã¯ç­‰ä¾¡ã¨ã¿ãªã—ã¾ã™ã€‚
+					ã¾ãŸã€å¤§æ–‡å­—å°æ–‡å­—ã‚’åŒºåˆ¥ã—ã¾ã›ã‚“ã€‚
 	*/
 	template<typename TChar>
 	static int Compare(const TChar* path1, const TChar* path2);
 
 
 	/**
-		@brief		2‚Â‚ÌƒpƒX•¶š—ñ‚ª“™‚µ‚¢‚©‚ğƒ`ƒFƒbƒN‚·‚é
-		@param[in]	path1	: ƒpƒX•¶š—ñ
-		@param[in]	path2	: ƒpƒX•¶š—ñ
-		@details	DirectorySeparatorChar ‚Æ AltDirectorySeparatorChar ‚Í“™‰¿‚Æ‚İ‚È‚µ‚Ü‚·B
-					‚Ü‚½A‘å•¶š¬•¶š‚ğ‹æ•Ê‚µ‚Ü‚¹‚ñB
+		@brief		2ã¤ã®ãƒ‘ã‚¹æ–‡å­—åˆ—ãŒç­‰ã—ã„ã‹ã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹
+		@param[in]	path1	: ãƒ‘ã‚¹æ–‡å­—åˆ—
+		@param[in]	path2	: ãƒ‘ã‚¹æ–‡å­—åˆ—
+		@details	DirectorySeparatorChar ã¨ AltDirectorySeparatorChar ã¯ç­‰ä¾¡ã¨ã¿ãªã—ã¾ã™ã€‚
+					ã¾ãŸã€å¤§æ–‡å­—å°æ–‡å­—ã‚’åŒºåˆ¥ã—ã¾ã›ã‚“ã€‚
 	*/
 	template<typename TChar>
 	static bool Equals(const TChar* path1, const TChar* path2);

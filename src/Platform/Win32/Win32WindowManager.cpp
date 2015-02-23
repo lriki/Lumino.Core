@@ -1,4 +1,4 @@
-
+ï»¿
 #include "../../Internal.h"
 #include "Win32Window.h"
 #include "Win32WindowManager.h"
@@ -38,7 +38,7 @@ Win32WindowManager::~Win32WindowManager()
 //-----------------------------------------------------------------------------
 //void Win32WindowManager::OnClosedWindow(Window* closedWindow)
 //{
-//	// zŠÂQÆ–h~‚Ì‚½‚ßAClose ‚³‚ê‚½‚çQÆ‚ğŠO‚·
+//	// å¾ªç’°å‚ç…§é˜²æ­¢ã®ãŸã‚ã€Close ã•ã‚ŒãŸã‚‰å‚ç…§ã‚’å¤–ã™
 //	if (closedWindo/*w == mMainWindow) {
 //		mMainWindow.*/SafeRelease();
 //	}

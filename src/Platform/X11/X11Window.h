@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 
 #include <X11/Xlib.h>
@@ -19,12 +19,12 @@ class X11Window
 	: public WindowBase
 {
 public:
-	/// ‰Šú‰»ƒf[ƒ^
+	/// åˆæœŸåŒ–ãƒ‡ãƒ¼ã‚¿
 	struct SettingData
 	{
-		const TCHAR*	TitleText;		///< ƒEƒBƒ“ƒhƒEƒ^ƒCƒgƒ‹‚Ì•¶š—ñ
-		Size			ClientSize;		///< ƒNƒ‰ƒCƒAƒ“ƒg—Ìˆæ‚ÌƒTƒCƒY
-		bool			Fullscreen;		///< ƒtƒ‹ƒXƒNƒŠ[ƒ“ƒ‚[ƒh‚Å‰Šú‰»‚·‚éê‡ true
+		const TCHAR*	TitleText;		///< ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¿ã‚¤ãƒˆãƒ«ã®æ–‡å­—åˆ—
+		Size			ClientSize;		///< ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆé ˜åŸŸã®ã‚µã‚¤ã‚º
+		bool			Fullscreen;		///< ãƒ•ãƒ«ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ãƒ¢ãƒ¼ãƒ‰ã§åˆæœŸåŒ–ã™ã‚‹å ´åˆ true
 		bool			Resizable;
 	};
 
@@ -46,8 +46,8 @@ private:
 	X11WindowManager* GetWindowManager() { return (X11WindowManager*)(m_windowManager); }
 
 private:
-	String		m_titleText;		///< ƒEƒBƒ“ƒhƒEƒ^ƒCƒgƒ‹‚Ì•¶š—ñ
-	Size		m_clientSize;		///< ƒNƒ‰ƒCƒAƒ“ƒg—Ìˆæ‚Ì‘å‚«‚³
+	String		m_titleText;		///< ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¿ã‚¤ãƒˆãƒ«ã®æ–‡å­—åˆ—
+	Size		m_clientSize;		///< ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆé ˜åŸŸã®å¤§ãã•
 	
 	::Window	m_x11Window;
 };

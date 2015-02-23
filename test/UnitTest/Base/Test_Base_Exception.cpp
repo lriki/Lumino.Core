@@ -1,4 +1,4 @@
-#include <TestConfig.h>
+﻿#include <TestConfig.h>
 
 class Test_Base_Exception : public ::testing::Test
 {
@@ -10,7 +10,7 @@ protected:
 //---------------------------------------------------------------------
 TEST_F(Test_Base_Exception, Basic)
 {
-	// char �ϒ� message
+	// char 可変長 message
 	try
 	{
 		LN_THROW(0, IOException, "test%d", 1);
@@ -19,7 +19,7 @@ TEST_F(Test_Base_Exception, Basic)
 	{
 		ASSERT_EQ(0, _tcscmp(_T("test1"), e.GetMessage()));
 	}
-	// wchar_t �ϒ� message
+	// wchar_t 可変長 message
 	try
 	{
 		LN_THROW(0, IOException, L"test%s", L"test");

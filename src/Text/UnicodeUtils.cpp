@@ -1,4 +1,4 @@
-
+ï»¿
 #include <stdio.h>
 #include "../../include/Lumino/Text/UnicodeUtils.h"
 
@@ -7,8 +7,8 @@ namespace Lumino
 namespace Text
 {
 
-// UTF-8 ‚Ì‚ ‚éæ“ªƒoƒCƒg‚É‘Î‚·‚é1•¶š•ª‚ÌŒã‘±ƒoƒCƒg”
-// (Œ»İ–{ƒ\[ƒX‚Å‚Í 4 ƒoƒCƒg‚Ü‚Å‚µ‚©ˆµ‚¦‚È‚¢‚ªAŠo‘‚Æ‚µ‚Äc‚µ‚Ä‚¨‚­)
+// UTF-8 ã®ã‚ã‚‹å…ˆé ­ãƒã‚¤ãƒˆã«å¯¾ã™ã‚‹1æ–‡å­—åˆ†ã®å¾Œç¶šãƒã‚¤ãƒˆæ•°
+// (ç¾åœ¨æœ¬ã‚½ãƒ¼ã‚¹ã§ã¯ 4 ãƒã‚¤ãƒˆã¾ã§ã—ã‹æ‰±ãˆãªã„ãŒã€è¦šæ›¸ã¨ã—ã¦æ®‹ã—ã¦ãŠã)
 static const char TrailingBytesForUTF8[256] = 
 {
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -32,14 +32,14 @@ static const char TrailingBytesForUTF8[256] =
 	3,3,3,3,3,3,3,3,4,4,4,4,5,5,5,5,
 };
 
-// UTF-8 ¨ UTF-32 ‚Ì•ÏŠ·‚Ég—p‚µAUTF-8 ‚ÌƒoƒCƒgƒ}[ƒN‚ğ‘Å‚¿Á‚·
+// UTF-8 â†’ UTF-32 ã®å¤‰æ›æ™‚ã«ä½¿ç”¨ã—ã€UTF-8 ã®ãƒã‚¤ãƒˆãƒãƒ¼ã‚¯ã‚’æ‰“ã¡æ¶ˆã™
 static const UnicodeUtils::UTF32 OffsetsFromUTF8[6] = 
 { 
 	0x00000000UL, 0x00003080UL, 0x000E2080UL, 
 	0x03C82080UL, 0xFA082080UL, 0x82082080UL,
 };
 
-// UTF-8 ‚ÌæsƒoƒCƒg‚É•t‚­ƒoƒCƒgƒ}[ƒN
+// UTF-8 ã®å…ˆè¡Œãƒã‚¤ãƒˆã«ä»˜ããƒã‚¤ãƒˆãƒãƒ¼ã‚¯
 // 00000000, 00000000, 11000000, 11100000, 11110000, 11111000, 11111100
 static const UnicodeUtils::UTF8 UTF8FirstByteMark[7] = { 0x00, 0x00, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC };
 
@@ -61,20 +61,20 @@ UTFConversionResult UnicodeUtils::ConvertUTF8toUTF16 (
 
 	while (source < sourceEnd)
 	{
-		// ˆê“x UTF32 •¶š‚Ö
+		// ä¸€åº¦ UTF32 æ–‡å­—ã¸
 		UTF32 ch;
 		result = ConvertCharUTF8toUTF32(&source, sourceEnd, options, &ch);
 		if (result != UTFConversionResult_Success) {
 			break;
 		}
 
-		// UTF32 ‚©‚ç UTF16 ‚Ö 
+		// UTF32 ã‹ã‚‰ UTF16 ã¸ 
 		result = ConvertCharUTF32toUTF16(ch, &target, targetEnd, options);
 		if (result != UTFConversionResult_Success) {
 			break;
 		}
 
-		// •¶š”ƒJƒEƒ“ƒg
+		// æ–‡å­—æ•°ã‚«ã‚¦ãƒ³ãƒˆ
 		options->CharCount++;
 	}
 	
@@ -103,14 +103,14 @@ UTFConversionResult UnicodeUtils::ConvertUTF8toUTF32(
 	{
 		 const UTF8* oldSource = source;	// backup
 
-		// UTF32 •¶š‚Ö
+		// UTF32 æ–‡å­—ã¸
 		UTF32 ch;
 		result = ConvertCharUTF8toUTF32(&source, sourceEnd, options, &ch);
 		if (result != UTFConversionResult_Success) {
 			break;
 		}
 
-		// target ƒoƒbƒtƒ@‚Ì”ÍˆÍƒ`ƒFƒbƒN
+		// target ãƒãƒƒãƒ•ã‚¡ã®ç¯„å›²ãƒã‚§ãƒƒã‚¯
 		if (target >= targetEnd) {
 			source = oldSource;
 			result = UTFConversionResult_TargetExhausted;
@@ -120,38 +120,38 @@ UTFConversionResult UnicodeUtils::ConvertUTF8toUTF32(
 		bool isIllegal = false;
 		if (ch <= MaxLegalUTF32) 
 		{
-			// UTF16ƒTƒƒQ[ƒg’l‚Í UTF32 ‚Å‚Í•s³•¶š (–Ê17 (>0x10FFFF) ‚©‚ç‚Í•s³•¶š)
+			// UTF16ã‚µãƒ­ã‚²ãƒ¼ãƒˆå€¤ã¯ UTF32 ã§ã¯ä¸æ­£æ–‡å­— (é¢17 (>0x10FFFF) ã‹ã‚‰ã¯ä¸æ­£æ–‡å­—)
 			if (SurrogateHighStart <= ch && ch <= SurrogateLowEnd)
 			{
 				isIllegal = true;
 			}
 		}
-		// UTF32 ‚Ì”ÍˆÍŠO
+		// UTF32 ã®ç¯„å›²å¤–
 		else {
 			isIllegal= true;
 		}
-		// •s³•¶š
+		// ä¸æ­£æ–‡å­—
 		if (isIllegal)
 		{
 			if (IsStrictConversion(options)) {
-				// ƒGƒ‰[‚Æ‚·‚é
+				// ã‚¨ãƒ©ãƒ¼ã¨ã™ã‚‹
 				source = oldSource;
 				result = UTFConversionResult_SourceIllegal;
 				break;
 			} 
 			else {
-				// ’uŠ·‚·‚é
+				// ç½®æ›ã™ã‚‹
 				*target = options->ReplacementChar;
 				target++;
 				options->IllegalCharCount++;
 			}
 		}
-		// ³‹K•¶š
+		// æ­£è¦æ–‡å­—
 		else {
 			*target++ = ch;
 		}	
 
-		// •¶š”ƒJƒEƒ“ƒg
+		// æ–‡å­—æ•°ã‚«ã‚¦ãƒ³ãƒˆ
 		options->CharCount++;
 	}
 
@@ -164,7 +164,7 @@ UTFConversionResult UnicodeUtils::ConvertUTF8toUTF32(
 //
 //---------------------------------------------------------------------
 UTFConversionResult UnicodeUtils::ConvertUTF16toUTF8(
-	const UTF16*			sourceStart,	// •ÏŠ·‚Å‚«‚È‚¢•¶š‚ªŒ©‚Â‚©‚Á‚½ê‡A‚»‚±‚ğw‚µ‚Ä‚¢‚é
+	const UTF16*			sourceStart,	// å¤‰æ›ã§ããªã„æ–‡å­—ãŒè¦‹ã¤ã‹ã£ãŸå ´åˆã€ãã“ã‚’æŒ‡ã—ã¦ã„ã‚‹
 	int						sourceLength,
 	UTF8*					targetStart, 
 	int						targetLength,
@@ -180,21 +180,21 @@ UTFConversionResult UnicodeUtils::ConvertUTF16toUTF8(
 	{
 		const UTF16* oldSource = source;
 
-		// ˆê“x UTF-32 •¶š‚Ö
+		// ä¸€åº¦ UTF-32 æ–‡å­—ã¸
 		UTF32 ch;
 		result = ConvertCharUTF16toUTF32(&source, sourceEnd, options, &ch);
 		if (result != UTFConversionResult_Success) {
 			break;
 		}
 
-		// UTF-8 •¶š‚Ö
+		// UTF-8 æ–‡å­—ã¸
 		result = ConvertCharUTF32toUTF8(ch, &target, targetEnd, options);
 		if (result != UTFConversionResult_Success) {
 			source = oldSource;
 			break;
 		}
 
-		// •¶š”ƒJƒEƒ“ƒg
+		// æ–‡å­—æ•°ã‚«ã‚¦ãƒ³ãƒˆ
 		options->CharCount++;
 	}
 
@@ -223,25 +223,25 @@ UTFConversionResult UnicodeUtils::ConvertUTF16toUTF32(
 	{
 		const UTF16* oldSource = source;
 
-		// UTF-32 •¶š‚Ö (¬Œ÷‚·‚é‚ÆAsource ‚ÍŸ‚Ì•¶š‚ÖˆÚ“®‚·‚é)
+		// UTF-32 æ–‡å­—ã¸ (æˆåŠŸã™ã‚‹ã¨ã€source ã¯æ¬¡ã®æ–‡å­—ã¸ç§»å‹•ã™ã‚‹)
 		UTF32 ch;
 		result = ConvertCharUTF16toUTF32(&source, sourceEnd, options, &ch);
 		if (result != UTFConversionResult_Success) {
 			break;
 		}
 
-		// o—Íƒoƒbƒtƒ@‚ÌƒTƒCƒYƒ`ƒFƒbƒN
+		// å‡ºåŠ›ãƒãƒƒãƒ•ã‚¡ã®ã‚µã‚¤ã‚ºãƒã‚§ãƒƒã‚¯
 		if (target >= targetEnd) {
 			source = oldSource;
 			result = UTFConversionResult_TargetExhausted;
 			break;
 		}
 
-		// Ši”[
+		// æ ¼ç´
 		*target = ch;
 		target++;
 
-		// •¶š”ƒJƒEƒ“ƒg
+		// æ–‡å­—æ•°ã‚«ã‚¦ãƒ³ãƒˆ
 		options->CharCount++;
 	}
 
@@ -272,27 +272,27 @@ UTFConversionResult UnicodeUtils::ConvertUTF32toUTF8(
 		UTF32 ch = *source;
 		source++;
 
-		// UTF16 ƒTƒƒQ[ƒg‚Í UTF32 ‚Å‚Í•s³•¶š
+		// UTF16 ã‚µãƒ­ã‚²ãƒ¼ãƒˆã¯ UTF32 ã§ã¯ä¸æ­£æ–‡å­—
 		if (SurrogateHighStart <= ch && ch <= SurrogateLowEnd)
 		{
-			if (IsStrictConversion(options)) {	// ƒGƒ‰[‚Æ‚·‚é	
+			if (IsStrictConversion(options)) {	// ã‚¨ãƒ©ãƒ¼ã¨ã™ã‚‹	
 				source = oldSource;
 				result = UTFConversionResult_SourceIllegal;
 				break;
 			} 
-			else {								// ’uŠ·‚·‚é
+			else {								// ç½®æ›ã™ã‚‹
 				ch = options->ReplacementChar;
 				options->IllegalCharCount++;
 			}
 		}
 
-		// UTF8 ‚Ö•ÏŠ·
+		// UTF8 ã¸å¤‰æ›
 		result = ConvertCharUTF32toUTF8(ch, &target, targetEnd, options);
 		if (result != UTFConversionResult_Success) {
 			break;
 		}
 
-		// •¶š”ƒJƒEƒ“ƒg
+		// æ–‡å­—æ•°ã‚«ã‚¦ãƒ³ãƒˆ
 		options->CharCount++;
 	}
 
@@ -319,23 +319,23 @@ UTFConversionResult UnicodeUtils::ConvertUTF32toUTF16(
 
     while (source < sourceEnd)
 	{
-		// o—Íƒoƒbƒtƒ@‚ÌƒTƒCƒYƒ`ƒFƒbƒN
+		// å‡ºåŠ›ãƒãƒƒãƒ•ã‚¡ã®ã‚µã‚¤ã‚ºãƒã‚§ãƒƒã‚¯
 		if (target >= targetEnd) {
 			result = UTFConversionResult_TargetExhausted;
 			break;
 		}
 
-		// UTF32 “Ç‚İæ‚è
+		// UTF32 èª­ã¿å–ã‚Š
 		UTF32 ch = *source;
 		source++;
 
-		// UTF16 ‚Ö (¬Œ÷‚·‚é‚ÆAtarget ‚ÍŸ‚ÌŠi”[æ‚ğw‚·)
+		// UTF16 ã¸ (æˆåŠŸã™ã‚‹ã¨ã€target ã¯æ¬¡ã®æ ¼ç´å…ˆã‚’æŒ‡ã™)
 		result = ConvertCharUTF32toUTF16(ch, &target, targetEnd, options);
 		if (result != UTFConversionResult_Success) {
 			break;
 		}
 
-		// •¶š”ƒJƒEƒ“ƒg
+		// æ–‡å­—æ•°ã‚«ã‚¦ãƒ³ãƒˆ
 		options->CharCount++;
 	}
 
@@ -363,36 +363,36 @@ UTFConversionResult UnicodeUtils::GetUTF16CharCount(
 		ch1 = *source;
 		source++;
 
-		// ƒTƒƒQ[ƒgƒyƒA‚ğ‚Á‚Ä‚¢‚éê‡
+		// ã‚µãƒ­ã‚²ãƒ¼ãƒˆãƒšã‚¢ã‚’æŒã£ã¦ã„ã‚‹å ´åˆ
 		if (SurrogateHighStart <= ch1 && ch1 <= SurrogateHighEnd)
 		{
-			if (source < sourceEnd)		// ƒoƒbƒtƒ@I’[ƒ`ƒFƒbƒN
+			if (source < sourceEnd)		// ãƒãƒƒãƒ•ã‚¡çµ‚ç«¯ãƒã‚§ãƒƒã‚¯
 			{
-				ch2 = *source;	// 2•¶š–Ú“Ç‚İæ‚è
-				// 2•¶š–Ú‚ª‰ºˆÊƒTƒƒQ[ƒg‚Å‚ ‚é
+				ch2 = *source;	// 2æ–‡å­—ç›®èª­ã¿å–ã‚Š
+				// 2æ–‡å­—ç›®ãŒä¸‹ä½ã‚µãƒ­ã‚²ãƒ¼ãƒˆã§ã‚ã‚‹
 				if (ch2 >= SurrogateLowStart && ch2 <= SurrogateLowEnd) {
 					++source;
 				}
 				else if (isStrict) {
-					// ãˆÊƒTƒƒQ[ƒg‚ª‚ ‚é‚Ì‚ÉA‰ºˆÊƒTƒƒQ[ƒg‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½
+					// ä¸Šä½ã‚µãƒ­ã‚²ãƒ¼ãƒˆãŒã‚ã‚‹ã®ã«ã€ä¸‹ä½ã‚µãƒ­ã‚²ãƒ¼ãƒˆãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸ
 					return UTFConversionResult_SourceIllegal;
 				}
 			}
 			else {
-				// ‰ºˆÊƒTƒƒQ[ƒg‚ğ’T‚µ‚Ä‚¢‚é“r’†‚Éƒoƒbƒtƒ@I’[‚É“’B‚µ‚Ä‚µ‚Ü‚Á‚½
+				// ä¸‹ä½ã‚µãƒ­ã‚²ãƒ¼ãƒˆã‚’æ¢ã—ã¦ã„ã‚‹é€”ä¸­ã«ãƒãƒƒãƒ•ã‚¡çµ‚ç«¯ã«åˆ°é”ã—ã¦ã—ã¾ã£ãŸ
 				return UTFConversionResult_SourceExhausted;
 			}
 		}
-		// ƒTƒƒQ[ƒgƒyƒA‚Å‚Í‚È‚¢ê‡
+		// ã‚µãƒ­ã‚²ãƒ¼ãƒˆãƒšã‚¢ã§ã¯ãªã„å ´åˆ
 		else
 		{
-			// ‚¢‚«‚È‚è‰ºˆÊƒTƒƒQ[ƒg’l‚ªŒ©‚Â‚©‚Á‚½
+			// ã„ããªã‚Šä¸‹ä½ã‚µãƒ­ã‚²ãƒ¼ãƒˆå€¤ãŒè¦‹ã¤ã‹ã£ãŸ
 			if (ch1 >= SurrogateLowStart && ch1 <= SurrogateLowEnd) {
 				return UTFConversionResult_SourceIllegal;
 			}
 		}
 
-		// •¶š”ƒJƒEƒ“ƒg
+		// æ–‡å­—æ•°ã‚«ã‚¦ãƒ³ãƒˆ
 		(*count)++;
 	}
 
@@ -407,12 +407,12 @@ UTFConversionResult UnicodeUtils::CheckUTF8TrailingBytes(const UTF8* sourceStart
 	*outExtraByteCount = 0;
 	int extra = TrailingBytesForUTF8[*sourceStart];
 
-	// ”ÍˆÍƒ`ƒFƒbƒN
+	// ç¯„å›²ãƒã‚§ãƒƒã‚¯
 	if (sourceStart + extra >= sourceEnd) {
 		return UTFConversionResult_SourceExhausted;
 	}
 
-	// ³í‚È UTF8 •¶š‚Å‚ ‚é‚©H
+	// æ­£å¸¸ãª UTF8 æ–‡å­—ã§ã‚ã‚‹ã‹ï¼Ÿ
 	if (strict && !IsLegalUTF8(sourceStart, extra + 1)) {
 		return UTFConversionResult_SourceIllegal;
 	}
@@ -429,28 +429,28 @@ UTFConversionResult UnicodeUtils::CheckUTF16Surrogate(const UTF16* sourceStart, 
 	*outSurrogate = false;
 
 	UTF32 ch = *sourceStart;
-	// ƒTƒƒQ[ƒgƒyƒA‚ğ‚Á‚Ä‚¢‚éê‡‚Í UTF32 ‚Ö‚Ì•ÏŠ·ˆ—‚ğs‚¤
+	// ã‚µãƒ­ã‚²ãƒ¼ãƒˆãƒšã‚¢ã‚’æŒã£ã¦ã„ã‚‹å ´åˆã¯ UTF32 ã¸ã®å¤‰æ›å‡¦ç†ã‚’è¡Œã†
 	if (SurrogateHighStart <= ch && ch <= SurrogateHighEnd) 
 	{
-		if (sourceStart + 1 < sourceEnd)		// ƒoƒbƒtƒ@I’[ƒ`ƒFƒbƒN
+		if (sourceStart + 1 < sourceEnd)		// ãƒãƒƒãƒ•ã‚¡çµ‚ç«¯ãƒã‚§ãƒƒã‚¯
 		{
-			UTF32 ch2 = *(sourceStart + 1);	// 2•¶š–Ú“Ç‚İæ‚è
-			// ‰ºˆÊƒTƒƒQ[ƒgƒ`ƒFƒbƒN
+			UTF32 ch2 = *(sourceStart + 1);	// 2æ–‡å­—ç›®èª­ã¿å–ã‚Š
+			// ä¸‹ä½ã‚µãƒ­ã‚²ãƒ¼ãƒˆãƒã‚§ãƒƒã‚¯
 			if (SurrogateLowStart <= ch2 && ch2 <= SurrogateLowEnd) {
 				*outSurrogate = true;
 			}
 			else if (strict) {
-				// ãˆÊƒTƒƒQ[ƒg‚ª‚ ‚é‚Ì‚ÉA‰ºˆÊƒTƒƒQ[ƒg‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½
+				// ä¸Šä½ã‚µãƒ­ã‚²ãƒ¼ãƒˆãŒã‚ã‚‹ã®ã«ã€ä¸‹ä½ã‚µãƒ­ã‚²ãƒ¼ãƒˆãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸ
 				return UTFConversionResult_SourceIllegal;
 			}
 		} 
 		else 
 		{
-			// ‰ºˆÊƒTƒƒQ[ƒg‚ğ’T‚µ‚Ä‚¢‚é“r’†‚Éƒoƒbƒtƒ@I’[‚É“’B‚µ‚Ä‚µ‚Ü‚Á‚½
+			// ä¸‹ä½ã‚µãƒ­ã‚²ãƒ¼ãƒˆã‚’æ¢ã—ã¦ã„ã‚‹é€”ä¸­ã«ãƒãƒƒãƒ•ã‚¡çµ‚ç«¯ã«åˆ°é”ã—ã¦ã—ã¾ã£ãŸ
 			return UTFConversionResult_SourceExhausted;
 		}
 	}
-	// ‚¢‚«‚È‚è‰ºˆÊƒTƒƒQ[ƒg’l‚ªŒ©‚Â‚©‚Á‚½
+	// ã„ããªã‚Šä¸‹ä½ã‚µãƒ­ã‚²ãƒ¼ãƒˆå€¤ãŒè¦‹ã¤ã‹ã£ãŸ
 	else if (strict && ch >= SurrogateLowStart && ch <= SurrogateLowEnd)
 	{
 		return UTFConversionResult_SourceIllegal;
@@ -470,20 +470,20 @@ UTFConversionResult UnicodeUtils::ConvertCharUTF8toUTF32(
 	const UTF8* source = *sourceStart;
 	UTF32 ch = 0;
 
-	// ’Ç‰Á‚Å“Ç‚ŞƒoƒCƒg”
+	// è¿½åŠ ã§èª­ã‚€ãƒã‚¤ãƒˆæ•°
 	unsigned short extraBytesToRead = TrailingBytesForUTF8[*source];
 	if (source + extraBytesToRead >= sourceEnd) {
 		return UTFConversionResult_SourceExhausted;
 	}
-	// ³‹K‚Ì UTF-8 •¶š‚ÌƒoƒCƒgƒV[ƒPƒ“ƒX‚Å‚ ‚é‚©‚ğŠm”F
+	// æ­£è¦ã® UTF-8 æ–‡å­—ã®ãƒã‚¤ãƒˆã‚·ãƒ¼ã‚±ãƒ³ã‚¹ã§ã‚ã‚‹ã‹ã‚’ç¢ºèª
 	if (!IsLegalUTF8(source, extraBytesToRead+1)) {
 		return UTFConversionResult_SourceIllegal;
 	}
-	// ’Ç‰ÁƒoƒCƒg”‚É‰‚¶‚ÄƒtƒH[ƒ‹ƒXƒ‹[‚Å—¬‚ê‚Â‚Â“Ç‚ñ‚Å‚¢‚­
+	// è¿½åŠ ãƒã‚¤ãƒˆæ•°ã«å¿œã˜ã¦ãƒ•ã‚©ãƒ¼ãƒ«ã‚¹ãƒ«ãƒ¼ã§æµã‚Œã¤ã¤èª­ã‚“ã§ã„ã
 	switch (extraBytesToRead)
 	{
-		case 5: ch += *source++; ch <<= 6;	// ‹Œ®
-		case 4: ch += *source++; ch <<= 6;	// ‹Œ®
+		case 5: ch += *source++; ch <<= 6;	// æ—§å¼
+		case 4: ch += *source++; ch <<= 6;	// æ—§å¼
 		case 3: ch += *source++; ch <<= 6;
 		case 2: ch += *source++; ch <<= 6;
 		case 1: ch += *source++; ch <<= 6;
@@ -501,14 +501,14 @@ UTFConversionResult UnicodeUtils::ConvertCharUTF8toUTF32(
 //---------------------------------------------------------------------
 UTFConversionResult UnicodeUtils::ConvertCharUTF32toUTF8(
 	UTF32					ch,
-	UTF8**					targetStart, // ¬”Û‚É‚©‚©‚í‚ç‚¸A‚±‚±‚Ì‚Ğ‚Æ‚Â‘O‚Ü‚Å•¶š‚ª‘‚©‚ê‚Ä‚¢‚éB
+	UTF8**					targetStart, // æˆå¦ã«ã‹ã‹ã‚ã‚‰ãšã€ã“ã“ã®ã²ã¨ã¤å‰ã¾ã§æ–‡å­—ãŒæ›¸ã‹ã‚Œã¦ã„ã‚‹ã€‚
 	UTF8*					targetEnd, 
 	UTFConversionOptions*	options)
 {
 	UTFConversionResult result = UTFConversionResult_Success;
 	UTF8*				target = *targetStart;
 
-	// •ÏŠ·ŒãA‰½ƒoƒCƒg•K—v‚©
+	// å¤‰æ›å¾Œã€ä½•ãƒã‚¤ãƒˆå¿…è¦ã‹
 	unsigned short bytesToWrite = 0;
 	if (ch < (UTF32)0x80)			{ bytesToWrite = 1; }
 	else if (ch < (UTF32)0x800)	{ bytesToWrite = 2; }
@@ -516,7 +516,7 @@ UTFConversionResult UnicodeUtils::ConvertCharUTF32toUTF8(
 	else if (ch <= MaxLegalUTF32)	{ bytesToWrite = 4; }
 	else 
 	{
-		// •s³•¶š‚ªŒ©‚Â‚©‚Á‚½
+		// ä¸æ­£æ–‡å­—ãŒè¦‹ã¤ã‹ã£ãŸ
 		bytesToWrite = 3;
 		if (IsStrictConversion(options)) {
 			return UTFConversionResult_SourceIllegal;
@@ -535,8 +535,8 @@ UTFConversionResult UnicodeUtils::ConvertCharUTF32toUTF8(
 		const UTF32 byteMask = 0xBF;
 		const UTF32 byteMark = 0x80; 
 
-		// target ‚Í‘‚«‚İ”ÍˆÍ‚Ìˆê”ÔŒã‚ë‚ğw‚µ‚Ä‚¨‚«A
-		// switch ƒtƒH[ƒ‹ƒXƒ‹[‚ÅŒã‚ë‚©‚ç‘O‚Ö•¶š‚ğ‘‚«‚ñ‚Å‚¢‚­
+		// target ã¯æ›¸ãè¾¼ã¿ç¯„å›²ã®ä¸€ç•ªå¾Œã‚ã‚’æŒ‡ã—ã¦ãŠãã€
+		// switch ãƒ•ã‚©ãƒ¼ãƒ«ã‚¹ãƒ«ãƒ¼ã§å¾Œã‚ã‹ã‚‰å‰ã¸æ–‡å­—ã‚’æ›¸ãè¾¼ã‚“ã§ã„ã
 		target += bytesToWrite;
 		switch (bytesToWrite)
 		{
@@ -567,7 +567,7 @@ UTFConversionResult UnicodeUtils::ConvertCharUTF32toUTF8(
 //
 //---------------------------------------------------------------------
 UTFConversionResult UnicodeUtils::ConvertCharUTF16toUTF32(
-	const UTF16**			sourceStart,	// ¸”s‚µ‚½ê‡‚Í•Ï‰»‚µ‚È‚¢
+	const UTF16**			sourceStart,	// å¤±æ•—ã—ãŸå ´åˆã¯å¤‰åŒ–ã—ãªã„
 	const UTF16*			sourceEnd,
 	UTFConversionOptions*	options,
 	UTF32*					outChar)
@@ -579,38 +579,38 @@ UTFConversionResult UnicodeUtils::ConvertCharUTF16toUTF32(
 	ch = *source;
 	source++;
 
-	// ƒTƒƒQ[ƒgƒyƒA‚ğ‚Á‚Ä‚¢‚éê‡‚Í UTF32 ‚Ö‚Ì•ÏŠ·ˆ—‚ğs‚¤
+	// ã‚µãƒ­ã‚²ãƒ¼ãƒˆãƒšã‚¢ã‚’æŒã£ã¦ã„ã‚‹å ´åˆã¯ UTF32 ã¸ã®å¤‰æ›å‡¦ç†ã‚’è¡Œã†
 	if (SurrogateHighStart <= ch && ch <= SurrogateHighEnd) 
 	{
-		if (source < sourceEnd)		// ƒoƒbƒtƒ@I’[ƒ`ƒFƒbƒN
+		if (source < sourceEnd)		// ãƒãƒƒãƒ•ã‚¡çµ‚ç«¯ãƒã‚§ãƒƒã‚¯
 		{
-			ch2 = *source;	// 2•¶š–Ú“Ç‚İæ‚è
-			// 2•¶š–Ú‚ª‰ºˆÊƒTƒƒQ[ƒg‚Å‚ ‚ê‚ÎAUTF-32‚É•ÏŠ·‚·‚é
+			ch2 = *source;	// 2æ–‡å­—ç›®èª­ã¿å–ã‚Š
+			// 2æ–‡å­—ç›®ãŒä¸‹ä½ã‚µãƒ­ã‚²ãƒ¼ãƒˆã§ã‚ã‚Œã°ã€UTF-32ã«å¤‰æ›ã™ã‚‹
 			if (ch2 >= SurrogateLowStart && ch2 <= SurrogateLowEnd) {
 				ch = ((ch - SurrogateHighStart) << UTF16HalfShift) + (ch2 - SurrogateLowStart) + UTF16HalfBase;
 				++source;
 			}
 			else if (IsStrictConversion(options)) {
-				// ãˆÊƒTƒƒQ[ƒg‚ª‚ ‚é‚Ì‚ÉA‰ºˆÊƒTƒƒQ[ƒg‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½
+				// ä¸Šä½ã‚µãƒ­ã‚²ãƒ¼ãƒˆãŒã‚ã‚‹ã®ã«ã€ä¸‹ä½ã‚µãƒ­ã‚²ãƒ¼ãƒˆãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸ
 				result = UTFConversionResult_SourceIllegal;
 			}
 		} 
 		else 
 		{
-			// ‰ºˆÊƒTƒƒQ[ƒg‚ğ’T‚µ‚Ä‚¢‚é“r’†‚Éƒoƒbƒtƒ@I’[‚É“’B‚µ‚Ä‚µ‚Ü‚Á‚½
+			// ä¸‹ä½ã‚µãƒ­ã‚²ãƒ¼ãƒˆã‚’æ¢ã—ã¦ã„ã‚‹é€”ä¸­ã«ãƒãƒƒãƒ•ã‚¡çµ‚ç«¯ã«åˆ°é”ã—ã¦ã—ã¾ã£ãŸ
 			result = UTFConversionResult_SourceExhausted;
 		}
 	}
-	// ƒTƒƒQ[ƒgƒyƒA‚Å‚Í‚È‚¢ê‡
+	// ã‚µãƒ­ã‚²ãƒ¼ãƒˆãƒšã‚¢ã§ã¯ãªã„å ´åˆ
 	else
 	{
-		// ‚¢‚«‚È‚è‰ºˆÊƒTƒƒQ[ƒg’l‚ªŒ©‚Â‚©‚Á‚½
+		// ã„ããªã‚Šä¸‹ä½ã‚µãƒ­ã‚²ãƒ¼ãƒˆå€¤ãŒè¦‹ã¤ã‹ã£ãŸ
 		if (ch >= SurrogateLowStart && ch <= SurrogateLowEnd) {
 			result = UTFConversionResult_SourceIllegal;
 		}
 	}
 	
-	// ¬Œ÷‚µ‚Ä‚¢‚ê‚Î‚»‚ê‚¼‚êXV (¸”s‚µ‚½ê‡AsourceStart ‚Í•s³•¶š‚ğw‚µ‚Ä‚¢‚é)
+	// æˆåŠŸã—ã¦ã„ã‚Œã°ãã‚Œãã‚Œæ›´æ–° (å¤±æ•—ã—ãŸå ´åˆã€sourceStart ã¯ä¸æ­£æ–‡å­—ã‚’æŒ‡ã—ã¦ã„ã‚‹)
 	if (result == UTFConversionResult_Success) {
 		*sourceStart = source;
 		*outChar = ch;	
@@ -629,13 +629,13 @@ UTFConversionResult UnicodeUtils::ConvertCharUTF32toUTF16(
 {
 	UTF16* target = *targetStart;
 
-	// 0xFFFF ˆÈ‰ºB•’Ê‚Ì UTF-16 \¬•¶š
+	// 0xFFFF ä»¥ä¸‹ã€‚æ™®é€šã® UTF-16 æ§‹æˆæ–‡å­—
 	if (ch <= MaxBMP) 
 	{
-		// UTF-16‚ÌƒTƒƒQ[ƒg‚ÍAUTF-32‚Å‚Í–³Œø‚È•¶š‚Å‚ ‚é
+		// UTF-16ã®ã‚µãƒ­ã‚²ãƒ¼ãƒˆã¯ã€UTF-32ã§ã¯ç„¡åŠ¹ãªæ–‡å­—ã§ã‚ã‚‹
 		if (SurrogateHighStart <= ch && ch <= SurrogateLowEnd) 
 		{
-			// •s³•¶š‚Ìˆ—
+			// ä¸æ­£æ–‡å­—ã®å‡¦ç†
 			if (IsStrictConversion(options)) {
 				return UTFConversionResult_SourceExhausted;
 			} else {
@@ -646,15 +646,15 @@ UTFConversionResult UnicodeUtils::ConvertCharUTF32toUTF16(
 		} 
 		else 
 		{
-			// ƒTƒƒQ[ƒg‚Å‚È‚¯‚ê‚Î•’Ê‚ÉŠi”[
+			// ã‚µãƒ­ã‚²ãƒ¼ãƒˆã§ãªã‘ã‚Œã°æ™®é€šã«æ ¼ç´
 			*target = (UTF16)ch;
 			target++;
 		}
 	}
-	// ‹KŠiŠO
+	// è¦æ ¼å¤–
 	else if (ch > MaxLegalUTF32) 
 	{
-		// •s³•¶š‚Ìˆ—
+		// ä¸æ­£æ–‡å­—ã®å‡¦ç†
 		if (IsStrictConversion(options)) {
 			return UTFConversionResult_SourceExhausted;
 		} else {
@@ -663,11 +663,11 @@ UTFConversionResult UnicodeUtils::ConvertCharUTF32toUTF16(
 			options->IllegalCharCount++;
 		}
 	}
-	// 0xFFFF ` 0x10FFFF ‚ÌŠÔ (ƒTƒƒQ[ƒgg—p)
+	// 0xFFFF ï½ 0x10FFFF ã®é–“ (ã‚µãƒ­ã‚²ãƒ¼ãƒˆä½¿ç”¨)
 	else 
 	{
 		if (target + 1 >= targetEnd) {
-			return UTFConversionResult_TargetExhausted;	// ƒoƒbƒtƒ@ƒI[ƒo[
+			return UTFConversionResult_TargetExhausted;	// ãƒãƒƒãƒ•ã‚¡ã‚ªãƒ¼ãƒãƒ¼
 		}
 		ch -= UTF16HalfBase;
 		*target = (UTF16)((ch >> UTF16HalfShift) + SurrogateHighStart);
@@ -685,12 +685,12 @@ UTFConversionResult UnicodeUtils::ConvertCharUTF32toUTF16(
 //---------------------------------------------------------------------
 bool UnicodeUtils::IsLegalUTF8(const UTF8 *source, int length) 
 {
-	// length ‚Í UTF-8 ‚ÌæsƒoƒCƒg‚É‚æ‚Á‚Ä–‘O‚ÉŒˆ’è‚³‚ê‚éB
-	// length > 4 ‚Ìê‡‚Í false ‚ğ•Ô‚·B
+	// length ã¯ UTF-8 ã®å…ˆè¡Œãƒã‚¤ãƒˆã«ã‚ˆã£ã¦äº‹å‰ã«æ±ºå®šã•ã‚Œã‚‹ã€‚
+	// length > 4 ã®å ´åˆã¯ false ã‚’è¿”ã™ã€‚
 
     UTF8 a;
 
-	// Å‰‚Éˆê”ÔŒã‚ë‚ğw‚µAƒtƒH[ƒ‹ƒXƒ‹[‚Å‚Ğ‚Æ‚Â‚¸‚Â‘O‚ÖŒ©‚Ä‚¢‚­
+	// æœ€åˆã«ä¸€ç•ªå¾Œã‚ã‚’æŒ‡ã—ã€ãƒ•ã‚©ãƒ¼ãƒ«ã‚¹ãƒ«ãƒ¼ã§ã²ã¨ã¤ãšã¤å‰ã¸è¦‹ã¦ã„ã
     const UTF8 *srcptr = source+length;
     switch (length) 
 	{
@@ -701,7 +701,7 @@ bool UnicodeUtils::IsLegalUTF8(const UTF8 *source, int length)
 
 		switch (*source) 
 		{
-			// ‚±‚±‚ÍƒtƒH[ƒ‹ƒXƒ‹[‚µ‚È‚¢‚Ì‚Å’ˆÓ
+			// ã“ã“ã¯ãƒ•ã‚©ãƒ¼ãƒ«ã‚¹ãƒ«ãƒ¼ã—ãªã„ã®ã§æ³¨æ„
 			case 0xE0: if (a < 0xA0) return false; break;
 			case 0xED: if (a > 0x9F) return false; break;
 			case 0xF0: if (a < 0x90) return false; break;

@@ -1,4 +1,4 @@
-
+ï»¿
 #include "../Internal.h"
 #include "../../include/Lumino/Threading/EventFlag.h"
 
@@ -27,7 +27,7 @@ EventFlag::EventFlag( bool initFlag )
 	: mHandle( NULL )
 {
     BOOL t = ( initFlag ) ? TRUE : FALSE;
-    // è“®ƒŠƒZƒbƒg‚Åì¬
+    // æ‰‹å‹•ãƒªã‚»ãƒƒãƒˆã§ä½œæˆ
     mHandle = CreateEvent( NULL, TRUE, t, NULL );
 }
 
@@ -126,7 +126,7 @@ EventFlag::~EventFlag()
 //-----------------------------------------------------------------------------
 void EventFlag::SetTrue()
 {
-	// ƒ~ƒ…[ƒeƒbƒNƒX‚ğƒƒbƒN‚·‚é
+	// ãƒŸãƒ¥ãƒ¼ãƒ†ãƒƒã‚¯ã‚¹ã‚’ãƒ­ãƒƒã‚¯ã™ã‚‹
 	int r = pthread_mutex_lock( &mMutex );
 	if ( r != 0 )
 	{ 
@@ -136,7 +136,7 @@ void EventFlag::SetTrue()
 
 	mSignal = true;
 
-	// ’†’f‚µ‚Ä‚¢‚éƒXƒŒƒbƒh‚É’Ê’m‚ğ‘—‚é
+	// ä¸­æ–­ã—ã¦ã„ã‚‹ã‚¹ãƒ¬ãƒƒãƒ‰ã«é€šçŸ¥ã‚’é€ã‚‹
 	r = pthread_cond_broadcast( &mWait );//pthread_cond_signal( &mWait );
 	if ( r != 0 )
 	{ 
@@ -144,7 +144,7 @@ void EventFlag::SetTrue()
 		return;
 	}
 
-	// ƒ~ƒ…[ƒeƒbƒNƒX‚ğƒAƒ“ƒƒbƒN‚·‚é
+	// ãƒŸãƒ¥ãƒ¼ãƒ†ãƒƒã‚¯ã‚¹ã‚’ã‚¢ãƒ³ãƒ­ãƒƒã‚¯ã™ã‚‹
 	r = pthread_mutex_unlock( &mMutex );
 	if ( r != 0 )
 	{ 
@@ -179,28 +179,28 @@ bool EventFlag::IsTrue() const
 //-----------------------------------------------------------------------------
 void EventFlag::Wait()
 {
-	// ƒ~ƒ…[ƒeƒbƒNƒX‚ğƒƒbƒN‚·‚é
+	// ãƒŸãƒ¥ãƒ¼ãƒ†ãƒƒã‚¯ã‚¹ã‚’ãƒ­ãƒƒã‚¯ã™ã‚‹
 	int r = pthread_mutex_lock( &mMutex );
 	if ( r != 0 ) { 
 		errno = r; 
 		return;
 	}
 
-	// true ‚È‚çƒAƒ“ƒƒbƒN‚µ‚Ä’†’f‚µ‚Ä‚İ‚é
+	// true ãªã‚‰ã‚¢ãƒ³ãƒ­ãƒƒã‚¯ã—ã¦ä¸­æ–­ã—ã¦ã¿ã‚‹
 	if ( mSignal )
 	{
 		pthread_mutex_unlock( &mMutex );
 		return;
 	}
 
-	// ƒXƒŒƒbƒh‚ğƒXƒŠ[ƒv‚³‚¹‚é
+	// ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’ã‚¹ãƒªãƒ¼ãƒ—ã•ã›ã‚‹
 	r = pthread_cond_wait( &mWait, &mMutex );
 	if ( r != 0 ) { 
 		errno = r; 
 		return;
 	}
 
-	// ƒAƒ“ƒƒbƒN
+	// ã‚¢ãƒ³ãƒ­ãƒƒã‚¯
 	pthread_mutex_unlock( &mMutex );
 	if ( r != 0 ) { 
 		errno = r; 

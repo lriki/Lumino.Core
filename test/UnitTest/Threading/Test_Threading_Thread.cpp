@@ -1,4 +1,4 @@
-#include <TestConfig.h>
+ï»¿#include <TestConfig.h>
 
 class Test_Thread : public ::testing::Test
 {
@@ -40,7 +40,7 @@ TEST_F(Test_Thread, Basic)
 
 		virtual void Execute()
 		{
-			SetThreadAffinityMask(GetCurrentThread(), 0x00000002); // Œ»İ‚ÌƒXƒŒƒbƒh‚ğ1”Ô–Ú‚ÌƒRƒA‚ÉŒÅ’è
+			SetThreadAffinityMask(GetCurrentThread(), 0x00000002); // ç¾åœ¨ã®ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’1ç•ªç›®ã®ã‚³ã‚¢ã«å›ºå®š
 
 			while (runnning)
 			{
@@ -48,7 +48,7 @@ TEST_F(Test_Thread, Basic)
 				*gTest = tar;
 				tar++;
 				writed = true;
-				while (writed) {}	// ‘‚¢‚Ä‚¢‚¢‚Ü‚Å‘Ò‚Â
+				while (writed) {}	// æ›¸ã„ã¦ã„ã„ã¾ã§å¾…ã¤
 			}
 
 			//value = tar;
@@ -58,7 +58,7 @@ TEST_F(Test_Thread, Basic)
 		}
 	};
 
-	SetThreadAffinityMask(GetCurrentThread(), 0x00000001); // Œ»İ‚ÌƒXƒŒƒbƒh‚ğ0”Ô–Ú‚ÌƒRƒA‚ÉŒÅ’è
+	SetThreadAffinityMask(GetCurrentThread(), 0x00000001); // ç¾åœ¨ã®ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’0ç•ªç›®ã®ã‚³ã‚¢ã«å›ºå®š
 
 	volatile int gTest;
 	TestThread testThread(&gTest);
@@ -68,7 +68,7 @@ TEST_F(Test_Thread, Basic)
 
 	for (int i = 0; i < 2000000; i++)
 	{
-		while (!testThread.writed) {}	// ‘‚©‚ê‚é‚Ü‚Å‘Ò‚Â
+		while (!testThread.writed) {}	// æ›¸ã‹ã‚Œã‚‹ã¾ã§å¾…ã¤
 
 		//EXPECT_EQ(i, testThread.gValue);
 		EXPECT_EQ(i, gTest);

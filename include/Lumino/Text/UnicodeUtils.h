@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #ifndef _WIN32
 #include <stdint.h>
@@ -9,29 +9,29 @@ namespace Lumino
 namespace Text
 {
 
-/// •¶šƒR[ƒh•ÏŠ·‚Ìˆ—Œ‹‰Ê
+/// æ–‡å­—ã‚³ãƒ¼ãƒ‰å¤‰æ›ã®å‡¦ç†çµæœ
 enum UTFConversionResult
 {
-	UTFConversionResult_Success = 0,		///< •ÏŠ·¬Œ÷
-	UTFConversionResult_SourceExhausted,	///< ƒ\[ƒXƒoƒbƒtƒ@‚ª•s³ (ƒoƒbƒtƒ@I’[‚Åƒ}ƒ‹ƒ`ƒoƒCƒg•¶š‚ª“rØ‚ê‚½)
-	UTFConversionResult_TargetExhausted,	///< ƒ^[ƒQƒbƒgƒoƒbƒtƒ@‚ª‘«‚è‚È‚¢
-	UTFConversionResult_SourceIllegal,		///< ƒ\[ƒXƒoƒbƒtƒ@“à‚É•s³‚È•¶š‚ªŒ©‚Â‚©‚Á‚½ (UTF8‚Ì•s³ƒoƒCƒgƒV[ƒPƒ“ƒX‚âAUTF16‚ÌƒTƒƒQ[ƒgƒyƒA•sˆê’v(ãˆÊ‚ª‚ ‚é‚Ì‚É‰ºˆÊ‚ª–³‚¢)‚Ì‚ÍA•s³•¶š’uŠ·‚ğ—LŒø‚É‚µ‚Ä‚¢‚Ä‚à‚±‚ÌƒGƒ‰[‚Å¸”s‚·‚é)
+	UTFConversionResult_Success = 0,		///< å¤‰æ›æˆåŠŸ
+	UTFConversionResult_SourceExhausted,	///< ã‚½ãƒ¼ã‚¹ãƒãƒƒãƒ•ã‚¡ãŒä¸æ­£ (ãƒãƒƒãƒ•ã‚¡çµ‚ç«¯ã§ãƒãƒ«ãƒãƒã‚¤ãƒˆæ–‡å­—ãŒé€”åˆ‡ã‚ŒãŸ)
+	UTFConversionResult_TargetExhausted,	///< ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãƒãƒƒãƒ•ã‚¡ãŒè¶³ã‚Šãªã„
+	UTFConversionResult_SourceIllegal,		///< ã‚½ãƒ¼ã‚¹ãƒãƒƒãƒ•ã‚¡å†…ã«ä¸æ­£ãªæ–‡å­—ãŒè¦‹ã¤ã‹ã£ãŸ (UTF8ã®ä¸æ­£ãƒã‚¤ãƒˆã‚·ãƒ¼ã‚±ãƒ³ã‚¹ã‚„ã€UTF16ã®ã‚µãƒ­ã‚²ãƒ¼ãƒˆãƒšã‚¢ä¸ä¸€è‡´(ä¸Šä½ãŒã‚ã‚‹ã®ã«ä¸‹ä½ãŒç„¡ã„)ã®æ™‚ã¯ã€ä¸æ­£æ–‡å­—ç½®æ›ã‚’æœ‰åŠ¹ã«ã—ã¦ã„ã¦ã‚‚ã“ã®ã‚¨ãƒ©ãƒ¼ã§å¤±æ•—ã™ã‚‹)
 };
 
-/// •¶šƒR[ƒh•ÏŠ·‚Ì’Ç‰Áî•ñ
+/// æ–‡å­—ã‚³ãƒ¼ãƒ‰å¤‰æ›ã®è¿½åŠ æƒ…å ±
 struct UTFConversionOptions
 {
-	unsigned long	ReplacementChar;		///< [in] •s³•¶š‚ğŒ©‚Â‚¯‚½A‚±‚Ì•¶š‚É’uŠ·‚·‚é (ASCII ‚Åw’è‚·‚é‚±‚ÆB'\0' ‚ğw’è‚µ‚½ó‘Ô‚Å•s³•¶š‚ğŒ©‚Â‚¯‚é‚ÆA•ÏŠ·‚Í¸”s‚·‚é)
+	unsigned long	ReplacementChar;		///< [in] ä¸æ­£æ–‡å­—ã‚’è¦‹ã¤ã‘ãŸæ™‚ã€ã“ã®æ–‡å­—ã«ç½®æ›ã™ã‚‹ (ASCII ã§æŒ‡å®šã™ã‚‹ã“ã¨ã€‚'\0' ã‚’æŒ‡å®šã—ãŸçŠ¶æ…‹ã§ä¸æ­£æ–‡å­—ã‚’è¦‹ã¤ã‘ã‚‹ã¨ã€å¤‰æ›ã¯å¤±æ•—ã™ã‚‹)
 
-	int				ConvertedSourceLength;	///< [out] •ÏŠ·‚Ég—p‚µ‚½ƒ\[ƒXƒoƒbƒtƒ@‚Ì—v‘f”‚ªŠi”[‚³‚ê‚é (ƒoƒCƒg”‚â•¶š”‚Å‚Í‚È‚¢)
-	int				ConvertedTargetLength;	///< [out] •ÏŠ·‚³‚ê‚½ƒ^[ƒQƒbƒgƒoƒbƒtƒ@‚Ì—v‘f”‚ªŠi”[‚³‚ê‚é (ƒoƒCƒg”‚â•¶š”‚Å‚Í‚È‚¢)
-	int				CharCount;				///< [out] •¶š”‚ªŠi”[‚³‚ê‚é (ƒ}ƒ‹ƒ`ƒoƒCƒg•¶š‚ğ1•¶š‚Æ‚İ‚È‚µ‚½•¶š”)
-	int				IllegalCharCount;		///< [out] Œ©‚Â‚¯‚½•s³•¶š‚Ì”
+	int				ConvertedSourceLength;	///< [out] å¤‰æ›ã«ä½¿ç”¨ã—ãŸã‚½ãƒ¼ã‚¹ãƒãƒƒãƒ•ã‚¡ã®è¦ç´ æ•°ãŒæ ¼ç´ã•ã‚Œã‚‹ (ãƒã‚¤ãƒˆæ•°ã‚„æ–‡å­—æ•°ã§ã¯ãªã„)
+	int				ConvertedTargetLength;	///< [out] å¤‰æ›ã•ã‚ŒãŸã‚¿ãƒ¼ã‚²ãƒƒãƒˆãƒãƒƒãƒ•ã‚¡ã®è¦ç´ æ•°ãŒæ ¼ç´ã•ã‚Œã‚‹ (ãƒã‚¤ãƒˆæ•°ã‚„æ–‡å­—æ•°ã§ã¯ãªã„)
+	int				CharCount;				///< [out] æ–‡å­—æ•°ãŒæ ¼ç´ã•ã‚Œã‚‹ (ãƒãƒ«ãƒãƒã‚¤ãƒˆæ–‡å­—ã‚’1æ–‡å­—ã¨ã¿ãªã—ãŸæ–‡å­—æ•°)
+	int				IllegalCharCount;		///< [out] è¦‹ã¤ã‘ãŸä¸æ­£æ–‡å­—ã®æ•°
 };
 
 /**
-	@brief		Unicode ‚Ì‘ŠŒİ•ÏŠ·“™‚ğs‚¤ƒ‚ƒWƒ…[ƒ‹
-	@details	UTF-8 ‚ÍÅ‘å 4 ƒoƒCƒg‚Æ‚µ‚Äˆµ‚¢‚Ü‚·B
+	@brief		Unicode ã®ç›¸äº’å¤‰æ›ç­‰ã‚’è¡Œã†ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«
+	@details	UTF-8 ã¯æœ€å¤§ 4 ãƒã‚¤ãƒˆã¨ã—ã¦æ‰±ã„ã¾ã™ã€‚
 */
 class UnicodeUtils
 {
@@ -46,41 +46,41 @@ public:
 	typedef uint8_t			UTF8;
 #endif
 
-	static const UTF32	SurrogateHighStart	= (UTF32)0xD800;	///< ãˆÊƒTƒƒQ[ƒg’l‚Ì”ÍˆÍ min
-	static const UTF32	SurrogateHighEnd	= (UTF32)0xDBFF;	///< ãˆÊƒTƒƒQ[ƒg’l‚Ì”ÍˆÍ max
-	static const UTF32	SurrogateLowStart	= (UTF32)0xDC00;	///< ‰ºˆÊƒTƒƒQ[ƒg’l‚Ì”ÍˆÍ min
-	static const UTF32	SurrogateLowEnd		= (UTF32)0xDFFF;	///< ‰ºˆÊƒTƒƒQ[ƒg’l‚Ì”ÍˆÍ max
-	static const int	UTF16HalfShift		= 10;				///< UTF16ãˆÊƒTƒƒQ[ƒg‚Ég—p‚·‚éƒVƒtƒg—Ê
-	static const UTF32	UTF16HalfBase		= 0x0010000UL;		///< UTF16‰ºˆÊƒTƒƒQ[ƒg‚Ég—p‚·‚éƒx[ƒX’l
-	static const UTF32	UTF16HalfMask		= 0x3FFUL;			///< UTF32¨UTF16•ÏŠ·‚ÌA‰ºˆÊƒ}ƒXƒN
-	static const UTF32	MaxLegalUTF32		= 0x0010FFFF;		///< ‚±‚Ì’lˆÈ‰º‚ª UTF32‚Æ‚µ‚Ä—LŒø
-	static const UTF32	ReplacementChar		= 0x0000FFFD;		///< •s³•¶š‚ªŒ©‚Â‚©‚Á‚½A‚±‚ê‚É’uŠ·‚·‚é
+	static const UTF32	SurrogateHighStart	= (UTF32)0xD800;	///< ä¸Šä½ã‚µãƒ­ã‚²ãƒ¼ãƒˆå€¤ã®ç¯„å›² min
+	static const UTF32	SurrogateHighEnd	= (UTF32)0xDBFF;	///< ä¸Šä½ã‚µãƒ­ã‚²ãƒ¼ãƒˆå€¤ã®ç¯„å›² max
+	static const UTF32	SurrogateLowStart	= (UTF32)0xDC00;	///< ä¸‹ä½ã‚µãƒ­ã‚²ãƒ¼ãƒˆå€¤ã®ç¯„å›² min
+	static const UTF32	SurrogateLowEnd		= (UTF32)0xDFFF;	///< ä¸‹ä½ã‚µãƒ­ã‚²ãƒ¼ãƒˆå€¤ã®ç¯„å›² max
+	static const int	UTF16HalfShift		= 10;				///< UTF16ä¸Šä½ã‚µãƒ­ã‚²ãƒ¼ãƒˆã«ä½¿ç”¨ã™ã‚‹ã‚·ãƒ•ãƒˆé‡
+	static const UTF32	UTF16HalfBase		= 0x0010000UL;		///< UTF16ä¸‹ä½ã‚µãƒ­ã‚²ãƒ¼ãƒˆã«ä½¿ç”¨ã™ã‚‹ãƒ™ãƒ¼ã‚¹å€¤
+	static const UTF32	UTF16HalfMask		= 0x3FFUL;			///< UTF32â†’UTF16å¤‰æ›æ™‚ã®ã€ä¸‹ä½ãƒã‚¹ã‚¯
+	static const UTF32	MaxLegalUTF32		= 0x0010FFFF;		///< ã“ã®å€¤ä»¥ä¸‹ãŒ UTF32ã¨ã—ã¦æœ‰åŠ¹
+	static const UTF32	ReplacementChar		= 0x0000FFFD;		///< ä¸æ­£æ–‡å­—ãŒè¦‹ã¤ã‹ã£ãŸæ™‚ã€ã“ã‚Œã«ç½®æ›ã™ã‚‹
 	static const UTF32	MaxBMP				= 0x0000FFFF;		///< Basic Multilingual Plane
 
 public:
 
 	/**
-		@brief			UTF8 ‚©‚ç UTF16 ‚Ö‚Ì•ÏŠ·
-		@param[in]		sourceStart		: •ÏŠ·Œ³‚Ìƒoƒbƒtƒ@‚Ìæ“ªƒAƒhƒŒƒX
-		@param[in]		sourceLength	: •ÏŠ·Œ³‚Ìƒoƒbƒtƒ@‚Ì’·‚³ (•¶š’PˆÊ(sourceStart‚Ì—v‘f”)BI’[ \0 ‚ÍŠÜ‚Ü‚È‚¢‚æ‚¤‚É‚·‚é‚±‚Æ)
-		@param[in]		targetStart		: •ÏŠ·Œ‹‰Ê‚ğŠi”[‚·‚éƒoƒbƒtƒ@‚Ìæ“ªƒAƒhƒŒƒX (I’[ \0 ‚ÍŠi”[‚³‚ê‚È‚¢)
-		@param[in]		targetLength	: •ÏŠ·Œ‹‰Ê‚ğŠi”[‚·‚éƒoƒbƒtƒ@‚Ì’·‚³ (•¶š’PˆÊ(targetStart‚Ì—v‘f”))
-		@param[in,out]	options			: •ÏŠ·‚Ì’Ç‰Áî•ñ
+		@brief			UTF8 ã‹ã‚‰ UTF16 ã¸ã®å¤‰æ›
+		@param[in]		sourceStart		: å¤‰æ›å…ƒã®ãƒãƒƒãƒ•ã‚¡ã®å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹
+		@param[in]		sourceLength	: å¤‰æ›å…ƒã®ãƒãƒƒãƒ•ã‚¡ã®é•·ã• (æ–‡å­—å˜ä½(sourceStartã®è¦ç´ æ•°)ã€‚çµ‚ç«¯ \0 ã¯å«ã¾ãªã„ã‚ˆã†ã«ã™ã‚‹ã“ã¨)
+		@param[in]		targetStart		: å¤‰æ›çµæœã‚’æ ¼ç´ã™ã‚‹ãƒãƒƒãƒ•ã‚¡ã®å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹ (çµ‚ç«¯ \0 ã¯æ ¼ç´ã•ã‚Œãªã„)
+		@param[in]		targetLength	: å¤‰æ›çµæœã‚’æ ¼ç´ã™ã‚‹ãƒãƒƒãƒ•ã‚¡ã®é•·ã• (æ–‡å­—å˜ä½(targetStartã®è¦ç´ æ•°))
+		@param[in,out]	options			: å¤‰æ›ã®è¿½åŠ æƒ…å ±
 	*/
 	static UTFConversionResult ConvertUTF8toUTF16(
 		const UTF8*				sourceStart, 
-		int						sourceLength,		// I’[ \0 “™‚ÍŠÜ‚Ü‚È‚¢
+		int						sourceLength,		// çµ‚ç«¯ \0 ç­‰ã¯å«ã¾ãªã„
 		UTF16*					targetStart,
 		int						targetLength,
 		UTFConversionOptions*	options);
 
 	/**
-		@brief			UTF8 ‚©‚ç UTF32 ‚Ö‚Ì•ÏŠ·
-		@param[in]		sourceStart		: •ÏŠ·Œ³‚Ìƒoƒbƒtƒ@‚Ìæ“ªƒAƒhƒŒƒX
-		@param[in]		sourceLength	: •ÏŠ·Œ³‚Ìƒoƒbƒtƒ@‚Ì’·‚³ (•¶š’PˆÊ(sourceStart‚Ì—v‘f”)BI’[ \0 ‚ÍŠÜ‚Ü‚È‚¢‚æ‚¤‚É‚·‚é‚±‚Æ)
-		@param[in]		targetStart		: •ÏŠ·Œ‹‰Ê‚ğŠi”[‚·‚éƒoƒbƒtƒ@‚Ìæ“ªƒAƒhƒŒƒX (I’[ \0 ‚ÍŠi”[‚³‚ê‚È‚¢)
-		@param[in]		targetLength	: •ÏŠ·Œ‹‰Ê‚ğŠi”[‚·‚éƒoƒbƒtƒ@‚Ì’·‚³ (•¶š’PˆÊ(targetStart‚Ì—v‘f”))
-		@param[in,out]	options			: •ÏŠ·‚Ì’Ç‰Áî•ñ
+		@brief			UTF8 ã‹ã‚‰ UTF32 ã¸ã®å¤‰æ›
+		@param[in]		sourceStart		: å¤‰æ›å…ƒã®ãƒãƒƒãƒ•ã‚¡ã®å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹
+		@param[in]		sourceLength	: å¤‰æ›å…ƒã®ãƒãƒƒãƒ•ã‚¡ã®é•·ã• (æ–‡å­—å˜ä½(sourceStartã®è¦ç´ æ•°)ã€‚çµ‚ç«¯ \0 ã¯å«ã¾ãªã„ã‚ˆã†ã«ã™ã‚‹ã“ã¨)
+		@param[in]		targetStart		: å¤‰æ›çµæœã‚’æ ¼ç´ã™ã‚‹ãƒãƒƒãƒ•ã‚¡ã®å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹ (çµ‚ç«¯ \0 ã¯æ ¼ç´ã•ã‚Œãªã„)
+		@param[in]		targetLength	: å¤‰æ›çµæœã‚’æ ¼ç´ã™ã‚‹ãƒãƒƒãƒ•ã‚¡ã®é•·ã• (æ–‡å­—å˜ä½(targetStartã®è¦ç´ æ•°))
+		@param[in,out]	options			: å¤‰æ›ã®è¿½åŠ æƒ…å ±
 	*/
 	static UTFConversionResult ConvertUTF8toUTF32(
 		const UTF8*				sourceStart,
@@ -90,12 +90,12 @@ public:
 		UTFConversionOptions*	options);
 
 	/**
-		@brief			UTF16 ‚©‚ç UTF8 ‚Ö‚Ì•ÏŠ·
-		@param[in]		sourceStart		: •ÏŠ·Œ³‚Ìƒoƒbƒtƒ@‚Ìæ“ªƒAƒhƒŒƒX
-		@param[in]		sourceLength	: •ÏŠ·Œ³‚Ìƒoƒbƒtƒ@‚Ì’·‚³ (•¶š’PˆÊ(sourceStart‚Ì—v‘f”)BI’[ \0 ‚ÍŠÜ‚Ü‚È‚¢‚æ‚¤‚É‚·‚é‚±‚Æ)
-		@param[in]		targetStart		: •ÏŠ·Œ‹‰Ê‚ğŠi”[‚·‚éƒoƒbƒtƒ@‚Ìæ“ªƒAƒhƒŒƒX (I’[ \0 ‚ÍŠi”[‚³‚ê‚È‚¢)
-		@param[in]		targetLength	: •ÏŠ·Œ‹‰Ê‚ğŠi”[‚·‚éƒoƒbƒtƒ@‚Ì’·‚³ (•¶š’PˆÊ(targetStart‚Ì—v‘f”))
-		@param[in,out]	options			: •ÏŠ·‚Ì’Ç‰Áî•ñ
+		@brief			UTF16 ã‹ã‚‰ UTF8 ã¸ã®å¤‰æ›
+		@param[in]		sourceStart		: å¤‰æ›å…ƒã®ãƒãƒƒãƒ•ã‚¡ã®å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹
+		@param[in]		sourceLength	: å¤‰æ›å…ƒã®ãƒãƒƒãƒ•ã‚¡ã®é•·ã• (æ–‡å­—å˜ä½(sourceStartã®è¦ç´ æ•°)ã€‚çµ‚ç«¯ \0 ã¯å«ã¾ãªã„ã‚ˆã†ã«ã™ã‚‹ã“ã¨)
+		@param[in]		targetStart		: å¤‰æ›çµæœã‚’æ ¼ç´ã™ã‚‹ãƒãƒƒãƒ•ã‚¡ã®å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹ (çµ‚ç«¯ \0 ã¯æ ¼ç´ã•ã‚Œãªã„)
+		@param[in]		targetLength	: å¤‰æ›çµæœã‚’æ ¼ç´ã™ã‚‹ãƒãƒƒãƒ•ã‚¡ã®é•·ã• (æ–‡å­—å˜ä½(targetStartã®è¦ç´ æ•°))
+		@param[in,out]	options			: å¤‰æ›ã®è¿½åŠ æƒ…å ±
 	*/
 	static UTFConversionResult ConvertUTF16toUTF8(
 		const UTF16*			sourceStart, 
@@ -105,12 +105,12 @@ public:
 		UTFConversionOptions*	options);
 
 	/**
-		@brief			UTF16 ‚©‚ç UTF32 ‚Ö‚Ì•ÏŠ·
-		@param[in]		sourceStart		: •ÏŠ·Œ³‚Ìƒoƒbƒtƒ@‚Ìæ“ªƒAƒhƒŒƒX
-		@param[in]		sourceLength	: •ÏŠ·Œ³‚Ìƒoƒbƒtƒ@‚Ì’·‚³ (•¶š’PˆÊ(sourceStart‚Ì—v‘f”)BI’[ \0 ‚ÍŠÜ‚Ü‚È‚¢‚æ‚¤‚É‚·‚é‚±‚Æ)
-		@param[in]		targetStart		: •ÏŠ·Œ‹‰Ê‚ğŠi”[‚·‚éƒoƒbƒtƒ@‚Ìæ“ªƒAƒhƒŒƒX (I’[ \0 ‚ÍŠi”[‚³‚ê‚È‚¢)
-		@param[in]		targetLength	: •ÏŠ·Œ‹‰Ê‚ğŠi”[‚·‚éƒoƒbƒtƒ@‚Ì’·‚³ (•¶š’PˆÊ(targetStart‚Ì—v‘f”))
-		@param[in,out]	options			: •ÏŠ·‚Ì’Ç‰Áî•ñ
+		@brief			UTF16 ã‹ã‚‰ UTF32 ã¸ã®å¤‰æ›
+		@param[in]		sourceStart		: å¤‰æ›å…ƒã®ãƒãƒƒãƒ•ã‚¡ã®å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹
+		@param[in]		sourceLength	: å¤‰æ›å…ƒã®ãƒãƒƒãƒ•ã‚¡ã®é•·ã• (æ–‡å­—å˜ä½(sourceStartã®è¦ç´ æ•°)ã€‚çµ‚ç«¯ \0 ã¯å«ã¾ãªã„ã‚ˆã†ã«ã™ã‚‹ã“ã¨)
+		@param[in]		targetStart		: å¤‰æ›çµæœã‚’æ ¼ç´ã™ã‚‹ãƒãƒƒãƒ•ã‚¡ã®å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹ (çµ‚ç«¯ \0 ã¯æ ¼ç´ã•ã‚Œãªã„)
+		@param[in]		targetLength	: å¤‰æ›çµæœã‚’æ ¼ç´ã™ã‚‹ãƒãƒƒãƒ•ã‚¡ã®é•·ã• (æ–‡å­—å˜ä½(targetStartã®è¦ç´ æ•°))
+		@param[in,out]	options			: å¤‰æ›ã®è¿½åŠ æƒ…å ±
 	*/
 	static UTFConversionResult ConvertUTF16toUTF32(
 		const UTF16*			sourceStart, 
@@ -120,12 +120,12 @@ public:
 		UTFConversionOptions*	options);
 
 	/**
-		@brief			UTF32 ‚©‚ç UTF8 ‚Ö‚Ì•ÏŠ·
-		@param[in]		sourceStart		: •ÏŠ·Œ³‚Ìƒoƒbƒtƒ@‚Ìæ“ªƒAƒhƒŒƒX
-		@param[in]		sourceLength	: •ÏŠ·Œ³‚Ìƒoƒbƒtƒ@‚Ì’·‚³ (•¶š’PˆÊ(sourceStart‚Ì—v‘f”)BI’[ \0 ‚ÍŠÜ‚Ü‚È‚¢‚æ‚¤‚É‚·‚é‚±‚Æ)
-		@param[in]		targetStart		: •ÏŠ·Œ‹‰Ê‚ğŠi”[‚·‚éƒoƒbƒtƒ@‚Ìæ“ªƒAƒhƒŒƒX (I’[ \0 ‚ÍŠi”[‚³‚ê‚È‚¢)
-		@param[in]		targetLength	: •ÏŠ·Œ‹‰Ê‚ğŠi”[‚·‚éƒoƒbƒtƒ@‚Ì’·‚³ (•¶š’PˆÊ(targetStart‚Ì—v‘f”))
-		@param[in,out]	options			: •ÏŠ·‚Ì’Ç‰Áî•ñ
+		@brief			UTF32 ã‹ã‚‰ UTF8 ã¸ã®å¤‰æ›
+		@param[in]		sourceStart		: å¤‰æ›å…ƒã®ãƒãƒƒãƒ•ã‚¡ã®å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹
+		@param[in]		sourceLength	: å¤‰æ›å…ƒã®ãƒãƒƒãƒ•ã‚¡ã®é•·ã• (æ–‡å­—å˜ä½(sourceStartã®è¦ç´ æ•°)ã€‚çµ‚ç«¯ \0 ã¯å«ã¾ãªã„ã‚ˆã†ã«ã™ã‚‹ã“ã¨)
+		@param[in]		targetStart		: å¤‰æ›çµæœã‚’æ ¼ç´ã™ã‚‹ãƒãƒƒãƒ•ã‚¡ã®å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹ (çµ‚ç«¯ \0 ã¯æ ¼ç´ã•ã‚Œãªã„)
+		@param[in]		targetLength	: å¤‰æ›çµæœã‚’æ ¼ç´ã™ã‚‹ãƒãƒƒãƒ•ã‚¡ã®é•·ã• (æ–‡å­—å˜ä½(targetStartã®è¦ç´ æ•°))
+		@param[in,out]	options			: å¤‰æ›ã®è¿½åŠ æƒ…å ±
 	*/
 	static UTFConversionResult ConvertUTF32toUTF8(
 		const UTF32*			sourceStart, 
@@ -135,12 +135,12 @@ public:
 		UTFConversionOptions*	options);
 
 	/**
-		@brief			UTF32 ‚©‚ç UTF16 ‚Ö‚Ì•ÏŠ·
-		@param[in]		sourceStart		: •ÏŠ·Œ³‚Ìƒoƒbƒtƒ@‚Ìæ“ªƒAƒhƒŒƒX
-		@param[in]		sourceLength	: •ÏŠ·Œ³‚Ìƒoƒbƒtƒ@‚Ì’·‚³ (•¶š’PˆÊ(sourceStart‚Ì—v‘f”)BI’[ \0 ‚ÍŠÜ‚Ü‚È‚¢‚æ‚¤‚É‚·‚é‚±‚Æ)
-		@param[in]		targetStart		: •ÏŠ·Œ‹‰Ê‚ğŠi”[‚·‚éƒoƒbƒtƒ@‚Ìæ“ªƒAƒhƒŒƒX (I’[ \0 ‚ÍŠi”[‚³‚ê‚È‚¢)
-		@param[in]		targetLength	: •ÏŠ·Œ‹‰Ê‚ğŠi”[‚·‚éƒoƒbƒtƒ@‚Ì’·‚³ (•¶š’PˆÊ(targetStart‚Ì—v‘f”))
-		@param[in,out]	options			: •ÏŠ·‚Ì’Ç‰Áî•ñ
+		@brief			UTF32 ã‹ã‚‰ UTF16 ã¸ã®å¤‰æ›
+		@param[in]		sourceStart		: å¤‰æ›å…ƒã®ãƒãƒƒãƒ•ã‚¡ã®å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹
+		@param[in]		sourceLength	: å¤‰æ›å…ƒã®ãƒãƒƒãƒ•ã‚¡ã®é•·ã• (æ–‡å­—å˜ä½(sourceStartã®è¦ç´ æ•°)ã€‚çµ‚ç«¯ \0 ã¯å«ã¾ãªã„ã‚ˆã†ã«ã™ã‚‹ã“ã¨)
+		@param[in]		targetStart		: å¤‰æ›çµæœã‚’æ ¼ç´ã™ã‚‹ãƒãƒƒãƒ•ã‚¡ã®å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹ (çµ‚ç«¯ \0 ã¯æ ¼ç´ã•ã‚Œãªã„)
+		@param[in]		targetLength	: å¤‰æ›çµæœã‚’æ ¼ç´ã™ã‚‹ãƒãƒƒãƒ•ã‚¡ã®é•·ã• (æ–‡å­—å˜ä½(targetStartã®è¦ç´ æ•°))
+		@param[in,out]	options			: å¤‰æ›ã®è¿½åŠ æƒ…å ±
 	*/
 	static UTFConversionResult ConvertUTF32toUTF16(
 		const UTF32*			sourceStart, 
@@ -150,9 +150,9 @@ public:
 		UTFConversionOptions*	options);
 
 	/**
-		@brief			UTF16 ‚ÌƒTƒƒQ[ƒgƒyƒA‚ğl—¶‚µ‚½•¶š”‚ğæ“¾‚·‚é
-		@param[in]		sourceStart		: ƒJƒEƒ“ƒgŒ³‚Ìƒoƒbƒtƒ@‚Ìæ“ªƒAƒhƒŒƒX
-		@param[in]		sourceLength	: ƒJƒEƒ“ƒgŒ³‚Ìƒoƒbƒtƒ@‚Ì’·‚³ (•¶š’PˆÊ(sourceStart‚Ì—v‘f”)BI’[ \0 ‚ÍŠÜ‚Ü‚È‚¢‚æ‚¤‚É‚·‚é‚±‚Æ)
+		@brief			UTF16 ã®ã‚µãƒ­ã‚²ãƒ¼ãƒˆãƒšã‚¢ã‚’è€ƒæ…®ã—ãŸæ–‡å­—æ•°ã‚’å–å¾—ã™ã‚‹
+		@param[in]		sourceStart		: ã‚«ã‚¦ãƒ³ãƒˆå…ƒã®ãƒãƒƒãƒ•ã‚¡ã®å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹
+		@param[in]		sourceLength	: ã‚«ã‚¦ãƒ³ãƒˆå…ƒã®ãƒãƒƒãƒ•ã‚¡ã®é•·ã• (æ–‡å­—å˜ä½(sourceStartã®è¦ç´ æ•°)ã€‚çµ‚ç«¯ \0 ã¯å«ã¾ãªã„ã‚ˆã†ã«ã™ã‚‹ã“ã¨)
 	*/
 	static UTFConversionResult GetUTF16CharCount(
 		const UTF16*			sourceStart,
@@ -161,63 +161,63 @@ public:
 		int*					count);
 
 	/**
-		@brief			UTF8 •¶š‚ÌŒã‘±ƒoƒCƒg”‚ğæ“¾‚·‚é
-		@param[in]		sourceStart			: ƒ`ƒFƒbƒN‘ÎÛ‚Ìæ“ª•¶š‚ÌƒAƒhƒŒƒX
-		@param[in]		sourceEnd			: ƒoƒbƒtƒ@‚ÌI’[•¶š‚ÌƒAƒhƒŒƒX (—LŒø‚È—Ìˆæ‚ÌŸ‚ÌƒAƒhƒŒƒX‚ğw‚· (\0 I’[•¶š—ñ‚È‚ç \0 ‚ğw‚·))
-		@param[in]		strict				: true ‚Ìê‡A•s³•¶š‚Ìƒ`ƒFƒbƒN‚ğs‚¤ (•s³•¶š‚ªŒ©‚Â‚©‚Á‚½ê‡‚Í UTFConversionResult_SourceIllegal ‚ğ•Ô‚·)
-		@param[out]		outExtraByteCount	: Œã‘±ƒoƒCƒg” (ASCII •¶š“™AŒã‘±‚ª–³‚¢ê‡‚Í 0 ‚ªŠi”[‚³‚ê‚é)
+		@brief			UTF8 æ–‡å­—ã®å¾Œç¶šãƒã‚¤ãƒˆæ•°ã‚’å–å¾—ã™ã‚‹
+		@param[in]		sourceStart			: ãƒã‚§ãƒƒã‚¯å¯¾è±¡ã®å…ˆé ­æ–‡å­—ã®ã‚¢ãƒ‰ãƒ¬ã‚¹
+		@param[in]		sourceEnd			: ãƒãƒƒãƒ•ã‚¡ã®çµ‚ç«¯æ–‡å­—ã®ã‚¢ãƒ‰ãƒ¬ã‚¹ (æœ‰åŠ¹ãªé ˜åŸŸã®æ¬¡ã®ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’æŒ‡ã™ (\0 çµ‚ç«¯æ–‡å­—åˆ—ãªã‚‰ \0 ã‚’æŒ‡ã™))
+		@param[in]		strict				: true ã®å ´åˆã€ä¸æ­£æ–‡å­—ã®ãƒã‚§ãƒƒã‚¯ã‚’è¡Œã† (ä¸æ­£æ–‡å­—ãŒè¦‹ã¤ã‹ã£ãŸå ´åˆã¯ UTFConversionResult_SourceIllegal ã‚’è¿”ã™)
+		@param[out]		outExtraByteCount	: å¾Œç¶šãƒã‚¤ãƒˆæ•° (ASCII æ–‡å­—ç­‰ã€å¾Œç¶šãŒç„¡ã„å ´åˆã¯ 0 ãŒæ ¼ç´ã•ã‚Œã‚‹)
 	*/
 	static UTFConversionResult CheckUTF8TrailingBytes(const UTF8* sourceStart, const UTF8* sourceEnd, bool strict, int* outExtraByteCount);
 
 	/**
-		@brief			UTF16 ‚ÌƒTƒƒQ[ƒgƒyƒA‚Å‚ ‚é‚©‚ğŠm”F‚·‚é
-		@param[in]		sourceStart		: ƒ`ƒFƒbƒN‘ÎÛ‚Ìæ“ª•¶š‚ÌƒAƒhƒŒƒX
-		@param[in]		sourceEnd		: ƒoƒbƒtƒ@‚ÌI’[•¶š‚ÌƒAƒhƒŒƒX (—LŒø‚È—Ìˆæ‚ÌŸ‚ÌƒAƒhƒŒƒX‚ğw‚· (\0 I’[•¶š—ñ‚È‚ç \0 ‚ğw‚·))
-		@param[in]		strict			: true ‚Ìê‡A•s³•¶š‚Ìƒ`ƒFƒbƒN‚ğs‚¤ (•s³•¶š‚ªŒ©‚Â‚©‚Á‚½ê‡‚Í UTFConversionResult_SourceIllegal ‚ğ•Ô‚·)
-		@param[out]		outSurrogate	: true ‚ªŠi”[‚³‚ê‚½ê‡AsourceStart ‚Æ ‚»‚ÌŸ‚Ì•¶š‚ÍƒTƒƒQ[ƒgƒyƒA‚Å‚ ‚é
+		@brief			UTF16 ã®ã‚µãƒ­ã‚²ãƒ¼ãƒˆãƒšã‚¢ã§ã‚ã‚‹ã‹ã‚’ç¢ºèªã™ã‚‹
+		@param[in]		sourceStart		: ãƒã‚§ãƒƒã‚¯å¯¾è±¡ã®å…ˆé ­æ–‡å­—ã®ã‚¢ãƒ‰ãƒ¬ã‚¹
+		@param[in]		sourceEnd		: ãƒãƒƒãƒ•ã‚¡ã®çµ‚ç«¯æ–‡å­—ã®ã‚¢ãƒ‰ãƒ¬ã‚¹ (æœ‰åŠ¹ãªé ˜åŸŸã®æ¬¡ã®ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’æŒ‡ã™ (\0 çµ‚ç«¯æ–‡å­—åˆ—ãªã‚‰ \0 ã‚’æŒ‡ã™))
+		@param[in]		strict			: true ã®å ´åˆã€ä¸æ­£æ–‡å­—ã®ãƒã‚§ãƒƒã‚¯ã‚’è¡Œã† (ä¸æ­£æ–‡å­—ãŒè¦‹ã¤ã‹ã£ãŸå ´åˆã¯ UTFConversionResult_SourceIllegal ã‚’è¿”ã™)
+		@param[out]		outSurrogate	: true ãŒæ ¼ç´ã•ã‚ŒãŸå ´åˆã€sourceStart ã¨ ãã®æ¬¡ã®æ–‡å­—ã¯ã‚µãƒ­ã‚²ãƒ¼ãƒˆãƒšã‚¢ã§ã‚ã‚‹
 	*/
 	static UTFConversionResult CheckUTF16Surrogate(const UTF16* sourceStart, const UTF16* sourceEnd, bool strict, bool* outSurrogate);
 
-	/// ƒ[ƒh‚ªAUTF16 ‚ÌãˆÊƒTƒƒQ[ƒg‚Å‚ ‚é‚©‚ğŠm”F‚·‚é
+	/// ãƒ¯ãƒ¼ãƒ‰ãŒã€UTF16 ã®ä¸Šä½ã‚µãƒ­ã‚²ãƒ¼ãƒˆã§ã‚ã‚‹ã‹ã‚’ç¢ºèªã™ã‚‹
 	static bool CheckUTF16HighSurrogate(UTF16 ch) { return (SurrogateHighStart <= ch && ch <= SurrogateHighEnd); }
 
-	/// ƒ[ƒh‚ªAUTF16 ‚Ì‰ºˆÊƒTƒƒQ[ƒg‚Å‚ ‚é‚©‚ğŠm”F‚·‚é
+	/// ãƒ¯ãƒ¼ãƒ‰ãŒã€UTF16 ã®ä¸‹ä½ã‚µãƒ­ã‚²ãƒ¼ãƒˆã§ã‚ã‚‹ã‹ã‚’ç¢ºèªã™ã‚‹
 	static bool CheckUTF16LowSurrogate(UTF16 ch) { return (SurrogateLowStart <= ch && ch <= SurrogateLowEnd); }
 
 private:
 
-	/// 1•¶š•ª‚Ì•ÏŠ· (UTF8 ¨ UTF32)
+	/// 1æ–‡å­—åˆ†ã®å¤‰æ› (UTF8 â†’ UTF32)
 	static UTFConversionResult ConvertCharUTF8toUTF32(
 		const UTF8**			sourceStart,
 		const UTF8*				sourceEnd,
 		UTFConversionOptions*	options,
 		UTF32*					outChar);
 
-	/// 1•¶š•ª‚Ì•ÏŠ· (UTF32 ¨ UTF8)
+	/// 1æ–‡å­—åˆ†ã®å¤‰æ› (UTF32 â†’ UTF8)
 	static UTFConversionResult ConvertCharUTF32toUTF8(
 		UTF32					ch,
 		UTF8**					targetStart, 
 		UTF8*					targetEnd,
 		UTFConversionOptions*	options);
 
-	/// 1•¶š•ª‚Ì•ÏŠ· (UTF16 ¨ UTF32)
+	/// 1æ–‡å­—åˆ†ã®å¤‰æ› (UTF16 â†’ UTF32)
 	static UTFConversionResult ConvertCharUTF16toUTF32(
 		const UTF16**			sourceStart,
 		const UTF16*			sourceEnd,
 		UTFConversionOptions*	options,
 		UTF32*					outChar);
 
-	/// 1•¶š•ª‚Ì•ÏŠ· (UTF32 ¨ UTF16)
+	/// 1æ–‡å­—åˆ†ã®å¤‰æ› (UTF32 â†’ UTF16)
 	static UTFConversionResult ConvertCharUTF32toUTF16(
 		UTF32					ch,
 		UTF16**					targetStart, 
 		UTF16*					targetEnd, 
 		UTFConversionOptions*	options);
 
-	/// ³‹K‚Ì UTF8 ƒoƒCƒg—ñ‚©‚ğƒ`ƒFƒbƒN‚·‚é
+	/// æ­£è¦ã® UTF8 ãƒã‚¤ãƒˆåˆ—ã‹ã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹
 	static bool IsLegalUTF8(const UTF8 *source, int length);
 
-	/// •s³•¶š‚ğ‹–—e‚·‚é‚©H
+	/// ä¸æ­£æ–‡å­—ã‚’è¨±å®¹ã™ã‚‹ã‹ï¼Ÿ
 	static bool IsStrictConversion(const UTFConversionOptions* options) { return (options->ReplacementChar == 0); }
 
 };

@@ -1,4 +1,4 @@
-
+﻿
 #include <sys/types.h>
 #include <sys/stat.h>
 #include "../../Internal.h"
@@ -48,11 +48,11 @@ static void Win32IOErrorToExceptionThrow(DWORD errorCode, const TChar* message)
 //-----------------------------------------------------------------------------
 bool FileUtils::Exists(const char* filePath)
 {
-	// ��fopen �ɂ��`�F�b�N��NG�B�t�@�C�����r�����b�N�ŊJ����Ă������Ɏ��s����B
+	// ※fopen によるチェックはNG。ファイルが排他ロックで開かれていた時に失敗する。
 	DWORD attr = ::GetFileAttributesA(filePath);
-	// �����[�U�[�t�H���_���̃t�@�C���ɃA�N�Z�X���悤�Ƃ���� attr = -1 �ɂȂ�B
-	// ���̂Ƃ� GetLastError() �� ERROR_ACCESS_DENIED �ł���B
-	// .NET �̎d�l�ɂ��킹�A�G���[�͈ꗥ false �ŕԂ��Ă���B
+	// 他ユーザーフォルダ内のファイルにアクセスしようとすると attr = -1 になる。
+	// このとき GetLastError() は ERROR_ACCESS_DENIED である。
+	// .NET の仕様にあわせ、エラーは一律 false で返している。
 	return ((attr != -1) &&
 			(attr & FILE_ATTRIBUTE_DIRECTORY) == 0);
 }
@@ -125,7 +125,7 @@ void FileUtils::Copy(const char* sourceFileName, const char* destFileName, bool 
 {
 	BOOL bRes = ::CopyFileA(sourceFileName, destFileName, (overwrite) ? FALSE : TRUE);
 	if (bRes == FALSE) {
-		// TODO ������������₳�Ȃ��ƁA�ǂ��炪�������킩��ɂ���
+		// TODO 引数もう一つ増やさないと、どちらが原因かわかりにくい
 		Win32IOErrorToExceptionThrow(::GetLastError(), sourceFileName);
 	}
 }
@@ -134,7 +134,7 @@ void FileUtils::Copy(const wchar_t* sourceFileName, const wchar_t* destFileName,
 {
 	BOOL bRes = ::CopyFileW(sourceFileName, destFileName, (overwrite) ? FALSE : TRUE);
 	if (bRes == FALSE) {
-		// TODO ������������₳�Ȃ��ƁA�ǂ��炪�������킩��ɂ���
+		// TODO 引数もう一つ増やさないと、どちらが原因かわかりにくい
 		Win32IOErrorToExceptionThrow(::GetLastError(), sourceFileName);
 	}
 }

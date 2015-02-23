@@ -1,4 +1,4 @@
-
+ï»¿
 #include <stdio.h>
 #include <string.h>
 #include "../Internal.h"
@@ -27,20 +27,20 @@ EncodingType EncodingDetector::Detect(const void* bytes, size_t bytesSize)
 	m_buffer = (const Byte*)bytes;
 	m_bufferSize = bytesSize;
 
-	// UTF Œn‚Ì BOM ƒ`ƒFƒbƒN
+	// UTF ç³»ã® BOM ãƒã‚§ãƒƒã‚¯
 	EncodingType type = CheckUTFBom();
 	if (type != EncodingType_Unknown) {
 		m_type = type;
 		return m_type;
 	}
 
-	// ASCII ƒ`ƒFƒbƒN
+	// ASCII ãƒã‚§ãƒƒã‚¯
 	if (CheckASCII()) {
 		m_type = EncodingType_ASCII;
 		return m_type;
 	}
 
-	// ƒ}ƒ‹ƒ`ƒoƒCƒg•¶šƒR[ƒh‚Ìƒ`ƒFƒbƒN
+	// ãƒãƒ«ãƒãƒã‚¤ãƒˆæ–‡å­—ã‚³ãƒ¼ãƒ‰ã®ãƒã‚§ãƒƒã‚¯
 	SJISDetector sjisDetector(m_buffer, m_bufferSize);
 	UTF8NDetector utf8NDetector(m_buffer, m_bufferSize);
 	IMBSCodeDetector* mbsDetectors[] = {
@@ -53,19 +53,19 @@ EncodingType EncodingDetector::Detect(const void* bytes, size_t bytesSize)
 		mbsDetectors[i]->Detect(true);
 	}
 
-	// —LŒø Detector ‚Ì’†‚Åˆê”ÔƒXƒRƒA‚Ì‘å‚«‚¢‚à‚Ì‚ğ‘I‘ğ‚·‚é
+	// æœ‰åŠ¹ Detector ã®ä¸­ã§ä¸€ç•ªã‚¹ã‚³ã‚¢ã®å¤§ãã„ã‚‚ã®ã‚’é¸æŠã™ã‚‹
 	int maxScore = 0;
 	IMBSCodeDetector* maxScoreDetector = NULL;
 	for (int i = 0; i < mbsDetectorsCount; ++i)
 	{
 		if (mbsDetectors[i]->GetUnMatchCount() == 0)
 		{
-			// ‚Ü‚¾‚Ğ‚Æ‚Â‚àŒ©‚Â‚©‚Á‚Ä‚¢‚È‚¯‚ê‚ÎA‚Æ‚è‚ ‚¦‚¸ƒ}ƒbƒ`‚µ‚½‚à‚Ì‚ğ•Û‚·‚é
+			// ã¾ã ã²ã¨ã¤ã‚‚è¦‹ã¤ã‹ã£ã¦ã„ãªã‘ã‚Œã°ã€ã¨ã‚Šã‚ãˆãšãƒãƒƒãƒã—ãŸã‚‚ã®ã‚’ä¿æŒã™ã‚‹
 			if (maxScoreDetector == NULL)
 			{
 				maxScoreDetector = mbsDetectors[i];
 			}
-			// Œ»İ•Û‚µ‚Ä‚¢‚é‚à‚Ì‚æ‚èƒXƒRƒA‚ª‘å‚«‚¯‚ê‚Î‚»‚ê‚ğ•Û‚·‚é
+			// ç¾åœ¨ä¿æŒã—ã¦ã„ã‚‹ã‚‚ã®ã‚ˆã‚Šã‚¹ã‚³ã‚¢ãŒå¤§ãã‘ã‚Œã°ãã‚Œã‚’ä¿æŒã™ã‚‹
 			else if (mbsDetectors[i]->GetScore() > maxScoreDetector->GetScore())
 			{
 				maxScoreDetector = mbsDetectors[i];
@@ -77,7 +77,7 @@ EncodingType EncodingDetector::Detect(const void* bytes, size_t bytesSize)
 		return m_type;
 	}
 
-	m_type = EncodingType_Unknown;	// ”»•Ê¸”s
+	m_type = EncodingType_Unknown;	// åˆ¤åˆ¥å¤±æ•—
 	return m_type;
 }
 
@@ -126,7 +126,7 @@ EncodingType EncodingDetector::CheckUTFBom()
 	BomData data[] = 
 	{
 		{ EncodingType_UTF8,	{ 0xEF, 0xBB, 0xBF, 0x00 }, 3 },
-		{ EncodingType_UTF32L,	{ 0xFF, 0xFE, 0x00, 0x00 }, 4 },	// UTF16Little ‚Æ“¯‚¶‚È‚Ì‚Åæ‚É”»•Ê‚µ‚È‚¢‚Æƒ_ƒ
+		{ EncodingType_UTF32L,	{ 0xFF, 0xFE, 0x00, 0x00 }, 4 },	// UTF16Little ã¨åŒã˜ãªã®ã§å…ˆã«åˆ¤åˆ¥ã—ãªã„ã¨ãƒ€ãƒ¡
 		{ EncodingType_UTF32B,	{ 0x00, 0x00, 0xFE, 0xFF }, 4 },
 		{ EncodingType_UTF16L,	{ 0xFF, 0xFE, 0x00, 0x00 }, 2 },
 		{ EncodingType_UTF16B,	{ 0xFE, 0xFF, 0x00, 0x00 }, 2 },
@@ -140,7 +140,7 @@ EncodingType EncodingDetector::CheckUTFBom()
 		}
 	}
 
-	return EncodingType_Unknown;	// BOM ‚ª–³‚©‚Á‚½
+	return EncodingType_Unknown;	// BOM ãŒç„¡ã‹ã£ãŸ
 }
 
 
@@ -180,7 +180,7 @@ void UTF8NDetector::Detect(bool untilUnmatch)
 		}
 		else
 		{
-			int extra;	// ’Ç‰Á‚Å“Ç‚Ş‚×‚«ƒoƒCƒg”Bpos ‚Ì•ª‚ÍŠÜ‚Ü‚È‚¢
+			int extra;	// è¿½åŠ ã§èª­ã‚€ã¹ããƒã‚¤ãƒˆæ•°ã€‚pos ã®åˆ†ã¯å«ã¾ãªã„
 			if (UnicodeUtils::CheckUTF8TrailingBytes(&m_buffer[m_pos], bufferEnd, true, &extra) == UTFConversionResult_Success)
 			{
 				m_pos += extra;
@@ -191,7 +191,7 @@ void UTF8NDetector::Detect(bool untilUnmatch)
 			}
 		}
 
-		// •s³•¶š‚ªŒ©‚Â‚©‚Á‚½‚Ì‚ÅI—¹
+		// ä¸æ­£æ–‡å­—ãŒè¦‹ã¤ã‹ã£ãŸã®ã§çµ‚äº†
 		if (untilUnmatch && m_unmatch > 0) { break; }
 	}
 }
@@ -222,7 +222,7 @@ void SJISDetector::Detect(bool untilUnmatch)
 	{
 		byte_t b1 = m_buffer[m_pos];
 		if (b1 <= 0x7F ||	// ASCII (0x00-0x7F)
-			b1 == 0x80 ||	// cp932 ‚Å‚Í 0x80 ‚Ìƒ}ƒbƒsƒ“ƒO‚ª‘¶İ‚·‚éBƒOƒŠƒt‚ª‚ ‚é‚í‚¯‚Å‚Í‚È‚¢‚ªcBB
+			b1 == 0x80 ||	// cp932 ã§ã¯ 0x80 ã®ãƒãƒƒãƒ”ãƒ³ã‚°ãŒå­˜åœ¨ã™ã‚‹ã€‚ã‚°ãƒªãƒ•ãŒã‚ã‚‹ã‚ã‘ã§ã¯ãªã„ãŒâ€¦ã€‚ã€‚
 			b1 == 0xA0 ||	// cp932
 			b1 == 0xFD ||	// cp932
 			b1 == 0xFE ||	// cp932
@@ -234,17 +234,17 @@ void SJISDetector::Detect(bool untilUnmatch)
 				++m_lineNum;
 			}
 		}
-		else if (b1 >= 0xA1 && b1 <= 0xDF) // 1ƒoƒCƒg”¼ŠpƒJƒi
+		else if (b1 >= 0xA1 && b1 <= 0xDF) // 1ãƒã‚¤ãƒˆåŠè§’ã‚«ãƒŠ
 		{
 			++m_score;
 		}
 		else if (m_pos + 1 < m_bufferSize)
 		{
 			byte_t b2 = m_buffer[m_pos];
-			if ((0x81 <= b1 && b1 <= 0x9F) ||		// æsƒoƒCƒg
+			if ((0x81 <= b1 && b1 <= 0x9F) ||		// å…ˆè¡Œãƒã‚¤ãƒˆ
 				(0xE0 <= b1 && b1 <= 0xFC))
 			{
-				if ((0x40 <= b2 && b2 <= 0x7E) ||	// 2byte–Ú
+				if ((0x40 <= b2 && b2 <= 0x7E) ||	// 2byteç›®
 					(0x80 <= b2 && b2 <= 0xFC))
 				{
 					++m_pos;
@@ -258,11 +258,11 @@ void SJISDetector::Detect(bool untilUnmatch)
 				m_unmatch++;
 			}
 		}
-		else { // ƒoƒbƒtƒ@––”ö‚Åƒ}ƒ‹ƒ`ƒoƒCƒg•¶š‚ª“rØ‚ê‚Ä‚¢‚é
+		else { // ãƒãƒƒãƒ•ã‚¡æœ«å°¾ã§ãƒãƒ«ãƒãƒã‚¤ãƒˆæ–‡å­—ãŒé€”åˆ‡ã‚Œã¦ã„ã‚‹
 			m_unmatch++;
 		}
 
-		// •s³•¶š‚ªŒ©‚Â‚©‚Á‚½‚Ì‚ÅI—¹
+		// ä¸æ­£æ–‡å­—ãŒè¦‹ã¤ã‹ã£ãŸã®ã§çµ‚äº†
 		if (untilUnmatch && m_unmatch > 0) { break; }
 	}
 }

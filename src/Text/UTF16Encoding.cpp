@@ -1,4 +1,4 @@
-
+ï»¿
 #include "../Internal.h"
 #include "../../include/Lumino/Text/UnicodeUtils.h"
 #include "UTF16Encoding.h"
@@ -39,57 +39,58 @@ byte_t* UTF16Encoding::GetPreamble() const
 //-----------------------------------------------------------------------------
 void UTF16Encoding::UTF16Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t inBufferByteCount, UTF16* outBuffer, size_t outBufferCharCount, size_t* outBytesUsed, size_t* outCharsUsed)
 {
-	/* ƒoƒCƒgƒXƒgƒŠ[ƒ€‚Ì UTF-16 ‚©‚çA“à•”•¶šƒR[ƒh‚Ì UTF-16 ‚Ö‚Ì•ÏŠ·‚Æ‚È‚éB
-	 * ƒoƒCƒgƒXƒgƒŠ[ƒ€‚ÍAUTF-16 •¶š‚ªƒoƒbƒtƒ@I’[‚Å“rØ‚ê‚éê‡‚àl—¶‚µ‚È‚¯‚ê‚Î‚È‚ç‚È‚¢B
+	/* ãƒã‚¤ãƒˆã‚¹ãƒˆãƒªãƒ¼ãƒ ã® UTF-16 ã‹ã‚‰ã€å†…éƒ¨æ–‡å­—ã‚³ãƒ¼ãƒ‰ã® UTF-16 ã¸ã®å¤‰æ›ã¨ãªã‚‹ã€‚
+	 * ãƒã‚¤ãƒˆã‚¹ãƒˆãƒªãƒ¼ãƒ ã¯ã€UTF-16 æ–‡å­—ãŒãƒãƒƒãƒ•ã‚¡çµ‚ç«¯ã§é€”åˆ‡ã‚Œã‚‹å ´åˆã‚‚è€ƒæ…®ã—ãªã‘ã‚Œã°ãªã‚‰ãªã„ã€‚
 	 */
 
-	// ‘O‰ñ“r’†‚Å“rØ‚ê‚½ƒoƒCƒg‚ª‚ ‚ê‚Îæ‚Éˆ—‚·‚é (inBuffer ‚Ìæ“ªƒoƒCƒg‚Æ‚Â‚È‚°‚Ä curLead ‚ÉŠi”[)
+	// å‰å›é€”ä¸­ã§é€”åˆ‡ã‚ŒãŸãƒã‚¤ãƒˆãŒã‚ã‚Œã°å…ˆã«å‡¦ç†ã™ã‚‹ (inBuffer ã®å…ˆé ­ãƒã‚¤ãƒˆã¨ã¤ãªã’ã¦ curLead ã«æ ¼ç´)
 	uint16_t curLead = 0x0000;
 	if (m_lastLeadByte != 0x00)
 	{
 		byte_t* word = (byte_t*)&curLead;
 		word[0] = m_lastLeadByte;
 		word[1] = inBuffer[0];
-		inBuffer++;				// Á”ï‚µ‚½•ª‚¾‚¯ƒoƒbƒtƒ@‚ğk‚ß‚é
-		inBufferByteCount--;	// Á”ï‚µ‚½•ª‚¾‚¯ƒoƒbƒtƒ@‚ğk‚ß‚é
+		inBuffer++;				// æ¶ˆè²»ã—ãŸåˆ†ã ã‘ãƒãƒƒãƒ•ã‚¡ã‚’ç¸®ã‚ã‚‹
+		inBufferByteCount--;	// æ¶ˆè²»ã—ãŸåˆ†ã ã‘ãƒãƒƒãƒ•ã‚¡ã‚’ç¸®ã‚ã‚‹
 		m_lastLeadByte = 0x00;
 	}
 
-	// “ü—Í‚ªŠï”ƒoƒCƒgBÅŒã‚ÌƒoƒCƒg‚ğæ‚Á‚Ä‚¨‚­
+	// å…¥åŠ›ãŒå¥‡æ•°ãƒã‚¤ãƒˆã€‚æœ€å¾Œã®ãƒã‚¤ãƒˆã‚’å–ã£ã¦ãŠã
 	if (inBufferByteCount % 2 != 0) 
 	{
 		m_lastLeadByte = inBuffer[inBufferByteCount - 1];
-		inBufferByteCount--;	// Á”ï‚µ‚½•ª‚¾‚¯ƒoƒbƒtƒ@‚ğk‚ß‚é
+		inBufferByteCount--;	// æ¶ˆè²»ã—ãŸåˆ†ã ã‘ãƒãƒƒãƒ•ã‚¡ã‚’ç¸®ã‚ã‚‹
 	}
 
-	// •ÏŠ· (‚à‚µ‘O‰ñ‚Ìƒoƒbƒtƒ@I’[‚ªãˆÊƒTƒƒQ[ƒg‚¾‚Á‚½‚çAm_lastLeadWord ‚ÉæsƒoƒCƒg‚ª“ü‚Á‚Ä‚¢‚é)
-	size_t inWordPos = (curLead != 0x0000) ? SIZE_MAX : 0;	// MBCS
+	// å¤‰æ› (ã‚‚ã—å‰å›ã®ãƒãƒƒãƒ•ã‚¡çµ‚ç«¯ãŒä¸Šä½ã‚µãƒ­ã‚²ãƒ¼ãƒˆã ã£ãŸã‚‰ã€m_lastLeadWord ã«å…ˆè¡Œãƒã‚¤ãƒˆãŒå…¥ã£ã¦ã„ã‚‹)
+	const size_t SIZE_T_MAX = (size_t)-1;
+	size_t inWordPos = (curLead != 0x0000) ? SIZE_T_MAX : 0;	// MBCS
 	size_t outWordPos = 0;									// UTF16
 	size_t inWordCount = inBufferByteCount / 2;
 	uint16_t* inWords = (uint16_t*)inBuffer;
 	size_t charCount = 0;
 	size_t usedByteCount = 0;
-	for (; inWordPos == SIZE_MAX || inWordPos < inWordCount;)
+	for (; inWordPos == SIZE_T_MAX || inWordPos < inWordCount;)
 	{
-		uint16_t ch = (inWordPos == SIZE_MAX) ? curLead : inWords[inWordPos];	// “rØ‚ê‚½ƒoƒCƒg‚ÆŒ‹‡‚µ‚½Å‰‚Ì1•¶š‚ğl—¶
+		uint16_t ch = (inWordPos == SIZE_T_MAX) ? curLead : inWords[inWordPos];	// é€”åˆ‡ã‚ŒãŸãƒã‚¤ãƒˆã¨çµåˆã—ãŸæœ€åˆã®1æ–‡å­—ã‚’è€ƒæ…®
 	
-		// ãˆÊƒTƒƒQ[ƒg–¢”­Œ©ó‘Ô‚Ìê‡
+		// ä¸Šä½ã‚µãƒ­ã‚²ãƒ¼ãƒˆæœªç™ºè¦‹çŠ¶æ…‹ã®å ´åˆ
 		if (m_lastLeadWord == 0x0000)
 		{
 			if (UnicodeUtils::CheckUTF16HighSurrogate(ch)) {
-				m_lastLeadWord = ch;	// ãˆÊƒTƒƒQ[ƒg”­Œ©ó‘Ô‚É‚·‚é
+				m_lastLeadWord = ch;	// ä¸Šä½ã‚µãƒ­ã‚²ãƒ¼ãƒˆç™ºè¦‹çŠ¶æ…‹ã«ã™ã‚‹
 			}
 			else {
-				// •’Ê‚ÌUTF16•¶šB•’Ê‚ÉŠi”[B
+				// æ™®é€šã®UTF16æ–‡å­—ã€‚æ™®é€šã«æ ¼ç´ã€‚
 				outBuffer[outWordPos++] = ch;
 				++charCount;
 				usedByteCount += 2;
 			}
 		}
-		// ’¼‘O‚Ì•¶š‚ªæsƒoƒCƒg‚Ìê‡
+		// ç›´å‰ã®æ–‡å­—ãŒå…ˆè¡Œãƒã‚¤ãƒˆã®å ´åˆ
 		else
 		{
-			// ‰ºˆÊƒTƒƒQ[ƒg‚ªŒ©‚Â‚©‚ê‚ÎŠi”[
+			// ä¸‹ä½ã‚µãƒ­ã‚²ãƒ¼ãƒˆãŒè¦‹ã¤ã‹ã‚Œã°æ ¼ç´
 			if (UnicodeUtils::CheckUTF16LowSurrogate(ch)) 
 			{
 				outBuffer[outWordPos++] = m_lastLeadWord;
@@ -100,21 +101,21 @@ void UTF16Encoding::UTF16Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t 
 			}
 			else 
 			{
-				// ‰ºˆÊƒTƒƒQ[ƒgˆÈŠO‚Ì•¶š‚ÍNG
+				// ä¸‹ä½ã‚µãƒ­ã‚²ãƒ¼ãƒˆä»¥å¤–ã®æ–‡å­—ã¯NG
 				LN_THROW(0, EncodingFallbackException);
 			}
 		}
 
-		// inWordPos ‚ği‚ß‚é
-		if (inWordPos == SIZE_MAX) {
-			inWordPos = 0;	// ˆê”ÔÅ‰‚Ì•¶š‚Ìˆ—‚ªI‚í‚Á‚½BinWords ‚ğŒ©n‚ß‚é
+		// inWordPos ã‚’é€²ã‚ã‚‹
+		if (inWordPos == SIZE_T_MAX) {
+			inWordPos = 0;	// ä¸€ç•ªæœ€åˆã®æ–‡å­—ã®å‡¦ç†ãŒçµ‚ã‚ã£ãŸã€‚inWords ã‚’è¦‹å§‹ã‚ã‚‹
 		}
 		else {
 			++inWordPos;
 		}
 	}
 
-	// o—Í
+	// å‡ºåŠ›
 	(*outBytesUsed) = usedByteCount;
 	(*outCharsUsed) = charCount;
 }
@@ -124,15 +125,15 @@ void UTF16Encoding::UTF16Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t 
 //-----------------------------------------------------------------------------
 void UTF16Encoding::UTF16Encoder::ConvertFromUTF16(const UTF16* inBuffer, size_t inBufferCharCount, byte_t* outBuffer, size_t outBufferByteCount, size_t* outBytesUsed, size_t* outCharsUsed)
 {
-	/* “à•”•¶šƒR[ƒh‚Ì UTF-16 ‚©‚çAƒoƒCƒgƒXƒgƒŠ[ƒ€‚Ì UTF-16 ‚Ö‚Ì•ÏŠ·‚Æ‚È‚éB
-	 * “à•”•¶šƒR[ƒh‚ÍA•K‚¸ 2byte ’PˆÊ‚Å‚ ‚èAƒoƒbƒtƒ@I’[‚ªƒoƒCƒg’PˆÊ‚Å“rØ‚ê‚é‚±‚Æ‚Í–³‚¢B
-	 * ‚»‚Ì‚½‚ßó‘Ô•Û‚·‚é•K—v‚Í–³‚­A‚»‚Ì‚Ü‚ÜƒRƒs[‚Å‚æ‚¢B
+	/* å†…éƒ¨æ–‡å­—ã‚³ãƒ¼ãƒ‰ã® UTF-16 ã‹ã‚‰ã€ãƒã‚¤ãƒˆã‚¹ãƒˆãƒªãƒ¼ãƒ ã® UTF-16 ã¸ã®å¤‰æ›ã¨ãªã‚‹ã€‚
+	 * å†…éƒ¨æ–‡å­—ã‚³ãƒ¼ãƒ‰ã¯ã€å¿…ãš 2byte å˜ä½ã§ã‚ã‚Šã€ãƒãƒƒãƒ•ã‚¡çµ‚ç«¯ãŒãƒã‚¤ãƒˆå˜ä½ã§é€”åˆ‡ã‚Œã‚‹ã“ã¨ã¯ç„¡ã„ã€‚
+	 * ãã®ãŸã‚çŠ¶æ…‹ä¿æŒã™ã‚‹å¿…è¦ã¯ç„¡ãã€ãã®ã¾ã¾ã‚³ãƒ”ãƒ¼ã§ã‚ˆã„ã€‚
 	 */
 
 	errno_t err = memcpy_s(outBuffer, outBufferByteCount, inBuffer, inBufferCharCount * sizeof(UTF16));
 	LN_THROW(err == 0, ArgumentException);
 
-	// •¶š”‚ÍƒJƒEƒ“ƒg‚·‚é
+	// æ–‡å­—æ•°ã¯ã‚«ã‚¦ãƒ³ãƒˆã™ã‚‹
 	int count;
 	UTFConversionResult r = UnicodeUtils::GetUTF16CharCount((UnicodeUtils::UTF16*)inBuffer, inBufferCharCount, true, &count);
 	LN_THROW(r == UTFConversionResult_Success, EncodingFallbackException);

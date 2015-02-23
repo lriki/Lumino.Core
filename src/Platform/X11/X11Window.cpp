@@ -1,6 +1,6 @@
-
+Ôªø
 /*
-	GLX éQçlÉ\Å[ÉX:
+	GLX ÂèÇËÄÉ„ÇΩ„Éº„Çπ:
 	http://www.cl.cam.ac.uk/~cs448/git/trunk/src/progs/xdemos/overlay.c
 */
 #include <GL/glx.h>
@@ -32,31 +32,31 @@ X11Window::X11Window(X11WindowManager* windowManager, const SettingData& setting
 	::Window	x11RootWindow		= GetWindowManager()->GetX11RootWindow();
 	
 	//---------------------------------------------------------
-	// XVisualInfo ÇéÊìæÇ∑ÇÈ
-	//		Ç±Ç±Ç≈ÇÕ GLX ÇÃ API ÇégópÇµÅAOpenGL Ç≈égÇ¢ÇΩÇ¢ÉTÅ[ÉtÉFÉCÉXÉtÉHÅ[É}ÉbÉgÇ©ÇÁ
-	//		XVisualInfo ÇéÊìæÇµÇƒÇ¢ÇÈÅB
-	//		OpenGL égÇÌÇ»Ç¢èÍçáÇÕ XMatchVisualInfo() ìôÅAëºÇ…Ç‡éÊìæÇ∑ÇÈéËíiÇÕÇ†ÇÈÅB
+	// XVisualInfo „ÇíÂèñÂæó„Åô„Çã
+	//		„Åì„Åì„Åß„ÅØ GLX „ÅÆ API „Çí‰ΩøÁî®„Åó„ÄÅOpenGL „Åß‰Ωø„ÅÑ„Åü„ÅÑ„Çµ„Éº„Éï„Çß„Ç§„Çπ„Éï„Ç©„Éº„Éû„ÉÉ„Éà„Åã„Çâ
+	//		XVisualInfo „ÇíÂèñÂæó„Åó„Å¶„ÅÑ„Çã„ÄÇ
+	//		OpenGL ‰Ωø„Çè„Å™„ÅÑÂ†¥Âêà„ÅØ XMatchVisualInfo() Á≠â„ÄÅ‰ªñ„Å´„ÇÇÂèñÂæó„Åô„ÇãÊâãÊÆµ„ÅØ„ÅÇ„Çã„ÄÇ
 	//
-	//		ÇøÇ»Ç›Ç…ÅAglfw ÇÕÉÜÅ[ÉUÅ[ÇÃéwíËÇ‚ÅAä¬ã´Ç™ägí£ã@î\ÇÉTÉ|Å[ÉgÇµÇƒÇ¢ÇÈÇ©ÇÉ`ÉFÉbÉNÇµÅA
-	//		ï∂éöÉRÅ[Éhé©ìÆîªï Ç›ÇΩÇ¢Ç…äe Visual åÛï‚Ç…ÉXÉRÉAÇêUÇ¡ÇƒÅA
-	//		ÉxÉXÉgÇ» Visual ÇåàÇﬂÇÊÇ§Ç∆ÇµÇƒÇ¢ÇΩÅB
-	//		ÇªÇ±Ç‹Ç≈Ç‚ÇÈÇ©ÇÕç°å„ÇÃóvñ]ÇµÇæÇ¢Ç≈ÅBÇ∆ÇËÇ†Ç¶Ç∏àÍî‘ÉxÅ[ÉVÉbÉNÇ» A8R8G8BÅAD24S8 Ç≈éÊìæÇ∑ÇÈÅB
-	//		Å¶glfx Ç≈ÇÕ glXChooseVisual ÇÕégÇ¡ÇƒÇ¢Ç»Ç¢ÅBglXGetFBConfigs Ç©ÅAägí£Ç™égÇ¶ÇÈÇ∆Ç´ÇÕ glxChooseFBConfigSGIXÅB
+	//		„Å°„Å™„Åø„Å´„ÄÅglfw „ÅØ„É¶„Éº„Ç∂„Éº„ÅÆÊåáÂÆö„ÇÑ„ÄÅÁí∞Â¢É„ÅåÊã°ÂºµÊ©üËÉΩ„Çí„Çµ„Éù„Éº„Éà„Åó„Å¶„ÅÑ„Çã„Åã„Çí„ÉÅ„Çß„ÉÉ„ÇØ„Åó„ÄÅ
+	//		ÊñáÂ≠ó„Ç≥„Éº„ÉâËá™ÂãïÂà§Âà•„Åø„Åü„ÅÑ„Å´ÂêÑ Visual ÂÄôË£ú„Å´„Çπ„Ç≥„Ç¢„ÇíÊåØ„Å£„Å¶„ÄÅ
+	//		„Éô„Çπ„Éà„Å™ Visual „ÇíÊ±∫„ÇÅ„Çà„ÅÜ„Å®„Åó„Å¶„ÅÑ„Åü„ÄÇ
+	//		„Åù„Åì„Åæ„Åß„ÇÑ„Çã„Åã„ÅØ‰ªäÂæå„ÅÆË¶ÅÊúõ„Åó„Å†„ÅÑ„Åß„ÄÇ„Å®„Çä„ÅÇ„Åà„Åö‰∏ÄÁï™„Éô„Éº„Ç∑„ÉÉ„ÇØ„Å™ A8R8G8B„ÄÅD24S8 „ÅßÂèñÂæó„Åô„Çã„ÄÇ
+	//		‚Äªglfx „Åß„ÅØ glXChooseVisual „ÅØ‰Ωø„Å£„Å¶„ÅÑ„Å™„ÅÑ„ÄÇglXGetFBConfigs „Åã„ÄÅÊã°Âºµ„Åå‰Ωø„Åà„Çã„Å®„Åç„ÅØ glxChooseFBConfigSGIX„ÄÇ
 	
 	// http://earth.uni-muenster.de/~joergs/opengl/glXChooseVisual.html
 	int32_t attributes[] =
 	{
-		//GLX_USE_GL,		// ÉäÉtÉ@ÉåÉìÉXÇ…ÇÕ "ñ≥éãÇ≥ÇÍÇÈ" Ç∆Ç†ÇÈÅB
+		//GLX_USE_GL,		// „É™„Éï„Ç°„É¨„É≥„Çπ„Å´„ÅØ "ÁÑ°Ë¶ñ„Åï„Çå„Çã" „Å®„ÅÇ„Çã„ÄÇ
 		//GLX_LEVEL, 0,
-		GLX_RGBA,			1,		// TrueColor égóp
-		GLX_DOUBLEBUFFER,	1,		// É_ÉuÉãÉoÉbÉtÉ@ÉäÉìÉOóLå¯
+		GLX_RGBA,			1,		// TrueColor ‰ΩøÁî®
+		GLX_DOUBLEBUFFER,	1,		// „ÉÄ„Éñ„É´„Éê„ÉÉ„Éï„Ç°„É™„É≥„Ç∞ÊúâÂäπ
 		GLX_RED_SIZE,		8,		// R 8bit
 		GLX_GREEN_SIZE,		8,		// G 8bit
 		GLX_BLUE_SIZE,		8,		// B 8bit
 		GLX_ALPHA_SIZE,		8,		// A 8bit
-		GLX_DEPTH_SIZE,		24,		// ê[ìxíl 24bit
-		GLX_STENCIL_SIZE,	8,		// ÉXÉeÉìÉVÉã 8bit
-		//GLX_SAMPLES,        MultiSamples,	// É}ÉãÉ`ÉTÉìÉvÉäÉìÉO (ÉAÉìÉ`ÉGÉCÉäÉAÉX)
+		GLX_DEPTH_SIZE,		24,		// Ê∑±Â∫¶ÂÄ§ 24bit
+		GLX_STENCIL_SIZE,	8,		// „Çπ„ÉÜ„É≥„Ç∑„É´ 8bit
+		//GLX_SAMPLES,        MultiSamples,	// „Éû„É´„ÉÅ„Çµ„É≥„Éó„É™„É≥„Ç∞ („Ç¢„É≥„ÉÅ„Ç®„Ç§„É™„Ç¢„Çπ)
 		None
 	};
 	printf("1\n");
@@ -66,25 +66,25 @@ X11Window::X11Window(X11WindowManager* windowManager, const SettingData& setting
 	
 	printf("2 %p\n", visual);
 	//---------------------------------------------------------
-	// ÉJÉâÅ[É}ÉbÉvÇëIëÇ∑ÇÈÅB
-	// 		ÉJÉâÅ[É}ÉbÉvÇ∆ÇÕÅAÉsÉNÉZÉãÉtÉHÅ[É}ÉbÉgÇÃÇÊÇ§Ç»Ç‡ÇÃÇ≈ÅA256êF Ç∆Ç© 65535êFìôólÅXÇ»ÉpÉåÉbÉgÇ™ë∂ç›ÇµÇƒÇ¢ÇÈÅB
-	// 		Ç±ÇÍÇÃé¿ë‘ÇÕÉTÅ[Éoë§Ç…Ç†ÇËÅAXCreateColormap() ÇÕéwíËÇ≥ÇÍÇΩ visual Ç©ÇÁç≈ìKÇ»ÉJÉâÅ[É}ÉbÉvÇÃ ID Çï‘ÇµÇƒÇ¢ÇÈÅBÇªÇÒÇ»ÉCÉÅÅ[ÉWÅB
-	// 		Ç±ÇÃÉJÉâÅ[É}ÉbÉvÇ XCreateWindow() Ç…éwíËÇ∑ÇÈÇ±Ç∆Ç≈ÅAÉEÉBÉìÉhÉEÇÃÉsÉNÉZÉãÉtÉHÅ[É}ÉbÉgÇåàíËÇ∑ÇÈÅB
+	// „Ç´„É©„Éº„Éû„ÉÉ„Éó„ÇíÈÅ∏Êäû„Åô„Çã„ÄÇ
+	// 		„Ç´„É©„Éº„Éû„ÉÉ„Éó„Å®„ÅØ„ÄÅ„Éî„ÇØ„Çª„É´„Éï„Ç©„Éº„Éû„ÉÉ„Éà„ÅÆ„Çà„ÅÜ„Å™„ÇÇ„ÅÆ„Åß„ÄÅ256Ëâ≤ „Å®„Åã 65535Ëâ≤Á≠âÊßò„ÄÖ„Å™„Éë„É¨„ÉÉ„Éà„ÅåÂ≠òÂú®„Åó„Å¶„ÅÑ„Çã„ÄÇ
+	// 		„Åì„Çå„ÅÆÂÆüÊÖã„ÅØ„Çµ„Éº„ÉêÂÅ¥„Å´„ÅÇ„Çä„ÄÅXCreateColormap() „ÅØÊåáÂÆö„Åï„Çå„Åü visual „Åã„ÇâÊúÄÈÅ©„Å™„Ç´„É©„Éº„Éû„ÉÉ„Éó„ÅÆ ID „ÇíËøî„Åó„Å¶„ÅÑ„Çã„ÄÇ„Åù„Çì„Å™„Ç§„É°„Éº„Ç∏„ÄÇ
+	// 		„Åì„ÅÆ„Ç´„É©„Éº„Éû„ÉÉ„Éó„Çí XCreateWindow() „Å´ÊåáÂÆö„Åô„Çã„Åì„Å®„Åß„ÄÅ„Ç¶„Ç£„É≥„Éâ„Ç¶„ÅÆ„Éî„ÇØ„Çª„É´„Éï„Ç©„Éº„Éû„ÉÉ„Éà„ÇíÊ±∫ÂÆö„Åô„Çã„ÄÇ
 	Colormap colorMap = XCreateColormap(x11Display, x11RootWindow, visual->visual, AllocNone);
 	
 	//---------------------------------------------------------
-	// ÉEÉBÉìÉhÉEÇÃëÆê´ (Win32 ÇÃÉEÉBÉìÉhÉEÉXÉ^ÉCÉãÇ›ÇΩÇ¢Ç»Ç‡ÇÃ)
+	// „Ç¶„Ç£„É≥„Éâ„Ç¶„ÅÆÂ±ûÊÄß (Win32 „ÅÆ„Ç¶„Ç£„É≥„Éâ„Ç¶„Çπ„Çø„Ç§„É´„Åø„Åü„ÅÑ„Å™„ÇÇ„ÅÆ)
 	//		http://homepage3.nifty.com/rio_i/lab/xlib/015attribute.htm
 	XSetWindowAttributes winAttr;
 	winAttr.colormap = colorMap;
 	winAttr.border_pixel = 0;
 	winAttr.override_redirect = False;
 	
-	// XÉTÅ[ÉoÇ©ÇÁÇ«ÇÃÉCÉxÉìÉgÇéÛÇØéÊÇËÇΩÇ¢ÇÃÇ©ÇéwíËÇ∑ÇÈ
+	// X„Çµ„Éº„Éê„Åã„Çâ„Å©„ÅÆ„Ç§„Éô„É≥„Éà„ÇíÂèó„ÅëÂèñ„Çä„Åü„ÅÑ„ÅÆ„Åã„ÇíÊåáÂÆö„Åô„Çã
 	winAttr.event_mask = ExposureMask | KeyPressMask | ButtonPressMask | StructureNotifyMask;
 	
 	//---------------------------------------------------------
-	// ÉEÉBÉìÉhÉEÇçÏÇÈ
+	// „Ç¶„Ç£„É≥„Éâ„Ç¶„Çí‰Ωú„Çã
 	m_x11Window = XCreateWindow(
 		x11Display,
 		x11RootWindow,
@@ -95,11 +95,20 @@ X11Window::X11Window(X11WindowManager* windowManager, const SettingData& setting
 		visual->depth,      // Color depth
 		InputOutput,
 		visual->visual,
-		CWBorderPixel | CWColormap | CWEventMask | CWOverrideRedirect,	// XSetWindowAttributes ÇÃÇ«ÇÃïîï™Ççló∂Ç∑ÇÈÇ©
+		CWBorderPixel | CWColormap | CWEventMask | CWOverrideRedirect,	// XSetWindowAttributes „ÅÆ„Å©„ÅÆÈÉ®ÂàÜ„ÇíËÄÉÊÖÆ„Åô„Çã„Åã
 		&winAttr );
-	
-	
 	XFree( visual );
+	
+	// X11 „ÅÆ„Ç¶„Ç£„É≥„Éâ„Ç¶„Å®„Åì„ÅÆ„ÇØ„É©„Çπ„ÅÆ„Ç§„É≥„Çπ„Çø„É≥„Çπ„ÇíÈñ¢ÈÄ£‰ªò„Åë„Çã (WinAPI „ÅÆ SetProp „Å´„ÅÇ„Åü„Çã)
+	int result = XSaveContext(
+		x11Display,
+		m_x11Window,
+		GetWindowManager()->GetX11Context(),
+		(XPointer) window);
+	LN_THROW(result == 0, InvalidOperationException);
+	
+	// WM_DELETE_WINDOW „ÅåÈÄöÁü•„Åï„Çå„Çã„Çà„ÅÜ„Å´„Åô„Çã
+	XSetWMProtocols(x11Display, m_x11Window, &GetWindowManager()->m_atom_WM_DELETE_WINDOW, 1);
 	
 	SetVisible(true);
 }
@@ -111,8 +120,11 @@ X11Window::~X11Window()
 {
 	if (m_x11Window)
 	{
-		XDestroyWindow(GetWindowManager()->GetX11Display(), m_x11Window);
-		m_x11Window = 0;
+		Display* x11Display = GetWindowManager()->GetX11Display();
+		XDeleteContext(x11Display, m_x11Window, GetWindowManager()->GetX11Context());
+        XUnmapWindow(x11Display, m_x11Window);
+		XDestroyWindow(x11Display, m_x11Window);
+		m_x11Window = (::Window)0;
 	}
 }
 

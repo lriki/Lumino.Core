@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 
 #include <vector>
@@ -8,15 +8,15 @@
 namespace Lumino
 {
 /**
-	@brief	ƒf[ƒ^‚Ì“Ç‚İ‘‚«æ‚Æ‚µ‚Äƒƒ‚ƒŠ‚ğg—p‚·‚éƒXƒgƒŠ[ƒ€‚Å‚·B
+	@brief	ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿æ›¸ãå…ˆã¨ã—ã¦ãƒ¡ãƒ¢ãƒªã‚’ä½¿ç”¨ã™ã‚‹ã‚¹ãƒˆãƒªãƒ¼ãƒ ã§ã™ã€‚
 */
 class MemoryStream
     : public Stream
 {
 public:
 	/**
-		@brief		Šg’£‰Â”\‚Èƒƒ‚ƒŠƒXƒgƒŠ[ƒ€‚ğì¬‚µ‚Ü‚·B
-		@details	‚±‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ÌŒãA•K—v‚É‰‚¶‚Ä Create() ‚ğŒÄ‚Ño‚µ‚ÄÄ‰Šú‰»‚·‚é‚±‚Æ‚ª‚Å‚«‚Ü‚·B
+		@brief		æ‹¡å¼µå¯èƒ½ãªãƒ¡ãƒ¢ãƒªã‚¹ãƒˆãƒªãƒ¼ãƒ ã‚’ä½œæˆã—ã¾ã™ã€‚
+		@details	ã“ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã®å¾Œã€å¿…è¦ã«å¿œã˜ã¦ Create() ã‚’å‘¼ã³å‡ºã—ã¦å†åˆæœŸåŒ–ã™ã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚
 	*/
 	MemoryStream();
 
@@ -25,21 +25,21 @@ public:
 public:
 
 	/**
-		@brief	ƒLƒƒƒpƒVƒeƒB‚ğw’è‚µ‚ÄAŠg’£‰Â”\‚Èƒƒ‚ƒŠƒXƒgƒŠ[ƒ€‚ğì¬‚µ‚Ü‚·B
-		@param	size	: ƒTƒCƒY(ƒoƒCƒg”)
+		@brief	ã‚­ãƒ£ãƒ‘ã‚·ãƒ†ã‚£ã‚’æŒ‡å®šã—ã¦ã€æ‹¡å¼µå¯èƒ½ãªãƒ¡ãƒ¢ãƒªã‚¹ãƒˆãƒªãƒ¼ãƒ ã‚’ä½œæˆã—ã¾ã™ã€‚
+		@param	size	: ã‚µã‚¤ã‚º(ãƒã‚¤ãƒˆæ•°)
 	*/
 	void Create(size_t size);
 
 	/**
-		@brief		Šù‘¶‚Ìƒoƒbƒtƒ@‚ğw’è‚µ‚ÄAƒTƒCƒY•ÏX‚Å‚«‚È‚¢ƒƒ‚ƒŠƒXƒgƒŠ[ƒ€‚ğì¬‚µ‚Ü‚·B
-		@param		buffer	: ƒoƒbƒtƒ@‚Ìæ“ªƒAƒhƒŒƒX
-		@param		size	: ƒTƒCƒY(ƒoƒCƒg”)
-		@details	buffer ‚Éw’è‚µ‚½ƒoƒbƒtƒ@‚ÍA‚±‚ÌƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ª‘¶İ‚·‚éŠÔ‚ÍŠJ•ú‚µ‚Ä‚Í‚¢‚¯‚Ü‚¹‚ñB
+		@brief		æ—¢å­˜ã®ãƒãƒƒãƒ•ã‚¡ã‚’æŒ‡å®šã—ã¦ã€ã‚µã‚¤ã‚ºå¤‰æ›´ã§ããªã„ãƒ¡ãƒ¢ãƒªã‚¹ãƒˆãƒªãƒ¼ãƒ ã‚’ä½œæˆã—ã¾ã™ã€‚
+		@param		buffer	: ãƒãƒƒãƒ•ã‚¡ã®å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹
+		@param		size	: ã‚µã‚¤ã‚º(ãƒã‚¤ãƒˆæ•°)
+		@details	buffer ã«æŒ‡å®šã—ãŸãƒãƒƒãƒ•ã‚¡ã¯ã€ã“ã®ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒå­˜åœ¨ã™ã‚‹é–“ã¯é–‹æ”¾ã—ã¦ã¯ã„ã‘ã¾ã›ã‚“ã€‚
 	*/
 	void Create(void* buffer, size_t size);
 
 	/**
-		@brief		ƒoƒCƒg”z—ñ‚Ìæ“ªƒAƒhƒŒƒX‚ğæ“¾‚µ‚Ü‚·B
+		@brief		ãƒã‚¤ãƒˆé…åˆ—ã®å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å–å¾—ã—ã¾ã™ã€‚
 	*/
 	void* GetBuffer();
 
@@ -50,13 +50,13 @@ public:
 	virtual size_t GetSize() { return m_buffer.size(); }
 	virtual size_t Read(void* buffer, size_t bufferSize, size_t byteCount) { LN_THROW(0, NotImplementedException); return 0; }
 	virtual void Write(const void* pData, size_t nByteCount);
-	virtual void Flush() {}		// Write ‚ª’¼Úƒƒ‚ƒŠ‚É‘‚«‚±‚Ş‚Ì‚Å•s—v
+	virtual void Flush() {}		// Write ãŒç›´æ¥ãƒ¡ãƒ¢ãƒªã«æ›¸ãã“ã‚€ã®ã§ä¸è¦
 
 private:
-	std::vector<byte_t>	m_buffer;			///< ‰Â•Ï’·‚Ìê‡‚Í‚±‚Ìƒoƒbƒtƒ@‚ğg‚¤
+	std::vector<byte_t>	m_buffer;			///< å¯å¤‰é•·ã®å ´åˆã¯ã“ã®ãƒãƒƒãƒ•ã‚¡ã‚’ä½¿ã†
 	size_t				m_seekPos;
 	
-	void*				m_fixedBuffer;		///< ŒÅ’è’·‚Ìê‡‚Í‚±‚Ìƒoƒbƒtƒ@‚ğg‚¤
+	void*				m_fixedBuffer;		///< å›ºå®šé•·ã®å ´åˆã¯ã“ã®ãƒãƒƒãƒ•ã‚¡ã‚’ä½¿ã†
 	size_t				m_fixedBufferSize;
 };
 

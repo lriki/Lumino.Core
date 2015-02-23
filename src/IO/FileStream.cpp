@@ -1,4 +1,4 @@
-
+﻿
 #include "../Internal.h"
 #include "../../include/Lumino/IO/FileUtils.h"
 #include "../../include/Lumino/IO/FileStream.h"

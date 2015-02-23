@@ -1,4 +1,4 @@
-#include <TestConfig.h>
+ï»¿#include <TestConfig.h>
 using namespace Threading;
 
 class Test_Threading_EventFlag : public ::testing::Test
@@ -43,11 +43,11 @@ TEST_F(Test_Threading_EventFlag, Basic)
 	TestThread t;
 	t.Execute();
 
-	t.mInited.Wait();	// ‰Šú‰»Š®—¹‘Ò‚¿
+	t.mInited.Wait();	// åˆæœŸåŒ–å®Œäº†å¾…ã¡
 	ASSERT_TRUE(gValue >= 2);
 
 
-	t.mRunning.SetFalse();	// I—¹—v‹
+	t.mRunning.SetFalse();	// çµ‚äº†è¦æ±‚
 	t.Wait();
 	ASSERT_TRUE(gValue >= 2);
 }
@@ -62,5 +62,5 @@ TEST_F(Test_Threading_EventFlag, Basic2)
 	ASSERT_TRUE(f2.IsTrue());
 	ASSERT_FALSE(f3.IsTrue());
 
-	f2.Wait();	// true ‚È‚Ì‚Å~‚Ü‚ç‚¸‚Éi‚Ş
+	f2.Wait();	// true ãªã®ã§æ­¢ã¾ã‚‰ãšã«é€²ã‚€
 }

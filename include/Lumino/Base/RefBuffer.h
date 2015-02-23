@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 
 #include "RefObject.h"
@@ -7,7 +7,7 @@ namespace Lumino
 {
 
 /**
-	@brief	QÆƒJƒEƒ“ƒg•t‚Ìƒƒ‚ƒŠƒoƒbƒtƒ@
+	@brief	å‚ç…§ã‚«ã‚¦ãƒ³ãƒˆä»˜ã®ãƒ¡ãƒ¢ãƒªãƒãƒƒãƒ•ã‚¡
 */
 class RefBuffer
 	: public RefObject
@@ -41,7 +41,7 @@ public:
 
 public:
 
-	/// ƒƒ‚ƒŠŠ„‚è“–‚Ä
+	/// ãƒ¡ãƒ¢ãƒªå‰²ã‚Šå½“ã¦
 	void Reserve(size_t size)
 	{
 		Dispose();
@@ -50,7 +50,7 @@ public:
 		mAutoDelete = true;
 	}
 
-	/// ƒƒ‚ƒŠŠ„‚è“–‚Ä + ƒRƒs[
+	/// ãƒ¡ãƒ¢ãƒªå‰²ã‚Šå½“ã¦ + ã‚³ãƒ”ãƒ¼
 	void Reserve(const byte_t* data, size_t size)
 	{
 		Dispose();
@@ -60,20 +60,20 @@ public:
 		memcpy(mBuffer, data, mSize);
 	}
 
-	/// ƒRƒs[
+	/// ã‚³ãƒ”ãƒ¼
 	void Copy(const byte_t* data, size_t size)
 	{
 		//mSize = size;
 		memcpy(mBuffer, data, size);
 	}
 
-	/// ƒRƒs[
+	/// ã‚³ãƒ”ãƒ¼
 	void Copy(size_t uOffset, const byte_t* data, size_t size)
 	{
 		memcpy(mBuffer + uOffset, data, size);
 	}
 
-	/// 0ƒNƒŠƒA
+	/// 0ã‚¯ãƒªã‚¢
 	void Clear()
 	{
 		if (mBuffer) {
@@ -81,26 +81,26 @@ public:
 		}
 	}
 
-	/// ƒAƒhƒŒƒXæ“¾
+	/// ã‚¢ãƒ‰ãƒ¬ã‚¹å–å¾—
 	byte_t* GetPointer() const
 	{
 		return mBuffer;
 	}
 
-	/// ƒTƒCƒYæ“¾
+	/// ã‚µã‚¤ã‚ºå–å¾—
 	size_t GetSize() const
 	{
 		return mSize;
 	}
 
-	/// ƒTƒCƒY•ÏX
+	/// ã‚µã‚¤ã‚ºå¤‰æ›´
 	void Resize(size_t newSize)
 	{
-		assert(newSize <= mSize);	// k¬•ûŒü‚Ì‚İ‚Æ‚è‚ ‚¦‚¸‹–‰Â
+		assert(newSize <= mSize);	// ç¸®å°æ–¹å‘ã®ã¿ã¨ã‚Šã‚ãˆãšè¨±å¯
 		mSize = newSize;
 	}
 
-	/// ƒ‰ƒbƒsƒ“ƒO
+	/// ãƒ©ãƒƒãƒ”ãƒ³ã‚°
 	void setBytesBuffer(byte_t* data, size_t size, bool autoDelete)
 	{
 		Dispose();

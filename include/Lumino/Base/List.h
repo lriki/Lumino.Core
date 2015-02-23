@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 
 #if 0
@@ -53,7 +53,7 @@ private:
 			mNodes = LN_NEW Node[mCapacity + 1];
 			mValues = static_cast<T*>(LN_OPERATOR_NEW(sizeof(T) * mCapacity));
 
-			// ‹ó‚«”Ô†ƒXƒ^ƒbƒN‚ğì¬‚µ‚Ä”Ô†‚ğ‘S•”‹l‚ß‚Ş
+			// ç©ºãç•ªå·ã‚¹ã‚¿ãƒƒã‚¯ã‚’ä½œæˆã—ã¦ç•ªå·ã‚’å…¨éƒ¨è©°ã‚è¾¼ã‚€
 			mIndexStack = LN_NEW int[mCapacity];
 			for (int i = 0; i < mCapacity; ++i)
 			{
@@ -61,7 +61,7 @@ private:
 			}
 			mIndexStackEnd = mCapacity;
 
-			// mCapacity ”Ô‚ÍÅ‰‚Ì—v‘f‚Ì‘O‚©‚ÂÅŒã‚Ì—v‘f‚ÌŒã‚É‚ ‚éƒ_ƒ~[—v‘f
+			// mCapacity ç•ªã¯æœ€åˆã®è¦ç´ ã®å‰ã‹ã¤æœ€å¾Œã®è¦ç´ ã®å¾Œã«ã‚ã‚‹ãƒ€ãƒŸãƒ¼è¦ç´ 
 			mNodes[mCapacity].Next = mNodes[mCapacity].Prev = mCapacity;
 		}
 
@@ -71,17 +71,17 @@ private:
 		}
 
 	public:
-		T*				mValues;		///< ƒIƒuƒWƒFƒNƒg”z—ñ
-		Node*			mNodes;			///< ƒm[ƒh”z—ñ
-		int				mCapacity;		///< Å‘å—v‘f”
-		int				mSize;			///< Œ»İ‚Ì—v‘f”
-		int*			mIndexStack;	///< ƒIƒuƒWƒFƒNƒg”z—ñ‚Ì‹ó‚«”Ô†ƒXƒ^ƒbƒN
-		int				mIndexStackEnd;	///< ƒXƒ^ƒbƒN‚ÌI’[ (‚±‚ê‚Ì‚Ğ‚Æ‚Â‘O‚Ü‚Å—v‘f‚ª‚ ‚é)
+		T*				mValues;		///< ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…åˆ—
+		Node*			mNodes;			///< ãƒãƒ¼ãƒ‰é…åˆ—
+		int				mCapacity;		///< æœ€å¤§è¦ç´ æ•°
+		int				mSize;			///< ç¾åœ¨ã®è¦ç´ æ•°
+		int*			mIndexStack;	///< ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…åˆ—ã®ç©ºãç•ªå·ã‚¹ã‚¿ãƒƒã‚¯
+		int				mIndexStackEnd;	///< ã‚¹ã‚¿ãƒƒã‚¯ã®çµ‚ç«¯ (ã“ã‚Œã®ã²ã¨ã¤å‰ã¾ã§è¦ç´ ãŒã‚ã‚‹)
 	};
 
 public:
 
-	/// ƒCƒeƒŒ[ƒ^
+	/// ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿
 	class iterator
 	{
 	public:
@@ -130,9 +130,9 @@ public:
 
 	private:
 
-		T*		mValues;		///< ƒIƒuƒWƒFƒNƒg”z—ñ
-		Node*	mNodes;			///< ƒm[ƒh”z—ñ
-		int		mPos;			///< ƒm[ƒh”z—ñ‚ÌˆÊ’u (‚±‚ÌƒCƒeƒŒ[ƒ^‚Ìw‚·ˆÊ’u)
+		T*		mValues;		///< ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…åˆ—
+		Node*	mNodes;			///< ãƒãƒ¼ãƒ‰é…åˆ—
+		int		mPos;			///< ãƒãƒ¼ãƒ‰é…åˆ—ã®ä½ç½® (ã“ã®ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ã®æŒ‡ã™ä½ç½®)
 
 		friend class List<T>;
 	};

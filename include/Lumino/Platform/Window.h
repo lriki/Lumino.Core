@@ -1,4 +1,4 @@
-
+﻿
 #pragma once
 
 #include "../Base/RefObject.h"
@@ -11,7 +11,7 @@ namespace Platform
 {
 
 /**
-	@brief	�v���b�g�t�H�[���ŗL�̃E�B���h�E�V�X�e���̃E�B���h�E�𒊏ۉ����܂��B
+	@brief	プラットフォーム固有のウィンドウシステムのウィンドウを抽象化します。
 */
 class Window
 	: public RefObject
@@ -19,45 +19,45 @@ class Window
 public:
 
 	/**
-		@brief		�N���C�A���g�̈�̃T�C�Y���擾���܂��B
+		@brief		クライアント領域のサイズを取得します。
 	*/
 	virtual const Size& GetSize() const = 0;
 	
 	/**
-		@brief		�t���X�N���[���̗L���t���O��ݒ肵�܂��B
-		@details	enabled �� true ��ݒ肷��ƃt���X�N���[���Afalse ��ݒ肷��ƃE�B���h�E���[�h�ɂȂ�܂��B
-					���̊֐��̓E�B���h�E�X�^�C����ύX���čő剻���邾���ł��B
-					���[�U�[��`�E�B���h�E�̏ꍇ�͂Ȃɂ����܂���B
+		@brief		フルスクリーンの有効フラグを設定します。
+		@details	enabled に true を設定するとフルスクリーン、false を設定するとウィンドウモードになります。
+					この関数はウィンドウスタイルを変更して最大化するだけです。
+					ユーザー定義ウィンドウの場合はなにもしません。
 	*/
 	virtual void SetFullScreenEnabled(bool enabled) = 0;
 
 	/**
-		@brief		�t���X�N���[����Ԃ��𔻒肵�܂��B
+		@brief		フルスクリーン状態かを判定します。
 	*/
 	virtual bool IsFullScreenEnabled() const = 0;
 
 	/**
-		@brief		�E�B���h�E���A�N�e�B�u���ǂ����������l���擾���܂��B
+		@brief		ウィンドウがアクティブかどうかを示す値を取得します。
 	*/
 	virtual bool IsActive() const = 0;
 
 	/**
-		@brief		���̃E�B���h�E�Ƀ}�E�X�L���v�`����ݒ肵�܂��B
+		@brief		このウィンドウにマウスキャプチャを設定します。
 	*/
 	virtual void CaptureMouse() = 0;
 
 	/**
-		@brief		���̃E�B���h�E����}�E�X�L���v�`�����폜���܂��B
+		@brief		このウィンドウからマウスキャプチャを削除します。
 	*/
 	virtual void ReleaseMouseCapture() = 0;
 
 	/**
-		@brief		���̃E�B���h�E�ɃC�x���g���X�i�[���A�^�b�`���܂��B(priority ���傫�����̂���ɏ��������B�K���f�^�b�`���邱��)
+		@brief		このウィンドウにイベントリスナーをアタッチします。(priority が大きいものが先に処理される。必ずデタッチすること)
 	*/
 	virtual void AttachEventListener(IEventListener* listener, int priority) = 0;
 
 	/**
-		@brief		���̃E�B���h�E����C�x���g���X�i�[���f�^�b�`���܂��B
+		@brief		このウィンドウからイベントリスナーをデタッチします。
 	*/
 	virtual void DetachEventListener(IEventListener* listener) = 0;
 

@@ -1,4 +1,4 @@
-// cp949 EUCKR
+﻿// cp949 EUCKR
 // Surrogate is not present in the character code.
 // To use the table, declare as follows.
 // extern "C" unsigned short g_EUCKRToUTF16Table[];

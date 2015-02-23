@@ -1,4 +1,4 @@
-
+ï»¿
 #include "../Internal.h"
 #include "../../include/Lumino/Text/UnicodeUtils.h"
 #include "UTF32Encoding.h"
@@ -42,24 +42,24 @@ void UTF32Encoding::UTF32Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t 
 	*outBytesUsed = 0;
 	*outCharsUsed = 0;
 
-	// •ÏŠ·İ’è
+	// å¤‰æ›è¨­å®š
 	UTFConversionOptions options;
 	memset(&options, 0, sizeof(options));
 	options.ReplacementChar = mFallbackReplacementChar;
 
-	// ‘O‰ñ“r’†‚Å“rØ‚ê‚½ƒoƒCƒg‚ª‚ ‚ê‚Îæ‚É•ÏŠ·‚·‚é
+	// å‰å›é€”ä¸­ã§é€”åˆ‡ã‚ŒãŸãƒã‚¤ãƒˆãŒã‚ã‚Œã°å…ˆã«å¤‰æ›ã™ã‚‹
 	if (m_lastLeadBytesCount > 0) 
 	{
-		size_t req = 4 - m_lastLeadBytesCount;	// ’Ç‰Á—v‹ƒoƒCƒg”
+		size_t req = 4 - m_lastLeadBytesCount;	// è¿½åŠ è¦æ±‚ãƒã‚¤ãƒˆæ•°
 		byte_t buf[4];
 		memcpy_s(buf, 4, m_lastLeadBytes, m_lastLeadBytesCount);
 		memcpy_s(buf + m_lastLeadBytesCount, req, inBuffer, req);
 
-		// •ÏŠ· (1•¶š‚¾‚¯)
+		// å¤‰æ› (1æ–‡å­—ã ã‘)
 		UTFConversionResult result = UnicodeUtils::ConvertUTF32toUTF16((UnicodeUtils::UTF32*)buf, 1, (UnicodeUtils::UTF16*)outBuffer, outBufferCharCount, &options);
 		LN_THROW(result == UTFConversionResult_Success, EncodingFallbackException);
 
-		// ƒoƒbƒtƒ@æ“ª‚ÍÁ”ï‚µ‚½•ª‚¾‚¯i‚ßAƒoƒbƒtƒ@ƒTƒCƒY‚ÍÁ”ï‚µ‚½•ª‚¾‚¯k‚ß‚é
+		// ãƒãƒƒãƒ•ã‚¡å…ˆé ­ã¯æ¶ˆè²»ã—ãŸåˆ†ã ã‘é€²ã‚ã€ãƒãƒƒãƒ•ã‚¡ã‚µã‚¤ã‚ºã¯æ¶ˆè²»ã—ãŸåˆ†ã ã‘ç¸®ã‚ã‚‹
 		inBuffer += req;
 		inBufferByteCount -= req;
 		outBuffer += options.ConvertedTargetLength / sizeof(UnicodeUtils::UTF16);
@@ -68,7 +68,7 @@ void UTF32Encoding::UTF32Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t 
 		(*outCharsUsed) += 1;
 	}
 
-	// ƒoƒbƒtƒ@I’[‚Å•¶š‚ª“rØ‚ê‚Ä‚¢‚éê‡‚ÍŸ‰ñ‚Ì•ÏŠ·‚É‰ñ‚·‚½‚ß‹L‰¯‚µ‚Ä‚¨‚­
+	// ãƒãƒƒãƒ•ã‚¡çµ‚ç«¯ã§æ–‡å­—ãŒé€”åˆ‡ã‚Œã¦ã„ã‚‹å ´åˆã¯æ¬¡å›ã®å¤‰æ›ã«å›ã™ãŸã‚è¨˜æ†¶ã—ã¦ãŠã
 	m_lastLeadBytesCount = inBufferByteCount % 4;
 	if (m_lastLeadBytesCount > 0)
 	{
@@ -76,7 +76,7 @@ void UTF32Encoding::UTF32Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t 
 		inBufferByteCount -= m_lastLeadBytesCount;
 	}
 	
-	// •ÏŠ·
+	// å¤‰æ›
 	UTFConversionResult result = UnicodeUtils::ConvertUTF32toUTF16(
 		(UnicodeUtils::UTF32*)inBuffer, 
 		inBufferByteCount / sizeof(UnicodeUtils::UTF32),
@@ -85,7 +85,7 @@ void UTF32Encoding::UTF32Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t 
 		&options);
 	LN_THROW(result == UTFConversionResult_Success, EncodingFallbackException);
 
-	// o—Í
+	// å‡ºåŠ›
 	(*outBytesUsed) += options.ConvertedTargetLength * sizeof(UnicodeUtils::UTF16);
 	(*outCharsUsed) += options.CharCount;
 }
@@ -98,21 +98,21 @@ void UTF32Encoding::UTF32Encoder::ConvertFromUTF16(const UTF16* inBuffer, size_t
 	*outBytesUsed = 0;
 	*outCharsUsed = 0;
 
-	// •ÏŠ·İ’è
+	// å¤‰æ›è¨­å®š
 	UTFConversionOptions options;
 	memset(&options, 0, sizeof(options));
 	options.ReplacementChar = mFallbackReplacementChar;
 
-	// ‘O‰ñ“r’†‚Å“rØ‚ê‚½ƒ[ƒh‚ª‚ ‚ê‚Îæ‚É•ÏŠ·‚·‚é
+	// å‰å›é€”ä¸­ã§é€”åˆ‡ã‚ŒãŸãƒ¯ãƒ¼ãƒ‰ãŒã‚ã‚Œã°å…ˆã«å¤‰æ›ã™ã‚‹
 	if (m_lastLeadWord != 0x0000)
 	{
 		uint16_t buf[2] = { m_lastLeadWord, inBuffer[0] };
 
-		// •ÏŠ· (ƒTƒƒQ[ƒgƒyƒA‚Å1•¶š‚¾‚¯)
+		// å¤‰æ› (ã‚µãƒ­ã‚²ãƒ¼ãƒˆãƒšã‚¢ã§1æ–‡å­—ã ã‘)
 		UTFConversionResult result = UnicodeUtils::ConvertUTF16toUTF32((UnicodeUtils::UTF16*)buf, 2, (UnicodeUtils::UTF32*)outBuffer, outBufferByteCount, &options);
 		LN_THROW(result == UTFConversionResult_Success, EncodingFallbackException);
 
-		// ƒoƒbƒtƒ@æ“ª‚ÍÁ”ï‚µ‚½•ª‚¾‚¯i‚ßAƒoƒbƒtƒ@ƒTƒCƒY‚ÍÁ”ï‚µ‚½•ª‚¾‚¯k‚ß‚é
+		// ãƒãƒƒãƒ•ã‚¡å…ˆé ­ã¯æ¶ˆè²»ã—ãŸåˆ†ã ã‘é€²ã‚ã€ãƒãƒƒãƒ•ã‚¡ã‚µã‚¤ã‚ºã¯æ¶ˆè²»ã—ãŸåˆ†ã ã‘ç¸®ã‚ã‚‹
 		size_t usedTargetBytes = options.ConvertedTargetLength * sizeof(UnicodeUtils::UTF32);
 		inBuffer += 1;
 		inBufferCharCount -= 1;
@@ -122,14 +122,14 @@ void UTF32Encoding::UTF32Encoder::ConvertFromUTF16(const UTF16* inBuffer, size_t
 		(*outCharsUsed) += options.CharCount;
 	}
 
-	// ‘O‰ñ“r’†‚Å“rØ‚ê‚½ƒ[ƒh‚ª‚ ‚ê‚Îæ‚É•ÏŠ·‚·‚é (‚Æ‚è‚ ‚¦‚¸ƒGƒ“ƒfƒBƒAƒ“l—¶‚¹‚¸AƒTƒƒQ[ƒg‚È‚çæ‚Á‚Ä‚¨‚­)
+	// å‰å›é€”ä¸­ã§é€”åˆ‡ã‚ŒãŸãƒ¯ãƒ¼ãƒ‰ãŒã‚ã‚Œã°å…ˆã«å¤‰æ›ã™ã‚‹ (ã¨ã‚Šã‚ãˆãšã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³è€ƒæ…®ã›ãšã€ã‚µãƒ­ã‚²ãƒ¼ãƒˆãªã‚‰å–ã£ã¦ãŠã)
 	if (UnicodeUtils::CheckUTF16HighSurrogate(inBuffer[inBufferCharCount - 1])/* || UnicodeUtils::CheckUTF16LowSurrogate(inBuffer[inBufferCharCount])*/)
 	{
 		m_lastLeadWord = inBuffer[inBufferCharCount];
 		inBufferCharCount -= 1;
 	}
 	
-	// •ÏŠ·
+	// å¤‰æ›
 	UTFConversionResult result = UnicodeUtils::ConvertUTF16toUTF32(
 		(UnicodeUtils::UTF16*)inBuffer, 
 		inBufferCharCount,
@@ -138,7 +138,7 @@ void UTF32Encoding::UTF32Encoder::ConvertFromUTF16(const UTF16* inBuffer, size_t
 		&options);
 	LN_THROW(result == UTFConversionResult_Success, EncodingFallbackException);
 
-	// o—Í
+	// å‡ºåŠ›
 	(*outBytesUsed) += options.ConvertedTargetLength * sizeof(UnicodeUtils::UTF32);
 	(*outCharsUsed) += options.CharCount;
 }

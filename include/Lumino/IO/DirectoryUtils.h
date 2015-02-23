@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../Base/Array.h"
 
@@ -13,9 +13,9 @@ class DirectoryUtils
 public:
 
 	/**
-		@brief		ƒfƒBƒŒƒNƒgƒŠ“à‚ÉŠÜ‚Ü‚ê‚é‘S‚Ä‚Ìƒtƒ@ƒCƒ‹‚ÌƒpƒX‚ğæ“¾‚·‚é
-		@param[in]	dirPath	: ŒŸõ‚·‚éƒfƒBƒŒƒNƒgƒŠ
-		@param[in]	pattern	: ŒŸõ•¶š—ñ (ƒƒCƒ‹ƒhƒJ[ƒhw’è‰Â”\)
+		@brief		ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå†…ã«å«ã¾ã‚Œã‚‹å…¨ã¦ã®ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹ã‚’å–å¾—ã™ã‚‹
+		@param[in]	dirPath	: æ¤œç´¢ã™ã‚‹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+		@param[in]	pattern	: æ¤œç´¢æ–‡å­—åˆ— (ãƒ¯ã‚¤ãƒ«ãƒ‰ã‚«ãƒ¼ãƒ‰æŒ‡å®šå¯èƒ½)
 	*/
 	static Array<String> GetFiles(const TCHAR* dirPath, const TCHAR* pattern);
 };

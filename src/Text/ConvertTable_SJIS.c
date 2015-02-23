@@ -1,4 +1,4 @@
-// cp932 SJIS
+﻿// cp932 SJIS
 // Surrogate is not present in the character code.
 // To use the table, declare as follows.
 // extern "C" unsigned short g_SJISToUTF16Table[];

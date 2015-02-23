@@ -1,4 +1,4 @@
-
+ï»¿
 #include "../../include/Lumino/Text/Encoding.h"
 
 namespace Lumino
@@ -7,7 +7,7 @@ namespace Text
 {
 
 /**
-	@brief		UTF16 ƒGƒ“ƒR[ƒfƒBƒ“ƒO
+	@brief		UTF16 ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°
 */
 class UTF16Encoding : public Encoding
 {

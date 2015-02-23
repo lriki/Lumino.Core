@@ -1,4 +1,4 @@
-
+Ôªø
 #include "../../include/Lumino/Text/Encoding.h"
 
 namespace Lumino
@@ -7,7 +7,7 @@ namespace Text
 {
 
 /**
-	@brief		ASCII ÉGÉìÉRÅ[ÉfÉBÉìÉO
+	@brief		ASCII „Ç®„É≥„Ç≥„Éº„Éá„Ç£„É≥„Ç∞
 */
 class ASCIIEncoding : public Encoding
 {

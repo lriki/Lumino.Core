@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 
 #include "../../../include/Lumino/Base/String.h"
@@ -14,15 +14,15 @@ class Win32Window
 	: public Win32WindowBase
 {
 public:
-	/// ‰Šú‰»ƒf[ƒ^
+	/// åˆæœŸåŒ–ãƒ‡ãƒ¼ã‚¿
 	struct SettingData
 	{
-		const TCHAR*	        TitleText;		///< ƒEƒBƒ“ƒhƒEƒ^ƒCƒgƒ‹‚Ì•¶š—ñ
-		int				        Width;			///< ƒNƒ‰ƒCƒAƒ“ƒg—Ìˆæ‚Ì•
-		int				        Height;			///< ƒNƒ‰ƒCƒAƒ“ƒg—Ìˆæ‚Ì‚‚³
-		bool			        Fullscreen;		///< ƒtƒ‹ƒXƒNƒŠ[ƒ“ƒ‚[ƒh‚Å‰Šú‰»‚·‚éê‡ true
-		const TCHAR*	        WinClassName;   ///< ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX‚Ì–¼‘O ‚Ü‚½‚Í NULL ( NULL ‚Ìê‡AL"_LNote_" ‚ªg‚í‚ê‚é )
-		int                     IconResourceID; ///< ƒ^ƒCƒgƒ‹ƒo[‚ÌƒAƒCƒRƒ“¯•Êq (IDI_ICON1 “™)
+		const TCHAR*	        TitleText;		///< ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¿ã‚¤ãƒˆãƒ«ã®æ–‡å­—åˆ—
+		int				        Width;			///< ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆé ˜åŸŸã®å¹…
+		int				        Height;			///< ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆé ˜åŸŸã®é«˜ã•
+		bool			        Fullscreen;		///< ãƒ•ãƒ«ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ãƒ¢ãƒ¼ãƒ‰ã§åˆæœŸåŒ–ã™ã‚‹å ´åˆ true
+		const TCHAR*	        WinClassName;   ///< ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ã®åå‰ ã¾ãŸã¯ NULL ( NULL ã®å ´åˆã€L"_LNote_" ãŒä½¿ã‚ã‚Œã‚‹ )
+		int                     IconResourceID; ///< ã‚¿ã‚¤ãƒˆãƒ«ãƒãƒ¼ã®ã‚¢ã‚¤ã‚³ãƒ³è­˜åˆ¥å­ (IDI_ICON1 ç­‰)
 		bool					Resizable;
 	};
 
@@ -52,15 +52,15 @@ private:
 	static LRESULT CALLBACK StaticWndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
 private:
-	String		mTitleText;			///< ƒEƒBƒ“ƒhƒEƒ^ƒCƒgƒ‹‚Ì•¶š—ñ    
-	Size		mClientSize;        ///< ƒNƒ‰ƒCƒAƒ“ƒg—Ìˆæ‚Ì‘å‚«‚³
-	int			mOrginalWidth;      ///< initialize() ‚Ü‚½‚Í setSize() ‚Åİ’è‚³‚ê‚½ƒNƒ‰ƒCƒAƒ“ƒg—Ìˆæ‚Ì•
-	int			mOrginalHeight;     ///< initialize() ‚Ü‚½‚Í setSize() ‚Åİ’è‚³‚ê‚½ƒNƒ‰ƒCƒAƒ“ƒg—Ìˆæ‚Ì‚‚³
-	HWND		mWindowHandle;		///< ƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹
-	RECT		mWindowRect;		///< ƒEƒBƒ“ƒhƒE—Ìˆæ
-	HACCEL		mAccelerators;      ///< ƒAƒNƒZƒ‰ƒŒ[ƒ^ (Alt+Enter ‚ÌŒx‰¹‘Îô‚Ì‚½‚ß‚Ég‚Á‚Ä‚é)
-	DWORD		mWindowedStyle;		///< ƒEƒBƒ“ƒhƒEƒ‚[ƒh‚ÌƒXƒ^ƒCƒ‹
-	bool		mFullScreen;        ///< ƒtƒ‹ƒXƒNƒŠ[ƒ“ƒ‚[ƒh ( —p‚ÌƒXƒ^ƒCƒ‹ ) ‚Ìê‡ true
+	String		mTitleText;			///< ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¿ã‚¤ãƒˆãƒ«ã®æ–‡å­—åˆ—    
+	Size		mClientSize;        ///< ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆé ˜åŸŸã®å¤§ãã•
+	int			mOrginalWidth;      ///< initialize() ã¾ãŸã¯ setSize() ã§è¨­å®šã•ã‚ŒãŸã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆé ˜åŸŸã®å¹…
+	int			mOrginalHeight;     ///< initialize() ã¾ãŸã¯ setSize() ã§è¨­å®šã•ã‚ŒãŸã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆé ˜åŸŸã®é«˜ã•
+	HWND		mWindowHandle;		///< ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ«
+	RECT		mWindowRect;		///< ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦é ˜åŸŸ
+	HACCEL		mAccelerators;      ///< ã‚¢ã‚¯ã‚»ãƒ©ãƒ¬ãƒ¼ã‚¿ (Alt+Enter ã®è­¦å‘ŠéŸ³å¯¾ç­–ã®ãŸã‚ã«ä½¿ã£ã¦ã‚‹)
+	DWORD		mWindowedStyle;		///< ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ¢ãƒ¼ãƒ‰æ™‚ã®ã‚¹ã‚¿ã‚¤ãƒ«
+	bool		mFullScreen;        ///< ãƒ•ãƒ«ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ãƒ¢ãƒ¼ãƒ‰ ( ç”¨ã®ã‚¹ã‚¿ã‚¤ãƒ« ) ã®å ´åˆ true
 
 };
 

@@ -1,4 +1,4 @@
-
+ï»¿
 #include "../Internal.h"
 #include "../../include/Lumino/IO/PathName.h"
 #include "../../include/Lumino/IO/DirectoryUtils.h"
@@ -22,7 +22,7 @@ Array<String> DirectoryUtils::GetFiles(const TCHAR* drPath, const TCHAR* pattern
 		dirPathKey.Append(_T("*"));
 	}
 
-    // ŒŸõŠJn
+    // æ¤œç´¢é–‹å§‹
 	WIN32_FIND_DATA fd;
 	HANDLE h = ::FindFirstFile(dirPathKey.GetCStr(), &fd);
 	if (h == INVALID_HANDLE_VALUE)
@@ -30,7 +30,7 @@ Array<String> DirectoryUtils::GetFiles(const TCHAR* drPath, const TCHAR* pattern
 		DWORD dwError = ::GetLastError();
 		if (dwError == ERROR_FILE_NOT_FOUND ||
 			dwError == ERROR_NO_MORE_FILES){
-			// ‚±‚ê‚ç‚Í‹–‰ÂB‹ó‚Ì”z—ñ‚ğ•Ô‚·B
+			// ã“ã‚Œã‚‰ã¯è¨±å¯ã€‚ç©ºã®é…åˆ—ã‚’è¿”ã™ã€‚
 			return fileList;
 		}
 		else {
@@ -41,17 +41,17 @@ Array<String> DirectoryUtils::GetFiles(const TCHAR* drPath, const TCHAR* pattern
     do
 	{
         if ( fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) {
-            // ƒfƒBƒŒƒNƒgƒŠ‚Ìê‡
+            // ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®å ´åˆ
         }
         else {
-            // ƒtƒ@ƒCƒ‹‚Ìê‡
+            // ãƒ•ã‚¡ã‚¤ãƒ«ã®å ´åˆ
 			fileList.Add(dirPatternPath + fd.cFileName);
         }
 
-		// Ÿ‚Ìƒtƒ@ƒCƒ‹‚ğŒŸõ‚·‚é
+		// æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ¤œç´¢ã™ã‚‹
 	} while (::FindNextFile(h, &fd));
 
-	// I—¹
+	// çµ‚äº†
 	::FindClose(h);
 	return fileList;
 }

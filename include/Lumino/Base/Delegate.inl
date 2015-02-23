@@ -1,9 +1,9 @@
-
+ï»¿
 template < LN_DELEGATE_TEMPLATE_ARGS >
 class LN_DELEGATE_CLASS_NAME
 {
 private:
-	/// ŠÖ”ƒ|ƒCƒ“ƒ^‚ğ•Û‚·‚é“à•”ƒNƒ‰ƒX‚ÌŠî’ê
+	/// é–¢æ•°ãƒã‚¤ãƒ³ã‚¿ã‚’ä¿æŒã™ã‚‹å†…éƒ¨ã‚¯ãƒ©ã‚¹ã®åŸºåº•
 	class DelegateHolderBase
 		: public RefObject
 	{
@@ -11,7 +11,7 @@ private:
 		virtual void call( LN_DELEGATE_ARGS_DECL ) const = 0;
 	};
 
-	/// DelegateHolderStatic (static ŠÖ”ŒÄ‚Ño‚µ‚ÌÀ‘Ì)
+	/// DelegateHolderStatic (static é–¢æ•°å‘¼ã³å‡ºã—æ™‚ã®å®Ÿä½“)
 	class DelegateHolderStatic
 		: public DelegateHolderBase
 	{
@@ -32,7 +32,7 @@ private:
 		}
 	};
 
-	/// DelegateHolderDynamics (ƒƒ“ƒoŠÖ”ŒÄ‚Ño‚µ‚ÌÀ‘Ì)
+	/// DelegateHolderDynamics (ãƒ¡ãƒ³ãƒé–¢æ•°å‘¼ã³å‡ºã—æ™‚ã®å®Ÿä½“)
 	template < typename T >
 	class DelegateHolderDynamics
 		: public DelegateHolderBase

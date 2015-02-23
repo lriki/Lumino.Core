@@ -1,4 +1,4 @@
-
+ï»¿
 #include "../Internal.h"
 #include "../../include/Lumino/Base/StringUtils.h"
 #include "../../include/Lumino/IO/PathUtils.h"
@@ -13,22 +13,22 @@ template<typename TChar>
 bool PathUtils::IsRootPath(const TChar* path)
 {
 #ifdef LN_WIN32
-	// windows ‚Ìê‡
+	// windows ã®å ´åˆ
 	size_t len = StringUtils::StrLen(path);
 	if (IsAbsolutePath(path) && len >= 2)
 	{
 		if (path[len - 1] == VolumeSeparatorChar) {
-			return true;	// ––”ö‚ª : ‚Å‚ ‚é ¨ "C:" “™
+			return true;	// æœ«å°¾ãŒ : ã§ã‚ã‚‹ â†’ "C:" ç­‰
 		}
 		if (path[len - 2] == VolumeSeparatorChar &&
 			(path[len - 1] == DirectorySeparatorChar || path[len - 1] == AltDirectorySeparatorChar))
 		{
-			return true;	// ––”ö‚ª \ ‚© / ‚ÅA‚»‚Ì‘O‚ª : ‚Å‚ ‚é ¨ "C:/" “™
+			return true;	// æœ«å°¾ãŒ \ ã‹ / ã§ã€ãã®å‰ãŒ : ã§ã‚ã‚‹ â†’ "C:/" ç­‰
 		}
 	}
 	return false;
 #else
-	// UNIX ‚Ìê‡A/ ‚¾‚¯‚Å‚ ‚é‚©
+	// UNIX ã®å ´åˆã€/ ã ã‘ã§ã‚ã‚‹ã‹
 	size_t len = StringUtils::StrLen(path);
 	if (len == 1 && path[0] == '/') {
 		return true;
@@ -47,10 +47,10 @@ bool PathUtils::IsAbsolutePath(const TChar* path)
 {
 	LN_THROW(path != NULL, ArgumentException);
 
-	// UNIX ƒ‹[ƒgƒpƒX
+	// UNIX ãƒ«ãƒ¼ãƒˆãƒ‘ã‚¹
 	if (path[0] == '/') return true;
 
-	// Windows ƒhƒ‰ƒCƒuƒŒƒ^[ (: ‚ÌŸ‚ª / ‚Å‚ ‚é‚©)
+	// Windows ãƒ‰ãƒ©ã‚¤ãƒ–ãƒ¬ã‚¿ãƒ¼ (: ã®æ¬¡ãŒ / ã§ã‚ã‚‹ã‹)
 	for (; *path; ++path) {
 		if (path[0] == ':') {
 			return true;
@@ -73,17 +73,17 @@ BasicString<TChar> PathUtils::GetDirectoryPath(const TChar* path)
 	LN_THROW(path != NULL, ArgumentException);
 
 
-	/* QlF‘¼‚Ìƒ‰ƒCƒuƒ‰ƒŠ‚ÌA‹ó•¶š‚âƒZƒpƒŒ[ƒ^‚ª–³‚¢‚È‚Ç‚ÅeƒfƒBƒŒƒNƒgƒŠ‚ªæ‚ê‚È‚¢‚Ì“®ì
+	/* å‚è€ƒï¼šä»–ã®ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®ã€ç©ºæ–‡å­—ã‚„ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿ãŒç„¡ã„ãªã©ã§è¦ªãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãŒå–ã‚Œãªã„æ™‚ã®å‹•ä½œ
 									"C:"	"C:/"	"C:/file"
-	- Qt (QFileInfo)			c	"C:"	"C:/"	"C:/"
-	- wxWidgets (wxFileName)	c
-	- Python (os.path)			c
-	- Ruby (Pathname)			c	"C:.."	"C:/"	"C:/"
-	- Java (os.nio.Paths)		c 
-	- C# (Path, Uri)			c	""		"C:/"	"C:/"
+	- Qt (QFileInfo)			â€¦	"C:"	"C:/"	"C:/"
+	- wxWidgets (wxFileName)	â€¦
+	- Python (os.path)			â€¦
+	- Ruby (Pathname)			â€¦	"C:.."	"C:/"	"C:/"
+	- Java (os.nio.Paths)		â€¦ 
+	- C# (Path, Uri)			â€¦	""		"C:/"	"C:/"
 	*/
 
-	// Œã‚ë‚©‚ç‘O‚É’²‚×‚ÄAÅ‰‚É \\ ‚© / ‚ªŒ©‚Â‚©‚é‚Æ‚±‚ë‚ğ’T‚·
+	// å¾Œã‚ã‹ã‚‰å‰ã«èª¿ã¹ã¦ã€æœ€åˆã« \\ ã‹ / ãŒè¦‹ã¤ã‹ã‚‹ã¨ã“ã‚ã‚’æ¢ã™
 	int pos = StringUtils::StrLen(path);
 	TChar lastSep = 0;
 	for ( ; pos >= 0; --pos ) {
@@ -97,7 +97,7 @@ BasicString<TChar> PathUtils::GetDirectoryPath(const TChar* path)
 	if (pos >= 0) {
 		str.assign(path, pos);
 
-		// ƒ‹[ƒgƒpƒX‚Ì––”ö‚Í•K‚¸ƒZƒpƒŒ[ƒ^‚É‚·‚é
+		// ãƒ«ãƒ¼ãƒˆãƒ‘ã‚¹ã®æœ«å°¾ã¯å¿…ãšã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿ã«ã™ã‚‹
 		if (IsRootPath(str.GetCStr())) {
 			if ((*str.rbegin() != DirectorySeparatorChar) && (*str.rbegin() != AltDirectorySeparatorChar)) {
 				if (lastSep != 0) {
@@ -111,7 +111,7 @@ BasicString<TChar> PathUtils::GetDirectoryPath(const TChar* path)
 
 	}
 	else {
-		// ƒZƒpƒŒ[ƒ^‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½B‚½‚¾‚µAƒ‹[ƒgƒpƒX‚Ìê‡‚Í‹ó•¶š‚É‚µ‚È‚¢B
+		// ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿ãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸã€‚ãŸã ã—ã€ãƒ«ãƒ¼ãƒˆãƒ‘ã‚¹ã®å ´åˆã¯ç©ºæ–‡å­—ã«ã—ãªã„ã€‚
 		if (IsRootPath(path)) {
 			str = path;
 		}
@@ -133,7 +133,7 @@ BasicString<TChar> PathUtils::GetFileName(const TChar* path)
 	int len = StringUtils::StrLen(path);
 	int pos = len - 1;
 
-	// Œã‚ë‚©‚ç‘O‚É’²‚×‚ÄAÅ‰‚ÉƒZƒpƒŒ[ƒ^‚ªŒ©‚Â‚©‚é‚Æ‚±‚ë‚ğ’T‚·
+	// å¾Œã‚ã‹ã‚‰å‰ã«èª¿ã¹ã¦ã€æœ€åˆã«ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿ãŒè¦‹ã¤ã‹ã‚‹ã¨ã“ã‚ã‚’æ¢ã™
 	for ( ; pos >= 0; --pos ) {
 		if ( path[pos] == DirectorySeparatorChar || path[pos] == AltDirectorySeparatorChar || path[pos] == VolumeSeparatorChar ) {
 			return BasicString<TChar>(&path[pos + 1], len - pos - 1);
@@ -182,12 +182,12 @@ void PathUtils::CanonicalizePath(const wchar_t* srcPath, wchar_t* outPath)
 //template void PathUtils::CanonicalizePath<wchar_t>(const TChar* srcPath, TChar* outPath);
 
 /**
-@brief		2‚Â‚ÌƒpƒX•¶š—ñ‚ğ”äŠr‚·‚é
-@param[in]	path1	: ƒpƒX•¶š—ñ
-@param[in]	path2	: ƒpƒX•¶š—ñ
-@return		•À‚×‘Ö‚¦‡˜‚ğ¦‚·®” (0 ‚Åˆê’v)
-@details	DirectorySeparatorChar ‚Æ AltDirectorySeparatorChar ‚Í“™‰¿‚Æ‚İ‚È‚µ‚Ü‚·B
-‚Ü‚½A‘å•¶š¬•¶š‚ğ‹æ•Ê‚µ‚Ü‚¹‚ñB
+@brief		2ã¤ã®ãƒ‘ã‚¹æ–‡å­—åˆ—ã‚’æ¯”è¼ƒã™ã‚‹
+@param[in]	path1	: ãƒ‘ã‚¹æ–‡å­—åˆ—
+@param[in]	path2	: ãƒ‘ã‚¹æ–‡å­—åˆ—
+@return		ä¸¦ã¹æ›¿ãˆé †åºã‚’ç¤ºã™æ•´æ•° (0 ã§ä¸€è‡´)
+@details	DirectorySeparatorChar ã¨ AltDirectorySeparatorChar ã¯ç­‰ä¾¡ã¨ã¿ãªã—ã¾ã™ã€‚
+ã¾ãŸã€å¤§æ–‡å­—å°æ–‡å­—ã‚’åŒºåˆ¥ã—ã¾ã›ã‚“ã€‚
 */
 //-----------------------------------------------------------------------------
 //
@@ -195,7 +195,7 @@ void PathUtils::CanonicalizePath(const wchar_t* srcPath, wchar_t* outPath)
 template<typename TChar>
 int PathUtils::Compare(const TChar* path1, const TChar* path2)
 {
-	// ‚Ü‚¸‚Í³‹K‰»BƒZƒLƒ…ƒŠƒeƒB“I„§–€
+	// ã¾ãšã¯æ­£è¦åŒ–ã€‚ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£çš„æ¨å¥¨äº‹é …
 	// https://www.jpcert.or.jp/java-rules/ids02-j.html
 	TChar absPath1[LN_MAX_PATH + 1];
 	TChar absPath2[LN_MAX_PATH + 1];
@@ -208,16 +208,16 @@ int PathUtils::Compare(const TChar* path1, const TChar* path2)
 	TChar* s2 = absPath2;
 
 #ifdef LN_WIN32
-	// ‘å•¶š¬•¶š‹æ•Ê‚¹‚¸A•¶š‚ª“™‚µ‚¢ŠÔŒJ‚è•Ô‚·
+	// å¤§æ–‡å­—å°æ–‡å­—åŒºåˆ¥ã›ãšã€æ–‡å­—ãŒç­‰ã—ã„é–“ç¹°ã‚Šè¿”ã™
 	while (*s1 && *s2)
 	{
 		if (StringUtils::ToUpper(*s1) != StringUtils::ToUpper(*s2))
 		{
-			// ƒZƒpƒŒ[ƒ^‚Ì·‚Í‹æ•Ê‚µ‚È‚¢
+			// ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿ã®å·®ã¯åŒºåˆ¥ã—ãªã„
 			if ((*s1 == DirectorySeparatorChar || *s1 == AltDirectorySeparatorChar) &&
 				(*s2 == DirectorySeparatorChar || *s2 == AltDirectorySeparatorChar)
 				){
-				// Œp‘±
+				// ç¶™ç¶š
 			}
 			else {
 				return ((StringUtils::ToUpper(*s1) - StringUtils::ToUpper(*s2)));
@@ -233,11 +233,11 @@ int PathUtils::Compare(const TChar* path1, const TChar* path2)
 	{
 		if (*s1 != *s2)
 		{
-			// ƒZƒpƒŒ[ƒ^‚Ì·‚Í‹æ•Ê‚µ‚È‚¢
+			// ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿ã®å·®ã¯åŒºåˆ¥ã—ãªã„
 			if ((*s1 == DirectorySeparatorChar || *s1 == AltDirectorySeparatorChar) &&
 				(*s2 == DirectorySeparatorChar || *s2 == AltDirectorySeparatorChar)
 				){
-				// Œp‘±
+				// ç¶™ç¶š
 			}
 			else {
 				return ((StringUtils::ToUpper(*s1) - StringUtils::ToUpper(*s2)));

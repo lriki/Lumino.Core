@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 
 #include "../Base/Common.h"
@@ -7,24 +7,24 @@ namespace Lumino
 {
 
 /**
-	@brief	Œ»İ‚ÌŠÂ‹«Eƒvƒ‰ƒbƒgƒtƒH[ƒ€‚ÉŠÖ‚·‚éî•ñ
+	@brief	ç¾åœ¨ã®ç’°å¢ƒãƒ»ãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ ã«é–¢ã™ã‚‹æƒ…å ±
 */
 class Environment
 {
 public:
 
 	/**
-		@brief		ƒVƒXƒeƒ€‹N“®‚©‚ç‚ÌŠÔ‚ğ ms ’PˆÊ‚Åæ“¾‚µ‚Ü‚·B
+		@brief		ã‚·ã‚¹ãƒ†ãƒ èµ·å‹•ã‹ã‚‰ã®æ™‚é–“ã‚’ ms å˜ä½ã§å–å¾—ã—ã¾ã™ã€‚
 	*/
 	static uint64_t GetTickCount();
 
 	/**
-		@brief		ƒVƒXƒeƒ€‹N“®‚©‚ç‚ÌŠÔ‚ğ ns ’PˆÊ‚Åæ“¾‚µ‚Ü‚·B
+		@brief		ã‚·ã‚¹ãƒ†ãƒ èµ·å‹•ã‹ã‚‰ã®æ™‚é–“ã‚’ ns å˜ä½ã§å–å¾—ã—ã¾ã™ã€‚
 	*/
 	static uint64_t GetTickCountNS();
 
 	/**
-		@brief		Œ»İ‚ÌŠÂ‹«‚Å’è‹`‚³‚ê‚Ä‚¢‚é‰üs•¶š—ñ‚ğæ“¾‚µ‚Ü‚·B
+		@brief		ç¾åœ¨ã®ç’°å¢ƒã§å®šç¾©ã•ã‚Œã¦ã„ã‚‹æ”¹è¡Œæ–‡å­—åˆ—ã‚’å–å¾—ã—ã¾ã™ã€‚
 	*/
 	template<typename TChar>
 	static const TChar* GetNewLine();

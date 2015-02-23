@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 
 namespace Lumino
@@ -7,46 +7,46 @@ namespace Platform
 {
 class Window;
 
-/// ƒVƒXƒeƒ€ƒCƒxƒ“ƒg‚Ìí—Ş
+/// ã‚·ã‚¹ãƒ†ãƒ ã‚¤ãƒ™ãƒ³ãƒˆã®ç¨®é¡
 enum EventType
 {
-	EventType_Unknown = 0,		///< •s–¾‚ÈƒCƒxƒ“ƒg
+	EventType_Unknown = 0,		///< ä¸æ˜ãªã‚¤ãƒ™ãƒ³ãƒˆ
 
-	EventType_Quit,				///< ƒAƒvƒŠI—¹—v‹
-	EventType_Close,			///< ƒEƒBƒ“ƒhƒE‚ª•Â‚¶‚ç‚ê‚æ‚¤‚Æ‚µ‚Ä‚¢‚é
-	//EventType_AppActivate,		///< ƒEƒBƒ“ƒhƒE‚ªƒAƒNƒeƒBƒu‚É‚È‚Á‚½
-	//EventType_AppDeactivate = 4,	///< ƒEƒBƒ“ƒhƒE‚ª”ñƒAƒNƒeƒBƒu‚É‚È‚Á‚½
+	EventType_Quit,				///< ã‚¢ãƒ—ãƒªçµ‚äº†è¦æ±‚
+	EventType_Close,			///< ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãŒé–‰ã˜ã‚‰ã‚Œã‚ˆã†ã¨ã—ã¦ã„ã‚‹
+	//EventType_AppActivate,		///< ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãŒã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã«ãªã£ãŸ
+	//EventType_AppDeactivate = 4,	///< ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãŒéã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã«ãªã£ãŸ
 
-	EventType_MouseDown,		///< [MouseEventArgs] ƒ}ƒEƒXƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½
-	EventType_MouseUp,			///< [MouseEventArgs] ƒ}ƒEƒXƒ{ƒ^ƒ“‚ª—£‚³‚ê‚½
-	EventType_MouseMove,		///< [MouseEventArgs] ƒ}ƒEƒX‚ªˆÚ“®‚µ‚½
-	EventType_MouseWheel,		///< [MouseEventArgs] ƒ}ƒEƒXƒzƒC[ƒ‹‚ª‘€ì‚³‚ê‚½
+	EventType_MouseDown,		///< [MouseEventArgs] ãƒã‚¦ã‚¹ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸ
+	EventType_MouseUp,			///< [MouseEventArgs] ãƒã‚¦ã‚¹ãƒœã‚¿ãƒ³ãŒé›¢ã•ã‚ŒãŸ
+	EventType_MouseMove,		///< [MouseEventArgs] ãƒã‚¦ã‚¹ãŒç§»å‹•ã—ãŸ
+	EventType_MouseWheel,		///< [MouseEventArgs] ãƒã‚¦ã‚¹ãƒ›ã‚¤ãƒ¼ãƒ«ãŒæ“ä½œã•ã‚ŒãŸ
 
-	EventType_KeyDown,			///< [MouseEventArgs] ƒL[‰Ÿ‰º
-	EventType_KeyUp,			///< [MouseEventArgs] ƒL[‰Ÿ‚µã‚°
-	//EventType_KeyChar,			///< [MouseEventArgs] •¶š“ü—Í (Ctrl‚âAltƒL[‚ª‰Ÿ‚³‚ê‚¸A“ú–{Œê“ü—Í OFF ‚Ìó‘Ô‚ÅƒL[‚ª‰Ÿ‚³‚êê‡)
+	EventType_KeyDown,			///< [MouseEventArgs] ã‚­ãƒ¼æŠ¼ä¸‹
+	EventType_KeyUp,			///< [MouseEventArgs] ã‚­ãƒ¼æŠ¼ã—ä¸Šã’
+	//EventType_KeyChar,			///< [MouseEventArgs] æ–‡å­—å…¥åŠ› (Ctrlã‚„Altã‚­ãƒ¼ãŒæŠ¼ã•ã‚Œãšã€æ—¥æœ¬èªå…¥åŠ› OFF ã®çŠ¶æ…‹ã§ã‚­ãƒ¼ãŒæŠ¼ã•ã‚Œå ´åˆ)
 
-	//EventType_TOUCH_DOWN = 13,	///< [ LNEvent::Touch ] ‰æ–Ê‚ªƒ^ƒbƒ`‚³‚ê‚½
-	//EventType_TOUCH_UP = 14,	///< [ LNEvent::Touch ] ‰æ–Ê‚©‚ç—£‚³‚ê‚½
-	//EventType_TOUCH_MOVE = 15,	///< [ LNEvent::Touch ] ƒ^ƒbƒ`’†‚ÉˆÚ“®‚µ‚½
+	//EventType_TOUCH_DOWN = 13,	///< [ LNEvent::Touch ] ç”»é¢ãŒã‚¿ãƒƒãƒã•ã‚ŒãŸ
+	//EventType_TOUCH_UP = 14,	///< [ LNEvent::Touch ] ç”»é¢ã‹ã‚‰é›¢ã•ã‚ŒãŸ
+	//EventType_TOUCH_MOVE = 15,	///< [ LNEvent::Touch ] ã‚¿ãƒƒãƒä¸­ã«ç§»å‹•ã—ãŸ
 
-	//EventType_WINDOW_SIZE_CHANGED,		///< ƒEƒBƒ“ƒhƒEƒTƒCƒY‚ª•ÏX‚³‚ê‚½
+	//EventType_WINDOW_SIZE_CHANGED,		///< ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚µã‚¤ã‚ºãŒå¤‰æ›´ã•ã‚ŒãŸ
 
 	//EventType_ANDROID_PAUSED = 101,	///< Android APP_CMD_RESUME
 	//EventType_ANDROID_RESUMED = 102,	///< Android APP_CMD_PAUSE
 };
 
-/// ƒ}ƒEƒXƒ{ƒ^ƒ“
+/// ãƒã‚¦ã‚¹ãƒœã‚¿ãƒ³
 enum MouseButton
 {
-	MouseButton_Left = 0,		///< ¶ƒ{ƒ^ƒ“
-	MouseButton_Right,			///< ‰Eƒ{ƒ^ƒ“
-	MouseButton_Middle,			///< ’†‰›ƒ{ƒ^ƒ“
+	MouseButton_Left = 0,		///< å·¦ãƒœã‚¿ãƒ³
+	MouseButton_Right,			///< å³ãƒœã‚¿ãƒ³
+	MouseButton_Middle,			///< ä¸­å¤®ãƒœã‚¿ãƒ³
 
-	MouseButton_None = 0xff		///< –³Œø‚Ü‚½‚Í‰Ÿ‚³‚ê‚Ä‚¢‚È‚¢‚±‚Æ‚ğ¦‚·
+	MouseButton_None = 0xff		///< ç„¡åŠ¹ã¾ãŸã¯æŠ¼ã•ã‚Œã¦ã„ãªã„ã“ã¨ã‚’ç¤ºã™
 };
 
-/// ƒL[ƒR[ƒh (NumPad ‚ÍƒTƒ|[ƒg‚µ‚Ä‚¢‚È‚¢)
+/// ã‚­ãƒ¼ã‚³ãƒ¼ãƒ‰ (NumPad ã¯ã‚µãƒãƒ¼ãƒˆã—ã¦ã„ãªã„)
 enum Key
 {
 	Key_Unknown = 0,
@@ -102,7 +102,7 @@ enum Key
 	Key_F11,
 	Key_F12,
 
-	Key_Space,	// 0x20 = ' ' (ƒXƒy[ƒX)
+	Key_Space,	// 0x20 = ' ' (ã‚¹ãƒšãƒ¼ã‚¹)
 	Key_Escape,
 	Key_Up,
 	Key_Down,
@@ -124,15 +124,15 @@ enum Key
 	Key_Home,
 	Key_End,
 
-	Key_Colon,		///< :	[”ñ„§ GLFW‚Å‚Í;]
-	Key_SemiColon,	///< ;	[”ñ„§ GLFW‚Å‚Í=]
+	Key_Colon,		///< :	[éæ¨å¥¨ GLFWã§ã¯;]
+	Key_SemiColon,	///< ;	[éæ¨å¥¨ GLFWã§ã¯=]
 	Key_Comma,		///< ,
 	Key_Period,		///< .
 	Key_Slash,		///< /
 	Key_Minus,		///< -
-	Key_BackSlash,	///< \(ƒoƒbƒNƒXƒ‰ƒbƒVƒ…) [”ñ„§ GLFW‚Å‚ÍNOWORD2]
-	Key_Yen,		///< \(BaskSpaceƒL[‚Ì¶‚Ì\ƒL[) [”ñ„§ GLFW‚Å‚ÍI]
-	Key_Caret,		///< ^ [”ñ„§ GLFW‚Å‚ÍGLFW_KEY_APOSTROPHE(')]
+	Key_BackSlash,	///< \(ãƒãƒƒã‚¯ã‚¹ãƒ©ãƒƒã‚·ãƒ¥) [éæ¨å¥¨ GLFWã§ã¯NOWORD2]
+	Key_Yen,		///< \(BaskSpaceã‚­ãƒ¼ã®å·¦ã®\ã‚­ãƒ¼) [éæ¨å¥¨ GLFWã§ã¯I]
+	Key_Caret,		///< ^ [éæ¨å¥¨ GLFWã§ã¯GLFW_KEY_APOSTROPHE(')]
 	Key_LBracket,	///< [
 	Key_RBracket,	///< ]
 
@@ -143,45 +143,45 @@ enum Key
 
 
 /**
-	@brief		ƒCƒxƒ“ƒgˆø”
-	@note		ˆÈ‘O‚Í EventArgs ƒNƒ‰ƒX‚©‚ç”h¶‚µ‚½ MouseEventArgs ‚â KeyEventArgs ‚ğ’è‹`‚·‚éƒXƒ^ƒCƒ‹‚ğæ‚Á‚Ä‚¢‚½B
-				‚µ‚©‚µAƒƒCƒ“ƒXƒŒƒbƒh‚Æ UI ƒXƒŒƒbƒh‚ğ•ª‚¯‚éê‡ƒCƒxƒ“ƒg‚Íˆê“xƒLƒ…[‚ÉÏ‚Ş•K—v‚ª‚ ‚èA
-				‚»‚Ì‚½‚ß‚É‚Íƒƒ‚ƒŠ‚Ì“®“IŠm•Û(new)‚ª•K{‚Æ‚È‚éB•p”É‚É”ò‚ñ‚Å‚­‚éƒƒbƒZ[ƒW‚É‘Î‚µ‚Ä new ‚Í‚Å‚«‚ê‚Î‚â‚è‚½‚­‚È‚¢B
-				new ‚µ‚È‚¢ê‡‚É‚Å‚«‚È‚­‚È‚é‚Ì‚ÍŒp³‚ğg‚Á‚½ƒIƒuƒWƒFƒNƒgwŒü“I‚Èƒ†[ƒU[Šg’£ƒCƒxƒ“ƒgˆø”‚ÌÀ‘•B
-				c‚Å‚ ‚é‚ªA•Ê‚Ì Lumino.GUI ‚Å‚ ‚ê‚Î‚Æ‚à‚©‚­APlatform ƒCƒxƒ“ƒg‚ğŠg’£‚µ‚½‚¢A‚µ‚©‚à‚±‚Ìƒ‰ƒCƒuƒ‰ƒŠ‚ğg‚Á‚ÄA
-				‚Æ‚¢‚¤‚±‚Æ‚ª‚ ‚é‚Ì‚©‚Æ‚¢‚¤‚ÆA‚Ü‚¸‚È‚¢‚Æv‚í‚ê‚éB
-				—á‚¦‚ ‚Á‚½‚Æ‚µ‚Ä‚à‘Š“–ƒŒƒAƒP[ƒX‚È‚Ì‚ÅAnew ‚ÌƒRƒXƒg‚Æ“V”‰‚ÉŠ|‚¯‚é‚Æ‹p‰º‚·‚é‚×‚«Bƒ†[ƒU[ƒf[ƒ^‚Æ‚µ‚Ä void* ‚Á‚Ä‚¨‚­‚¾‚¯‚Å\•ªB
+	@brief		ã‚¤ãƒ™ãƒ³ãƒˆå¼•æ•°
+	@note		ä»¥å‰ã¯ EventArgs ã‚¯ãƒ©ã‚¹ã‹ã‚‰æ´¾ç”Ÿã—ãŸ MouseEventArgs ã‚„ KeyEventArgs ã‚’å®šç¾©ã™ã‚‹ã‚¹ã‚¿ã‚¤ãƒ«ã‚’å–ã£ã¦ã„ãŸã€‚
+				ã—ã‹ã—ã€ãƒ¡ã‚¤ãƒ³ã‚¹ãƒ¬ãƒƒãƒ‰ã¨ UI ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’åˆ†ã‘ã‚‹å ´åˆã‚¤ãƒ™ãƒ³ãƒˆã¯ä¸€åº¦ã‚­ãƒ¥ãƒ¼ã«ç©ã‚€å¿…è¦ãŒã‚ã‚Šã€
+				ãã®ãŸã‚ã«ã¯ãƒ¡ãƒ¢ãƒªã®å‹•çš„ç¢ºä¿(new)ãŒå¿…é ˆã¨ãªã‚‹ã€‚é »ç¹ã«é£›ã‚“ã§ãã‚‹ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã«å¯¾ã—ã¦ new ã¯ã§ãã‚Œã°ã‚„ã‚ŠãŸããªã„ã€‚
+				new ã—ãªã„å ´åˆã«ã§ããªããªã‚‹ã®ã¯ç¶™æ‰¿ã‚’ä½¿ã£ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæŒ‡å‘çš„ãªãƒ¦ãƒ¼ã‚¶ãƒ¼æ‹¡å¼µã‚¤ãƒ™ãƒ³ãƒˆå¼•æ•°ã®å®Ÿè£…ã€‚
+				â€¦ã§ã‚ã‚‹ãŒã€åˆ¥ã® Lumino.GUI ã§ã‚ã‚Œã°ã¨ã‚‚ã‹ãã€Platform ã‚¤ãƒ™ãƒ³ãƒˆã‚’æ‹¡å¼µã—ãŸã„ã€ã—ã‹ã‚‚ã“ã®ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’ä½¿ã£ã¦ã€
+				ã¨ã„ã†ã“ã¨ãŒã‚ã‚‹ã®ã‹ã¨ã„ã†ã¨ã€ã¾ãšãªã„ã¨æ€ã‚ã‚Œã‚‹ã€‚
+				ä¾‹ãˆã‚ã£ãŸã¨ã—ã¦ã‚‚ç›¸å½“ãƒ¬ã‚¢ã‚±ãƒ¼ã‚¹ãªã®ã§ã€new ã®ã‚³ã‚¹ãƒˆã¨å¤©ç§¤ã«æ›ã‘ã‚‹ã¨å´ä¸‹ã™ã‚‹ã¹ãã€‚ãƒ¦ãƒ¼ã‚¶ãƒ¼ãƒ‡ãƒ¼ã‚¿ã¨ã—ã¦ void* æŒã£ã¦ãŠãã ã‘ã§ååˆ†ã€‚
 */
 struct EventArgs
 {
-	EventType	Type;			///< ƒCƒxƒ“ƒg‚Ìí—Ş
-	Window*		Sender;			///< ƒCƒxƒ“ƒg‚Ì‘—MŒ³ƒEƒBƒ“ƒhƒE
+	EventType	Type;			///< ã‚¤ãƒ™ãƒ³ãƒˆã®ç¨®é¡
+	Window*		Sender;			///< ã‚¤ãƒ™ãƒ³ãƒˆã®é€ä¿¡å…ƒã‚¦ã‚£ãƒ³ãƒ‰ã‚¦
 
-	/// ƒ}ƒEƒXƒCƒxƒ“ƒg‚Ìˆø”
+	/// ãƒã‚¦ã‚¹ã‚¤ãƒ™ãƒ³ãƒˆã®å¼•æ•°
 	union 
 	{
-		MouseButton	Button;		///< ƒ{ƒ^ƒ“”Ô†
-		short		Delta;		///< ƒ}ƒEƒXƒzƒC[ƒ‹‚Ì‰ñ“]‰ñ” (windows ‚Å‚Í 1 ‰ñ‚É‚Â‚« 120 ‚ªŠi”[‚³‚ê‚é‚ªA‚±‚ê‚Í³‚Ü‚½‚Í•‰‚Ì‰ñ”‚ÅA1’PˆÊ)
-		short		X;			///< ƒ}ƒEƒXƒCƒxƒ“ƒg¶¬‚Ìƒ}ƒEƒX‚Ì X À•W (ƒNƒ‰ƒCƒAƒ“ƒg—ÌˆæŠO‚Í -1)
-		short		Y;			///< ƒ}ƒEƒXƒCƒxƒ“ƒg¶¬‚Ìƒ}ƒEƒX‚Ì Y À•W (ƒNƒ‰ƒCƒAƒ“ƒg—ÌˆæŠO‚Í -1)
-		short		MoveX;	    ///< X À•W‚ÌˆÚ“®—Ê
-		short		MoveY;      ///< Y À•W‚ÌˆÚ“®—Ê
+		MouseButton	Button;		///< ãƒœã‚¿ãƒ³ç•ªå·
+		short		Delta;		///< ãƒã‚¦ã‚¹ãƒ›ã‚¤ãƒ¼ãƒ«ã®å›è»¢å›æ•° (windows ã§ã¯ 1 å›ã«ã¤ã 120 ãŒæ ¼ç´ã•ã‚Œã‚‹ãŒã€ã“ã‚Œã¯æ­£ã¾ãŸã¯è² ã®å›æ•°ã§ã€1å˜ä½)
+		short		X;			///< ãƒã‚¦ã‚¹ã‚¤ãƒ™ãƒ³ãƒˆç”Ÿæˆæ™‚ã®ãƒã‚¦ã‚¹ã® X åº§æ¨™ (ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆé ˜åŸŸå¤–ã¯ -1)
+		short		Y;			///< ãƒã‚¦ã‚¹ã‚¤ãƒ™ãƒ³ãƒˆç”Ÿæˆæ™‚ã®ãƒã‚¦ã‚¹ã® Y åº§æ¨™ (ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆé ˜åŸŸå¤–ã¯ -1)
+		short		MoveX;	    ///< X åº§æ¨™ã®ç§»å‹•é‡
+		short		MoveY;      ///< Y åº§æ¨™ã®ç§»å‹•é‡
 
 	} Mouse;
 
-	/// ƒL[ƒ{[ƒhƒCƒxƒ“ƒg‚Ìˆø”
+	/// ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ã‚¤ãƒ™ãƒ³ãƒˆã®å¼•æ•°
 	union
 	{
-		Key			KeyCode;	///< ƒL[ƒR[ƒh
-		bool		IsAlt;		///< Alt ƒL[‚ª‰Ÿ‚³‚ê‚Ä‚¢‚éê‡ true
-		bool		IsShift;	///< Shift ƒL[‚ª‰Ÿ‚³‚ê‚Ä‚¢‚éê‡ true
-		bool		IsControl;	///< Ctrl ƒL[‚ª‰Ÿ‚³‚ê‚Ä‚¢‚éê‡ true
+		Key			KeyCode;	///< ã‚­ãƒ¼ã‚³ãƒ¼ãƒ‰
+		bool		IsAlt;		///< Alt ã‚­ãƒ¼ãŒæŠ¼ã•ã‚Œã¦ã„ã‚‹å ´åˆ true
+		bool		IsShift;	///< Shift ã‚­ãƒ¼ãŒæŠ¼ã•ã‚Œã¦ã„ã‚‹å ´åˆ true
+		bool		IsControl;	///< Ctrl ã‚­ãƒ¼ãŒæŠ¼ã•ã‚Œã¦ã„ã‚‹å ´åˆ true
 
 	} Key;
 
 public:
 
-	/// í—Ş‚Æ‘—MŒ³ƒEƒBƒ“ƒhƒE‚ğw’è‚µ‚Ä‰Šú‰»‚·‚é
+	/// ç¨®é¡ã¨é€ä¿¡å…ƒã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’æŒ‡å®šã—ã¦åˆæœŸåŒ–ã™ã‚‹
 	EventArgs(EventType type, Window* sender) { Type = type; Sender = sender; }
 	EventArgs() {}
 };

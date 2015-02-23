@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../Base/String.h"
 #include "../IO/PathName.h"
@@ -9,30 +9,30 @@ namespace Lumino
 class TestUtils
 {
 public:
-	/// baseFilePath ‚Ìƒtƒ@ƒCƒ‹‚Æ“¯‚¶ƒfƒBƒŒƒNƒgƒŠ‚Ì fileName ‚ğw‚·ƒpƒX‚ğ“¾‚é
+	/// baseFilePath ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¨åŒã˜ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã® fileName ã‚’æŒ‡ã™ãƒ‘ã‚¹ã‚’å¾—ã‚‹
 	static String GetFilePath(const char* baseFilePath, const char* fileName);
 
-	/// baseFilePath ‚Ìƒtƒ@ƒCƒ‹‚Æ“¯‚¶ƒfƒBƒŒƒNƒgƒŠ‚Ì fileName ‚ğw‚·ƒpƒX‚ğ“¾‚é
+	/// baseFilePath ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¨åŒã˜ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã® fileName ã‚’æŒ‡ã™ãƒ‘ã‚¹ã‚’å¾—ã‚‹
 	static PathName GetDirPath(const char* baseFilePath);
 
-	/// baseFilePath ‚Ìƒtƒ@ƒCƒ‹‚Æ“¯‚¶ƒfƒBƒŒƒNƒgƒŠ‚Ì fileName ‚ğw‚·ƒpƒX‚ğ“¾‚é
+	/// baseFilePath ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¨åŒã˜ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã® fileName ã‚’æŒ‡ã™ãƒ‘ã‚¹ã‚’å¾—ã‚‹
 	static PathNameA GetFilePathA(const char* baseFilePath, const char* fileName);
 	static PathNameW GetFilePathW(const char* baseFilePath, const wchar_t* fileName);
 
-	/// 2 ‚Â‚Ì”z—ñ‚ğƒoƒCƒg’PˆÊ‚Å”äŠr‚·‚é
+	/// 2 ã¤ã®é…åˆ—ã‚’ãƒã‚¤ãƒˆå˜ä½ã§æ¯”è¼ƒã™ã‚‹
 	static bool CheckArrays(const void* ary1, const void* ary2, size_t count);
 };
 
-// __FILE__ ‚Ì‚ ‚éƒtƒHƒ‹ƒ_ƒpƒX (PathName) ‚ğæ“¾‚·‚é
+// __FILE__ ã®ã‚ã‚‹ãƒ•ã‚©ãƒ«ãƒ€ãƒ‘ã‚¹ (PathName) ã‚’å–å¾—ã™ã‚‹
 #define LN_TEST_GET_DIR_PATH() TestUtils::GetDirPath(__FILE__)
 
-// __FILE__ ‚Æ“¯‚¶ƒtƒHƒ‹ƒ_‚Ìƒtƒ@ƒCƒ‹ƒpƒX (TCHAR) ‚ğæ“¾‚·‚é
+// __FILE__ ã¨åŒã˜ãƒ•ã‚©ãƒ«ãƒ€ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ (TCHAR) ã‚’å–å¾—ã™ã‚‹
 #define LN_TEST_GET_FILE_PATH(fileName) TestUtils::GetFilePath(__FILE__, fileName).c_str()
 
-// __FILE__ ‚Æ“¯‚¶ƒtƒHƒ‹ƒ_‚Ìƒtƒ@ƒCƒ‹ƒpƒX (char) ‚ğæ“¾‚·‚é
+// __FILE__ ã¨åŒã˜ãƒ•ã‚©ãƒ«ãƒ€ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ (char) ã‚’å–å¾—ã™ã‚‹
 #define LN_TEST_GET_FILE_PATH_A(fileName) TestUtils::GetFilePathA(__FILE__, fileName).c_str()
 
-// __FILE__ ‚Æ“¯‚¶ƒtƒHƒ‹ƒ_‚Ìƒtƒ@ƒCƒ‹ƒpƒX (wchar_t) ‚ğæ“¾‚·‚é
+// __FILE__ ã¨åŒã˜ãƒ•ã‚©ãƒ«ãƒ€ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ (wchar_t) ã‚’å–å¾—ã™ã‚‹
 #define LN_TEST_GET_FILE_PATH_W(fileName) TestUtils::GetFilePathW(__FILE__, fileName).c_str()
 
 } // namespace Lumino

@@ -1,4 +1,4 @@
-
+ï»¿
 #include "../Internal.h"
 #include "../../include/Lumino/Base/RefBuffer.h"
 #include "../../include/Lumino/Text/UnicodeUtils.h"
@@ -65,7 +65,7 @@ static bool CheckDBCSLeadByte(const DBCSEncoding::TableInfo* info, byte_t byte)
 		if (info->LeadBytePairs[pair] == 0x00) {
 			return false;
 		}
-		// æsƒoƒCƒg‚Ì”ÍˆÍ“à‚Å‚ ‚é‚©
+		// å…ˆè¡Œãƒã‚¤ãƒˆã®ç¯„å›²å†…ã§ã‚ã‚‹ã‹
 		if (info->LeadBytePairs[pair] <= byte && byte <= info->LeadBytePairs[pair + 1]) {
 			return true;
 		}
@@ -79,7 +79,7 @@ static bool CheckDBCSLeadByte(const DBCSEncoding::TableInfo* info, byte_t byte)
 DBCSEncoding::DBCSEncoding(EncodingType type)
 	: m_encodingType(EncodingType_Unknown)
 {
-	LN_THROW(Tables[type].LeadBytePairs != NULL, ArgumentException);	// DBEncoding ‚Æ‚µ‚Ä‚Íg‚¦‚È‚¢
+	LN_THROW(Tables[type].LeadBytePairs != NULL, ArgumentException);	// DBEncoding ã¨ã—ã¦ã¯ä½¿ãˆãªã„
 	m_encodingType = type;
 }
 
@@ -92,50 +92,50 @@ void DBCSEncoding::DBCSDecoder::ConvertToUTF16(const byte_t* inBuffer, size_t in
 	*outBytesUsed = 0;
 	*outCharsUsed = 0;
 
-	// “ü—Í‚ª 0 •¶š‚Ìê‡‚Í‰½‚à‚µ‚È‚¢ (•ÏŠ·‚Ì•K—v‚È‚µ)
+	// å…¥åŠ›ãŒ 0 æ–‡å­—ã®å ´åˆã¯ä½•ã‚‚ã—ãªã„ (å¤‰æ›ã®å¿…è¦ãªã—)
 	if (inBufferByteCount == 0) { return; }
 
-	// •ÏŠ· (‚à‚µ‘O‰ñ‚Ìƒoƒbƒtƒ@I’[‚ªæsƒoƒCƒg‚¾‚Á‚½‚çAm_lastLeadByte ‚ÉæsƒoƒCƒg‚ª“ü‚Á‚Ä‚¢‚é)
+	// å¤‰æ› (ã‚‚ã—å‰å›ã®ãƒãƒƒãƒ•ã‚¡çµ‚ç«¯ãŒå…ˆè¡Œãƒã‚¤ãƒˆã ã£ãŸã‚‰ã€m_lastLeadByte ã«å…ˆè¡Œãƒã‚¤ãƒˆãŒå…¥ã£ã¦ã„ã‚‹)
 	size_t inBufPos = 0;	// MBCS
 	size_t outBufPos = 0;	// UTF16
 	for (; inBufPos < inBufferByteCount; ++inBufPos)
 	{
 		byte_t b = inBuffer[inBufPos];
 
-		// æsƒoƒCƒg–¢”­Œ©ó‘Ô‚Ìê‡
+		// å…ˆè¡Œãƒã‚¤ãƒˆæœªç™ºè¦‹çŠ¶æ…‹ã®å ´åˆ
 		if (m_lastLeadByte == 0x00)
 		{
 			if (CheckDBCSLeadByte(m_tableInfo, b)) {
-				m_lastLeadByte = b;	// æsƒoƒCƒg”­Œ©ó‘Ô‚É‚·‚é
+				m_lastLeadByte = b;	// å…ˆè¡Œãƒã‚¤ãƒˆç™ºè¦‹çŠ¶æ…‹ã«ã™ã‚‹
 			}
 			else {
-				// ƒVƒ“ƒOƒ‹ƒoƒCƒg•¶šB•’Ê‚É•ÏŠ·‚·‚éB
+				// ã‚·ãƒ³ã‚°ãƒ«ãƒã‚¤ãƒˆæ–‡å­—ã€‚æ™®é€šã«å¤‰æ›ã™ã‚‹ã€‚
 				outBuffer[outBufPos] = m_tableInfo->DBCSToUTF16Table[b];
-				LN_THROW(outBuffer[outBufPos] != 0x0000, EncodingFallbackException);	// •s³•¶š
+				LN_THROW(outBuffer[outBufPos] != 0x0000, EncodingFallbackException);	// ä¸æ­£æ–‡å­—
 				++outBufPos;
 			}
 		}
-		// ’¼‘O‚Ì•¶š‚ªæsƒoƒCƒg‚Ìê‡
+		// ç›´å‰ã®æ–‡å­—ãŒå…ˆè¡Œãƒã‚¤ãƒˆã®å ´åˆ
 		else
 		{
-			// æsƒoƒCƒg‚ª˜A‘±‚·‚é‚±‚Æ‚à‚ ‚éB"" ‚Í 0x81 0x81 ‚Å‚ ‚éB
-			//if (CheckDBCSLeadByte(m_tableInfo, b)) {	// æsƒoƒCƒg‚ª˜A‘±‚Å—ˆ‚é‚Í‚¸–³‚¢
-			//	LN_THROW(0, EncodingFallbackException);	// •s³•¶š
+			// å…ˆè¡Œãƒã‚¤ãƒˆãŒé€£ç¶šã™ã‚‹ã“ã¨ã‚‚ã‚ã‚‹ã€‚"ï¼" ã¯ 0x81 0x81 ã§ã‚ã‚‹ã€‚
+			//if (CheckDBCSLeadByte(m_tableInfo, b)) {	// å…ˆè¡Œãƒã‚¤ãƒˆãŒé€£ç¶šã§æ¥ã‚‹ã¯ãšç„¡ã„
+			//	LN_THROW(0, EncodingFallbackException);	// ä¸æ­£æ–‡å­—
 			//}
 
-			// ƒ}ƒ‹ƒ`ƒoƒCƒg•¶šBæsƒoƒCƒg‚ğãˆÊƒoƒCƒg‚É‚µ‚Ä•ÏŠ·‚·‚éB
+			// ãƒãƒ«ãƒãƒã‚¤ãƒˆæ–‡å­—ã€‚å…ˆè¡Œãƒã‚¤ãƒˆã‚’ä¸Šä½ãƒã‚¤ãƒˆã«ã—ã¦å¤‰æ›ã™ã‚‹ã€‚
 			outBuffer[outBufPos] = m_tableInfo->DBCSToUTF16Table[(m_lastLeadByte << 8) | (b & 0xFF)];
-			LN_THROW(outBuffer[outBufPos] != 0x0000, EncodingFallbackException);	// •s³•¶š
+			LN_THROW(outBuffer[outBufPos] != 0x0000, EncodingFallbackException);	// ä¸æ­£æ–‡å­—
 			++outBufPos;
 			m_lastLeadByte = 0x00;
 		}
 	}
 
-	// ‚à‚µƒoƒbƒtƒ@I’[‚ªæsƒoƒCƒg‚Å‚ ‚ê‚ÎA‚±‚Ì“_‚Å m_lastLeadByte ‚ÉæsƒoƒCƒg‚ª“ü‚Á‚Ä‚¢‚é
+	// ã‚‚ã—ãƒãƒƒãƒ•ã‚¡çµ‚ç«¯ãŒå…ˆè¡Œãƒã‚¤ãƒˆã§ã‚ã‚Œã°ã€ã“ã®æ™‚ç‚¹ã§ m_lastLeadByte ã«å…ˆè¡Œãƒã‚¤ãƒˆãŒå…¥ã£ã¦ã„ã‚‹
 
-	// DBCSEncoding ‚Å‚ÍƒTƒƒQ[ƒg‚ğ‚½‚È‚¢‚±‚Æ‚ªŒˆ‚Ü‚Á‚Ä‚¢‚é‚Ì‚Å‚»‚Ì‚Ü‚Ü•ÏŠ·‚µ‚½•¶š”‚ğo—Í‚Å‚«‚éB
-	*outBytesUsed = outBufPos * sizeof(UTF16);	// •ÏŠ·Œã‚ÌƒoƒCƒg”
-	*outCharsUsed = outBufPos;					// •ÏŠ·Œã‚Ì•¶š”
+	// DBCSEncoding ã§ã¯ã‚µãƒ­ã‚²ãƒ¼ãƒˆã‚’æŒãŸãªã„ã“ã¨ãŒæ±ºã¾ã£ã¦ã„ã‚‹ã®ã§ãã®ã¾ã¾å¤‰æ›ã—ãŸæ–‡å­—æ•°ã‚’å‡ºåŠ›ã§ãã‚‹ã€‚
+	*outBytesUsed = outBufPos * sizeof(UTF16);	// å¤‰æ›å¾Œã®ãƒã‚¤ãƒˆæ•°
+	*outCharsUsed = outBufPos;					// å¤‰æ›å¾Œã®æ–‡å­—æ•°
 }
 
 //-----------------------------------------------------------------------------
@@ -147,29 +147,29 @@ void DBCSEncoding::DBCSEncoder::ConvertFromUTF16(const UTF16* inBuffer, size_t i
 	*outBytesUsed = 0;
 	*outCharsUsed = 0;
 
-	// “ü—Í‚ª 0 •¶š‚Ìê‡‚Í‰½‚à‚µ‚È‚¢ (•ÏŠ·‚Ì•K—v‚È‚µ)
+	// å…¥åŠ›ãŒ 0 æ–‡å­—ã®å ´åˆã¯ä½•ã‚‚ã—ãªã„ (å¤‰æ›ã®å¿…è¦ãªã—)
 	if (inBufferCharCount == 0) { return; }
 
-	// •ÏŠ·
+	// å¤‰æ›
 	size_t inBufPos = 0;	// UTF16
 	size_t outBufPos = 0;	// MBCS
 	for (; inBufPos < inBufferCharCount; ++inBufPos)
 	{
 		UTF16 ch = inBuffer[inBufPos];
 
-		// ƒTƒƒQ[ƒg‚ÍƒGƒ‰[
+		// ã‚µãƒ­ã‚²ãƒ¼ãƒˆã¯ã‚¨ãƒ©ãƒ¼
 		if (UnicodeUtils::CheckUTF16HighSurrogate(ch) || UnicodeUtils::CheckUTF16LowSurrogate(ch)) {
 			LN_THROW(0, EncodingFallbackException);
 		}
 
 		uint16_t dbBytes = m_tableInfo->UTF16ToDBCSTable[ch];
 
-		// ƒVƒ“ƒOƒ‹ƒoƒCƒg•¶š
+		// ã‚·ãƒ³ã‚°ãƒ«ãƒã‚¤ãƒˆæ–‡å­—
 		if ((dbBytes & 0xFF00) == 0x0000) {
 			outBuffer[outBufPos] = dbBytes & 0xFF;
 			++outBufPos;
 		}
-		// ƒ}ƒ‹ƒ`ƒoƒCƒg•¶š
+		// ãƒãƒ«ãƒãƒã‚¤ãƒˆæ–‡å­—
 		else {
 			outBuffer[outBufPos] = ((dbBytes & 0xFF00) >> 8);
 			++outBufPos;

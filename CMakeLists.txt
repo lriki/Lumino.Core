@@ -1,3 +1,6 @@
+# e.g.) $ cmake -DLN_EXCEPTION_BACKTRACE=OFF ..
+
+
 cmake_minimum_required (VERSION 2.8.7)
 project (LuminoCore)
 

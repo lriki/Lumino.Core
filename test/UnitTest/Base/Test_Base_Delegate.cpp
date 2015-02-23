@@ -1,4 +1,4 @@
-#include <TestConfig.h>
+ï»¿#include <TestConfig.h>
 
 class Test_Base_Delegate : public ::testing::Test
 {
@@ -12,7 +12,7 @@ static int g_Value = 0;
 
 //---------------------------------------------------------------------
 
-class Test1		// GCC (Cygwin?) ‚Å‚ÍŠÖ”“àƒ[ƒJƒ‹ƒNƒ‰ƒX‚Ìƒƒ“ƒoŠÖ”ƒ|ƒCƒ“ƒ^‚ğæ‚ë‚¤‚Æ‚·‚é‚ÆƒRƒ“ƒpƒCƒ‹ƒGƒ‰[‚É‚È‚é‚Ì‚ÅAŠO‚É’u‚¢‚Ä‚¨‚­
+class Test1		// GCC (Cygwin?) ã§ã¯é–¢æ•°å†…ãƒ­ãƒ¼ã‚«ãƒ«ã‚¯ãƒ©ã‚¹ã®ãƒ¡ãƒ³ãƒé–¢æ•°ãƒã‚¤ãƒ³ã‚¿ã‚’å–ã‚ã†ã¨ã™ã‚‹ã¨ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¨ãƒ©ãƒ¼ã«ãªã‚‹ã®ã§ã€å¤–ã«ç½®ã„ã¦ãŠã
 {
 public:
 
@@ -97,19 +97,19 @@ TEST_F(Test_Base_Delegate, Delegate01)
 	Test_Delegate01 t1;
 	t1.mValue = &value;
 
-	// ƒfƒtƒHƒ‹ƒgƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	// ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	// IsEmpty
 	Delegate01<int> d1;
 	ASSERT_TRUE(d1.IsEmpty());
 
-	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^ (ƒCƒ“ƒXƒ^ƒ“ƒXƒƒ\ƒbƒh)
+	// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ (ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ¡ã‚½ãƒƒãƒ‰)
 	// Call
 	Delegate01<int> d2(&t1, &Test_Delegate01::Callback1);
 	d2.Call(1);
 	ASSERT_FALSE(d2.IsEmpty());
 	ASSERT_EQ(1, value);
 
-	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^ (static ƒƒ\ƒbƒh)
+	// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ (static ãƒ¡ã‚½ãƒƒãƒ‰)
 	// oeprator ()()
 	Delegate01<int> d3(&Test_Delegate01::Callback2);
 	d3(2);

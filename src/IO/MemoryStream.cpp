@@ -1,4 +1,4 @@
-
+ï»¿
 #include "../Internal.h"
 #include "../../include/Lumino/IO/MemoryStream.h"
 
@@ -13,7 +13,7 @@ MemoryStream::MemoryStream()
 	, m_fixedBuffer(NULL)
 	, m_fixedBufferSize(0)
 {
-	// —v‘f‚ª1‚ÂˆÈã–³‚¢‚Æ [0] ‚É‚àƒAƒNƒZƒX‚Å‚«‚È‚¢ (assert ‚ª”­¶‚·‚é)
+	// è¦ç´ ãŒ1ã¤ä»¥ä¸Šç„¡ã„ã¨ [0] ã«ã‚‚ã‚¢ã‚¯ã‚»ã‚¹ã§ããªã„ (assert ãŒç™ºç”Ÿã™ã‚‹)
 	m_buffer.resize(1);
 }
 
@@ -62,7 +62,7 @@ void MemoryStream::Write(const void* data, size_t byteCount)
 {
 	size_t newPos = m_seekPos + byteCount;
 
-	// ŒÅ’è’·‚Ìƒoƒbƒtƒ@‚ðŽg—p‚µ‚Ä‚¢‚éê‡
+	// å›ºå®šé•·ã®ãƒãƒƒãƒ•ã‚¡ã‚’ä½¿ç”¨ã—ã¦ã„ã‚‹å ´åˆ
 	if (m_fixedBuffer != NULL)
 	{
 		if (newPos > m_fixedBufferSize) {
@@ -70,10 +70,10 @@ void MemoryStream::Write(const void* data, size_t byteCount)
 		}
 		memcpy_s(m_fixedBuffer, m_fixedBufferSize, data, byteCount);
 	}
-	// ‰Â•Ï’·‚Ìƒoƒbƒtƒ@‚ðŽg—p‚µ‚Ä‚¢‚éê‡
+	// å¯å¤‰é•·ã®ãƒãƒƒãƒ•ã‚¡ã‚’ä½¿ç”¨ã—ã¦ã„ã‚‹å ´åˆ
 	else
 	{
-		// •K—v‚ª‚ ‚ê‚ÎŠg’£
+		// å¿…è¦ãŒã‚ã‚Œã°æ‹¡å¼µ
 		if (newPos >= m_buffer.size()) {
 			m_buffer.resize(newPos + 1);
 		}

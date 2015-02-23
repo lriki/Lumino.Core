@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 
 #include "../Base/NonCopyable.h"
@@ -11,7 +11,7 @@ namespace Threading
 	@page	Doc_Threading
 		- @ref Doc_ReadWriteMutex_1
 
-	@page	Doc_ReadWriteMutex_1	•¡”‚Ì“Ç‚İæ‚èƒƒbƒN‚ÆA1‚Â‚Ì‘‚«‚İƒƒbƒN‚ğs‚¤
+	@page	Doc_ReadWriteMutex_1	è¤‡æ•°ã®èª­ã¿å–ã‚Šãƒ­ãƒƒã‚¯ã¨ã€1ã¤ã®æ›¸ãè¾¼ã¿ãƒ­ãƒƒã‚¯ã‚’è¡Œã†
 
 	@code
 		class Test
@@ -37,7 +37,7 @@ namespace Threading
 */
 
 /**
-	@brief	•¡”‚Ì“Ç‚İæ‚èƒƒbƒN‚ÆA1‚Â‚Ì‘‚«‚İƒƒbƒN‚ğs‚¤ Mutex
+	@brief	è¤‡æ•°ã®èª­ã¿å–ã‚Šãƒ­ãƒƒã‚¯ã¨ã€1ã¤ã®æ›¸ãè¾¼ã¿ãƒ­ãƒƒã‚¯ã‚’è¡Œã† Mutex
 */
 class ReadWriteMutex
 	: public NonCopyable
@@ -49,22 +49,22 @@ public:
 public:
 
 	/**
-		@brief	“Ç‚İæ‚èƒƒbƒN
+		@brief	èª­ã¿å–ã‚Šãƒ­ãƒƒã‚¯
 	*/
 	void LockRead();
 
 	/**
-		@brief	“Ç‚İæ‚èƒAƒ“ƒƒbƒN
+		@brief	èª­ã¿å–ã‚Šã‚¢ãƒ³ãƒ­ãƒƒã‚¯
 	*/
 	void UnlockRead();
 
 	/**
-		@brief	‘‚«‚İƒƒbƒN
+		@brief	æ›¸ãè¾¼ã¿ãƒ­ãƒƒã‚¯
 	*/
 	void LockWrite();
 
 	/**
-		@brief	‘‚«‚İƒAƒ“ƒƒbƒN
+		@brief	æ›¸ãè¾¼ã¿ã‚¢ãƒ³ãƒ­ãƒƒã‚¯
 	*/
 	void UnlockWrite();
 
@@ -73,7 +73,7 @@ private:
 #ifdef LN_THREAD_WIN32
 	CRITICAL_SECTION    mReaderCountLock;
 	CRITICAL_SECTION    mWriterLock;
-	HANDLE              mNoReaders;		///< ReadLock() ‚µ‚Ä‚¢‚éƒXƒŒƒbƒh‚ª‚Ğ‚Æ‚Â‚à–³‚¢‚©
+	HANDLE              mNoReaders;		///< ReadLock() ã—ã¦ã„ã‚‹ã‚¹ãƒ¬ãƒƒãƒ‰ãŒã²ã¨ã¤ã‚‚ç„¡ã„ã‹
 	int                 mReaderCount;
 #else
 	pthread_mutex_t     mLock;
