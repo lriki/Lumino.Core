@@ -48,9 +48,9 @@ static const UnicodeUtils::UTF8 UTF8FirstByteMark[7] = { 0x00, 0x00, 0xC0, 0xE0,
 //---------------------------------------------------------------------
 UTFConversionResult UnicodeUtils::ConvertUTF8toUTF16 (
 	const UTF8*				sourceStart, 
-	int						sourceLength,
+	size_t					sourceLength,
 	UTF16*					targetStart,
-	int						targetLength,
+	size_t					targetLength,
 	UTFConversionOptions*	options)
 {
 	UTFConversionResult result = UTFConversionResult_Success;
@@ -88,9 +88,9 @@ UTFConversionResult UnicodeUtils::ConvertUTF8toUTF16 (
 //---------------------------------------------------------------------
 UTFConversionResult UnicodeUtils::ConvertUTF8toUTF32(
 	const UTF8*				sourceStart,
-	int						sourceLength,
+	size_t					sourceLength,
 	UTF32*					targetStart,
-	int						targetLength,
+	size_t					targetLength,
 	UTFConversionOptions*	options)
 {
     UTFConversionResult	result = UTFConversionResult_Success;
@@ -165,9 +165,9 @@ UTFConversionResult UnicodeUtils::ConvertUTF8toUTF32(
 //---------------------------------------------------------------------
 UTFConversionResult UnicodeUtils::ConvertUTF16toUTF8(
 	const UTF16*			sourceStart,	// 変換できない文字が見つかった場合、そこを指している
-	int						sourceLength,
+	size_t					sourceLength,
 	UTF8*					targetStart, 
-	int						targetLength,
+	size_t					targetLength,
 	UTFConversionOptions*	options)
 {
 	UTFConversionResult	result = UTFConversionResult_Success;
@@ -208,9 +208,9 @@ UTFConversionResult UnicodeUtils::ConvertUTF16toUTF8(
 //---------------------------------------------------------------------
 UTFConversionResult UnicodeUtils::ConvertUTF16toUTF32(
 	const UTF16*			sourceStart, 
-	int						sourceLength,
+	size_t					sourceLength,
 	UTF32*					targetStart, 
-	int						targetLength,
+	size_t					targetLength,
 	UTFConversionOptions*	options)
 {
 	UTFConversionResult	result = UTFConversionResult_Success;
@@ -255,9 +255,9 @@ UTFConversionResult UnicodeUtils::ConvertUTF16toUTF32(
 //---------------------------------------------------------------------
 UTFConversionResult UnicodeUtils::ConvertUTF32toUTF8(
 	const UTF32*			sourceStart, 
-	int						sourceLength,
+	size_t					sourceLength,
 	UTF8*					targetStart, 
-	int						targetLength,
+	size_t					targetLength,
 	UTFConversionOptions*	options)
 {
 	UTFConversionResult	result = UTFConversionResult_Success;
@@ -306,9 +306,9 @@ UTFConversionResult UnicodeUtils::ConvertUTF32toUTF8(
 //---------------------------------------------------------------------
 UTFConversionResult UnicodeUtils::ConvertUTF32toUTF16(
 	const UTF32*			sourceStart, 
-	int						sourceLength,
+	size_t					sourceLength,
 	UTF16*					targetStart, 
-	int						targetLength,
+	size_t					targetLength,
 	UTFConversionOptions*	options)
 {
 	UTFConversionResult	result = UTFConversionResult_Success;
@@ -349,7 +349,7 @@ UTFConversionResult UnicodeUtils::ConvertUTF32toUTF16(
 //---------------------------------------------------------------------
 UTFConversionResult UnicodeUtils::GetUTF16CharCount(
 	const UTF16*			sourceStart,
-	int						sourceLength,
+	size_t					sourceLength,
 	bool					isStrict,
 	int*					count)
 {
@@ -683,7 +683,7 @@ UTFConversionResult UnicodeUtils::ConvertCharUTF32toUTF16(
 //---------------------------------------------------------------------
 //
 //---------------------------------------------------------------------
-bool UnicodeUtils::IsLegalUTF8(const UTF8 *source, int length) 
+bool UnicodeUtils::IsLegalUTF8(const UTF8 *source, size_t length)
 {
 	// length は UTF-8 の先行バイトによって事前に決定される。
 	// length > 4 の場合は false を返す。

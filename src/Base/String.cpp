@@ -138,7 +138,7 @@ void BasicString<TChar>::AssignCStr(const wchar_t* str, size_type begin, size_ty
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-void BasicString<TChar>::ConvertFrom(const void* buffer, int byteCount, const Text::Encoding* encoding, bool* outUsedDefaultChar)
+void BasicString<TChar>::ConvertFrom(const void* buffer, size_t byteCount, const Text::Encoding* encoding, bool* outUsedDefaultChar)
 {
 	LN_THROW(encoding, ArgumentException);
 
@@ -205,7 +205,7 @@ BasicString<TChar> BasicString<TChar>::Trim() const
 {
 	const TChar* begin;
 	int length;
-	StringUtils::Trim(std_basic_string::c_str(), std_basic_string::size(), &begin, &length);
+	StringUtils::Trim(std_basic_string::c_str(), (int)std_basic_string::size(), &begin, &length);
 	return BasicString<TChar>(begin, length);
 }
 
@@ -240,7 +240,7 @@ int BasicString<TChar>::IndexOf(const TChar* str, int startIndex) const
 	if (pos == std_basic_string::npos) {
 		return -1;
 	}
-	return pos;
+	return (int)pos;
 }
 
 //-----------------------------------------------------------------------------

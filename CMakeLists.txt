@@ -21,6 +21,8 @@ option(MSVC_LINK_MULTI_THREAD_STATIC_RUNTIME "static runtime (/MT, /MTd) or DLL 
 # Exceprion Backtrace.
 option(LN_EXCEPTION_BACKTRACE "In some unix environment there is a possibility that can not be compiled." ON)
 
+# Architecture.
+#option(LN_BUILD_X64 "Architecture." OFF)
 
 #------------------------------------------------------------------------------
 # Apply options
@@ -36,22 +38,32 @@ find_package(OpenGL REQUIRED)
 if (WIN32)
 	# MSVC Version name
 	if (MSVC_VERSION EQUAL 1400)
-		string(CONCAT LN_STATIC_LIB_OUTPUT_NAME ${LN_STATIC_LIB_OUTPUT_NAME} "-msvc80")
+		set(LN_STATIC_LIB_OUTPUT_NAME "${LN_STATIC_LIB_OUTPUT_NAME}_msvc80")
 	elseif (MSVC_VERSION EQUAL 1500)
-		string(CONCAT LN_STATIC_LIB_OUTPUT_NAME ${LN_STATIC_LIB_OUTPUT_NAME} "-msvc90")
+		set(LN_STATIC_LIB_OUTPUT_NAME "${LN_STATIC_LIB_OUTPUT_NAME}_msvc90")
 	elseif (MSVC_VERSION EQUAL 1600)
-		string(CONCAT LN_STATIC_LIB_OUTPUT_NAME ${LN_STATIC_LIB_OUTPUT_NAME} "-msvc100")
+		set(LN_STATIC_LIB_OUTPUT_NAME "${LN_STATIC_LIB_OUTPUT_NAME}_msvc100")
 	elseif (MSVC_VERSION EQUAL 1700)
-		string(CONCAT LN_STATIC_LIB_OUTPUT_NAME ${LN_STATIC_LIB_OUTPUT_NAME} "-msvc110")
+		set(LN_STATIC_LIB_OUTPUT_NAME "${LN_STATIC_LIB_OUTPUT_NAME}_msvc110")
 	elseif (MSVC_VERSION EQUAL 1800)
-		string(CONCAT LN_STATIC_LIB_OUTPUT_NAME ${LN_STATIC_LIB_OUTPUT_NAME} "-msvc120")
+		set(LN_STATIC_LIB_OUTPUT_NAME "${LN_STATIC_LIB_OUTPUT_NAME}_msvc120")
 	endif()
+	
+	# Architecture.
+	# http://stackoverflow.com/questions/5334095/cmake-multiarchitecture-compilation
+	if (${CMAKE_EXE_LINKER_FLAGS} MATCHES "/machine:x64")	# /machine:x64 
+		set(LN_STATIC_LIB_OUTPUT_NAME "${LN_STATIC_LIB_OUTPUT_NAME}x64")
+	else()
+		set(LN_STATIC_LIB_OUTPUT_NAME "${LN_STATIC_LIB_OUTPUT_NAME}x86")
+	endif()
+	
+	set(LN_STATIC_LIB_OUTPUT_NAME "${LN_STATIC_LIB_OUTPUT_NAME}_static")
 	
 	# MSVC Runtime library.
 	if (MSVC_LINK_MULTI_THREAD_STATIC_RUNTIME)
-		#string(CONCAT LN_STATIC_LIB_OUTPUT_NAME ${LN_STATIC_LIB_OUTPUT_NAME} "-MD")
+		set(LN_STATIC_LIB_OUTPUT_NAME "${LN_STATIC_LIB_OUTPUT_NAME}_MD")
 	else()
-		#string(CONCAT LN_STATIC_LIB_OUTPUT_NAME ${LN_STATIC_LIB_OUTPUT_NAME} "-MT")
+		set(LN_STATIC_LIB_OUTPUT_NAME "${LN_STATIC_LIB_OUTPUT_NAME}_MT")
 		# Overwrite options.
 		foreach (flag
 			CMAKE_C_FLAGS
@@ -68,6 +80,7 @@ if (WIN32)
 			endif()
 		endforeach()
 	endif()
+	set(CMAKE_DEBUG_POSTFIX "d")
 	
 	# link librarys.
 	list(APPEND LN_LINK_LIBS "imagehlp.lib")
@@ -148,25 +161,15 @@ set(LN_MATH_SOURCES
 	src/Testing/TestUtils.cpp
 	${LN_PLATFORM_SOURCES})
 
-#------------------------------
-# Test source files.
-set(LN_TEST_SOURCES
-	test/gtest/src/gtest-all.cc
-	test/gtest/src/gtest_main.cc
-	test/UnitTest/Base/Test_Base_List.cpp
-	test/UnitTest/Base/Test_Base_STLUtils.cpp
-	test/UnitTest/Base/Test_Base_String.cpp
-	test/UnitTest/Base/Test_Base_StringUtils.cpp
-	test/UnitTest/Base/Test_Base_UnicodeUtils.cpp
-	test/UnitTest/Base/Test_Base_Delegate.cpp
-	test/UnitTest/Base/Test_Base_Encoding.cpp
-	test/UnitTest/Base/Test_Base_Encoding_UTF8.cpp
-	test/UnitTest/Platform/Test_Platform_Application.cpp)
-
 #------------------------------------------------------------------------------
 # Output
 #------------------------------------------------------------------------------
 
+#set(CMAKE_CXX_FLAGS "")
+#set(CMAKE_CXX_FLAGS_DEBUG "-g -pg")
+#set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-g -pg -O3")
+#set(CMAKE_CXX_FLAGS_RELEASE "-DNDEBUG -O3")
+#set(CMAKE_CXX_FLAGS_MINSIZEREL "")
 
 if (LN_EXCEPTION_BACKTRACE)
 	add_definitions(-DLN_EXCEPTION_BACKTRACE)
@@ -174,10 +177,9 @@ endif()
 
 #------------------------------
 # Static library.
-set(LN_STATIC_LIB_OUTPUT_NAME "${LN_STATIC_LIB_OUTPUT_NAME}-static")
 add_library(LuminoCore_Static STATIC ${LN_MATH_SOURCES})
 set_target_properties(LuminoCore_Static PROPERTIES OUTPUT_NAME ${LN_STATIC_LIB_OUTPUT_NAME})
-set_target_properties(LuminoCore_Static PROPERTIES DEBUG_POSTFIX "_d")
+#set_target_properties(LuminoCore_Static PROPERTIES DEBUG_POSTFIX "_d")
 set_target_properties(
 	LuminoCore_Static PROPERTIES INCLUDE_DIRECTORIES
 	"${PROJECT_SOURCE_DIR}/include/Lumino")

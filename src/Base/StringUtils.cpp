@@ -89,7 +89,7 @@ int StringUtils::IndexOf(const TChar* str1, const TChar* str2, int startIndex)
 {
 	LN_THROW(str1 && str2, ArgumentException);
 
-	int nLen = StrLen(str1);
+	int nLen = (int)StrLen(str1);
 	if (startIndex > nLen)
 		return -1;
 
@@ -97,7 +97,7 @@ int StringUtils::IndexOf(const TChar* str1, const TChar* str2, int startIndex)
 	if (pPos == NULL)
 		return -1;
 
-	return pPos - str1;
+	return (int)(pPos - str1);
 }
 template int StringUtils::IndexOf<char>(const char* str1, const char* str2, int startIndex);
 template int StringUtils::IndexOf<wchar_t>(const wchar_t* str1, const wchar_t* str2, int startIndex);
@@ -137,7 +137,7 @@ void StringUtils::Trim(const TChar* begin, int length, const TChar** outBegin, i
 	}
 
 	*outBegin = begin;
-	*outLength = end - begin;
+	*outLength = (int)(end - begin);
 }
 template void StringUtils::Trim<char>(const char* begin, int length, const char** outBegin, int* outLength);
 template void StringUtils::Trim<wchar_t>(const wchar_t* begin, int length, const wchar_t** outBegin, int* outLength);
@@ -186,7 +186,7 @@ template void StringUtils::FormatVAList<wchar_t>(const wchar_t* format, va_list 
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-bool StringUtils::EndsWith(const TChar* str1, int len1, const TChar* str2, int len2, StringComparison comparisonType)
+bool StringUtils::EndsWith(const TChar* str1, size_t len1, const TChar* str2, size_t len2, StringComparison comparisonType)
 {
 	// 長さが -1 の場合は \0 までカウント
 	len1 = (len1 < 0) ? StrLen(str1) : len1;
@@ -224,8 +224,8 @@ bool StringUtils::EndsWith(const TChar* str1, int len1, const TChar* str2, int l
 		return true;
 	}
 }
-template bool StringUtils::EndsWith<char>(const char* str1, int len1, const char* str2, int len2, StringComparison comparisonType);
-template bool StringUtils::EndsWith<wchar_t>(const wchar_t* str1, int len1, const wchar_t* str2, int len2, StringComparison comparisonType);
+template bool StringUtils::EndsWith<char>(const char* str1, size_t len1, const char* str2, size_t len2, StringComparison comparisonType);
+template bool StringUtils::EndsWith<wchar_t>(const wchar_t* str1, size_t len1, const wchar_t* str2, size_t len2, StringComparison comparisonType);
 
 //-----------------------------------------------------------------------------
 //

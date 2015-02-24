@@ -69,9 +69,9 @@ public:
 	*/
 	static UTFConversionResult ConvertUTF8toUTF16(
 		const UTF8*				sourceStart, 
-		int						sourceLength,		// 終端 \0 等は含まない
+		size_t					sourceLength,		// 終端 \0 等は含まない
 		UTF16*					targetStart,
-		int						targetLength,
+		size_t					targetLength,
 		UTFConversionOptions*	options);
 
 	/**
@@ -84,9 +84,9 @@ public:
 	*/
 	static UTFConversionResult ConvertUTF8toUTF32(
 		const UTF8*				sourceStart,
-		int						sourceLength,
+		size_t					sourceLength,
 		UTF32*					targetStart,
-		int						targetLength,
+		size_t					targetLength,
 		UTFConversionOptions*	options);
 
 	/**
@@ -99,9 +99,9 @@ public:
 	*/
 	static UTFConversionResult ConvertUTF16toUTF8(
 		const UTF16*			sourceStart, 
-		int						sourceLength, 
+		size_t					sourceLength,
 		UTF8*					targetStart, 
-		int						targetLength,
+		size_t					targetLength,
 		UTFConversionOptions*	options);
 
 	/**
@@ -114,9 +114,9 @@ public:
 	*/
 	static UTFConversionResult ConvertUTF16toUTF32(
 		const UTF16*			sourceStart, 
-		int						sourceLength, 
+		size_t					sourceLength,
 		UTF32*					targetStart, 
-		int						targetLength,
+		size_t					targetLength,
 		UTFConversionOptions*	options);
 
 	/**
@@ -129,9 +129,9 @@ public:
 	*/
 	static UTFConversionResult ConvertUTF32toUTF8(
 		const UTF32*			sourceStart, 
-		int						sourceLength, 
+		size_t					sourceLength,
 		UTF8*					targetStart, 
-		int						targetLength,
+		size_t					targetLength,
 		UTFConversionOptions*	options);
 
 	/**
@@ -144,9 +144,9 @@ public:
 	*/
 	static UTFConversionResult ConvertUTF32toUTF16(
 		const UTF32*			sourceStart, 
-		int						sourceLength, 
+		size_t					sourceLength,
 		UTF16*					targetStart, 
-		int						targetLength,
+		size_t					targetLength,
 		UTFConversionOptions*	options);
 
 	/**
@@ -156,7 +156,7 @@ public:
 	*/
 	static UTFConversionResult GetUTF16CharCount(
 		const UTF16*			sourceStart,
-		int						sourceLength,
+		size_t					sourceLength,
 		bool					isStrict,
 		int*					count);
 
@@ -215,7 +215,7 @@ private:
 		UTFConversionOptions*	options);
 
 	/// 正規の UTF8 バイト列かをチェックする
-	static bool IsLegalUTF8(const UTF8 *source, int length);
+	static bool IsLegalUTF8(const UTF8 *source, size_t length);
 
 	/// 不正文字を許容するか？
 	static bool IsStrictConversion(const UTFConversionOptions* options) { return (options->ReplacementChar == 0); }

@@ -52,8 +52,8 @@ private:
 
 private:
 
-	HANDLE	m_hProcess;
-	bool	m_bIsSymbolEngineReady;
+	HANDLE	m_process;
+	bool	m_isSymbolEngineReady;
 	LoadLibraryHelper	mKernel32Librsry;
 	LoadLibraryHelper	mDbgHelpLibrsry;
 
@@ -103,10 +103,10 @@ public:
 
 	BackTrace()
 	{
-		m_bIsSymbolEngineReady = false;
+		m_isSymbolEngineReady = false;
 
 		// プロセスを記録
-		m_hProcess = ::GetCurrentProcess();
+		m_process = ::GetCurrentProcess();
 
 		if (!mKernel32Librsry.Load("kernel32.dll")) {
 			return;
@@ -131,19 +131,19 @@ public:
 
 		// シンボルエンジンの初期化
 		mSymSetOptionsProc(SYMOPT_DEFERRED_LOADS | SYMOPT_LOAD_LINES | SYMOPT_UNDNAME);
-		if (mSymInitializeProc(m_hProcess, NULL, TRUE))
+		if (mSymInitializeProc(m_process, NULL, TRUE))
 		{
 			// シンボルエンジン準備完了
-			m_bIsSymbolEngineReady = true;
+			m_isSymbolEngineReady = true;
 		}
 	}
 
 	~BackTrace()
 	{
-		if (m_bIsSymbolEngineReady)
+		if (m_isSymbolEngineReady)
 		{
-			mSymCleanupProc(m_hProcess);
-			m_bIsSymbolEngineReady = false;
+			mSymCleanupProc(m_process);
+			m_isSymbolEngineReady = false;
 		}
 	}
 
@@ -159,11 +159,10 @@ public:
 	}
 
 #ifdef LN_X64 //for64bit
-#error 未テスト
 	//シンボルの解決
-	void addressToSymbolString(void* address, char * outBuffer, int len) const
+	void AddressToSymbolString(void* address, char * outBuffer, int len) const
 	{
-		if (!this->IsSymbolEngineReady)
+		if (!this->m_isSymbolEngineReady)
 		{
 			//シンボルエンジンが準備できていない.
 			_snprintf_s(outBuffer, len, _TRUNCATE, "0x%p @ ??? @ ??? @ ???:???", address);
@@ -172,7 +171,7 @@ public:
 
 		//モジュール名
 		IMAGEHLP_MODULE64 imageModule = { sizeof(IMAGEHLP_MODULE64) };
-		BOOL r = this->SymGetModuleInfo64Proc(this->Process, (DWORD64)address, &imageModule);
+		BOOL r = mSymGetModuleInfo64Proc(m_process, (DWORD64)address, &imageModule);
 		if (!r)
 		{
 			_snprintf_s(outBuffer, len, _TRUNCATE, "0x%p @ ??? @ ??? @ ???:???", address);
@@ -188,7 +187,7 @@ public:
 
 		//関数名の取得...
 		DWORD64 disp = 0;
-		r = this->SymGetSymFromAddr64Proc(this->Process, (DWORD64)address, &disp, imageSymbol);
+		r = mSymGetSymFromAddr64Proc(m_process, (DWORD64)address, &disp, imageSymbol);
 		if (!r)
 		{//関数名がわかりません
 			_snprintf_s(outBuffer, len, _TRUNCATE, "0x%p @ %s @ ??? @ ???:???", address, imageModule.ModuleName);
@@ -197,7 +196,7 @@ public:
 
 		//行番号の取得
 		IMAGEHLP_LINE64 line = { sizeof(IMAGEHLP_LINE64) };
-		r = this->SymGetLineFromAddr64Proc(this->Process, (DWORD64)address, &disp, &line);
+		r = mSymGetLineFromAddr64Proc(m_process, (DWORD64)address, &disp, &line);
 		if (!r)
 		{//行番号が分かりません
 			_snprintf_s(outBuffer, len, _TRUNCATE, "0x%p @ %s @ %s @ %s+%d", address,
@@ -212,7 +211,7 @@ public:
 	//シンボルの解決
 	void AddressToSymbolString(void* address, char * outBuffer, int len) const
 	{
-		if (!m_bIsSymbolEngineReady)
+		if (!m_isSymbolEngineReady)
 		{
 			// シンボルエンジンが準備できていない
 			_snprintf_s(outBuffer, len, _TRUNCATE, "0x%p @ ??? @ ??? @ ???:???", address);
@@ -221,7 +220,7 @@ public:
 
 		// モジュール名
 		IMAGEHLP_MODULE imageModule = { sizeof(IMAGEHLP_MODULE) };
-		BOOL r = mSymGetModuleInfoProc(m_hProcess, (DWORD)address, &imageModule);
+		BOOL r = mSymGetModuleInfoProc(m_process, (DWORD)address, &imageModule);
 		if (!r) {
 			_snprintf_s(outBuffer, len, _TRUNCATE, "0x%p @ ??? @ ??? @ ???:???", address);
 			return;
@@ -236,7 +235,7 @@ public:
 
 		// 関数名の取得
 		DWORD disp = 0;
-		r = mSymGetSymFromAddrProc(m_hProcess, (DWORD)address, &disp, imageSymbol);
+		r = mSymGetSymFromAddrProc(m_process, (DWORD)address, &disp, imageSymbol);
 		if (!r) {
 			_snprintf_s(outBuffer, len, _TRUNCATE, "0x%p @ %s @ ??? @ ???:???", address, imageModule.ModuleName);
 			return;
@@ -244,7 +243,7 @@ public:
 
 		// 行番号の取得
 		IMAGEHLP_LINE line = { sizeof(IMAGEHLP_LINE) };
-		r = mSymGetLineFromAddrProc(m_hProcess, (DWORD)address, &disp, &line);
+		r = mSymGetLineFromAddrProc(m_process, (DWORD)address, &disp, &line);
 		if (!r) {
 			_snprintf_s(outBuffer, len, _TRUNCATE, "0x%p @ %s @ %s @ %s+%d",
 				address, imageModule.ModuleName, imageSymbol->Name, imageSymbol->Name, (int)((char*)address - (char*)line.Address));

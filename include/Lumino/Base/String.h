@@ -126,7 +126,7 @@ public:
 		@param[in]	encoding			: 変換元文字エンコーディング
 		@param[out]	usedDefaultChar		: 変換不可文字をデフォルト文字 ('?') に変換したかどうか
 	*/
-	void ConvertFrom(const void* buffer, int byteCount, const Text::Encoding* encoding, bool* usedDefaultChar = NULL);
+	void ConvertFrom(const void* buffer, size_t byteCount, const Text::Encoding* encoding, bool* usedDefaultChar = NULL);
 
 	/**
 		@brief		指定したエンコーディングを使用し、変換した文字列バッファを取得する
@@ -185,7 +185,7 @@ public:
 	/**
 		@brief		文字列を構成するバイト数を取得する
 	*/
-	int GetByteCount() const { return std_basic_string::size() * sizeof(TChar); }
+	int GetByteCount() const { return (int)(std_basic_string::size() * sizeof(TChar)); }
 
 	/**
 		@brief		文字列を整数値に変換する
@@ -202,7 +202,7 @@ public:
 	bool ToInt(int* value) const;
 
 	/// 終端 \0 までの文字数を返す (マルチバイト文字は考慮しない。CString::GetLength と同様の関数です)
-	int GetLength() const { return std_basic_string::size(); } 
+	int GetLength() const { return (int)(std_basic_string::size()); }
 
 public:
 	/// 現在の環境で定義されている改行文字列を取得する

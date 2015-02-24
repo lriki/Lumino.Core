@@ -155,14 +155,14 @@ RefBuffer* Encoding::Convert(
 	//LN_THROW(srcByteCount >= (size_t)decoder->GetMinByteCount(), ArgumentException);	// バッファのバイト数は、そのバッファのエンコーディングの最低バイト数以上でなければならない
 
 	// src に入っている最悪パターンの文字数
-	int srcMaxCharCount = srcByteCount / decoder->GetMinByteCount();
+	size_t srcMaxCharCount = srcByteCount / decoder->GetMinByteCount();
 	srcMaxCharCount += 1;	// Decoder・Encoder の状態保存により前回のあまり文字が1つ追加されるかもしれない
 
 	// 中間バッファに必要な最大バイト数
-	int utf16MaxByteCount = srcMaxCharCount * 4;	// UTF16 は1文字最大4バイト
+	size_t utf16MaxByteCount = srcMaxCharCount * 4;	// UTF16 は1文字最大4バイト
 
 	// 出力バッファに必要な最大バイト数
-	int outputMaxByteCount = srcMaxCharCount * encoder->GetMaxByteCount();
+	size_t outputMaxByteCount = srcMaxCharCount * encoder->GetMaxByteCount();
 
 	// 中間バッファ作成
 	RefPtr<RefBuffer> tmpBuf(LN_NEW RefBuffer());
@@ -260,9 +260,9 @@ void SystemMultiByteEncoding::SystemMultiByteDecoder::ConvertToUTF16(const byte_
 	int len = ::MultiByteToWideChar(
 		CP_THREAD_ACP, MB_ERR_INVALID_CHARS, 
 		(LPCSTR)inBuffer, 
-		inBufferByteCount,		// lpMultiByteStr が指す文字列のサイズをバイト単位で渡します。
+		(int)inBufferByteCount,		// lpMultiByteStr が指す文字列のサイズをバイト単位で渡します。
 		(LPWSTR)outBuffer, 
-		outBufferCharCount);	// lpWideCharStr が指すバッファのサイズをワイド文字数の単位で指定します。
+		(int)outBufferCharCount);	// lpWideCharStr が指すバッファのサイズをワイド文字数の単位で指定します。
 	LN_THROW(len > 0, EncodingFallbackException);
 
 	// mbstowcs じゃ文字数カウントはできないので UnicodeUtils を使う

@@ -84,7 +84,7 @@ BasicString<TChar> PathUtils::GetDirectoryPath(const TChar* path)
 	*/
 
 	// 後ろから前に調べて、最初に \\ か / が見つかるところを探す
-	int pos = StringUtils::StrLen(path);
+	size_t pos = StringUtils::StrLen(path);
 	TChar lastSep = 0;
 	for ( ; pos >= 0; --pos ) {
 		if ( path[pos] == '\\' || path[pos] == '/' ) {
@@ -130,8 +130,8 @@ template BasicString<wchar_t> PathUtils::GetDirectoryPath<wchar_t>(const wchar_t
 template<typename TChar>
 BasicString<TChar> PathUtils::GetFileName(const TChar* path)
 {
-	int len = StringUtils::StrLen(path);
-	int pos = len - 1;
+	size_t len = StringUtils::StrLen(path);
+	size_t pos = len - 1;
 
 	// 後ろから前に調べて、最初にセパレータが見つかるところを探す
 	for ( ; pos >= 0; --pos ) {
