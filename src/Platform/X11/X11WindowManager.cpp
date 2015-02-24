@@ -119,7 +119,7 @@ void X11WindowManager::DoEvents()
 			case ClientMessage:
 			{
 				// クローズボタンが押された場合
-				if ((Atom)xev->xclient.data.l[0] == m_atom_WM_DELETE_WINDOW)
+				if ((Atom)xev.xclient.data.l[0] == m_atom_WM_DELETE_WINDOW)
 				{
 					// TODO
 					Exit();
