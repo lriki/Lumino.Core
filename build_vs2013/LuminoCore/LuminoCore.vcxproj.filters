@@ -175,6 +175,9 @@
     <ClInclude Include="..\..\include\Lumino\Base\Rect.h">
       <Filter>Base</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Base\Point.h">
+      <Filter>Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\include\Lumino\Base\Delegate.inl">

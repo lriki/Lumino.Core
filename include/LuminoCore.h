@@ -19,6 +19,8 @@
 #include "Lumino/Base/Memory.h"
 #include "Lumino/Base/NonCopyable.h"
 #include "Lumino/Base/Delegate.h"
+#include "Lumino/Base/Size.h"
+#include "Lumino/Base/Rect.h"
 
 #include "Lumino/IO/PathName.h"
 #include "Lumino/IO/PathUtils.h"

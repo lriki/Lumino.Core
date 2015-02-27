@@ -119,7 +119,7 @@ public:
 		@endcodes
 	*/
 	template<typename TChar>
-	static bool EndsWith(const TChar* str1, size_t len1, const TChar* str2, size_t len2, StringComparison comparisonType);
+	static bool EndsWith(const TChar* str1, int len1, const TChar* str2, int len2, StringComparison comparisonType);
 	
 	/**
 		@brief		文字列をデリミタで分割する

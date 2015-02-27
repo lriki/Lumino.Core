@@ -5,7 +5,7 @@ namespace Lumino
 {
 
 /**
-	@brief		2次元上のオブジェクトサイズを表すクラス
+	@brief		2次元上のオブジェクトサイズを表すクラスです。
 */
 class Size
 {

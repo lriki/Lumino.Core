@@ -186,7 +186,7 @@ template void StringUtils::FormatVAList<wchar_t>(const wchar_t* format, va_list 
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-bool StringUtils::EndsWith(const TChar* str1, size_t len1, const TChar* str2, size_t len2, StringComparison comparisonType)
+bool StringUtils::EndsWith(const TChar* str1, int len1, const TChar* str2, int len2, StringComparison comparisonType)
 {
 	// 長さが -1 の場合は \0 までカウント
 	len1 = (len1 < 0) ? StrLen(str1) : len1;
@@ -224,8 +224,8 @@ bool StringUtils::EndsWith(const TChar* str1, size_t len1, const TChar* str2, si
 		return true;
 	}
 }
-template bool StringUtils::EndsWith<char>(const char* str1, size_t len1, const char* str2, size_t len2, StringComparison comparisonType);
-template bool StringUtils::EndsWith<wchar_t>(const wchar_t* str1, size_t len1, const wchar_t* str2, size_t len2, StringComparison comparisonType);
+template bool StringUtils::EndsWith<char>(const char* str1, int len1, const char* str2, int len2, StringComparison comparisonType);
+template bool StringUtils::EndsWith<wchar_t>(const wchar_t* str1, int len1, const wchar_t* str2, int len2, StringComparison comparisonType);
 
 //-----------------------------------------------------------------------------
 //

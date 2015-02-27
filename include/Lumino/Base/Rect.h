@@ -1,6 +1,9 @@
 ﻿
 #pragma once
 
+#include "Point.h"
+#include "Size.h"
+
 namespace Lumino
 {
 
@@ -21,15 +24,22 @@ public:
 	/**
 		@brief	すべての要素を 0 で初期化します。
 	*/
-	Rect() { Set(0, 0); }
+	Rect() { Set(0, 0, 0, 0); }
 
 	/**
 		@brief	位置とサイズを指定して初期化します。
 	*/
 	Rect(int x, int y, int width, int height) { Set(x, y, width, height); }
+	
+	/**
+		@brief	位置とサイズを指定して初期化します。
+	*/
+	Rect(const Point& point, const Size& size) { Set(point.X, point.Y, size.Width, size.Height); }
 
-	//Rect(Point Size)
-	//Rect(Rect)
+	/**
+		@brief	指定した矩形をコピーして初期化します。
+	*/
+	Rect(const Rect& rect) { Set(rect.X, rect.Y, rect.Width, rect.Height); }
 
 public:
 
@@ -37,11 +47,6 @@ public:
 		@brief	各要素を設定します。
 	*/
 	void Set(int x, int y, int width, int height) { X = x; Y = y; Width = width; Height = height; }
-	
-	/**
-		@brief	空の矩形かを判定します。
-	*/
-	int GetLeft() const { return X; }
 
 	/**
 		@brief	左辺の x 軸の値を取得します。
@@ -125,7 +130,7 @@ public:
 	*/
 	bool Contains(int x, int y) const
 	{
-		if (IsEmpty) {
+		if (IsEmpty()) {
 			return false;
 		}
 		return ((x >= X) && (x - Width <= X) && (y >= Y) && (y - Height <= Y));
@@ -136,7 +141,7 @@ public:
 	*/
 	bool Contains(const Rect& rect) const
 	{
-		if (IsEmpty || rect.IsEmpty) {
+		if (IsEmpty() || rect.IsEmpty()) {
 			return false;
 		}
 		return (
