@@ -172,6 +172,9 @@
     <ClInclude Include="..\..\include\Lumino\Text\EncodingDetector.h">
       <Filter>Text</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Base\Rect.h">
+      <Filter>Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\include\Lumino\Base\Delegate.inl">

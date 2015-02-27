@@ -20,6 +20,7 @@
     <ClInclude Include="..\..\include\Lumino\Base\List.h" />
     <ClInclude Include="..\..\include\Lumino\Base\Memory.h" />
     <ClInclude Include="..\..\include\Lumino\Base\NonCopyable.h" />
+    <ClInclude Include="..\..\include\Lumino\Base\Rect.h" />
     <ClInclude Include="..\..\include\Lumino\Base\RefBuffer.h" />
     <ClInclude Include="..\..\include\Lumino\Base\RefObject.h" />
     <ClInclude Include="..\..\include\Lumino\Base\Size.h" />
