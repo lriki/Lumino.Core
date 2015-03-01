@@ -22,6 +22,5 @@ link_libraries(LuminoCore_Static)
 
 add_definitions(-DGTEST_HAS_TR1_TUPLE=0)
 
-#add_dependencies(UnitTest LuminoCore_Static)
-
-add_executable(UnitTest ${LN_TEST_SOURCES})
+add_executable(LuminoCore_UnitTest ${LN_TEST_SOURCES})
+#add_dependencies(LuminoCore_UnitTest LuminoCore_Static)

@@ -22,6 +22,7 @@ namespace Platform
 //-----------------------------------------------------------------------------
 X11Window::X11Window(X11WindowManager* windowManager, const SettingData& settingData)
 	: WindowBase(windowManager)
+	, m_visualInfo(NULL)
 	//, m_x11Window(NULL)
 {
 	m_titleText = settingData.TitleText;
@@ -59,12 +60,11 @@ X11Window::X11Window(X11WindowManager* windowManager, const SettingData& setting
 		//GLX_SAMPLES,        MultiSamples,	// マルチサンプリング (アンチエイリアス)
 		None
 	};
-	printf("1\n");
+	
 	// http://manpages.ubuntu.com/manpages/gutsy/ja/man3/glXChooseVisual.3x.html
 	// http://www.wakhok.ac.jp/~tatsuo/sen96/4shuu/section1.html
-	XVisualInfo* visual = glXChooseVisual(x11Display, x11DefaultScreen, attributes);
+	m_visualInfo = glXChooseVisual(x11Display, x11DefaultScreen, attributes);
 	
-	printf("2 %p\n", visual);
 	//---------------------------------------------------------
 	// カラーマップを選択する。
 	// 		カラーマップとは、ピクセルフォーマットのようなもので、256色 とか 65535色等様々なパレットが存在している。
@@ -97,7 +97,6 @@ X11Window::X11Window(X11WindowManager* windowManager, const SettingData& setting
 		visual->visual,
 		CWBorderPixel | CWColormap | CWEventMask | CWOverrideRedirect,	// XSetWindowAttributes のどの部分を考慮するか
 		&winAttr );
-	XFree( visual );
 	
 	// X11 のウィンドウとこのクラスのインスタンスを関連付ける (WinAPI の SetProp にあたる)
 	int result = XSaveContext(
@@ -118,7 +117,11 @@ X11Window::X11Window(X11WindowManager* windowManager, const SettingData& setting
 //-----------------------------------------------------------------------------
 X11Window::~X11Window()
 {
-	if (m_x11Window)
+	if (m_visualInfo != NULL) {
+		XFree(m_visualInfo);
+		m_visualInfo = NULL;
+	}
+	if (m_x11Window != NULL)
 	{
 		Display* x11Display = GetWindowManager()->GetX11Display();
 		XDeleteContext(x11Display, m_x11Window, GetWindowManager()->GetX11Context());

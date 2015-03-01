@@ -31,6 +31,9 @@ public:
 public:
 	X11Window(X11WindowManager* windowManager, const SettingData& settingData);
 	virtual ~X11Window();
+	XVisualInfo* GetX11VisualInfo() { return m_visualInfo; }
+	::Window* GetX11WindowID() { return m_x11Window; }
+	X11WindowManager* GetWindowManager() { return (X11WindowManager*)(m_windowManager); }
 
 public:
 	// override Window
@@ -43,13 +46,13 @@ public:
 	
 private:
 	void SetVisible(bool show);
-	X11WindowManager* GetWindowManager() { return (X11WindowManager*)(m_windowManager); }
 
 private:
-	String		m_titleText;		///< ウィンドウタイトルの文字列
-	Size		m_clientSize;		///< クライアント領域の大きさ
+	String			m_titleText;		///< ウィンドウタイトルの文字列
+	Size			m_clientSize;		///< クライアント領域の大きさ
 	
-	::Window	m_x11Window;
+	XVisualInfo*	m_visualInfo;
+	::Window		m_x11Window;
 };
 
 } // namespace Platform

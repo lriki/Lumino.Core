@@ -21,6 +21,22 @@ public:
 	*/
 	static HWND GetWindowHandle(Window* window);
 #endif
+#ifdef LN_X11
+	/**
+		@brief		ウィンドウのウィンドウIDを取得します。
+	*/
+	static ::Window GetX11WindowID(Window* window);
+
+	/**
+		@brief		ウィンドウのビジュアルを取得します。
+	*/
+	static XVisualInfo* GetX11VisualInfo(Window* window);
+
+	/**
+		@brief		ウィンドウが接続されているXサーバを取得します。
+	*/
+	static Display* GetX11Display(Window* window);
+#endif
 };
 
 } // namespace Platform

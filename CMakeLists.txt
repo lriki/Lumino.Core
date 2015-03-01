@@ -91,7 +91,8 @@ if (WIN32)
 		src/Platform/Win32/Environment.cpp
 		src/Platform/Win32/Win32WindowManager.cpp
 		src/Platform/Win32/Win32WindowBase.cpp
-		src/Platform/Win32/Win32Window.cpp)
+		src/Platform/Win32/Win32Window.cpp
+		src/Platform/Win32/PlatformSupport_Win32.cpp)
 
 elseif (APPLE)
 	set(LN_UNIT_TEST_LINK_LIBS "pthread")
