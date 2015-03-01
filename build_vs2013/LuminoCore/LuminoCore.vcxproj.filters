@@ -178,6 +178,9 @@
     <ClInclude Include="..\..\include\Lumino\Base\Point.h">
       <Filter>Base</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Platform\PlatformSupport.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\include\Lumino\Base\Delegate.inl">
@@ -295,6 +298,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\Text\UnicodeUtils.cpp">
       <Filter>Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Platform\Win32\PlatformSupport_Win32.cpp">
+      <Filter>Platform\Win32</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

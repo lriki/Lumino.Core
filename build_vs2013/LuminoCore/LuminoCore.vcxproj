@@ -40,6 +40,7 @@
     <ClInclude Include="..\..\include\Lumino\Platform\EventArgs.h" />
     <ClInclude Include="..\..\include\Lumino\Platform\EventListener.h" />
     <ClInclude Include="..\..\include\Lumino\Platform\PlatformManager.h" />
+    <ClInclude Include="..\..\include\Lumino\Platform\PlatformSupport.h" />
     <ClInclude Include="..\..\include\Lumino\Platform\Window.h" />
     <ClInclude Include="..\..\include\Lumino\Testing\TestUtils.h" />
     <ClInclude Include="..\..\include\Lumino\Text\Encoding.h" />
@@ -80,6 +81,7 @@
     <ClCompile Include="..\..\src\IO\Win32\FileUtils_win32.cpp" />
     <ClCompile Include="..\..\src\Platform\PlatformManager.cpp" />
     <ClCompile Include="..\..\src\Platform\Win32\Environment.cpp" />
+    <ClCompile Include="..\..\src\Platform\Win32\PlatformSupport_Win32.cpp" />
     <ClCompile Include="..\..\src\Platform\Win32\Win32WindowManager.cpp" />
     <ClCompile Include="..\..\src\Platform\Win32\Win32Window.cpp" />
     <ClCompile Include="..\..\src\Platform\Win32\Win32WindowBase.cpp" />
