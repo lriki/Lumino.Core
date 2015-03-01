@@ -12,6 +12,7 @@ namespace Lumino
 namespace Platform
 {
 class WindowManagerBase;
+class Window;
 
 /// ウィンドウシステムに使用するAPI・ライブラリ
 enum WindowSystemAPI
@@ -56,6 +57,7 @@ public:
 public:
 
 	void Initialize(const PlatformManagerSettings& settings);
+	Window* GetMainWindow();
 	// override Application
 	//virtual void CreateMainWindow(const WindowCreationSettings& settings, bool useThread);
 	bool DoEvents();

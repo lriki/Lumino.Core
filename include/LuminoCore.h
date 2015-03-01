@@ -37,4 +37,5 @@
 #include "Lumino/Threading/Thread.h"
 
 #include "Lumino/Platform/PlatformManager.h"
+#include "Lumino/Platform/PlatformSupport.h"
 #include "Lumino/Platform/Window.h"

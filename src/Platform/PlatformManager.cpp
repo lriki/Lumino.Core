@@ -121,6 +121,14 @@ void PlatformManager::Initialize(const PlatformManagerSettings& settings)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+Window* PlatformManager::GetMainWindow()
+{
+	return m_windowManager->GetMainWindow();
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 bool PlatformManager::DoEvents()
 {
 	// メインスレッドでメッセージ処理する場合は InternalDoEvents
@@ -145,6 +153,7 @@ void PlatformManager::Dispose()
 	else {
 		m_windowManager->Finalize();
 	}
+	LN_SAFE_RELEASE(m_windowManager);
 }
 
 //-----------------------------------------------------------------------------

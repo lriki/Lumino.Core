@@ -33,7 +33,7 @@ class WindowManagerBase
 	: public RefObject
 {
 protected:
-	WindowManagerBase() {}
+	WindowManagerBase() { m_endRequested = false; }
 	virtual ~WindowManagerBase() {}
 
 public:

@@ -20,11 +20,6 @@ public:
 		@brief		ウィンドウのウィンドウハンドルを取得します。
 	*/
 	static HWND GetWindowHandle(Window* window);
-
-	/**
-		@brief		ウィンドウのデバイスコンテキストハンドルを取得します。
-	*/
-	static HDC GetWindowDC(Window* window);
 #endif
 };
 

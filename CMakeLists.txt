@@ -127,7 +127,7 @@ endif()
 #------------------------------------------------------------------------------
 #------------------------------
 # Source files.
-set(LN_MATH_SOURCES
+set(LN_SOURCES
 	src/Base/Exception.cpp
 	src/Base/Memory.cpp
 	src/Base/RefObject.cpp
@@ -177,7 +177,7 @@ endif()
 
 #------------------------------
 # Static library.
-add_library(LuminoCore_Static STATIC ${LN_MATH_SOURCES})
+add_library(LuminoCore_Static STATIC ${LN_SOURCES})
 set_target_properties(LuminoCore_Static PROPERTIES OUTPUT_NAME ${LN_STATIC_LIB_OUTPUT_NAME})
 #set_target_properties(LuminoCore_Static PROPERTIES DEBUG_POSTFIX "_d")
 set_target_properties(
@@ -192,7 +192,7 @@ add_custom_command(
 
 #------------------------------
 # Shared library.
-add_library(LuminoCore_Shared SHARED ${LN_MATH_SOURCES} ${LN_MATH_HEADERS})
+add_library(LuminoCore_Shared SHARED ${LN_SOURCES})
 set_target_properties(LuminoCore_Shared PROPERTIES OUTPUT_NAME ${PROJECT_NAME})
 set_target_properties(LuminoCore_Shared PROPERTIES DEBUG_POSTFIX "_d")
 set_target_properties(LuminoCore_Shared PROPERTIES COMPILE_DEFINITIONS "LUMINO_BUILD_DLL")
