@@ -70,7 +70,7 @@ X11Window::X11Window(X11WindowManager* windowManager, const SettingData& setting
 	// 		カラーマップとは、ピクセルフォーマットのようなもので、256色 とか 65535色等様々なパレットが存在している。
 	// 		これの実態はサーバ側にあり、XCreateColormap() は指定された visual から最適なカラーマップの ID を返している。そんなイメージ。
 	// 		このカラーマップを XCreateWindow() に指定することで、ウィンドウのピクセルフォーマットを決定する。
-	Colormap colorMap = XCreateColormap(x11Display, x11RootWindow, visual->visual, AllocNone);
+	Colormap colorMap = XCreateColormap(x11Display, x11RootWindow, m_visualInfo->visual, AllocNone);
 	
 	//---------------------------------------------------------
 	// ウィンドウの属性 (Win32 のウィンドウスタイルみたいなもの)
@@ -92,9 +92,9 @@ X11Window::X11Window(X11WindowManager* windowManager, const SettingData& setting
 		m_clientSize.Width,
 		m_clientSize.Height,
 		0,                  // Border width
-		visual->depth,      // Color depth
+		m_visualInfo->depth,      // Color depth
 		InputOutput,
-		visual->visual,
+		m_visualInfo->visual,
 		CWBorderPixel | CWColormap | CWEventMask | CWOverrideRedirect,	// XSetWindowAttributes のどの部分を考慮するか
 		&winAttr );
 	

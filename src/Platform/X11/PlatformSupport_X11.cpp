@@ -1,6 +1,5 @@
 ﻿
-#pragma once
-
+#include <GL/glx.h>
 #include "../../Internal.h"
 #include "../../../include/Lumino/Platform/PlatformSupport.h"
 #include "X11WindowManager.h"

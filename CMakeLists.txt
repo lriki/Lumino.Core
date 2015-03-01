@@ -116,7 +116,8 @@ elseif (UNIX)
 		src/IO/Unix/FileUtils_unix.cpp
 		src/Platform/Environment_unix.cpp
 		src/Platform/X11/X11WindowManager.cpp
-		src/Platform/X11/X11Window.cpp)
+		src/Platform/X11/X11Window.cpp
+		src/Platform/X11/PlatformSupport_X11.cpp)
 	
 else()
 	# Not support.
