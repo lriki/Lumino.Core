@@ -48,9 +48,6 @@
     <ClInclude Include="..\..\include\Lumino\Base\NonCopyable.h">
       <Filter>Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Lumino\Base\RefBuffer.h">
-      <Filter>Base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Lumino\Base\RefObject.h">
       <Filter>Base</Filter>
     </ClInclude>
@@ -181,6 +178,12 @@
     <ClInclude Include="..\..\include\Lumino\Platform\PlatformSupport.h">
       <Filter>Platform</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Base\ByteBuffer.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Base\Stack.h">
+      <Filter>Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\include\Lumino\Base\Delegate.inl">
@@ -301,6 +304,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\Platform\Win32\PlatformSupport_Win32.cpp">
       <Filter>Platform\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Base\ByteBuffer.cpp">
+      <Filter>Base</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

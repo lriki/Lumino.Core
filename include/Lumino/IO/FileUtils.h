@@ -7,7 +7,7 @@
 namespace Lumino
 {
 namespace Text { class Encoding; }
-class RefBuffer;
+class ByteBuffer;
 
 /// ファイルとディレクトリの属性
 enum FileAttribute
@@ -81,8 +81,8 @@ public:
 	static size_t GetFileSize( FILE* stream );
 
 	/// ファイルの内容をすべて読み込む (バイナリ形式)
-	static RefBuffer* ReadAllBytes(const char* filePath);
-	static RefBuffer* ReadAllBytes(const wchar_t* filePath);
+	static ByteBuffer* ReadAllBytes(const char* filePath);
+	static ByteBuffer* ReadAllBytes(const wchar_t* filePath);
 
 	/// ファイルの内容をすべて読み込み、文字列として返す
 	static String ReadAllText(const TCHAR* filePath, const Text::Encoding* encoding = NULL);

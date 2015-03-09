@@ -1,7 +1,7 @@
 ﻿
 #include "../Internal.h"
 #include <sstream>
-#include "../../include/Lumino/Base/RefBuffer.h"
+#include "../../include/Lumino/Base/ByteBuffer.h"
 #include "../../include/Lumino/Text/Encoding.h"
 #include "../../include/Lumino/Base/StringUtils.h"
 #include "../../include/Lumino/Base/String.h"
@@ -155,14 +155,14 @@ void BasicString<TChar>::ConvertFrom(const void* buffer, size_t byteCount, const
 		//size_t charsUsed;
 		//bool usedDefaultChar;
 		Text::EncodingConversionResult info;
-		RefPtr<RefBuffer> tmpBuffer(
+		RefPtr<ByteBuffer> tmpBuffer(
 			Text::Encoding::Convert(buffer, byteCount, encoding, thisTypeEncoding,
 			&info));
 		if (outUsedDefaultChar != NULL) {
 			*outUsedDefaultChar = info.UsedDefaultChar;
 		}
 
-		std_basic_string::assign((const TChar*)tmpBuffer->GetPointer(), info.BytesUsed / sizeof(TChar));
+		std_basic_string::assign((const TChar*)tmpBuffer->GetData(), info.BytesUsed / sizeof(TChar));
 	}
 }
 
@@ -170,14 +170,14 @@ void BasicString<TChar>::ConvertFrom(const void* buffer, size_t byteCount, const
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-RefBuffer* BasicString<TChar>::ConvertTo(const Text::Encoding* encoding, bool* outUsedDefaultChar) const
+ByteBuffer* BasicString<TChar>::ConvertTo(const Text::Encoding* encoding, bool* outUsedDefaultChar) const
 {
 	//size_t bytesUsed;
 	//size_t charsUsed;
 	//bool usedDefaultChar;
 	Text::EncodingConversionResult info;
 
-	RefBuffer* buf = Text::Encoding::Convert(
+	ByteBuffer* buf = Text::Encoding::Convert(
 		std_basic_string::c_str(), GetByteCount(), GetThisTypeEncoding(),
 		encoding,
 		&info);

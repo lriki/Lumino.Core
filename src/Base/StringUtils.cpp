@@ -2,7 +2,7 @@
 #include "../Internal.h"
 #include <wctype.h>
 #include "../../include/Lumino/Base/RefObject.h"
-#include "../../include/Lumino/Base/RefBuffer.h"
+#include "../../include/Lumino/Base/ByteBuffer.h"
 #include "../../include/Lumino/Base/String.h"
 #include "../../include/Lumino/Base/StringUtils.h"
 

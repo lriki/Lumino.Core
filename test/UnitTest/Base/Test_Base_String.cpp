@@ -119,8 +119,8 @@ TEST_F(Test_Base_String, ConvertTo)
 {
 	{
 		StringA str1("test");
-		RefPtr<RefBuffer> buf(str1.ConvertTo(Text::Encoding::GetWideCharEncoding()));
-		wchar_t* wstr = (wchar_t*)buf->GetPointer();
+		RefPtr<ByteBuffer> buf(str1.ConvertTo(Text::Encoding::GetWideCharEncoding()));
+		wchar_t* wstr = (wchar_t*)buf->GetData();
 		ASSERT_EQ(sizeof(wchar_t) * 4, buf->GetSize());
 		ASSERT_EQ(L't', wstr[0]);
 		ASSERT_EQ(L'e', wstr[1]);
@@ -130,8 +130,8 @@ TEST_F(Test_Base_String, ConvertTo)
 
 	{
 		StringW str1(L"test");
-		RefPtr<RefBuffer> buf(str1.ConvertTo(Text::Encoding::GetSystemMultiByteEncoding()));
-		char* astr = (char*)buf->GetPointer();
+		RefPtr<ByteBuffer> buf(str1.ConvertTo(Text::Encoding::GetSystemMultiByteEncoding()));
+		char* astr = (char*)buf->GetData();
 		ASSERT_EQ(4, buf->GetSize());
 		ASSERT_EQ('t', astr[0]);
 		ASSERT_EQ('e', astr[1]);

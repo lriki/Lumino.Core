@@ -90,6 +90,9 @@
     <ClCompile Include="..\..\test\UnitTest\Base\Test_Base_Rect.cpp">
       <Filter>UnitTest\Base</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\test\UnitTest\Base\Test_Base_ByteBuffer.cpp">
+      <Filter>UnitTest\Base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\test\UnitTest\TestConfig.h">

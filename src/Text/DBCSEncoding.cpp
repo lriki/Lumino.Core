@@ -1,6 +1,6 @@
 ﻿
 #include "../Internal.h"
-#include "../../include/Lumino/Base/RefBuffer.h"
+#include "../../include/Lumino/Base/ByteBuffer.h"
 #include "../../include/Lumino/Text/UnicodeUtils.h"
 #include "DBCSEncoding.h"
 

@@ -37,10 +37,10 @@ TEST_F(Test_Base_Encoding_UTF8, Basic)
 		//size_t charsUsed;
 		//bool usedDefaultChar;
 		EncodingConversionResult info;
-		RefPtr<RefBuffer> buf1(
+		RefPtr<ByteBuffer> buf1(
 			Encoding::Convert(str1, 9, decoder, encoder, &info));
 		
-		uint16_t* utf16str = (uint16_t*)buf1->GetPointer();
+		uint16_t* utf16str = (uint16_t*)buf1->GetData();
 
 		ASSERT_EQ(6, info.BytesUsed);
 		ASSERT_EQ(3, info.CharsUsed);
@@ -61,10 +61,10 @@ TEST_F(Test_Base_Encoding_UTF8, Basic)
 		//size_t charsUsed;
 		//bool usedDefaultChar;
 		EncodingConversionResult info;
-		RefPtr<RefBuffer> buf1(
+		RefPtr<ByteBuffer> buf1(
 			Encoding::Convert(utf16str, 6, decoder, encoder, &info));
 
-		uint8_t* utf8str = (uint8_t*)buf1->GetPointer();
+		uint8_t* utf8str = (uint8_t*)buf1->GetData();
 
 		ASSERT_EQ(9, info.BytesUsed);
 		ASSERT_EQ(3, info.CharsUsed);

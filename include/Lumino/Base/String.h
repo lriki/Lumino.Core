@@ -10,7 +10,7 @@ namespace Lumino
 {
 namespace Text { class Encoding; }
 
-class RefBuffer;
+class ByteBuffer;
 
 /// String::Split() の出力方法
 enum StringSplitOptions
@@ -135,7 +135,7 @@ public:
 		@return		\0終端文字は付加されません。GetSize() により使用バイト数を確認できます。
 					使用後、Release() で開放する必要があります。
 	*/
-	RefBuffer* ConvertTo(const Text::Encoding* encoding, bool* usedDefaultChar = NULL) const;
+	ByteBuffer* ConvertTo(const Text::Encoding* encoding, bool* usedDefaultChar = NULL) const;
 
 	/**
 		@brief		空文字列を設定する

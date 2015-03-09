@@ -43,6 +43,55 @@ public:
 };
 
 /**
+	@brief	参照カウントを持つ動的配列のクラスです。
+*/
+template<typename T, typename TAllocator = STLAllocator<T> >
+class ArrayList : public RefObject
+{
+public:
+	typedef typename std::vector<T, TAllocator>	std_vector;
+	typedef typename std_vector::iterator		iterator;
+	typedef typename std_vector::const_iterator	const_iterator;
+
+public:
+
+	/// 配列が空であるかを判定します。
+	bool IsEmpty() const { return m_vector.empty(); }
+
+	/// 保持できる要素数を設定します。
+	void Reserve(int size) { m_vector.reserve(size); }
+
+	/// 末尾に要素を追加します。
+	void Add(const T& value) { m_vector.push_back(value); }
+
+	/// 全ての要素を削除します。
+	void Clear() { m_vector.push_back(value); }
+
+	/// 格納されている要素数を取得します。
+	int GetCount() const { return (int)m_vector.size(); }
+
+	/// 指定したインデックスにある要素への参照を取得します。
+	T& GetAt(int index) { return m_vector.at(index); }
+	const T& GetAt(int index) const { return m_vector.at(index); }
+
+	/// 終端要素の参照を返します。
+	T& GetLast() { return *(m_vector.rbegin()); }
+	const T& GetLast() const { return *(m_vector.rbegin()); }
+
+public:
+	// STL interface
+	iterator		begin()			{ return m_vector.begin(); }
+	const_iterator	begin() const	{ return m_vector.begin(); }
+	iterator		end()			{ return m_vector.end(); }
+	const_iterator	end() const		{ return m_vector.end(); }
+	iterator		erase(iterator pos) { return m_list.erase(pos); }
+	iterator		erase(iterator begin, iterator end) { return m_list.erase(begin, end); }
+
+private:
+	std_vector	m_vector;
+};
+
+/**
 	@brief		キーの "operator <" の実装により値を並べ替える動的配列
 */
 template<typename TKey, typename TValue, typename TAllocator = STLAllocator< std::pair<TKey, TValue> > >

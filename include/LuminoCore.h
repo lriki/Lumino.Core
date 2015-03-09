@@ -10,7 +10,7 @@
 #include "Lumino/Base/String.h"
 #include "Lumino/Base/StringUtils.h"
 #include "Lumino/Base/RefObject.h"
-#include "Lumino/Base/RefBuffer.h"
+#include "Lumino/Base/ByteBuffer.h"
 #include "Lumino/Base/STLUtils.h"
 #include "Lumino/Base/Typedef.h"
 #include "Lumino/Base/CRT.h"
@@ -21,6 +21,7 @@
 #include "Lumino/Base/Delegate.h"
 #include "Lumino/Base/Size.h"
 #include "Lumino/Base/Rect.h"
+#include "Lumino/Base/Stack.h"
 
 #include "Lumino/IO/PathName.h"
 #include "Lumino/IO/PathUtils.h"

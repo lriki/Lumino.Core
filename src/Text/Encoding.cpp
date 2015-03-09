@@ -1,7 +1,7 @@
 ﻿
 #include "../Internal.h"
 #include "../../include/Lumino/Base/RefObject.h"
-#include "../../include/Lumino/Base/RefBuffer.h"
+#include "../../include/Lumino/Base/ByteBuffer.h"
 #include "../../include/Lumino/Text/UnicodeUtils.h"
 #include "../../include/Lumino/Text/Encoding.h"
 #include "ASCIIEncoding.h"
@@ -131,7 +131,7 @@ Encoding* Encoding::GetEncodingTemplate<wchar_t>()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-RefBuffer* Encoding::Convert(
+ByteBuffer* Encoding::Convert(
 	const void* src, size_t srcByteCount, const Encoding* srcEncoding,
 	const Encoding* targetEncoding,
 	EncodingConversionResult* result)
@@ -144,7 +144,7 @@ RefBuffer* Encoding::Convert(
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-RefBuffer* Encoding::Convert(
+ByteBuffer* Encoding::Convert(
 	const void* src, size_t srcByteCount, Decoder* decoder,
 	Encoder* encoder,
 	EncodingConversionResult* result)
@@ -165,12 +165,10 @@ RefBuffer* Encoding::Convert(
 	size_t outputMaxByteCount = srcMaxCharCount * encoder->GetMaxByteCount();
 
 	// 中間バッファ作成
-	RefPtr<RefBuffer> tmpBuf(LN_NEW RefBuffer());
-	tmpBuf->Reserve(utf16MaxByteCount + sizeof(uint16_t));	// 終端 \0 考慮 (mbstowcs_s は \0 を書き込もうとする)
+	RefPtr<ByteBuffer> tmpBuf(LN_NEW ByteBuffer(utf16MaxByteCount + sizeof(uint16_t), false));	// 終端 \0 考慮 (mbstowcs_s は \0 を書き込もうとする)
 
 	// 変換先バッファを、最大要素数で確保
-	RefPtr<RefBuffer> targetBuf(LN_NEW RefBuffer());
-	targetBuf->Reserve(outputMaxByteCount + encoder->GetMaxByteCount());	// 終端 \0 考慮 (mbstowcs_s は \0 を書き込もうとする)
+	RefPtr<ByteBuffer> targetBuf(LN_NEW ByteBuffer(outputMaxByteCount + encoder->GetMaxByteCount(), false));	// 終端 \0 考慮 (mbstowcs_s は \0 を書き込もうとする)
 
 	// 変換実行
 	size_t bytesUsed;
@@ -179,15 +177,15 @@ RefBuffer* Encoding::Convert(
 	decoder->ConvertToUTF16(
 		(const byte_t*)src,
 		srcByteCount,
-		(UTF16*)tmpBuf->GetPointer(),
+		(UTF16*)tmpBuf->GetData(),
 		utf16MaxByteCount / sizeof(UTF16),			// \0 強制格納に備え、1文字分余裕のあるサイズを指定する
 		&bytesUsed,
 		&charsUsed);
 	// 中間フォーマットからターゲットフォーマットへ
 	encoder->ConvertFromUTF16(
-		(const UTF16*)tmpBuf->GetPointer(),
+		(const UTF16*)tmpBuf->GetData(),
 		bytesUsed / sizeof(UTF16),
-		(byte_t*)targetBuf->GetPointer(),
+		(byte_t*)targetBuf->GetData(),
 		targetBuf->GetSize(),		// \0 強制格納に備え、1文字分余裕のあるサイズを指定する
 		&bytesUsed,
 		&charsUsed);
@@ -279,7 +277,7 @@ void SystemMultiByteEncoding::SystemMultiByteDecoder::ConvertToUTF16(const byte_
 #else
 	// 一時メモリ確保 (char[] → UTF-8 で最悪のパターンは、すべてASCIIの場合)
 	size_t tmpUTF32BufferLen = inBufferByteCount * sizeof(UnicodeUtils::UTF32);
-	RefBuffer tmpUTF32Buffer;
+	ByteBuffer tmpUTF32Buffer;
 	tmpUTF32Buffer.Reserve(sizeof(wchar_t) * inBufferByteCount);
 	tmpUTF32Buffer.Clear();
 
@@ -313,7 +311,7 @@ void SystemMultiByteEncoding::SystemMultiByteDecoder::ConvertToUTF16(const byte_
 	
 	// mbstowcs_s は変換したいサイズを指定することができず、基本的に \0 まで変換することになる。
 	// そのため、一度別バッファに移して \0 を付ける
-	RefBuffer tmpInBuffer;
+	ByteBuffer tmpInBuffer;
 	tmpInBuffer.Reserve(inByteCount + sizeof(char));	// NULL 文字分 + 1
 	tmpInBuffer.Copy(inBuffer, inByteCount);
 	char* tmpStr = (char*)tmpInBuffer.GetPointer();
@@ -345,7 +343,7 @@ void SystemMultiByteEncoding::SystemMultiByteDecoder::ConvertToUTF16(const byte_
 	#ifdef LN_WCHAR_16
 	// mbstowcs_s は変換したいサイズを指定することができず、基本的に \0 まで変換することになる。
 	// そのため、一度別バッファに移して \0 を付ける
-	RefBuffer tmpInBuffer;
+	ByteBuffer tmpInBuffer;
 	tmpInBuffer.Reserve(inByteCount + sizeof(char));	// NULL 文字分 + 1
 	tmpInBuffer.Copy(inBuffer, inByteCount);
 	char* tmpStr = (char*)tmpInBuffer.GetPointer();
@@ -429,7 +427,7 @@ void SystemMultiByteEncoding::SystemMultiByteEncoder::ConvertFromUTF16(const UTF
 	LN_THROW(0, NotImplementedException);
 #else
 	// UTF-16 のサロゲートを考慮し、最悪パターン(すべてサロゲート)でメモリ確保
-	RefBuffer tmpUTF32Buffer;
+	ByteBuffer tmpUTF32Buffer;
 	tmpUTF32Buffer.Reserve(sizeof(wchar_t) * (inBufferCharCount * 2));
 	tmpUTF32Buffer.Clear();
 
@@ -463,7 +461,7 @@ void SystemMultiByteEncoding::SystemMultiByteEncoder::ConvertFromUTF16(const UTF
 #ifdef LN_WCHAR_16
 	// wcsrtombs_s は変換したいサイズを指定することができず、基本的に \0 まで変換することになる。
 	// そのため、一度別バッファに移して \0 を付ける
-	RefBuffer tmpWideBuffer;
+	ByteBuffer tmpWideBuffer;
 	tmpWideBuffer.Reserve(inByteCount + sizeof(wchar_t));	// NULL 文字分
 	tmpWideBuffer.Copy(inBuffer, inByteCount);
 	wchar_t* wideStr = (wchar_t*)tmpWideBuffer.GetPointer();
