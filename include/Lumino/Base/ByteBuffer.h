@@ -79,7 +79,7 @@ public:
 	/**
 		@brief		バッファの再割り当てを行い、指定されたデータをコピーします。
 		@param[in]	data		: コピー元のデータ
-		@param[in]	size		: コピー元のデータのバイト数
+		@param[in]	size		: コピーするバイト数
 	*/
 	void Alloc(const void* data, size_t size);
 
@@ -103,7 +103,7 @@ public:
 	/**
 		@brief		指定したバッファからこのバッファにデータをコピーします。
 		@param[in]	data		: コピー元バッファ
-		@param[in]	size		: コピー元バッファのバイト数
+		@param[in]	size		: コピーするバイト数
 	*/
 	void Copy(const void* data, size_t size);
 
@@ -111,7 +111,7 @@ public:
 		@brief		指定したコピー先位置に、指定したバッファからこのバッファにデータをコピーします。
 		@param[in]	offset		: コピー先の先頭インデックス
 		@param[in]	data		: コピー元バッファ
-		@param[in]	size		: コピー元バッファのバイト数
+		@param[in]	size		: コピーするバイト数
 	*/
 	void Copy(size_t offset, const void* data, size_t size);
 
