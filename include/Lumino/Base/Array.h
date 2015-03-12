@@ -65,7 +65,7 @@ public:
 	void Add(const T& value) { m_vector.push_back(value); }
 
 	/// 全ての要素を削除します。
-	void Clear() { m_vector.push_back(value); }
+	void Clear() { m_vector.clear(); }
 
 	/// 格納されている要素数を取得します。
 	int GetCount() const { return (int)m_vector.size(); }
