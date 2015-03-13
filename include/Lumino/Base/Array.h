@@ -79,6 +79,10 @@ public:
 	const T& GetLast() const { return *(m_vector.rbegin()); }
 
 public:
+	T& operator[] (size_t index) { return m_vector[index]; }
+	const T& operator[] (size_t index) const { return m_vector[index]; }
+
+public:
 	// STL interface
 	iterator		begin()			{ return m_vector.begin(); }
 	const_iterator	begin() const	{ return m_vector.begin(); }

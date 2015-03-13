@@ -16,7 +16,11 @@ TEST_F(Test_Base_String, Constructor)
 		EXPECT_EQ(str1, str2.c_str());
 	}
 
-	
+	{
+		std::string str1(NULL);
+		EXPECT_TRUE(str1.empty());
+	}
+
 }
 
 //---------------------------------------------------------------------
