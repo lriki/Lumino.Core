@@ -41,7 +41,7 @@ public:
 	/**
 		@brief	例外の詳細メッセージを取得します。
 	*/
-	const TCHAR* GetMessage() const { return mMessage; }
+	virtual const TCHAR* GetMessage() const { return mMessage; }
 
 	/**
 		@brief		例外発生時に詳細情報をダンプするファイルを初期化する

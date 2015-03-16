@@ -72,7 +72,7 @@ public:
 		@param[in]	ptr		: 管理対象としてセットする ReferenceObject インスタンスのポインタ
 		@param[in]	addRef	: true の場合、セットされた ReferenceObject の参照カウントをインクリメントする
 	*/
-	explicit RefPtr( T* ptr, bool addRef = false)
+	RefPtr( T* ptr, bool addRef = false)
 		: mPtr( ptr )
 	{
 		if ( addRef ) {
