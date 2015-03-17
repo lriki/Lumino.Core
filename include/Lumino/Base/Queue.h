@@ -16,6 +16,8 @@ class Queue
 {
 public:
 	typedef typename std::deque<T, TAllocator>	std_deque;
+	typedef typename std_deque::iterator		iterator;
+	typedef typename std_deque::const_iterator	const_iterator;
 
 public:
 	Queue() {}
@@ -36,11 +38,18 @@ public:
 	void Enqueue(const T& value) { m_queue.push_back(value); }
 
 	/// キューの先頭の要素を削除します。
-	void Dequeue(T* outHead = NULL) { if (outHead) *outTop = GetHead(); m_queue.pop_front(); }
+	void Dequeue(T* outHead = NULL) { if (outHead) *outHead = GetHead(); m_queue.pop_front(); }
 
 	/// キューの先頭の要素を取得します。
 	T& GetHead() { return m_queue.front(); }
 	const T& GetHead() const { return m_queue.front(); }
+
+public:
+	// STL interface
+	iterator		begin()			{ return m_queue.begin(); }
+	const_iterator	begin() const	{ return m_queue.begin(); }
+	iterator		end()			{ return m_queue.end(); }
+	const_iterator	end() const		{ return m_queue.end(); }
 
 private:
 	std_deque	m_queue;
