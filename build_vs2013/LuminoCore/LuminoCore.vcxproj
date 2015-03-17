@@ -40,8 +40,9 @@
     <ClInclude Include="..\..\include\Lumino\Platform\Environment.h" />
     <ClInclude Include="..\..\include\Lumino\Platform\EventArgs.h" />
     <ClInclude Include="..\..\include\Lumino\Platform\EventListener.h" />
-    <ClInclude Include="..\..\include\Lumino\Platform\PlatformManager.h" />
+    <ClInclude Include="..\..\include\Lumino\Platform\Application.h" />
     <ClInclude Include="..\..\include\Lumino\Platform\PlatformSupport.h" />
+    <ClInclude Include="..\..\include\Lumino\Platform\NativeWindow.h" />
     <ClInclude Include="..\..\include\Lumino\Platform\Window.h" />
     <ClInclude Include="..\..\include\Lumino\Testing\TestUtils.h" />
     <ClInclude Include="..\..\include\Lumino\Text\Encoding.h" />
@@ -54,6 +55,7 @@
     <ClInclude Include="..\..\include\Lumino\Threading\Thread.h" />
     <ClInclude Include="..\..\include\Lumino\Threading\ThreadingExceptions.h" />
     <ClInclude Include="..\..\src\Base\Win32\BackTrace.h" />
+    <ClInclude Include="..\..\src\Platform\Internal.h" />
     <ClInclude Include="..\..\src\Platform\Win32\Win32WindowManager.h" />
     <ClInclude Include="..\..\src\Platform\Win32\Win32Window.h" />
     <ClInclude Include="..\..\src\Platform\Win32\Win32WindowBase.h" />
@@ -81,12 +83,13 @@
     <ClCompile Include="..\..\src\IO\PathName.cpp" />
     <ClCompile Include="..\..\src\IO\PathUtils.cpp" />
     <ClCompile Include="..\..\src\IO\Win32\FileUtils_win32.cpp" />
-    <ClCompile Include="..\..\src\Platform\PlatformManager.cpp" />
+    <ClCompile Include="..\..\src\Platform\Application.cpp" />
     <ClCompile Include="..\..\src\Platform\Win32\Environment.cpp" />
     <ClCompile Include="..\..\src\Platform\Win32\PlatformSupport_Win32.cpp" />
     <ClCompile Include="..\..\src\Platform\Win32\Win32WindowManager.cpp" />
     <ClCompile Include="..\..\src\Platform\Win32\Win32Window.cpp" />
     <ClCompile Include="..\..\src\Platform\Win32\Win32WindowBase.cpp" />
+    <ClCompile Include="..\..\src\Platform\Window.cpp" />
     <ClCompile Include="..\..\src\Platform\WindowBase.cpp" />
     <ClCompile Include="..\..\src\Platform\WindowManagerBase.cpp" />
     <ClCompile Include="..\..\src\Testing\TestUtils.cpp" />

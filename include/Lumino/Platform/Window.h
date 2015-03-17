@@ -1,4 +1,4 @@
-ï»¿
+
 #pragma once
 
 #include "../Base/RefObject.h"
@@ -11,59 +11,70 @@ namespace Platform
 {
 
 /**
-	@brief	ãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ å›ºæœ‰ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚·ã‚¹ãƒ†ãƒ ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’æŠ½è±¡åŒ–ã—ã¾ã™ã€‚
+	@brief	ƒEƒBƒ“ƒhƒEƒVƒXƒeƒ€‚ÌƒEƒBƒ“ƒhƒE‚ğ•\‚·ƒNƒ‰ƒX‚Å‚·B
 */
 class Window
 	: public RefObject
 {
 public:
+	/**
+		@brief		ƒEƒBƒ“ƒhƒE‚ğì¬‚µ‚Ü‚·B
+		@param[in]	title		: ƒEƒBƒ“ƒhƒEƒ^ƒCƒgƒ‹
+		@param[in]	size		: ƒNƒ‰ƒCƒAƒ“ƒg—Ìˆæ‚ÌƒsƒNƒZƒ‹ƒTƒCƒY
+		@param[in]	resizable	: ‰Â•ÏƒEƒBƒ“ƒhƒE‚Æ‚µ‚Äì¬‚·‚é‚©‚Ç‚¤‚©
+	*/
+	Window(const String& title, const Size& clientSize, bool resizable);
+	virtual ~Window();
+
+public:
 
 	/**
-		@brief		ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆé ˜åŸŸã®ã‚µã‚¤ã‚ºã‚’å–å¾—ã—ã¾ã™ã€‚
+		@brief		ƒNƒ‰ƒCƒAƒ“ƒg—Ìˆæ‚ÌƒTƒCƒY‚ğæ“¾‚µ‚Ü‚·B
 	*/
-	virtual const Size& GetSize() const = 0;
+	const Size& GetSize() const;
 	
 	/**
-		@brief		ãƒ•ãƒ«ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã®æœ‰åŠ¹ãƒ•ãƒ©ã‚°ã‚’è¨­å®šã—ã¾ã™ã€‚
-		@details	enabled ã« true ã‚’è¨­å®šã™ã‚‹ã¨ãƒ•ãƒ«ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã€false ã‚’è¨­å®šã™ã‚‹ã¨ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ¢ãƒ¼ãƒ‰ã«ãªã‚Šã¾ã™ã€‚
-					ã“ã®é–¢æ•°ã¯ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¹ã‚¿ã‚¤ãƒ«ã‚’å¤‰æ›´ã—ã¦æœ€å¤§åŒ–ã™ã‚‹ã ã‘ã§ã™ã€‚
-					ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®å ´åˆã¯ãªã«ã‚‚ã—ã¾ã›ã‚“ã€‚
+		@brief		ƒtƒ‹ƒXƒNƒŠ[ƒ“‚Ì—LŒøƒtƒ‰ƒO‚ğİ’è‚µ‚Ü‚·B
+		@details	enabled ‚É true ‚ğİ’è‚·‚é‚Æƒtƒ‹ƒXƒNƒŠ[ƒ“Afalse ‚ğİ’è‚·‚é‚ÆƒEƒBƒ“ƒhƒEƒ‚[ƒh‚É‚È‚è‚Ü‚·B
+					‚±‚ÌŠÖ”‚ÍƒEƒBƒ“ƒhƒEƒXƒ^ƒCƒ‹‚ğ•ÏX‚µ‚ÄÅ‘å‰»‚·‚é‚¾‚¯‚Å‚·B
+					ƒ†[ƒU[’è‹`ƒEƒBƒ“ƒhƒE‚Ìê‡‚Í‚È‚É‚à‚µ‚Ü‚¹‚ñB
 	*/
-	virtual void SetFullScreenEnabled(bool enabled) = 0;
+	void SetFullScreenEnabled(bool enabled);
 
 	/**
-		@brief		ãƒ•ãƒ«ã‚¹ã‚¯ãƒªãƒ¼ãƒ³çŠ¶æ…‹ã‹ã‚’åˆ¤å®šã—ã¾ã™ã€‚
+		@brief		ƒtƒ‹ƒXƒNƒŠ[ƒ“ó‘Ô‚©‚ğ”»’è‚µ‚Ü‚·B
 	*/
-	virtual bool IsFullScreenEnabled() const = 0;
+	bool IsFullScreenEnabled() const;
 
 	/**
-		@brief		ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãŒã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‹ã©ã†ã‹ã‚’ç¤ºã™å€¤ã‚’å–å¾—ã—ã¾ã™ã€‚
+		@brief		ƒEƒBƒ“ƒhƒE‚ªƒAƒNƒeƒBƒu‚©‚Ç‚¤‚©‚ğ¦‚·’l‚ğæ“¾‚µ‚Ü‚·B
 	*/
-	virtual bool IsActive() const = 0;
+	bool IsActive() const;
 
 	/**
-		@brief		ã“ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã«ãƒã‚¦ã‚¹ã‚­ãƒ£ãƒ—ãƒãƒ£ã‚’è¨­å®šã—ã¾ã™ã€‚
+		@brief		‚±‚ÌƒEƒBƒ“ƒhƒE‚Éƒ}ƒEƒXƒLƒƒƒvƒ`ƒƒ‚ğİ’è‚µ‚Ü‚·B
 	*/
-	virtual void CaptureMouse() = 0;
+	void CaptureMouse();
 
 	/**
-		@brief		ã“ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‹ã‚‰ãƒã‚¦ã‚¹ã‚­ãƒ£ãƒ—ãƒãƒ£ã‚’å‰Šé™¤ã—ã¾ã™ã€‚
+		@brief		‚±‚ÌƒEƒBƒ“ƒhƒE‚©‚çƒ}ƒEƒXƒLƒƒƒvƒ`ƒƒ‚ğíœ‚µ‚Ü‚·B
 	*/
-	virtual void ReleaseMouseCapture() = 0;
+	void ReleaseMouseCapture();
 
 	/**
-		@brief		ã“ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã«ã‚¤ãƒ™ãƒ³ãƒˆãƒªã‚¹ãƒŠãƒ¼ã‚’ã‚¢ã‚¿ãƒƒãƒã—ã¾ã™ã€‚(priority ãŒå¤§ãã„ã‚‚ã®ãŒå…ˆã«å‡¦ç†ã•ã‚Œã‚‹ã€‚å¿…ãšãƒ‡ã‚¿ãƒƒãƒã™ã‚‹ã“ã¨)
+		@brief		‚±‚ÌƒEƒBƒ“ƒhƒE‚ÉƒCƒxƒ“ƒgƒŠƒXƒi[‚ğƒAƒ^ƒbƒ`‚µ‚Ü‚·B(priority ‚ª‘å‚«‚¢‚à‚Ì‚ªæ‚Éˆ—‚³‚ê‚éB•K‚¸ƒfƒ^ƒbƒ`‚·‚é‚±‚Æ)
 	*/
-	virtual void AttachEventListener(IEventListener* listener, int priority) = 0;
+	void AttachEventListener(IEventListener* listener, int priority);
 
 	/**
-		@brief		ã“ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‹ã‚‰ã‚¤ãƒ™ãƒ³ãƒˆãƒªã‚¹ãƒŠãƒ¼ã‚’ãƒ‡ã‚¿ãƒƒãƒã—ã¾ã™ã€‚
+		@brief		‚±‚ÌƒEƒBƒ“ƒhƒE‚©‚çƒCƒxƒ“ƒgƒŠƒXƒi[‚ğƒfƒ^ƒbƒ`‚µ‚Ü‚·B
 	*/
-	virtual void DetachEventListener(IEventListener* listener) = 0;
+	void DetachEventListener(IEventListener* listener);
 
-protected:
-	Window() {}
-	virtual ~Window() {}
+private:
+	friend class Application;
+	Window(NativeWindow* nativeWindow);
+	NativeWindow*	m_nativeWindow;
 };
 
 } // namespace Platform

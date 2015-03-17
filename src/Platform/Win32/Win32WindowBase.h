@@ -1,7 +1,7 @@
 ﻿
 #pragma once
 
-#include "../../../include/Lumino/Platform/Window.h"
+#include "../../../include/Lumino/Platform/NativeWindow.h"
 #include "../WindowBase.h"
 
 namespace Lumino
@@ -21,7 +21,7 @@ public:
 	virtual ~Win32WindowBase();
 
 public:
-	// override Window
+	// override NativeWindow
 	virtual bool IsActive() const { return mIsActive; }
 
 public:
@@ -40,6 +40,7 @@ public:
 	static Key ConvertVirtualKeyCode(DWORD winVK);
 
 protected:
+	Size	mClientSize;        ///< クライアント領域の大きさ
 	int		mLastMouseX;
 	int		mLastMouseY;
 	bool	mIsActive;

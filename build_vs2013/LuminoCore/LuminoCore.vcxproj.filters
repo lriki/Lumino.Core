@@ -96,9 +96,6 @@
     <ClInclude Include="..\..\include\Lumino\Platform\EventListener.h">
       <Filter>Platform</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Lumino\Platform\Window.h">
-      <Filter>Platform</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Lumino\Platform\Environment.h">
       <Filter>Platform</Filter>
     </ClInclude>
@@ -150,9 +147,6 @@
     <ClInclude Include="..\..\src\Platform\Win32\Win32WindowManager.h">
       <Filter>Platform\Win32</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Lumino\Platform\PlatformManager.h">
-      <Filter>Platform</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\Text\UTF32Encoding.h">
       <Filter>Text</Filter>
     </ClInclude>
@@ -183,6 +177,18 @@
     </ClInclude>
     <ClInclude Include="..\..\include\Lumino\Base\Stack.h">
       <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Platform\NativeWindow.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Platform\Window.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Platform\Application.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Platform\Internal.h">
+      <Filter>Platform</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -275,9 +281,6 @@
     <ClCompile Include="..\..\src\Text\ConvertTable_EUCKR.c">
       <Filter>Text</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Platform\PlatformManager.cpp">
-      <Filter>Platform</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\Platform\WindowManagerBase.cpp">
       <Filter>Platform</Filter>
     </ClCompile>
@@ -307,6 +310,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\Base\ByteBuffer.cpp">
       <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Platform\Window.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Platform\Application.cpp">
+      <Filter>Platform</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

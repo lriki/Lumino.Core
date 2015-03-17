@@ -32,13 +32,15 @@
 */
 
 #include "../Internal.h"
+#include "Internal.h"
 #ifdef LN_WIN32
 	#include "Win32/Win32WindowManager.h"
 #endif
 #ifdef LN_X11
 	#include "X11/X11WindowManager.h"
 #endif
-#include "../../include/Lumino/Platform/PlatformManager.h"
+#include "../../include/Lumino/Platform/Application.h"
+#include "../../include/Lumino/Platform/Window.h"
 
 
 namespace Lumino
@@ -56,19 +58,21 @@ WindowCreationSettings::WindowCreationSettings()
 	, Resizable(true)
 {}
 
-PlatformManagerSettings::PlatformManagerSettings()
+ApplicationSettings::ApplicationSettings()
 	: API(WindowSystemAPI_Win32API)
 	, UseInternalUIThread(false)
 {}
 
 //=============================================================================
-// PlatformManager
+// Application
 //=============================================================================
+
+Application* Internal::ApplicationInstance = NULL;
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-PlatformManager::PlatformManager()
+Application::Application()
 	: m_useThread(false)
 	, m_windowManager(NULL)
 {
@@ -77,7 +81,7 @@ PlatformManager::PlatformManager()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-PlatformManager::PlatformManager(const PlatformManagerSettings& settings)
+Application::Application(const ApplicationSettings& settings)
 	: m_useThread(false)
 	, m_windowManager(NULL)
 {
@@ -87,7 +91,7 @@ PlatformManager::PlatformManager(const PlatformManagerSettings& settings)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-PlatformManager::~PlatformManager()
+Application::~Application()
 {
 	Dispose();
 }
@@ -95,13 +99,13 @@ PlatformManager::~PlatformManager()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void PlatformManager::Initialize(const PlatformManagerSettings& settings)
+void Application::Initialize(const ApplicationSettings& settings)
 {
 	m_windowCreationSettings = settings.MainWindowSettings;
 	m_useThread = settings.UseInternalUIThread;
 
 #ifdef LN_WIN32
-	m_windowManager = LN_NEW Win32WindowManager();
+	m_windowManager = LN_NEW Win32WindowManager(0);
 #endif
 #ifdef LN_X11
 	m_windowManager = LN_NEW X11WindowManager();
@@ -110,26 +114,26 @@ void PlatformManager::Initialize(const PlatformManagerSettings& settings)
 	if (m_useThread) {
 		m_mainWindowThreadInitFinished.SetFalse();
 		m_mainWindowThreadEndRequested.SetFalse();
-		m_mainWindowThread.Start(LN_CreateDelegate(this, &PlatformManager::Thread_MainWindow));
+		m_mainWindowThread.Start(LN_CreateDelegate(this, &Application::Thread_MainWindow));
 		m_mainWindowThreadInitFinished.Wait();	// 初期化終了まで待機する
 	}
 	else {
 		m_windowManager->CreateMainWindow(m_windowCreationSettings);
 	}
+
+	// MainWindow
+	m_mainWindow = LN_NEW Window(m_windowManager->GetMainWindow());
+
+	// グローバル変数にセット
+	if (Internal::ApplicationInstance == NULL) {
+		Internal::ApplicationInstance = this;
+	}
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-Window* PlatformManager::GetMainWindow()
-{
-	return m_windowManager->GetMainWindow();
-}
-
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-bool PlatformManager::DoEvents()
+bool Application::DoEvents()
 {
 	// メインスレッドでメッセージ処理する場合は InternalDoEvents
 	if (!m_useThread) {
@@ -142,9 +146,9 @@ bool PlatformManager::DoEvents()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void PlatformManager::Dispose()
+void Application::Dispose()
 {
-	// 別スレッドでメッセ―じょりしていた場合異はスレッド終了待機
+	// 別スレッドでメッセージ処理していた場合異はスレッド終了待機
 	if (m_useThread) {
 		m_mainWindowThreadEndRequested.SetTrue();	// 終了要求だして、
 		m_mainWindowThread.Wait();					// 待つ
@@ -153,13 +157,19 @@ void PlatformManager::Dispose()
 	else {
 		m_windowManager->Finalize();
 	}
+	LN_SAFE_RELEASE(m_mainWindow);
 	LN_SAFE_RELEASE(m_windowManager);
+
+	// グローバル変数からはずす
+	if (Internal::ApplicationInstance == this) {
+		Internal::ApplicationInstance = NULL;
+	}
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void PlatformManager::Thread_MainWindow()
+void Application::Thread_MainWindow()
 {
 	// 初期化
 	m_windowManager->CreateMainWindow(m_windowCreationSettings);

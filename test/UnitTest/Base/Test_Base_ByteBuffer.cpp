@@ -39,7 +39,7 @@ TEST_F(Test_Base_ByteBuffer, Constructor)
 	ByteBuffer buf5(data2, 2, true);
 	buf5.Copy("ab", 2);
 	ASSERT_EQ(2, buf5.GetSize());
-	ASSERT_EQ(data2, buf5.GetData());
+	ASSERT_TRUE(TestUtils::CheckArrays(data2, buf5.GetData(), 2));
 	ASSERT_EQ('a', buf5[0]);
 	ASSERT_EQ('b', buf5[1]);
 	ASSERT_EQ('a', data2[0]);	// 元バッファにも書き込まれている
@@ -108,7 +108,7 @@ TEST_F(Test_Base_ByteBuffer, SetReferenceBuffer)
 	buf1.SetReferenceBuffer(data2, 2);
 	buf1.Copy("ab", 2);
 	ASSERT_EQ(2, buf1.GetSize());
-	ASSERT_EQ(data2, buf1.GetData());
+	ASSERT_TRUE(TestUtils::CheckArrays(data2, buf1.GetData(), 2));
 	ASSERT_EQ('a', buf1[0]);
 	ASSERT_EQ('b', buf1[1]);
 	ASSERT_EQ('a', data2[0]);	// 元バッファにも書き込まれている

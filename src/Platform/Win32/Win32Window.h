@@ -14,31 +14,13 @@ class Win32Window
 	: public Win32WindowBase
 {
 public:
-	/// 初期化データ
-	struct SettingData
-	{
-		const TCHAR*	        TitleText;		///< ウィンドウタイトルの文字列
-		int				        Width;			///< クライアント領域の幅
-		int				        Height;			///< クライアント領域の高さ
-		bool			        Fullscreen;		///< フルスクリーンモードで初期化する場合 true
-		const TCHAR*	        WinClassName;   ///< ウィンドウクラスの名前 または NULL ( NULL の場合、L"_LNote_" が使われる )
-		int                     IconResourceID; ///< タイトルバーのアイコン識別子 (IDI_ICON1 等)
-		bool					Resizable;
-	};
-
-public:
-	static const TCHAR*		WINDOW_CLASS_NAME;
-	static const TCHAR*		PROP_WINPROC;
-	static const DWORD		WINDOWED_STYLE;
-	static const DWORD		FULLSCREEN_STYLE;
-
-public:
-	Win32Window(Win32WindowManager* windowManager, const SettingData& settingData);
+	Win32Window(Win32WindowManager* windowManager, HWND hWnd, DWORD hWindowedStyle, HACCEL hAccel, const String& title);
 	virtual ~Win32Window();
 
 public:
-	// override Window
+	// override NativeWindow
 	virtual const Size& GetSize() const { return mClientSize; }
+	virtual void SetVisible(bool visible);
 	virtual void SetFullScreenEnabled(bool enabled);
 	virtual bool IsFullScreenEnabled() const { return mFullScreen; }
 	virtual void CaptureMouse();
@@ -49,11 +31,9 @@ public:
 
 private:
 	void Resize(bool fullscreen);
-	static LRESULT CALLBACK StaticWndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
 private:
-	String		mTitleText;			///< ウィンドウタイトルの文字列    
-	Size		mClientSize;        ///< クライアント領域の大きさ
+	String		mTitleText;			///< ウィンドウタイトルの文字列  
 	int			mOrginalWidth;      ///< initialize() または setSize() で設定されたクライアント領域の幅
 	int			mOrginalHeight;     ///< initialize() または setSize() で設定されたクライアント領域の高さ
 	HWND		mWindowHandle;		///< ウィンドウハンドル

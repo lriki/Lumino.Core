@@ -11,10 +11,13 @@ protected:
 //---------------------------------------------------------------------
 TEST_F(Test_Platform_Application, Basic)
 {
-	PlatformManagerSettings s;
-	PlatformManager m(s);
-#if 0
-	while (app->DoEvents())
+	ApplicationSettings s;
+	Application app(s);
+
+	Window win1(_T("test"), Size(100, 200), false);
+
+#if 1
+	while (app.DoEvents())
 	{
 	}
 #endif
@@ -23,8 +26,8 @@ TEST_F(Test_Platform_Application, Basic)
 //---------------------------------------------------------------------
 //TEST_F(Test_Platform_Application, DoEvents)
 //{
-//	PlatformManagerSettings s;
-//	PlatformManager m(s);
+//	ApplicationSettings s;
+//	Application m(s);
 //
 //	int i = 0;
 //	while (m.DoEvents())
@@ -39,11 +42,11 @@ TEST_F(Test_Platform_Application, Basic)
 //---------------------------------------------------------------------
 TEST_F(Test_Platform_Application, OnThread)
 {
-	PlatformManagerSettings s;
+	ApplicationSettings s;
 	s.UseInternalUIThread = true;
-	PlatformManager m(s);
+	Application app(s);
 #if 0
-	while (app->DoEvents())
+	while (app.DoEvents())
 	{
 	}
 #endif

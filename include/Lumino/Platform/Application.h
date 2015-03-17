@@ -12,6 +12,7 @@ namespace Lumino
 namespace Platform
 {
 class WindowManagerBase;
+class NativeWindow;
 class Window;
 
 /// ウィンドウシステムに使用するAPI・ライブラリ
@@ -32,32 +33,32 @@ struct WindowCreationSettings
 	WindowCreationSettings();
 };
 
-/// PlatformManager を初期化するための設定
-struct PlatformManagerSettings
+/// Application を初期化するための設定
+struct ApplicationSettings
 {
 	WindowSystemAPI			API;
 	WindowCreationSettings	MainWindowSettings;
 	bool					UseInternalUIThread;	///<  (default:false)
 
-	PlatformManagerSettings();
+	ApplicationSettings();
 };
 
-class PlatformManager
+class Application
 	: public RefObject
 {
 	//public:
 	//
-	//	static PlatformManager* Create();
+	//	static Application* Create();
 
 public:
-	PlatformManager();
-	PlatformManager(const PlatformManagerSettings& settings);
-	virtual ~PlatformManager();
+	Application();
+	Application(const ApplicationSettings& settings);
+	virtual ~Application();
 
 public:
 
-	void Initialize(const PlatformManagerSettings& settings);
-	Window* GetMainWindow();
+	void Initialize(const ApplicationSettings& settings);
+	Window* GetMainWindow() { return m_mainWindow; }
 	// override Application
 	//virtual void CreateMainWindow(const WindowCreationSettings& settings, bool useThread);
 	bool DoEvents();
@@ -76,9 +77,11 @@ private:
 	void Thread_MainWindow();
 
 private:
+	friend class Window;
 	bool						m_useThread;
 	WindowCreationSettings		m_windowCreationSettings;
 	WindowManagerBase*			m_windowManager;
+	Window*						m_mainWindow;
 	Threading::DelegateThread	m_mainWindowThread;
 	Threading::EventFlag		m_mainWindowThreadInitFinished;
 	Threading::EventFlag		m_mainWindowThreadEndRequested;

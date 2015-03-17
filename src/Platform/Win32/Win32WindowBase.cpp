@@ -123,6 +123,15 @@ LRESULT Win32WindowBase::WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 			/////////////////////////////////////////////// ウィンドウサイズが変更された
 			case WM_SIZE:
 			{
+				mClientSize.Set(lparam & 0xFFFF, (lparam >> 16) & 0xFFFF);
+
+
+
+				// ウィンドウサイズを拾っておく
+				//RECT rc;
+				//::GetClientRect(mWindowHandle, &rc);
+				//window->mClientSize.Set(rc.right, rc.bottom);
+
 				//EventArgs e;
 				//e.Type = LN_EVENT_WINDOW_SIZE_CHANGED;
 				//e.Sender = this;

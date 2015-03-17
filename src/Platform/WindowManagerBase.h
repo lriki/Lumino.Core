@@ -1,13 +1,13 @@
 ﻿
 #pragma once
 
-#include "../../include/Lumino/Platform/PlatformManager.h"
+#include "../../include/Lumino/Platform/Application.h"
 
 namespace Lumino
 {
 namespace Platform
 {
-class Window;
+class NativeWindow;
 
 /**
 	@note	[2015/2/8]
@@ -38,18 +38,19 @@ protected:
 
 public:
 	virtual void CreateMainWindow(const WindowCreationSettings& settings) = 0;
-	virtual Window* GetMainWindow() = 0;
+	virtual NativeWindow* GetMainWindow() = 0;
+	virtual NativeWindow* CreateSubWindow(const WindowCreationSettings& settings) = 0;
 	virtual void DoEvents() = 0;
 	virtual void Finalize() = 0;
 
 public:
-	void AddWindow(Window* window) { m_windowArray.Add(window); }
-	void RemoveWindow(Window* window) { m_windowArray.Remove(window); }
+	void AddWindow(NativeWindow* window) { m_windowArray.Add(window); }
+	void RemoveWindow(NativeWindow* window) { m_windowArray.Remove(window); }
 	bool IsEndRequested() const { return m_endRequested; }
 	void Exit() { m_endRequested = true; }
 
 protected:
-	Array<Window*>			m_windowArray;
+	Array<NativeWindow*>	m_windowArray;
 	bool					m_endRequested;
 };
 
