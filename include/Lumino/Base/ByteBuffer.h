@@ -123,8 +123,8 @@ public:
 	/**
 		@brief		バッファの先頭アドレスを取得します。
 	*/
-	void* GetData() { return m_buffer; }
-	const void* GetData() const { return m_buffer; }
+	byte_t* GetData() { return m_buffer; }
+	const byte_t* GetData() const { return m_buffer; }
 	
 	/**
 		@brief		バッファのサイズ (バイト数) を取得します。
