@@ -14,7 +14,7 @@ TEST_F(Test_Platform_Application, Basic)
 	ApplicationSettings s;
 	Application app(s);
 
-	Window win1(_T("test"), Size(100, 200), false);
+	RefPtr<Window> win1(Window::Create(_T("test"), Size(200, 200), true));
 
 #if 1
 	while (app.DoEvents())

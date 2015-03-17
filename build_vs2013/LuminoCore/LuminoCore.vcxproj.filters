@@ -178,9 +178,6 @@
     <ClInclude Include="..\..\include\Lumino\Base\Stack.h">
       <Filter>Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Lumino\Platform\NativeWindow.h">
-      <Filter>Platform</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Lumino\Platform\Window.h">
       <Filter>Platform</Filter>
     </ClInclude>
@@ -188,6 +185,9 @@
       <Filter>Platform</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Platform\Internal.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Platform\NativeWindow.h">
       <Filter>Platform</Filter>
     </ClInclude>
   </ItemGroup>

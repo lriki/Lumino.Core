@@ -216,7 +216,7 @@ void Win32WindowManager::CreateMainWindow(const WindowCreationSettings& settings
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-NativeWindow* Win32WindowManager::CreateSubWindow(const WindowCreationSettings& settings)
+Window* Win32WindowManager::CreateSubWindow(const WindowCreationSettings& settings)
 {
 	Win32WindowManager::NativeWindowCreationData data;
 	data.TitleText = settings.Title;

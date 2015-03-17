@@ -1,15 +1,17 @@
 ﻿
 #pragma once
 
-#include "../Base/RefObject.h"
-#include "../Base/Size.h"
-#include "EventListener.h"
+#include "../../include/Lumino/Base/RefObject.h"
+#include "../../include/Lumino/Base/Size.h"
+#include "../../include/Lumino/Platform/Window.h"
+//#include "../../include/Lumino/EventListener.h"
 
 namespace Lumino
 {
 namespace Platform
 {
 
+#if 0
 /**
 	@brief	プラットフォーム固有のウィンドウシステムのウィンドウを抽象化します。
 */
@@ -64,6 +66,7 @@ public:
 protected:
 	virtual ~NativeWindow() {};
 };
+#endif
 
 } // namespace Platform
 } // namespace Lumino

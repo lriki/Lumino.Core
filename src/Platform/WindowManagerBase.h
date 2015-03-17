@@ -7,7 +7,7 @@ namespace Lumino
 {
 namespace Platform
 {
-class NativeWindow;
+class Window;
 
 /**
 	@note	[2015/2/8]
@@ -38,20 +38,20 @@ protected:
 
 public:
 	virtual void CreateMainWindow(const WindowCreationSettings& settings) = 0;
-	virtual NativeWindow* GetMainWindow() = 0;
-	virtual NativeWindow* CreateSubWindow(const WindowCreationSettings& settings) = 0;
+	virtual Window* GetMainWindow() = 0;
+	virtual Window* CreateSubWindow(const WindowCreationSettings& settings) = 0;
 	virtual void DoEvents() = 0;
 	virtual void Finalize() = 0;
 
 public:
-	void AddWindow(NativeWindow* window) { m_windowArray.Add(window); }
-	void RemoveWindow(NativeWindow* window) { m_windowArray.Remove(window); }
+	void AddWindow(Window* window) { m_windowArray.Add(window); }
+	void RemoveWindow(Window* window) { m_windowArray.Remove(window); }
 	bool IsEndRequested() const { return m_endRequested; }
 	void Exit() { m_endRequested = true; }
 
 protected:
-	Array<NativeWindow*>	m_windowArray;
-	bool					m_endRequested;
+	Array<Window*>	m_windowArray;
+	bool			m_endRequested;
 };
 
 } // namespace Platform

@@ -1,7 +1,7 @@
 ﻿
 #pragma once
 
-#include "../../include/Lumino/Platform/NativeWindow.h"
+#include "NativeWindow.h"
 
 namespace Lumino
 {
@@ -13,7 +13,7 @@ class WindowManagerBase;
 	@brief	
 */
 class WindowBase
-	: public NativeWindow
+	: public Window
 {
 public:
 	WindowBase(WindowManagerBase* windowManager);

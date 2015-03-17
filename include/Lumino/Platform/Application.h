@@ -12,7 +12,6 @@ namespace Lumino
 namespace Platform
 {
 class WindowManagerBase;
-class NativeWindow;
 class Window;
 
 /// ウィンドウシステムに使用するAPI・ライブラリ
@@ -58,20 +57,15 @@ public:
 public:
 
 	void Initialize(const ApplicationSettings& settings);
-	Window* GetMainWindow() { return m_mainWindow; }
+	Window* GetMainWindow();
 	// override Application
 	//virtual void CreateMainWindow(const WindowCreationSettings& settings, bool useThread);
 	bool DoEvents();
 
 public:
 	void Dispose();
-	//void AddWindow(Window* window) { mWindowArray.Add(window); }
-	//void RemoveWindow(Window* window) { mWindowArray.Remove(window); }
 
 protected:
-	//virtual Window* InternalCreateWindow(const WindowCreationSettings& settings) = 0;
-	//virtual void InternalDoEvents() = 0;
-	//virtual void InternalDestroyWindow(Window* window) = 0;
 
 private:
 	void Thread_MainWindow();
@@ -81,7 +75,7 @@ private:
 	bool						m_useThread;
 	WindowCreationSettings		m_windowCreationSettings;
 	WindowManagerBase*			m_windowManager;
-	Window*						m_mainWindow;
+	//Window*						m_mainWindow;
 	Threading::DelegateThread	m_mainWindowThread;
 	Threading::EventFlag		m_mainWindowThreadInitFinished;
 	Threading::EventFlag		m_mainWindowThreadEndRequested;

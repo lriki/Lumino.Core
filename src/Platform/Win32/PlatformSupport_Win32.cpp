@@ -13,7 +13,7 @@ namespace Platform
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-HWND PlatformSupport::GetWindowHandle(NativeWindow* window)
+HWND PlatformSupport::GetWindowHandle(Window* window)
 {
 	Win32WindowBase* w = dynamic_cast<Win32WindowBase*>(window);
 	LN_THROW(w, ArgumentException);

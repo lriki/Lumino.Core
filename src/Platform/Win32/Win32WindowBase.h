@@ -1,7 +1,7 @@
 ﻿
 #pragma once
 
-#include "../../../include/Lumino/Platform/NativeWindow.h"
+#include "../NativeWindow.h"
 #include "../WindowBase.h"
 
 namespace Lumino
@@ -21,7 +21,7 @@ public:
 	virtual ~Win32WindowBase();
 
 public:
-	// override NativeWindow
+	// override Window
 	virtual bool IsActive() const { return mIsActive; }
 
 public:

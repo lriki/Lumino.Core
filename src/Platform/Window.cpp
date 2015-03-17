@@ -4,8 +4,8 @@
 #include "../Internal.h"
 #include "Internal.h"
 #include "../../include/Lumino/Platform/Window.h"
-#include "../../include/Lumino/Platform/NativeWindow.h"
 #include "../../include/Lumino/Platform/Application.h"
+#include "NativeWindow.h"
 #include "WindowManagerBase.h"
 
 namespace Lumino
@@ -13,6 +13,34 @@ namespace Lumino
 namespace Platform
 {
 
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+Window* Window::Create(const String& title, const Size& clientSize, bool resizable)
+{
+	WindowCreationSettings data;
+	data.Title = title;
+	data.ClientSize = clientSize;
+	data.Fullscreen = false;
+	data.Resizable = resizable;
+	return Internal::ApplicationInstance->m_windowManager->CreateSubWindow(data);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+Window::Window()
+{
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+Window::~Window()
+{
+}
+
+#if 0
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
@@ -106,6 +134,7 @@ void Window::DetachEventListener(IEventListener* listener)
 {
 	m_nativeWindow->DetachEventListener(listener);
 }
+#endif
 
 } // namespace Platform
 } // namespace Lumino

@@ -122,12 +122,20 @@ void Application::Initialize(const ApplicationSettings& settings)
 	}
 
 	// MainWindow
-	m_mainWindow = LN_NEW Window(m_windowManager->GetMainWindow());
+	//m_mainWindow = LN_NEW Window(m_windowManager->GetMainWindow());
 
 	// グローバル変数にセット
 	if (Internal::ApplicationInstance == NULL) {
 		Internal::ApplicationInstance = this;
 	}
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+Window* Application::GetMainWindow()
+{
+	return m_windowManager->GetMainWindow();
 }
 
 //-----------------------------------------------------------------------------
@@ -157,7 +165,7 @@ void Application::Dispose()
 	else {
 		m_windowManager->Finalize();
 	}
-	LN_SAFE_RELEASE(m_mainWindow);
+	//LN_SAFE_RELEASE(m_mainWindow);
 	LN_SAFE_RELEASE(m_windowManager);
 
 	// グローバル変数からはずす

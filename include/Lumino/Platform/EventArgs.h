@@ -5,7 +5,7 @@ namespace Lumino
 {
 namespace Platform
 {
-class NativeWindow;
+class Window;
 
 /// システムイベントの種類
 enum EventType
@@ -155,7 +155,7 @@ enum Key
 struct EventArgs
 {
 	EventType		Type;			///< イベントの種類
-	NativeWindow*	Sender;			///< イベントの送信元ウィンドウ
+	Window*			Sender;			///< イベントの送信元ウィンドウ
 
 	/// マウスイベントの引数
 	union 
@@ -182,7 +182,7 @@ struct EventArgs
 public:
 
 	/// 種類と送信元ウィンドウを指定して初期化する
-	EventArgs(EventType type, NativeWindow* sender) { Type = type; Sender = sender; }
+	EventArgs(EventType type, Window* sender) { Type = type; Sender = sender; }
 	EventArgs() {}
 };
 

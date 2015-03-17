@@ -42,7 +42,6 @@
     <ClInclude Include="..\..\include\Lumino\Platform\EventListener.h" />
     <ClInclude Include="..\..\include\Lumino\Platform\Application.h" />
     <ClInclude Include="..\..\include\Lumino\Platform\PlatformSupport.h" />
-    <ClInclude Include="..\..\include\Lumino\Platform\NativeWindow.h" />
     <ClInclude Include="..\..\include\Lumino\Platform\Window.h" />
     <ClInclude Include="..\..\include\Lumino\Testing\TestUtils.h" />
     <ClInclude Include="..\..\include\Lumino\Text\Encoding.h" />
@@ -56,6 +55,7 @@
     <ClInclude Include="..\..\include\Lumino\Threading\ThreadingExceptions.h" />
     <ClInclude Include="..\..\src\Base\Win32\BackTrace.h" />
     <ClInclude Include="..\..\src\Platform\Internal.h" />
+    <ClInclude Include="..\..\src\Platform\NativeWindow.h" />
     <ClInclude Include="..\..\src\Platform\Win32\Win32WindowManager.h" />
     <ClInclude Include="..\..\src\Platform\Win32\Win32Window.h" />
     <ClInclude Include="..\..\src\Platform\Win32\Win32WindowBase.h" />

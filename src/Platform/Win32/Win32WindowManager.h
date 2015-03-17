@@ -48,8 +48,8 @@ public:
 public:
 	// override Application
 	virtual void CreateMainWindow(const WindowCreationSettings& settings);
-	virtual NativeWindow* GetMainWindow() { return mMainWindow; }
-	virtual NativeWindow* CreateSubWindow(const WindowCreationSettings& settings);
+	virtual Window* GetMainWindow() { return mMainWindow; }
+	virtual Window* CreateSubWindow(const WindowCreationSettings& settings);
 	virtual void DoEvents();
 	virtual void Finalize();
 

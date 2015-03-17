@@ -18,7 +18,7 @@ public:
 	virtual ~Win32Window();
 
 public:
-	// override NativeWindow
+	// override Window
 	virtual const Size& GetSize() const { return mClientSize; }
 	virtual void SetVisible(bool visible);
 	virtual void SetFullScreenEnabled(bool enabled);
@@ -30,12 +30,8 @@ public:
 	virtual HWND GetWindowHandle() { return mWindowHandle; }
 
 private:
-	void Resize(bool fullscreen);
-
-private:
 	String		mTitleText;			///< ウィンドウタイトルの文字列  
-	int			mOrginalWidth;      ///< initialize() または setSize() で設定されたクライアント領域の幅
-	int			mOrginalHeight;     ///< initialize() または setSize() で設定されたクライアント領域の高さ
+	Size		m_originalClientSize;	///< initialize() または setSize() で設定されたクライアント領域のサイズ
 	HWND		mWindowHandle;		///< ウィンドウハンドル
 	RECT		mWindowRect;		///< ウィンドウ領域
 	HACCEL		mAccelerators;      ///< アクセラレータ (Alt+Enter の警告音対策のために使ってる)

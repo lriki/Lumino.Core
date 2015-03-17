@@ -7,7 +7,7 @@ namespace Lumino
 {
 namespace Platform
 {
-class NativeWindow;
+class Window;
 
 /**
 	@brief	プラットフォーム固有の機能にアクセスします。
@@ -19,23 +19,23 @@ public:
 	/**
 		@brief		ウィンドウのウィンドウハンドルを取得します。
 	*/
-	static HWND GetWindowHandle(NativeWindow* window);
+	static HWND GetWindowHandle(Window* window);
 #endif
 #ifdef LN_X11
 	/**
 		@brief		ウィンドウのウィンドウIDを取得します。
 	*/
-	static ::NativeWindow GetX11WindowID(NativeWindow* window);
+	static ::Window GetX11WindowID(Window* window);
 
 	/**
 		@brief		ウィンドウのビジュアルを取得します。
 	*/
-	static XVisualInfo* GetX11VisualInfo(NativeWindow* window);
+	static XVisualInfo* GetX11VisualInfo(Window* window);
 
 	/**
 		@brief		ウィンドウが接続されているXサーバを取得します。
 	*/
-	static Display* GetX11Display(NativeWindow* window);
+	static Display* GetX11Display(Window* window);
 #endif
 };
 
