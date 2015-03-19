@@ -55,6 +55,12 @@ public:
 
 public:
 
+	ArrayList() {}
+
+	ArrayList(const ArrayList<T, TAllocator>& ary) : m_vector(ary.m_vector) { }
+	
+public:
+
 	/// 配列が空であるかを判定します。
 	bool IsEmpty() const { return m_vector.empty(); }
 
