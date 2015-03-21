@@ -135,6 +135,7 @@ set(LN_SOURCES
 	src/Base/RefObject.cpp
 	src/Base/String.cpp
 	src/Base/StringUtils.cpp
+	src/Base/ByteBuffer.cpp
 	src/IO/DirectoryUtils.cpp
 	src/IO/FileStream.cpp
 	src/IO/FileUtils.cpp
@@ -159,7 +160,8 @@ set(LN_SOURCES
 	src/Threading/ReadWriteMutex.cpp
 	src/Platform/WindowManagerBase.cpp
 	src/Platform/WindowBase.cpp
-	src/Platform/PlatformManager.cpp
+	src/Platform/Window.cpp
+	src/Platform/Application.cpp
 	src/Testing/TestUtils.cpp
 	${LN_PLATFORM_SOURCES})
 
