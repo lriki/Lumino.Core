@@ -102,6 +102,19 @@ void X11WindowManager::CreateMainWindow(const WindowCreationSettings& settings)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+Window* X11WindowManager::CreateSubWindow(const WindowCreationSettings& settings)
+{
+	X11Window::SettingData data;
+	data.TitleText = settings.Title;
+	data.ClientSize = settings.ClientSize;
+	data.Fullscreen = settings.Fullscreen;
+	data.Resizable = settings.Resizable;
+	return LN_NEW X11Window(this, data);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 void X11WindowManager::DoEvents()
 {
 	/* XPending() は、トップレベルウィンドウが破棄された後に呼ばれると次のようなエラーを表示し強制終了する。

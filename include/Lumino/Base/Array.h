@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "STLUtils.h"
+#include "RefObject.h"
 
 namespace Lumino
 {
@@ -94,8 +95,8 @@ public:
 	const_iterator	begin() const	{ return m_vector.begin(); }
 	iterator		end()			{ return m_vector.end(); }
 	const_iterator	end() const		{ return m_vector.end(); }
-	iterator		erase(iterator pos) { return m_list.erase(pos); }
-	iterator		erase(iterator begin, iterator end) { return m_list.erase(begin, end); }
+	iterator		erase(iterator pos) { return m_vector.erase(pos); }
+	iterator		erase(iterator begin, iterator end) { return m_vector.erase(begin, end); }
 
 private:
 	std_vector	m_vector;

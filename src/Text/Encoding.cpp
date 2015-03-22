@@ -277,15 +277,13 @@ void SystemMultiByteEncoding::SystemMultiByteDecoder::ConvertToUTF16(const byte_
 #else
 	// 一時メモリ確保 (char[] → UTF-8 で最悪のパターンは、すべてASCIIの場合)
 	size_t tmpUTF32BufferLen = inBufferByteCount * sizeof(UnicodeUtils::UTF32);
-	ByteBuffer tmpUTF32Buffer;
-	tmpUTF32Buffer.Reserve(sizeof(wchar_t) * inBufferByteCount);
-	tmpUTF32Buffer.Clear();
+	ByteBuffer tmpUTF32Buffer(sizeof(wchar_t) * inBufferByteCount, true);
 
 	// wchar_t (UTF-32) へ変換する
 	const char* str_ptr = (const char*)inBuffer;
 	mbstate_t state;
 	memset(&state, 0, sizeof(state));
-	size_t len = mbsrtowcs((wchar_t*)tmpUTF32Buffer.GetPointer(), &str_ptr, inBufferByteCount, &state);
+	size_t len = mbsrtowcs((wchar_t*)tmpUTF32Buffer.GetData(), &str_ptr, inBufferByteCount, &state);
 	LN_THROW(len != -1, EncodingFallbackException);
 
 	// UTF-32 から UTF-16 へ変換する
@@ -293,7 +291,7 @@ void SystemMultiByteEncoding::SystemMultiByteDecoder::ConvertToUTF16(const byte_
 	memset(&options, 0, sizeof(options));
 	options.ReplacementChar = mFallbackReplacementChar;
 	UTFConversionResult result = UnicodeUtils::ConvertUTF32toUTF16(
-		(UnicodeUtils::UTF32*)tmpUTF32Buffer.GetPointer(),
+		(UnicodeUtils::UTF32*)tmpUTF32Buffer.GetData(),
 		len,
 		outBuffer,
 		outBufferCharCount,
@@ -427,9 +425,7 @@ void SystemMultiByteEncoding::SystemMultiByteEncoder::ConvertFromUTF16(const UTF
 	LN_THROW(0, NotImplementedException);
 #else
 	// UTF-16 のサロゲートを考慮し、最悪パターン(すべてサロゲート)でメモリ確保
-	ByteBuffer tmpUTF32Buffer;
-	tmpUTF32Buffer.Reserve(sizeof(wchar_t) * (inBufferCharCount * 2));
-	tmpUTF32Buffer.Clear();
+	ByteBuffer tmpUTF32Buffer(sizeof(wchar_t) * (inBufferCharCount * 2), true);
 
 	// UTF-32 へ変換する
 	UTFConversionOptions options;
@@ -438,13 +434,13 @@ void SystemMultiByteEncoding::SystemMultiByteEncoder::ConvertFromUTF16(const UTF
 	UTFConversionResult result = UnicodeUtils::ConvertUTF16toUTF32(
 		inBuffer,
 		inBufferCharCount,
-		(UnicodeUtils::UTF32*)tmpUTF32Buffer.GetPointer(),
+		(UnicodeUtils::UTF32*)tmpUTF32Buffer.GetData(),
 		tmpUTF32Buffer.GetSize(),
 		&options);
 	LN_THROW(result == UTFConversionResult_Success, EncodingFallbackException);
 
 	// UTF-32 を char[] へ変換する (wcsrtombs() は出力バッファにあまりがあるときは '\0' をつけるが、一杯の時はつけない)
-	const wchar_t* wstr_ptr = (const wchar_t*)tmpUTF32Buffer.GetPointer();
+	const wchar_t* wstr_ptr = (const wchar_t*)tmpUTF32Buffer.GetData();
 	mbstate_t state;
 	memset(&state, 0, sizeof(state));
 	size_t t = wcsrtombs((char*)outBuffer, &wstr_ptr, outBufferByteCount, &state);

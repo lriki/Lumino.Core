@@ -43,11 +43,15 @@ X11Window::X11Window(X11WindowManager* windowManager, const SettingData& setting
 	//		ベストな Visual を決めようとしていた。
 	//		そこまでやるかは今後の要望しだいで。とりあえず一番ベーシックな A8R8G8B、D24S8 で取得する。
 	//		※glfx では glXChooseVisual は使っていない。glXGetFBConfigs か、拡張が使えるときは glxChooseFBConfigSGIX。
-	
 	// http://earth.uni-muenster.de/~joergs/opengl/glXChooseVisual.html
+	// 各設定の初期値:
+	// http://www-01.ibm.com/support/knowledgecenter/ssw_aix_53/com.ibm.aix.opengl/doc/openglrf/glXChooseFBConfig.htm%23glxchoosefbconfig
+	// http://wlog.flatlib.jp/item/1679
 	int32_t attributes[] =
 	{
 		//GLX_USE_GL,		// リファレンスには "無視される" とある。
+		GLX_RENDER_TYPE,	GLX_RGBA_BIT,
+		GLX_DRAWABLE_TYPE,	GLX_WINDOW_BIT,
 		//GLX_LEVEL, 0,
 		GLX_RGBA,			1,		// TrueColor 使用
 		GLX_DOUBLEBUFFER,	1,		// ダブルバッファリング有効
@@ -61,9 +65,17 @@ X11Window::X11Window(X11WindowManager* windowManager, const SettingData& setting
 		None
 	};
 	
+	// FBConfig 取得。とりあえず取得できたリストの先頭のを選択する
+	int itemCount = 0;
+	GLXFBConfig* configArray = glXChooseFBConfig(display, screen, attributes, &itemCount);
+	LN_THROW(itemCount > 0, InvalidOperationException);
+    m_fbConfig = config_array[0];
+	XFree( config_array );
+	
 	// http://manpages.ubuntu.com/manpages/gutsy/ja/man3/glXChooseVisual.3x.html
 	// http://www.wakhok.ac.jp/~tatsuo/sen96/4shuu/section1.html
-	m_visualInfo = glXChooseVisual(x11Display, x11DefaultScreen, attributes);
+	//m_visualInfo = glXChooseVisual(x11Display, x11DefaultScreen, attributes);
+	m_visualInfo = glXGetVisualFromFBConfig(x11Display, m_fbConfig);
 	
 	//---------------------------------------------------------
 	// カラーマップを選択する。
