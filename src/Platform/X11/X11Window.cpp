@@ -3,7 +3,6 @@
 	GLX 参考ソース:
 	http://www.cl.cam.ac.uk/~cs448/git/trunk/src/progs/xdemos/overlay.c
 */
-#include <GL/glx.h>
 #include "../../Internal.h"
 #include "X11WindowManager.h"
 #include "X11Window.h"
@@ -67,10 +66,10 @@ X11Window::X11Window(X11WindowManager* windowManager, const SettingData& setting
 	
 	// FBConfig 取得。とりあえず取得できたリストの先頭のを選択する
 	int itemCount = 0;
-	GLXFBConfig* configArray = glXChooseFBConfig(display, screen, attributes, &itemCount);
+	GLXFBConfig* configArray = glXChooseFBConfig(x11Display, x11DefaultScreen, attributes, &itemCount);
 	LN_THROW(itemCount > 0, InvalidOperationException);
-    m_fbConfig = config_array[0];
-	XFree( config_array );
+    m_fbConfig = configArray[0];
+	XFree(configArray);
 	
 	// http://manpages.ubuntu.com/manpages/gutsy/ja/man3/glXChooseVisual.3x.html
 	// http://www.wakhok.ac.jp/~tatsuo/sen96/4shuu/section1.html

@@ -23,6 +23,16 @@ namespace Platform
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+const GLXFBConfig* PlatformSupport::GetGLXFBConfig(Window* window)
+{
+	X11Window* w = dynamic_cast<X11Window*>(window);
+	LN_THROW(w, ArgumentException);
+	return w->GetGLXFBConfig();
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 XVisualInfo* PlatformSupport::GetX11VisualInfo(Window* window)
 {
 	X11Window* w = dynamic_cast<X11Window*>(window);

@@ -5,6 +5,7 @@
 #include <X11/Xutil.h>
 #include <X11/Xlocale.h>
 #include <X11/keysym.h>
+#include <GL/glx.h>
 #include "../../../include/Lumino/Base/String.h"
 #include "../../../include/Lumino/Base/Size.h"
 #include "../WindowBase.h"
