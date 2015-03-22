@@ -30,7 +30,7 @@ public:
 	/**
 		@brief		ウィンドウの GLXFBConfig 構造体のポインタを取得します。
 	*/
-	const GLXFBConfig* GetGLXFBConfig(Window* window);
+	static const GLXFBConfig* GetGLXFBConfig(Window* window);
 	
 	/**
 		@brief		ウィンドウのビジュアルを取得します。
