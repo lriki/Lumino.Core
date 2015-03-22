@@ -28,6 +28,11 @@ public:
 	static ::Window GetX11WindowID(Window* window);
 
 	/**
+		@brief		ウィンドウの GLXFBConfig 構造体のポインタを取得します。
+	*/
+	const GLXFBConfig* GetGLXFBConfig(Window* window);
+	
+	/**
 		@brief		ウィンドウのビジュアルを取得します。
 	*/
 	static XVisualInfo* GetX11VisualInfo(Window* window);
