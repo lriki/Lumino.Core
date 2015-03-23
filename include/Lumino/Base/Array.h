@@ -100,6 +100,9 @@ public:
 	T& GetLast() { return *(m_vector.rbegin()); }
 	const T& GetLast() const { return *(m_vector.rbegin()); }
 
+	/// 別の配列をこの配列に上書きコピーします。
+	void CopyFrom(const ArrayList<T>& ary) { m_vector = ary.m_vector; }
+
 public:
 	T& operator[] (int index) { return m_vector[index]; }
 	const T& operator[] (int index) const { return m_vector[index]; }

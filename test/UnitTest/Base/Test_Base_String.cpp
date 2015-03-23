@@ -24,6 +24,22 @@ TEST_F(Test_Base_String, Constructor)
 }
 
 //---------------------------------------------------------------------
+TEST_F(Test_Base_String, XYChar)
+{
+	String str1("multi");
+	ASSERT_STREQ(_T("multi"), str1.GetCStr());
+
+	String str2(L"wide");
+	ASSERT_STREQ(_T("wide"), str2.GetCStr());
+
+	str1 = "multi";
+	ASSERT_STREQ(_T("multi"), str1.GetCStr());
+
+	str2 = L"wide";
+	ASSERT_STREQ(_T("wide"), str2.GetCStr());
+}
+
+//---------------------------------------------------------------------
 TEST_F(Test_Base_String, AssignCStr)
 {
 	// char、wchar_t の相互変換

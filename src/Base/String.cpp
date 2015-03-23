@@ -250,6 +250,15 @@ int BasicString<TChar>::IndexOf(const TChar* str, int startIndex) const
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
+int BasicString<TChar>::Compare(const TChar* str, int count, CaseSensitivity cs)
+{
+	return StringUtils::Compare(GetCStr(), str, (count < 0) ? GetLength() : count, cs);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
 Array< BasicString<TChar> > BasicString<TChar>::Split(const TChar* delim, StringSplitOptions option) const
 {
 	return StringUtils::Split(*this, delim, option);

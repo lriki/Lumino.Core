@@ -11,13 +11,6 @@
 namespace Lumino
 {
 
-/// 大文字と小文字の区別指定
-enum CaseSensitivity
-{
-	CaseSensitivity_CaseSensitive = 0,	///< 大文字と小文字を区別する
-	CaseSensitivity_CaseInsensitive,	///< 大文字と小文字を区別しない
-};
-
 /**
 	@brief		文字列ユーティリティ
 	@details	char および wchar_t 型文字列に対する各操作を行うユーティリティ関数郡です。
@@ -83,6 +76,19 @@ public:
 	static int IndexOf(const TChar* str1, const TChar* str2, int startIndex = 0);
 
 	/**
+		@brief		2 つの文字列を比較します。
+		@param[in]	str1		: 比較文字列
+		@param[in]	str2		: 比較文字列
+		@param[in]	count		: 比較する文字数
+		@param[in]	cs			: 大文字と小文字の区別設定
+		@return		str1 が str2 より小さい → 0 より小さい値
+					str1 と str2 が等しい   → 0
+					str1 が str2 より大きい → 0 より大きい値
+	*/
+	template<typename TChar>
+	static int Compare(const TChar* str1, const TChar* str2, int count, CaseSensitivity cs = CaseSensitivity_CaseSensitive);
+
+	/**
 		@brief		文字列の前後にある空白を除いた文字列の範囲を調べる
 		@param[in]	
 	*/
@@ -121,7 +127,35 @@ public:
 	*/
 	template<typename TChar>
 	static bool EndsWith(const TChar* str1, int len1, const TChar* str2, int len2, CaseSensitivity cs);
-	
+
+	/**
+		@brief		文字列の左側(先頭)から指定した文字数を抽出します。
+		@param[in]	str		: 対象の文字列
+		@param[in]	count	: 文字数
+		@return		抽出された文字列
+	*/
+	template<typename TChar>
+	static BasicString<TChar> Left(const TChar* str, int count);
+
+	/**
+		@brief		文字列の右側(末尾)から指定した文字数を抽出します。
+		@param[in]	str		: 対象の文字列
+		@param[in]	count	: 文字数
+		@return		抽出された文字列
+	*/
+	template<typename TChar>
+	static BasicString<TChar> Right(const TChar* str, int count);
+
+	/**
+		@brief		文字列の部分文字列を抽出します。
+		@param[in]	str		: 対象の文字列
+		@param[in]	start	: 開始文字インデックス
+		@param[in]	count	: 文字数 (-1 の場合、末尾まで抽出する)
+		@return		抽出された文字列
+	*/
+	template<typename TChar>
+	static BasicString<TChar> Mid(const TChar* str, int start, int count = -1);
+
 	/**
 		@brief		文字列をデリミタで分割する
 		@param[in]	str		: 分割対象の文字列

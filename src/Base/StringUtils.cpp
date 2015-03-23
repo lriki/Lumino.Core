@@ -106,6 +106,48 @@ template int StringUtils::IndexOf<wchar_t>(const wchar_t* str1, const wchar_t* s
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
+int StringUtils::Compare(const TChar* str1, const TChar* str2, int count, CaseSensitivity cs)
+{
+	if (cs == CaseSensitivity_CaseSensitive)
+	{
+		while (count > 0)
+		{
+			if (*str1 != *str2) {
+				return ((unsigned int)(*str1)) - ((unsigned int)(*str2));
+			}
+			if (*str1 == 0) {
+				break;
+			}
+			++str1;
+			++str2;
+			--count;
+		}
+		return 0;
+	}
+	else
+	{
+		while (count > 0)
+		{
+			if (ToUpper(*str1) != ToUpper(*str2)) {
+				return ((unsigned int)(ToUpper(*str1))) - ((unsigned int)(ToUpper(*str2)));
+			}
+			if (*str1 == 0) {
+				break;
+			}
+			++str1;
+			++str2;
+			--count;
+		}
+		return 0;
+	}
+}
+template int StringUtils::Compare<char>(const char* str1, const char* str2, int count, CaseSensitivity cs);
+template int StringUtils::Compare<wchar_t>(const wchar_t* str1, const wchar_t* str2, int count, CaseSensitivity cs);
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
 void StringUtils::Trim(const TChar* begin, int length, const TChar** outBegin, int* outLength)
 {
 	LN_THROW(begin && length >= 0 && outBegin && outLength, ArgumentException);
@@ -226,6 +268,75 @@ bool StringUtils::EndsWith(const TChar* str1, int len1, const TChar* str2, int l
 }
 template bool StringUtils::EndsWith<char>(const char* str1, int len1, const char* str2, int len2, CaseSensitivity cs);
 template bool StringUtils::EndsWith<wchar_t>(const wchar_t* str1, int len1, const wchar_t* str2, int len2, CaseSensitivity cs);
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+BasicString<TChar> StringUtils::Left(const TChar* str, int count)
+{
+	if (count < 0) {
+		count = 0;
+	}
+
+	int len = StrLen(str);
+	if (count >= len) {
+		return BasicString<TChar>(str);
+	}
+	return BasicString<TChar>(str, count);
+}
+template BasicString<char> StringUtils::Left<char>(const char* str, int count);
+template BasicString<wchar_t> StringUtils::Left<wchar_t>(const wchar_t* str, int count);
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+BasicString<TChar> StringUtils::Right(const TChar* str, int count)
+{
+	if (count < 0) {
+		count = 0;
+	}
+
+	int len = StrLen(str);
+	if (count >= len) {
+		return BasicString<TChar>(str);
+	}
+	return BasicString<TChar>(str + len - count, count);
+}
+template BasicString<char> StringUtils::Right<char>(const char* str, int count);
+template BasicString<wchar_t> StringUtils::Right<wchar_t>(const wchar_t* str, int count);
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+static BasicString<TChar> Mid(const TChar* str, int start, int count)
+{
+	int len = StrLen(str);
+
+	if (start < 0) {
+		start = 0;
+	}
+	if (count < 0) {
+		count = len - start;
+	}
+
+	if (start + count > len) {
+		count = len - start;
+	}
+	if (start > len) {
+		count = 0;
+	}
+
+	if (start == 0 && count == len) {
+		return BasicString<TChar>(str);
+	}
+
+	return BasicString<TChar>(str + start, count);
+}
+template BasicString<char> StringUtils::Mid<char>(const char* str, int start, int count);
+template BasicString<wchar_t> StringUtils::Mid<wchar_t>(const wchar_t* str, int start, int count);
 
 //-----------------------------------------------------------------------------
 //
