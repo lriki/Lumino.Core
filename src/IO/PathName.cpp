@@ -132,7 +132,8 @@ bool BasicPathName<TChar>::IsRoot() const
 template<typename TChar>
 bool BasicPathName<TChar>::CheckExt(const TChar* ext) const
 {
-	return StringUtils::EndsWith(m_path.c_str(), m_path.size(), ext, -1, StringComparison_IgnoreCase);
+	// TODO: 大文字小文字の区別をする
+	return StringUtils::EndsWith(m_path.c_str(), m_path.size(), ext, -1, CaseSensitivity_CaseInsensitive);
 }
 
 //-----------------------------------------------------------------------------

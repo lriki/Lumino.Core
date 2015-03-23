@@ -186,7 +186,7 @@ template void StringUtils::FormatVAList<wchar_t>(const wchar_t* format, va_list 
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-bool StringUtils::EndsWith(const TChar* str1, int len1, const TChar* str2, int len2, StringComparison comparisonType)
+bool StringUtils::EndsWith(const TChar* str1, int len1, const TChar* str2, int len2, CaseSensitivity cs)
 {
 	// 長さが -1 の場合は \0 までカウント
 	len1 = (len1 < 0) ? StrLen(str1) : len1;
@@ -195,8 +195,8 @@ bool StringUtils::EndsWith(const TChar* str1, int len1, const TChar* str2, int l
 	const TChar* p1 = str1 + len1;
 	const TChar* p2 = str2 + len2;
 	
-	// 大文字小文字を区別する場合
-	if (comparisonType == StringComparison_IgnoreCase)
+	// 大文字小文字を区別しない場合
+	if (cs == CaseSensitivity_CaseInsensitive)
 	{
 		while (str2 <= p2)
 		{
@@ -209,7 +209,7 @@ bool StringUtils::EndsWith(const TChar* str1, int len1, const TChar* str2, int l
 		}
 		return true;
 	}
-	// 大文字小文字を区別しない場合
+	// 大文字小文字を区別する場合
 	else
 	{
 		while (str2 <= p2)
@@ -224,8 +224,8 @@ bool StringUtils::EndsWith(const TChar* str1, int len1, const TChar* str2, int l
 		return true;
 	}
 }
-template bool StringUtils::EndsWith<char>(const char* str1, int len1, const char* str2, int len2, StringComparison comparisonType);
-template bool StringUtils::EndsWith<wchar_t>(const wchar_t* str1, int len1, const wchar_t* str2, int len2, StringComparison comparisonType);
+template bool StringUtils::EndsWith<char>(const char* str1, int len1, const char* str2, int len2, CaseSensitivity cs);
+template bool StringUtils::EndsWith<wchar_t>(const wchar_t* str1, int len1, const wchar_t* str2, int len2, CaseSensitivity cs);
 
 //-----------------------------------------------------------------------------
 //

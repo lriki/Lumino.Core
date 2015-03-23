@@ -11,10 +11,11 @@
 namespace Lumino
 {
 
-enum StringComparison
+/// 大文字と小文字の区別指定
+enum CaseSensitivity
 {
-	StringComparison_Normal = 0,		///< 大文字小文字を区別して比較を行う
-	StringComparison_IgnoreCase,		///< 大文字小文字を区別しないで比較を行う
+	CaseSensitivity_CaseSensitive = 0,	///< 大文字と小文字を区別する
+	CaseSensitivity_CaseInsensitive,	///< 大文字と小文字を区別しない
 };
 
 /**
@@ -119,7 +120,7 @@ public:
 		@endcodes
 	*/
 	template<typename TChar>
-	static bool EndsWith(const TChar* str1, int len1, const TChar* str2, int len2, StringComparison comparisonType);
+	static bool EndsWith(const TChar* str1, int len1, const TChar* str2, int len2, CaseSensitivity cs);
 	
 	/**
 		@brief		文字列をデリミタで分割する

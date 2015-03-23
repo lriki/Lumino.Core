@@ -17,8 +17,8 @@ TEST_F(Test_Base_String, Constructor)
 	}
 
 	{
-		std::string str1(NULL);
-		EXPECT_TRUE(str1.empty());
+		//std::string str1(NULL);
+		//EXPECT_TRUE(str1.empty());
 	}
 
 }

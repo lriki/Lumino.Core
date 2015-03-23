@@ -16,7 +16,7 @@ TEST_F(Test_Platform_Application, Basic)
 
 	RefPtr<Window> win1(Window::Create(_T("test"), Size(200, 200), true));
 
-#if 1
+#if 0
 	while (app.DoEvents())
 	{
 	}
