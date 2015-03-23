@@ -217,6 +217,35 @@ TEST_F(Test_Base_String, Trim)
 	}
 }
 
+//---------------------------------------------------------------------
+TEST_F(Test_Base_String, Compare)
+{
+	String str1("abc");
+	EXPECT_EQ(0, str1.Compare(_T("abc")));
+	EXPECT_LE(0, str1.Compare(_T("ab")));	// v1 < v2
+	EXPECT_GT(0, str1.Compare(_T("abd")));	// v1 > v2
+}
+
+//---------------------------------------------------------------------
+TEST_F(Test_Base_String, Left)
+{
+	String str1(_T("abcdef"));
+	ASSERT_STREQ(_T("ab"), str1.Left(2));
+}
+
+//---------------------------------------------------------------------
+TEST_F(Test_Base_String, Right)
+{
+	String str1(_T("abcdef"));
+	ASSERT_STREQ(_T("ef"), str1.Right(2));
+}
+
+//---------------------------------------------------------------------
+TEST_F(Test_Base_String, Mid)
+{
+	String str1(_T("abcdef"));
+	ASSERT_STREQ(_T("cde"), str1.Mid(2, 3));
+}
 
 //---------------------------------------------------------------------
 TEST_F(Test_Base_String, Split)

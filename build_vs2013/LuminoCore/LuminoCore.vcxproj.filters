@@ -190,6 +190,9 @@
     <ClInclude Include="..\..\src\Platform\NativeWindow.h">
       <Filter>Platform</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\IO\File.h">
+      <Filter>IO</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\include\Lumino\Base\Delegate.inl">
@@ -316,6 +319,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\Platform\Application.cpp">
       <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\IO\File.cpp">
+      <Filter>IO</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

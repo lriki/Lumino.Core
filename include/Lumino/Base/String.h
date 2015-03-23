@@ -213,7 +213,7 @@ public:
 					str1 と str2 が等しい   → 0
 					str1 が str2 より大きい → 0 より大きい値
 	*/
-	int Compare(const TChar* str, int count = -1, CaseSensitivity cs = CaseSensitivity_CaseSensitive);
+	int Compare(const TChar* str, int count = -1, CaseSensitivity cs = CaseSensitivity_CaseSensitive) const;
 
 	/**
 		@brief		文字列の左側(先頭)から指定した文字数を抽出します。
@@ -225,7 +225,7 @@ public:
 					s.Left(2)		=> _T("ab");
 		@endcode
 	*/
-	BasicString<TChar> Left(int count);
+	BasicString<TChar> Left(int count) const;
 
 	/**
 		@brief		文字列の右側(末尾)から指定した文字数を抽出します。
@@ -237,7 +237,7 @@ public:
 					s.Right(2)		=> _T("ef");
 		@endcode
 	*/
-	BasicString<TChar> Right(int count);
+	BasicString<TChar> Right(int count) const;
 
 	/**
 		@brief		文字列の部分文字列を抽出します。
@@ -250,7 +250,7 @@ public:
 					s.Mid(2, 3)		=> _T("cde");
 		@endcode
 	*/
-	BasicString<TChar> Mid(int start, int count = -1);
+	BasicString<TChar> Mid(int start, int count = -1) const;
 
 	/**
 		@brief		文字列をデリミタで分割する

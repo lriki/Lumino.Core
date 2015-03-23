@@ -31,6 +31,7 @@
     <ClInclude Include="..\..\include\Lumino\Base\StringUtils.h" />
     <ClInclude Include="..\..\include\Lumino\Base\Typedef.h" />
     <ClInclude Include="..\..\include\Lumino\IO\DirectoryUtils.h" />
+    <ClInclude Include="..\..\include\Lumino\IO\File.h" />
     <ClInclude Include="..\..\include\Lumino\IO\FileStream.h" />
     <ClInclude Include="..\..\include\Lumino\IO\FileUtils.h" />
     <ClInclude Include="..\..\include\Lumino\IO\MemoryStream.h" />
@@ -77,6 +78,7 @@
     <ClCompile Include="..\..\src\Base\String.cpp" />
     <ClCompile Include="..\..\src\Base\StringUtils.cpp" />
     <ClCompile Include="..\..\src\IO\DirectoryUtils.cpp" />
+    <ClCompile Include="..\..\src\IO\File.cpp" />
     <ClCompile Include="..\..\src\IO\FileStream.cpp" />
     <ClCompile Include="..\..\src\IO\FileUtils.cpp" />
     <ClCompile Include="..\..\src\IO\MemoryStream.cpp" />

@@ -250,7 +250,7 @@ int BasicString<TChar>::IndexOf(const TChar* str, int startIndex) const
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-int BasicString<TChar>::Compare(const TChar* str, int count, CaseSensitivity cs)
+int BasicString<TChar>::Compare(const TChar* str, int count, CaseSensitivity cs) const
 {
 	return StringUtils::Compare(GetCStr(), str, (count < 0) ? GetLength() : count, cs);
 }
@@ -259,7 +259,7 @@ int BasicString<TChar>::Compare(const TChar* str, int count, CaseSensitivity cs)
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-BasicString<TChar> BasicString<TChar>::Left(int count)
+BasicString<TChar> BasicString<TChar>::Left(int count) const
 {
 	return StringUtils::Left(GetCStr(), count);
 }
@@ -268,7 +268,7 @@ BasicString<TChar> BasicString<TChar>::Left(int count)
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-BasicString<TChar> BasicString<TChar>::Right(int count)
+BasicString<TChar> BasicString<TChar>::Right(int count) const
 {
 	return StringUtils::Right(GetCStr(), count);
 }
@@ -277,7 +277,7 @@ BasicString<TChar> BasicString<TChar>::Right(int count)
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-BasicString<TChar> BasicString<TChar>::Mid(int start, int count)
+BasicString<TChar> BasicString<TChar>::Mid(int start, int count) const
 {
 	return StringUtils::Mid(GetCStr(), start, count);
 }
