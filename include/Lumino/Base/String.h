@@ -174,6 +174,9 @@ public:
 	*/
 	int IndexOf(const TChar* str, int startIndex = 0) const;
 
+
+	//public int Compare(const TChar* str, StringComparison);
+
 	/**
 		@brief		文字列をデリミタで分割する
 		@param[in]	delim	: デリミタ文字列

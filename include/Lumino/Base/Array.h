@@ -68,14 +68,29 @@ public:
 	/// 保持できる要素数を設定します。
 	void Reserve(int size) { m_vector.reserve(size); }
 
+	/// 配列の要素数を変更します。
+	void Resize(int size) { m_vector.resize(size); }
+
 	/// 末尾に要素を追加します。
 	void Add(const T& value) { m_vector.push_back(value); }
 
 	/// 全ての要素を削除します。
 	void Clear() { m_vector.clear(); }
 
+	/// item に一致する最初の要素を削除します。
+	void Remove(const T& item) { STLUtils::Remove(m_vector, item); }
+
+	/// 指定したインデックスにある要素を削除します。
+	void RemoveAt(int index) { m_vector.erase(m_vector.begin() + index); }
+
+	/// item に一致する全ての要素を削除します。
+	void RemoveAll(const T& item) { STLUtils::RemoveAll(m_vector, item); }
+
 	/// 格納されている要素数を取得します。
 	int GetCount() const { return (int)m_vector.size(); }
+
+	/// 指定したインデックスに要素を設定します。
+	void SetAt(int index, const T& item) { m_vector.at(index) = item; }
 
 	/// 指定したインデックスにある要素への参照を取得します。
 	T& GetAt(int index) { return m_vector.at(index); }
