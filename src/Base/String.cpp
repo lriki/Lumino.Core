@@ -259,6 +259,33 @@ int BasicString<TChar>::Compare(const TChar* str, int count, CaseSensitivity cs)
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
+BasicString<TChar> BasicString<TChar>::Left(int count)
+{
+	return StringUtils::Left(GetCStr(), count);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+BasicString<TChar> BasicString<TChar>::Right(int count)
+{
+	return StringUtils::Right(GetCStr(), count);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+BasicString<TChar> BasicString<TChar>::Mid(int start, int count)
+{
+	return StringUtils::Mid(GetCStr(), start, count);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
 Array< BasicString<TChar> > BasicString<TChar>::Split(const TChar* delim, StringSplitOptions option) const
 {
 	return StringUtils::Split(*this, delim, option);

@@ -72,7 +72,10 @@ public:
 	void Resize(int size) { m_vector.resize(size); }
 
 	/// 末尾に要素を追加します。
-	void Add(const T& value) { m_vector.push_back(value); }
+	void Add(const T& item) { m_vector.push_back(item); }
+
+	/// 指定したインデックスの位置に要素を挿入します。
+	void Insert(int index, const T& item) { m_vector.insert(m_vector.begin() + index, item); }
 
 	/// 全ての要素を削除します。
 	void Clear() { m_vector.clear(); }

@@ -311,7 +311,7 @@ template BasicString<wchar_t> StringUtils::Right<wchar_t>(const wchar_t* str, in
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-static BasicString<TChar> Mid(const TChar* str, int start, int count)
+BasicString<TChar> StringUtils::Mid(const TChar* str, int start, int count)
 {
 	int len = StrLen(str);
 
