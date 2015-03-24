@@ -333,7 +333,7 @@ BasicString<TChar> BasicString<TChar>::Mid(int start, int count) const
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-Array< BasicString<TChar> > BasicString<TChar>::Split(const TChar* delim, StringSplitOptions option) const
+ArrayList< BasicString<TChar> > BasicString<TChar>::Split(const TChar* delim, StringSplitOptions option) const
 {
 	return StringUtils::Split(*this, delim, option);
 }

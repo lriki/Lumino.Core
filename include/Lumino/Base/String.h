@@ -273,7 +273,7 @@ public:
 		@param[in]	option	: 分割方法
 		@return		分割結果の文字列配列
 	*/
-	Array< BasicString<TChar> > Split(const TChar* delim, StringSplitOptions option = StringSplitOptions_None) const;
+	ArrayList< BasicString<TChar> > Split(const TChar* delim, StringSplitOptions option = StringSplitOptions_None) const;
 
 	/**
 		@brief		文字列を構成するバイト数を取得する

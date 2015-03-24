@@ -50,9 +50,11 @@ template<typename T, typename TAllocator = STLAllocator<T> >
 class ArrayList : public RefObject
 {
 public:
-	typedef typename std::vector<T, TAllocator>	std_vector;
-	typedef typename std_vector::iterator		iterator;
-	typedef typename std_vector::const_iterator	const_iterator;
+	typedef typename std::vector<T, TAllocator>		std_vector;
+	typedef typename std_vector::iterator			iterator;
+	typedef typename std_vector::const_iterator		const_iterator;
+	typedef typename std_vector::reference			reference;
+	typedef typename std_vector::const_reference	const_reference;
 
 public:
 
@@ -73,6 +75,9 @@ public:
 
 	/// 末尾に要素を追加します。
 	void Add(const T& item) { m_vector.push_back(item); }
+
+	/// 末尾に別の配列を連結します。
+	void Add(const ArrayList<T>& items) { m_vector.insert(m_vector.end(), items.m_vector.begin(), items.m_vector.end()); }
 
 	/// 指定したインデックスの位置に要素を挿入します。
 	void Insert(int index, const T& item) { m_vector.insert(m_vector.begin() + index, item); }
@@ -96,8 +101,8 @@ public:
 	void SetAt(int index, const T& item) { m_vector.at(index) = item; }
 
 	/// 指定したインデックスにある要素への参照を取得します。
-	T& GetAt(int index) { return m_vector.at(index); }
-	const T& GetAt(int index) const { return m_vector.at(index); }
+	reference GetAt(int index) { return m_vector.at(index); }				// VC++ や GCC では bool は特殊化され、T& には変換できない。reference で返さないとコンパイルエラーとなる
+	const_reference GetAt(int index) const { return m_vector.at(index); }
 
 	/// 終端要素の参照を返します。
 	T& GetLast() { return *(m_vector.rbegin()); }

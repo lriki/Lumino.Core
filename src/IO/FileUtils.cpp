@@ -287,7 +287,7 @@ ByteBuffer* FileUtils::ReadAllBytes(const char* filePath)
 	FILE* fp;
 	errno_t err = fopen_s(&fp, filePath, "rb");
 	LN_THROW(err == 0, FileNotFoundException);
-	uint64_t size = GetFileSize(fp);
+	size_t size = (size_t)GetFileSize(fp);
 
 	
 	RefPtr<ByteBuffer> buffer(LN_NEW ByteBuffer(size));
@@ -301,8 +301,7 @@ ByteBuffer* FileUtils::ReadAllBytes(const wchar_t* filePath)
 	FILE* fp;
 	errno_t err = _wfopen_s(&fp, filePath, L"rb");
 	LN_THROW(err == 0, FileNotFoundException);
-
-	size_t size = GetFileSize(fp);
+	size_t size = (size_t)GetFileSize(fp);
 
 	RefPtr<ByteBuffer> buffer(LN_NEW ByteBuffer(size));
 	fread(buffer->GetData(), 1, size, fp);

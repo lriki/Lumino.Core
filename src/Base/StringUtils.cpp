@@ -342,9 +342,9 @@ template BasicString<wchar_t> StringUtils::Mid<wchar_t>(const wchar_t* str, int 
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-Array< BasicString<TChar> > StringUtils::Split(const BasicString<TChar>& str, const TChar* delim, StringSplitOptions option)
+ArrayList< BasicString<TChar> > StringUtils::Split(const BasicString<TChar>& str, const TChar* delim, StringSplitOptions option)
 {
-	Array< BasicString<TChar> > result;
+	ArrayList< BasicString<TChar> > result;
 
 	// 最初の区切り文字を探す
 	int tokenStart = 0;
@@ -352,12 +352,12 @@ Array< BasicString<TChar> > StringUtils::Split(const BasicString<TChar>& str, co
 
 	if (delimIndex >= 0) {
 		if (option == StringSplitOptions_None || delimIndex > tokenStart) {
-			result.push_back(str.SubString(tokenStart, delimIndex - tokenStart));
+			result.Add(str.SubString(tokenStart, delimIndex - tokenStart));
 		}
 	}
 	else {
 		if (option == StringSplitOptions_None || tokenStart != str.size()) {
-			result.push_back(str.SubString(tokenStart));	// 残り全て
+			result.Add(str.SubString(tokenStart));	// 残り全て
 		}
 		return result;
 	}
@@ -369,12 +369,12 @@ Array< BasicString<TChar> > StringUtils::Split(const BasicString<TChar>& str, co
 		delimIndex = str.IndexOf(delim, tokenStart);
 		if (delimIndex >= 0) {
 			if (option == StringSplitOptions_None || delimIndex > tokenStart) {
-				result.push_back(str.SubString(tokenStart, delimIndex - tokenStart));
+				result.Add(str.SubString(tokenStart, delimIndex - tokenStart));
 			}
 		}
 		else {
 			if (option == StringSplitOptions_None || tokenStart != str.size()) {
-				result.push_back(str.SubString(tokenStart));	// 残り全て
+				result.Add(str.SubString(tokenStart));	// 残り全て
 			}
 			break;
 		}
@@ -384,8 +384,8 @@ Array< BasicString<TChar> > StringUtils::Split(const BasicString<TChar>& str, co
 
 	return result;
 }
-template Array< BasicString<char> > StringUtils::Split(const BasicString<char>& str, const char* delim, StringSplitOptions option);
-template Array< BasicString<wchar_t> > StringUtils::Split(const BasicString<wchar_t>& str, const wchar_t* delim, StringSplitOptions option);
+template ArrayList< BasicString<char> > StringUtils::Split(const BasicString<char>& str, const char* delim, StringSplitOptions option);
+template ArrayList< BasicString<wchar_t> > StringUtils::Split(const BasicString<wchar_t>& str, const wchar_t* delim, StringSplitOptions option);
 
 //----------------------------------------------------------------------
 //
