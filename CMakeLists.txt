@@ -141,6 +141,7 @@ set(LN_SOURCES
 	src/IO/FileUtils.cpp
 	src/IO/PathName.cpp
 	src/IO/PathUtils.cpp
+	src/IO/File.cpp
 	src/Text/ASCIIEncoding.cpp
 	src/Text/DBCSEncoding.cpp
 	src/Text/UTF16Encoding.cpp
