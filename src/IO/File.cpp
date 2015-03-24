@@ -40,7 +40,7 @@ File::~File()
 //-----------------------------------------------------------------------------
 void File::Open(FileMode mode, FileAccess access)
 {
-	LN_THROW(m_stream, InvalidOperationException);	// すでにファイルが開かれている
+	LN_THROW(m_stream == NULL, InvalidOperationException);	// すでにファイルが開かれている
 
 	m_fileAccess = access;
 
