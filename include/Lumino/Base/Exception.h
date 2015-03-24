@@ -265,11 +265,11 @@ class Win32Exception
 	: public Exception
 {
 public:
-	Win32Exception(DWORD dwLastError);
+	Win32Exception(uint32_t/*DWORD*/ dwLastError);
 	virtual ~Win32Exception() throw() {}
 
 public:
-	DWORD			GetLastErrorCode() const { return m_dwLastErrorCode; }
+	uint32_t/*DWORD*/			GetLastErrorCode() const { return m_dwLastErrorCode; }
 	const TCHAR*	GetFormatMessage() const { return m_pFormatMessage; }
 
 public:
@@ -277,8 +277,8 @@ public:
 	virtual Exception* Copy() const { return LN_NEW Win32Exception( *this ); }
 
 private:
-	DWORD		m_dwLastErrorCode;
-	TCHAR		m_pFormatMessage[512];	///< FormatMessage() で取得したメッセージ
+	uint32_t/*DWORD*/	m_dwLastErrorCode;
+	TCHAR				m_pFormatMessage[512];	///< FormatMessage() で取得したメッセージ
 };
 #endif
 

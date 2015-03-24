@@ -30,6 +30,7 @@
 #include "Lumino/IO/FileStream.h"
 #include "Lumino/IO/MemoryStream.h"
 #include "Lumino/IO/FileUtils.h"
+#include "Lumino/IO/File.h"
 
 #include "Lumino/Threading/Atomic.h"
 #include "Lumino/Threading/EventFlag.h"

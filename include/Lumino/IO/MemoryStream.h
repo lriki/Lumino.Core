@@ -48,7 +48,7 @@ public:
 	virtual bool CanRead() { return true; }
 	virtual bool CanWrite() { return true; }
 	virtual size_t GetSize() { return m_buffer.size(); }
-	virtual size_t Read(void* buffer, size_t bufferSize, size_t byteCount) { LN_THROW(0, NotImplementedException); return 0; }
+	virtual size_t Read(void* buffer, size_t byteCount) { LN_THROW(0, NotImplementedException); return 0; }
 	virtual void Write(const void* pData, size_t nByteCount);
 	virtual void Flush() {}		// Write が直接メモリに書きこむので不要
 

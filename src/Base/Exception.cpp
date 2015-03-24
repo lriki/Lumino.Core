@@ -173,11 +173,10 @@ void Exception::SetMessage(const wchar_t* format, va_list args)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-Win32Exception::Win32Exception( DWORD dwLastError )
+Win32Exception::Win32Exception(uint32_t/*DWORD*/ dwLastError)
 	: m_dwLastErrorCode( dwLastError )
 {
 	// エラーメッセージ取得
-
 	memset(m_pFormatMessage, 0, sizeof(m_pFormatMessage));
     :: FormatMessage(
 		FORMAT_MESSAGE_FROM_SYSTEM, NULL, m_dwLastErrorCode,

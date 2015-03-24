@@ -75,7 +75,7 @@ public:
 	virtual bool CanRead() { return (mFileAccess == FileAccess_Read) || (mFileAccess == FileAccess_ReadWrite); }
 	virtual bool CanWrite() { return (mFileAccess == FileAccess_Write) || (mFileAccess == FileAccess_ReadWrite); }
 	virtual size_t GetSize();
-	virtual size_t Read(void* buffer, size_t bufferSize, size_t byteCount);
+	virtual size_t Read(void* buffer, size_t byteCount);
 	virtual void Write(const void* data, size_t byteCount);
 	virtual void Flush();
 

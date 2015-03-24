@@ -120,10 +120,9 @@ size_t File::GetSize()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-size_t File::Read(void* buffer, size_t bufferSize, size_t readCount)
+size_t File::Read(void* buffer, size_t readCount)
 {
 	LN_THROW(m_stream, InvalidOperationException);
-	LN_THROW(bufferSize >= readCount, ArgumentException);
 	return fread(buffer, 1, readCount, m_stream);
 }
 

@@ -35,7 +35,7 @@ public:
 
 private:
 #ifdef LN_THREAD_WIN32
-    volatile LONG			mValue;
+    volatile long			mValue;
 #else
 	volatile int32_t		mValue;
     mutable pthread_mutex_t	mMutex;

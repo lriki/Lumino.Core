@@ -98,6 +98,8 @@ public:
 	BasicString& operator+=(const std_basic_string& right)	{ return static_cast<BasicString&>(std_basic_string::operator+=(right)); }	// += std::string
 	BasicString& operator+=(const TChar* ptr)				{ return static_cast<BasicString&>(std_basic_string::operator+=(ptr)); }
 	BasicString& operator+=(TChar ch)						{ return static_cast<BasicString&>(std_basic_string::operator+=(ch)); }
+	TChar& operator[](int index)							{ return std_basic_string::operator[](index); }
+	const TChar& operator[](int index)	const				{ return std_basic_string::operator[](index); }
 	operator const TChar*() const { return std_basic_string::c_str(); }
 
 public:
@@ -208,6 +210,14 @@ public:
 		@return		見つからなかった場合は -1
 	*/
 	int IndexOf(const TChar* str, int startIndex = 0) const;
+
+	/**
+		@brief		字列を検索し、見つかった最初の文字のインデックスを返す
+		@param[in]	str			: 検索文字列
+		@param[in]	startIndex	: 検索を開始するインデックス (省略した場合は先頭から)
+		@return		見つからなかった場合は -1
+	*/
+	int IndexOf(TChar ch, int startIndex = 0) const;
 
 	/**
 		@brief		この文字列と、指定した文字列を比較します。

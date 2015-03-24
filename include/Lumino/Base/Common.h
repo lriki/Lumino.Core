@@ -89,6 +89,8 @@
 
 //----------------------------------------------------------------------
 // include
+#include <stdio.h>
+#include <stdarg.h>
 #include <assert.h>
 
 #if defined(LN_WIN32)
@@ -104,7 +106,7 @@
 
 // ファイルパスの最大文字数
 #if defined(LN_WIN32)
-	#define LN_MAX_PATH		MAX_PATH	// 260
+	#define LN_MAX_PATH		260//MAX_PATH
 #elif defined(PATH_MAX)
 	#define LN_MAX_PATH		PATH_MAX
 #elif defined(_PC_PATH_MAX)

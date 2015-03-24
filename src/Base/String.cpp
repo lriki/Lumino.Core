@@ -284,6 +284,19 @@ int BasicString<TChar>::IndexOf(const TChar* str, int startIndex) const
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
+int BasicString<TChar>::IndexOf(TChar ch, int startIndex) const
+{
+	size_type pos = this->find(ch, startIndex);
+	if (pos == std_basic_string::npos) {
+		return -1;
+	}
+	return (int)pos;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
 int BasicString<TChar>::Compare(const TChar* str, int count, CaseSensitivity cs) const
 {
 	return StringUtils::Compare(GetCStr(), str, (count < 0) ? GetLength() : count, cs);

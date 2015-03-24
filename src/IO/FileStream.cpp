@@ -72,16 +72,15 @@ void FileStream::Close()
 //-----------------------------------------------------------------------------
 size_t FileStream::GetSize()
 {
-	return FileUtils::GetFileSize( mStream );
+	return (size_t)FileUtils::GetFileSize( mStream );
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-size_t FileStream::Read(void* buffer, size_t bufferSize, size_t readCount)
+size_t FileStream::Read(void* buffer, size_t readCount)
 {
 	LN_THROW(mStream, InvalidOperationException);
-	LN_THROW(bufferSize >= readCount, ArgumentException);
 	return fread(buffer, 1, readCount, mStream );
 }
 
