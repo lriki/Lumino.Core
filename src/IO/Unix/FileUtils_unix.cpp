@@ -163,11 +163,11 @@ void FileUtils::Delete(const wchar_t* filePath)
 	MBCS_FILEPATH(mbcsFilePath, filePath);
 	Delete(mbcsFilePath);
 }
-
+	
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-size_t FileUtils::GetFileSize(const TCHAR* filePath)
+uint64_t FileUtils::GetFileSize(const TCHAR* filePath)
 {
 	LN_THROW( filePath != NULL, ArgumentException );
 
@@ -175,7 +175,7 @@ size_t FileUtils::GetFileSize(const TCHAR* filePath)
 	errno_t r = _tfopen_s( &fp, filePath, _T("r") );
 	LN_THROW( r == 0, FileNotFoundException );
 
-	size_t size = 0;
+	uint64_t size = 0;
 	try
 	{
 		size = GetFileSize(fp);
@@ -192,7 +192,7 @@ size_t FileUtils::GetFileSize(const TCHAR* filePath)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-size_t FileUtils::GetFileSize( FILE* stream )
+uint64_t FileUtils::GetFileSize( FILE* stream )
 {
 	struct stat stbuf;
 	int handle = fileno( stream );
