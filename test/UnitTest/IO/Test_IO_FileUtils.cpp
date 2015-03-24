@@ -70,8 +70,8 @@ TEST_F(Test_IO_FileUtils, Copy_Delete)
 	String src1 = LOCALFILE("TestData/test1.txt");
 	String src2 = LOCALFILE("TestData/test2.txt");
 	String dest = LOCALFILE("TestData/test_copy.txt");
-	size_t src1Size = FileUtils::GetFileSize(src1);
-	size_t src2Size = FileUtils::GetFileSize(src2);
+	uint64_t src1Size = FileUtils::GetFileSize(src1);
+	uint64_t src2Size = FileUtils::GetFileSize(src2);
 
 	// 最初はコピー先ファイルが無いこと。
 	ASSERT_FALSE(FileUtils::Exists(dest));

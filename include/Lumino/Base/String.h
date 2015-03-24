@@ -182,9 +182,15 @@ public:
 	/**
 		@brief		文字列の先頭と末尾の空白を全て削除する
 		@details	空白文字はロケールに依存します。日本語環境であれば全角スペースも空白扱いです。
-
 	*/
 	StringT Trim() const;
+
+	/**
+		@brief		この文字列から指定した文字をすべて取り除いた新しい文字列を返します。
+		@param[in]	ch		: 削除する文字
+		@param[in]	cs		: 大文字と小文字の区別設定
+	*/
+	StringT Remove(TChar ch, CaseSensitivity cs = CaseSensitivity_CaseSensitive) const;
 
 	/**
 		@brief		文字列の置換を行う
@@ -192,7 +198,6 @@ public:
 		@param[in]	to
 		@return		置換結果の文字列
 		@details	from に一致するすべての文字列を to に置換します。
-
 	*/
 	StringT Replace(const TChar* from, const TChar* to) const;
 

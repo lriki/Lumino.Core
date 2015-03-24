@@ -216,6 +216,40 @@ BasicString<TChar> BasicString<TChar>::Trim() const
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
+BasicString<TChar> BasicString<TChar>::Remove(TChar ch, CaseSensitivity cs) const
+{
+	BasicString<TChar> newStr(*this);
+
+	// 大文字と小文字を区別する
+	if (cs == CaseSensitivity_CaseSensitive)
+	{
+		struct
+		{
+			TChar ch;
+			bool operator()(TChar value) { return ch == value; }
+		} cmp;
+		cmp.ch = ch;
+		newStr.erase(std::remove_if(newStr.begin(), newStr.end(), cmp), newStr.end());
+	}
+	// 大文字と小文字を区別しない
+	else //if (cs == CaseSensitivity_CaseSensitive)
+	{
+		struct
+		{
+			TChar ch;
+			bool operator()(TChar value) { return StringUtils::ToUpper(ch) == StringUtils::ToUpper(value); }
+		} cmp;
+		cmp.ch = ch;
+		newStr.erase(std::remove_if(newStr.begin(), newStr.end(), cmp), newStr.end());
+	}
+
+	return newStr;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
 BasicString<TChar> BasicString<TChar>::Replace(const TChar* from, const TChar* to) const
 {
 	size_type pos = 0;

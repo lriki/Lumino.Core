@@ -161,16 +161,6 @@ TEST_F(Test_Base_String, ConvertTo)
 }
 
 //---------------------------------------------------------------------
-TEST_F(Test_Base_String, Replace)
-{
-	StringA str1("test");
-	StringA str2 = str1.Replace("es", "b");
-	ASSERT_EQ('t', str2.at(0));
-	ASSERT_EQ('b', str2.at(1));
-	ASSERT_EQ('t', str2.at(2));
-}
-
-//---------------------------------------------------------------------
 TEST_F(Test_Base_String, Trim)
 {
 	// 前後
@@ -215,6 +205,29 @@ TEST_F(Test_Base_String, Trim)
 		String t = str1.Trim();
 		ASSERT_EQ(_T(""), t);
 	}
+}
+
+//---------------------------------------------------------------------
+TEST_F(Test_Base_String, Remove)
+{
+	String str1(_T("abcdef"));
+
+	String str2 = str1.Remove(_T('c'));
+	ASSERT_STREQ(_T("abdef"), str2);
+
+	// 大文字小文字を区別しない
+	String str3 = str2.Remove(_T('D'), CaseSensitivity_CaseInsensitive);
+	ASSERT_STREQ(_T("abef"), str3);
+}
+
+//---------------------------------------------------------------------
+TEST_F(Test_Base_String, Replace)
+{
+	StringA str1("test");
+	StringA str2 = str1.Replace("es", "b");
+	ASSERT_EQ('t', str2.at(0));
+	ASSERT_EQ('b', str2.at(1));
+	ASSERT_EQ('t', str2.at(2));
 }
 
 //---------------------------------------------------------------------

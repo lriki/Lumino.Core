@@ -75,10 +75,10 @@ public:
 	static void Delete(const wchar_t* filePath);
 
 	/// ファイルサイズを取得する
-	static size_t GetFileSize(const TCHAR* filePath);
+	static uint64_t GetFileSize(const TCHAR* filePath);
 
 	/// ファイルサイズを取得する
-	static size_t GetFileSize( FILE* stream );
+	static uint64_t GetFileSize(FILE* stream);
 
 	/// ファイルの内容をすべて読み込む (バイナリ形式)
 	static ByteBuffer* ReadAllBytes(const char* filePath);

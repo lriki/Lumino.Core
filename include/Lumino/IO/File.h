@@ -4,27 +4,10 @@
 #include "../Base/RefObject.h"
 #include "../Base/String.h"
 #include "PathName.h"
-#include "Stream.h"
+#include "FileStream.h"
 
 namespace Lumino
 {
-
-
-// フラグにまとめるべき？
-enum FileOpenMode
-{
-	FileOpenMode_NotOpen	= 0x0000,
-
-	FileOpenMode_ReadOnly	= 0x0001,
-	FileOpenMode_WriteOnly	= 0x0002,
-	FileOpenMode_ReadWrite	= FileOpenMode_ReadOnly | FileOpenMode_WriteOnly,
-	
-	FileOpenMode_Open		= 0x0004,
-	FileOpenMode_Create		= 0x0008,
-	FileOpenMode_Append		= 0x0010,
-
-	//FileOpenMode_Unbuffered = 0x0020,
-};
 
 /**
 	@brief		ファイル操作を行うクラスです。
@@ -50,23 +33,46 @@ public:
 	*/
 	File(const PathName& filePath);
 
-	virtual ~File() {}
-
-public:
-
-
+	virtual ~File();
 
 public:
 
 	/**
-		@brief	読み取りをサポートするかどうか
+		@brief		コンストラクタで指定されたファイルパスを使用してファイルストリームを開きます。
+		@param[in]	mode	: ファイルを開く方法
+		@param[in]	access	: ファイルへのアクセス方法
 	*/
-	virtual bool CanRead() = 0;
+	void Open(FileMode mode, FileAccess access);
 
 	/**
-		@brief	書き込みをサポートするかどうか
+		@brief		開いているファイルストリームを閉じます。
+		@details	デストラクタからも呼び出されます。
 	*/
-	virtual bool CanWrite() = 0;
+	void Close();
+
+	/**
+		@brief		ファイルの絶対パスを取得します。
+	*/
+	PathName GetFilePath() const;
+
+	/**
+		@brief		拡張子を含むファイルの名前を取得します。
+		@code
+					File f("C:\ConsoleApplication1\Program.cs");
+					f.GetFileName();	// => "Program.cs"
+		@endcode
+	*/
+	String GetFileName() const;
+
+	/**
+		@brief		現在のファイルサイズをバイト単位で取得します。
+	*/
+	uint64_t GetLength() const;
+
+public:
+	// override Stream
+	virtual bool CanRead();
+	virtual bool CanWrite();
 
 	/**
 		@brief	ストリーム長 (バイト単位) の取得
@@ -95,6 +101,11 @@ public:
 		@brief	ストリームの内部バッファのデータを全てターゲット(ファイル等)に書き込み、内部バッファをクリアする
 	*/
 	virtual void Flush() = 0;
+
+private:
+	PathName	m_filePath;
+	FileAccess	m_fileAccess;
+	FILE*		m_stream;
 
 };
 

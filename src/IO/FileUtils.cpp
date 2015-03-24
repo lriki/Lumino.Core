@@ -287,7 +287,7 @@ ByteBuffer* FileUtils::ReadAllBytes(const char* filePath)
 	FILE* fp;
 	errno_t err = fopen_s(&fp, filePath, "rb");
 	LN_THROW(err == 0, FileNotFoundException);
-	size_t size = GetFileSize(fp);
+	uint64_t size = GetFileSize(fp);
 
 	
 	RefPtr<ByteBuffer> buffer(LN_NEW ByteBuffer(size));
