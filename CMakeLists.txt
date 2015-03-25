@@ -36,7 +36,11 @@ endif()
 find_package(OpenGL REQUIRED)
 
 if (WIN32)
-	# MSVC Version name
+
+	#------------------------------------------------------
+	# Make static lib name.
+	#	{ProjectName}_{msvcVer}{Arch}_static_{Runtime}
+	#	e.g)	LuminoMath_msvc120x86_static_MTd.lib
 	if (MSVC_VERSION EQUAL 1400)
 		set(LN_STATIC_LIB_OUTPUT_NAME "${LN_STATIC_LIB_OUTPUT_NAME}_msvc80")
 	elseif (MSVC_VERSION EQUAL 1500)
@@ -81,6 +85,8 @@ if (WIN32)
 		endforeach()
 	endif()
 	set(CMAKE_DEBUG_POSTFIX "d")
+	# end   Make static lib name.
+	#------------------------------------------------------
 	
 	# link librarys.
 	list(APPEND LN_LINK_LIBS "imagehlp.lib")
@@ -127,7 +133,7 @@ endif()
 #------------------------------------------------------------------------------
 # Files
 #------------------------------------------------------------------------------
-#------------------------------
+#--------------------------------------
 # Source files.
 set(LN_SOURCES
 	src/Base/Exception.cpp
@@ -180,7 +186,7 @@ if (LN_EXCEPTION_BACKTRACE)
 	add_definitions(-DLN_EXCEPTION_BACKTRACE)
 endif()
 
-#------------------------------
+#--------------------------------------
 # Static library.
 add_library(LuminoCore_Static STATIC ${LN_SOURCES})
 set_target_properties(LuminoCore_Static PROPERTIES OUTPUT_NAME ${LN_STATIC_LIB_OUTPUT_NAME})
@@ -195,7 +201,7 @@ add_custom_command(
 	COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:LuminoCore_Static> "${PROJECT_SOURCE_DIR}/lib")
 
 
-#------------------------------
+#--------------------------------------
 # Shared library.
 add_library(LuminoCore_Shared SHARED ${LN_SOURCES})
 set_target_properties(LuminoCore_Shared PROPERTIES OUTPUT_NAME ${PROJECT_NAME})
