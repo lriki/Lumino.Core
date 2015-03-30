@@ -77,6 +77,7 @@ public:
 	virtual size_t GetSize();
 	virtual size_t Read(void* buffer, size_t byteCount);
 	virtual void Write(const void* data, size_t byteCount);
+	virtual void Seek(int64_t offset, SeekOrigin origin);
 	virtual void Flush();
 
 private:

@@ -6,6 +6,14 @@
 namespace Lumino
 {
 
+/// ストリーム位置の指定の基準
+enum SeekOrigin
+{
+	SeekOrigin_Begin	= SEEK_SET,		/// ストリームの先頭
+	SeekOrigin_Current	= SEEK_CUR,		/// ストリームの現在位置
+	SeekOrigin_End		= SEEK_END,		/// ストリームの末尾
+};
+
 /**
 	@brief		ストリームのベースクラス
 */
@@ -50,8 +58,14 @@ public:
 	*/
 	virtual void Write(const void* data, size_t byteCount) = 0;
 
+
 	/**
-		@brief	ストリームの内部バッファのデータを全てターゲット(ファイル等)に書き込み、内部バッファをクリアする
+		@brief		ストリームの現在位置を指定した位置に設定します。
+	*/
+	virtual void Seek(int64_t offset, SeekOrigin origin) = 0;
+
+	/**
+		@brief		ストリームの内部バッファのデータを全てターゲット(ファイル等)に書き込み、内部バッファをクリアする
 	*/
 	virtual void Flush() = 0;
 
