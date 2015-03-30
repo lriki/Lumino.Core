@@ -165,6 +165,29 @@ void Exception::SetMessage(const wchar_t* format, va_list args)
 #endif
 }
 
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void Exception::SetMessage(const char* format, ...)
+{
+	va_list args;
+	va_start(args, format);
+	SetMessage(format, args);
+	va_end(args);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void Exception::SetMessage(const wchar_t* format, ...)
+{
+	va_list args;
+	va_start(args, format);
+	SetMessage(format, args);
+	va_end(args);
+}
+
+
 #ifdef LN_WIN32
 //=============================================================================
 // Win32Exception

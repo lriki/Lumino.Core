@@ -65,6 +65,8 @@ public:
 protected:
 	void SetMessage(const char* format, va_list args);
 	void SetMessage(const wchar_t* format, va_list args);
+	void SetMessage(const char* format, ...);
+	void SetMessage(const wchar_t* format, ...);
 
 private:
 	static const int MaxMessageBufferSize = 1024;
