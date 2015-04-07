@@ -100,37 +100,43 @@ BasicString<TChar>::~BasicString()
 //-----------------------------------------------------------------------------
 template<typename TChar>
 BasicString<TChar>::BasicString(const BasicString& str)
-	: m_string(NULL)
+	: m_ref(NULL)
+	, m_string(NULL)
 {
 	LN_REFOBJ_SET(m_string, str.m_string);
 }
 template<typename TChar>
 BasicString<TChar>::BasicString(const BasicString& str, size_type length)
-	: m_string(NULL)
+	: m_ref(NULL)
+	, m_string(NULL)
 {
 	AssignTString(str.m_string->c_str(), length);
 }
 template<typename TChar>
 BasicString<TChar>::BasicString(const BasicString& str, size_type begin, size_type length)
-	: m_string(NULL)
+	: m_ref(NULL)
+	, m_string(NULL)
 {
 	AssignTString(str.m_string->c_str() + begin, length);	// str+begin にしないと、暗黙的コンストラクタの呼び出しが発生してしまう
 }
 template<typename TChar>
 BasicString<TChar>::BasicString(const TChar* str)
-	: m_string(NULL)
+	: m_ref(NULL)
+	, m_string(NULL)
 {
 	AssignTString(str, -1);
 }
 template<typename TChar>
 BasicString<TChar>::BasicString(const TChar* str, size_type length)
-	: m_string(NULL)
+	: m_ref(NULL)
+	, m_string(NULL)
 {
 	AssignTString(str, length);
 }
 template<typename TChar>
 BasicString<TChar>::BasicString(const TChar* str, size_type begin, size_type length)
-	: m_string(NULL)
+	: m_ref(NULL)
+	, m_string(NULL)
 {
 	AssignTString(str + begin, length);
 }
@@ -158,37 +164,43 @@ BasicString<TChar>& BasicString<TChar>::operator=(const TChar* right)
 //-----------------------------------------------------------------------------
 template<typename TChar>
 BasicString<TChar>::BasicString(const BasicString<YCHAR>& str)
-	: m_string(NULL)
+	: m_ref(NULL)
+	, m_string(NULL)
 {
 	AssignCStr(str.GetCStr());
 }
 template<typename TChar>
 BasicString<TChar>::BasicString(const BasicString<YCHAR>& str, size_type length)
-	: m_string(NULL)
+	: m_ref(NULL)
+	, m_string(NULL)
 {
 	AssignCStr(str.GetCStr(), length);
 }
 template<typename TChar>
 BasicString<TChar>::BasicString(const BasicString<YCHAR>& str, size_type begin, size_type length)
-	: m_string(NULL)
+	: m_ref(NULL)
+	, m_string(NULL)
 {
 	AssignCStr(str.GetCStr(), begin, length);
 }
 template<typename TChar>
 BasicString<TChar>::BasicString(const YCHAR* str)
-	: m_string(NULL)
+	: m_ref(NULL)
+	, m_string(NULL)
 {
 	AssignCStr(str);
 }
 template<typename TChar>
 BasicString<TChar>::BasicString(const YCHAR* str, size_type length)
-	: m_string(NULL)
+	: m_ref(NULL)
+	, m_string(NULL)
 {
 	AssignCStr(str, length);
 }
 template<typename TChar>
 BasicString<TChar>::BasicString(const YCHAR* str, size_type begin, size_type length)
-	: m_string(NULL)
+	: m_ref(NULL)
+	, m_string(NULL)
 {
 	AssignCStr(str, begin, length);
 }
@@ -251,11 +263,11 @@ bool BasicString<TChar>::operator==(const TChar* right) const
 {
 	return Compare(right, -1, CaseSensitivity_CaseSensitive) == 0;
 }
-template<typename TChar>
-TChar& BasicString<TChar>::operator[](int index)
-{
-	return InternalGetAt(index);
-}
+//template<typename TChar>
+//TChar& BasicString<TChar>::operator[](int index)
+//{
+//	return InternalGetAt(index);
+//}
 template<typename TChar>
 const TChar& BasicString<TChar>::operator[](int index) const
 {
@@ -653,10 +665,7 @@ bool BasicString<TChar>::ToInt(int* value) const
 template<typename TChar>
 int BasicString<TChar>::GetLength() const
 {
-	if (m_string != NULL) {
-		return m_string->size();
-	}
-	return 0;
+	return m_string->size();
 }
 
 //-----------------------------------------------------------------------------
@@ -683,6 +692,7 @@ void BasicString<TChar>::AssignTString(const TChar* str, int len)
 	else {
 		m_string = LN_NEW BasicStringCore<TChar>();	// 参照カウントは 1
 		m_string->assign(str, (len < 0) ? StringUtils::StrLen(str) : len);
+		m_ref = m_string->c_str();
 	}
 }
 
@@ -693,9 +703,11 @@ template<typename TChar>
 void BasicString<TChar>::Realloc()
 {
 	if (m_string->IsShared()) {
-		LN_SAFE_RELEASE(m_string);
+		BasicStringCore<TChar>* old = m_string;
 		m_string = LN_NEW BasicStringCore<TChar>();	// 参照カウントは 1
-		m_string->assign(m_string->c_str());
+		m_string->assign(old->c_str());
+		m_ref = m_string->c_str();
+		LN_SAFE_RELEASE(old);
 	}
 	else {
 		// 共有参照されていなければそのまま使い続ければよい

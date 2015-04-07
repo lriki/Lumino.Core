@@ -22,7 +22,7 @@ TEST_F(Test_Base_STLUtils, Foreach)
 		{
 			result += str;
 		}
-		ASSERT_EQ(_T("abc"), result);
+		ASSERT_STREQ(_T("abc"), result);
 	}
 	// 内容の変更
 	{
@@ -36,9 +36,9 @@ TEST_F(Test_Base_STLUtils, Foreach)
 		{
 			str = _T("A");
 		}
-		ASSERT_EQ(_T("A"), ary1[0]);
-		ASSERT_EQ(_T("A"), ary1[1]);
-		ASSERT_EQ(_T("A"), ary1[2]);
+		ASSERT_STREQ(_T("A"), ary1[0]);
+		ASSERT_STREQ(_T("A"), ary1[1]);
+		ASSERT_STREQ(_T("A"), ary1[2]);
 	}
 	// break
 	{
@@ -53,7 +53,7 @@ TEST_F(Test_Base_STLUtils, Foreach)
 			result += str;
 			break;
 		}
-		ASSERT_EQ(_T("a"), result);
+		ASSERT_STREQ(_T("a"), result);
 	}
 	// continue
 	{
@@ -71,7 +71,7 @@ TEST_F(Test_Base_STLUtils, Foreach)
 			}
 			result += str;
 		}
-		ASSERT_EQ(_T("a|c"), result);
+		ASSERT_STREQ(_T("a|c"), result);
 	}
 	// const
 	{
@@ -87,7 +87,7 @@ TEST_F(Test_Base_STLUtils, Foreach)
 		{
 			result += str;
 		}
-		ASSERT_EQ(_T("abc"), result);
+		ASSERT_STREQ(_T("abc"), result);
 	}
 	// 2重ループ
 
@@ -110,7 +110,7 @@ TEST_F(Test_Base_STLUtils, Foreach)
 				result += str2;
 			}
 		}
-		ASSERT_EQ(_T("adefbdefcdef"), result);
+		ASSERT_STREQ(_T("adefbdefcdef"), result);
 	}
 }
 

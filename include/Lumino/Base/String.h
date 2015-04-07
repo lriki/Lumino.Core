@@ -141,7 +141,7 @@ public:
 	BasicString& operator+=(TChar ch);
 	bool operator==(const BasicString& right) const;
 	bool operator==(const TChar* right) const;
-	TChar& operator[](int index);
+	//TChar& operator[](int index);
 	const TChar& operator[](int index)	const;
 	operator const TChar*() const;
 
@@ -243,14 +243,7 @@ public:
 		@return		見つからなかった場合は -1
 	*/
 	int IndexOf(const TChar* str, int startIndex = 0) const;
-
-	/**
-		@brief		字列を検索し、見つかった最初の文字のインデックスを返す
-		@param[in]	str			: 検索文字列
-		@param[in]	startIndex	: 検索を開始するインデックス (省略した場合は先頭から)
-		@return		見つからなかった場合は -1
-	*/
-	int IndexOf(TChar ch, int startIndex = 0) const;
+	int IndexOf(TChar ch,         int startIndex = 0) const;	///< @copydoc IndexOf
 
 	/**
 		@brief		文字列を検索し、最後に見つかったインデックスを返します。
@@ -270,7 +263,7 @@ public:
 		@endcode
 	*/
 	int LastIndexOf(const TChar* str, int startIndex = -1, int count = -1, CaseSensitivity cs = CaseSensitivity_CaseSensitive) const;
-	int LastIndexOf(TChar ch,         int startIndex = -1, int count = -1, CaseSensitivity cs = CaseSensitivity_CaseSensitive) const;			///< @copydoc LastIndexOf
+	int LastIndexOf(TChar ch,         int startIndex = -1, int count = -1, CaseSensitivity cs = CaseSensitivity_CaseSensitive) const;	///< @copydoc LastIndexOf
 
 	/**
 		@brief		この文字列の末尾が、指定した文字列と一致するかを判断します。
@@ -378,6 +371,7 @@ private:
 	Text::Encoding* GetThisTypeEncoding() const;
 
 private:
+	const TChar* m_ref;		///< 愚直な printf に備え、クラス先頭のメンバは m_string->c_str() を指しておく
 	BasicStringCore<TChar>*	m_string;
 };
 

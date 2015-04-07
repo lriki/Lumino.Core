@@ -115,6 +115,14 @@ TEST_F(Test_Base_String, Format)
 			ArgumentException);
 	}
 
+	// 
+	{
+		String str1(_T("str1"));
+		String str2;
+		str2.Format(_T("[%s]"), str1);
+		ASSERT_STREQ(_T("[str1]"), str2);
+	}
+
 #if _WIN32	// unix not impl
 	// StringW Max 文字数チェック
 	{
@@ -166,6 +174,17 @@ TEST_F(Test_Base_String, IndexOf)
 	String str1(_T("abcdef"));
 	ASSERT_EQ(1, str1.IndexOf(_T("bcd")));
 	ASSERT_EQ(4, str1.IndexOf(_T('e')));
+}
+
+//---------------------------------------------------------------------
+TEST_F(Test_Base_String, LastIndexOf)
+{
+	String str = "abcdef";
+	ASSERT_EQ(3, str.LastIndexOf(_T("de")));
+	ASSERT_EQ(1, str.LastIndexOf(_T("bc"), 2));
+	ASSERT_EQ(-1, str.LastIndexOf(_T("cd"), 2));
+	ASSERT_EQ(2, str.LastIndexOf(_T("cd"), 4, 3));
+	ASSERT_EQ(-1, str.LastIndexOf(_T("bc"), 4, 3));
 }
 
 //---------------------------------------------------------------------

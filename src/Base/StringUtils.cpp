@@ -132,9 +132,9 @@ int StringUtils::LastIndexOf(const TChar* str1, int str1Len, const TChar* str2, 
 		startIndex = StrLen(str1) - 1;
 	}
 
-	const TChar* pos = str1 + startIndex;						// 検索範囲の末尾の文字を指す
-	const TChar* end = (count < 0) ? str1 : pos - count;		// 検索範囲の先頭の文字を指す
-	LN_THROW(end <= pos, ArgumentException);					// 末尾と先頭が逆転してないこと。
+	const TChar* pos = str1 + startIndex;							// 検索範囲の末尾の文字を指す
+	const TChar* end = (count < 0) ? str1 : pos - (count - 1);		// 検索範囲の先頭の文字を指す
+	LN_THROW(end <= pos, ArgumentException);						// 末尾と先頭が逆転してないこと。
 
 	if (pos - end < str2Len) {
 		return -1;	// 検索範囲が検索文字数よりも少ない場合は見つかるはずがない
