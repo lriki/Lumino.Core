@@ -95,6 +95,11 @@ public:
 					count バイトよりも近い位置にあり容量を拡充できない場合は例外 (NotSupportedException) が発生します。
 	*/
 	virtual void Write(const void* data, size_t byteCount);
+	
+	/**
+		@brief		ストリームの現在位置を指定した位置に設定します。
+	*/
+	virtual void Seek(int64_t offset, SeekOrigin origin);
 
 	/**
 		@brief	ストリームの内部バッファのデータを全てターゲット(ファイル等)に書き込み、内部バッファをクリアする

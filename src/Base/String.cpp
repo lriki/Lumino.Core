@@ -66,12 +66,224 @@
 namespace Lumino
 {
 
+//template<typename TChar>
+//const TChar BasicStringCore<TChar>::EmptyString[1] = { 0x00 };
+
+template<typename TChar>
+BasicStringCore<TChar> BasicStringCore<TChar>::m_sharedEmpty;
+
 //=============================================================================
 // BasicString
 //=============================================================================
-/*
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 template<typename TChar>
-const BasicString<TChar> BasicString<TChar>::Empty;*/
+BasicString<TChar>::BasicString()
+	: m_string(NULL)
+{
+	LN_REFOBJ_SET(m_string, BasicStringCore<TChar>::GetSharedEmpty());
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+BasicString<TChar>::~BasicString()
+{
+	LN_SAFE_RELEASE(m_string);
+}
+
+//-----------------------------------------------------------------------------
+// TChar コンストラクタ系
+//-----------------------------------------------------------------------------
+template<typename TChar>
+BasicString<TChar>::BasicString(const BasicString& str)
+	: m_string(NULL)
+{
+	LN_REFOBJ_SET(m_string, str.m_string);
+}
+template<typename TChar>
+BasicString<TChar>::BasicString(const BasicString& str, size_type length)
+	: m_string(NULL)
+{
+	AssignTString(str.m_string->c_str(), length);
+}
+template<typename TChar>
+BasicString<TChar>::BasicString(const BasicString& str, size_type begin, size_type length)
+	: m_string(NULL)
+{
+	AssignTString(str.m_string->c_str() + begin, length);	// str+begin にしないと、暗黙的コンストラクタの呼び出しが発生してしまう
+}
+template<typename TChar>
+BasicString<TChar>::BasicString(const TChar* str)
+	: m_string(NULL)
+{
+	AssignTString(str, -1);
+}
+template<typename TChar>
+BasicString<TChar>::BasicString(const TChar* str, size_type length)
+	: m_string(NULL)
+{
+	AssignTString(str, length);
+}
+template<typename TChar>
+BasicString<TChar>::BasicString(const TChar* str, size_type begin, size_type length)
+	: m_string(NULL)
+{
+	AssignTString(str + begin, length);
+}
+template<typename TChar>
+BasicString<TChar>& BasicString<TChar>::operator=(const BasicString& right)
+{
+	LN_REFOBJ_SET(m_string, right.m_string);
+	return (*this);
+}
+template<typename TChar>
+BasicString<TChar>& BasicString<TChar>::operator=(const std::basic_string<TChar>& right)
+{
+	AssignTString(right.c_str(), -1);
+	return (*this);
+}
+template<typename TChar>
+BasicString<TChar>& BasicString<TChar>::operator=(const TChar* right)
+{
+	AssignTString(right, -1);
+	return (*this);
+}
+
+//-----------------------------------------------------------------------------
+// YCHAR コンストラクタ系
+//-----------------------------------------------------------------------------
+template<typename TChar>
+BasicString<TChar>::BasicString(const BasicString<YCHAR>& str)
+	: m_string(NULL)
+{
+	AssignCStr(str.GetCStr());
+}
+template<typename TChar>
+BasicString<TChar>::BasicString(const BasicString<YCHAR>& str, size_type length)
+	: m_string(NULL)
+{
+	AssignCStr(str.GetCStr(), length);
+}
+template<typename TChar>
+BasicString<TChar>::BasicString(const BasicString<YCHAR>& str, size_type begin, size_type length)
+	: m_string(NULL)
+{
+	AssignCStr(str.GetCStr(), begin, length);
+}
+template<typename TChar>
+BasicString<TChar>::BasicString(const YCHAR* str)
+	: m_string(NULL)
+{
+	AssignCStr(str);
+}
+template<typename TChar>
+BasicString<TChar>::BasicString(const YCHAR* str, size_type length)
+	: m_string(NULL)
+{
+	AssignCStr(str, length);
+}
+template<typename TChar>
+BasicString<TChar>::BasicString(const YCHAR* str, size_type begin, size_type length)
+	: m_string(NULL)
+{
+	AssignCStr(str, begin, length);
+}
+template<typename TChar>
+BasicString<TChar>& BasicString<TChar>::operator=(const BasicString<YCHAR>& right)
+{
+	AssignCStr(right.GetCStr()); return (*this);
+	return (*this);
+}
+template<typename TChar>
+BasicString<TChar>& BasicString<TChar>::operator=(const std::basic_string<YCHAR>& right)
+{
+	AssignCStr(right.c_str()); return (*this);
+	return (*this);
+}
+template<typename TChar>
+BasicString<TChar>& BasicString<TChar>::operator=(const YCHAR* right)
+{
+	AssignCStr(right); return (*this);
+	return (*this);
+}
+
+//-----------------------------------------------------------------------------
+// operators
+//-----------------------------------------------------------------------------
+template<typename TChar>
+BasicString<TChar>& BasicString<TChar>::operator+=(const BasicString<TChar>& right)
+{
+	Append(right.m_string->c_str(), right.GetLength());
+	return (*this);
+}
+template<typename TChar>
+BasicString<TChar>& BasicString<TChar>::operator+=(const std::basic_string<TChar>& right)
+{
+	Append(right.c_str(), right.size());
+	return (*this);
+}
+template<typename TChar>
+BasicString<TChar>& BasicString<TChar>::operator+=(const TChar* ptr)
+{
+	Append(ptr, -1);
+	return (*this);
+}
+template<typename TChar>
+BasicString<TChar>& BasicString<TChar>::operator+=(TChar ch)
+{
+	Append(&ch, 1);
+	return (*this);
+}
+template<typename TChar>
+bool BasicString<TChar>::operator==(const BasicString& right) const
+{
+	if (GetLength() != right.GetLength()) {
+		return false;
+	}
+	return Compare(right.GetCStr(), right.GetLength(), CaseSensitivity_CaseSensitive) == 0;
+}
+template<typename TChar>
+bool BasicString<TChar>::operator==(const TChar* right) const
+{
+	return Compare(right, -1, CaseSensitivity_CaseSensitive) == 0;
+}
+template<typename TChar>
+TChar& BasicString<TChar>::operator[](int index)
+{
+	return InternalGetAt(index);
+}
+template<typename TChar>
+const TChar& BasicString<TChar>::operator[](int index) const
+{
+	return InternalGetAt(index);
+}
+template<typename TChar>
+BasicString<TChar>::operator const TChar*() const
+{
+	return GetCStr();
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+const TChar* BasicString<TChar>::GetCStr() const
+{
+	return m_string->c_str();
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+bool BasicString<TChar>::IsEmpty() const
+{
+	return m_string->empty();
+}
 
 //-----------------------------------------------------------------------------
 //
@@ -95,15 +307,14 @@ void BasicString<TChar>::Format(const TChar* format, ...)
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-void BasicString<TChar>::AssignCStr(const char* str, size_type begin, size_type length, bool* outUsedDefaultChar)
+void BasicString<TChar>::AssignCStr(const char* str, int begin, int length, bool* outUsedDefaultChar)
 {
 	LN_THROW(str != NULL, ArgumentException);	// std::string の assing は NULL が渡されたときの動作は未定義。VS2013 では制御が返ってこなくなった
 
-
-	if (length == std_basic_string::npos) {
-		length = 0xFFFFFFFF;
+	if (length <= -1) {
+		length = INT_MAX;
 	}
-	size_type len = std::min(strlen(str), length);
+	int len = std::min((int)strlen(str), length);
 
 	// サイズ 0 なら空文字列にするだけ
 	if (len == 0) {
@@ -113,20 +324,29 @@ void BasicString<TChar>::AssignCStr(const char* str, size_type begin, size_type 
 		ConvertFrom(str + begin, len, Text::Encoding::GetSystemMultiByteEncoding());
 	}
 }
+template<typename TChar>
+void BasicString<TChar>::AssignCStr(const char* str, int length, bool* usedDefaultChar)
+{
+	AssignCStr(str, 0, length, usedDefaultChar);
+}
+template<typename TChar>
+void BasicString<TChar>::AssignCStr(const char* str, bool* usedDefaultChar)
+{
+	AssignCStr(str, 0, -1, usedDefaultChar);
+}
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-void BasicString<TChar>::AssignCStr(const wchar_t* str, size_type begin, size_type length, bool* outUsedDefaultChar)
+void BasicString<TChar>::AssignCStr(const wchar_t* str, int begin, int length, bool* outUsedDefaultChar)
 {
 	LN_THROW(str != NULL, ArgumentException);	// std::string の assing は NULL が渡されたときの動作は未定義。VS2013 では制御が返ってこなくなった
 
-
-	if (length == std_basic_string::npos) {
-		length = 0xFFFFFFFF;
+	if (length <= -1) {
+		length = INT_MAX;
 	}
-	size_type len = std::min(wcslen(str), length) * sizeof(wchar_t);
+	int len = std::min((int)wcslen(str), length) * sizeof(wchar_t);
 
 	// サイズ 0 なら空文字列にするだけ
 	if (len == 0) {
@@ -135,6 +355,16 @@ void BasicString<TChar>::AssignCStr(const wchar_t* str, size_type begin, size_ty
 	else {
 		ConvertFrom(str + begin, len, Text::Encoding::GetWideCharEncoding());
 	}
+}
+template<typename TChar>
+void BasicString<TChar>::AssignCStr(const wchar_t* str, int length, bool* usedDefaultChar)
+{
+	AssignCStr(str, 0, length, usedDefaultChar);
+}
+template<typename TChar>
+void BasicString<TChar>::AssignCStr(const wchar_t* str, bool* usedDefaultChar)
+{
+	AssignCStr(str, 0, -1, usedDefaultChar);
 }
 
 //-----------------------------------------------------------------------------
@@ -150,13 +380,10 @@ void BasicString<TChar>::ConvertFrom(const void* buffer, size_t byteCount, const
 	// 全く同じエンコーディングなら変換の必要は無い
 	if (thisTypeEncoding == encoding) 
 	{
-		std_basic_string::assign((const TChar*)buffer, byteCount / sizeof(TChar));
+		AssignTString((const TChar*)buffer, byteCount / sizeof(TChar));
 	}
 	else
 	{
-		//size_t bytesUsed;
-		//size_t charsUsed;
-		//bool usedDefaultChar;
 		Text::EncodingConversionResult info;
 		RefPtr<ByteBuffer> tmpBuffer(
 			Text::Encoding::Convert(buffer, byteCount, encoding, thisTypeEncoding,
@@ -165,7 +392,7 @@ void BasicString<TChar>::ConvertFrom(const void* buffer, size_t byteCount, const
 			*outUsedDefaultChar = info.UsedDefaultChar;
 		}
 
-		std_basic_string::assign((const TChar*)tmpBuffer->GetData(), info.BytesUsed / sizeof(TChar));
+		AssignTString((const TChar*)tmpBuffer->GetData(), info.BytesUsed / sizeof(TChar));
 	}
 }
 
@@ -175,13 +402,10 @@ void BasicString<TChar>::ConvertFrom(const void* buffer, size_t byteCount, const
 template<typename TChar>
 ByteBuffer* BasicString<TChar>::ConvertTo(const Text::Encoding* encoding, bool* outUsedDefaultChar) const
 {
-	//size_t bytesUsed;
-	//size_t charsUsed;
-	//bool usedDefaultChar;
 	Text::EncodingConversionResult info;
 
 	ByteBuffer* buf = Text::Encoding::Convert(
-		std_basic_string::c_str(), GetByteCount(), GetThisTypeEncoding(),
+		GetCStr(), GetByteCount(), GetThisTypeEncoding(),
 		encoding,
 		&info);
 	if (outUsedDefaultChar != NULL) {
@@ -189,6 +413,15 @@ ByteBuffer* BasicString<TChar>::ConvertTo(const Text::Encoding* encoding, bool* 
 	}
 
 	return buf;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+void BasicString<TChar>::SetEmpty()
+{
+	LN_REFOBJ_SET(m_string, BasicStringCore<TChar>::GetSharedEmpty());
 }
 
 //-----------------------------------------------------------------------------
@@ -208,7 +441,7 @@ BasicString<TChar> BasicString<TChar>::Trim() const
 {
 	const TChar* begin;
 	int length;
-	StringUtils::Trim(std_basic_string::c_str(), (int)std_basic_string::size(), &begin, &length);
+	StringUtils::Trim(GetCStr(), GetLength(), &begin, &length);
 	return BasicString<TChar>(begin, length);
 }
 
@@ -233,20 +466,25 @@ template<typename TChar>
 BasicString<TChar> BasicString<TChar>::Remove(TChar ch, CaseSensitivity cs) const
 {
 	BasicString<TChar> newStr(*this);
+	if (newStr.IsEmpty()) {
+		// 空文字列なら処理を行う必要は無い。というか、SharedEmpty に対して erase とかしてはいけない。
+		return newStr;
+	}
 
 	// 大文字と小文字を区別する
+	std::basic_string<TChar>& ss = *newStr.m_string;
 	if (cs == CaseSensitivity_CaseSensitive)
 	{
 		CmpCaseSensitive<TChar> cmp;
 		cmp.ch = ch;
-		newStr.erase(std::remove_if(newStr.begin(), newStr.end(), cmp), newStr.end());
+		ss.erase(std::remove_if(ss.begin(), ss.end(), cmp), ss.end());
 	}
 	// 大文字と小文字を区別しない
 	else //if (cs == CaseSensitivity_CaseSensitive)
 	{
 		CmpCaseInsensitive<TChar> cmp;
 		cmp.ch = ch;
-		newStr.erase(std::remove_if(newStr.begin(), newStr.end(), cmp), newStr.end());
+		ss.erase(std::remove_if(ss.begin(), ss.end(), cmp), ss.end());
 	}
 
 	return newStr;
@@ -258,19 +496,23 @@ BasicString<TChar> BasicString<TChar>::Remove(TChar ch, CaseSensitivity cs) cons
 template<typename TChar>
 BasicString<TChar> BasicString<TChar>::Replace(const TChar* from, const TChar* to) const
 {
-	size_type pos = 0;
-	size_t from_length = StringUtils::StrLen(from);
-	size_t to_length = StringUtils::StrLen(to);
-
-	StringT output(*this);
-
-	while (pos = output.find(from, pos), pos != String::npos)
-	{
-		output.replace(pos, from_length, to);
-		pos += to_length;
+	BasicString<TChar> newStr(*this);
+	if (newStr.IsEmpty()) {
+		// 空文字列なら処理を行う必要は無い。というか、SharedEmpty に対して replace とかしてはいけない。
+		return newStr;
 	}
 
-	return output;
+	size_type pos = 0;
+	size_t fromLength = StringUtils::StrLen(from);
+	size_t toLength = StringUtils::StrLen(to);
+
+	while (pos = newStr.m_string->find(from, pos), pos != std::basic_string<TChar>::npos)
+	{
+		newStr.m_string->replace(pos, fromLength, to);
+		pos += toLength;
+	}
+
+	return newStr;
 }
 
 //-----------------------------------------------------------------------------
@@ -279,8 +521,8 @@ BasicString<TChar> BasicString<TChar>::Replace(const TChar* from, const TChar* t
 template<typename TChar>
 int BasicString<TChar>::IndexOf(const TChar* str, int startIndex) const
 {
-	size_type pos = this->find(str, startIndex);
-	if (pos == std_basic_string::npos) {
+	size_type pos = m_string->find(str, startIndex);
+	if (pos == std::basic_string<TChar>::npos) {
 		return -1;
 	}
 	return (int)pos;
@@ -292,11 +534,39 @@ int BasicString<TChar>::IndexOf(const TChar* str, int startIndex) const
 template<typename TChar>
 int BasicString<TChar>::IndexOf(TChar ch, int startIndex) const
 {
-	size_type pos = this->find(ch, startIndex);
-	if (pos == std_basic_string::npos) {
+	size_type pos = m_string->find(ch, startIndex);
+	if (pos == std::basic_string<TChar>::npos) {
 		return -1;
 	}
 	return (int)pos;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+int BasicString<TChar>::LastIndexOf(const TChar* str, int startIndex, int count, CaseSensitivity cs) const
+{
+	return StringUtils::LastIndexOf(GetCStr(), GetLength(), str, StringUtils::StrLen(str), startIndex, count, cs);
+}
+template<typename TChar>
+int BasicString<TChar>::LastIndexOf(TChar ch, int startIndex, int count, CaseSensitivity cs) const
+{
+	return StringUtils::LastIndexOf(GetCStr(), GetLength(), &ch, 1, startIndex, count, cs);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+bool BasicString<TChar>::EndsWith(const TChar* str, CaseSensitivity cs) const
+{
+	return StringUtils::EndsWith(GetCStr(), GetLength(), str, StringUtils::StrLen(str), cs);
+}
+template<typename TChar>
+bool BasicString<TChar>::EndsWith(TChar ch, CaseSensitivity cs) const
+{
+	return StringUtils::EndsWith(GetCStr(), GetLength(), &ch, 1, cs);
 }
 
 //-----------------------------------------------------------------------------
@@ -366,7 +636,7 @@ template<typename TChar>
 int BasicString<TChar>::ToInt() const
 {
 	int tmp;
-	bool r = StrToInt(Trim().c_str(), &tmp);
+	bool r = StrToInt(Trim().GetCStr(), &tmp);
 	LN_THROW(r, InvalidFormatException);
 	return tmp;
 }
@@ -374,9 +644,20 @@ int BasicString<TChar>::ToInt() const
 template<typename TChar>
 bool BasicString<TChar>::ToInt(int* value) const
 {
-	return StrToInt(Trim().c_str(), value);
+	return StrToInt(Trim().GetCStr(), value);
 }
 
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+int BasicString<TChar>::GetLength() const
+{
+	if (m_string != NULL) {
+		return m_string->size();
+	}
+	return 0;
+}
 
 //-----------------------------------------------------------------------------
 //
@@ -386,6 +667,69 @@ const BasicString<TChar>& BasicString<TChar>::GetNewLine()
 {
 	static BasicString<TChar> nl(Environment::GetNewLine<TChar>());
 	return nl;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+void BasicString<TChar>::AssignTString(const TChar* str, int len)
+{
+	LN_SAFE_RELEASE(m_string);
+	if (str == NULL || len == 0) {
+		// 空の文字列になる場合は共有の空文字列を参照する
+		LN_REFOBJ_SET(m_string, BasicStringCore<TChar>::GetSharedEmpty());
+	}
+	else {
+		m_string = LN_NEW BasicStringCore<TChar>();	// 参照カウントは 1
+		m_string->assign(str, (len < 0) ? StringUtils::StrLen(str) : len);
+	}
+}
+
+//-----------------------------------------------------------------------------
+// ソース文字列の共有参照を切り、新しい BasicStringCore を確保する
+//-----------------------------------------------------------------------------
+template<typename TChar>
+void BasicString<TChar>::Realloc()
+{
+	if (m_string->IsShared()) {
+		LN_SAFE_RELEASE(m_string);
+		m_string = LN_NEW BasicStringCore<TChar>();	// 参照カウントは 1
+		m_string->assign(m_string->c_str());
+	}
+	else {
+		// 共有参照されていなければそのまま使い続ければよい
+	}
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+void BasicString<TChar>::Append(const TChar* str, int len)
+{
+	Realloc();	// 共有参照を切る
+	m_string->append(str, (len < 0) ? StringUtils::StrLen(str) : len);
+}
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+template<typename TChar>
+TChar& BasicString<TChar>::InternalGetAt(int index)
+{
+	LN_ASSERT(0 <= index && index < GetLength());
+	return m_string->at(index);
+}
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+template<typename TChar>
+const TChar& BasicString<TChar>::InternalGetAt(int index) const
+{
+	LN_ASSERT(0 <= index && index < GetLength());
+	return m_string->at(index);
 }
 
 //-----------------------------------------------------------------------------

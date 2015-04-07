@@ -107,7 +107,7 @@ TEST_F(Test_Base_Encoding, SystemEncodingTest)
 		StringA str2;
 		str2.ConvertFrom(str1, 6, Encoding::GetSystemMultiByteEncoding());
 
-		ASSERT_EQ(6, str2.size());
+		ASSERT_EQ(6, str2.GetLength());
 	}
 
 	// Multi → Wide
@@ -115,16 +115,16 @@ TEST_F(Test_Base_Encoding, SystemEncodingTest)
 		StringW str2;
 		str2.ConvertFrom(str1, 6, Encoding::GetSystemMultiByteEncoding());
 
-		ASSERT_EQ(3, str2.size());
-		ASSERT_EQ(0x65E5, str2.at(0));	// L'日'
-		ASSERT_EQ(0x672C, str2.at(1));	// L'本'
-		ASSERT_EQ(0x8A9e, str2.at(2));	// L'語'
+		ASSERT_EQ(3, str2.GetLength());
+		ASSERT_EQ(0x65E5, str2[0]);	// L'日'
+		ASSERT_EQ(0x672C, str2[1]);	// L'本'
+		ASSERT_EQ(0x8A9e, str2[2]);	// L'語'
 
 		// 1文字だけ
 		StringW str3;
 		str3.AssignCStr("A");
-		ASSERT_EQ(1, str3.size());
-		ASSERT_EQ('A', str3.at(0));
+		ASSERT_EQ(1, str3.GetLength());
+		ASSERT_EQ('A', str3[0]);
 	}
 
 	// Wide → Multi 
@@ -135,7 +135,7 @@ TEST_F(Test_Base_Encoding, SystemEncodingTest)
 		StringA str2;
 		str2.ConvertFrom(wstr1, 3 * sizeof(wchar_t), Encoding::GetWideCharEncoding());
 
-		ASSERT_EQ(strlen((char*)str1), str2.size());
+		ASSERT_EQ(strlen((char*)str1), str2.GetLength());
 		//ASSERT_EQ(0x93, (byte_t)str2.at(0));	// '日'	※ unsingned char で比較しないと一致が取れない
 		//ASSERT_EQ(0xFA, (byte_t)str2.at(1));	// '日'
 		//ASSERT_EQ(0x96, (byte_t)str2.at(2));	// '本'
@@ -147,8 +147,8 @@ TEST_F(Test_Base_Encoding, SystemEncodingTest)
 		// 1文字だけ
 		StringA str3;
 		str3.AssignCStr(L"A");
-		ASSERT_EQ(1, str3.size());
-		ASSERT_EQ('A', str3.at(0));
+		ASSERT_EQ(1, str3.GetLength());
+		ASSERT_EQ('A', str3[0]);
 	}
 
 	// Multi に変換できない文字があった

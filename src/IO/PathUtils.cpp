@@ -95,11 +95,17 @@ BasicString<TChar> PathUtils::GetDirectoryPath(const TChar* path)
 
 	BasicString<TChar> str;
 	if (pos >= 0) {
-		str.assign(path, pos);
+		str = BasicString<TChar>(path, pos);
 
 		// ルートパスの末尾は必ずセパレータにする
-		if (IsRootPath(str.GetCStr())) {
-			if ((*str.rbegin() != DirectorySeparatorChar) && (*str.rbegin() != AltDirectorySeparatorChar)) {
+		if (IsRootPath(str.GetCStr()))
+		{
+			// 末尾がセパレータでなければセパレータを追加する
+			//if ((*str.rbegin() != DirectorySeparatorChar) && (*str.rbegin() != AltDirectorySeparatorChar)) {
+			//if (str.LastIndexOf(DirectorySeparatorChar) != str.GetLength() &&
+			//	str.LastIndexOf(AltDirectorySeparatorChar) != str.GetLength()){
+			if (!str.EndsWith(DirectorySeparatorChar) && !str.EndsWith(AltDirectorySeparatorChar))
+			{
 				if (lastSep != 0) {
 					str += (const char)lastSep;
 				}
@@ -110,14 +116,13 @@ BasicString<TChar> PathUtils::GetDirectoryPath(const TChar* path)
 		}
 
 	}
-	else {
+	else
+	{
 		// セパレータが見つからなかった。ただし、ルートパスの場合は空文字にしない。
 		if (IsRootPath(path)) {
 			str = path;
 		}
 	}
-
-	
 
 	return str;
 }

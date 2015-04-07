@@ -64,16 +64,29 @@ public:
 	/// strncmp の overload 実装
 	static int StrNCmp(const char* str1, const char* str2, size_t count) { return strncmp(str1, str2, count); }
 	static int StrNCmp(const wchar_t* str1, const wchar_t* str2, size_t count) { return wcsncmp(str1, str2, count); }
+	static int StrNICmp(const char* str1, const char* str2, size_t count);
+	static int StrNICmp(const wchar_t* str1, const wchar_t* str2, size_t count);
 
 	/**
-		@brief		文字列を検索し、見つかった最初の文字のインデックスを返す
+		@brief		文字列を検索し、見つかった最初の文字のインデックスを返します。
 		@param[in]	str1		: 検索対象文字列
 		@param[in]	str2		: 検索文字列
 		@param[in]	startIndex	: 検索を開始するインデックス (省略した場合は先頭から)
-		@return		見つからなかった場合は -1
+		@return		見つかった文字列の開始インデックス。見つからなかった場合は -1。
 	*/
 	template<typename TChar>
 	static int IndexOf(const TChar* str1, const TChar* str2, int startIndex = 0);
+
+	/**
+		@brief		文字列を検索し、最後に見つかったインデックスを返します。
+		@param[in]	str1		: 検索対象文字列
+		@param[in]	str2		: 検索文字列
+		@param[in]	startIndex	: 検索を開始するインデックス
+		@param[in]	count		: 検索する文字数
+		@return		見つかった文字列の開始インデックス。見つからなかった場合は -1。
+	*/
+	template<typename TChar>
+	static int LastIndexOf(const TChar* str1, int str1Len, const TChar* str2, int str2Len, int startIndex, int count, CaseSensitivity cs);
 
 	/**
 		@brief		2 つの文字列を比較します。

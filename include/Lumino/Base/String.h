@@ -42,6 +42,47 @@ public:
 	typedef char YCHAR;
 };
 
+
+template<typename TChar>
+class BasicStringCore : public std::basic_string<TChar>
+{
+public:
+	//static const TChar EmptyString[1];	// "\0"
+
+
+public:
+	BasicStringCore() : m_recCount(1) {}
+	~BasicStringCore() {}
+
+	inline bool IsShared() const { return (m_recCount > 1); }
+	inline void AddRef() { ++m_recCount; }
+	inline void Release()
+	{
+		--m_recCount;
+		if (m_recCount <= 0) {
+			delete this;
+		}
+	}
+
+	static BasicStringCore* GetSharedEmpty() { return &m_sharedEmpty; }
+
+public:
+	int		m_recCount;
+
+	static BasicStringCore	m_sharedEmpty;
+};
+
+
+
+
+
+
+
+
+
+
+
+
 /**
 	@brief		文字列を表すクラス
 	@details	std::basic_string をベースに機能拡張を行った文字列クラスです。
@@ -52,7 +93,7 @@ public:
 
 */
 template<typename TChar>
-class BasicString : public std::basic_string<TChar>
+class BasicString
 {
 public:
 	static const int MaxFormatLength = 2048;
@@ -60,55 +101,57 @@ public:
 	typedef typename ChTraitsBase<TChar>::XCHAR XCHAR;
 	typedef typename ChTraitsBase<TChar>::YCHAR YCHAR;
 
-	typedef std::basic_string<TChar>	std_basic_string;
 	typedef BasicString<TChar>			StringT;
     typedef std::size_t size_type;		// need GCC
 
 public:
-	BasicString() : std_basic_string() {}
+	BasicString();
+	~BasicString();
 
 	// TChar (同一の文字型は assign だけにし、高速化を図る)
-	BasicString(const BasicString& str) : std_basic_string(str) {}
-	BasicString(const BasicString& str, size_type length) : std_basic_string(str, length) {}
-	BasicString(const BasicString& str, size_type begin, size_type length) : std_basic_string(str, begin, length) {}
-	BasicString(const TChar* str) : std_basic_string(str) {}
-	BasicString(const TChar* str, size_type length) : std_basic_string(str, length) {}
-	BasicString(const TChar* str, size_type begin, size_type length) : std_basic_string(str + begin, length) {}	// str+begin にしないと、暗黙的コンストラクタの呼び出しが発生してしまう
-	BasicString& operator=(const BasicString& right)				{ assign(right.GetCStr()); return (*this); }
-	BasicString& operator=(const std::basic_string<TChar>& right)	{ assign(right); return (*this); }
-	BasicString& operator=(const TChar* right)						{ assign(right); return (*this); }
+	BasicString(const BasicString& str);
+	BasicString(const BasicString& str, size_type length);
+	BasicString(const BasicString& str, size_type begin, size_type length);
+	BasicString(const TChar* str);
+	BasicString(const TChar* str, size_type length);
+	BasicString(const TChar* str, size_type begin, size_type length);
+	BasicString& operator=(const BasicString& right);
+	BasicString& operator=(const std::basic_string<TChar>& right);
+	BasicString& operator=(const TChar* right);
 
 	// YCHAR (対の文字型は AssignCStr で文字コード変換を行う)
-	BasicString(const BasicString<YCHAR>& str) { AssignCStr(str.GetCStr()); }
-	BasicString(const BasicString<YCHAR>& str, size_type length) { AssignCStr(str.GetCStr(), length); }
-	BasicString(const BasicString<YCHAR>& str, size_type begin, size_type length) { AssignCStr(str.GetCStr(), begin, length); }
-	BasicString(const YCHAR* str) { AssignCStr(str); }
-	BasicString(const YCHAR* str, size_type length) { AssignCStr(str, length); }
-	BasicString(const YCHAR* str, size_type begin, size_type length) { AssignCStr(str, begin, length); }
-	BasicString& operator=(const BasicString<YCHAR>& right)			{ AssignCStr(right.GetCStr()); return (*this); }
-	BasicString& operator=(const std::basic_string<YCHAR>& right)	{ AssignCStr(right.c_str()); return (*this); }
-	BasicString& operator=(const YCHAR* right)						{ AssignCStr(right); return (*this); }
+	BasicString(const BasicString<YCHAR>& str);
+	BasicString(const BasicString<YCHAR>& str, size_type length);
+	BasicString(const BasicString<YCHAR>& str, size_type begin, size_type length);
+	BasicString(const YCHAR* str);
+	BasicString(const YCHAR* str, size_type length);
+	BasicString(const YCHAR* str, size_type begin, size_type length);
+	BasicString& operator=(const BasicString<YCHAR>& right);
+	BasicString& operator=(const std::basic_string<YCHAR>& right);
+	BasicString& operator=(const YCHAR* right);
 
 	// override std::basic_string
-	explicit BasicString(const std_basic_string& str) : std_basic_string(str) {}
-			 BasicString(size_type count, TChar ch)	: std_basic_string(count, ch) {}
+	//explicit BasicString(const std_basic_string& str) : std_basic_string(str) {}
+	//		 BasicString(size_type count, TChar ch)	: std_basic_string(count, ch) {}
 	
 	// operators
-	BasicString& operator+=(const BasicString& right)		{ return static_cast<BasicString&>(std_basic_string::operator+=(right)); }
-	BasicString& operator+=(const std_basic_string& right)	{ return static_cast<BasicString&>(std_basic_string::operator+=(right)); }	// += std::string
-	BasicString& operator+=(const TChar* ptr)				{ return static_cast<BasicString&>(std_basic_string::operator+=(ptr)); }
-	BasicString& operator+=(TChar ch)						{ return static_cast<BasicString&>(std_basic_string::operator+=(ch)); }
-	TChar& operator[](int index)							{ return std_basic_string::operator[](index); }
-	const TChar& operator[](int index)	const				{ return std_basic_string::operator[](index); }
-	operator const TChar*() const { return std_basic_string::c_str(); }
+	BasicString& operator+=(const BasicString& right);
+	BasicString& operator+=(const std::basic_string<TChar>& right);
+	BasicString& operator+=(const TChar* ptr);
+	BasicString& operator+=(TChar ch);
+	bool operator==(const BasicString& right) const;
+	bool operator==(const TChar* right) const;
+	TChar& operator[](int index);
+	const TChar& operator[](int index)	const;
+	operator const TChar*() const;
 
 public:
 
 	/// C言語形式の文字列ポインタを返す
-	const TChar* GetCStr() const { return std_basic_string::c_str(); }
+	const TChar* GetCStr() const;
 	
 	/// 文字列が空の時にtrueを返す
-	bool IsEmpty() const { return std_basic_string::empty(); }
+	bool IsEmpty() const;
 
 	/**
 		@brief		書式文字列と可変長引数リストから文字列を生成する
@@ -134,22 +177,12 @@ public:
 					文字コードをの変換を行います。
 					TChar と str の型が同じ場合は文字コードの変換を行いません。
 	*/
-	void AssignCStr(const char* str, size_type begin, size_type length, bool* usedDefaultChar = NULL);
-
-	/// @copydoc AssignCStr
-	void AssignCStr(const char* str, size_type length, bool* usedDefaultChar = NULL) { AssignCStr(str, 0, length, usedDefaultChar); }
-
-	/// @copydoc AssignCStr
-	void AssignCStr(const char* str, bool* usedDefaultChar = NULL) { AssignCStr(str, 0, std_basic_string::npos, usedDefaultChar); }
-
-	/// @copydoc AssignCStr
-	void AssignCStr(const wchar_t* str, size_type begin, size_type length, bool* usedDefaultChar = NULL);
-
-	/// @copydoc AssignCStr
-	void AssignCStr(const wchar_t* str, size_type length, bool* usedDefaultChar = NULL) { AssignCStr(str, 0, length, usedDefaultChar); }
-
-	/// @copydoc AssignCStr
-	void AssignCStr(const wchar_t* str, bool* usedDefaultChar = NULL) { AssignCStr(str, 0, std_basic_string::npos, usedDefaultChar); }
+	void AssignCStr(const char* str, int begin, int length, bool* usedDefaultChar = NULL);
+	void AssignCStr(const char* str, int length, bool* usedDefaultChar = NULL);					///< @copydoc AssignCStr
+	void AssignCStr(const char* str, bool* usedDefaultChar = NULL);								///< @copydoc AssignCStr
+	void AssignCStr(const wchar_t* str, int begin, int length, bool* usedDefaultChar = NULL);	///< @copydoc AssignCStr
+	void AssignCStr(const wchar_t* str, int length, bool* usedDefaultChar = NULL);				///< @copydoc AssignCStr
+	void AssignCStr(const wchar_t* str, bool* usedDefaultChar = NULL);							///< @copydoc AssignCStr
 
 	/**
 		@brief		指定したエンコーディングを使用し、文字列を変換して設定する
@@ -172,7 +205,7 @@ public:
 	/**
 		@brief		空文字列を設定する
 	*/
-	void SetEmpty() { this->clear(); }
+	void SetEmpty();
 
 	/**
 		@brief		部分文字列を取得する
@@ -218,6 +251,40 @@ public:
 		@return		見つからなかった場合は -1
 	*/
 	int IndexOf(TChar ch, int startIndex = 0) const;
+
+	/**
+		@brief		文字列を検索し、最後に見つかったインデックスを返します。
+		@param[in]	str			: 検索文字列
+		@param[in]	startIndex	: 検索を開始するインデックス (-1 を指定すると、文字列の末尾から検索を開始する)
+		@param[in]	count		: 検索する文字数 (-1 を指定すると、文字列の先頭まで検索する)
+		@param[in]	cs			: 大文字と小文字の区別設定
+		@return		見つかった文字列の開始インデックス。見つからなかった場合は -1。
+		@details	startIndex の位置から文字列の先頭に向かう count 文字分の領域から str を検索します。
+		@code
+					String str = "abcdef";
+					str.LastIndexOf("de");			// => 3
+					str.LastIndexOf("bc", 2);		// => 1
+					str.LastIndexOf("cd", 2);		// => -1	(検索範囲 "abc" の中に "cd" は存在しない)
+					str.LastIndexOf("cd", 4, 3);	// => 2		(検索範囲 "cde" の中に "cd" は存在する)
+					str.LastIndexOf("bc", 4, 3);	// => -1	(検索範囲 "cde" の中に "bc" は存在しない)
+		@endcode
+	*/
+	int LastIndexOf(const TChar* str, int startIndex = -1, int count = -1, CaseSensitivity cs = CaseSensitivity_CaseSensitive) const;
+	int LastIndexOf(TChar ch,         int startIndex = -1, int count = -1, CaseSensitivity cs = CaseSensitivity_CaseSensitive) const;			///< @copydoc LastIndexOf
+
+	/**
+		@brief		この文字列の末尾が、指定した文字列と一致するかを判断します。
+		@param[in]	str			: 検索文字列
+		@details	str2 が空文字の場合は必ず true が返ります。
+		@code
+					str = "file.txt";
+					if (str.EndsWith(".txt")) {
+						// 一致した
+					}
+		@endcodes
+	*/
+	bool EndsWith(const TChar* str, CaseSensitivity cs = CaseSensitivity_CaseSensitive) const;
+	bool EndsWith(TChar ch,         CaseSensitivity cs = CaseSensitivity_CaseSensitive) const;	///< @copydoc EndsWith
 
 	/**
 		@brief		この文字列と、指定した文字列を比較します。
@@ -278,7 +345,7 @@ public:
 	/**
 		@brief		文字列を構成するバイト数を取得する
 	*/
-	int GetByteCount() const { return (int)(std_basic_string::size() * sizeof(TChar)); }
+	int GetByteCount() const { return GetLength() * sizeof(TChar); }
 
 	/**
 		@brief		文字列を整数値に変換する
@@ -295,14 +362,23 @@ public:
 	bool ToInt(int* value) const;
 
 	/// 終端 \0 までの文字数を返す (マルチバイト文字は考慮しない。CString::GetLength と同様の関数です)
-	int GetLength() const { return (int)(std_basic_string::size()); }
+	int GetLength() const;
 
 public:
 	/// 現在の環境で定義されている改行文字列を取得する
 	static const StringT& GetNewLine();
 
 private:
+	void AssignTString(const TChar* str, int len);
+	void Realloc();
+	void Append(const TChar* str, int len);
+	TChar& InternalGetAt(int index);
+	const TChar& InternalGetAt(int index) const;
+
 	Text::Encoding* GetThisTypeEncoding() const;
+
+private:
+	BasicStringCore<TChar>*	m_string;
 };
 
 template<typename TChar>

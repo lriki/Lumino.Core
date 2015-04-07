@@ -91,7 +91,7 @@ TEST_F(Test_Base_Encoding_UTF8, Basic)
 
 		// 元もまま変換されていないこと
 		for (int i = 0; i < 15; i++) {
-			ASSERT_EQ(true, utf8str[i] == (uint8_t)str.at(i));
+			ASSERT_EQ(true, utf8str[i] == (uint8_t)str[i]);
 		}
 	}
 }

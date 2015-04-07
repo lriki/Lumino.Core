@@ -71,6 +71,15 @@ int				StringUtils::VSPrintf(wchar_t* out, int charCount, const wchar_t* format,
 }
 #endif
 
+
+#ifdef _WIN32
+int StringUtils::StrNICmp(const char* str1, const char* str2, size_t count) { return _strnicmp(str1, str2, count); }
+int StringUtils::StrNICmp(const wchar_t* str1, const wchar_t* str2, size_t count) { return _wcsnicmp(str1, str2, count); }
+#else
+int StringUtils::StrNICmp(const char* str1, const char* str2, size_t count) { return strnicmp(str1, str2, count); }
+int StringUtils::StrNICmp(const wchar_t* str1, const wchar_t* str2, size_t count) { return wcsnicmp(str1, str2, count); }
+#endif
+
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
@@ -101,6 +110,66 @@ int StringUtils::IndexOf(const TChar* str1, const TChar* str2, int startIndex)
 }
 template int StringUtils::IndexOf<char>(const char* str1, const char* str2, int startIndex);
 template int StringUtils::IndexOf<wchar_t>(const wchar_t* str1, const wchar_t* str2, int startIndex);
+
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+int StringUtils::LastIndexOf(const TChar* str1, int str1Len, const TChar* str2, int str2Len, int startIndex, int count, CaseSensitivity cs)
+{
+	LN_THROW(str1 != NULL && str2 != NULL, ArgumentException);	// 各文字列は NULL でないこと。
+	LN_THROW(startIndex < str1Len, ArgumentException);			// startIndex は str1 の長さを超えてはいけない。
+
+	if (str1Len == 0 || str2Len == 0) {
+		return -1;	// それぞれ長さが 0 であれば見つかるはずがない
+	}
+	if (startIndex == 0 || count == 0) {
+		return -1;	// 検索範囲がつぶれてる
+	}
+
+	if (startIndex < 0) {
+		startIndex = StrLen(str1) - 1;
+	}
+
+	const TChar* pos = str1 + startIndex;						// 検索範囲の末尾の文字を指す
+	const TChar* end = (count < 0) ? str1 : pos - count;		// 検索範囲の先頭の文字を指す
+	LN_THROW(end <= pos, ArgumentException);					// 末尾と先頭が逆転してないこと。
+
+	if (pos - end < str2Len) {
+		return -1;	// 検索範囲が検索文字数よりも少ない場合は見つかるはずがない
+	}
+
+	pos -= (str2Len - 1);
+
+	// 大文字小文字を区別する
+	if (cs == CaseSensitivity_CaseSensitive)
+	{
+		// 後ろから前へ見ていく
+		while (pos >= end)
+		{
+			if (StrNCmp(pos, str2, str2Len) == 0) {
+				return pos - str1;
+			}
+			--pos;
+		}
+	}
+	// 大文字小文字を区別しない
+	else
+	{
+		// 後ろから前へ見ていく
+		while (pos >= end)
+		{
+			if (StrNICmp(pos, str2, str2Len) == 0) {
+				return pos - str1;
+			}
+			--pos;
+		}
+	}
+	return -1;
+}
+template int StringUtils::LastIndexOf<char>(const char* str1, int str1Len, const char* str2, int str2Len, int startIndex, int count, CaseSensitivity cs);
+template int StringUtils::LastIndexOf<wchar_t>(const wchar_t* str1, int str1Len, const wchar_t* str2, int str2Len, int startIndex, int count, CaseSensitivity cs);
 
 //-----------------------------------------------------------------------------
 //
@@ -219,7 +288,7 @@ void StringUtils::FormatVAList(const TChar* format, va_list args, BasicString<TC
 	int validSize = VSPrintf(buf, nMaxLength + 1, format, args);
 
 	LN_THROW(0 <= validSize && validSize <= nMaxLength, ArgumentException);
-	out->assign(buf);
+	*out = buf;
 }
 template void StringUtils::FormatVAList<char>(const char* format, va_list args, BasicString<char>* out);
 template void StringUtils::FormatVAList<wchar_t>(const wchar_t* format, va_list args, BasicString<wchar_t>* out);
@@ -356,7 +425,7 @@ ArrayList< BasicString<TChar> > StringUtils::Split(const BasicString<TChar>& str
 		}
 	}
 	else {
-		if (option == StringSplitOptions_None || tokenStart != str.size()) {
+		if (option == StringSplitOptions_None || tokenStart != str.GetLength()) {
 			result.Add(str.SubString(tokenStart));	// 残り全て
 		}
 		return result;
@@ -364,7 +433,7 @@ ArrayList< BasicString<TChar> > StringUtils::Split(const BasicString<TChar>& str
 	// 次のトークン開始位置を指す
 	tokenStart = delimIndex + 1;
 
-	while (tokenStart <= ((int)str.size()))
+	while (tokenStart <= ((int)str.GetLength()))
 	{
 		delimIndex = str.IndexOf(delim, tokenStart);
 		if (delimIndex >= 0) {
@@ -373,7 +442,7 @@ ArrayList< BasicString<TChar> > StringUtils::Split(const BasicString<TChar>& str
 			}
 		}
 		else {
-			if (option == StringSplitOptions_None || tokenStart != str.size()) {
+			if (option == StringSplitOptions_None || tokenStart != str.GetLength()) {
 				result.Add(str.SubString(tokenStart));	// 残り全て
 			}
 			break;

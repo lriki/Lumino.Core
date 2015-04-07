@@ -62,12 +62,12 @@ public:
 	BasicPathName(const PathNameT& basePath, const PathNameT& relativePath) { AssignUnderBasePath(basePath, relativePath); }
 
 	// operators
-	BasicPathName& operator = (const BasicStringT& str)	{ Assign(str.c_str()); return (*this); }
+	BasicPathName& operator = (const BasicStringT& str)	{ Assign(str.GetCStr()); return (*this); }
 	BasicPathName& operator = (const char* str) { Assign(str); return (*this); }
 	BasicPathName& operator = (const wchar_t* str) { Assign(str); return (*this); }
 	bool operator < (const BasicPathName& right) const { return PathUtils::Compare(m_path.GetCStr(), right.m_path.GetCStr()) < 0; }
 	bool operator < (const TChar* right) const { return PathUtils::Compare(m_path.GetCStr(), right) < 0; }
-	operator const TChar*() const { return m_path.c_str(); }
+	operator const TChar*() const { return m_path.GetCStr(); }
 
 
 public:
@@ -80,7 +80,7 @@ public:
 	/// @copydoc Assign
 	void Assign(const wchar_t* path);
 	/// @copydoc Assign
-	void Assign(const BasicStringT& path) { Assign(path.c_str()); }
+	void Assign(const BasicStringT& path) { Assign(path.GetCStr()); }
 
 	/**
 		@brief		ベースパスと相対パスを連結して、パスを作成する
@@ -92,7 +92,7 @@ public:
 	/// @copydoc AssignUnderBasePath
 	void AssignUnderBasePath(const PathNameT& basePath, const wchar_t* relativePath);
 	/// @copydoc AssignUnderBasePath
-	void AssignUnderBasePath(const PathNameT& basePath, const BasicStringT& relativePath) { AssignUnderBasePath(basePath, relativePath.c_str()); }
+	void AssignUnderBasePath(const PathNameT& basePath, const BasicStringT& relativePath) { AssignUnderBasePath(basePath, relativePath.GetCStr()); }
 	/// @copydoc AssignUnderBasePath
 	void AssignUnderBasePath(const PathNameT& basePath, const PathNameT& relativePath) { AssignUnderBasePath(basePath, relativePath.GetCStr()); }
 
@@ -104,16 +104,16 @@ public:
 	*/
 	void Append(const TChar* path);
 	/// @copydoc Append
-	void Append(const PathNameT& path) { Append(path.m_path.c_str()); }
+	void Append(const PathNameT& path) { Append(path.m_path.GetCStr()); }
 
 	/// 空文字列を設定する
 	void SetEmpty() { m_path.SetEmpty(); }
 
 	/// パス文字列の中から拡張子を含むファイル名の部分を返す (空パスの場合は空文字列を返す)
-	BasicStringT GetFileName() const { return PathUtils::GetFileName(m_path.c_str()); }
+	BasicStringT GetFileName() const { return PathUtils::GetFileName(m_path.GetCStr()); }
 
 	/// パスの TChar 文字列を返す
-	const TChar* GetCStr() const { return m_path.c_str(); }
+	const TChar* GetCStr() const { return m_path.GetCStr(); }
 	
 	/// パス文字列を返す
 	const BasicStringT& GetString() const { return m_path; }
@@ -122,7 +122,7 @@ public:
 	const BasicString<TChar> GetStrEndSeparator() const;
 
 	/// パスが空であるかを確認する
-	bool IsEmpty() const { return m_path.empty(); }
+	bool IsEmpty() const { return m_path.IsEmpty(); }
 
 	/// 絶対パスであるかを確認する
 	bool IsAbsolutePath() const;
@@ -175,11 +175,11 @@ public:
 					http://helpx.adobe.com/jp/x-productkb/global/cpsid_83180.html
 					http://www.clip-studio.com/clip_site/support/faq/detail/svc/52/tid/37429
 	*/
-	bool Equals(const TChar* path) const { return PathUtils::Equals(m_path.c_str(), path); }
+	bool Equals(const TChar* path) const { return PathUtils::Equals(m_path.GetCStr(), path); }
 	/// @copydoc Equals
-	bool Equals(const PathNameT& path) const { return PathUtils::Equals(m_path.c_str(), path.GetCStr()); }
+	bool Equals(const PathNameT& path) const { return PathUtils::Equals(m_path.GetCStr(), path.GetCStr()); }
 	/// @copydoc Equals
-	bool Equals(const BasicStringT& path) const { return PathUtils::Equals(m_path.c_str(), path.c_str()); }
+	bool Equals(const BasicStringT& path) const { return PathUtils::Equals(m_path.GetCStr(), path.GetCStr()); }
 	/// @copydoc Equals
 	bool operator == (const PathNameT& path) const { return Equals(path); }
 

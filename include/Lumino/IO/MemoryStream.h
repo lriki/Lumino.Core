@@ -50,6 +50,7 @@ public:
 	virtual size_t GetSize() { return m_buffer.size(); }
 	virtual size_t Read(void* buffer, size_t byteCount) { LN_THROW(0, NotImplementedException); return 0; }
 	virtual void Write(const void* pData, size_t nByteCount);
+	virtual void Seek(int64_t offset, SeekOrigin origin);
 	virtual void Flush() {}		// Write が直接メモリに書きこむので不要
 
 private:

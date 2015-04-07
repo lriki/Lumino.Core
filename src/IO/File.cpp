@@ -139,6 +139,22 @@ void File::Write(const void* data, size_t byteCount)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+void File::Seek(int64_t offset, SeekOrigin origin)
+{
+	LN_THROW(m_stream, InvalidOperationException);
+
+#ifdef LN_WIN32
+	_fseeki64(m_stream, offset, origin);
+#else
+	// TODO:
+	// http://stackoverflow.com/questions/1035657/seeking-and-reading-large-files-in-a-linux-c-application
+	fseek(m_stream, offset, origin);
+#endif
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 void File::Flush()
 {
 	LN_THROW(m_stream, InvalidOperationException);

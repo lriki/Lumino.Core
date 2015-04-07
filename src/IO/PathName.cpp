@@ -41,7 +41,8 @@ void BasicPathName<TChar>::AssignUnderBasePath(const PathNameT& basePath, const 
 	else
 	{
 		m_path = basePath.m_path;
-		if ((*m_path.rbegin()) != Separator) {	// 末尾セパレータ
+		// 末尾にセパレータがなければ付加する
+		if (!m_path.EndsWith(Separator)) {
 			m_path += Separator;
 		}
 
@@ -67,7 +68,9 @@ void BasicPathName<TChar>::AssignUnderBasePath(const PathNameT& basePath, const 
 	else
 	{
 		m_path = basePath.m_path;
-		if ((*m_path.rbegin()) != Separator) {	// 末尾セパレータ
+		//if ((*m_path.rbegin()) != Separator) {	// 末尾セパレータ
+		// 末尾がセパレータでなければ付加する
+		if (!m_path.EndsWith(Separator)) {
 			m_path += Separator;
 		}
 
@@ -88,7 +91,7 @@ void BasicPathName<TChar>::Append(const TChar* path)
 		m_path = path;
 	}
 	else {
-		if (m_path.size() > 0 && (*m_path.rbegin()) != Separator) {	// 末尾セパレータ
+		if (m_path.GetLength() > 0 && !m_path.EndsWith(Separator))/*(*m_path.rbegin()) != Separator)*/ {	// 末尾セパレータ
 			m_path += Separator;
 		}
 		m_path += path;
@@ -102,7 +105,7 @@ template<typename TChar>
 const BasicString<TChar> BasicPathName<TChar>::GetStrEndSeparator() const
 {
 	BasicStringT newStr = m_path;
-	if (!newStr.IsEmpty() && (*newStr.rbegin()) != Separator) {	// 末尾セパレータ
+	if (!newStr.IsEmpty() && !newStr.EndsWith(Separator)/*(*newStr.rbegin()) != Separator*/) {	// 末尾セパレータ
 		newStr += Separator;
 	}
 	return newStr;
@@ -114,7 +117,7 @@ const BasicString<TChar> BasicPathName<TChar>::GetStrEndSeparator() const
 template<typename TChar>
 bool BasicPathName<TChar>::IsAbsolutePath() const
 {
-	return PathUtils::IsAbsolutePath(m_path.c_str());
+	return PathUtils::IsAbsolutePath(m_path.GetCStr());
 }
 
 //-----------------------------------------------------------------------------
@@ -123,7 +126,7 @@ bool BasicPathName<TChar>::IsAbsolutePath() const
 template<typename TChar>
 bool BasicPathName<TChar>::IsRoot() const
 {
-	return PathUtils::IsRootPath(m_path.c_str());
+	return PathUtils::IsRootPath(m_path.GetCStr());
 }
 
 //-----------------------------------------------------------------------------
@@ -133,7 +136,7 @@ template<typename TChar>
 bool BasicPathName<TChar>::CheckExt(const TChar* ext) const
 {
 	// TODO: 大文字小文字の区別をする
-	return StringUtils::EndsWith(m_path.c_str(), m_path.size(), ext, -1, CaseSensitivity_CaseInsensitive);
+	return StringUtils::EndsWith(m_path.GetCStr(), m_path.GetLength(), ext, -1, CaseSensitivity_CaseInsensitive);
 }
 
 //-----------------------------------------------------------------------------
@@ -150,7 +153,7 @@ BasicPathName<TChar> BasicPathName<TChar>::GetParent() const
 		- Java (os.nio.Paths)		… null を返す
 		- C# (Path, Uri)			… "" を返す (入力が "" だった場合は例外)
 	*/
-	return BasicPathName(PathUtils::GetDirectoryPath(m_path.c_str()).c_str());
+	return BasicPathName(PathUtils::GetDirectoryPath(m_path.GetCStr()).GetCStr());
 }
 
 //-----------------------------------------------------------------------------
@@ -161,7 +164,7 @@ BasicPathName<TChar> BasicPathName<TChar>::CanonicalizePath() const
 {
 	TChar tmpPath[LN_MAX_PATH + 1];
 	memset(tmpPath, 0, sizeof(tmpPath));
-	PathUtils::CanonicalizePath(m_path.c_str(), tmpPath);
+	PathUtils::CanonicalizePath(m_path.GetCStr(), tmpPath);
 	return BasicPathName<TChar>(tmpPath);
 }
 
@@ -172,8 +175,8 @@ template<typename TChar>
 std::string BasicPathName<TChar>::ToLocalChar() const
 {
 	BasicString<char> tmp;
-	tmp.AssignCStr(m_path.c_str());
-	return std::string(tmp.c_str());
+	tmp.AssignCStr(m_path.GetCStr());
+	return std::string(tmp.GetCStr());
 }
 
 //-----------------------------------------------------------------------------
@@ -192,22 +195,22 @@ BasicPathName<TChar> BasicPathName<TChar>::GetUniqueFilePathInDirectory(const Pa
 	do
 	{
 		if (filePrefix != NULL && extName != NULL) {
-			filePath.Format(LN_T(TChar, "%s%s%llu%d%s"), dirPath.c_str(), filePrefix, key, number, extName);
+			filePath.Format(LN_T(TChar, "%s%s%llu%d%s"), dirPath.GetCStr(), filePrefix, key, number, extName);
 		}
 		else if (filePrefix == NULL && extName != NULL) {
-			filePath.Format(LN_T(TChar, "%s%llu%d%s"), dirPath.c_str(), key, number, extName);
+			filePath.Format(LN_T(TChar, "%s%llu%d%s"), dirPath.GetCStr(), key, number, extName);
 		}
 		else if (filePrefix != NULL && extName == NULL) {
-			filePath.Format(LN_T(TChar, "%s%s%llu%d"), dirPath.c_str(), filePrefix, key, number);
+			filePath.Format(LN_T(TChar, "%s%s%llu%d"), dirPath.GetCStr(), filePrefix, key, number);
 		}
 		else {
-			filePath.Format(LN_T(TChar, "%s%llu%d"), dirPath.c_str(), key, number);
+			filePath.Format(LN_T(TChar, "%s%llu%d"), dirPath.GetCStr(), key, number);
 		}
 
 		number++;
-	} while(FileUtils::Exists(filePath.c_str()));
+	} while (FileUtils::Exists(filePath.GetCStr()));
 
-	return PathNameT(filePath.c_str());
+	return PathNameT(filePath.GetCStr());
 }
 
 

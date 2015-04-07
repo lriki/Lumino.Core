@@ -94,7 +94,7 @@ public:
 	static void WriteAllText(const TCHAR* filePath, const String& str, const Text::Encoding* encoding = NULL);
 
 	/// 現在の位置とデータ(ファイル)サイズ、オフセット、基準(SEEK_xxxx)を受け取って、新しいシーク位置を返す
-	size_t CalcSeekPoint(size_t curPoint, size_t maxSize, size_t offset, int origin);
+	static int64_t CalcSeekPoint(int64_t curPoint, int64_t maxSize, int64_t offset, int origin);
 };
 
 } // namespace Lumino

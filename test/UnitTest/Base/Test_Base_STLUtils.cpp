@@ -65,7 +65,7 @@ TEST_F(Test_Base_STLUtils, Foreach)
 		String result;
 		LN_FOREACH(String& str, ary1)
 		{
-			if (result.size() == 1) {
+			if (result.GetLength() == 1) {
 				result += _T("|");
 				continue;
 			}

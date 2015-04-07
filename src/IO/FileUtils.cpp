@@ -349,9 +349,9 @@ void FileUtils::WriteAllText(const TCHAR* filePath, const String& str, const Tex
 //----------------------------------------------------------------------
 //
 //----------------------------------------------------------------------
-size_t FileUtils::CalcSeekPoint(size_t curPoint, size_t maxSize, size_t offset, int origin)
+int64_t FileUtils::CalcSeekPoint(int64_t curPoint, int64_t maxSize, int64_t offset, int origin)
 {
-	size_t newPoint = curPoint;
+	int64_t newPoint = curPoint;
 	switch (origin)
 	{
 	case SEEK_CUR:
