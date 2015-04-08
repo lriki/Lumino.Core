@@ -1,4 +1,7 @@
-﻿
+﻿/**
+	@file	String.h
+*/
+
 #pragma once
 
 #include <vector>
@@ -26,76 +29,31 @@ enum StringSplitOptions
 	StringSplitOptions_RemoveEmptyEntries,	///< 出力は空の文字列を含まない
 };
 
-template< typename BaseType = char >
-class ChTraitsBase
-{
-public:
-	typedef char XCHAR;
-	typedef wchar_t YCHAR;
-};
-
-template<>
-class ChTraitsBase< wchar_t >
-{
-public:
-	typedef wchar_t XCHAR;
-	typedef char YCHAR;
-};
-
-
-template<typename TChar>
-class BasicStringCore : public std::basic_string<TChar>
-{
-public:
-	//static const TChar EmptyString[1];	// "\0"
-
-
-public:
-	BasicStringCore() : m_recCount(1) {}
-	~BasicStringCore() {}
-
-	inline bool IsShared() const { return (m_recCount > 1); }
-	inline void AddRef() { ++m_recCount; }
-	inline void Release()
-	{
-		--m_recCount;
-		if (m_recCount <= 0) {
-			delete this;
-		}
-	}
-
-	static BasicStringCore* GetSharedEmpty() { return &m_sharedEmpty; }
-
-public:
-	int		m_recCount;
-
-	static BasicStringCore	m_sharedEmpty;
-};
-
-
-
-
-
-
-
-
-
-
-
-
 /**
-	@brief		文字列を表すクラス
-	@details	std::basic_string をベースに機能拡張を行った文字列クラスです。
-	
-	@note		Replace 等の文字列を変更する関数は、可読性向上のために基本的に処理結果を戻り値で返している。
-				VisualC++ や GCC 等のメジャーなコンパイラでは RVO が適用されるため、殆どの場合コピーコンストラクタは呼ばれない。
-				値で返すことのオーバーヘッドは、コンストラクタ呼び出し1回のみ。
-
+	@brief		文字列のクラス
 */
 template<typename TChar>
 class BasicString
 {
 public:
+
+
+	template< typename BaseType = char >
+	class ChTraitsBase
+	{
+	public:
+		typedef char XCHAR;
+		typedef wchar_t YCHAR;
+	};
+
+	template<>
+	class ChTraitsBase< wchar_t >
+	{
+	public:
+		typedef wchar_t XCHAR;
+		typedef char YCHAR;
+	};
+
 	static const int MaxFormatLength = 2048;
 
 	typedef typename ChTraitsBase<TChar>::XCHAR XCHAR;
@@ -178,11 +136,11 @@ public:
 					TChar と str の型が同じ場合は文字コードの変換を行いません。
 	*/
 	void AssignCStr(const char* str, int begin, int length, bool* usedDefaultChar = NULL);
-	void AssignCStr(const char* str, int length, bool* usedDefaultChar = NULL);					///< @copydoc AssignCStr
-	void AssignCStr(const char* str, bool* usedDefaultChar = NULL);								///< @copydoc AssignCStr
-	void AssignCStr(const wchar_t* str, int begin, int length, bool* usedDefaultChar = NULL);	///< @copydoc AssignCStr
-	void AssignCStr(const wchar_t* str, int length, bool* usedDefaultChar = NULL);				///< @copydoc AssignCStr
-	void AssignCStr(const wchar_t* str, bool* usedDefaultChar = NULL);							///< @copydoc AssignCStr
+	void AssignCStr(const char* str, int length, bool* usedDefaultChar = NULL);					///< @overload AssignCStr
+	void AssignCStr(const char* str, bool* usedDefaultChar = NULL);								///< @overload AssignCStr
+	void AssignCStr(const wchar_t* str, int begin, int length, bool* usedDefaultChar = NULL);	///< @overload AssignCStr
+	void AssignCStr(const wchar_t* str, int length, bool* usedDefaultChar = NULL);				///< @overload AssignCStr
+	void AssignCStr(const wchar_t* str, bool* usedDefaultChar = NULL);							///< @overload AssignCStr
 
 	/**
 		@brief		指定したエンコーディングを使用し、文字列を変換して設定する
@@ -243,7 +201,7 @@ public:
 		@return		見つからなかった場合は -1
 	*/
 	int IndexOf(const TChar* str, int startIndex = 0) const;
-	int IndexOf(TChar ch,         int startIndex = 0) const;	///< @copydoc IndexOf
+	int IndexOf(TChar ch,         int startIndex = 0) const;	///< @overload IndexOf
 
 	/**
 		@brief		文字列を検索し、最後に見つかったインデックスを返します。
@@ -263,7 +221,7 @@ public:
 		@endcode
 	*/
 	int LastIndexOf(const TChar* str, int startIndex = -1, int count = -1, CaseSensitivity cs = CaseSensitivity_CaseSensitive) const;
-	int LastIndexOf(TChar ch,         int startIndex = -1, int count = -1, CaseSensitivity cs = CaseSensitivity_CaseSensitive) const;	///< @copydoc LastIndexOf
+	int LastIndexOf(TChar ch,         int startIndex = -1, int count = -1, CaseSensitivity cs = CaseSensitivity_CaseSensitive) const;	///< @overload LastIndexOf
 
 	/**
 		@brief		この文字列の末尾が、指定した文字列と一致するかを判断します。
@@ -277,7 +235,7 @@ public:
 		@endcodes
 	*/
 	bool EndsWith(const TChar* str, CaseSensitivity cs = CaseSensitivity_CaseSensitive) const;
-	bool EndsWith(TChar ch,         CaseSensitivity cs = CaseSensitivity_CaseSensitive) const;	///< @copydoc EndsWith
+	bool EndsWith(TChar ch,         CaseSensitivity cs = CaseSensitivity_CaseSensitive) const;	///< @overload EndsWith
 
 	/**
 		@brief		この文字列と、指定した文字列を比較します。
@@ -371,8 +329,39 @@ private:
 	Text::Encoding* GetThisTypeEncoding() const;
 
 private:
-	const TChar* m_ref;		///< 愚直な printf に備え、クラス先頭のメンバは m_string->c_str() を指しておく
-	BasicStringCore<TChar>*	m_string;
+
+	//template<typename TChar>
+	class BasicStringCore
+		: public std::basic_string<TChar, std::char_traits<TChar>, STLAllocator<TChar> >
+	{
+	public:
+		//static const TChar EmptyString[1];	// "\0"
+
+
+	public:
+		BasicStringCore() : m_recCount(1) {}
+		~BasicStringCore() {}
+
+		inline bool IsShared() const { return (m_recCount > 1); }
+		inline void AddRef() { ++m_recCount; }
+		inline void Release()
+		{
+			--m_recCount;
+			if (m_recCount <= 0) {
+				delete this;
+			}
+		}
+
+		static BasicStringCore* GetSharedEmpty() { return &m_sharedEmpty; }
+
+	public:
+		int		m_recCount;
+
+		static BasicStringCore	m_sharedEmpty;
+	};
+
+	const TChar* m_ref;		///< 可変長の実引数にされることに備え、クラス先頭のメンバは m_string->c_str() を指しておく
+	BasicStringCore/*<TChar>*/*	m_string;
 };
 
 template<typename TChar>
@@ -393,8 +382,13 @@ inline BasicString<TChar> operator+(const BasicString<TChar>& left, const TChar*
 	return str;
 }
 
+#ifdef LN_DOXYGEN
+/// @sa BasicStringCore
+class String {};
+#else
 typedef BasicString<TCHAR>		String;
 typedef BasicString<char>		StringA;
 typedef BasicString<wchar_t>	StringW;
+#endif
 
 } // namespace Lumino

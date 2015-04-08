@@ -70,7 +70,7 @@ namespace Lumino
 //const TChar BasicStringCore<TChar>::EmptyString[1] = { 0x00 };
 
 template<typename TChar>
-BasicStringCore<TChar> BasicStringCore<TChar>::m_sharedEmpty;
+typename BasicString<TChar>::BasicStringCore/*<TChar>*/ BasicString<TChar>::BasicStringCore/*<TChar>*/::m_sharedEmpty;
 
 //=============================================================================
 // BasicString
@@ -83,7 +83,7 @@ template<typename TChar>
 BasicString<TChar>::BasicString()
 	: m_string(NULL)
 {
-	LN_REFOBJ_SET(m_string, BasicStringCore<TChar>::GetSharedEmpty());
+	LN_REFOBJ_SET(m_string, BasicStringCore::GetSharedEmpty());
 }
 
 //-----------------------------------------------------------------------------
@@ -433,7 +433,7 @@ ByteBuffer* BasicString<TChar>::ConvertTo(const Text::Encoding* encoding, bool* 
 template<typename TChar>
 void BasicString<TChar>::SetEmpty()
 {
-	LN_REFOBJ_SET(m_string, BasicStringCore<TChar>::GetSharedEmpty());
+	LN_REFOBJ_SET(m_string, BasicStringCore::GetSharedEmpty());
 }
 
 //-----------------------------------------------------------------------------
@@ -484,7 +484,7 @@ BasicString<TChar> BasicString<TChar>::Remove(TChar ch, CaseSensitivity cs) cons
 	}
 
 	// 大文字と小文字を区別する
-	std::basic_string<TChar>& ss = *newStr.m_string;
+	BasicStringCore& ss = *newStr.m_string;
 	if (cs == CaseSensitivity_CaseSensitive)
 	{
 		CmpCaseSensitive<TChar> cmp;
@@ -687,10 +687,10 @@ void BasicString<TChar>::AssignTString(const TChar* str, int len)
 	LN_SAFE_RELEASE(m_string);
 	if (str == NULL || len == 0) {
 		// 空の文字列になる場合は共有の空文字列を参照する
-		LN_REFOBJ_SET(m_string, BasicStringCore<TChar>::GetSharedEmpty());
+		LN_REFOBJ_SET(m_string, BasicStringCore::GetSharedEmpty());
 	}
 	else {
-		m_string = LN_NEW BasicStringCore<TChar>();	// 参照カウントは 1
+		m_string = LN_NEW BasicStringCore();	// 参照カウントは 1
 		m_string->assign(str, (len < 0) ? StringUtils::StrLen(str) : len);
 		m_ref = m_string->c_str();
 	}
@@ -703,8 +703,8 @@ template<typename TChar>
 void BasicString<TChar>::Realloc()
 {
 	if (m_string->IsShared()) {
-		BasicStringCore<TChar>* old = m_string;
-		m_string = LN_NEW BasicStringCore<TChar>();	// 参照カウントは 1
+		BasicStringCore* old = m_string;
+		m_string = LN_NEW BasicStringCore();	// 参照カウントは 1
 		m_string->assign(old->c_str());
 		m_ref = m_string->c_str();
 		LN_SAFE_RELEASE(old);

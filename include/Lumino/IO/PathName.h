@@ -45,20 +45,20 @@ public:
 public:
 	BasicPathName() {}
 
-	/// @copydoc Assign
+	/// @overload Assign
 	explicit BasicPathName(const char* path) { Assign(path); }
-	/// @copydoc Assign
+	/// @overload Assign
 	explicit BasicPathName(const wchar_t* path) { Assign(path); }
-	/// @copydoc Assign
+	/// @overload Assign
 	explicit BasicPathName(const BasicStringT& path) { Assign(path); }
 
-	/// @copydoc AssignUnderBasePath
+	/// @overload AssignUnderBasePath
 	BasicPathName(const PathNameT& basePath, const char* relativePath) { AssignUnderBasePath(basePath, relativePath); }
-	/// @copydoc AssignUnderBasePath
+	/// @overload AssignUnderBasePath
 	BasicPathName(const PathNameT& basePath, const wchar_t* relativePath) { AssignUnderBasePath(basePath, relativePath); }
-	/// @copydoc AssignUnderBasePath
+	/// @overload AssignUnderBasePath
 	BasicPathName(const PathNameT& basePath, const BasicStringT& relativePath) { AssignUnderBasePath(basePath, relativePath); }
-	/// @copydoc AssignUnderBasePath
+	/// @overload AssignUnderBasePath
 	BasicPathName(const PathNameT& basePath, const PathNameT& relativePath) { AssignUnderBasePath(basePath, relativePath); }
 
 	// operators
@@ -77,9 +77,9 @@ public:
 		@param[in]	path		: パス文字列
 	*/
 	void Assign(const char* path);
-	/// @copydoc Assign
+	/// @overload Assign
 	void Assign(const wchar_t* path);
-	/// @copydoc Assign
+	/// @overload Assign
 	void Assign(const BasicStringT& path) { Assign(path.GetCStr()); }
 
 	/**
@@ -89,11 +89,11 @@ public:
 		@details	relativePath がフルパスの場合は basePath を無視します。
 	*/
 	void AssignUnderBasePath(const PathNameT& basePath, const char* relativePath);
-	/// @copydoc AssignUnderBasePath
+	/// @overload AssignUnderBasePath
 	void AssignUnderBasePath(const PathNameT& basePath, const wchar_t* relativePath);
-	/// @copydoc AssignUnderBasePath
+	/// @overload AssignUnderBasePath
 	void AssignUnderBasePath(const PathNameT& basePath, const BasicStringT& relativePath) { AssignUnderBasePath(basePath, relativePath.GetCStr()); }
-	/// @copydoc AssignUnderBasePath
+	/// @overload AssignUnderBasePath
 	void AssignUnderBasePath(const PathNameT& basePath, const PathNameT& relativePath) { AssignUnderBasePath(basePath, relativePath.GetCStr()); }
 
 	/**
@@ -103,7 +103,7 @@ public:
 					path が絶対パスであれば、現在のパスを置き換えます。
 	*/
 	void Append(const TChar* path);
-	/// @copydoc Append
+	/// @overload Append
 	void Append(const PathNameT& path) { Append(path.m_path.GetCStr()); }
 
 	/// 空文字列を設定する
@@ -176,11 +176,11 @@ public:
 					http://www.clip-studio.com/clip_site/support/faq/detail/svc/52/tid/37429
 	*/
 	bool Equals(const TChar* path) const { return PathUtils::Equals(m_path.GetCStr(), path); }
-	/// @copydoc Equals
+	/// @overload Equals
 	bool Equals(const PathNameT& path) const { return PathUtils::Equals(m_path.GetCStr(), path.GetCStr()); }
-	/// @copydoc Equals
+	/// @overload Equals
 	bool Equals(const BasicStringT& path) const { return PathUtils::Equals(m_path.GetCStr(), path.GetCStr()); }
-	/// @copydoc Equals
+	/// @overload Equals
 	bool operator == (const PathNameT& path) const { return Equals(path); }
 
 public:

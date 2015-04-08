@@ -65,8 +65,6 @@ if (WIN32)
 	
 	# MSVC Runtime library.
 	if (MSVC_LINK_MULTI_THREAD_STATIC_RUNTIME)
-		set(LN_STATIC_LIB_OUTPUT_NAME "${LN_STATIC_LIB_OUTPUT_NAME}_MD")
-	else()
 		set(LN_STATIC_LIB_OUTPUT_NAME "${LN_STATIC_LIB_OUTPUT_NAME}_MT")
 		# Overwrite options.
 		foreach (flag
@@ -83,6 +81,8 @@ if (WIN32)
 				string(REGEX REPLACE "/MDd" "/MTd" ${flag} "${${flag}}")
 			endif()
 		endforeach()
+	else()
+		set(LN_STATIC_LIB_OUTPUT_NAME "${LN_STATIC_LIB_OUTPUT_NAME}_MD")
 	endif()
 	set(CMAKE_DEBUG_POSTFIX "d")
 	# end   Make static lib name.
@@ -143,8 +143,10 @@ set(LN_SOURCES
 	src/Base/StringUtils.cpp
 	src/Base/ByteBuffer.cpp
 	src/IO/DirectoryUtils.cpp
+	src/IO/File.cpp
 	src/IO/FileStream.cpp
 	src/IO/FileUtils.cpp
+	src/IO/MemoryStream.cpp
 	src/IO/PathName.cpp
 	src/IO/PathUtils.cpp
 	src/IO/File.cpp

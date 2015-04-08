@@ -28,6 +28,9 @@ namespace Lumino
 
 /**
 	@brief	例外ベースクラス
+
+	@todo	VC++ で本ライブラリを DLL としてビルドするときは、DLLランタイムを使用しないと warning C4275 が発生する。
+			これは、staticランタイムだと std::exception に dllexport がつかないため。
 */
 class LUMINO_EXPORT Exception : public std::exception
 {
