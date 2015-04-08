@@ -29,6 +29,21 @@ enum StringSplitOptions
 	StringSplitOptions_RemoveEmptyEntries,	///< 出力は空の文字列を含まない
 };
 
+template<typename BaseType = char>	// GCC では BasicString 内部に定義できないので外に出している
+class BasicStringTraits
+{
+public:
+	typedef char XCHAR;
+	typedef wchar_t YCHAR;
+};
+template<>
+class BasicStringTraits<wchar_t>
+{
+public:
+	typedef wchar_t XCHAR;
+	typedef char YCHAR;
+};
+
 /**
 	@brief		文字列のクラス
 */
@@ -37,27 +52,10 @@ class BasicString
 {
 public:
 
-
-	template< typename BaseType = char >
-	class ChTraitsBase
-	{
-	public:
-		typedef char XCHAR;
-		typedef wchar_t YCHAR;
-	};
-
-	template<>
-	class ChTraitsBase< wchar_t >
-	{
-	public:
-		typedef wchar_t XCHAR;
-		typedef char YCHAR;
-	};
-
 	static const int MaxFormatLength = 2048;
 
-	typedef typename ChTraitsBase<TChar>::XCHAR XCHAR;
-	typedef typename ChTraitsBase<TChar>::YCHAR YCHAR;
+	typedef typename BasicStringTraits<TChar>::XCHAR XCHAR;
+	typedef typename BasicStringTraits<TChar>::YCHAR YCHAR;
 
 	typedef BasicString<TChar>			StringT;
     typedef std::size_t size_type;		// need GCC

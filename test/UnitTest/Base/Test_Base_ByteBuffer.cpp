@@ -44,6 +44,15 @@ TEST_F(Test_Base_ByteBuffer, Constructor)
 	ASSERT_EQ('b', buf5[1]);
 	ASSERT_EQ('a', data2[0]);	// 元バッファにも書き込まれている
 	ASSERT_EQ('b', data2[1]);	// 元バッファにも書き込まれている
+
+	// データコピー
+	char data6[5] = "test";
+	ByteBuffer buf6(data6, 4, false);
+	ASSERT_EQ(4, buf6.GetSize());
+	ASSERT_EQ('t', buf6[0]);
+	ASSERT_EQ('e', buf6[1]);
+	ASSERT_EQ('s', buf6[2]);
+	ASSERT_EQ('t', buf6[3]);
 }
 
 //-----------------------------------------------------------------------------
