@@ -104,7 +104,7 @@ BasicString<TChar> PathUtils::GetDirectoryPath(const TChar* path)
 			//if ((*str.rbegin() != DirectorySeparatorChar) && (*str.rbegin() != AltDirectorySeparatorChar)) {
 			//if (str.LastIndexOf(DirectorySeparatorChar) != str.GetLength() &&
 			//	str.LastIndexOf(AltDirectorySeparatorChar) != str.GetLength()){
-			if (!str.EndsWith(DirectorySeparatorChar) && !str.EndsWith(AltDirectorySeparatorChar))
+			if (!str.EndsWith((TChar)DirectorySeparatorChar) && !str.EndsWith((TChar)AltDirectorySeparatorChar))
 			{
 				if (lastSep != 0) {
 					str += (const char)lastSep;

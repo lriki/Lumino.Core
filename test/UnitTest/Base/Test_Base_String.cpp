@@ -115,13 +115,15 @@ TEST_F(Test_Base_String, Format)
 			ArgumentException);
 	}
 
-	// 
+#ifdef LN_MSVC
+	// 可変長実引数への指定は保障外だが、一応動くか見ておく。ちなみに GCC ではコンパイルエラーになる。
 	{
 		String str1(_T("str1"));
 		String str2;
 		str2.Format(_T("[%s]"), str1);
 		ASSERT_STREQ(_T("[str1]"), str2);
 	}
+#endif
 
 #if _WIN32	// unix not impl
 	// StringW Max 文字数チェック

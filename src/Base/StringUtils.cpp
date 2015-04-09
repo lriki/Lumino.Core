@@ -72,6 +72,7 @@ int				StringUtils::VSPrintf(wchar_t* out, int charCount, const wchar_t* format,
 #endif
 
 
+/*
 #ifdef _WIN32
 int StringUtils::StrNICmp(const char* str1, const char* str2, size_t count) { return _strnicmp(str1, str2, count); }
 int StringUtils::StrNICmp(const wchar_t* str1, const wchar_t* str2, size_t count) { return _wcsnicmp(str1, str2, count); }
@@ -79,6 +80,52 @@ int StringUtils::StrNICmp(const wchar_t* str1, const wchar_t* str2, size_t count
 int StringUtils::StrNICmp(const char* str1, const char* str2, size_t count) { return strnicmp(str1, str2, count); }
 int StringUtils::StrNICmp(const wchar_t* str1, const wchar_t* str2, size_t count) { return wcsnicmp(str1, str2, count); }
 #endif
+*/
+int StringUtils::StrNICmp(const char* s1, const char* s2, size_t count)
+{
+	if (count == 0) {
+		return 0;
+	}
+
+	//while (*s1 && *s2)
+	do
+	{
+		if (StringUtils::ToUpper(*s1) != StringUtils::ToUpper(*s2))
+		{
+			return ((StringUtils::ToUpper(*s1) - StringUtils::ToUpper(*s2)));
+		}
+		if (*s1 == 0) {
+			break;
+		}
+		++s1;
+		++s2;
+		--count;
+	} while (count != 0);
+	return 0;//((StringUtils::ToUpper(*s1) - StringUtils::ToUpper(*s2)));
+}
+int StringUtils::StrNICmp(const wchar_t* s1, const wchar_t* s2, size_t count)
+{
+	if (count == 0) {
+		return 0;
+	}
+
+	//while (*s1 && *s2)
+	do
+	{
+		if (StringUtils::ToUpper(*s1) != StringUtils::ToUpper(*s2))
+		{
+			return ((StringUtils::ToUpper(*s1) - StringUtils::ToUpper(*s2)));
+		}
+		if (*s1 == 0) {
+			break;
+		}
+		++s1;
+		++s2;
+		--count;
+	} while (count != 0);
+	return 0;//((StringUtils::ToUpper(*s1) - StringUtils::ToUpper(*s2)));
+}
+
 
 //-----------------------------------------------------------------------------
 //

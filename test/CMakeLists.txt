@@ -30,7 +30,15 @@ include_directories(
 	"${PROJECT_SOURCE_DIR}/test/gtest/src"
 	"${PROJECT_SOURCE_DIR}/test/UnitTest")
 
-link_libraries(LuminoCore_Static)
+set(LN_TEST_LIBS LuminoCore_Static)
+if (WIN32)
+elseif (APPLE)
+	list(APPEND LN_TEST_LIBS "pthread")	# for gtest.
+elseif (UNIX)
+	list(APPEND LN_TEST_LIBS "pthread")	# for gtest.
+else()
+endif()
+link_libraries(${LN_TEST_LIBS})
 
 add_definitions(-DGTEST_HAS_TR1_TUPLE=0)	# vs2012
 
