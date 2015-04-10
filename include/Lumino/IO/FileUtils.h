@@ -40,7 +40,7 @@ public:
 	static bool Exists(const wchar_t* filePath);
 
 	/**
-		@brief		ファイルの属性を取得する
+		@brief		ファイルの属性を取得します。
 		@param[in]	filePath		: ファイル名
 		@return		ファイルの属性 (FileAttribute のビットの組み合わせ)
 	*/
@@ -48,10 +48,11 @@ public:
 	static uint32_t GetAttribute(const wchar_t* filePath);
 
 	/**
-		@brief		ファイルの属性を設定する
+		@brief		ファイルの属性を設定します。
 		@param[in]	filePath		: ファイル名
 		@param[in]	attr			: ファイルの属性 (FileAttribute のビットの組み合わせ)
-		@details	
+		@details	この関数により変更できる属性は、読み取り属性のみです。(Unix では隠し属性はファイル名で表現されるためです)
+					それ以外のフラグビットは無視されます。
 	*/
 	static void SetAttribute(const char* filePath, uint32_t attr);
 	static void SetAttribute(const wchar_t* filePath, uint32_t attr);

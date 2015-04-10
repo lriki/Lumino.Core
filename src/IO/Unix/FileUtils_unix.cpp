@@ -109,6 +109,30 @@ uint32_t FileUtils::GetAttribute(const wchar_t* filePath)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+void FileUtils::SetAttribute(const char* filePath, uint32_t attr)
+{
+	struct stat st;
+	int ret = ::stat(filePath, &st);
+	LN_THROW(ret != -1, IOException);
+	
+	// 変更できるのは読み取り属性だけ。
+	// 隠し属性は Unix ではファイル名で表現する。
+	if (attrs & FileAttribute_ReadOnly) {
+		ret = ::chmod(filePath, st.st_mode & ~(S_IWUSR | S_IWOTH | S_IWGRP));
+	} else {
+		ret = ::chmod(filePath, st.st_mode | S_IWUSR);
+	}
+	LN_THROW(ret != -1, IOException);
+}
+void FileUtils::SetAttribute(const wchar_t* filePath, uint32_t attr)
+{
+	MBCS_FILEPATH(mbcsFilePath, filePath);
+	return SetAttribute(mbcsFilePath, attr);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 void FileUtils::Copy(const char* sourceFileName, const char* destFileName, bool overwrite)
 {
 	// http://ppp-lab.sakura.ne.jp/ProgrammingPlacePlus/c/044.html
