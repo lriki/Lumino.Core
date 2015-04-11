@@ -109,7 +109,7 @@ uint32_t FileUtils::GetAttribute(const wchar_t* filePath)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void FileUtils::SetAttribute(const char* filePath, uint32_t attr)
+void FileUtils::SetAttribute(const char* filePath, uint32_t attrs)
 {
 	struct stat st;
 	int ret = ::stat(filePath, &st);
@@ -124,10 +124,10 @@ void FileUtils::SetAttribute(const char* filePath, uint32_t attr)
 	}
 	LN_THROW(ret != -1, IOException);
 }
-void FileUtils::SetAttribute(const wchar_t* filePath, uint32_t attr)
+void FileUtils::SetAttribute(const wchar_t* filePath, uint32_t attrs)
 {
 	MBCS_FILEPATH(mbcsFilePath, filePath);
-	return SetAttribute(mbcsFilePath, attr);
+	return SetAttribute(mbcsFilePath, attrs);
 }
 
 //-----------------------------------------------------------------------------
