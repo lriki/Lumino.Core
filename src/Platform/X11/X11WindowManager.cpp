@@ -41,8 +41,20 @@ X11WindowManager::X11WindowManager()
 	 */
 	m_x11Context = XUniqueContext();
 	
-	
-	
+#if 0
+	const char* vendor = glXGetClientString(x11Display, GLX_VENDOR);
+
+	int nativeConfigsCount;
+	GLXFBConfig* nativeConfigs = glXGetFBConfigs(x11Display, x11DefaultScreen, &nativeConfigsCount);
+	FILE* fp = fopen("fbconigs.txt", "w");
+	fprintf(fp, "%s\n", vendor);
+
+	printf("fp %p\n", fp);
+	fprintf(fp, "nativeConfigsCount: %d\n", nativeConfigsCount);
+	for (int i = 0; i < nativeConfigsCount; ++i)
+		PrintFBConfig(fp, x11Display, &nativeConfigs[i]);
+	fclose(fp);
+#endif
 	
 	
 	// Window manager atoms.
@@ -53,6 +65,26 @@ X11WindowManager::X11WindowManager()
 	
 	// http://homepage3.nifty.com/rio_i/lab/xlib/015attribute.htm#15_1_7
 	
+	
+	/*
+		GLX extension のバージョンを取得する
+		・・・というのは建前。
+		VirtualBox 上の Ubuntu12.04 で、GLX クライアントの実装 Vender を Mesa から Chromium に変更するのが目的。
+		この環境では、glXGetFBConfigAttrib や glXChooseFBConfig が以下のようなメッセージを標準出力し、エラーを返す問題があった。
+			OpenGL Warning: XGetVisualInfo returned 0 visuals for 09fbcc38
+			OpenGL Warning: Retry with 0x8003 returned 0 visuals
+			OpenGL Warning: glXGetFBConfigAttrib for 09fbcc38, failed to get XVisualInfo
+		これは
+			glXGetClientString(display, GLX_VENDOR);
+		で取得できる文字列が "Mesa Project and SGI" (デフォルト) の時に発生した。
+		同環境では GLFW が正常に動作するので GLFW のソースを追ってみたところ、
+		GLFW では GLX_VENDOR が "Chromium" となっていた。
+		そして、この GLX_VENDOR は何故か glXQueryVersion() の呼び出しで変化する。API リファレンスにもそんなこと乗ってないのに…。
+		おそらく、現在の環境で一番いい感じに使える GLX クライアントを自動選択してくれているのだと思われる。
+	*/
+	int major, minor;
+	Bool r = glXQueryVersion(x11Display, &major, &minor);
+	LN_THROW(r, InvalidOperationException);
 }
 
 //-----------------------------------------------------------------------------

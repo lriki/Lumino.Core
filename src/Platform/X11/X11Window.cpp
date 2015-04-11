@@ -16,6 +16,52 @@ namespace Platform
 // X11Window
 //=============================================================================
 
+void PrintFBConfig(FILE* fp, Display* display, const GLXFBConfig* fbConfig)
+{
+	int value;
+	glXGetFBConfigAttrib(display, *fbConfig, GLX_FBCONFIG_ID, &value);
+	fprintf(fp, "id: %d\n", value);
+	glXGetFBConfigAttrib(display, *fbConfig, GLX_DOUBLEBUFFER, &value);
+	fprintf(fp, "  GLX_DOUBLEBUFFER: %d\n", value);
+	glXGetFBConfigAttrib(display, *fbConfig, GLX_VISUAL_ID, &value);
+	fprintf(fp, "  GLX_VISUAL_ID: %d\n", value);
+	glXGetFBConfigAttrib(display, *fbConfig, GLX_RENDER_TYPE, &value);
+	fprintf(fp, "  GLX_RENDER_TYPE.GLX_RGBA_BIT: %d\n", value & GLX_RGBA_BIT);
+	glXGetFBConfigAttrib(display, *fbConfig, GLX_DRAWABLE_TYPE, &value);
+	fprintf(fp, "  GLX_DRAWABLE_TYPE.GLX_WINDOW_BIT: %d\n", value & GLX_WINDOW_BIT);
+
+	glXGetFBConfigAttrib(display, *fbConfig, GLX_RED_SIZE, &value);
+	fprintf(fp, "  GLX_RED_SIZE: %d\n", value);
+	glXGetFBConfigAttrib(display, *fbConfig, GLX_GREEN_SIZE, &value);
+	fprintf(fp, "  GLX_GREEN_SIZE: %d\n", value);
+	glXGetFBConfigAttrib(display, *fbConfig, GLX_BLUE_SIZE, &value);
+	fprintf(fp, "  GLX_BLUE_SIZE: %d\n", value);
+	glXGetFBConfigAttrib(display, *fbConfig, GLX_ALPHA_SIZE, &value);
+	fprintf(fp, "  GLX_ALPHA_SIZE: %d\n", value);
+	glXGetFBConfigAttrib(display, *fbConfig, GLX_DEPTH_SIZE, &value);
+	fprintf(fp, "  GLX_DEPTH_SIZE: %d\n", value);
+	glXGetFBConfigAttrib(display, *fbConfig, GLX_STENCIL_SIZE, &value);
+	fprintf(fp, "  GLX_STENCIL_SIZE: %d\n", value);
+
+	glXGetFBConfigAttrib(display, *fbConfig, GLX_ACCUM_RED_SIZE, &value);
+	fprintf(fp, "  GLX_ACCUM_RED_SIZE: %d\n", value);
+	glXGetFBConfigAttrib(display, *fbConfig, GLX_ACCUM_GREEN_SIZE, &value);
+	fprintf(fp, "  GLX_ACCUM_GREEN_SIZE: %d\n", value);
+	glXGetFBConfigAttrib(display, *fbConfig, GLX_ACCUM_BLUE_SIZE, &value);
+	fprintf(fp, "  GLX_ACCUM_BLUE_SIZE: %d\n", value);
+	glXGetFBConfigAttrib(display, *fbConfig, GLX_ACCUM_ALPHA_SIZE, &value);
+	fprintf(fp, "  GLX_ACCUM_ALPHA_SIZE: %d\n", value);
+
+	glXGetFBConfigAttrib(display, *fbConfig, GLX_AUX_BUFFERS, &value);
+	fprintf(fp, "  GLX_AUX_BUFFERS: %d\n", value);
+	glXGetFBConfigAttrib(display, *fbConfig, GLX_STEREO, &value);
+	fprintf(fp, "  GLX_STEREO: %d\n", value);
+	glXGetFBConfigAttrib(display, *fbConfig, GLX_SAMPLES, &value);
+	fprintf(fp, "  GLX_SAMPLES: %d\n", value);
+	glXGetFBConfigAttrib(display, *fbConfig, GLX_FRAMEBUFFER_SRGB_CAPABLE_ARB, &value);
+	fprintf(fp, "  GLX_FRAMEBUFFER_SRGB_CAPABLE_ARB: %d\n", value);
+}
+	
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
@@ -57,7 +103,7 @@ X11Window::X11Window(X11WindowManager* windowManager, const SettingData& setting
 		GLX_RED_SIZE,		8,		// R 8bit
 		GLX_GREEN_SIZE,		8,		// G 8bit
 		GLX_BLUE_SIZE,		8,		// B 8bit
-		GLX_ALPHA_SIZE,		8,		// A 8bit
+		GLX_ALPHA_SIZE,		0,		// A 8bit
 		GLX_DEPTH_SIZE,		24,		// 深度値 24bit
 		GLX_STENCIL_SIZE,	8,		// ステンシル 8bit
 		//GLX_SAMPLES,        MultiSamples,	// マルチサンプリング (アンチエイリアス)
