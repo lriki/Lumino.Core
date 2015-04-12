@@ -83,7 +83,7 @@ X11WindowManager::X11WindowManager()
 		おそらく、現在の環境で一番いい感じに使える GLX クライアントを自動選択してくれているのだと思われる。
 	*/
 	int major, minor;
-	Bool r = glXQueryVersion(x11Display, &major, &minor);
+	Bool r = glXQueryVersion(m_x11Display, &major, &minor);
 	LN_THROW(r, InvalidOperationException);
 }
 

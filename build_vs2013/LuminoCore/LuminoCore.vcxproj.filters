@@ -28,6 +28,12 @@
     <Filter Include="IO\Win32">
       <UniqueIdentifier>{2b69a502-ad1f-4e16-832d-e3444abc9796}</UniqueIdentifier>
     </Filter>
+    <Filter Include="external">
+      <UniqueIdentifier>{4fc1feff-dc8c-4e3d-a006-71c15430e9de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external\camellia">
+      <UniqueIdentifier>{93f4024a-1499-407c-a7ae-d5e5b748d8bb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\Lumino\Base\CRT.h">
@@ -193,6 +199,21 @@
     <ClInclude Include="..\..\include\Lumino\IO\File.h">
       <Filter>IO</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\IO\FileManager.h">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\camellia\camellia.h">
+      <Filter>external\camellia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\IO\Archive.h">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\IO\ArchiveMaker.h">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\IO\Common.h">
+      <Filter>IO</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\include\Lumino\Base\Delegate.inl">
@@ -321,6 +342,18 @@
       <Filter>Platform</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\IO\File.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\IO\FileManager.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\camellia\camellia.cpp">
+      <Filter>external\camellia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\IO\Archive.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\IO\ArchiveMaker.cpp">
       <Filter>IO</Filter>
     </ClCompile>
   </ItemGroup>

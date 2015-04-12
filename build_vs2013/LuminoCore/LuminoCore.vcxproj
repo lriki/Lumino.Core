@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\external\camellia\camellia.h" />
     <ClInclude Include="..\..\include\LuminoCore.h" />
     <ClInclude Include="..\..\include\Lumino\Base\Array.h" />
     <ClInclude Include="..\..\include\Lumino\Base\Common.h" />
@@ -30,8 +31,10 @@
     <ClInclude Include="..\..\include\Lumino\Base\String.h" />
     <ClInclude Include="..\..\include\Lumino\Base\StringUtils.h" />
     <ClInclude Include="..\..\include\Lumino\Base\Typedef.h" />
+    <ClInclude Include="..\..\include\Lumino\IO\Common.h" />
     <ClInclude Include="..\..\include\Lumino\IO\DirectoryUtils.h" />
     <ClInclude Include="..\..\include\Lumino\IO\File.h" />
+    <ClInclude Include="..\..\include\Lumino\IO\FileManager.h" />
     <ClInclude Include="..\..\include\Lumino\IO\FileStream.h" />
     <ClInclude Include="..\..\include\Lumino\IO\FileUtils.h" />
     <ClInclude Include="..\..\include\Lumino\IO\MemoryStream.h" />
@@ -55,6 +58,8 @@
     <ClInclude Include="..\..\include\Lumino\Threading\Thread.h" />
     <ClInclude Include="..\..\include\Lumino\Threading\ThreadingExceptions.h" />
     <ClInclude Include="..\..\src\Base\Win32\BackTrace.h" />
+    <ClInclude Include="..\..\src\IO\Archive.h" />
+    <ClInclude Include="..\..\src\IO\ArchiveMaker.h" />
     <ClInclude Include="..\..\src\Platform\Internal.h" />
     <ClInclude Include="..\..\src\Platform\NativeWindow.h" />
     <ClInclude Include="..\..\src\Platform\Win32\Win32WindowManager.h" />
@@ -71,14 +76,18 @@
     <None Include="..\..\include\Lumino\Base\Delegate.inl" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\external\camellia\camellia.cpp" />
     <ClCompile Include="..\..\src\Base\ByteBuffer.cpp" />
     <ClCompile Include="..\..\src\Base\Exception.cpp" />
     <ClCompile Include="..\..\src\Base\Memory.cpp" />
     <ClCompile Include="..\..\src\Base\RefObject.cpp" />
     <ClCompile Include="..\..\src\Base\String.cpp" />
     <ClCompile Include="..\..\src\Base\StringUtils.cpp" />
+    <ClCompile Include="..\..\src\IO\Archive.cpp" />
+    <ClCompile Include="..\..\src\IO\ArchiveMaker.cpp" />
     <ClCompile Include="..\..\src\IO\DirectoryUtils.cpp" />
     <ClCompile Include="..\..\src\IO\File.cpp" />
+    <ClCompile Include="..\..\src\IO\FileManager.cpp" />
     <ClCompile Include="..\..\src\IO\FileStream.cpp" />
     <ClCompile Include="..\..\src\IO\FileUtils.cpp" />
     <ClCompile Include="..\..\src\IO\MemoryStream.cpp" />
@@ -155,8 +164,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;LN_EXCEPTION_BACKTRACE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>
-      </AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -179,8 +187,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;LN_EXCEPTION_BACKTRACE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>
-      </AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
