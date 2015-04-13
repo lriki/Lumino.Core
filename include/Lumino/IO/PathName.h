@@ -44,11 +44,12 @@ public:
 
 public:
 	BasicPathName() {}
+	BasicPathName(const BasicPathName& obj);
 
 	/// @overload Assign
-	explicit BasicPathName(const char* path) { Assign(path); }
+	BasicPathName(const char* path) { Assign(path); }
 	/// @overload Assign
-	explicit BasicPathName(const wchar_t* path) { Assign(path); }
+	BasicPathName(const wchar_t* path) { Assign(path); }
 	/// @overload Assign
 	explicit BasicPathName(const BasicStringT& path) { Assign(path); }
 
@@ -120,6 +121,22 @@ public:
 
 	/// パス文字列を返す (末尾に必ずセパレータをひとつ付加する)
 	const BasicString<TChar> GetStrEndSeparator() const;
+
+	/**
+		@brief		このパスから拡張子を取り除いたパスを返します。
+		@code
+					PathName path1("C:/dir/file.txt");
+					PathName path2 = path1.GetWithoutExtension();	// => "C:/dir/file"
+
+					"file.txt"			=> "file"
+					"file"				=> "file"
+					""					=> ""
+					"C:/dir.sub/file"	=> "C:/dir.sub/file"
+					"dir/.git"			=> "dir/"
+					".git"				=> ""
+		@endcode
+	*/
+	BasicPathName<TChar> GetWithoutExtension() const;
 
 	/// パスが空であるかを確認する
 	bool IsEmpty() const { return m_path.IsEmpty(); }

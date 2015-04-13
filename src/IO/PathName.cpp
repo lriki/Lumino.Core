@@ -1,12 +1,22 @@
 ﻿
 #include <time.h>
 #include "../Internal.h"
-#include "../../include/Lumino/Base/StringUtils.h"
-#include "../../include/Lumino/IO/FileUtils.h"
-#include "../../include/Lumino/IO/PathName.h"
+#include <Lumino/Base/StringUtils.h>
+#include <Lumino/IO/FileUtils.h>
+#include <Lumino/IO/PathName.h>
+#include <Lumino/IO/FileManager.h>
 
 namespace Lumino
 {
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+BasicPathName<TChar>::BasicPathName(const BasicPathName& obj)
+	: m_path(obj.m_path)
+{
+}
 	
 //-----------------------------------------------------------------------------
 //
@@ -109,6 +119,34 @@ const BasicString<TChar> BasicPathName<TChar>::GetStrEndSeparator() const
 		newStr += Separator;
 	}
 	return newStr;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+BasicPathName<TChar> BasicPathName<TChar>::GetWithoutExtension() const
+{
+	CaseSensitivity cs = FileManager::GetInstance().GetFileSystemCaseSensitivity();
+
+	// 最後の . 位置確認
+	int dotPos = m_path.LastIndexOf('.', -1, -1, cs);
+	if (dotPos == -1) {
+		return (*this);		// . が無ければ何もせずそのまま返す
+	}
+
+	// 最後のセパレータ位置確認
+	int separatorPos = m_path.LastIndexOf(Separator, -1, -1, cs);
+	if (AltSeparator != 0) {
+		int altPos = m_path.LastIndexOf(AltSeparator, -1, -1, cs);
+		separatorPos = std::max(separatorPos, altPos);
+	}
+
+	if (dotPos < separatorPos) {
+		return (*this);		// "dir.sub/file" のように、. の後ろにセパレータがあった。ファイル名に付く . ではないので、何もせずそのまま返す
+	}
+
+	return BasicPathName<TChar>(m_path.Left(dotPos));
 }
 
 //-----------------------------------------------------------------------------

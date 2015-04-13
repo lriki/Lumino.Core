@@ -1,7 +1,11 @@
-﻿//==============================================================================
-// Archive 
-//------------------------------------------------------------------------------
-/*	[13/10/13] ファイル名マップのキーは UTF-16 統一？環境に合わせる？
+﻿/*	
+	[2015/4/13] ファイル名マップのキーは UTF-16 統一？環境に合わせる？その②
+		
+		TCHAR に合わせる。
+		というのも、一部 (ほぼ全て？Ubuntuとか) の Unix 環境では、wchar_t が使いものにならないため。
+
+
+	[2013/10/13] ファイル名マップのキーは UTF-16 統一？環境に合わせる？
 		速度的な懸念。環境に合わせた方が高速な気がするが…。
 
 		wchar_t のみ使用してくださいっていうなら、確かに高速。
@@ -20,714 +24,391 @@
 
 		→とりあえず完全にUnicodeString 任せで。
 */
-//==============================================================================
 
-#include "stdafx.h"
 #include <string>
 #include <algorithm>
-#include <camellia/camellia.h>
-//#include <Dependencies/ConvertUTF/ConvertUTF.h>
-#include "../Base/Misc.h"
-#include "../Base/StringUtils.h"
-#include "../Base/Unicode.h"
-#include "../System/Environment.h"
-#include "Common.h"
-#include "FileUtil.h"
-#include "StreamObject.h"
+#include "../../external/camellia/camellia.h"
+#include "../Internal.h"
+#include <Lumino/Base/ByteBuffer.h>
+#include <Lumino/Base/StringUtils.h>
+#include <Lumino/Base/Environment.h>
+#include <Lumino/IO/Common.h>
+#include <Lumino/IO/FileUtils.h>
+#include <Lumino/IO/Stream.h>
+#include <Lumino/IO/FileManager.h>
+#include <Lumino/Text/Encoding.h>
 #include "Archive.h"
 
-namespace LNote
-{
-namespace Core
-{
-namespace FileIO
+namespace Lumino
 {
 
-//==============================================================================
-// ■ Archive
-//==============================================================================
+//=============================================================================
+// Archive
+//=============================================================================
 	
-	const lnByte Archive::InternalKey[16] = {
-		0x6e, 0x36, 0x38, 0x64, 0x35, 0x6f, 0x68, 0x6d,
-		0x33, 0x42, 0x69, 0x61, 0x34, 0x78, 0x37, 0x6c
-	};
-
-	//----------------------------------------------------------------------
-	//
-	//----------------------------------------------------------------------
-	Archive::Archive()
-		: mStream	        ( NULL )
-		, mFileNum	        ( 0 )
-        , mTempBuffer       ( NULL )
-        , mTempBufferSize   ( 0 )
-	{
-	}
-
-	//----------------------------------------------------------------------
-	//
-	//----------------------------------------------------------------------
-	Archive::~Archive()
-	{
-		if ( mStream )
-		{
-			fclose( mStream );
-			mStream = NULL;
-
-            mEntriesMap.clear();
-		}
-        SAFE_DELETE_ARRAY( mTempBuffer );
-	}
-
-	//----------------------------------------------------------------------
-	//
-	//----------------------------------------------------------------------
-	void Archive::initialize( const lnChar* directory, const lnChar* filename, const char* key )
-	{
-		mKey = ( key ) ? key : "";
-		mFileNum = 0;
-
-		// 拡張子を除いた部分をコピーする
-#ifdef LNOTE_UNICODE
-		mArchiveDirectory  = FileIO::Path::getExtName( directory_ );
-        mArchiveDirectory += L"\\";
-		mArchiveDirectory += FileIO::Path::getExtName( filename_ );
-        mArchiveDirectory += L"\\";
-        FileIO::Path::normalizePath( &mArchiveDirectory );
-#else
-		Base::UnicodeString uniDirPath;
-		Base::UnicodeString uniFilePath;
-		uniDirPath.setDecodeBytes( directory );
-		uniFilePath.setDecodeBytes( filename );
-		mArchiveDirectory  = uniDirPath.getString();
-        mArchiveDirectory += L"\\";
-		mArchiveDirectory += FileIO::Path::getExtName( uniFilePath.getString() );
-        mArchiveDirectory += L"\\";
-        FileIO::Path::normalizePath( &mArchiveDirectory );
-#endif
-		// ディレクトリパスが相対パスであれば、カレントディレクトリを使って絶対パス化する
-		if (!Path::isFullPath(mArchiveDirectory.c_str()))
-		{
-			lnChar curDir[LN_MAX_PATH];
-			System::Environment::getCurrentDirectory( curDir );
-
-			lnRefStringW wpath = curDir;
-			wpath += L"\\";
-			wpath += mArchiveDirectory.c_str();
-
-			wchar_t newDir[LN_MAX_PATH];
-			Path::canonicalizePath( wpath.c_str(), newDir );
-
-			mArchiveDirectory = newDir;
-			mArchiveDirectory += L"\\";
-			FileIO::Path::normalizePath( &mArchiveDirectory );
-		}
-
-        // 実際のファイル名を作る
-		lnString real_name = directory;
-        real_name += _T("/");
-        real_name += filename;
-
-        // 拡張キーの作成
-        if ( key )
-        {
-            lnByte key_buf[ KEY_SIZE ] = { 0 };
-            memcpy( key_buf, key, strlen( key ) );
-            memset( mKeyTable, 0, sizeof( mKeyTable ) );
-            Camellia_Ekeygen( KEY_SIZE, key_buf, mKeyTable );
-        }
-
-        // とりあえず一時バッファを確保しておく
-        _checkTempBuffer( 5000 );
-
-		// アーカイブファイルを開く
-        mStream = _tfopen( real_name.c_str(), _T("rb") );
-		LN_THROW_FileNotFound( mStream, real_name.c_str() );
-
-		// ファイルサイズ取得
-		size_t archive_size = FileIO::FileUtils::getFileSize(mStream);
-
-        // 終端から16バイト戻ってからそれを読むとファイル数
-		fseek( mStream, -16, SEEK_END );
-		mFileNum = _readU32Padding16();
-
-		// ヘッダ読み込み
-		fseek( mStream, 0, SEEK_SET );
-        ArchiveHeader header;
-        fread( &header, 1, sizeof( header ), mStream );
-
-        // マジックナンバーをチェック
-        if ( memcmp( header.ID, "lna ", 4 ) != 0 )
-		{
-			fclose( mStream );
-			mStream = NULL;
-			LN_THROW_InvalidFormat(0);
-		}
-
-		// 内部キーのチェック (ユーザーキーは本当に正しいか？)
-		lnByte internalKey[16];
-		_readPadding16( internalKey, 16 );
-		if ( memcmp( internalKey, Archive::InternalKey, 16 ) != 0 ) {
-			LN_THROW_InvalidOperation(0, "invalid archive key: %s", mKey.c_str());
-		}
-
-        // ファイル情報を取得していく
-		lnU32 name_len;
-		wchar_t* name_buf;
-		Entry entry;
-		for ( int i = 0; i < mFileNum; ++i )
-		{
-			// ファイル名の長さとファイルサイズを読む
-            _readU32Padding16( &name_len, &entry.mSize );
-			
-#if 0
-			name_buf = (wchar_t*)LN_NEW lnU32[name_len + 1];
-			UTF16* tmpBuf = LN_NEW UTF16[name_len + 1];
-			_readPadding16( tmpBuf, name_len * sizeof(UTF16) );
-
-			wprintf((wchar_t*)tmpBuf);
-
-			ConversionResult r = ConvertUTF16toUTF32(
-				(const UTF16**)&tmpBuf,
-				(const UTF16*)&tmpBuf[name_len + 1], 
-				(UTF32**)&name_buf, 
-				(UTF32*)&name_buf[name_len + 1], 
-				strictConversion,
-				NULL ); 
-			if (r != conversionOK) {
-				LN_THROW_FileFormat( 0 );
-			}
-			delete[] tmpBuf;
-#endif
-
-#if defined(LNOTE_WCHAR_16)
-			// ファイル名を読み込むバッファを確保して読みこみ
-			name_buf = LN_NEW wchar_t[name_len + 1];
-			_readPadding16( name_buf, name_len * sizeof(wchar_t) );
-			name_buf[ name_len ] = L'\0';
-#elif defined(LNOTE_WCHAR_32)
-			name_buf = LN_NEW wchar_t[name_len + 1];
-			/*UTF16**/ tmpBuf = LN_NEW UTF16[name_len + 1];
-			_readPadding16( tmpBuf, name_len * sizeof(UTF16) );
-
-			/*ConversionResult*/ r = ConvertUTF16toUTF32(
-				(const UTF16**)&tmpBuf,
-				(const UTF16*)&tmpBuf[name_len + 1], 
-				(UTF32**)&name_buf, 
-				(UTF32*)&name_buf[name_len + 1], 
-				strictConversion,
-				NULL ); 
-			if (r != conversionOK) {
-				LN_THROW_FileFormat( 0 );
-			}
-			delete[] tmpBuf;
-#endif
-            // ここでのファイルポインタがデータ本体の位置
-			entry.mOffset = ftell( mStream );
-
-			// 今のシステム用に正規化してからファイルマップに追加
-			std::wstring keyPath = name_buf;
-			Path::normalizePath( &keyPath );
-			mEntriesMap.insert( EntriesPair( keyPath, entry ) );
-
-			// ファイルポインタをデータサイズ分進める
-			//fseek( mStream, entry.mSize + ( 16 - ( entry.mSize % 16 ) ) % 16, SEEK_CUR );
-            lnU32 ofs = _padding16( entry.mSize );
-            fseek( mStream, entry.mSize + ofs, SEEK_CUR );
-            
-			SAFE_DELETE_ARRAY( name_buf );
-		}
-
-		//int cur_fpos = ftell(mStream);
-		//_p(cur_fpos);
-	}
-
-
-	//----------------------------------------------------------------------
-	//
-	//----------------------------------------------------------------------
-	void Archive::open(const wchar_t* filename_, FILE** out_stream_, int* data_offset_, int* data_size_, FileType type)
-	{
-		*out_stream_ = NULL;
-		*data_offset_ = 0;
-		*data_size_ = 0;
-
-		if ( mFileNum == 0 )
-		{
-			return;
-		}
-		else
-		{
-			std::wstring path = filename_;
-			FileIO::Path::normalizePath( &path );
-
-			EntriesMap::iterator it;
-			it = mEntriesMap.find( path );
-			if ( it != mEntriesMap.end() )
-			{
-				*out_stream_ = mStream;
-				Entry entry = it->second;
-				*data_offset_ = entry.mOffset;
-				*data_size_ = entry.mSize;
-			}
-		}
-	}
-
-	//----------------------------------------------------------------------
-	//
-	//----------------------------------------------------------------------
-	bool Archive::existsFile( const wchar_t* fileFullPath )
-	{
-		// アーカイブのディレクトリと同じ
-		if ( wcsncmp( fileFullPath, mArchiveDirectory.c_str(), mArchiveDirectory.size() ) == 0 )
-		{
-			int copyLen = wcslen( fileFullPath ) - mArchiveDirectory.size();
-
-			// ファイル名が空文字ではない
-			if ( copyLen > 0 )
-			{
-				// アーカイブのあるディレクトリ名部分を取り除く
-				//std::wstring internalPath = std::wstring( 
-				//	fileFullPath, 
-				//	mArchiveDirectory.size(), 
-				//	copyLen );
-				const wchar_t* internalPath = (fileFullPath + mArchiveDirectory.size());
-
-				// 検索
-				EntriesMap::iterator it = mEntriesMap.find( internalPath );
-				if ( it != mEntriesMap.end() )
-				{
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	//----------------------------------------------------------------------
-	//
-	//----------------------------------------------------------------------
-	Stream* Archive::createStream(const wchar_t* fileFullPath, FileType type)
-    {
-		// アーカイブのディレクトリと同じ？
-		LN_THROW_FileNotFound( 
-			wcsncmp( fileFullPath, mArchiveDirectory.c_str(), mArchiveDirectory.size() ) == 0,
-			fileFullPath );
-
-		int copyLen = wcslen( fileFullPath ) - mArchiveDirectory.size();
-
-		// ファイル名が空文字
-		LN_THROW_FileNotFound( copyLen > 0, fileFullPath );	
-
-		// アーカイブのあるディレクトリ名部分を取り除く
-		//std::wstring internalPath = std::wstring( 
-		//	fileFullPath, 
-		//	mArchiveDirectory.size(), 
-		//	copyLen );
-		const wchar_t* internalPath = (fileFullPath + mArchiveDirectory.size());
-
-        FILE* out_stream;
-        int data_offset;
-        int data_size;
-		open( internalPath, &out_stream, &data_offset, &data_size, type );
-        if ( !out_stream ) return NULL;
-
-        return LN_NEW ArchiveInStream( this, out_stream, data_offset, data_size, type );
-    }
-
-	//----------------------------------------------------------------------
-	//
-	//----------------------------------------------------------------------
-	lnU32 Archive::read(void* buffer, lnU32 count, FILE* stream, FileType type)
-	{
-		Threading::ScopedLock lock( mLock );
-
-		lnU32 read_size = 0;
-        int cur_fpos = ftell( mStream );            // 例)位置が 20 の場合
-		//_p(cur_fpos);
-        int over_fpos = ( cur_fpos % 16 );          // 4
-        int read_start_pos = cur_fpos - over_fpos;  // 16
-            
-        // 16 バイト単位になるように戻す
-        fseek( mStream, read_start_pos, SEEK_SET ); // seek 16
-
-        int over_count = ( count % 16 );           // count_ が 30 の場合、14
-        int r_size = count + over_fpos;            // count_ が 30 の場合、34
-        r_size += _padding16( r_size );//( 16 - ( r_size % 16 ) ) % 16;    // 48 バイト読む
-
-        // 必要な領域を確保
-        _checkTempBuffer( r_size );
-
-        read_size = fread( mTempBuffer, 1, r_size, mStream );
-
-		//_p(cur_fpos);
-		//printf((char*)mTempBuffer);
-
-        int tmpbuf_pos = 0;     // mTempBuffer から読むバイト位置
-        lnU32 total = 0;          // mTempBuffer から読んだバイト数の累計 (buffer_ に転送しようとしたバイト数)
-        int re_count = count;  // あと残り buffer_ に書き込めるバイト数
-        lnByte tmp_buf[ 16 ];
-        lnByte* write_pos = static_cast< lnByte* >( buffer );
-
-        // 前方に余分に読んだものがある場合
-        if ( over_fpos > 0 )
-        {
-			Camellia_EncryptBlock(KEY_SIZE, &mTempBuffer[total], mKeyTable, tmp_buf);
-            tmpbuf_pos += 16;
-
-            int data_size = 16 - over_fpos; // 余分を除いたデータサイズ
-            memcpy( write_pos, &tmp_buf[ over_fpos ], std::min( re_count, data_size ) );   // min は count_ 以上書きこまないため
-            write_pos = write_pos + data_size;
-                
-            total += data_size;
-            re_count -= std::min( re_count, data_size );
-        }
-
-        while ( true )
-        {
-            // 今回の読み込みで count_ に到達する場合は終了
-            // count_ が 16 丁度の場合はもう一周
-            if ( total + 16 >= count )
-            {
-                break;
-            }
-
-			Camellia_DecryptBlock(KEY_SIZE, &mTempBuffer[tmpbuf_pos], mKeyTable, write_pos);
-            tmpbuf_pos += 16;
-            write_pos += 16;
-            total += 16;
-            re_count -= 16;
-        }
-
-        // 後方に余分に読んだものがある場合
-        if ( over_count > 0 )
-        {
-            //_p(tmpbuf_pos);
-            //_p(total);
-            //_p(count_);
-            //_p(over_count);
-			Camellia_DecryptBlock(KEY_SIZE, &mTempBuffer[tmpbuf_pos], mKeyTable, tmp_buf);
-            memcpy( write_pos, tmp_buf, std::min( re_count, over_count ) );
-
-            //total += 16;
-        }
-        else
-        {
-			Camellia_DecryptBlock(KEY_SIZE, &mTempBuffer[tmpbuf_pos], mKeyTable, tmp_buf);
-            memcpy( write_pos, tmp_buf, re_count );
-        }
-
-
-
-            
-
-        // 呼び出し側での不具合を避けるため、正常に読めている場合は count_ を読んだバイト数とする
-        if ( read_size > count )
-        {
-            read_size = count;
-
-            // ファイルポインタを正しい位置に移動
-            fseek( mStream, cur_fpos + count, SEEK_SET );
-        }
-
-
-
-        //-------------------------------------------------
-        // テキストモードの場合は改行コードを LF に変換
-		if (type == FileType_Text)
-        {
-			lnByte* tbuf = (lnByte*)buffer;
-			lnU32 readPoint = 0;
-			lnU32 writePoint = 0;
-			lnU32 loopCount = read_size;
-			for ( ; readPoint < loopCount; )
-			{
-				if ( tbuf[readPoint] == 0x0d ) {	
-					// CR+LF → LF
-					if ( readPoint < loopCount - 1 && tbuf[readPoint + 1] == 0x0a ) {	
-						tbuf[writePoint] = 0x0a;
-						++readPoint;
-						--read_size;
-					}
-					// CR → LF
-					else {
-						tbuf[writePoint] = 0x0a;
-					}
-				}
-				else
-				{
-					tbuf[writePoint] = tbuf[readPoint];
-				}
-				readPoint++;
-				writePoint++;
-			}
-        }
-
-		return read_size;
-	}
-
-	//----------------------------------------------------------------------
-	//
-	//----------------------------------------------------------------------
-    void Archive::_checkTempBuffer( lnU32 request_size )
-    {
-        if ( request_size > mTempBufferSize )
-        {
-            mTempBufferSize = request_size;
-            SAFE_DELETE_ARRAY( mTempBuffer );
-            mTempBuffer = LN_NEW lnByte[ mTempBufferSize ];
-        }
-    }
-
-	//----------------------------------------------------------------------
-	//
-	//----------------------------------------------------------------------
-	lnU32 Archive::_readU32Padding16()
-    {
-        lnByte b[ 16 ] = { 0 };
-
-        // 復号する場合
-        if ( mKey.size() > 0 )
-        {
-            lnByte buf[ 16 ];
-            fread( buf, 1, 16, mStream );
-			Camellia_DecryptBlock(KEY_SIZE, buf, mKeyTable, b);
-        }
-        // そのまま読み込む場合
-        else
-        {
-            fread( b, 1, 16, mStream );
-        }
-
-        if ( Base::isLittleEndian() )
-        {
-            return *((lnU32*)b);
-        }
-        else
-        {
-            lnU32 r = *((lnU32*)b);
-            r = (((r) >> 24) +
-                (((r) & 0x00ff0000) >> 8) +
-                (((r) & 0x0000ff00) << 8) +
-                ((r) << 24));
-            return r;
-        }
-    }
-
-	//----------------------------------------------------------------------
-	// 
-	//----------------------------------------------------------------------
-	void Archive::_readU32Padding16( lnU32* v0, lnU32* v1 )
-    {
-        lnByte b[ 16 ] = { 0 };
-
-        // 復号する場合
-        if ( mKey.size() > 0 )
-        {
-            lnByte buf[ 16 ];
-            fread( buf, 1, 16, mStream );
-			Camellia_DecryptBlock(KEY_SIZE, buf, mKeyTable, b);
-        }
-        // そのまま読み込む場合
-        else
-        {
-            fread( b, 1, 16, mStream );
-        }
-
-        // 復号する場合
-        if ( 0 )
-        {
-        }
-
-        if ( Base::isLittleEndian() )
-        {
-            *v0 = *((lnU32*)(b + 0));
-            *v1 = *((lnU32*)(b + 4));
-        }
-        else
-        {
-            lnU32 r = *((lnU32*)b);
-            *v0 =  (((r) >> 24) +
-                    (((r) & 0x00ff0000) >> 8) +
-                    (((r) & 0x0000ff00) << 8) +
-                    ((r) << 24));
-
-            r = *((lnU32*)(b + 4));
-            *v1 =  (((r) >> 24) +
-                    (((r) & 0x00ff0000) >> 8) +
-                    (((r) & 0x0000ff00) << 8) +
-                    ((r) << 24));
-        }
-    }
-
-	//----------------------------------------------------------------------
-	//
-	//----------------------------------------------------------------------
-	int Archive::_readPadding16( void* buffer, int count )
-    {
-        int read_size;
-
-        // 復号する場合
-        if ( mKey.size() > 0 )
-        {
-            int count_p16 = _padding16( count );
-
-            // 全体のサイズを計算して、バッファ確保
-            int all_size = count + count_p16;//( 16 - ( count_ % 16 ) ) % 16;
-            _checkTempBuffer( all_size );
-
-            // 一時バッファに読む
-            read_size = fread( mTempBuffer, 1, all_size, mStream );
-
-            int over_size = count_p16;//( 16 - ( count_ % 16 ) ) % 16;
-            int i = 0;
-            int total = 0;
-            
-            lnByte* buf = static_cast< lnByte* >( buffer );
-            while ( true )
-            {
-                if ( total + 16 >= count )
-                {
-                    lnByte read_data[ 16 ];
-					Camellia_DecryptBlock(KEY_SIZE, &mTempBuffer[total], mKeyTable, read_data);
-                    memcpy( &buf[ i * 16 ], read_data, 16 - over_size );
-                    break;
-                }
-                else
-                {
-					Camellia_DecryptBlock(KEY_SIZE, &mTempBuffer[total], mKeyTable, &buf[total]);
-                }
-                ++i;
-                total += 16;
-            }
-
-            // 仮
-            //memcpy( buffer_, mTempBuffer, count_ );
-        }
-        // 復号しない場合は buffer_ に直接読んで、余分を進める
-        else
-        {
-            read_size = fread( buffer, 1, count, mStream );
-            fseek( mStream, _padding16( count ), SEEK_CUR );
-            
-            //fseek( mStream, ( 16 - ( count_ % 16 ) ) % 16, SEEK_CUR );
-            
-        }
-        return read_size;
-    }
-
-//==============================================================================
-// ■ ArchiveInStream
-//==============================================================================
-
-
-	//----------------------------------------------------------------------
-	//
-	//----------------------------------------------------------------------
-	ArchiveInStream::ArchiveInStream(Archive* archive, FILE* stream, lnU32 data_offset, lnU32 data_size, FileType type)
-        : mArchive          ( archive )
-        , mStream           ( stream )
-        , mDataOffset       ( data_offset )
-        , mDataSize         ( data_size )
-        , mSeekPoint        ( 0 )
-        , mOpenType( type )
-    {
-        LN_SAFE_ADDREF( mArchive );
-    }
-
-	//----------------------------------------------------------------------
-	//
-	//----------------------------------------------------------------------
-    ArchiveInStream::~ArchiveInStream()
-    {
-        LN_SAFE_RELEASE( mArchive );
-    }
-
-	//----------------------------------------------------------------------
-	//
-	//----------------------------------------------------------------------
-    int ArchiveInStream::read( void* buffer, int buffer_size, int read_size )
-    {
-        if ( read_size < 0 )
-		{
-			read_size = buffer_size;
-		}
-
-        // 読み込み開始位置に移動
-		long read_point = static_cast< long >( mDataOffset ) + mSeekPoint;
-		int offset = fseek(mStream, read_point, SEEK_SET);
-		LN_ERR2_ASSERT_S(offset == 0);
-
-        // 復号しながら読み込む
-		int validSize = mArchive->read( buffer, read_size, mStream, mOpenType );
-
-        // 読んだ分だけファイルポインタを移動
-		// ※テキスト形式の場合は、fread() が返すバイト数とシーク位置が異なるときがある。(CR+LF変換)
-		//   そのため、validSize ではなく read_size でポインタを進めておく。
-		//   例えばこう
-		//   [ FileIO::File::getFileSize(fp) = 162 ]
-		//   [ fread( buf, 1, FileIO::File::getFileSize(fp), fp ) = 157 ]
-		//   [ ftell(fp) = 162 ]
-		mSeekPoint += read_size;
-		if ( mSeekPoint > mDataSize )
-			mSeekPoint = mDataSize;
-
-        return validSize;
-    }
-
-	//----------------------------------------------------------------------
-	//
-	//----------------------------------------------------------------------
-    void ArchiveInStream::seek( int offset, int origin )
-    {
-        switch ( origin )
-		{
-			case SEEK_CUR:
-				mSeekPoint += offset;
-				break;
-
-			case SEEK_END:
-				mSeekPoint = mDataSize + offset;
-				break;
-
-			default :
-				mSeekPoint = offset;
-				break;
-		}
-
-        LN_ERR2_ASSERT_S( mSeekPoint >= 0 );
-        LN_ERR2_ASSERT_S( mSeekPoint <= mDataSize );
-    }
-
-
-//==============================================================================
-// ■ DummyArchive
-//==============================================================================
-
-	//----------------------------------------------------------------------
-	//
-	//----------------------------------------------------------------------
-	bool DummyArchive::existsFile( const wchar_t* fileFullPath )
-	{
-		return FileUtils::exists(fileFullPath);
-	}
-
-	//----------------------------------------------------------------------
-	//
-	//----------------------------------------------------------------------
-	Stream* DummyArchive::createStream(const wchar_t* fileFullPath, FileType type)
-	{
-		LRefPtr<InFileStream> file( LN_NEW InFileStream() );
-		file->open( fileFullPath, type );
-		file->addRef();
-		return file.getPtr();
-	}
-
-
-
-} // namespace FileIO
-} // namespace Core
-} // namespace LNote
-
-//==============================================================================
+const byte_t Archive::InternalKey[16] = {
+	0x6e, 0x36, 0x38, 0x64, 0x35, 0x6f, 0x68, 0x6d,
+	0x33, 0x42, 0x69, 0x61, 0x34, 0x78, 0x37, 0x6c
+};
+
+//-----------------------------------------------------------------------------
 //
-//==============================================================================
+//-----------------------------------------------------------------------------
+Archive::Archive()
+	: m_stream(NULL)
+	, m_fileCount(0)
+{
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+Archive::~Archive()
+{
+	if (m_stream)
+	{
+		fclose(m_stream);
+		m_stream = NULL;
+
+		m_entriesMap.clear();
+	}
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void Archive::Open(const PathName& filePath, const String& key)
+{
+	m_key = key;
+	m_fileCount = 0;
+
+	// このアーカイブファイルをディレクトリに見立てたときのパスを作る
+	// (絶対パスにして、拡張子を取り除く)
+	PathName fullPath = filePath.CanonicalizePath();
+	m_virtualDirectoryPath = fullPath.GetWithoutExtension();
+
+    // 拡張キーの初期化
+	memset(m_keyTable, 0, sizeof(m_keyTable));
+	if (!m_key.IsEmpty())
+	{
+		StringA k(m_key);
+		byte_t key_buf[KEY_SIZE] = { 0 };
+		memcpy(key_buf, k.GetCStr(), k.GetLength());
+		memset(m_keyTable, 0, sizeof(m_keyTable));
+		Camellia_Ekeygen(KEY_SIZE, key_buf, m_keyTable);
+    }
+
+	// アーカイブファイルを開く
+	errno_t err = _tfopen_s(&m_stream, filePath, _T("rb"));
+	LN_THROW(err == 0, FileNotFoundException);
+
+    // 終端から16バイト戻ってからそれを読むとファイル数
+	fseek(m_stream, -16, SEEK_END);
+	m_fileCount = ReadU32Padding16();
+
+	// ヘッダ読み込み
+	fseek( m_stream, 0, SEEK_SET );
+    ArchiveHeader header;
+    fread( &header, 1, sizeof( header ), m_stream );
+
+    // マジックナンバーをチェック
+    if ( memcmp( header.ID, "lna ", 4 ) != 0 )
+	{
+		fclose( m_stream );
+		m_stream = NULL;
+		LN_THROW(0, InvalidFormatException);
+	}
+
+	// 内部キーのチェック (ユーザーキーは本当に正しいか？)
+	byte_t internalKey[16];
+	ReadPadding16(internalKey, 16);
+	if (memcmp(internalKey, Archive::InternalKey, 16) != 0) {
+		LN_THROW(0, InvalidFormatException, "invalid archive key.");
+	}
+
+	// ファイル情報を取得していく
+	uint32_t name_len;
+	Entry entry;
+	for ( int i = 0; i < m_fileCount; ++i )
+	{
+		// ファイル名の長さとファイルサイズを読む
+		ReadU32Padding16(&name_len, &entry.Size);
+
+		// ファイル名を読み込むバッファを確保して読み込む
+		ByteBuffer nameBuf(name_len * sizeof(UTF16));
+		ReadPadding16(nameBuf.GetData(), name_len * sizeof(UTF16));
+		String tmpName;
+		tmpName.ConvertFrom(nameBuf.GetData(), nameBuf.GetSize(), Text::Encoding::GetUTF16Encoding());
+		PathName name(m_virtualDirectoryPath, tmpName);	// 絶対パスにする
+		name = name.CanonicalizePath();
+			
+		// ここでのファイルポインタがデータ本体の位置
+		entry.Offset = ftell( m_stream );
+
+		// 今のシステム用に正規化してからファイルマップに追加
+		m_entriesMap.insert(EntriesPair(name, entry));
+
+		// ファイルポインタをデータサイズ分進めて、次のファイルへ
+		uint32_t ofs = Padding16(entry.Size);
+		fseek(m_stream, entry.Size + ofs, SEEK_CUR);
+	}
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+bool Archive::ExistsFile(const PathName& fileFullPath)
+{
+#if 1 // map のキーを絶対パスにしてみた。メモリ効率は悪いが、検索キー用に PathName を再度作らなくて良くなる。まぁ、携帯機に乗せるときに問題になるようなら改めて見直す…。
+	EntriesMap::iterator itr = m_entriesMap.find(fileFullPath);
+	if (itr != m_entriesMap.end()) {
+		return true;
+	}
+	return false;
+#else
+	// まず、パスの先頭が m_virtualDirectoryPath と一致するかを確認する
+	CaseSensitivity cs = FileManager::GetInstance().GetFileSystemCaseSensitivity();
+	if (StringUtils::Compare(fileFullPath.GetCStr(), m_virtualDirectoryPath.GetCStr(), m_virtualDirectoryPath.GetString().GetLength(), cs) == 0)
+	{
+		// internalPath は m_virtualDirectoryPath の後ろの部分の開始位置
+		const TCHAR* internalPath = fileFullPath.GetCStr() + m_virtualDirectoryPath.GetString().GetLength();
+		if (*internalPath != _T('\0'))
+		{
+			// 検索
+			EntriesMap::iterator itr = m_entriesMap.find(internalPath);
+			if (itr != m_entriesMap.end()) {
+				return true;
+			}
+		}
+	}
+	return false;
+#endif
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+ArchiveStream* Archive::CreateStream(const PathName& fileFullPath)
+{
+#if 1 // map のキーを絶対パスにしてみた。メモリ効率は悪いが、検索キー用に PathName を再度作らなくて良くなる。まぁ、携帯機に乗せるときに問題になるようなら改めて見直す…。
+	EntriesMap::iterator itr = m_entriesMap.find(fileFullPath);
+	LN_THROW((itr != m_entriesMap.end()), FileNotFoundException, fileFullPath);	// ファイルが見つからなかった
+
+	return LN_NEW ArchiveStream(this, m_stream, itr->second.Offset, itr->second.Size);
+#else
+	// まず、パスの先頭が m_virtualDirectoryPath と一致するかを確認する
+	CaseSensitivity cs = FileManager::GetInstance().GetFileSystemCaseSensitivity();
+	if (StringUtils::Compare(fileFullPath.GetCStr(), m_virtualDirectoryPath.GetCStr(), m_virtualDirectoryPath.GetString().GetLength(), cs) != 0)
+	{
+		LN_THROW(0, FileNotFoundException, fileFullPath);
+	}
+
+	// internalPath は m_virtualDirectoryPath の後ろの部分の開始位置
+	const TCHAR* internalPath = fileFullPath.GetCStr() + m_virtualDirectoryPath.GetString().GetLength();
+	LN_THROW((*internalPath != _T('\0')), FileNotFoundException, fileFullPath);	// ファイル名が空だった
+
+	EntriesMap::iterator itr = m_entriesMap.find(internalPath);
+	LN_THROW((itr != m_entriesMap.end()), FileNotFoundException, fileFullPath);	// ファイルが見つからなかった
+	
+	return LN_NEW ArchiveStream(this, m_stream, itr->second.mOffset, itr->second.mSize);
+#endif
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+size_t Archive::ReadArchiveStream(byte_t* buffer, uint32_t count, FILE* stream, uint64_t dataOffset, uint64_t seekPos)
+{
+	Threading::MutexScopedLock lock(m_mutex);
+	byte_t tmpSrcBuf[16];	// 復号前データ
+	byte_t tmpDstBuf[16];	// 復号後データ
+	size_t readSize = 0;
+
+	uint64_t frontLeadCount = (seekPos % 16);						// 読み取り開始ブロックの、先頭の不要なバイト数
+	uint64_t startBlockPos = dataOffset + seekPos - frontLeadCount;	// 読み取り開始ブロック(16byte単位)の開始Seek位置
+
+	fseek(m_stream, (long)startBlockPos, SEEK_SET);
+
+	// 前方に余分に読んだものがある場合 (前回の read が 16byte の倍数ではなければ、ブロックの途中から読む必要がある)
+	if (frontLeadCount > 0)
+	{
+		fread(tmpSrcBuf, 1, 16, m_stream);	// アーカイブ内のデータは必ず 16byte にパディングされているので 16 読み取ってしまってよい
+		Camellia_DecryptBlock(KEY_SIZE, tmpSrcBuf, m_keyTable, tmpDstBuf);
+
+		uint32_t size = std::min(count, (uint32_t)(16 - frontLeadCount));	// 余分を除いたデータサイズ (min は count 以上書きこまないため)
+		memcpy(buffer, (tmpDstBuf + frontLeadCount), size);
+		buffer += size;
+		count -= size;
+		readSize += size;
+	}
+
+	// 読み取りデータが 16byte 満たされる間ループ。
+	// 今回の読み込みで buffer への読み取りバイト数に到達する場合は終了。最後のブロックは抜けた直後の if に任せる。
+	// count_ が 16 丁度の場合はもう一周。
+	while (count >= 16)
+	{
+		fread(tmpSrcBuf, 1, 16, m_stream);
+		Camellia_DecryptBlock(KEY_SIZE, tmpSrcBuf, m_keyTable, buffer);		// 直接 buffer に書き込んでしまう
+		buffer += 16;
+		count -= 16;
+		readSize += 16;
+	}
+
+	// 後方に 16byte 未満が残っている
+	uint32_t remCount = (count % 16);
+	if (remCount > 0)
+	{
+		fread(tmpSrcBuf, 1, 16, m_stream);
+		Camellia_DecryptBlock(KEY_SIZE, tmpSrcBuf, m_keyTable, tmpDstBuf);
+		memcpy(buffer, tmpDstBuf, remCount);
+		readSize += remCount;
+	}
+	else {
+		// ここに来るなら全てのデータは読み終えているはず
+		LN_ASSERT(count == 0);
+	}
+
+	return readSize;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+uint32_t Archive::ReadU32Padding16()
+{
+	uint32_t v0, v1;
+	ReadU32Padding16(&v0, &v1);
+	return v0;
+}
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+void Archive::ReadU32Padding16( uint32_t* v0, uint32_t* v1 )
+{
+	byte_t b[16] = { 0 };
+
+	// 復号する場合
+	if (!m_key.IsEmpty())
+	{
+		byte_t buf[16];
+		fread(buf, 1, 16, m_stream);
+		Camellia_DecryptBlock(KEY_SIZE, buf, m_keyTable, b);
+	}
+	// そのまま読み込む場合
+	else
+	{
+		fread(b, 1, 16, m_stream);
+	}
+
+	if (Environment::IsLittleEndian())
+	{
+		*v0 = *((uint32_t*)(b + 0));
+		*v1 = *((uint32_t*)(b + 4));
+	}
+	else
+	{
+		uint32_t r = *((uint32_t*)b);
+		*v0 = (((r) >> 24) +
+			(((r)& 0x00ff0000) >> 8) +
+			(((r)& 0x0000ff00) << 8) +
+			((r) << 24));
+
+		r = *((uint32_t*)(b + 4));
+		*v1 = (((r) >> 24) +
+			(((r)& 0x00ff0000) >> 8) +
+			(((r)& 0x0000ff00) << 8) +
+			((r) << 24));
+	}
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void Archive::ReadPadding16(byte_t* buffer, int count)
+{
+	// 復号する場合
+	if (!m_key.IsEmpty())
+	{
+		while (count > 0)
+		{
+			byte_t tmpSrcBuf[16];
+			byte_t tmpDstBuf[16];
+
+			// 16byte 読んで復号
+			fread(tmpSrcBuf, 1, 16, m_stream);
+			Camellia_DecryptBlock(KEY_SIZE, tmpSrcBuf, m_keyTable, tmpDstBuf);
+
+			// buffer へ書き込む
+			int size = std::min(count, 16);
+			memcpy(buffer, tmpDstBuf, size);
+			buffer += size;
+			count -= size;
+		}
+	}
+	// 復号しない場合
+	else
+	{
+		fread(buffer, 1, 16, m_stream);
+		fseek(m_stream, Padding16(count), SEEK_CUR);
+	}
+}
+
+//=============================================================================
+// ArchiveStream
+//=============================================================================
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+ArchiveStream::ArchiveStream(Archive* archive, FILE* stream, uint32_t dataOffset, uint32_t dataSize)
+	: m_archive(archive)
+	, m_stream(stream)
+	, m_dataOffset(dataOffset)
+	, m_dataSize(dataSize)
+	, m_seekPoint(0)
+{
+	LN_SAFE_ADDREF(m_archive);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+ArchiveStream::~ArchiveStream()
+{
+	LN_SAFE_RELEASE(m_archive);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+size_t ArchiveStream::Read(void* buffer, size_t byteCount)
+{
+    // 復号しながら読み込む
+	size_t validSize = m_archive->ReadArchiveStream((byte_t*)buffer, byteCount, m_stream, m_dataOffset, m_seekPoint);
+
+    // 読んだ分だけファイルポインタを移動
+	// ※テキスト形式の場合は、fread() が返すバイト数とシーク位置が異なるときがある。(CR+LF変換)
+	//   そのため、validSize ではなく read_size でポインタを進めておく。
+	//   例えばこう
+	//   [ FileIO::File::getFileSize(fp) = 162 ]
+	//   [ fread( buf, 1, FileIO::File::getFileSize(fp), fp ) = 157 ]
+	//   [ ftell(fp) = 162 ]
+	// → [2015/4/13] Archive 内部でのテキスト対応は無しにした。
+	m_seekPoint += validSize;
+	if (m_seekPoint > m_dataSize) {
+		m_seekPoint = m_dataSize;
+	}
+
+    return validSize;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void ArchiveStream::Seek(int64_t offset, SeekOrigin origin)
+{
+	m_seekPoint = FileUtils::CalcSeekPoint(m_seekPoint, m_dataSize, offset, origin);
+}
+
+} // namespace Lumino

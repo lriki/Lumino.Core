@@ -21,12 +21,12 @@ File::File(const String& filePath)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-File::File(const PathName& filePath)
-	: m_filePath(filePath)
-	, m_fileAccess(FileAccess_Read)
-	, m_stream(NULL)
-{
-}
+//File::File(const PathName& filePath)
+//	: m_filePath(filePath)
+//	, m_fileAccess(FileAccess_Read)
+//	, m_stream(NULL)
+//{
+//}
 
 //-----------------------------------------------------------------------------
 //

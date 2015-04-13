@@ -54,7 +54,7 @@ void FileStream::Open( const TCHAR* filePath, FileMode fileMode, FileAccess file
 	LN_THROW(mode, FileNotFoundException);
 
 	errno_t err = _tfopen_s(&mStream, filePath, mode);
-	LN_THROW( err == 0, FileNotFoundException );
+	LN_THROW(err == 0, FileNotFoundException);
 }
 
 //-----------------------------------------------------------------------------

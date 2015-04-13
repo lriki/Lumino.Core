@@ -17,6 +17,7 @@
     <ClInclude Include="..\..\include\Lumino\Base\Common.h" />
     <ClInclude Include="..\..\include\Lumino\Base\CRT.h" />
     <ClInclude Include="..\..\include\Lumino\Base\Delegate.h" />
+    <ClInclude Include="..\..\include\Lumino\Base\Environment.h" />
     <ClInclude Include="..\..\include\Lumino\Base\Exception.h" />
     <ClInclude Include="..\..\include\Lumino\Base\List.h" />
     <ClInclude Include="..\..\include\Lumino\Base\Memory.h" />
@@ -41,7 +42,6 @@
     <ClInclude Include="..\..\include\Lumino\IO\PathName.h" />
     <ClInclude Include="..\..\include\Lumino\IO\PathUtils.h" />
     <ClInclude Include="..\..\include\Lumino\IO\Stream.h" />
-    <ClInclude Include="..\..\include\Lumino\Platform\Environment.h" />
     <ClInclude Include="..\..\include\Lumino\Platform\EventArgs.h" />
     <ClInclude Include="..\..\include\Lumino\Platform\EventListener.h" />
     <ClInclude Include="..\..\include\Lumino\Platform\Application.h" />
@@ -78,6 +78,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\external\camellia\camellia.cpp" />
     <ClCompile Include="..\..\src\Base\ByteBuffer.cpp" />
+    <ClCompile Include="..\..\src\Base\Environment.cpp" />
     <ClCompile Include="..\..\src\Base\Exception.cpp" />
     <ClCompile Include="..\..\src\Base\Memory.cpp" />
     <ClCompile Include="..\..\src\Base\RefObject.cpp" />
@@ -95,7 +96,6 @@
     <ClCompile Include="..\..\src\IO\PathUtils.cpp" />
     <ClCompile Include="..\..\src\IO\Win32\FileUtils_win32.cpp" />
     <ClCompile Include="..\..\src\Platform\Application.cpp" />
-    <ClCompile Include="..\..\src\Platform\Win32\Environment.cpp" />
     <ClCompile Include="..\..\src\Platform\Win32\PlatformSupport_Win32.cpp" />
     <ClCompile Include="..\..\src\Platform\Win32\Win32WindowManager.cpp" />
     <ClCompile Include="..\..\src\Platform\Win32\Win32Window.cpp" />

@@ -28,8 +28,7 @@ public:
 	};
 
 public:
-	FileManager(const ConfigData& configData);
-	virtual ~FileManager();
+	static FileManager& GetInstance();
 
 public:
 
@@ -53,6 +52,15 @@ public:
 		@brief		リクエストされているすべての非同期読み込み/書き込み処理の終了を待機します。
 	*/
 	void WaitForAllASyncProcess();
+
+	/*
+		@brief		現在の環境のファイルシステムが、パス文字列の大文字と小文字を区別するかを確認します。
+	*/
+	CaseSensitivity GetFileSystemCaseSensitivity() const;
+
+private:
+	FileManager();
+	virtual ~FileManager();
 };
 
 } // namespace Lumino

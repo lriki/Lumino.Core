@@ -109,8 +109,9 @@ void ArchiveMaker::Close()
 //-----------------------------------------------------------------------------
 bool ArchiveMaker::AddFile(const wchar_t* filePath, const wchar_t* aliasPath)
 {
-	FILE* stream = _wfopen( filePath, L"rb" );
-	if ( stream )
+	FILE* stream;
+	errno_t err = _tfopen_s(&stream, filePath, L"rb");
+	if (err == 0)
 	{
         // アクセス用の名前がなければ、ファイル名を代わりに使う
 		if (!aliasPath)
@@ -125,7 +126,7 @@ bool ArchiveMaker::AddFile(const wchar_t* filePath, const wchar_t* aliasPath)
         //-------------------------------------------------
         // ファイル名の長さとファイルのサイズを書き込む
 		uint32_t nameSize = filename.size();
-		uint32_t fileSize = FileUtils::GetFileSize(stream);
+		uint32_t fileSize = (uint32_t)FileUtils::GetFileSize(stream);
 
 		WriteU32Padding16(nameSize, fileSize);
 
@@ -134,6 +135,9 @@ bool ArchiveMaker::AddFile(const wchar_t* filePath, const wchar_t* aliasPath)
 
         // ファイル名を書き込む (終端NULLはナシ)
 		WritePadding16((byte_t*)filename.c_str(), nameSize * sizeof(wchar_t));
+
+		//wprintf(L"filename : %s\n", filename.c_str());
+		//wprintf(L"seek     : %u\n", ftell(m_stream));
 
         // サイズ分のメモリを確保して追加する内容を読み込む
 		byte_t* buffer = LN_NEW byte_t[fileSize];

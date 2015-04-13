@@ -31,7 +31,7 @@ public:
 					開いていない状態では Stream クラスの機能を使用することはできません。
 					開くには、Open() を使用します。
 	*/
-	File(const PathName& filePath);
+	//explicit File(const PathName& filePath);
 
 	virtual ~File();
 
@@ -81,11 +81,11 @@ public:
 	
 	/**
 		@brief		バイト シーケンスを読み取り、読み取ったバイト数の分だけストリームの現在位置を進めます。
-		@param		duffer		: 読み取ったデータの格納先アドレス
+		@param		buffer		: 読み取ったデータの格納先アドレス
 		@param		byteCount	: 読み取るバイト数
 		@return		実際に読み取ったバイト数。EOF に到達している場合は 0 を返す。
 	*/
-	virtual size_t Read(void* duffer, size_t byteCount);
+	virtual size_t Read(void* buffer, size_t byteCount);
 
 	/**
 		@brief		現在のストリームにバイト シーケンスを書き込み、書き込んだバイト数の分だけストリームの現在位置を進めます。

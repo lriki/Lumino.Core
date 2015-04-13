@@ -102,9 +102,6 @@
     <ClInclude Include="..\..\include\Lumino\Platform\EventListener.h">
       <Filter>Platform</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Lumino\Platform\Environment.h">
-      <Filter>Platform</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\Base\Win32\BackTrace.h">
       <Filter>Base\Win32</Filter>
     </ClInclude>
@@ -214,6 +211,9 @@
     <ClInclude Include="..\..\include\Lumino\IO\Common.h">
       <Filter>IO</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Base\Environment.h">
+      <Filter>Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\include\Lumino\Base\Delegate.inl">
@@ -258,9 +258,6 @@
       <Filter>Platform\Win32</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\Platform\Win32\Win32WindowBase.cpp">
-      <Filter>Platform\Win32</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Platform\Win32\Environment.cpp">
       <Filter>Platform\Win32</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\Threading\ThreadingExceptions.cpp">
@@ -350,11 +347,14 @@
     <ClCompile Include="..\..\external\camellia\camellia.cpp">
       <Filter>external\camellia</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\IO\ArchiveMaker.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\IO\Archive.cpp">
       <Filter>IO</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\IO\ArchiveMaker.cpp">
-      <Filter>IO</Filter>
+    <ClCompile Include="..\..\src\Base\Environment.cpp">
+      <Filter>Base</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

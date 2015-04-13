@@ -1,11 +1,11 @@
 ﻿
 #include "../Internal.h"
 #include <sstream>
-#include "../../include/Lumino/Base/ByteBuffer.h"
-#include "../../include/Lumino/Text/Encoding.h"
-#include "../../include/Lumino/Base/StringUtils.h"
-#include "../../include/Lumino/Base/String.h"
-#include "../../include/Lumino/Platform/Environment.h"
+#include <Lumino/Base/ByteBuffer.h>
+#include <Lumino/Text/Encoding.h>
+#include <Lumino/Base/StringUtils.h>
+#include <Lumino/Base/String.h>
+#include <Lumino/Base/Environment.h>
 
 
 /*
@@ -84,6 +84,7 @@ BasicString<TChar>::BasicString()
 	: m_string(NULL)
 {
 	LN_REFOBJ_SET(m_string, BasicStringCore::GetSharedEmpty());
+	m_ref = m_string->c_str();
 }
 
 //-----------------------------------------------------------------------------
@@ -104,6 +105,7 @@ BasicString<TChar>::BasicString(const BasicString& str)
 	, m_string(NULL)
 {
 	LN_REFOBJ_SET(m_string, str.m_string);
+	m_ref = m_string->c_str();
 }
 template<typename TChar>
 BasicString<TChar>::BasicString(const BasicString& str, size_type length)
@@ -144,6 +146,7 @@ template<typename TChar>
 BasicString<TChar>& BasicString<TChar>::operator=(const BasicString& right)
 {
 	LN_REFOBJ_SET(m_string, right.m_string);
+	m_ref = m_string->c_str();
 	return (*this);
 }
 template<typename TChar>
@@ -692,8 +695,8 @@ void BasicString<TChar>::AssignTString(const TChar* str, int len)
 	else {
 		m_string = LN_NEW BasicStringCore();	// 参照カウントは 1
 		m_string->assign(str, (len < 0) ? StringUtils::StrLen(str) : len);
-		m_ref = m_string->c_str();
 	}
+	m_ref = m_string->c_str();
 }
 
 //-----------------------------------------------------------------------------
@@ -722,6 +725,7 @@ void BasicString<TChar>::Append(const TChar* str, int len)
 {
 	Realloc();	// 共有参照を切る
 	m_string->append(str, (len < 0) ? StringUtils::StrLen(str) : len);
+	m_ref = m_string->c_str();
 }
 
 //-----------------------------------------------------------------------------

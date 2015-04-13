@@ -5,10 +5,9 @@
 
 #include <map>
 #include <string>
-#include "../Base/RefString.h"
-#include "../Base/Unicode.h"
-#include "../Threading/Mutex.h"
-#include "Interface.h"
+#include <Lumino/Threading/Mutex.h>
+#include <Lumino/IO/Stream.h>
+#include <Lumino/IO/PathName.h>
 
 namespace Lumino
 {
@@ -34,7 +33,7 @@ public:
 
 	/**
 		@brief      アーカイブファイルを開いてアクセスの準備をします。
-		@param[in]	filePath	: アーカイブファイルの絶対パス
+		@param[in]	filePath	: アーカイブファイルのパス
 		@param[in]	key			: パスワード文字列
 		@code
 				// アーカイブファイル内に「Chara.png」「Map/Ground.png」というファイルがある場合…
@@ -54,7 +53,7 @@ public:
 				file.open( "Data/Image/Map/Ground.png" );
 		@endcode
 	*/
-	void Open(const PathName& filePath, const String* key);
+	void Open(const PathName& filePath, const String& key);
 
 	/**
 		@brief	アーカイブ内に指定したパスのファイルが存在するか確認します。
@@ -68,52 +67,51 @@ public:
 
 private:
 
-	// 数値を 16 にそろえるために加算する数値「( 16 - ( v_ % 16 ) ) % 16」の最適化 ( 5 は 11、27 は 5 等 )
-    int _padding16( int v ) const { return ( v != 0 ) ? ( 16 - ( v & 0x0000000f ) ) & 0x0000000f : 16; }
-	uint32_t _padding16(uint32_t v) const { return (v != 0) ? (16 - (v & 0x0000000f)) & 0x0000000f : 16; }
+	/// ArchiveStream から呼ばれる
+	size_t ReadArchiveStream(byte_t* buffer, size_t count, FILE* stream, uint64_t dataOffset, uint64_t seekPos);
 
-	/// 一時バッファのサイズチェック
-	void _checkTempBuffer(uint32_t request_size);
+	// 数値を 16 にそろえるために加算する数値「( 16 - ( v_ % 16 ) ) % 16」の最適化 ( 5 は 11、27 は 5 等 )
+	int Padding16(int v) const { return (v != 0) ? (16 - (v & 0x0000000f)) & 0x0000000f : 16; }
+	uint32_t Padding16(uint32_t v) const { return (v != 0) ? (16 - (v & 0x0000000f)) & 0x0000000f : 16; }
 
 	/// パディングを考慮して整数を読み込む
-	uint32_t _readU32Padding16();
+	uint32_t ReadU32Padding16();
 
 	/// パディングを考慮して整数を読み込む (ファイル名長さ、ファイルサイズ用)
-	void _readU32Padding16(uint32_t* v0, uint32_t* v1);
+	void ReadU32Padding16(uint32_t* v0, uint32_t* v1);
 
 	/// パディングを考慮してデータを読み込む
-	int _readPadding16( void* buffer, int count );
+	void ReadPadding16(byte_t* buffer, int count);
 
 private:
 
 	/// ファイルひとつ分の情報
 	struct Entry
 	{
-		uint32_t		mOffset;		///< ストリーム先頭からファイルの位置までのオフセット
-		uint32_t		mSize;			///< ファイルサイズ
+		uint32_t	Offset;		///< ストリーム先頭からファイルの位置までのオフセット
+		uint32_t	Size;		///< ファイルサイズ
 	};
 
-	typedef std::map<std::wstring, Entry>	EntriesMap;
-	typedef std::pair<std::wstring, Entry>	EntriesPair;
+	typedef std::map<PathName, Entry>	EntriesMap;
+	typedef std::pair<PathName, Entry>	EntriesPair;
 
 private:
+	friend class ArchiveStream;
 
 	// camellia key table type.
 	static const int L_CAMELLIA_TABLE_BYTE_LEN = 272;
 	static const int L_CAMELLIA_TABLE_WORD_LEN = (L_CAMELLIA_TABLE_BYTE_LEN / 4);
 	typedef unsigned int KEY_TABLE_TYPE[L_CAMELLIA_TABLE_WORD_LEN];
 
-    static const int KEY_SIZE  = 128;
+    static const int KEY_SIZE = 128;
 
-    std::wstring		mArchiveDirectory;  ///< アーカイブファイルをディレクトリに見立てた時の、そこまのパス ( [.lnaの親フルパス]/[拡張子を除いたアーカイブファイル名]/ )
-	EntriesMap	        mEntriesMap;	    ///< ファイル名に対応するファイル情報を格納する map
-	FILE*		        mStream;		    ///< アーカイブファイルのストリーム
-	int			        mFileNum;		    ///< アーカイブファイル内のファイル数
-    Base::RefTString    mKey;			    ///< 復号キー (char)
-	KEY_TABLE_TYPE      mKeyTable/*[256]*/;
-    byte_t*             mTempBuffer;
-	uint32_t				mTempBufferSize;
-    Threading::Mutex	mLock;
+    PathName			m_virtualDirectoryPath;	///< アーカイブファイルをディレクトリに見立てた時の、そこまのパス ( [.lnaの親フルパス]/[拡張子を除いたアーカイブファイル名]/ )
+	EntriesMap			m_entriesMap;		    ///< ファイル名に対応するファイル情報を格納する map
+	FILE*				m_stream;			    ///< アーカイブファイルのストリーム
+	int					m_fileCount;			///< アーカイブファイル内のファイル数
+    String				m_key;				    ///< 復号キー (char)
+	KEY_TABLE_TYPE		m_keyTable;
+    Threading::Mutex	m_mutex;				///< ReadArchiveStream() をスレッドセーフにする
 };
 
 /**
@@ -123,32 +121,26 @@ class ArchiveStream
     : public Stream
 {
 private:
-	ArchiveStream(Archive* archive, FILE* stream, uint32_t data_offset, uint32_t data_size);
+	ArchiveStream(Archive* archive, FILE* stream, uint32_t dataOffset, uint32_t dataSize);
 	virtual ~ArchiveStream();
 
 public:
-
-	/// ファイル ( データ ) サイズの取得
-    virtual int getSize() { return mDataSize; }
-
-	/// ファイルポインタの位置の取得
-	virtual int getPosition() { return mSeekPoint; }
-
-	/// データの読み込み
-	virtual int read( void* buffer, int buffer_size, int read_size = -1 );
-
-	/// ファイルポインタの設定
-	virtual void seek( int offset, int origin = SEEK_SET );
+	virtual bool CanRead() { return true; }
+	virtual bool CanWrite() { return false; }
+	virtual size_t GetSize() { return m_dataSize; }
+	virtual size_t Read(void* buffer, size_t byteCount);
+	virtual void Write(const void* data, size_t byteCount) {}
+	virtual void Seek(int64_t offset, SeekOrigin origin);
+	virtual void Flush() {}
 
 private:
+	friend class Archive;
 
-    Archive*        mArchive;           ///< このクラスを作成したアーカイブクラス
-    FILE*           mStream;            ///< ファイルストリーム
-	uint32_t		mDataOffset;        ///< ファイルの先頭からデータの先頭位置までのオフセット
-	uint32_t		mDataSize;          ///< データサイズ
-	uint32_t		mSeekPoint;         ///< シーク位置
-
-    friend class Archive;
+    Archive*		m_archive;			///< このクラスを作成したアーカイブクラス
+	FILE*			m_stream;			///< アーカイブ本体のファイルストリーム
+	uint32_t		m_dataOffset;		///< ファイルの先頭からデータの先頭位置までのオフセット
+	uint32_t		m_dataSize;			///< データサイズ
+	int64_t			m_seekPoint;		///< シーク位置
 };
 
 } // namespace Lumino

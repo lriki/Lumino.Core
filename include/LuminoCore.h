@@ -22,6 +22,7 @@
 #include "Lumino/Base/Size.h"
 #include "Lumino/Base/Rect.h"
 #include "Lumino/Base/Stack.h"
+#include "Lumino/Base/Environment.h"
 
 #include "Lumino/IO/PathName.h"
 #include "Lumino/IO/PathUtils.h"
