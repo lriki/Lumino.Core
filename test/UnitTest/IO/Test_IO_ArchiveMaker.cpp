@@ -34,13 +34,17 @@ TEST_F(Test_IO_ArchiveMaker, Basic)
 	ASSERT_FALSE(archive.ExistsFile(LOCALFILE("Test1/aaaa.txt")));
 
 	// ArchiveText1_0byte.txt
-	RefPtr<Stream> file_0byte(archive.CreateStream(LOCALFILE("Test1/ArchiveText1_0byte.txt")));
-	ASSERT_EQ(0, file_0byte->GetSize());
+	{
+		RefPtr<Stream> file;
+		archive.TryCreateStream(LOCALFILE("Test1/ArchiveText1_0byte.txt"), &file);
+		ASSERT_EQ(0, file->GetSize());
+	}
 
 	// ArchiveText1_1byte.txt
 	{
 		char buf[64] = { 0 };
-		RefPtr<Stream> file(archive.CreateStream(LOCALFILE("Test1/ArchiveText1_1byte.txt")));
+		RefPtr<Stream> file;
+		archive.TryCreateStream(LOCALFILE("Test1/ArchiveText1_1byte.txt"), &file);
 		ASSERT_EQ(1, file->GetSize());
 		ASSERT_EQ(1, file->Read(buf, 1));
 		ASSERT_STREQ("1", buf);
@@ -49,7 +53,8 @@ TEST_F(Test_IO_ArchiveMaker, Basic)
 	// ArchiveText1_15byte.txt
 	{
 		char buf[64] = { 0 };
-		RefPtr<Stream> file(archive.CreateStream(LOCALFILE("Test1/ArchiveText1_15byte.txt")));
+		RefPtr<Stream> file;
+		archive.TryCreateStream(LOCALFILE("Test1/ArchiveText1_15byte.txt"), &file);
 		ASSERT_EQ(15, file->GetSize());
 		ASSERT_EQ(15, file->Read(buf, 15));
 		ASSERT_STREQ("123456789012345", buf);
@@ -58,7 +63,8 @@ TEST_F(Test_IO_ArchiveMaker, Basic)
 	// ArchiveText1_16byte.txt
 	{
 		char buf[64] = { 0 };
-		RefPtr<Stream> file(archive.CreateStream(LOCALFILE("Test1/ArchiveText1_16byte.txt")));
+		RefPtr<Stream> file;
+		archive.TryCreateStream(LOCALFILE("Test1/ArchiveText1_16byte.txt"), &file);
 		ASSERT_EQ(16, file->GetSize());
 		ASSERT_EQ(16, file->Read(buf, 16));
 		ASSERT_STREQ("1234567890123456", buf);
@@ -67,7 +73,8 @@ TEST_F(Test_IO_ArchiveMaker, Basic)
 	// ArchiveText1_17byte.txt
 	{
 		char buf[64] = { 0 };
-		RefPtr<Stream> file(archive.CreateStream(LOCALFILE("Test1/ArchiveText1_17byte.txt")));
+		RefPtr<Stream> file;
+		archive.TryCreateStream(LOCALFILE("Test1/ArchiveText1_17byte.txt"), &file);
 		ASSERT_EQ(17, file->GetSize());
 		ASSERT_EQ(17, file->Read(buf, 17));
 		ASSERT_STREQ("12345678901234567", buf);
@@ -76,7 +83,8 @@ TEST_F(Test_IO_ArchiveMaker, Basic)
 	// ArchiveText1_32byte.txt
 	{
 		char buf[64] = { 0 };
-		RefPtr<Stream> file(archive.CreateStream(LOCALFILE("Test1/ArchiveText1_32byte.txt")));
+		RefPtr<Stream> file;
+		archive.TryCreateStream(LOCALFILE("Test1/ArchiveText1_32byte.txt"), &file);
 		ASSERT_EQ(32, file->GetSize());
 		ASSERT_EQ(32, file->Read(buf, 32));
 		ASSERT_STREQ("12345678901234567890123456789012", buf);
@@ -85,7 +93,8 @@ TEST_F(Test_IO_ArchiveMaker, Basic)
 	// ArchiveText1_33byte.txt
 	{
 		char buf[64] = { 0 };
-		RefPtr<Stream> file(archive.CreateStream(LOCALFILE("Test1/ArchiveText1_33byte.txt")));
+		RefPtr<Stream> file;
+		archive.TryCreateStream(LOCALFILE("Test1/ArchiveText1_33byte.txt"), &file);
 		ASSERT_EQ(33, file->GetSize());
 		ASSERT_EQ(33, file->Read(buf, 33));
 		ASSERT_STREQ("123456789012345678901234567890123", buf);
@@ -94,7 +103,8 @@ TEST_F(Test_IO_ArchiveMaker, Basic)
 	// ArchiveText1_33byte.txt  1 Å® 32 ÇÃï™äÑ
 	{
 		char buf[64] = { 0 };
-		RefPtr<Stream> file(archive.CreateStream(LOCALFILE("Test1/ArchiveText1_33byte.txt")));
+		RefPtr<Stream> file;
+		archive.TryCreateStream(LOCALFILE("Test1/ArchiveText1_33byte.txt"), &file);
 		ASSERT_EQ(1, file->Read(buf, 1));
 		ASSERT_STREQ("1", buf);
 
@@ -106,7 +116,8 @@ TEST_F(Test_IO_ArchiveMaker, Basic)
 	{
 		char buf[64] = { 0 };
 		char* pos = buf;
-		RefPtr<Stream> file(archive.CreateStream(LOCALFILE("Test1/ArchiveText1_33byte.txt")));
+		RefPtr<Stream> file;
+		archive.TryCreateStream(LOCALFILE("Test1/ArchiveText1_33byte.txt"), &file);
 
 		for (int i = 0; i < 33; i++)
 		{

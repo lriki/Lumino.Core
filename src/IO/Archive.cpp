@@ -35,6 +35,7 @@
 #include <Lumino/IO/Common.h>
 #include <Lumino/IO/FileUtils.h>
 #include <Lumino/IO/Stream.h>
+#include <Lumino/IO/FileStream.h>
 #include <Lumino/IO/FileManager.h>
 #include <Lumino/Text/Encoding.h>
 #include "Archive.h"
@@ -188,13 +189,16 @@ bool Archive::ExistsFile(const PathName& fileFullPath)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-ArchiveStream* Archive::CreateStream(const PathName& fileFullPath)
+bool Archive::TryCreateStream(const PathName& fileFullPath, Stream** outStream)
 {
 #if 1 // map のキーを絶対パスにしてみた。メモリ効率は悪いが、検索キー用に PathName を再度作らなくて良くなる。まぁ、携帯機に乗せるときに問題になるようなら改めて見直す…。
 	EntriesMap::iterator itr = m_entriesMap.find(fileFullPath);
-	LN_THROW((itr != m_entriesMap.end()), FileNotFoundException, fileFullPath);	// ファイルが見つからなかった
+	if (itr == m_entriesMap.end()) {
+		return false;
+	}
 
-	return LN_NEW ArchiveStream(this, m_stream, itr->second.Offset, itr->second.Size);
+	*outStream = LN_NEW ArchiveStream(this, m_stream, itr->second.Offset, itr->second.Size);
+	return true;
 #else
 	// まず、パスの先頭が m_virtualDirectoryPath と一致するかを確認する
 	CaseSensitivity cs = FileManager::GetInstance().GetFileSystemCaseSensitivity();
@@ -409,6 +413,34 @@ size_t ArchiveStream::Read(void* buffer, size_t byteCount)
 void ArchiveStream::Seek(int64_t offset, SeekOrigin origin)
 {
 	m_seekPoint = FileUtils::CalcSeekPoint(m_seekPoint, m_dataSize, offset, origin);
+}
+
+//=============================================================================
+// DummyArchive
+//=============================================================================
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+bool DummyArchive::ExistsFile(const PathName& fileFullPath)
+{
+	return FileUtils::Exists(fileFullPath);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+bool DummyArchive::TryCreateStream(const PathName& fileFullPath, Stream** outStream)
+{
+	try
+	{
+		*outStream = LN_NEW FileStream(fileFullPath, FileMode_Open, FileAccess_Read);
+		return true;
+	}
+	catch (...) {
+
+	}
+	return false;
 }
 
 } // namespace Lumino

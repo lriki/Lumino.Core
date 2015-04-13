@@ -185,7 +185,14 @@ public:
     {
         LN_ASSERT( mPtr != NULL );
         return *mPtr;
-    }
+	}
+	
+	/// (インスタンスが NULL 出なければ assert します)
+	T** operator&() throw()
+	{
+		LN_ASSERT(mPtr == NULL);
+		return &mPtr;
+	}
 
     /// ->
     T* operator -> ()

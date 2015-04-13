@@ -13,13 +13,51 @@ namespace Lumino
 {
 class ArchiveStream;
 
+class IArchive
+	: public RefObject
+{
+protected:
+	IArchive() {}
+	virtual ~IArchive() {}
+
+public:
+
+	/**
+		@brief	アーカイブ内に指定したパスのファイルが存在するか確認します。
+	*/
+	virtual bool ExistsFile(const PathName& fileFullPath) = 0;
+
+	/**
+		@brief	アーカイブ内のファイルを読み取るためのストリームを作成します。
+	*/
+	virtual bool TryCreateStream(const PathName& fileFullPath, Stream** outStream) = 0;
+
+};
+
 /**
 	@brief	アーカイブファイルに読み取りアクセスするクラスです。
 	@note	アーカイブファイル内のファイル名文字コードは UTF-16。
 			ファイルマップに展開するときは環境依存の TCHAR に変換される。
+	@code
+			// アーカイブファイル内に「Chara.png」「Map/Ground.png」というファイルがある場合…
+
+			// 例 1 )
+			// 実行ファイルと同じフォルダにあるアーカイブファイル "Image.lna" を使う
+			archive.Open( "Image.lna" );
+
+			archive.CreateStream( "Image/Chara.png" );
+			archive.CreateStream( "Image/Map/Ground.png" );
+
+			// 例 2 )
+			// 実行ファイルと同じフォルダにある「Data」フォルダ内のアーカイブファイル "Image.lna" を使う
+			archive.Open( "Data/Image.lna" );
+
+			archive.CreateStream( "Data/Image/Chara.png" );
+			archive.CreateStream( "Data/Image/Map/Ground.png" );
+	@endcode
 */
 class Archive
-	: public RefObject
+	: public IArchive
 {
 public:
 	static const int Version_001 = 001;
@@ -35,35 +73,18 @@ public:
 		@brief      アーカイブファイルを開いてアクセスの準備をします。
 		@param[in]	filePath	: アーカイブファイルのパス
 		@param[in]	key			: パスワード文字列
-		@code
-				// アーカイブファイル内に「Chara.png」「Map/Ground.png」というファイルがある場合…
-
-				// 例 1 )
-				// 実行ファイルと同じフォルダにあるアーカイブファイル "Image.lna" を使う
-				archive.initialize( "Image.lna" );
-
-				file.open( "Image/Chara.png" );
-				file.open( "Image/Map/Ground.png" );
-
-				// 例 2 )
-				// 実行ファイルと同じフォルダにある「Data」フォルダ内のアーカイブファイル "Image.lna" を使う
-				archive.initialize( "Data/Image.lna" );
-
-				file.open( "Data/Image/Chara.png" );
-				file.open( "Data/Image/Map/Ground.png" );
-		@endcode
 	*/
 	void Open(const PathName& filePath, const String& key);
 
 	/**
 		@brief	アーカイブ内に指定したパスのファイルが存在するか確認します。
 	*/
-	bool ExistsFile(const PathName& fileFullPath);
+	virtual bool ExistsFile(const PathName& fileFullPath);
 
 	/**
 		@brief	アーカイブ内のファイルを読み取るためのストリームを作成します。
 	*/
-	ArchiveStream* CreateStream(const PathName& fileFullPath);
+	virtual bool TryCreateStream(const PathName& fileFullPath, Stream** outStream);
 
 private:
 
@@ -141,6 +162,15 @@ private:
 	uint32_t		m_dataOffset;		///< ファイルの先頭からデータの先頭位置までのオフセット
 	uint32_t		m_dataSize;			///< データサイズ
 	int64_t			m_seekPoint;		///< シーク位置
+};
+
+/// FileManager の実装を簡易化するためのダミーアーカイブ (ディレクトリ直接参照)
+class DummyArchive
+	: public IArchive
+{
+public:
+	virtual bool ExistsFile(const PathName& fileFullPath);
+	virtual bool TryCreateStream(const PathName& fileFullPath, Stream** outStream);
 };
 
 } // namespace Lumino
