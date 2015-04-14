@@ -1,7 +1,7 @@
 ﻿
 #pragma once
 
-#include <stack>
+#include <vector>
 
 namespace Lumino
 {
@@ -9,11 +9,11 @@ namespace Lumino
 /**
 	@brief	参照カウントを持つスタックのクラスです。
 */
-template<typename T/*, typename TAllocator = STLAllocator<T>*/ >	// TODO: Allocator が使えない。vector 化を検討する。
+template<typename T, typename TAllocator = STLAllocator<T> >
 class Stack : public RefObject
 {
-public:
-	typedef typename std::stack<T/*, TAllocator*/>	std_stack;
+//public:
+	//typedef typename std::stack<T/*, TAllocator*/>	std_stack;
 
 public:
 	Stack() {}
@@ -24,6 +24,9 @@ public:
 	/// スタックが空であるかを判定します。
 	bool IsEmpty() const { return m_stack.empty(); }
 
+	/// 保持できる要素数を設定します。
+	void Reserve(int size) { m_stack.reserve(size); }
+
 	/// 全ての要素を削除します。
 	void Clear() { m_stack.clear(); }
 
@@ -31,17 +34,17 @@ public:
 	int GetCount() const { return (int)m_stack.size(); }
 
 	/// スタックの先頭に要素を追加します。
-	void Push(const T& value) { m_stack.push(value); }
+	void Push(const T& value) { m_stack.push_back(value); }
 
 	/// スタックの先頭の要素を削除します。
-	void Pop(T* outTop = NULL) { if (outTop) *outTop = GetTop(); m_stack.pop(); }
+	void Pop(T* outTop = NULL) { if (outTop) *outTop = GetTop(); m_stack.pop_back(); }
 
 	/// スタックの先頭の要素を取得します。
-	T& GetTop() { return m_stack.top(); }
-	const T& GetTop() const { return m_stack.top(); }
+	T& GetTop() { return *(m_stack.rbegin()); }
+	const T& GetTop() const { return *(m_stack.rbegin()); }
 
 private:
-	std_stack	m_stack;
+	std::vector<T, TAllocator>	m_stack;
 };
 
 } // namespace Lumino

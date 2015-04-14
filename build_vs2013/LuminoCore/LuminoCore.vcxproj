@@ -14,6 +14,7 @@
     <ClInclude Include="..\..\external\camellia\camellia.h" />
     <ClInclude Include="..\..\include\LuminoCore.h" />
     <ClInclude Include="..\..\include\Lumino\Base\Array.h" />
+    <ClInclude Include="..\..\include\Lumino\Base\Cache.h" />
     <ClInclude Include="..\..\include\Lumino\Base\Common.h" />
     <ClInclude Include="..\..\include\Lumino\Base\CRT.h" />
     <ClInclude Include="..\..\include\Lumino\Base\Delegate.h" />
@@ -78,6 +79,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\external\camellia\camellia.cpp" />
     <ClCompile Include="..\..\src\Base\ByteBuffer.cpp" />
+    <ClCompile Include="..\..\src\Base\Cache.cpp" />
     <ClCompile Include="..\..\src\Base\Environment.cpp" />
     <ClCompile Include="..\..\src\Base\Exception.cpp" />
     <ClCompile Include="..\..\src\Base\Memory.cpp" />

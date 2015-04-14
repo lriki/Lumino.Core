@@ -266,6 +266,16 @@ bool BasicString<TChar>::operator==(const TChar* right) const
 {
 	return Compare(right, -1, CaseSensitivity_CaseSensitive) == 0;
 }
+template<typename TChar>
+bool BasicString<TChar>::operator < (const BasicString& right) const
+{
+	return Compare(right.GetCStr(), right.GetLength(), CaseSensitivity_CaseSensitive) < 0;
+}
+template<typename TChar>
+bool BasicString<TChar>::operator < (const TChar* right) const
+{
+	return Compare(right, -1, CaseSensitivity_CaseSensitive) < 0;
+}
 //template<typename TChar>
 //TChar& BasicString<TChar>::operator[](int index)
 //{

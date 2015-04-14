@@ -1,5 +1,5 @@
 ﻿/**
-	@file	ArchiveMaker.h
+	@file	Archive.h
 */
 #pragma once
 
