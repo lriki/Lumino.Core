@@ -24,6 +24,8 @@ option(LN_EXCEPTION_BACKTRACE "In some unix environment there is a possibility t
 # Architecture.
 #option(LN_BUILD_X64 "Architecture." OFF)
 
+#option(LN_BUILD_SHARED_LIB "Build Shared lib." OFF)
+
 #------------------------------------------------------------------------------
 # Apply options
 #------------------------------------------------------------------------------
@@ -94,7 +96,6 @@ if (WIN32)
 	# platform sources.
 	set(LN_PLATFORM_SOURCES
 		src/IO/Win32/FileUtils_win32.cpp
-		src/Platform/Win32/Environment.cpp
 		src/Platform/Win32/Win32WindowManager.cpp
 		src/Platform/Win32/Win32WindowBase.cpp
 		src/Platform/Win32/Win32Window.cpp
@@ -136,14 +137,20 @@ endif()
 #--------------------------------------
 # Source files.
 set(LN_SOURCES
+	external/camellia/camellia.cpp
+	src/Base/ByteBuffer.cpp
+	src/Base/Cache.cpp
+	src/Base/Environment.cpp
 	src/Base/Exception.cpp
 	src/Base/Memory.cpp
 	src/Base/RefObject.cpp
 	src/Base/String.cpp
 	src/Base/StringUtils.cpp
-	src/Base/ByteBuffer.cpp
+	src/IO/Archive.cpp
+	src/IO/ArchiveMaker.cpp
 	src/IO/DirectoryUtils.cpp
 	src/IO/File.cpp
+	src/IO/FileManager.cpp
 	src/IO/FileStream.cpp
 	src/IO/FileUtils.cpp
 	src/IO/MemoryStream.cpp
@@ -174,6 +181,10 @@ set(LN_SOURCES
 	src/Testing/TestUtils.cpp
 	${LN_PLATFORM_SOURCES})
 
+set(LN_INCLUDE_DIRECTORIES
+	${PROJECT_SOURCE_DIR}/include)
+include_directories(${LN_INCLUDE_DIRECTORIES})
+
 #------------------------------------------------------------------------------
 # Output
 #------------------------------------------------------------------------------
@@ -190,38 +201,31 @@ endif()
 
 #--------------------------------------
 # Static library.
-add_library(LuminoCore_Static STATIC ${LN_SOURCES})
-set_target_properties(LuminoCore_Static PROPERTIES OUTPUT_NAME ${LN_STATIC_LIB_OUTPUT_NAME})
-#set_target_properties(LuminoCore_Static PROPERTIES DEBUG_POSTFIX "_d")
-set_target_properties(
-	LuminoCore_Static PROPERTIES INCLUDE_DIRECTORIES
-	"${PROJECT_SOURCE_DIR}/include/Lumino")
-target_link_libraries(LuminoCore_Static ${LN_LINK_LIBS})
-add_custom_command(
-	TARGET LuminoCore_Static
-	POST_BUILD
-	COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:LuminoCore_Static> "${PROJECT_SOURCE_DIR}/lib")
-
+add_library(${PROJECT_NAME}_Static STATIC ${LN_SOURCES})
+set_target_properties(${PROJECT_NAME}_Static PROPERTIES OUTPUT_NAME ${LN_STATIC_LIB_OUTPUT_NAME})
+target_link_libraries(${PROJECT_NAME}_Static ${LN_LINK_LIBS})
+add_custom_command(TARGET ${PROJECT_NAME}_Static POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${PROJECT_NAME}_Static> "${PROJECT_SOURCE_DIR}/lib")
 
 #--------------------------------------
 # Shared library.
-add_library(LuminoCore_Shared SHARED ${LN_SOURCES})
-set_target_properties(LuminoCore_Shared PROPERTIES OUTPUT_NAME ${PROJECT_NAME})
-set_target_properties(LuminoCore_Shared PROPERTIES DEBUG_POSTFIX "_d")
-set_target_properties(LuminoCore_Shared PROPERTIES COMPILE_DEFINITIONS "LUMINO_BUILD_DLL")
-set_target_properties(
-	LuminoCore_Shared PROPERTIES INCLUDE_DIRECTORIES
-	"${PROJECT_SOURCE_DIR}/include/Lumino")
-target_link_libraries(LuminoCore_Shared ${LN_LINK_LIBS})
-add_custom_command(
-	TARGET LuminoCore_Shared
-	POST_BUILD
-	COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:LuminoCore_Shared> "${PROJECT_SOURCE_DIR}/lib")
-add_custom_command(
-	TARGET LuminoCore_Shared
-	POST_BUILD
-	COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_LINKER_FILE:LuminoCore_Shared> "${PROJECT_SOURCE_DIR}/lib")
-
+if (LN_BUILD_SHARED_LIB)
+	add_library(LuminoCore_Shared SHARED ${LN_SOURCES})
+	set_target_properties(LuminoCore_Shared PROPERTIES OUTPUT_NAME ${PROJECT_NAME})
+	set_target_properties(LuminoCore_Shared PROPERTIES DEBUG_POSTFIX "_d")
+	set_target_properties(LuminoCore_Shared PROPERTIES COMPILE_DEFINITIONS "LUMINO_BUILD_DLL")
+	set_target_properties(
+		LuminoCore_Shared PROPERTIES INCLUDE_DIRECTORIES
+		"${PROJECT_SOURCE_DIR}/include/Lumino")
+	target_link_libraries(LuminoCore_Shared ${LN_LINK_LIBS})
+	add_custom_command(
+		TARGET LuminoCore_Shared
+		POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:LuminoCore_Shared> "${PROJECT_SOURCE_DIR}/lib")
+	add_custom_command(
+		TARGET LuminoCore_Shared
+		POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_LINKER_FILE:LuminoCore_Shared> "${PROJECT_SOURCE_DIR}/lib")
+endif()
 
 # Unit test.
 add_subdirectory(test)
