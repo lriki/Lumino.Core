@@ -140,6 +140,7 @@ set(LN_SOURCES
 	external/camellia/camellia.cpp
 	src/Base/ByteBuffer.cpp
 	src/Base/Cache.cpp
+	src/Base/DllLoader.cpp
 	src/Base/Environment.cpp
 	src/Base/Exception.cpp
 	src/Base/Memory.cpp

@@ -217,6 +217,9 @@
     <ClInclude Include="..\..\include\Lumino\Base\Cache.h">
       <Filter>Base</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\Base\DllLoader.h">
+      <Filter>Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\include\Lumino\Base\Delegate.inl">
@@ -360,6 +363,9 @@
       <Filter>Base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\Base\Cache.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Base\DllLoader.cpp">
       <Filter>Base</Filter>
     </ClCompile>
   </ItemGroup>

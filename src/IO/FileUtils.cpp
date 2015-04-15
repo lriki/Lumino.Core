@@ -12,13 +12,6 @@ namespace Lumino
 #if 0
 
 
-#define MBCS_FILEPATH(mbcsPath, srcWPath) \
-	char mbcsPath[LN_MAX_PATH + 1]; \
-	if (wcstombs(mbcsPath, srcWPath, LN_MAX_PATH) < 0) { \
-		LN_THROW(0, IOException); \
-		}
-
-
 #ifdef _WIN32
 #else
 //-----------------------------------------------------------------------------
@@ -76,7 +69,7 @@ bool FileUtils::Exists(const wchar_t* filePath)
 	return ((attr != -1) &&
 			(attr & FILE_ATTRIBUTE_DIRECTORY) == 0);
 #else
-	MBCS_FILEPATH(mbcsFilePath, filePath);
+	LN_LOCAL_MBCS_FILEPATH(mbcsFilePath, filePath);
 	return Exists(mbcsFilePath);
 #endif
 }
@@ -140,7 +133,7 @@ uint32_t FileUtils::GetAttribute(const wchar_t* filePath)
 	if (attr & FILE_ATTRIBUTE_HIDDEN)    flags |= FileAttribute_Hidden;
 	return flags;
 #else
-	MBCS_FILEPATH(mbcsFilePath, filePath);
+	LN_LOCAL_MBCS_FILEPATH(mbcsFilePath, filePath);
 	return GetAttribute(mbcsFilePath);
 #endif
 }
@@ -194,8 +187,8 @@ void FileUtils::Copy(const wchar_t* sourceFileName, const wchar_t* destFileName,
 	BOOL bRes = ::CopyFileW(sourceFileName, destFileName, (overwrite) ? FALSE : TRUE);
 	LN_THROW(bRes, Win32Exception, ::GetLastError());
 #else
-	MBCS_FILEPATH(mbcsSrc, sourceFileName);
-	MBCS_FILEPATH(mbcsDest, destFileName);
+	LN_LOCAL_MBCS_FILEPATH(mbcsSrc, sourceFileName);
+	LN_LOCAL_MBCS_FILEPATH(mbcsDest, destFileName);
 	Copy(mbcsSrc, mbcsDest, overwrite);
 #endif
 }
@@ -219,7 +212,7 @@ void FileUtils::Delete(const wchar_t* filePath)
 	BOOL r = ::DeleteFileW(filePath);
 	LN_THROW(r != FALSE, Win32Exception, ::GetLastError());
 #else
-	MBCS_FILEPATH(mbcsFilePath, filePath);
+	LN_LOCAL_MBCS_FILEPATH(mbcsFilePath, filePath);
 	Delete(mbcsFilePath);
 #endif
 }

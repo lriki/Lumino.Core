@@ -1,4 +1,6 @@
-﻿
+﻿/**
+	@file	FileManager.h
+*/
 #pragma once
 
 #include "Common.h"
