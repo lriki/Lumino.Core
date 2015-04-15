@@ -6,6 +6,9 @@
 // exp の条件が満たされなかった場合、type に指定した例外を throw する
 #define LN_THROW( exp, type, ... )	{ if (!(exp)) { type e = type(__VA_ARGS__); e.SetSourceLocationInfo(__FILE__, __LINE__); throw e; } }
 
+// HRESULT を返す関数の呼び出しユーティリティ (Win32 用)
+#define LN_COMCALL(exp)				{ HRESULT hr = (exp); if (FAILED(hr)) { LN_THROW(0, COMException, hr); } }
+
 /// 例外クラスの基本的なコンストラクタを宣言する
 #define LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(className) \
 	className(const char* message, ...) \
@@ -284,6 +287,21 @@ public:
 private:
 	uint32_t/*DWORD*/	m_dwLastErrorCode;
 	TCHAR				m_pFormatMessage[512];	///< FormatMessage() で取得したメッセージ
+};
+
+/**
+	@brief	COM のエラーを示す例外クラス (HRESULT)
+*/
+class COMException
+	: public Exception
+{
+public:
+	COMException(uint32_t hresult);
+	virtual ~COMException() throw();
+
+public:
+	// override Exception
+	virtual Exception* Copy() const;
 };
 #endif
 
