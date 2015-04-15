@@ -149,6 +149,7 @@ set(LN_SOURCES
 	src/Base/StringUtils.cpp
 	src/IO/Archive.cpp
 	src/IO/ArchiveMaker.cpp
+	src/IO/BinaryReader.cpp
 	src/IO/DirectoryUtils.cpp
 	src/IO/File.cpp
 	src/IO/FileManager.cpp

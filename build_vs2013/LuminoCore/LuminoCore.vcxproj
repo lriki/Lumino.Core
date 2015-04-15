@@ -34,6 +34,7 @@
     <ClInclude Include="..\..\include\Lumino\Base\String.h" />
     <ClInclude Include="..\..\include\Lumino\Base\StringUtils.h" />
     <ClInclude Include="..\..\include\Lumino\Base\Typedef.h" />
+    <ClInclude Include="..\..\include\Lumino\IO\BinaryReader.h" />
     <ClInclude Include="..\..\include\Lumino\IO\Common.h" />
     <ClInclude Include="..\..\include\Lumino\IO\DirectoryUtils.h" />
     <ClInclude Include="..\..\include\Lumino\IO\File.h" />
@@ -90,6 +91,7 @@
     <ClCompile Include="..\..\src\Base\StringUtils.cpp" />
     <ClCompile Include="..\..\src\IO\Archive.cpp" />
     <ClCompile Include="..\..\src\IO\ArchiveMaker.cpp" />
+    <ClCompile Include="..\..\src\IO\BinaryReader.cpp" />
     <ClCompile Include="..\..\src\IO\DirectoryUtils.cpp" />
     <ClCompile Include="..\..\src\IO\File.cpp" />
     <ClCompile Include="..\..\src\IO\FileManager.cpp" />

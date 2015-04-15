@@ -220,6 +220,9 @@
     <ClInclude Include="..\..\include\Lumino\Base\DllLoader.h">
       <Filter>Base</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\IO\BinaryReader.h">
+      <Filter>IO</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\include\Lumino\Base\Delegate.inl">
@@ -367,6 +370,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\Base\DllLoader.cpp">
       <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\IO\BinaryReader.cpp">
+      <Filter>IO</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
