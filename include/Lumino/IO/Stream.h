@@ -37,9 +37,14 @@ public:
 	virtual bool CanWrite() = 0;
 
 	/**
-		@brief	ストリーム長 (バイト単位) の取得
+		@brief	ストリームの長さ (バイト単位) を取得します。
 	*/
-	virtual size_t GetSize() = 0;
+	virtual int64_t GetLength() const = 0;
+
+	/**
+		@brief	ストリーム内の現在位置 (ファイルポインタの位置) を取得します。
+	*/
+	virtual int64_t GetPosition() const = 0;
 	
 	/**
 		@brief		バイト シーケンスを読み取り、読み取ったバイト数の分だけストリームの現在位置を進めます。

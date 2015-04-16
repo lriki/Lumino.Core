@@ -69,43 +69,17 @@ public:
 	/**
 		@brief		現在のファイルサイズをバイト単位で取得します。
 	*/
-	uint64_t GetLength() const;
+	//uint64_t GetLength() const;
 
 public:
 	// override Stream
 	virtual bool CanRead();
 	virtual bool CanWrite();
-
-	/**
-		@brief	ストリーム長 (バイト単位) の取得
-	*/
-	virtual size_t GetSize();
-	
-	/**
-		@brief		バイト シーケンスを読み取り、読み取ったバイト数の分だけストリームの現在位置を進めます。
-		@param		buffer		: 読み取ったデータの格納先アドレス
-		@param		byteCount	: 読み取るバイト数
-		@return		実際に読み取ったバイト数。EOF に到達している場合は 0 を返す。
-	*/
+	virtual int64_t GetLength() const;
+	virtual int64_t GetPosition() const;
 	virtual size_t Read(void* buffer, size_t byteCount);
-
-	/**
-		@brief		現在のストリームにバイト シーケンスを書き込み、書き込んだバイト数の分だけストリームの現在位置を進めます。
-		@param		data		: 書き込むデータ
-		@param		byteCount	: バイト数
-		@details	固定長バッファへの書き込み等で、現在のシーク位置がストリームの末尾に向かって
-					count バイトよりも近い位置にあり容量を拡充できない場合は例外 (NotSupportedException) が発生します。
-	*/
 	virtual void Write(const void* data, size_t byteCount);
-	
-	/**
-		@brief		ストリームの現在位置を指定した位置に設定します。
-	*/
 	virtual void Seek(int64_t offset, SeekOrigin origin);
-
-	/**
-		@brief	ストリームの内部バッファのデータを全てターゲット(ファイル等)に書き込み、内部バッファをクリアする
-	*/
 	virtual void Flush();
 
 private:

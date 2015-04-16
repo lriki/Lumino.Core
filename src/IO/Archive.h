@@ -148,7 +148,8 @@ private:
 public:
 	virtual bool CanRead() { return true; }
 	virtual bool CanWrite() { return false; }
-	virtual size_t GetSize() { return m_dataSize; }
+	virtual int64_t GetLength() const { return m_dataSize; }
+	virtual int64_t GetPosition() const { return m_seekPoint; }
 	virtual size_t Read(void* buffer, size_t byteCount);
 	virtual void Write(const void* data, size_t byteCount) {}
 	virtual void Seek(int64_t offset, SeekOrigin origin);

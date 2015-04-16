@@ -32,6 +32,7 @@
 #include "Lumino/IO/MemoryStream.h"
 #include "Lumino/IO/FileUtils.h"
 #include "Lumino/IO/File.h"
+#include "Lumino/IO/BinaryReader.h"
 
 #include "Lumino/Threading/Atomic.h"
 #include "Lumino/Threading/EventFlag.h"

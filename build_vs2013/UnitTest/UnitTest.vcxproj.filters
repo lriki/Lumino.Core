@@ -105,6 +105,9 @@
     <ClCompile Include="..\..\test\UnitTest\Base\Test_Base_Cache.cpp">
       <Filter>UnitTest\Base</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\test\UnitTest\IO\Test_IO_BinaryReader.cpp">
+      <Filter>UnitTest\IO</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\test\UnitTest\TestConfig.h">

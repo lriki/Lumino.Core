@@ -70,9 +70,18 @@ void FileStream::Close()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-size_t FileStream::GetSize()
+int64_t FileStream::GetLength() const
 {
 	return (size_t)FileUtils::GetFileSize( mStream );
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+int64_t FileStream::GetPosition() const
+{
+	// TODO: 64bit 確認 → ftello?
+	return ftell(mStream);
 }
 
 //-----------------------------------------------------------------------------
@@ -81,7 +90,7 @@ size_t FileStream::GetSize()
 size_t FileStream::Read(void* buffer, size_t readCount)
 {
 	LN_THROW(mStream, InvalidOperationException);
-	return fread(buffer, 1, readCount, mStream );
+	return fread(buffer, 1, readCount, mStream);
 }
 
 //-----------------------------------------------------------------------------

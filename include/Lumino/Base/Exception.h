@@ -120,6 +120,22 @@ public:
 };
 
 /**
+	@brief		ストリームの末尾を越えて読み込もうとしたときにスローされる例外です。
+*/
+class EndOfStreamException
+	: public IOException
+{
+public:
+	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(EndOfStreamException);
+	EndOfStreamException() {}
+	virtual ~EndOfStreamException() throw() {}
+
+public:
+	// override Exception
+	virtual Exception* Copy() const { return LN_NEW EndOfStreamException(*this); }
+};
+
+/**
 	@brief	メソッドに渡された引数のいずれかが無効な場合にスローされる例外。
 */
 class ArgumentException

@@ -98,6 +98,7 @@
     <ClCompile Include="..\..\test\UnitTest\Base\Test_Base_UnicodeUtils.cpp" />
     <ClCompile Include="..\..\test\UnitTest\Base\Test_Base_UTF32Encoding.cpp" />
     <ClCompile Include="..\..\test\UnitTest\IO\Test_IO_ArchiveMaker.cpp" />
+    <ClCompile Include="..\..\test\UnitTest\IO\Test_IO_BinaryReader.cpp" />
     <ClCompile Include="..\..\test\UnitTest\IO\Test_IO_File.cpp" />
     <ClCompile Include="..\..\test\UnitTest\IO\Test_IO_FileUtils.cpp" />
     <ClCompile Include="..\..\test\UnitTest\IO\Test_IO_MemoryStream.cpp" />
