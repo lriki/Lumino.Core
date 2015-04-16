@@ -42,3 +42,5 @@
 
 #include "Lumino/Platform/Application.h"
 #include "Lumino/Platform/Window.h"
+#include "Lumino/Platform/PlatformSupport.h"
+

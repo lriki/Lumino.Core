@@ -27,7 +27,18 @@ const DWORD		Win32WindowManager::FULLSCREEN_STYLE = WS_POPUP;
 //
 //-----------------------------------------------------------------------------
 Win32WindowManager::Win32WindowManager(int IconResourceID)
+	: m_comInited(false)
 {
+	// CoInitializeEx は ShowWindow() ～ DestroyWindow() の外側で呼び出さなければならない。
+	// http://blog.techlab-xe.net/archives/400
+	// 例えば ウィンドウ作成→DirectInput初期化みたいにするとき、Input モジュールの中で CoInitializeEx しているとこの罠にはまる。
+	// とりあえず、Platform モジュールでは COM は使わないが、他のモジュールとの連携に備え、初期化しておく。
+	if (SUCCEEDED(::CoInitializeEx(NULL, COINIT_MULTITHREADED)))
+	{
+		// エラーにはしない。別の設定で COM が初期化済みだったりすると失敗することがあるが、COM 自体は使えるようになっている
+		m_comInited = true;
+	}
+
 	m_windowClassName = WINDOW_CLASS_NAME;
 
 	//const TCHAR*	        WinClassName;   ///< ウィンドウクラスの名前 または NULL ( NULL の場合、L"_LNote_" が使われる )
@@ -68,6 +79,12 @@ Win32WindowManager::Win32WindowManager(int IconResourceID)
 Win32WindowManager::~Win32WindowManager()
 {
 	UnregisterClass(m_windowClassName.GetCStr(), m_hInst);
+
+	if (m_comInited)
+	{
+		::CoUninitialize();
+		m_comInited = false;
+	}
 }
 
 //-----------------------------------------------------------------------------
