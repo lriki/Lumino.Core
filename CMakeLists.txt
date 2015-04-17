@@ -147,10 +147,12 @@ set(LN_SOURCES
 	src/Base/DllLoader.cpp
 	src/Base/Environment.cpp
 	src/Base/Exception.cpp
+	src/Base/Logger.cpp
 	src/Base/Memory.cpp
 	src/Base/RefObject.cpp
 	src/Base/String.cpp
 	src/Base/StringUtils.cpp
+	src/Base/Version.cpp
 	src/IO/Archive.cpp
 	src/IO/BinaryReader.cpp
 	src/IO/DirectoryUtils.cpp
