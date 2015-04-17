@@ -1,4 +1,4 @@
-/**
+ï»¿/**
 	@file	Cache.h
 */
 #pragma once
@@ -13,7 +13,7 @@ namespace Lumino
 class CacheManager;
 
 /**
-	@brief	ƒLƒƒƒbƒVƒ…‚ÌŒŸõƒL[‚Å‚·B
+	@brief	ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã®æ¤œç´¢ã‚­ãƒ¼ã§ã™ã€‚
 */
 class CacheKey
 {
@@ -49,10 +49,10 @@ private:
 };
 
 /**
-	@brief		ƒLƒƒƒbƒVƒ…‰Â”\‚ÈƒIƒuƒWƒFƒNƒg‚ÌƒCƒ“ƒ^[ƒtƒFƒCƒX‚Å‚·B
-	@details	ICacheObject ‚Í RefObject ‚ÆƒZƒbƒg‚Åg—p‚µ‚Ü‚·B
-				—¼•û‚ğŒp³‚µ‚½ƒNƒ‰ƒX‚É LN_CACHE_OBJECT_DECL ƒ}ƒNƒ‚Å•K—v‚È‹@”\‚ğÀ‘•‚µ‚Ü‚·B
-				ICacheObject ‚ÍQÆƒJƒEƒ“ƒg‚ª 0 ‚É‚È‚Á‚½‚Æ‚«Adelete ‚Í‚³‚ê‚¸ƒLƒƒƒbƒVƒ…‚É“ü‚ê‚ç‚ê‚Ü‚·B
+	@brief		ã‚­ãƒ£ãƒƒã‚·ãƒ¥å¯èƒ½ãªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã§ã™ã€‚
+	@details	ICacheObject ã¯ RefObject ã¨ã‚»ãƒƒãƒˆã§ä½¿ç”¨ã—ã¾ã™ã€‚
+				ä¸¡æ–¹ã‚’ç¶™æ‰¿ã—ãŸã‚¯ãƒ©ã‚¹ã« LN_CACHE_OBJECT_DECL ãƒã‚¯ãƒ­ã§å¿…è¦ãªæ©Ÿèƒ½ã‚’å®Ÿè£…ã—ã¾ã™ã€‚
+				ICacheObject ã¯å‚ç…§ã‚«ã‚¦ãƒ³ãƒˆãŒ 0 ã«ãªã£ãŸã¨ãã€delete ã¯ã•ã‚Œãšã‚­ãƒ£ãƒƒã‚·ãƒ¥ã«å…¥ã‚Œã‚‰ã‚Œã¾ã™ã€‚
 */
 class ICacheObject
 {
@@ -82,7 +82,7 @@ public:
 	virtual int32_t	Release() = 0;
 };
 
-/// ICacheObject ‚ÌÀ‘•ƒ†[ƒeƒBƒŠƒeƒB
+/// ICacheObject ã®å®Ÿè£…ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£
 #define LN_CACHE_OBJECT_DECL \
 protected: \
 	CacheObjectInfo m_cacheObjectInfo; \
@@ -105,39 +105,39 @@ public: \
 	}
 
 /**
-	@brief	ƒLƒƒƒbƒVƒ…ƒIƒuƒWƒFƒNƒg‚ÌŠÇ—ƒNƒ‰ƒX‚Å‚·B
+	@brief	ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç®¡ç†ã‚¯ãƒ©ã‚¹ã§ã™ã€‚
 */
 class CacheManager
 	: public RefObject
 {
 public:
 	/**
-		@brief		‰Šú‰»
-		@param[in]	capacityCount	: ƒLƒƒƒbƒVƒ…‚É•Û‚Å‚«‚éÅ‘åƒIƒuƒWƒFƒNƒg”
-		@param[in]	maxMemorySize	: ƒLƒƒƒbƒVƒ…‚É•Û‚Å‚«‚éÅ‘åƒƒ‚ƒŠ—Ê (byte’PˆÊB0 ‚Ìê‡‚Íƒƒ‚ƒŠ—Ê‚ğl—¶‚µ‚È‚¢)
+		@brief		åˆæœŸåŒ–
+		@param[in]	capacityCount	: ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã«ä¿æŒã§ãã‚‹æœ€å¤§ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ•°
+		@param[in]	maxMemorySize	: ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã«ä¿æŒã§ãã‚‹æœ€å¤§ãƒ¡ãƒ¢ãƒªé‡ (byteå˜ä½ã€‚0 ã®å ´åˆã¯ãƒ¡ãƒ¢ãƒªé‡ã‚’è€ƒæ…®ã—ãªã„)
 	*/
 	CacheManager(int capacityCount, size_t maxMemorySize);
 
 public:
 
 	/**
-		@brief	I—¹ˆ— (‚±‚êˆÈ~ƒLƒƒƒbƒVƒ…‚ÉƒIƒuƒWƒFƒNƒg‚ğ’Ç‰Á‚µ‚È‚¢‚æ‚¤‚É‚·‚é)
+		@brief	çµ‚äº†å‡¦ç† (ã“ã‚Œä»¥é™ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è¿½åŠ ã—ãªã„ã‚ˆã†ã«ã™ã‚‹)
 	*/
 	void Finalize();
 
 	/**
-		@brief	ƒIƒuƒWƒFƒNƒg‚ğƒLƒƒƒbƒVƒ…ŠÇ—‚É’Ç‰Á‚µ‚Ü‚·B
+		@brief	ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã‚­ãƒ£ãƒƒã‚·ãƒ¥ç®¡ç†ã«è¿½åŠ ã—ã¾ã™ã€‚
 	*/
 	void RegisterCacheObject(const CacheKey& key, ICacheObject* obj);
 
 	/**
-		@brief		ƒL[‚Éˆê’v‚·‚éƒIƒuƒWƒFƒNƒg‚ğŒŸõ‚µ‚Ü‚·B
-		@details	QÆƒJƒEƒ“ƒg‚ğƒCƒ“ƒNƒŠƒƒ“ƒg‚µ‚Ä•Ô‚µ‚Ü‚·B
+		@brief		ã‚­ãƒ¼ã«ä¸€è‡´ã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ¤œç´¢ã—ã¾ã™ã€‚
+		@details	å‚ç…§ã‚«ã‚¦ãƒ³ãƒˆã‚’ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ãƒˆã—ã¦è¿”ã—ã¾ã™ã€‚
 	*/
 	ICacheObject* FindObjectAddRef(const CacheKey& key);
 	
 	/**
-		@brief	ƒLƒƒƒbƒVƒ…‚ğƒNƒŠƒA‚µ‚Ü‚·B
+		@brief	ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’ã‚¯ãƒªã‚¢ã—ã¾ã™ã€‚
 	*/
 	void ClearCache();
 

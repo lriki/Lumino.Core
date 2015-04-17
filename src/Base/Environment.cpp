@@ -1,4 +1,4 @@
-
+ï»¿
 #include "../Internal.h"
 #include <Lumino/Base/Environment.h>
 
@@ -36,8 +36,8 @@ bool Environment::IsLittleEndian()
 uint64_t Environment::GetTickCount()
 {
 #ifdef _WIN32
-	// timeGetTime() ‚Í timeBeginPeriod() ‚É‚æ‚Á‚Ä¸“x‚ª•Ï‚í‚é‚½‚ßA
-	// GetTickCount() ‚Ì•û‚ª–³“ï‚©‚à‚µ‚ê‚È‚¢
+	// timeGetTime() ã¯ timeBeginPeriod() ã«ã‚ˆã£ã¦ç²¾åº¦ãŒå¤‰ã‚ã‚‹ãŸã‚ã€
+	// GetTickCount() ã®æ–¹ãŒç„¡é›£ã‹ã‚‚ã—ã‚Œãªã„
 	return ::GetTickCount();
 #else
 	LN_THROW(0, NotImplementedException);
@@ -54,7 +54,7 @@ uint64_t Environment::GetTickCountNS()
 	static LARGE_INTEGER freq = {};
 	static bool initGetTickCount = false;
 
-	// ‰‰ñŒÄ‚Ño‚µ‚É‰Šú‰»
+	// åˆå›å‘¼ã³å‡ºã—æ™‚ã«åˆæœŸåŒ–
 	if (!initGetTickCount)
 	{
 		::QueryPerformanceFrequency(&freq);
@@ -65,7 +65,7 @@ uint64_t Environment::GetTickCountNS()
 	::QueryPerformanceCounter(&current);
 
 	if (freq.QuadPart) {
-		return static_cast<long long>(((double)current.QuadPart) * 1000 * 1000 * 1000 / freq.QuadPart);		// ns ’PˆÊ
+		return static_cast<long long>(((double)current.QuadPart) * 1000 * 1000 * 1000 / freq.QuadPart);		// ns å˜ä½
 	}
 	return 0;
 #else

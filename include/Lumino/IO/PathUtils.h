@@ -54,6 +54,12 @@ public:
 	static BasicString<TChar> GetFileName(const TChar* path);
 
 	/**
+		@brief		パス文字列の中から拡張子を含むファイル名の部分を返す
+	*/
+	template<typename TChar>
+	static const TChar* GetFileNameSub(const TChar* path);
+
+	/**
 		@brief		パスを単純化する
 		@param[in]	srcPath	: 元ファイルパス
 		@param[in]	outPath	: 単純化したパスの格納先 (LN_MAX_PATH + 1 の領域があること)

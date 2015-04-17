@@ -1,4 +1,4 @@
-
+Ôªø
 #include "../Internal.h"
 #ifdef _WIN32
 #else
@@ -18,8 +18,12 @@ static void* LoadDLL(const TCHAR* filePath)
 #ifdef _WIN32
 	return ::LoadLibrary(filePath);
 #else
+#ifdef LN_UNICODE
 	LN_LOCAL_MBCS_FILEPATH(mbcsPath, filePath);
 	return dlopen(mbcsPath, RTLD_LAZY);
+#else
+	return dlopen(filePath, RTLD_LAZY);
+#endif
 #endif
 }
 
@@ -71,7 +75,7 @@ DllLoader::~DllLoader()
 //-----------------------------------------------------------------------------
 bool DllLoader::Exists(const TCHAR* filePath)
 {
-	// ÉçÅ[ÉhÇ≈Ç´ÇÈÇ©Ç≈É`ÉFÉbÉN
+	// „É≠„Éº„Éâ„Åß„Åç„Çã„Åã„Åß„ÉÅ„Çß„ÉÉ„ÇØ
 	void* module = LoadDLL(filePath);
 	if (module != NULL)
 	{

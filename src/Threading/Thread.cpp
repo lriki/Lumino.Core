@@ -225,6 +225,8 @@ public:
 //-----------------------------------------------------------------------------
 Thread::Thread()
 	: mFinished(false)
+	, mLastException(NULL)
+	, mThread(0)
 {
 }
 

@@ -1,4 +1,4 @@
-﻿#include <TestConfig.h>
+#include <TestConfig.h>
 
 class Test_IO_BinaryReader : public ::testing::Test
 {

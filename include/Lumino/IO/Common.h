@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../Base/Common.h"
 
@@ -6,51 +6,51 @@ namespace Lumino
 {
 class IArchive;
 
-/// ƒtƒ@ƒCƒ‹‚ğŠJ‚­•û–@‚Ü‚½‚Íì¬‚·‚é•û–@
+/// ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ãæ–¹æ³•ã¾ãŸã¯ä½œæˆã™ã‚‹æ–¹æ³•
 enum FileMode
 {
-	FileMode_Create = 0,		///< V‚µ‚¢ƒtƒ@ƒCƒ‹‚ğì¬‚·‚éBŠù‚É‘¶İ‚·‚éê‡‚Íã‘‚«‚³‚ê‚é
-	FileMode_Open,				///< Šù‘¶‚Ìƒtƒ@ƒCƒ‹‚ğŠJ‚­
-	FileMode_Append,			///< ƒtƒ@ƒCƒ‹‚ğŠJ‚«Aƒtƒ@ƒCƒ‹‚Ì––”ö‚ğƒV[ƒN‚·‚éB‘¶İ‚µ‚È‚¢ê‡‚ÍV‚µ‚¢ƒtƒ@ƒCƒ‹‚ğì¬B
+	FileMode_Create = 0,		///< æ–°ã—ã„ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆã™ã‚‹ã€‚æ—¢ã«å­˜åœ¨ã™ã‚‹å ´åˆã¯ä¸Šæ›¸ãã•ã‚Œã‚‹
+	FileMode_Open,				///< æ—¢å­˜ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã
+	FileMode_Append,			///< ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ãã€ãƒ•ã‚¡ã‚¤ãƒ«ã®æœ«å°¾ã‚’ã‚·ãƒ¼ã‚¯ã™ã‚‹ã€‚å­˜åœ¨ã—ãªã„å ´åˆã¯æ–°ã—ã„ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆã€‚
 
 	FileMode_Max,				///< (terminator)
 };
 
-/// ƒtƒ@ƒCƒ‹‚ÉƒAƒNƒZƒX‚·‚é•û–@
+/// ãƒ•ã‚¡ã‚¤ãƒ«ã«ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹æ–¹æ³•
 enum FileAccess
 {
-	FileAccess_Read = 0,		///< “Ç‚İæ‚èƒAƒNƒZƒX
-	FileAccess_ReadWrite,		///< “Ç‚İæ‚è‹y‚Ñ‘‚«‚İƒAƒNƒZƒX
-	FileAccess_Write,			///< ‘‚«‚İƒAƒNƒZƒX
+	FileAccess_Read = 0,		///< èª­ã¿å–ã‚Šã‚¢ã‚¯ã‚»ã‚¹
+	FileAccess_ReadWrite,		///< èª­ã¿å–ã‚ŠåŠã³æ›¸ãè¾¼ã¿ã‚¢ã‚¯ã‚»ã‚¹
+	FileAccess_Write,			///< æ›¸ãè¾¼ã¿ã‚¢ã‚¯ã‚»ã‚¹
 
 	FileAccess_Max,				///< (terminator)
 };
 
-/// ƒtƒ@ƒCƒ‹‚Ì‹¤—L•û–@
+/// ãƒ•ã‚¡ã‚¤ãƒ«ã®å…±æœ‰æ–¹æ³•
 enum FileShare
 {
-	FileShare_None = 0,			///< ‘¼‚Ì‚·‚×‚Ä‚Ì“Ç‚İ‘‚«‚ğ‹‘”Û‚·‚é
-	FileShare_Read,				///< ‘¼‚ª“Ç‚İæ‚èê—p‚Åƒtƒ@ƒCƒ‹‚ğŠJ‚­‚±‚Æ‚ğ‹–‰Â‚·‚é
-	FileShare_Write,			///< ‘¼‚ª‘‚«‚İê—p‚Åƒtƒ@ƒCƒ‹‚ğŠJ‚­‚±‚Æ‚ğ‹–‰Â‚·‚é
-	FileShare_ReadWrite,		///< ‘¼‚ª“Ç‚İæ‚è‚Ü‚½‚Í‘‚«‚İ‚Åƒtƒ@ƒCƒ‹‚ğŠJ‚­‚±‚Æ‚ğ‹–‰Â‚·‚é (‚·‚×‚Ä‚Ì‹¤—L‚ğ‹–‰Â‚·‚é)
+	FileShare_None = 0,			///< ä»–ã®ã™ã¹ã¦ã®èª­ã¿æ›¸ãã‚’æ‹’å¦ã™ã‚‹
+	FileShare_Read,				///< ä»–ãŒèª­ã¿å–ã‚Šå°‚ç”¨ã§ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ãã“ã¨ã‚’è¨±å¯ã™ã‚‹
+	FileShare_Write,			///< ä»–ãŒæ›¸ãè¾¼ã¿å°‚ç”¨ã§ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ãã“ã¨ã‚’è¨±å¯ã™ã‚‹
+	FileShare_ReadWrite,		///< ä»–ãŒèª­ã¿å–ã‚Šã¾ãŸã¯æ›¸ãè¾¼ã¿ã§ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ãã“ã¨ã‚’è¨±å¯ã™ã‚‹ (ã™ã¹ã¦ã®å…±æœ‰ã‚’è¨±å¯ã™ã‚‹)
 
 	FileShare_Max,				///< (terminator)
 };
 
-/// ƒtƒ@ƒCƒ‹‚Ö‚ÌƒAƒNƒZƒX—Dæ“x
+/// ãƒ•ã‚¡ã‚¤ãƒ«ã¸ã®ã‚¢ã‚¯ã‚»ã‚¹å„ªå…ˆåº¦
 enum FileAccessPriority
 {
-	FileAccessPriority_ArchiveFirst = 0,	///< ƒA[ƒJƒCƒu—Dæ
-	FileAccessPriority_DirectoryFirst,		///< ƒfƒBƒŒƒNƒgƒŠ—Dæ
-	FileAccessPriority_ArchiveOnly,			///< ƒA[ƒJƒCƒu‚Ì‚İ   
+	FileAccessPriority_ArchiveFirst = 0,	///< ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–å„ªå…ˆ
+	FileAccessPriority_DirectoryFirst,		///< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå„ªå…ˆ
+	FileAccessPriority_ArchiveOnly,			///< ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ã®ã¿   
 };
 
 #pragma pack(1)
 struct ArchiveHeader
 {
 	char	ID[4];			///< 'l' 'n' 'a' ' '
-	uint8_t	Version;		///< ƒtƒ@ƒCƒ‹ƒo[ƒWƒ‡ƒ“
-	byte_t	Padding[11];	///< \‘¢‘ÌƒTƒCƒY‚ª 16 ‚Ì”{”‚É‚È‚é‚æ‚¤‚É‚·‚é‚½‚ß‚ÌƒpƒfƒBƒ“ƒO
+	uint8_t	Version;		///< ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒ¼ã‚¸ãƒ§ãƒ³
+	byte_t	Padding[11];	///< æ§‹é€ ä½“ã‚µã‚¤ã‚ºãŒ 16 ã®å€æ•°ã«ãªã‚‹ã‚ˆã†ã«ã™ã‚‹ãŸã‚ã®ãƒ‘ãƒ‡ã‚£ãƒ³ã‚°
 };
 #pragma pack()
 

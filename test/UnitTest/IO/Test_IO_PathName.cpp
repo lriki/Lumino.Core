@@ -1,4 +1,4 @@
-﻿#include <TestConfig.h>
+#include <TestConfig.h>
 
 class Test_IO_PathName : public ::testing::Test
 {
@@ -6,6 +6,17 @@ protected:
 	virtual void SetUp() {}
 	virtual void TearDown() {}
 };
+
+
+//-----------------------------------------------------------------------------
+TEST_F(Test_IO_PathName, GetFileName)
+{
+	PathName path1(_T("dir/file.txt"));
+	ASSERT_STREQ(_T("file.txt"), path1.GetFileName());
+
+	PathName path2(_T("file.txt"));
+	ASSERT_STREQ(_T("file.txt"), path2.GetFileName());
+}
 
 //-----------------------------------------------------------------------------
 TEST_F(Test_IO_PathName, GetWithoutExtension)

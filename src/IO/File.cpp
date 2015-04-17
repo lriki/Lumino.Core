@@ -1,4 +1,4 @@
-
+ï»¿
 #include "../Internal.h"
 #include "../../include/Lumino/IO/File.h"
 #include "../../include/Lumino/IO/FileUtils.h"
@@ -38,7 +38,7 @@ File::~File()
 //-----------------------------------------------------------------------------
 void File::Open(FileMode mode, FileAccess access)
 {
-	LN_THROW(m_stream == NULL, InvalidOperationException);	// ‚·‚Å‚Éƒtƒ@ƒCƒ‹‚ªŠJ‚©‚ê‚Ä‚¢‚é
+	LN_THROW(m_stream == NULL, InvalidOperationException);	// ã™ã§ã«ãƒ•ã‚¡ã‚¤ãƒ«ãŒé–‹ã‹ã‚Œã¦ã„ã‚‹
 
 	m_fileAccess = access;
 
@@ -112,7 +112,7 @@ int64_t File::GetLength() const
 //-----------------------------------------------------------------------------
 int64_t File::GetPosition() const
 {
-	// TODO: 64bit Šm”F ¨ ftello?
+	// TODO: 64bit ç¢ºèª â†’ ftello?
 	return ftell(m_stream);
 }
 

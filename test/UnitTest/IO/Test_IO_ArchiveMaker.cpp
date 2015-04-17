@@ -13,7 +13,7 @@ protected:
 //-----------------------------------------------------------------------------
 TEST_F(Test_IO_ArchiveMaker, Basic)
 {
-	// ƒA[ƒJƒCƒuƒtƒ@ƒCƒ‹‚ğì‚é
+	// ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œã‚‹
 	ArchiveMaker maker;
 	maker.Open(LOCALFILE("Test1.lna"), "test");
 	maker.AddFile(LOCALFILE("TestData/ArchiveText1_0byte.txt"), L"ArchiveText1_0byte.txt");
@@ -29,7 +29,7 @@ TEST_F(Test_IO_ArchiveMaker, Basic)
 	Archive archive;
 	archive.Open(LOCALFILE("Test1.lna"), _T("test"));
 
-	// ‘¶İƒ`ƒFƒbƒN
+	// å­˜åœ¨ãƒã‚§ãƒƒã‚¯
 	ASSERT_TRUE(archive.ExistsFile(LOCALFILE("Test1/ArchiveText1_0byte.txt")));
 	ASSERT_FALSE(archive.ExistsFile(LOCALFILE("Test1/aaaa.txt")));
 
@@ -100,7 +100,7 @@ TEST_F(Test_IO_ArchiveMaker, Basic)
 		ASSERT_STREQ("123456789012345678901234567890123", buf);
 	}
 
-	// ArchiveText1_33byte.txt  1 ¨ 32 ‚Ì•ªŠ„
+	// ArchiveText1_33byte.txt  1 â†’ 32 ã®åˆ†å‰²
 	{
 		char buf[64] = { 0 };
 		RefPtr<Stream> file;
@@ -112,7 +112,7 @@ TEST_F(Test_IO_ArchiveMaker, Basic)
 		ASSERT_STREQ("23456789012345678901234567890123", buf);
 	}
 
-	// ArchiveText1_33byte.txt  1byte ‚¸‚Â
+	// ArchiveText1_33byte.txt  1byte ãšã¤
 	{
 		char buf[64] = { 0 };
 		char* pos = buf;

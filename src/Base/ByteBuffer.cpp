@@ -1,4 +1,4 @@
-
+ï»¿
 #include "../Internal.h"
 #include <Lumino/Base/ByteBuffer.h>
 
@@ -69,7 +69,7 @@ ByteBuffer::ByteBuffer(const char* str)
 	, m_size(0)
 	, m_refMode(false)
 {
-	// I’[ NULL ‚ÍƒRƒs[‚µ‚È‚¢ (QByteArray ‚Æ“¯‚¶“®ì)
+	// çµ‚ç«¯ NULL ã¯ã‚³ãƒ”ãƒ¼ã—ãªã„ (QByteArray ã¨åŒã˜å‹•ä½œ)
 	Alloc(str, sizeof(char) * strlen(str));
 }
 
@@ -104,7 +104,7 @@ void ByteBuffer::Alloc(size_t size, bool zeroClear)
 	m_size = size;
 	m_refMode = false;
 
-	// •K—v‚Å‚ ‚ê‚Î 0 ƒNƒŠƒA
+	// å¿…è¦ã§ã‚ã‚Œã° 0 ã‚¯ãƒªã‚¢
 	if (zeroClear) {
 		memset(m_buffer, 0, m_size);
 	}
@@ -124,34 +124,34 @@ void ByteBuffer::Alloc(const void* data, size_t size)
 //-----------------------------------------------------------------------------
 void ByteBuffer::Resize(size_t size, bool zeroClear)
 {
-	// –¢Š„‚è“–‚Ä‚È‚ç new ‚·‚é‚¾‚¯B
+	// æœªå‰²ã‚Šå½“ã¦ãªã‚‰ new ã™ã‚‹ã ã‘ã€‚
 	if (m_buffer == NULL)
 	{
 		Alloc(size, zeroClear);
 	}
 	else
 	{
-		// ƒTƒCƒY‚ª capacity ‚æ‚è‘å‚«‚­‚È‚é‚æ‚¤‚Å‚ ‚ê‚ÎÄŠm•Û
+		// ã‚µã‚¤ã‚ºãŒ capacity ã‚ˆã‚Šå¤§ãããªã‚‹ã‚ˆã†ã§ã‚ã‚Œã°å†ç¢ºä¿
 		byte_t* newBuf = m_buffer;
 		size_t newSize = size;
 		size_t newCapacity = m_capacity;
 		if (size > m_capacity) {
 			newBuf = LN_NEW byte_t[size];
 			newCapacity = size;
-			// •K—v‚Å‚ ‚ê‚Î 0 ƒNƒŠƒA
+			// å¿…è¦ã§ã‚ã‚Œã° 0 ã‚¯ãƒªã‚¢
 			if (zeroClear) {
 				memset(newBuf, 0, newCapacity);
 			}
 		}
 
-		// Œ³‚Ìƒoƒbƒtƒ@‚ª‚ ‚ê‚ÎƒRƒs[B‚»‚ÌŒãŒ³‚Ìƒoƒbƒtƒ@‚ğ”jŠü
+		// å…ƒã®ãƒãƒƒãƒ•ã‚¡ãŒã‚ã‚Œã°ã‚³ãƒ”ãƒ¼ã€‚ãã®å¾Œå…ƒã®ãƒãƒƒãƒ•ã‚¡ã‚’ç ´æ£„
 		if (newBuf != m_buffer)
 		{
 			memcpy_s(newBuf, size, m_buffer, std::min(size, m_size));
 			Dispose();
 		}
 
-		// V‚µ‚¢ƒoƒbƒtƒ@‚É·‚µ‘Ö‚¦
+		// æ–°ã—ã„ãƒãƒƒãƒ•ã‚¡ã«å·®ã—æ›¿ãˆ
 		m_buffer = newBuf;
 		m_capacity = newCapacity;
 		m_size = newSize;
@@ -227,7 +227,7 @@ void ByteBuffer::Dispose()
 ////-----------------------------------------------------------------------------
 //void ByteBuffer::SetInternalSize(size_t size)
 //{
-//	LN_THROW(size <= m_size, ArgumentException);	// k¬•ûŒü‚Ì‚İ‚Æ‚è‚ ‚¦‚¸‹–‰Â
+//	LN_THROW(size <= m_size, ArgumentException);	// ç¸®å°æ–¹å‘ã®ã¿ã¨ã‚Šã‚ãˆãšè¨±å¯
 //	m_size = size;
 //}
 //
@@ -236,21 +236,21 @@ void ByteBuffer::Dispose()
 ////-----------------------------------------------------------------------------
 //void Reserve(size_t size, bool zeroClear)
 //{
-//	// Å‰‚Éƒƒ‚ƒŠŠm•ÛB—áŠO‚µ‚½‚Í‰½‚à‚¹‚¸‚É”²‚¯‚ç‚ê‚é
+//	// æœ€åˆã«ãƒ¡ãƒ¢ãƒªç¢ºä¿ã€‚ä¾‹å¤–ã—ãŸæ™‚ã¯ä½•ã‚‚ã›ãšã«æŠœã‘ã‚‰ã‚Œã‚‹
 //	byte_t* newBuf = LN_NEW byte_t[size];
 //
-//	// Œ³‚Ìƒoƒbƒtƒ@‚ª‚ ‚ê‚ÎƒRƒs[B‚»‚ÌŒãŒ³‚Ìƒoƒbƒtƒ@‚ğ”jŠü
+//	// å…ƒã®ãƒãƒƒãƒ•ã‚¡ãŒã‚ã‚Œã°ã‚³ãƒ”ãƒ¼ã€‚ãã®å¾Œå…ƒã®ãƒãƒƒãƒ•ã‚¡ã‚’ç ´æ£„
 //	if (m_buffer != NULL) {
 //		memcpy_s(newBuf, size, m_buffer, std::min(size, m_size));
 //	}
 //	Dispose();
 //
-//	// V‚µ‚¢ƒoƒbƒtƒ@‚É·‚µ‘Ö‚¦
+//	// æ–°ã—ã„ãƒãƒƒãƒ•ã‚¡ã«å·®ã—æ›¿ãˆ
 //	m_buffer = newBuf;
 //	m_size = size;
 //	m_refMode = false;
 //
-//	// •K—v‚Å‚ ‚ê‚Î 0 ƒNƒŠƒA
+//	// å¿…è¦ã§ã‚ã‚Œã° 0 ã‚¯ãƒªã‚¢
 //	if (zeroClear) {
 //		memset(m_buffer, 0, m_size);
 //	}
@@ -261,7 +261,7 @@ void ByteBuffer::Dispose()
 //-----------------------------------------------------------------------------
 //void Reserve(const byte_t* data, size_t size)
 //{
-//	// Œ³‚Ìƒoƒbƒtƒ@‚ÍŠ®‘S‚É”jŠü‚·‚é‚Ì‚Åæ‚ÉÁ‚µ‚Ä‚µ‚Ü‚Á‚Ä—Ç‚¢
+//	// å…ƒã®ãƒãƒƒãƒ•ã‚¡ã¯å®Œå…¨ã«ç ´æ£„ã™ã‚‹ã®ã§å…ˆã«æ¶ˆã—ã¦ã—ã¾ã£ã¦è‰¯ã„
 //	Dispose();
 //	m_buffer = LN_NEW byte_t[size];
 //	m_size = size;

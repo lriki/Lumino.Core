@@ -99,6 +99,7 @@ if (WIN32)
 	
 	# platform sources.
 	set(LN_PLATFORM_SOURCES
+		src/IO/ArchiveMaker.cpp
 		src/IO/Win32/FileUtils_win32.cpp
 		src/Platform/Win32/Win32WindowManager.cpp
 		src/Platform/Win32/Win32WindowBase.cpp
@@ -151,7 +152,6 @@ set(LN_SOURCES
 	src/Base/String.cpp
 	src/Base/StringUtils.cpp
 	src/IO/Archive.cpp
-	src/IO/ArchiveMaker.cpp
 	src/IO/BinaryReader.cpp
 	src/IO/DirectoryUtils.cpp
 	src/IO/File.cpp

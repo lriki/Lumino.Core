@@ -1,4 +1,4 @@
-/**
+ï»¿/**
 	@file	BinaryReader.h
 */
 #pragma once
@@ -11,7 +11,7 @@ namespace Lumino
 class Stream;
 
 /**
-	@brief	ƒXƒgƒŠ[ƒ€‚©‚çƒoƒCƒiƒŠƒf[ƒ^‚ğ“Ç‚İæ‚éƒNƒ‰ƒX‚Å‚·B
+	@brief	ã‚¹ãƒˆãƒªãƒ¼ãƒ ã‹ã‚‰ãƒã‚¤ãƒŠãƒªãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿å–ã‚‹ã‚¯ãƒ©ã‚¹ã§ã™ã€‚
 */
 class BinaryReader
 {
@@ -22,82 +22,82 @@ public:
 public:
 
 	/**
-		@brief		•„†•t‚« 1 ƒoƒCƒg®”‚ğ“Ç‚İæ‚èAƒXƒgƒŠ[ƒ€‚ÌŒ»İˆÊ’u‚ğ 1 ƒoƒCƒgi‚ß‚Ü‚·B
+		@brief		ç¬¦å·ä»˜ã 1 ãƒã‚¤ãƒˆæ•´æ•°ã‚’èª­ã¿å–ã‚Šã€ã‚¹ãƒˆãƒªãƒ¼ãƒ ã®ç¾åœ¨ä½ç½®ã‚’ 1 ãƒã‚¤ãƒˆé€²ã‚ã¾ã™ã€‚
 	*/
 	int8_t ReadInt8();
 
 	/**
-		@brief		•„†•t‚« 2 ƒoƒCƒg®”‚ğ“Ç‚İæ‚èAƒXƒgƒŠ[ƒ€‚ÌŒ»İˆÊ’u‚ğ 2 ƒoƒCƒgi‚ß‚Ü‚·B
-		@param[in]	dataByteOrder	: “Ç‚İæ‚éƒf[ƒ^‚ÌƒoƒCƒgƒI[ƒ_[
+		@brief		ç¬¦å·ä»˜ã 2 ãƒã‚¤ãƒˆæ•´æ•°ã‚’èª­ã¿å–ã‚Šã€ã‚¹ãƒˆãƒªãƒ¼ãƒ ã®ç¾åœ¨ä½ç½®ã‚’ 2 ãƒã‚¤ãƒˆé€²ã‚ã¾ã™ã€‚
+		@param[in]	dataByteOrder	: èª­ã¿å–ã‚‹ãƒ‡ãƒ¼ã‚¿ã®ãƒã‚¤ãƒˆã‚ªãƒ¼ãƒ€ãƒ¼
 	*/
 	int16_t ReadInt16(ByteOrder dataByteOrder = ByteOrder_Little);
 
 	/**
-		@brief		•„†•t‚« 4 ƒoƒCƒg®”‚ğ“Ç‚İæ‚èAƒXƒgƒŠ[ƒ€‚ÌŒ»İˆÊ’u‚ğ 4 ƒoƒCƒgi‚ß‚Ü‚·B
-		@param[in]	dataByteOrder	: “Ç‚İæ‚éƒf[ƒ^‚ÌƒoƒCƒgƒI[ƒ_[
+		@brief		ç¬¦å·ä»˜ã 4 ãƒã‚¤ãƒˆæ•´æ•°ã‚’èª­ã¿å–ã‚Šã€ã‚¹ãƒˆãƒªãƒ¼ãƒ ã®ç¾åœ¨ä½ç½®ã‚’ 4 ãƒã‚¤ãƒˆé€²ã‚ã¾ã™ã€‚
+		@param[in]	dataByteOrder	: èª­ã¿å–ã‚‹ãƒ‡ãƒ¼ã‚¿ã®ãƒã‚¤ãƒˆã‚ªãƒ¼ãƒ€ãƒ¼
 	*/
 	int32_t ReadInt32(ByteOrder dataByteOrder = ByteOrder_Little);
 
 	/**
-		@brief		•„†•t‚« 8 ƒoƒCƒg®”‚ğ“Ç‚İæ‚èAƒXƒgƒŠ[ƒ€‚ÌŒ»İˆÊ’u‚ğ 8 ƒoƒCƒgi‚ß‚Ü‚·B
-		@param[in]	dataByteOrder	: “Ç‚İæ‚éƒf[ƒ^‚ÌƒoƒCƒgƒI[ƒ_[
+		@brief		ç¬¦å·ä»˜ã 8 ãƒã‚¤ãƒˆæ•´æ•°ã‚’èª­ã¿å–ã‚Šã€ã‚¹ãƒˆãƒªãƒ¼ãƒ ã®ç¾åœ¨ä½ç½®ã‚’ 8 ãƒã‚¤ãƒˆé€²ã‚ã¾ã™ã€‚
+		@param[in]	dataByteOrder	: èª­ã¿å–ã‚‹ãƒ‡ãƒ¼ã‚¿ã®ãƒã‚¤ãƒˆã‚ªãƒ¼ãƒ€ãƒ¼
 	*/
 	int64_t ReadInt64(ByteOrder dataByteOrder = ByteOrder_Little);
 
 	/**
-		@brief		•„†–³‚µ 1 ƒoƒCƒg®”‚ğ“Ç‚İæ‚èAƒXƒgƒŠ[ƒ€‚ÌŒ»İˆÊ’u‚ğ 1 ƒoƒCƒgi‚ß‚Ü‚·B
+		@brief		ç¬¦å·ç„¡ã— 1 ãƒã‚¤ãƒˆæ•´æ•°ã‚’èª­ã¿å–ã‚Šã€ã‚¹ãƒˆãƒªãƒ¼ãƒ ã®ç¾åœ¨ä½ç½®ã‚’ 1 ãƒã‚¤ãƒˆé€²ã‚ã¾ã™ã€‚
 	*/
 	uint8_t ReadUInt8();
 
 	/**
-		@brief		•„†–³‚µ 2 ƒoƒCƒg®”‚ğ“Ç‚İæ‚èAƒXƒgƒŠ[ƒ€‚ÌŒ»İˆÊ’u‚ğ 2 ƒoƒCƒgi‚ß‚Ü‚·B
-		@param[in]	dataByteOrder	: “Ç‚İæ‚éƒf[ƒ^‚ÌƒoƒCƒgƒI[ƒ_[
+		@brief		ç¬¦å·ç„¡ã— 2 ãƒã‚¤ãƒˆæ•´æ•°ã‚’èª­ã¿å–ã‚Šã€ã‚¹ãƒˆãƒªãƒ¼ãƒ ã®ç¾åœ¨ä½ç½®ã‚’ 2 ãƒã‚¤ãƒˆé€²ã‚ã¾ã™ã€‚
+		@param[in]	dataByteOrder	: èª­ã¿å–ã‚‹ãƒ‡ãƒ¼ã‚¿ã®ãƒã‚¤ãƒˆã‚ªãƒ¼ãƒ€ãƒ¼
 	*/
 	uint16_t ReadUInt16(ByteOrder dataByteOrder = ByteOrder_Little);
 
 	/**
-		@brief		•„†–³‚µ 4 ƒoƒCƒg®”‚ğ“Ç‚İæ‚èAƒXƒgƒŠ[ƒ€‚ÌŒ»İˆÊ’u‚ğ 4 ƒoƒCƒgi‚ß‚Ü‚·B
-		@param[in]	dataByteOrder	: “Ç‚İæ‚éƒf[ƒ^‚ÌƒoƒCƒgƒI[ƒ_[
+		@brief		ç¬¦å·ç„¡ã— 4 ãƒã‚¤ãƒˆæ•´æ•°ã‚’èª­ã¿å–ã‚Šã€ã‚¹ãƒˆãƒªãƒ¼ãƒ ã®ç¾åœ¨ä½ç½®ã‚’ 4 ãƒã‚¤ãƒˆé€²ã‚ã¾ã™ã€‚
+		@param[in]	dataByteOrder	: èª­ã¿å–ã‚‹ãƒ‡ãƒ¼ã‚¿ã®ãƒã‚¤ãƒˆã‚ªãƒ¼ãƒ€ãƒ¼
 	*/
 	uint32_t ReadUInt32(ByteOrder dataByteOrder = ByteOrder_Little);
 
 	/**
-		@brief		•„†–³‚µ 8 ƒoƒCƒg®”‚ğ“Ç‚İæ‚èAƒXƒgƒŠ[ƒ€‚ÌŒ»İˆÊ’u‚ğ 8 ƒoƒCƒgi‚ß‚Ü‚·B
-		@param[in]	dataByteOrder	: “Ç‚İæ‚éƒf[ƒ^‚ÌƒoƒCƒgƒI[ƒ_[
+		@brief		ç¬¦å·ç„¡ã— 8 ãƒã‚¤ãƒˆæ•´æ•°ã‚’èª­ã¿å–ã‚Šã€ã‚¹ãƒˆãƒªãƒ¼ãƒ ã®ç¾åœ¨ä½ç½®ã‚’ 8 ãƒã‚¤ãƒˆé€²ã‚ã¾ã™ã€‚
+		@param[in]	dataByteOrder	: èª­ã¿å–ã‚‹ãƒ‡ãƒ¼ã‚¿ã®ãƒã‚¤ãƒˆã‚ªãƒ¼ãƒ€ãƒ¼
 	*/
 	uint64_t ReadUInt64(ByteOrder dataByteOrder = ByteOrder_Little);
 
 	/**
-		@brief		w’è‚µ‚½ƒoƒCƒg”‚Ì•„†•t‚«®”‚ğ“Ç‚İæ‚èAƒXƒgƒŠ[ƒ€‚ÌŒ»İˆÊ’u‚ği‚ß‚Ü‚·B
-		@param[in]	byteCount	: “Ç‚İæ‚éƒoƒCƒg” (1, 2, 4, 8‚Ì‚¢‚¸‚ê‚©)
-		@param[in]	dataByteOrder	: “Ç‚İæ‚éƒf[ƒ^‚ÌƒoƒCƒgƒI[ƒ_[
+		@brief		æŒ‡å®šã—ãŸãƒã‚¤ãƒˆæ•°ã®ç¬¦å·ä»˜ãæ•´æ•°ã‚’èª­ã¿å–ã‚Šã€ã‚¹ãƒˆãƒªãƒ¼ãƒ ã®ç¾åœ¨ä½ç½®ã‚’é€²ã‚ã¾ã™ã€‚
+		@param[in]	byteCount	: èª­ã¿å–ã‚‹ãƒã‚¤ãƒˆæ•° (1, 2, 4, 8ã®ã„ãšã‚Œã‹)
+		@param[in]	dataByteOrder	: èª­ã¿å–ã‚‹ãƒ‡ãƒ¼ã‚¿ã®ãƒã‚¤ãƒˆã‚ªãƒ¼ãƒ€ãƒ¼
 	*/
 	int64_t ReadInt(int byteCount, ByteOrder dataByteOrder = ByteOrder_Little);
 
 	/**
-		@brief		w’è‚µ‚½ƒoƒCƒg”‚Ì•„†–³‚µ®”‚ğ“Ç‚İæ‚èAƒXƒgƒŠ[ƒ€‚ÌŒ»İˆÊ’u‚ği‚ß‚Ü‚·B
-		@param[in]	byteCount	: “Ç‚İæ‚éƒoƒCƒg” (1, 2, 4, 8‚Ì‚¢‚¸‚ê‚©)
-		@param[in]	dataByteOrder	: “Ç‚İæ‚éƒf[ƒ^‚ÌƒoƒCƒgƒI[ƒ_[
+		@brief		æŒ‡å®šã—ãŸãƒã‚¤ãƒˆæ•°ã®ç¬¦å·ç„¡ã—æ•´æ•°ã‚’èª­ã¿å–ã‚Šã€ã‚¹ãƒˆãƒªãƒ¼ãƒ ã®ç¾åœ¨ä½ç½®ã‚’é€²ã‚ã¾ã™ã€‚
+		@param[in]	byteCount	: èª­ã¿å–ã‚‹ãƒã‚¤ãƒˆæ•° (1, 2, 4, 8ã®ã„ãšã‚Œã‹)
+		@param[in]	dataByteOrder	: èª­ã¿å–ã‚‹ãƒ‡ãƒ¼ã‚¿ã®ãƒã‚¤ãƒˆã‚ªãƒ¼ãƒ€ãƒ¼
 	*/
 	uint64_t ReadUInt(int byteCount, ByteOrder dataByteOrder = ByteOrder_Little);
 
 	/**
-		@brief		w’è‚µ‚½ƒoƒCƒg”‚Ìƒf[ƒ^‚ğ“Ç‚İæ‚èAƒXƒgƒŠ[ƒ€‚ÌŒ»İˆÊ’u‚ği‚ß‚Ü‚·B
+		@brief		æŒ‡å®šã—ãŸãƒã‚¤ãƒˆæ•°ã®ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿å–ã‚Šã€ã‚¹ãƒˆãƒªãƒ¼ãƒ ã®ç¾åœ¨ä½ç½®ã‚’é€²ã‚ã¾ã™ã€‚
 	*/
 	size_t Read(void* buffer, size_t count);
 
 	/**
-		@brief		ƒXƒgƒŠ[ƒ€‚ÌŒ»İˆÊ’u‚ğAw’è‚µ‚½ƒIƒtƒZƒbƒg‚¾‚¯i‚ß‚Ü‚·B
+		@brief		ã‚¹ãƒˆãƒªãƒ¼ãƒ ã®ç¾åœ¨ä½ç½®ã‚’ã€æŒ‡å®šã—ãŸã‚ªãƒ•ã‚»ãƒƒãƒˆã ã‘é€²ã‚ã¾ã™ã€‚
 	*/
 	void Seek(int offset);
 
 	/**
-		@brief		ƒXƒgƒŠ[ƒ€‚ÌŒ»İˆÊ’u‚ğæ“¾‚µ‚Ü‚·B
+		@brief		ã‚¹ãƒˆãƒªãƒ¼ãƒ ã®ç¾åœ¨ä½ç½®ã‚’å–å¾—ã—ã¾ã™ã€‚
 	*/
 	int64_t GetPosition();
 
 	/**
-		@brief		ƒtƒ@ƒCƒ‹I’[‚É“’B‚µ‚Ä‚¢‚é‚©‚ğŠm”F‚µ‚Ü‚·B
+		@brief		ãƒ•ã‚¡ã‚¤ãƒ«çµ‚ç«¯ã«åˆ°é”ã—ã¦ã„ã‚‹ã‹ã‚’ç¢ºèªã—ã¾ã™ã€‚
 	*/
 	bool IsEOF() const;
 

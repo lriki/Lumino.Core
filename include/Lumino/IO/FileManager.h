@@ -1,4 +1,4 @@
-/**
+ï»¿/**
 	@file	FileManager.h
 */
 #pragma once
@@ -19,10 +19,10 @@ class FileManager
     : public RefObject
 {
 public:
-	/// ‰Šú‰»ƒf[ƒ^
+	/// åˆæœŸåŒ–ãƒ‡ãƒ¼ã‚¿
 	struct ConfigData
 	{
-		FileAccessPriority	AccessMode;     ///< ƒtƒ@ƒCƒ‹‚Ö‚ÌƒAƒNƒZƒX—Dæ“x
+		FileAccessPriority	AccessMode;     ///< ãƒ•ã‚¡ã‚¤ãƒ«ã¸ã®ã‚¢ã‚¯ã‚»ã‚¹å„ªå…ˆåº¦
 	};
 
 public:
@@ -31,35 +31,35 @@ public:
 public:
 
 	/**
-		@brief		ƒA[ƒJƒCƒuƒtƒ@ƒCƒ‹‚ğ“o˜^‚µ‚Ü‚·B
-		@details	ˆÈ~‚±‚ÌƒNƒ‰ƒX‚Ì‹@”\‚ğ’Ê‚µ‚ÄAƒA[ƒJƒCƒuƒtƒ@ƒCƒ‹‚ğƒtƒHƒ‹ƒ_‚Å‚ ‚é‚©‚Ì‚æ‚¤‚É
-					“à•”‚Ìƒtƒ@ƒCƒ‹‚É“Ç‚İæ‚èƒAƒNƒZƒX‚·‚é‚±‚Æ‚ª‚Å‚«‚Ü‚·B
+		@brief		ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ç™»éŒ²ã—ã¾ã™ã€‚
+		@details	ä»¥é™ã“ã®ã‚¯ãƒ©ã‚¹ã®æ©Ÿèƒ½ã‚’é€šã—ã¦ã€ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ãƒ•ã‚©ãƒ«ãƒ€ã§ã‚ã‚‹ã‹ã®ã‚ˆã†ã«
+					å†…éƒ¨ã®ãƒ•ã‚¡ã‚¤ãƒ«ã«èª­ã¿å–ã‚Šã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚
 	*/
 	void RegisterArchive(const PathName& filePath, const String& password);
 
 	/**
-		@brief		w’è‚³‚ê‚½ƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚é‚©‚Ç‚¤‚©‚ğŠm”F‚µ‚Ü‚·B
-		@details	‰Šú‰»‚Éw’è‚µ‚½ƒAƒNƒZƒX—Dæ“x‚É]‚¢A“o˜^‚³‚ê‚Ä‚¢‚éƒA[ƒJƒCƒu‚ª‚ ‚ê‚Î‚»‚Ì“à•”‚àŠm”F‚µ‚Ü‚·B
+		@brief		æŒ‡å®šã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã™ã‚‹ã‹ã©ã†ã‹ã‚’ç¢ºèªã—ã¾ã™ã€‚
+		@details	åˆæœŸåŒ–æ™‚ã«æŒ‡å®šã—ãŸã‚¢ã‚¯ã‚»ã‚¹å„ªå…ˆåº¦ã«å¾“ã„ã€ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ãŒã‚ã‚Œã°ãã®å†…éƒ¨ã‚‚ç¢ºèªã—ã¾ã™ã€‚
 	*/
 	bool ExistsFile(const char* filePath);
 	bool ExistsFile(const wchar_t* filePath);	///< @overload ExistsFile
 	bool ExistsFile(const PathName& filePath);	///< @overload ExistsFile
 
 	/**
-		@brief		“Ç‚İæ‚èê—pƒ‚[ƒh‚Åƒtƒ@ƒCƒ‹ƒXƒgƒŠ[ƒ€‚ğŠJ‚«‚Ü‚·B
-		@details	‰Šú‰»‚Éw’è‚µ‚½ƒAƒNƒZƒX—Dæ“x‚É]‚¢A“o˜^‚³‚ê‚Ä‚¢‚éƒA[ƒJƒCƒu‚ª‚ ‚ê‚Î‚»‚Ì“à•”‚àŠm”F‚µ‚Ü‚·B
+		@brief		èª­ã¿å–ã‚Šå°‚ç”¨ãƒ¢ãƒ¼ãƒ‰ã§ãƒ•ã‚¡ã‚¤ãƒ«ã‚¹ãƒˆãƒªãƒ¼ãƒ ã‚’é–‹ãã¾ã™ã€‚
+		@details	åˆæœŸåŒ–æ™‚ã«æŒ‡å®šã—ãŸã‚¢ã‚¯ã‚»ã‚¹å„ªå…ˆåº¦ã«å¾“ã„ã€ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ãŒã‚ã‚Œã°ãã®å†…éƒ¨ã‚‚ç¢ºèªã—ã¾ã™ã€‚
 	*/
 	Stream* CreateFileStream(const char* filePath);
 	Stream* CreateFileStream(const wchar_t* filePath);	///< @overload CreateInFileStream
 	Stream* CreateFileStream(const PathName& filePath);	///< @overload CreateInFileStream
 
 	/**
-		@brief		ƒŠƒNƒGƒXƒg‚³‚ê‚Ä‚¢‚é‚·‚×‚Ä‚Ì”ñ“¯Šú“Ç‚İ‚İ/‘‚«‚İˆ—‚ÌI—¹‚ğ‘Ò‹@‚µ‚Ü‚·B
+		@brief		ãƒªã‚¯ã‚¨ã‚¹ãƒˆã•ã‚Œã¦ã„ã‚‹ã™ã¹ã¦ã®éåŒæœŸèª­ã¿è¾¼ã¿/æ›¸ãè¾¼ã¿å‡¦ç†ã®çµ‚äº†ã‚’å¾…æ©Ÿã—ã¾ã™ã€‚
 	*/
 	void WaitForAllASyncProcess();
 
 	/**
-		@brief		Œ»İ‚ÌŠÂ‹«‚Ìƒtƒ@ƒCƒ‹ƒVƒXƒeƒ€‚ªAƒpƒX•¶š—ñ‚Ì‘å•¶š‚Æ¬•¶š‚ğ‹æ•Ê‚·‚é‚©‚ğŠm”F‚µ‚Ü‚·B
+		@brief		ç¾åœ¨ã®ç’°å¢ƒã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚·ã‚¹ãƒ†ãƒ ãŒã€ãƒ‘ã‚¹æ–‡å­—åˆ—ã®å¤§æ–‡å­—ã¨å°æ–‡å­—ã‚’åŒºåˆ¥ã™ã‚‹ã‹ã‚’ç¢ºèªã—ã¾ã™ã€‚
 	*/
 	CaseSensitivity GetFileSystemCaseSensitivity() const;
 

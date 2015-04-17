@@ -1,4 +1,4 @@
-
+ï»¿
 #include "../Internal.h"
 #include <Lumino/IO/Stream.h>
 #include <Lumino/IO/BinaryReader.h>
@@ -47,11 +47,11 @@ int16_t BinaryReader::ReadInt16(ByteOrder dataByteOrder)
 	size_t count = m_stream->Read(&buffer, 2);
 	LN_THROW(count == 2, EndOfStreamException);
 
-	// Œ»Ý‚ÌŠÂ‹«‚Æ“¯‚¶ƒGƒ“ƒfƒBƒAƒ“‚Å‚ ‚ê‚Î‚»‚Ì‚Ü‚Ü•Ô‚·
+	// ç¾åœ¨ã®ç’°å¢ƒã¨åŒã˜ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ã§ã‚ã‚Œã°ãã®ã¾ã¾è¿”ã™
 	if (dataByteOrder == Environment::GetByteOrder()) {
 		return *((int16_t*)buffer);
 	}
-	// ˆÙ‚È‚éƒGƒ“ƒfƒBƒAƒ“‚Å‚ ‚ê‚Î swap
+	// ç•°ãªã‚‹ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ã§ã‚ã‚Œã° swap
 	else
 	{
 		byte_t out[2], *p = (byte_t*)&buffer;
@@ -70,11 +70,11 @@ int32_t BinaryReader::ReadInt32(ByteOrder dataByteOrder)
 	size_t count = m_stream->Read(&buffer, 4);
 	LN_THROW(count == 4, EndOfStreamException);
 
-	// Œ»Ý‚ÌŠÂ‹«‚Æ“¯‚¶ƒGƒ“ƒfƒBƒAƒ“‚Å‚ ‚ê‚Î‚»‚Ì‚Ü‚Ü•Ô‚·
+	// ç¾åœ¨ã®ç’°å¢ƒã¨åŒã˜ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ã§ã‚ã‚Œã°ãã®ã¾ã¾è¿”ã™
 	if (dataByteOrder == Environment::GetByteOrder()) {
 		return *((int32_t*)buffer);
 	}
-	// ˆÙ‚È‚éƒGƒ“ƒfƒBƒAƒ“‚Å‚ ‚ê‚Î swap
+	// ç•°ãªã‚‹ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ã§ã‚ã‚Œã° swap
 	else
 	{
 		byte_t out[4], *p = (byte_t*)&buffer;
@@ -95,11 +95,11 @@ int64_t BinaryReader::ReadInt64(ByteOrder dataByteOrder)
 	size_t count = m_stream->Read(&buffer, 8);
 	LN_THROW(count == 8, EndOfStreamException);
 
-	// Œ»Ý‚ÌŠÂ‹«‚Æ“¯‚¶ƒGƒ“ƒfƒBƒAƒ“‚Å‚ ‚ê‚Î‚»‚Ì‚Ü‚Ü•Ô‚·
+	// ç¾åœ¨ã®ç’°å¢ƒã¨åŒã˜ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ã§ã‚ã‚Œã°ãã®ã¾ã¾è¿”ã™
 	if (dataByteOrder == Environment::GetByteOrder()) {
 		return *((int64_t*)buffer);
 	}
-	// ˆÙ‚È‚éƒGƒ“ƒfƒBƒAƒ“‚Å‚ ‚ê‚Î swap
+	// ç•°ãªã‚‹ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ã§ã‚ã‚Œã° swap
 	else
 	{
 		byte_t out[8], *p = (byte_t*)&buffer;
@@ -134,11 +134,11 @@ uint16_t BinaryReader::ReadUInt16(ByteOrder dataByteOrder)
 	size_t count = m_stream->Read(&buffer, 2);
 	LN_THROW(count == 2, EndOfStreamException);
 
-	// Œ»Ý‚ÌŠÂ‹«‚Æ“¯‚¶ƒGƒ“ƒfƒBƒAƒ“‚Å‚ ‚ê‚Î‚»‚Ì‚Ü‚Ü•Ô‚·
+	// ç¾åœ¨ã®ç’°å¢ƒã¨åŒã˜ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ã§ã‚ã‚Œã°ãã®ã¾ã¾è¿”ã™
 	if (dataByteOrder == Environment::GetByteOrder()) {
 		return *((uint16_t*)buffer);
 	}
-	// ˆÙ‚È‚éƒGƒ“ƒfƒBƒAƒ“‚Å‚ ‚ê‚Î swap
+	// ç•°ãªã‚‹ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ã§ã‚ã‚Œã° swap
 	else
 	{
 		byte_t out[2], *p = (byte_t*)&buffer;
@@ -157,11 +157,11 @@ uint32_t BinaryReader::ReadUInt32(ByteOrder dataByteOrder)
 	size_t count = m_stream->Read(&buffer, 4);
 	LN_THROW(count == 4, EndOfStreamException);
 
-	// Œ»Ý‚ÌŠÂ‹«‚Æ“¯‚¶ƒGƒ“ƒfƒBƒAƒ“‚Å‚ ‚ê‚Î‚»‚Ì‚Ü‚Ü•Ô‚·
+	// ç¾åœ¨ã®ç’°å¢ƒã¨åŒã˜ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ã§ã‚ã‚Œã°ãã®ã¾ã¾è¿”ã™
 	if (dataByteOrder == Environment::GetByteOrder()) {
 		return *((uint32_t*)buffer);
 	}
-	// ˆÙ‚È‚éƒGƒ“ƒfƒBƒAƒ“‚Å‚ ‚ê‚Î swap
+	// ç•°ãªã‚‹ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ã§ã‚ã‚Œã° swap
 	else
 	{
 		byte_t out[4], *p = (byte_t*)&buffer;
@@ -182,11 +182,11 @@ uint64_t BinaryReader::ReadUInt64(ByteOrder dataByteOrder)
 	size_t count = m_stream->Read(&buffer, 8);
 	LN_THROW(count == 8, EndOfStreamException);
 
-	// Œ»Ý‚ÌŠÂ‹«‚Æ“¯‚¶ƒGƒ“ƒfƒBƒAƒ“‚Å‚ ‚ê‚Î‚»‚Ì‚Ü‚Ü•Ô‚·
+	// ç¾åœ¨ã®ç’°å¢ƒã¨åŒã˜ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ã§ã‚ã‚Œã°ãã®ã¾ã¾è¿”ã™
 	if (dataByteOrder == Environment::GetByteOrder()) {
 		return *((uint64_t*)buffer);
 	}
-	// ˆÙ‚È‚éƒGƒ“ƒfƒBƒAƒ“‚Å‚ ‚ê‚Î swap
+	// ç•°ãªã‚‹ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ã§ã‚ã‚Œã° swap
 	else
 	{
 		byte_t out[8], *p = (byte_t*)&buffer;
@@ -239,7 +239,7 @@ uint64_t BinaryReader::ReadUInt(int byteCount, ByteOrder dataByteOrder)
 //-----------------------------------------------------------------------------
 size_t BinaryReader::Read(void* buffer, size_t count)
 {
-	LN_ASSERT(m_stream != NULL);	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Å•K‚¸“ü—Í‚ª•K—v‚È‚Ì‚Å‚ ‚è‚¦‚È‚¢‚Í‚¸
+	LN_ASSERT(m_stream != NULL);	// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã§å¿…ãšå…¥åŠ›ãŒå¿…è¦ãªã®ã§ã‚ã‚Šãˆãªã„ã¯ãš
 	return m_stream->Read(buffer, count);
 }
 
@@ -248,7 +248,7 @@ size_t BinaryReader::Read(void* buffer, size_t count)
 //-----------------------------------------------------------------------------
 void BinaryReader::Seek(int offset)
 {
-	LN_ASSERT(m_stream != NULL);	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Å•K‚¸“ü—Í‚ª•K—v‚È‚Ì‚Å‚ ‚è‚¦‚È‚¢‚Í‚¸
+	LN_ASSERT(m_stream != NULL);	// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã§å¿…ãšå…¥åŠ›ãŒå¿…è¦ãªã®ã§ã‚ã‚Šãˆãªã„ã¯ãš
 	m_stream->Seek(offset, SeekOrigin_Current);
 }
 
@@ -257,7 +257,7 @@ void BinaryReader::Seek(int offset)
 //-----------------------------------------------------------------------------
 int64_t BinaryReader::GetPosition()
 {
-	LN_ASSERT(m_stream != NULL);	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Å•K‚¸“ü—Í‚ª•K—v‚È‚Ì‚Å‚ ‚è‚¦‚È‚¢‚Í‚¸
+	LN_ASSERT(m_stream != NULL);	// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã§å¿…ãšå…¥åŠ›ãŒå¿…è¦ãªã®ã§ã‚ã‚Šãˆãªã„ã¯ãš
 	return m_stream->GetPosition();
 }
 
@@ -266,7 +266,7 @@ int64_t BinaryReader::GetPosition()
 //-----------------------------------------------------------------------------
 bool BinaryReader::IsEOF() const
 {
-	LN_ASSERT(m_stream != NULL);	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Å•K‚¸“ü—Í‚ª•K—v‚È‚Ì‚Å‚ ‚è‚¦‚È‚¢‚Í‚¸
+	LN_ASSERT(m_stream != NULL);	// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã§å¿…ãšå…¥åŠ›ãŒå¿…è¦ãªã®ã§ã‚ã‚Šãˆãªã„ã¯ãš
 	return (m_stream->GetPosition() >= m_stream->GetLength());
 }
 

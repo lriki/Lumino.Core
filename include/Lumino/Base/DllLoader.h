@@ -1,4 +1,4 @@
-/**
+ï»¿/**
 	@file	FileManager.h
 */
 #pragma once
@@ -10,7 +10,7 @@ namespace Lumino
 {
 
 /**
-	@file	DLL ‚Ü‚½‚Í ‹¤—Lƒ‰ƒCƒuƒ‰ƒŠ‚ðƒ[ƒh‚µAƒAƒNƒZƒX‚·‚é‚½‚ß‚ÌƒNƒ‰ƒX‚Å‚·B
+	@file	DLL ã¾ãŸã¯ å…±æœ‰ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’ãƒ­ãƒ¼ãƒ‰ã—ã€ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹ã§ã™ã€‚
 */
 class DllLoader
 	: public NonCopyable
@@ -18,44 +18,44 @@ class DllLoader
 public:
 
 	/**
-		@brief		ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-		@details	•Ê“r Load() ŠÖ”‚ðŒÄ‚Ño‚µ‚ÄAƒ‰ƒCƒuƒ‰ƒŠ‚ðƒ[ƒh‚·‚é•K—v‚ª‚ ‚è‚Ü‚·B
+		@brief		ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		@details	åˆ¥é€” Load() é–¢æ•°ã‚’å‘¼ã³å‡ºã—ã¦ã€ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚
 	*/
 	DllLoader();
 
 	/**
-		@brief		Žw’è‚µ‚½ƒ‰ƒCƒuƒ‰ƒŠ‚ðƒ[ƒh‚µAƒCƒ“ƒXƒ^ƒ“ƒX‚ð‰Šú‰»‚µ‚Ü‚·B
-		@param[in]	filePath	: ƒ‰ƒCƒuƒ‰ƒŠ‚Ì–¼‘O‚Ü‚½‚ÍƒpƒX
+		@brief		æŒ‡å®šã—ãŸãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’ãƒ­ãƒ¼ãƒ‰ã—ã€ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’åˆæœŸåŒ–ã—ã¾ã™ã€‚
+		@param[in]	filePath	: ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®åå‰ã¾ãŸã¯ãƒ‘ã‚¹
 	*/
 	DllLoader(const TCHAR* filePath);
 
 	/**
-		@brief		ƒ[ƒhÏ‚Ý‚Ìƒ‰ƒCƒuƒ‰ƒŠ‚ð‰ð•ú‚µ‚Ü‚·B
+		@brief		ãƒ­ãƒ¼ãƒ‰æ¸ˆã¿ã®ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’è§£æ”¾ã—ã¾ã™ã€‚
 	*/
 	~DllLoader();
 
 public:
 
 	/**
-		@brief		Žw’è‚µ‚½ƒ‰ƒCƒuƒ‰ƒŠ‚ª‘¶Ý‚·‚é‚©‚ðŠm”F‚µ‚Ü‚·B
-		@return		ƒAƒNƒZƒX‚Å‚«‚ê‚Î trueA‚»‚¤‚Å‚È‚¯‚ê‚Î false
+		@brief		æŒ‡å®šã—ãŸãƒ©ã‚¤ãƒ–ãƒ©ãƒªãŒå­˜åœ¨ã™ã‚‹ã‹ã‚’ç¢ºèªã—ã¾ã™ã€‚
+		@return		ã‚¢ã‚¯ã‚»ã‚¹ã§ãã‚Œã° trueã€ãã†ã§ãªã‘ã‚Œã° false
 	*/
 	static bool Exists(const TCHAR* filePath);
 
 	/**
-		@brief		Žw’è‚µ‚½ƒ‰ƒCƒuƒ‰ƒŠ‚ðƒ[ƒh‚µ‚Ü‚·B
-		@param[in]	filePath	: ƒ‰ƒCƒuƒ‰ƒŠ‚Ì–¼‘O‚Ü‚½‚ÍƒpƒX
+		@brief		æŒ‡å®šã—ãŸãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’ãƒ­ãƒ¼ãƒ‰ã—ã¾ã™ã€‚
+		@param[in]	filePath	: ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®åå‰ã¾ãŸã¯ãƒ‘ã‚¹
 	*/
 	void Load(const TCHAR* filePath);
 
 	/**
-		@brief		ƒ[ƒhÏ‚Ý‚Ìƒ‰ƒCƒuƒ‰ƒŠ‚ð‰ð•ú‚µ‚Ü‚·B
-		@details	ƒ[ƒh‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Î‰½‚à‚µ‚Ü‚¹‚ñBƒfƒXƒgƒ‰ƒNƒ^‚Å‚àŽÀs‚³‚ê‚Ü‚·B
+		@brief		ãƒ­ãƒ¼ãƒ‰æ¸ˆã¿ã®ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’è§£æ”¾ã—ã¾ã™ã€‚
+		@details	ãƒ­ãƒ¼ãƒ‰ã•ã‚Œã¦ã„ãªã‘ã‚Œã°ä½•ã‚‚ã—ã¾ã›ã‚“ã€‚ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã§ã‚‚å®Ÿè¡Œã•ã‚Œã¾ã™ã€‚
 	*/
 	void Unload();
 
 	/**
-		@brief		ƒ‰ƒCƒuƒ‰ƒŠ‚ÉŠÜ‚Ü‚ê‚éŠÖ”‚ÌƒAƒhƒŒƒX‚ðŽæ“¾‚µ‚Ü‚·B
+		@brief		ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã«å«ã¾ã‚Œã‚‹é–¢æ•°ã®ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å–å¾—ã—ã¾ã™ã€‚
 	*/
 	void* GetProcAddress(const char* procName);
 

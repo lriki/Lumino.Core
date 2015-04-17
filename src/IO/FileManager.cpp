@@ -1,4 +1,4 @@
-
+﻿
 #include "../Internal.h"
 #include "Archive.h"
 #include <Lumino/IO/FileUtils.h>
@@ -28,7 +28,7 @@ FileManager::FileManager()
 	, m_dummyArchive(LN_NEW DummyArchive())
 {
 	m_archiveList.Add(m_dummyArchive);
-	m_dummyArchive->AddRef();	// m_archiveList ����̎Q�Ƃ�����
+	m_dummyArchive->AddRef();	// m_archiveList からの参照を示す
 }
 
 //-----------------------------------------------------------------------------
@@ -119,7 +119,7 @@ Stream* FileManager::CreateFileStream(const PathName& filePath)
 		}
 	}
 
-	LN_THROW(stream != NULL, FileNotFoundException, absPath);	// �t�@�C����������Ȃ�����
+	LN_THROW(stream != NULL, FileNotFoundException, absPath);	// ファイルが見つからなかった
 	return stream;
 }
 
@@ -140,24 +140,24 @@ CaseSensitivity FileManager::GetFileSystemCaseSensitivity() const
 //-----------------------------------------------------------------------------
 void FileManager::RefreshArchiveList()
 {
-	// ��x�_�~�[�����X�g����O��
+	// 一度ダミーをリストから外す
 	if (m_archiveList.Contains(m_dummyArchive))
 	{
 		m_archiveList.Remove(m_dummyArchive);
 		m_dummyArchive->Release();
 	}
 
-	// �f�B���N�g���D��Ȃ�_�~�[��擪�ɒǉ�������
+	// ディレクトリ優先ならダミーを先頭に追加し直す
 	if (m_fileAccessPriority == FileAccessPriority_DirectoryFirst) {
 		m_archiveList.Insert(0, m_dummyArchive);
 		m_dummyArchive->AddRef();
 	}
-	// �A�[�J�C�u�D��Ȃ�_�~�[�𖖔��ɒǉ�������
+	// アーカイブ優先ならダミーを末尾に追加し直す
 	else if (m_fileAccessPriority == FileAccessPriority_ArchiveFirst) {
 		m_archiveList.Add(m_dummyArchive);
 		m_dummyArchive->AddRef();
 	}
-	// �A�[�J�C�u�݂̂ł���΃_�~�[��ǉ�����K�v�͖���
+	// アーカイブのみであればダミーを追加する必要は無い
 	else {
 	}
 }

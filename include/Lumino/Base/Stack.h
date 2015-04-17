@@ -2,6 +2,8 @@
 #pragma once
 
 #include <vector>
+#include "RefObject.h"
+#include "STLUtils.h"
 
 namespace Lumino
 {

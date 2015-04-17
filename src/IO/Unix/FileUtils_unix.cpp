@@ -6,6 +6,7 @@
 #include "../../../include/Lumino/Text/Encoding.h"
 #include "../../../include/Lumino/IO/FileStream.h"
 #include "../../../include/Lumino/IO/FileUtils.h"
+#include "../../../include/Lumino/IO/PathUtils.h"
 
 namespace Lumino
 {
@@ -39,12 +40,28 @@ static bool is_stat_writable(struct stat *st, const char *path)
 //-----------------------------------------------------------------------------
 bool FileUtils::Exists(const char* filePath)
 {
+	if (filePath == NULL) {
+		return false;
+	}
+
 	// ※fopen によるチェックはNG。ファイルが排他ロックで開かれていた時に失敗する。
-	
+	// ※access によるチェックもNG。ディレクトリも考慮してしまう。
+	struct stat st;
+	int ret = ::stat(filePath, &st);
+	if (ret == 0)
+	{
+		if (S_ISDIR(st.st_mode)) {
+			return false;		// ディレクトリだった。
+		}
+		return true;
+	}
+	return false;
+
+#if 0
 	// http://www.ie.u-ryukyu.ac.jp/?kono/lecture/1999/os/info1/file-2.html
 	//struct stat st;
 	//int ret = ::stat(file, &st);
-	//st.st_mode
+	//
 	int ret = access(filePath, F_OK);
 	if (ret == -1) {
 		if (errno == ENOENT) {
@@ -57,9 +74,13 @@ bool FileUtils::Exists(const char* filePath)
 		}
 	}
 	return true;
+#endif
 }
 bool FileUtils::Exists(const wchar_t* filePath)
 {
+	if (filePath == NULL) {
+		return false;
+	}
 	MBCS_FILEPATH(mbcsFilePath, filePath);
 	return Exists(mbcsFilePath);
 }
@@ -76,7 +97,8 @@ uint32_t FileUtils::GetAttribute(const char* filePath)
 	if (ret == -1) {
 		LN_THROW(0, IOException);
 	}
-
+	
+	const char* fileName = PathUtils::GetFileNameSub(filePath);
 	uint32_t attrs = 0;
 	if (S_ISDIR(st.st_mode))
 	{
@@ -84,7 +106,7 @@ uint32_t FileUtils::GetAttribute(const char* filePath)
 		if (!is_stat_writable(&st, filePath)) {
 			attrs |= FileAttribute_ReadOnly;
 		}
-		if (filePath[0] == '.') {
+		if (fileName[0] == '.') {
 			attrs |= FileAttribute_Hidden;
 		}
 	}
@@ -93,7 +115,7 @@ uint32_t FileUtils::GetAttribute(const char* filePath)
 		if (!is_stat_writable(&st, filePath)) {
 			attrs |= FileAttribute_ReadOnly;
 		}
-		if (filePath[0] == '.') {
+		if (fileName[0] == '.') {
 			attrs |= FileAttribute_Hidden;
 		}
 	}

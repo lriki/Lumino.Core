@@ -93,6 +93,30 @@ inline errno_t mbstowcs_s( size_t *pConvertedChars, wchar_t *wcstr, size_t sizeI
 }
 
 //-----------------------------------------------------------------------------
+// https://msdn.microsoft.com/ja-jp/library/s7wzt4be.aspx
+//-----------------------------------------------------------------------------
+inline errno_t wcstombs_s(
+	size_t *pReturnValue,
+	char *mbstr,
+	size_t sizeInBytes,
+	const wchar_t *wcstr,
+	size_t count	// wcstrの要素数または _TRUNCATE。
+	)
+{
+	if (mbstr == NULL && sizeInBytes > 0) {
+		return EINVAL;
+	}
+	if (wcstr == NULL) {
+		return EINVAL;
+	}
+	if (count == _TRUNCATE) {
+		count = wcslen(wcstr);
+	}
+	*pReturnValue = wcstombs(mbstr, wcstr, sizeInBytes);
+	return 0;
+}
+
+//-----------------------------------------------------------------------------
 // http://msdn.microsoft.com/ja-jp/library/f30dzcf6.aspx
 //-----------------------------------------------------------------------------
 inline int _snprintf_s(

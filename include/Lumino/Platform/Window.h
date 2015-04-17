@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 
 #include "../Base/RefObject.h"
@@ -10,7 +10,7 @@ namespace Lumino
 namespace Platform
 {
 /**
-	@brief	ƒvƒ‰ƒbƒgƒtƒH[ƒ€ŒÅ—L‚ÌƒEƒBƒ“ƒhƒEƒVƒXƒeƒ€‚ÌƒEƒBƒ“ƒhƒE‚ğ’ŠÛ‰»‚µ‚Ü‚·B
+	@brief	ãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ å›ºæœ‰ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚·ã‚¹ãƒ†ãƒ ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’æŠ½è±¡åŒ–ã—ã¾ã™ã€‚
 */
 class Window
 	: public RefObject
@@ -18,55 +18,55 @@ class Window
 public:
 
 	/**
-		@brief		ƒEƒBƒ“ƒhƒE‚ğì¬‚µ‚Ü‚·B
-		@param[in]	title		: ƒEƒBƒ“ƒhƒEƒ^ƒCƒgƒ‹
-		@param[in]	size		: ƒNƒ‰ƒCƒAƒ“ƒg—Ìˆæ‚ÌƒsƒNƒZƒ‹ƒTƒCƒY
-		@param[in]	resizable	: ‰Â•ÏƒEƒBƒ“ƒhƒE‚Æ‚µ‚Äì¬‚·‚é‚©‚Ç‚¤‚©
+		@brief		ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’ä½œæˆã—ã¾ã™ã€‚
+		@param[in]	title		: ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¿ã‚¤ãƒˆãƒ«
+		@param[in]	size		: ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆé ˜åŸŸã®ãƒ”ã‚¯ã‚»ãƒ«ã‚µã‚¤ã‚º
+		@param[in]	resizable	: å¯å¤‰ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã¨ã—ã¦ä½œæˆã™ã‚‹ã‹ã©ã†ã‹
 	*/
 	static Window* Create(const String& title, const Size& clientSize, bool resizable);
 
 public:
 
 	/**
-		@brief		ƒNƒ‰ƒCƒAƒ“ƒg—Ìˆæ‚ÌƒTƒCƒY‚ğæ“¾‚µ‚Ü‚·B
+		@brief		ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆé ˜åŸŸã®ã‚µã‚¤ã‚ºã‚’å–å¾—ã—ã¾ã™ã€‚
 	*/
 	virtual const Size& GetSize() const = 0;
 	
 	/**
-		@brief		ƒtƒ‹ƒXƒNƒŠ[ƒ“‚Ì—LŒøƒtƒ‰ƒO‚ğİ’è‚µ‚Ü‚·B
-		@details	enabled ‚É true ‚ğİ’è‚·‚é‚Æƒtƒ‹ƒXƒNƒŠ[ƒ“Afalse ‚ğİ’è‚·‚é‚ÆƒEƒBƒ“ƒhƒEƒ‚[ƒh‚É‚È‚è‚Ü‚·B
-					‚±‚ÌŠÖ”‚ÍƒEƒBƒ“ƒhƒEƒXƒ^ƒCƒ‹‚ğ•ÏX‚µ‚ÄÅ‘å‰»‚·‚é‚¾‚¯‚Å‚·B
-					ƒ†[ƒU[’è‹`ƒEƒBƒ“ƒhƒE‚Ìê‡‚Í‚È‚É‚à‚µ‚Ü‚¹‚ñB
+		@brief		ãƒ•ãƒ«ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã®æœ‰åŠ¹ãƒ•ãƒ©ã‚°ã‚’è¨­å®šã—ã¾ã™ã€‚
+		@details	enabled ã« true ã‚’è¨­å®šã™ã‚‹ã¨ãƒ•ãƒ«ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã€false ã‚’è¨­å®šã™ã‚‹ã¨ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ¢ãƒ¼ãƒ‰ã«ãªã‚Šã¾ã™ã€‚
+					ã“ã®é–¢æ•°ã¯ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¹ã‚¿ã‚¤ãƒ«ã‚’å¤‰æ›´ã—ã¦æœ€å¤§åŒ–ã™ã‚‹ã ã‘ã§ã™ã€‚
+					ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®å ´åˆã¯ãªã«ã‚‚ã—ã¾ã›ã‚“ã€‚
 	*/
 	virtual void SetFullScreenEnabled(bool enabled) = 0;
 
 	/**
-		@brief		ƒtƒ‹ƒXƒNƒŠ[ƒ“ó‘Ô‚©‚ğ”»’è‚µ‚Ü‚·B
+		@brief		ãƒ•ãƒ«ã‚¹ã‚¯ãƒªãƒ¼ãƒ³çŠ¶æ…‹ã‹ã‚’åˆ¤å®šã—ã¾ã™ã€‚
 	*/
 	virtual bool IsFullScreenEnabled() const = 0;
 
 	/**
-		@brief		ƒEƒBƒ“ƒhƒE‚ªƒAƒNƒeƒBƒu‚©‚Ç‚¤‚©‚ğ¦‚·’l‚ğæ“¾‚µ‚Ü‚·B
+		@brief		ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãŒã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‹ã©ã†ã‹ã‚’ç¤ºã™å€¤ã‚’å–å¾—ã—ã¾ã™ã€‚
 	*/
 	virtual bool IsActive() const = 0;
 
 	/**
-		@brief		‚±‚ÌƒEƒBƒ“ƒhƒE‚Éƒ}ƒEƒXƒLƒƒƒvƒ`ƒƒ‚ğİ’è‚µ‚Ü‚·B
+		@brief		ã“ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã«ãƒã‚¦ã‚¹ã‚­ãƒ£ãƒ—ãƒãƒ£ã‚’è¨­å®šã—ã¾ã™ã€‚
 	*/
 	virtual void CaptureMouse() = 0;
 
 	/**
-		@brief		‚±‚ÌƒEƒBƒ“ƒhƒE‚©‚çƒ}ƒEƒXƒLƒƒƒvƒ`ƒƒ‚ğíœ‚µ‚Ü‚·B
+		@brief		ã“ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‹ã‚‰ãƒã‚¦ã‚¹ã‚­ãƒ£ãƒ—ãƒãƒ£ã‚’å‰Šé™¤ã—ã¾ã™ã€‚
 	*/
 	virtual void ReleaseMouseCapture() = 0;
 
 	/**
-		@brief		‚±‚ÌƒEƒBƒ“ƒhƒE‚ÉƒCƒxƒ“ƒgƒŠƒXƒi[‚ğƒAƒ^ƒbƒ`‚µ‚Ü‚·B(priority ‚ª‘å‚«‚¢‚à‚Ì‚ªæ‚Éˆ—‚³‚ê‚éB•K‚¸ƒfƒ^ƒbƒ`‚·‚é‚±‚Æ)
+		@brief		ã“ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã«ã‚¤ãƒ™ãƒ³ãƒˆãƒªã‚¹ãƒŠãƒ¼ã‚’ã‚¢ã‚¿ãƒƒãƒã—ã¾ã™ã€‚(priority ãŒå¤§ãã„ã‚‚ã®ãŒå…ˆã«å‡¦ç†ã•ã‚Œã‚‹ã€‚å¿…ãšãƒ‡ã‚¿ãƒƒãƒã™ã‚‹ã“ã¨)
 	*/
 	virtual void AttachEventListener(IEventListener* listener, int priority) = 0;
 
 	/**
-		@brief		‚±‚ÌƒEƒBƒ“ƒhƒE‚©‚çƒCƒxƒ“ƒgƒŠƒXƒi[‚ğƒfƒ^ƒbƒ`‚µ‚Ü‚·B
+		@brief		ã“ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‹ã‚‰ã‚¤ãƒ™ãƒ³ãƒˆãƒªã‚¹ãƒŠãƒ¼ã‚’ãƒ‡ã‚¿ãƒƒãƒã—ã¾ã™ã€‚
 	*/
 	virtual void DetachEventListener(IEventListener* listener) = 0;
 
@@ -77,17 +77,17 @@ protected:
 
 #if 0
 /**
-	@brief	ƒEƒBƒ“ƒhƒEƒVƒXƒeƒ€‚ÌƒEƒBƒ“ƒhƒE‚ğ•\‚·ƒNƒ‰ƒX‚Å‚·B
+	@brief	ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚·ã‚¹ãƒ†ãƒ ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹ã§ã™ã€‚
 */
 class Window
 	: public RefObject
 {
 public:
 	/**
-		@brief		ƒEƒBƒ“ƒhƒE‚ğì¬‚µ‚Ü‚·B
-		@param[in]	title		: ƒEƒBƒ“ƒhƒEƒ^ƒCƒgƒ‹
-		@param[in]	size		: ƒNƒ‰ƒCƒAƒ“ƒg—Ìˆæ‚ÌƒsƒNƒZƒ‹ƒTƒCƒY
-		@param[in]	resizable	: ‰Â•ÏƒEƒBƒ“ƒhƒE‚Æ‚µ‚Äì¬‚·‚é‚©‚Ç‚¤‚©
+		@brief		ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’ä½œæˆã—ã¾ã™ã€‚
+		@param[in]	title		: ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¿ã‚¤ãƒˆãƒ«
+		@param[in]	size		: ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆé ˜åŸŸã®ãƒ”ã‚¯ã‚»ãƒ«ã‚µã‚¤ã‚º
+		@param[in]	resizable	: å¯å¤‰ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã¨ã—ã¦ä½œæˆã™ã‚‹ã‹ã©ã†ã‹
 	*/
 	Window(const String& title, const Size& clientSize, bool resizable);
 	virtual ~Window();
@@ -95,45 +95,45 @@ public:
 public:
 
 	/**
-		@brief		ƒNƒ‰ƒCƒAƒ“ƒg—Ìˆæ‚ÌƒTƒCƒY‚ğæ“¾‚µ‚Ü‚·B
+		@brief		ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆé ˜åŸŸã®ã‚µã‚¤ã‚ºã‚’å–å¾—ã—ã¾ã™ã€‚
 	*/
 	const Size& GetSize() const;
 	
 	/**
-		@brief		ƒtƒ‹ƒXƒNƒŠ[ƒ“‚Ì—LŒøƒtƒ‰ƒO‚ğİ’è‚µ‚Ü‚·B
-		@details	enabled ‚É true ‚ğİ’è‚·‚é‚Æƒtƒ‹ƒXƒNƒŠ[ƒ“Afalse ‚ğİ’è‚·‚é‚ÆƒEƒBƒ“ƒhƒEƒ‚[ƒh‚É‚È‚è‚Ü‚·B
-					‚±‚ÌŠÖ”‚ÍƒEƒBƒ“ƒhƒEƒXƒ^ƒCƒ‹‚ğ•ÏX‚µ‚ÄÅ‘å‰»‚·‚é‚¾‚¯‚Å‚·B
-					ƒ†[ƒU[’è‹`ƒEƒBƒ“ƒhƒE‚Ìê‡‚Í‚È‚É‚à‚µ‚Ü‚¹‚ñB
+		@brief		ãƒ•ãƒ«ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã®æœ‰åŠ¹ãƒ•ãƒ©ã‚°ã‚’è¨­å®šã—ã¾ã™ã€‚
+		@details	enabled ã« true ã‚’è¨­å®šã™ã‚‹ã¨ãƒ•ãƒ«ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã€false ã‚’è¨­å®šã™ã‚‹ã¨ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ¢ãƒ¼ãƒ‰ã«ãªã‚Šã¾ã™ã€‚
+					ã“ã®é–¢æ•°ã¯ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¹ã‚¿ã‚¤ãƒ«ã‚’å¤‰æ›´ã—ã¦æœ€å¤§åŒ–ã™ã‚‹ã ã‘ã§ã™ã€‚
+					ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®å ´åˆã¯ãªã«ã‚‚ã—ã¾ã›ã‚“ã€‚
 	*/
 	void SetFullScreenEnabled(bool enabled);
 
 	/**
-		@brief		ƒtƒ‹ƒXƒNƒŠ[ƒ“ó‘Ô‚©‚ğ”»’è‚µ‚Ü‚·B
+		@brief		ãƒ•ãƒ«ã‚¹ã‚¯ãƒªãƒ¼ãƒ³çŠ¶æ…‹ã‹ã‚’åˆ¤å®šã—ã¾ã™ã€‚
 	*/
 	bool IsFullScreenEnabled() const;
 
 	/**
-		@brief		ƒEƒBƒ“ƒhƒE‚ªƒAƒNƒeƒBƒu‚©‚Ç‚¤‚©‚ğ¦‚·’l‚ğæ“¾‚µ‚Ü‚·B
+		@brief		ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãŒã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‹ã©ã†ã‹ã‚’ç¤ºã™å€¤ã‚’å–å¾—ã—ã¾ã™ã€‚
 	*/
 	bool IsActive() const;
 
 	/**
-		@brief		‚±‚ÌƒEƒBƒ“ƒhƒE‚Éƒ}ƒEƒXƒLƒƒƒvƒ`ƒƒ‚ğİ’è‚µ‚Ü‚·B
+		@brief		ã“ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã«ãƒã‚¦ã‚¹ã‚­ãƒ£ãƒ—ãƒãƒ£ã‚’è¨­å®šã—ã¾ã™ã€‚
 	*/
 	void CaptureMouse();
 
 	/**
-		@brief		‚±‚ÌƒEƒBƒ“ƒhƒE‚©‚çƒ}ƒEƒXƒLƒƒƒvƒ`ƒƒ‚ğíœ‚µ‚Ü‚·B
+		@brief		ã“ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‹ã‚‰ãƒã‚¦ã‚¹ã‚­ãƒ£ãƒ—ãƒãƒ£ã‚’å‰Šé™¤ã—ã¾ã™ã€‚
 	*/
 	void ReleaseMouseCapture();
 
 	/**
-		@brief		‚±‚ÌƒEƒBƒ“ƒhƒE‚ÉƒCƒxƒ“ƒgƒŠƒXƒi[‚ğƒAƒ^ƒbƒ`‚µ‚Ü‚·B(priority ‚ª‘å‚«‚¢‚à‚Ì‚ªæ‚Éˆ—‚³‚ê‚éB•K‚¸ƒfƒ^ƒbƒ`‚·‚é‚±‚Æ)
+		@brief		ã“ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã«ã‚¤ãƒ™ãƒ³ãƒˆãƒªã‚¹ãƒŠãƒ¼ã‚’ã‚¢ã‚¿ãƒƒãƒã—ã¾ã™ã€‚(priority ãŒå¤§ãã„ã‚‚ã®ãŒå…ˆã«å‡¦ç†ã•ã‚Œã‚‹ã€‚å¿…ãšãƒ‡ã‚¿ãƒƒãƒã™ã‚‹ã“ã¨)
 	*/
 	void AttachEventListener(IEventListener* listener, int priority);
 
 	/**
-		@brief		‚±‚ÌƒEƒBƒ“ƒhƒE‚©‚çƒCƒxƒ“ƒgƒŠƒXƒi[‚ğƒfƒ^ƒbƒ`‚µ‚Ü‚·B
+		@brief		ã“ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‹ã‚‰ã‚¤ãƒ™ãƒ³ãƒˆãƒªã‚¹ãƒŠãƒ¼ã‚’ãƒ‡ã‚¿ãƒƒãƒã—ã¾ã™ã€‚
 	*/
 	void DetachEventListener(IEventListener* listener);
 

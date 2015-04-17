@@ -1,4 +1,4 @@
-/**
+ï»¿/**
 	@file	Environment.h
 */
 
@@ -7,42 +7,42 @@
 namespace Lumino
 {
 
-/// ƒGƒ“ƒfƒBƒAƒ“‚ğ¦‚·’l
+/// ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ã‚’ç¤ºã™å€¤
 enum ByteOrder
 {
-	ByteOrder_Little = 0,	///< ƒŠƒgƒ‹ƒGƒ“ƒfƒBƒAƒ“
-	ByteOrder_Big,			///< ƒrƒbƒOƒGƒ“ƒfƒBƒAƒ“
+	ByteOrder_Little = 0,	///< ãƒªãƒˆãƒ«ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³
+	ByteOrder_Big,			///< ãƒ“ãƒƒã‚°ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³
 };
 
 /**
-	@brief	Œ»İ‚ÌŠÂ‹«‚ÉŠÖ‚·‚éî•ñ‚ÉƒAƒNƒZƒX‚·‚é‚½‚ß‚ÌƒNƒ‰ƒX‚Å‚·B
+	@brief	ç¾åœ¨ã®ç’°å¢ƒã«é–¢ã™ã‚‹æƒ…å ±ã«ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹ã§ã™ã€‚
 */
 class Environment
 {
 public:
 
 	/**
-		@brief	Œ»İ‚ÌŠÂ‹«‚ÌƒGƒ“ƒfƒBƒAƒ“‚ğŠm”F‚µ‚Ü‚·B
+		@brief	ç¾åœ¨ã®ç’°å¢ƒã®ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ã‚’ç¢ºèªã—ã¾ã™ã€‚
 	*/
 	static ByteOrder GetByteOrder();
 
 	/**
-		@brief	ƒŠƒgƒ‹ƒGƒ“ƒfƒBƒAƒ“ŠÂ‹«‚Å‚ ‚é‚©‚ğŠm”F‚µ‚Ü‚·B
+		@brief	ãƒªãƒˆãƒ«ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ç’°å¢ƒã§ã‚ã‚‹ã‹ã‚’ç¢ºèªã—ã¾ã™ã€‚
 	*/
 	static bool IsLittleEndian();
 
 	/**
-		@brief		ƒVƒXƒeƒ€‹N“®‚©‚ç‚ÌŠÔ‚ğ ms ’PˆÊ‚Åæ“¾‚µ‚Ü‚·B
+		@brief		ã‚·ã‚¹ãƒ†ãƒ èµ·å‹•ã‹ã‚‰ã®æ™‚é–“ã‚’ ms å˜ä½ã§å–å¾—ã—ã¾ã™ã€‚
 	*/
 	static uint64_t GetTickCount();
 
 	/**
-		@brief		ƒVƒXƒeƒ€‹N“®‚©‚ç‚ÌŠÔ‚ğ ns ’PˆÊ‚Åæ“¾‚µ‚Ü‚·B
+		@brief		ã‚·ã‚¹ãƒ†ãƒ èµ·å‹•ã‹ã‚‰ã®æ™‚é–“ã‚’ ns å˜ä½ã§å–å¾—ã—ã¾ã™ã€‚
 	*/
 	static uint64_t GetTickCountNS();
 
 	/**
-		@brief		Œ»İ‚ÌŠÂ‹«‚Å’è‹`‚³‚ê‚Ä‚¢‚é‰üs•¶š—ñ‚ğæ“¾‚µ‚Ü‚·B
+		@brief		ç¾åœ¨ã®ç’°å¢ƒã§å®šç¾©ã•ã‚Œã¦ã„ã‚‹æ”¹è¡Œæ–‡å­—åˆ—ã‚’å–å¾—ã—ã¾ã™ã€‚
 	*/
 	template<typename TChar>
 	static const TChar* GetNewLine();

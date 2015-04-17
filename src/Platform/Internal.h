@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 
 namespace Lumino
@@ -10,7 +10,7 @@ class Application;
 class Internal
 {
 public:
-	/// Å‰‚Éì¬‚³‚ê‚½ Application ƒNƒ‰ƒX‚Ìƒ|ƒCƒ“ƒ^
+	/// æœ€åˆã«ä½œæˆã•ã‚ŒãŸ Application ã‚¯ãƒ©ã‚¹ã®ãƒã‚¤ãƒ³ã‚¿
 	static Application* ApplicationInstance;
 };
 

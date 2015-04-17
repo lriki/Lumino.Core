@@ -135,19 +135,36 @@ template BasicString<wchar_t> PathUtils::GetDirectoryPath<wchar_t>(const wchar_t
 template<typename TChar>
 BasicString<TChar> PathUtils::GetFileName(const TChar* path)
 {
-	size_t len = StringUtils::StrLen(path);
-	size_t pos = len - 1;
-
-	// 後ろから前に調べて、最初にセパレータが見つかるところを探す
-	for ( ; pos >= 0; --pos ) {
-		if ( path[pos] == DirectorySeparatorChar || path[pos] == AltDirectorySeparatorChar || path[pos] == VolumeSeparatorChar ) {
-			return BasicString<TChar>(&path[pos + 1], len - pos - 1);
-		}
-	}
-	return BasicString<TChar>(path);
+	return BasicString<TChar>(GetFileNameSub(path));
 }
 template BasicString<char> PathUtils::GetFileName(const char* path);
 template BasicString<wchar_t> PathUtils::GetFileName(const wchar_t* path);
+
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+const TChar* PathUtils::GetFileNameSub(const TChar* path)
+{
+	int len = StringUtils::StrLen(path);
+	int pos = len - 1;
+
+	// 後ろから前に調べて、最初にセパレータが見つかるところを探す
+	while (pos >= 0)
+	{
+		if (path[pos] != 0x00)
+		{
+			if (path[pos] == DirectorySeparatorChar || path[pos] == AltDirectorySeparatorChar || path[pos] == VolumeSeparatorChar) {
+				return &path[pos + 1];//BasicString<TChar>(&path[pos + 1], len - pos - 1);
+			}
+		}
+		--pos;
+	}
+	return path;
+}
+template const char* PathUtils::GetFileNameSub(const char* path);
+template const wchar_t* PathUtils::GetFileNameSub(const wchar_t* path);
 
 //-----------------------------------------------------------------------------
 //

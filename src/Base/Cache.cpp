@@ -1,4 +1,4 @@
-
+ï»¿
 #include <Lumino/Base/Common.h>
 #include <Lumino/Base/Stack.h>
 #include <Lumino/Base/Cache.h>
@@ -88,7 +88,7 @@ bool CacheKey::operator == (const CacheKey& key) const
 		return (m_pathName == key.m_pathName);
 	}
 
-	LN_ASSERT(0);	// ‚±‚±‚É—ˆ‚é‚Ì‚Í NG
+	LN_ASSERT(0);	// ã“ã“ã«æ¥ã‚‹ã®ã¯ NG
 	return false;
 }
 
@@ -113,9 +113,9 @@ bool CacheKey::operator < (const CacheKey& key) const
 		return (m_pathName < key.m_pathName);
 	}
 
-	LN_ASSERT(0);	// ‚±‚±‚É—ˆ‚é‚Ì‚Í NG
+	LN_ASSERT(0);	// ã“ã“ã«æ¥ã‚‹ã®ã¯ NG
 	return false;
-	// map,set ‚ªŒŸõ‚ğs‚¤‚ÍuX1 < X2vuX2 < X1v‚Ì—¼•û‚ª¬—§‚µ‚È‚©‚Á‚½‚Æ‚«uX1==X2v‚Æ‚İ‚È‚·‚Ì‚ª•W€“I‚È“®ì‚ç‚µ‚¢
+	// map,set ãŒæ¤œç´¢ã‚’è¡Œã†æ™‚ã¯ã€ŒX1 < X2ã€ã€ŒX2 < X1ã€ã®ä¸¡æ–¹ãŒæˆç«‹ã—ãªã‹ã£ãŸã¨ãã€ŒX1==X2ã€ã¨ã¿ãªã™ã®ãŒæ¨™æº–çš„ãªå‹•ä½œã‚‰ã—ã„
 }
 
 
@@ -150,10 +150,10 @@ public:
 
 public:
 
-	/// Å‘å—v‘f”‚Ìæ“¾
+	/// æœ€å¤§è¦ç´ æ•°ã®å–å¾—
 	int GetCapacity() const { return m_internalCapacity - 1; }
 
-	/// —Ìˆæ‚ÌŠm•Û
+	/// é ˜åŸŸã®ç¢ºä¿
 	void SetCapacity(int capacityCount, size_t maxMemorySize)
 	{
 		Clear();
@@ -169,41 +169,41 @@ public:
 			m_maxMemorySize = ULLONG_MAX;
 		}
 
-		// ƒŠƒXƒg‚ÌƒIƒuƒWƒFƒNƒg‰ğ•ú‚ÍAV‚µ‚¢ƒIƒuƒWƒFƒNƒg‚ª’Ç‰Á‚³‚ê‚½Œã‚Ås‚¤B
-		// ‚»‚Ì‚½‚ßAƒŠƒXƒg‚Ì—v‘f”‚Í +1 ‘½‚­•Û‚Å‚«‚é‚æ‚¤‚É‚·‚é•K—v‚ª‚ ‚éB
+		// ãƒªã‚¹ãƒˆã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆè§£æ”¾ã¯ã€æ–°ã—ã„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒè¿½åŠ ã•ã‚ŒãŸå¾Œã§è¡Œã†ã€‚
+		// ãã®ãŸã‚ã€ãƒªã‚¹ãƒˆã®è¦ç´ æ•°ã¯ +1 å¤šãä¿æŒã§ãã‚‹ã‚ˆã†ã«ã™ã‚‹å¿…è¦ãŒã‚ã‚‹ã€‚
 		m_internalCapacity = capacityCount + 1;
-		mNodes = LN_NEW Node[m_internalCapacity + 1];	// ƒ_ƒ~[ƒm[ƒh‚Ì•ª‚Ì +1 (mNodes[m_internalCapacity] ‚ªƒ_ƒ~[ƒm[ƒh)
+		mNodes = LN_NEW Node[m_internalCapacity + 1];	// ãƒ€ãƒŸãƒ¼ãƒãƒ¼ãƒ‰ã®åˆ†ã® +1 (mNodes[m_internalCapacity] ãŒãƒ€ãƒŸãƒ¼ãƒãƒ¼ãƒ‰)
 
-		// ‹ó‚«”Ô†ƒXƒ^ƒbƒN
+		// ç©ºãç•ªå·ã‚¹ã‚¿ãƒƒã‚¯
 		mIndexStack.Reserve(m_internalCapacity);
 		for (int i = 0; i < m_internalCapacity; ++i)
 		{
 			mIndexStack.Push(i);
 		}
 
-		// m_internalCapacity ”Ô‚ÍÅ‰‚Ì—v‘f‚Ì‘O‚©‚ÂÅŒã‚Ì—v‘f‚ÌŒã‚É‚ ‚éƒ_ƒ~[—v‘f
+		// m_internalCapacity ç•ªã¯æœ€åˆã®è¦ç´ ã®å‰ã‹ã¤æœ€å¾Œã®è¦ç´ ã®å¾Œã«ã‚ã‚‹ãƒ€ãƒŸãƒ¼è¦ç´ 
 		mNodes[m_internalCapacity].Next = mNodes[m_internalCapacity].Prev = m_internalCapacity;
 	}
 
-	/// ƒNƒŠƒA (‘S delete ŒÄ‚Ño‚µ)
+	/// ã‚¯ãƒªã‚¢ (å…¨ delete å‘¼ã³å‡ºã—)
 	void Clear()
 	{
 		if (mNodes && m_internalCapacity > 0)
 		{
-			Node* node = &mNodes[m_internalCapacity];	// ƒ_ƒ~[ƒm[ƒh
-			uint32_t index = node->Next;             // ƒ_ƒ~[ƒm[ƒh‚ÌŸ‚ªŠJnƒCƒ“ƒfƒbƒNƒX
+			Node* node = &mNodes[m_internalCapacity];	// ãƒ€ãƒŸãƒ¼ãƒãƒ¼ãƒ‰
+			uint32_t index = node->Next;             // ãƒ€ãƒŸãƒ¼ãƒãƒ¼ãƒ‰ã®æ¬¡ãŒé–‹å§‹ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
 			int i = 0;
 
 			while (true)
 			{
-				// ƒ_ƒ~[ƒm[ƒh‚ğw‚µ‚Ä‚¢‚éê‡‚ÍI—¹
+				// ãƒ€ãƒŸãƒ¼ãƒãƒ¼ãƒ‰ã‚’æŒ‡ã—ã¦ã„ã‚‹å ´åˆã¯çµ‚äº†
 				if (index == m_internalCapacity)
 				{
 					break;
 				}
-				// íœ
+				// å‰Šé™¤
 				m_manager->DeleteCachedObject(mNodes[index].Value);
-				// Ÿ‚Ö
+				// æ¬¡ã¸
 				index = mNodes[index].Next;
 
 				++i;
@@ -211,32 +211,32 @@ public:
 
 			mNodeMap.clear();
 
-			// ‹ó‚«”Ô†ƒXƒ^ƒbƒN
+			// ç©ºãç•ªå·ã‚¹ã‚¿ãƒƒã‚¯
 			mIndexStack.Clear();
 			for (int i = 0; i < m_internalCapacity; ++i)
 			{
 				mIndexStack.Push(i);
 			}
 
-			// ƒm[ƒh‚Í new ‚Æ‚©‚µ‚Ä‚é‚í‚¯‚¶‚á‚È‚¢‚Ì‚ÅAƒ_ƒ~[‚Ì‘OŒã‚¾‚¯•t‚¯•Ï‚¦‚Ä‚¨‚¯‚ÎƒŠƒXƒg‚Í‹ó‚Ìó‘Ô‚É‚È‚é
+			// ãƒãƒ¼ãƒ‰ã¯ new ã¨ã‹ã—ã¦ã‚‹ã‚ã‘ã˜ã‚ƒãªã„ã®ã§ã€ãƒ€ãƒŸãƒ¼ã®å‰å¾Œã ã‘ä»˜ã‘å¤‰ãˆã¦ãŠã‘ã°ãƒªã‚¹ãƒˆã¯ç©ºã®çŠ¶æ…‹ã«ãªã‚‹
 			mNodes[m_internalCapacity].Next = mNodes[m_internalCapacity].Prev = m_internalCapacity;
 			mSize = 0;
 			m_usedMemorySize = 0;
 		}
 	}
 
-	/// ƒIƒuƒWƒFƒNƒg‚ğ’Ç‰Á‚·‚é (ƒƒ‚ƒŠƒTƒCƒY‚Ì“s‡‚È‚Ç‚Å’Ç‰Á‚Å‚«‚È‚©‚Á‚½ê‡‚Í false)
+	/// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è¿½åŠ ã™ã‚‹ (ãƒ¡ãƒ¢ãƒªã‚µã‚¤ã‚ºã®éƒ½åˆãªã©ã§è¿½åŠ ã§ããªã‹ã£ãŸå ´åˆã¯ false)
 	bool AddObject(ICacheObject* obj)
 	{
 		ICacheObject::CacheObjectInfo& info = obj->GetCacheObjectInfo();
 
 		if (obj && !info.Key.IsNull() && m_internalCapacity > 0)
 		{
-			// ‚·‚Å‚É’Ç‰Á‚³‚ê‚Ä‚¢‚é‚©’²‚×‚é
+			// ã™ã§ã«è¿½åŠ ã•ã‚Œã¦ã„ã‚‹ã‹èª¿ã¹ã‚‹
 			if (info.InCacheList) {
 				return false;
 			}
-			// ƒIƒuƒWƒFƒNƒg’P‘Ì‚ÌƒTƒCƒY‚ªƒLƒƒƒbƒVƒ…ƒƒ‚ƒŠ—Ê‚ğ’´‚¦‚Ä‚¢‚éB’Ç‰Á‚Å‚«‚È‚¢
+			// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå˜ä½“ã®ã‚µã‚¤ã‚ºãŒã‚­ãƒ£ãƒƒã‚·ãƒ¥ãƒ¡ãƒ¢ãƒªé‡ã‚’è¶…ãˆã¦ã„ã‚‹ã€‚è¿½åŠ ã§ããªã„
 			if (info.CacheMemorySize > m_maxMemorySize) {
 				return false;
 			}
@@ -244,11 +244,11 @@ public:
 			int idx = mIndexStack.GetTop();
 			mIndexStack.Pop();
 
-			Node* dummy = &mNodes[m_internalCapacity];	    // ƒ_ƒ~[ƒm[ƒh
-			Node* prev = &mNodes[dummy->Prev];	// ƒ_ƒ~[‚Ì‚Ğ‚Æ‚Â‘O ( ÅŒã )
-			Node* new_node = &mNodes[idx];           // ‚»‚ÌŠÔ‚É“ü‚ê‚éƒm[ƒh
+			Node* dummy = &mNodes[m_internalCapacity];	    // ãƒ€ãƒŸãƒ¼ãƒãƒ¼ãƒ‰
+			Node* prev = &mNodes[dummy->Prev];	// ãƒ€ãƒŸãƒ¼ã®ã²ã¨ã¤å‰ ( æœ€å¾Œ )
+			Node* new_node = &mNodes[idx];           // ãã®é–“ã«å…¥ã‚Œã‚‹ãƒãƒ¼ãƒ‰
 
-			// new_node ‚ğƒŠƒXƒg‚Ì––”ö‚É’Ç‰Á‚·‚é
+			// new_node ã‚’ãƒªã‚¹ãƒˆã®æœ«å°¾ã«è¿½åŠ ã™ã‚‹
 			new_node->Prev = dummy->Prev;
 			new_node->Next = m_internalCapacity;
 			dummy->Prev = idx;
@@ -258,15 +258,15 @@ public:
 
 			mNodeMap.insert(std::pair< CacheKey, Node* >(info.Key, new_node));
 
-			// íœ‘Ò‚¿’†‚ğ¦‚·ƒtƒ‰ƒO ON
+			// å‰Šé™¤å¾…ã¡ä¸­ã‚’ç¤ºã™ãƒ•ãƒ©ã‚° ON
 			info.InCacheList = true;
 
-			// ƒLƒƒƒbƒVƒ…“àƒƒ‚ƒŠƒTƒCƒY‚ğ‘‚â‚·
+			// ã‚­ãƒ£ãƒƒã‚·ãƒ¥å†…ãƒ¡ãƒ¢ãƒªã‚µã‚¤ã‚ºã‚’å¢—ã‚„ã™
 			m_usedMemorySize += info.CacheMemorySize;
 
 			++mSize;
 
-			// ƒLƒƒƒbƒVƒ…‚ğ’²‚×‚ÄŒÃ‚¢‚à‚Ì‚ª‚ ‚ê‚Îíœ
+			// ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’èª¿ã¹ã¦å¤ã„ã‚‚ã®ãŒã‚ã‚Œã°å‰Šé™¤
 			CheckList();
 
 			return true;
@@ -274,7 +274,7 @@ public:
 		return false;
 	}
 
-	/// ƒL[‚Éˆê’v‚·‚éƒIƒuƒWƒFƒNƒg‚ÌŒŸõ (•Ô‚³‚ê‚éƒIƒuƒWƒFƒNƒg‚ÌQÆƒJƒEƒ“ƒg‚Íí‚É 0)             
+	/// ã‚­ãƒ¼ã«ä¸€è‡´ã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ¤œç´¢ (è¿”ã•ã‚Œã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å‚ç…§ã‚«ã‚¦ãƒ³ãƒˆã¯å¸¸ã« 0)             
 	ICacheObject* FindObject(const CacheKey& key)
 	{
 		if (m_internalCapacity == 0) return NULL;
@@ -282,13 +282,13 @@ public:
 		NodeMap::iterator itr = mNodeMap.find(key);
 		if (itr != mNodeMap.end())
 		{
-			// íœ‘Ò‚¿ƒŠƒXƒg‚©‚çŠO‚·
+			// å‰Šé™¤å¾…ã¡ãƒªã‚¹ãƒˆã‹ã‚‰å¤–ã™
 			Node* n = itr->second;
-			uint32_t idx = mNodes[n->Next].Prev;   // ©•ª‚ÌƒCƒ“ƒfƒbƒNƒX
+			uint32_t idx = mNodes[n->Next].Prev;   // è‡ªåˆ†ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
 			mNodes[n->Next].Prev = n->Prev;
 			mNodes[n->Prev].Next = n->Next;
 
-			// ‹ó‚«ƒCƒ“ƒfƒbƒNƒX‚ğ–ß‚·
+			// ç©ºãã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’æˆ»ã™
 			mIndexStack.Push(idx);
 
 			ICacheObject* v = itr->second->Value;
@@ -297,7 +297,7 @@ public:
 
 			--mSize;
 
-			// g—p’†‚É‚·‚é
+			// ä½¿ç”¨ä¸­ã«ã™ã‚‹
 			v->GetCacheObjectInfo().InCacheList = false;
 
 			return v;
@@ -305,37 +305,37 @@ public:
 		return NULL;
 	}
 
-	/// ƒLƒƒƒbƒVƒ…‚Ì“à—e‚ğo—Í‚·‚é
+	/// ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã®å†…å®¹ã‚’å‡ºåŠ›ã™ã‚‹
 	void dump(FILE* stream);
 
 private:
 
-	/// ƒLƒƒƒbƒVƒ…‚ÌƒŠƒXƒg‚ğ’²‚×‚ÄAŒÃ‚¢‚à‚Ì(æ“ª)‚ª‚ ‚éê‡‚Ííœ
+	/// ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã®ãƒªã‚¹ãƒˆã‚’èª¿ã¹ã¦ã€å¤ã„ã‚‚ã®(å…ˆé ­)ãŒã‚ã‚‹å ´åˆã¯å‰Šé™¤
 	void CheckList()
 	{
-		// ƒIƒuƒWƒFƒNƒg”‚Æƒƒ‚ƒŠƒTƒCƒY—¼•û‚ª§ŒÀ“à‚Éû‚Ü‚é‚Ü‚Åíœ‚ğŒJ‚è•Ô‚·
+		// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ•°ã¨ãƒ¡ãƒ¢ãƒªã‚µã‚¤ã‚ºä¸¡æ–¹ãŒåˆ¶é™å†…ã«åã¾ã‚‹ã¾ã§å‰Šé™¤ã‚’ç¹°ã‚Šè¿”ã™
 		while (mSize >= m_internalCapacity || m_usedMemorySize > m_maxMemorySize)
 		{
-			Node* dummy = &mNodes[m_internalCapacity];	    // ƒ_ƒ~[ƒm[ƒh
+			Node* dummy = &mNodes[m_internalCapacity];	    // ãƒ€ãƒŸãƒ¼ãƒãƒ¼ãƒ‰
 			uint32_t front_index = dummy->Next;
-			Node* front = &mNodes[front_index];	// æ“ª‚Ìƒm[ƒhæ‚èo‚µ
+			Node* front = &mNodes[front_index];	// å…ˆé ­ã®ãƒãƒ¼ãƒ‰å–ã‚Šå‡ºã—
 
-			// front ‚ğƒŠƒXƒg‚©‚çŠO‚·
+			// front ã‚’ãƒªã‚¹ãƒˆã‹ã‚‰å¤–ã™
 			dummy->Next = front->Next;
 			mNodes[front->Next].Prev = m_internalCapacity;
 
-			// ‹ó‚¢‚½ƒCƒ“ƒfƒbƒNƒX‚ğƒXƒ^ƒbƒN‚ÉÏ‚Ş
+			// ç©ºã„ãŸã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’ã‚¹ã‚¿ãƒƒã‚¯ã«ç©ã‚€
 			mIndexStack.Push(front_index);
 
-			// Map ‚©‚ç‚àíœ
+			// Map ã‹ã‚‰ã‚‚å‰Šé™¤
 			mNodeMap.erase(front->Value->GetCacheObjectInfo().Key);
 
 			--mSize;
 
-			// ƒLƒƒƒbƒVƒ…“àƒƒ‚ƒŠƒTƒCƒY‚ğŒ¸‚ç‚·
+			// ã‚­ãƒ£ãƒƒã‚·ãƒ¥å†…ãƒ¡ãƒ¢ãƒªã‚µã‚¤ã‚ºã‚’æ¸›ã‚‰ã™
 			m_usedMemorySize -= front->Value->GetCacheObjectInfo().CacheMemorySize;
 
-			// ‚È‚¢‚Æv‚¤‚¯‚ÇAˆê‰ front ‚ªƒ_ƒ~[‚¶‚á‚È‚¢‚©ƒ`ƒFƒbƒN‚µ‚Ä‚©‚ç‰ğ•ú
+			// ãªã„ã¨æ€ã†ã‘ã©ã€ä¸€å¿œ front ãŒãƒ€ãƒŸãƒ¼ã˜ã‚ƒãªã„ã‹ãƒã‚§ãƒƒã‚¯ã—ã¦ã‹ã‚‰è§£æ”¾
 			if (front != dummy)
 			{
 				m_manager->DeleteCachedObject(front->Value);
@@ -356,11 +356,11 @@ private:
 
 private:
 	CacheManager*	m_manager;
-	Node*           mNodes;         ///< ‰ğ•ú‘Ò‚¿ƒŠƒXƒg
-	int             m_internalCapacity;      ///< Å‘å—v‘f” (SetCapacity ‚Åw’è‚³‚ê‚½ƒTƒCƒY +1)
-	int             mSize;          ///< Œ»İ‚Ì—v‘f”
-	Stack<int>		mIndexStack;    ///< ‹ó‚«”Ô†ƒXƒ^ƒbƒN
-	NodeMap         mNodeMap;       ///< ƒL[‚Æƒm[ƒh‚Ì‘Î‰•\
+	Node*           mNodes;         ///< è§£æ”¾å¾…ã¡ãƒªã‚¹ãƒˆ
+	int             m_internalCapacity;      ///< æœ€å¤§è¦ç´ æ•° (SetCapacity ã§æŒ‡å®šã•ã‚ŒãŸã‚µã‚¤ã‚º +1)
+	int             mSize;          ///< ç¾åœ¨ã®è¦ç´ æ•°
+	Stack<int>		mIndexStack;    ///< ç©ºãç•ªå·ã‚¹ã‚¿ãƒƒã‚¯
+	NodeMap         mNodeMap;       ///< ã‚­ãƒ¼ã¨ãƒãƒ¼ãƒ‰ã®å¯¾å¿œè¡¨
 	uint64_t		m_usedMemorySize;
 	uint64_t		m_maxMemorySize;
 };
@@ -430,9 +430,9 @@ void CacheManager::RegisterCacheObject(const CacheKey& key, ICacheObject* obj)
 
 	ICacheObject::CacheObjectInfo& info = obj->GetCacheObjectInfo();
 
-	LN_ASSERT(!key.IsNull());					// ƒL[‚Í’†g‚ª–³‚¯‚ê‚Î‚È‚ç‚È‚¢
-	LN_ASSERT(info.Key.IsNull());		// Šù‚ÉƒL[‚ªŠ„‚è“–‚Ä‚ç‚ê‚Ä‚¢‚é obj ‚Í“o˜^Ï‚İ‚È‚Ì‚ÅƒGƒ‰[
-	if (m_cacheUnusedList == NULL) { return; }	// ‰Šú‰»‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Î‰½‚à‚µ‚È‚¢
+	LN_ASSERT(!key.IsNull());					// ã‚­ãƒ¼ã¯ä¸­èº«ãŒç„¡ã‘ã‚Œã°ãªã‚‰ãªã„
+	LN_ASSERT(info.Key.IsNull());		// æ—¢ã«ã‚­ãƒ¼ãŒå‰²ã‚Šå½“ã¦ã‚‰ã‚Œã¦ã„ã‚‹ obj ã¯ç™»éŒ²æ¸ˆã¿ãªã®ã§ã‚¨ãƒ©ãƒ¼
+	if (m_cacheUnusedList == NULL) { return; }	// åˆæœŸåŒ–ã•ã‚Œã¦ã„ãªã‘ã‚Œã°ä½•ã‚‚ã—ãªã„
 
 	m_cacheUsingMap.insert(CacheUsingPair(key, obj));
 	info.Manager = this;
@@ -450,20 +450,20 @@ ICacheObject* CacheManager::FindObjectAddRef(const CacheKey& key)
 	ICacheObject* obj = NULL;
 	if (!key.IsNull() && m_cacheUnusedList != NULL)
 	{
-		// ‚Ü‚¸‚Í¡g‚Á‚Ä‚é•¨‚ğŒŸõ
+		// ã¾ãšã¯ä»Šä½¿ã£ã¦ã‚‹ç‰©ã‚’æ¤œç´¢
 		CacheUsingMap::iterator itr = m_cacheUsingMap.find(key);
 		if (itr != m_cacheUsingMap.end())
 		{
 			obj = itr->second;
 			obj->AddRef();
 		}
-		// ƒLƒƒƒbƒVƒ…ƒŠƒXƒg‚ğŒŸõ
+		// ã‚­ãƒ£ãƒƒã‚·ãƒ¥ãƒªã‚¹ãƒˆã‚’æ¤œç´¢
 		else
 		{
 			obj = m_cacheUnusedList->FindObject(key);
 			if (obj != NULL)
 			{
-				// g—p’†ƒIƒuƒWƒFƒNƒgƒ}ƒbƒv‚É“ü‚ê‚Ä‚¨‚­
+				// ä½¿ç”¨ä¸­ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒãƒƒãƒ—ã«å…¥ã‚Œã¦ãŠã
 				m_cacheUsingMap.insert(CacheUsingPair(obj->GetCacheObjectInfo().Key, obj));
 				obj->AddRef();
 			}
@@ -478,7 +478,7 @@ ICacheObject* CacheManager::FindObjectAddRef(const CacheKey& key)
 void CacheManager::ClearCache()
 {
 	Threading::MutexScopedLock lock(m_mutex);
-	if (m_cacheUnusedList != NULL) {	// Finalize() Ï‚İƒ`ƒFƒbƒN
+	if (m_cacheUnusedList != NULL) {	// Finalize() æ¸ˆã¿ãƒã‚§ãƒƒã‚¯
 		m_cacheUnusedList->Clear();
 	}
 }
@@ -507,13 +507,13 @@ void CacheManager::AddCacheUnusedList(ICacheObject* obj)
 	Threading::MutexScopedLock lock(m_mutex);
 
 	bool addedObj = false;
-	if (m_cacheUnusedList != NULL)	// Finalize() Ï‚İƒ`ƒFƒbƒN
+	if (m_cacheUnusedList != NULL)	// Finalize() æ¸ˆã¿ãƒã‚§ãƒƒã‚¯
 	{
 		m_cacheUsingMap.erase(obj->GetCacheObjectInfo().Key);
 		addedObj = m_cacheUnusedList->AddObject(obj);
 	}
 
-	// ’Ç‰Á‚Å‚«‚È‚©‚Á‚½‚çAQÆƒJƒEƒ“ƒg 0 ‚È‚Ì‚ÉƒLƒƒƒbƒVƒ…‚É“ü‚ê‚È‚©‚Á‚½‚Æ‚¢‚¤‚±‚ÆBdelete ‚·‚é
+	// è¿½åŠ ã§ããªã‹ã£ãŸã‚‰ã€å‚ç…§ã‚«ã‚¦ãƒ³ãƒˆ 0 ãªã®ã«ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã«å…¥ã‚Œãªã‹ã£ãŸã¨ã„ã†ã“ã¨ã€‚delete ã™ã‚‹
 	if (!addedObj) {
 		DeleteCachedObject(obj);
 	}
@@ -524,8 +524,8 @@ void CacheManager::AddCacheUnusedList(ICacheObject* obj)
 //-----------------------------------------------------------------------------
 void CacheManager::DeleteCachedObject(ICacheObject* obj)
 {
-	// ‚±‚ÌŠÖ”‚Í AddCacheUnusedList() => m_cacheUnusedList->AddObject Œo—R‚ÅŒÄ‚Î‚ê‚é‚Ì‚ÅA
-	// ƒƒbƒN‚·‚é‚æ‚¤‚Èd—l‚ª•K—v‚É‚È‚Á‚½‚Æ‚«‚Í’ˆÓ‚·‚é‚±‚ÆB
+	// ã“ã®é–¢æ•°ã¯ AddCacheUnusedList() => m_cacheUnusedList->AddObject çµŒç”±ã§å‘¼ã°ã‚Œã‚‹ã®ã§ã€
+	// ãƒ­ãƒƒã‚¯ã™ã‚‹ã‚ˆã†ãªä»•æ§˜ãŒå¿…è¦ã«ãªã£ãŸã¨ãã¯æ³¨æ„ã™ã‚‹ã“ã¨ã€‚
 
 	LN_ASSERT(obj != NULL);
 	LN_ASSERT(obj->GetCacheObjectInfo().Manager != NULL);

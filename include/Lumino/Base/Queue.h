@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 
 #include <deque>
@@ -8,7 +8,7 @@ namespace Lumino
 {
 
 /**
-	@brief	QÆƒJƒEƒ“ƒg‚ğ‚ÂƒLƒ…[‚ÌƒNƒ‰ƒX‚Å‚·B
+	@brief	å‚ç…§ã‚«ã‚¦ãƒ³ãƒˆã‚’æŒã¤ã‚­ãƒ¥ãƒ¼ã®ã‚¯ãƒ©ã‚¹ã§ã™ã€‚
 */
 template<typename T, typename TAllocator = STLAllocator<T> >
 class Queue 
@@ -25,22 +25,22 @@ public:
 
 public:
 
-	/// ƒLƒ…[‚ª‹ó‚Å‚ ‚é‚©‚ğ”»’è‚µ‚Ü‚·B
+	/// ã‚­ãƒ¥ãƒ¼ãŒç©ºã§ã‚ã‚‹ã‹ã‚’åˆ¤å®šã—ã¾ã™ã€‚
 	bool IsEmpty() const { return m_queue.empty(); }
 
-	/// ‘S‚Ä‚Ì—v‘f‚ğíœ‚µ‚Ü‚·B
+	/// å…¨ã¦ã®è¦ç´ ã‚’å‰Šé™¤ã—ã¾ã™ã€‚
 	void Clear() { m_queue.clear(); }
 
-	/// Ši”[‚³‚ê‚Ä‚¢‚é—v‘f”‚ğæ“¾‚µ‚Ü‚·B
+	/// æ ¼ç´ã•ã‚Œã¦ã„ã‚‹è¦ç´ æ•°ã‚’å–å¾—ã—ã¾ã™ã€‚
 	int GetCount() const { return (int)m_queue.size(); }
 
-	/// ƒXƒ^ƒbƒN‚Ìæ“ª‚É—v‘f‚ğ’Ç‰Á‚µ‚Ü‚·B
+	/// ã‚¹ã‚¿ãƒƒã‚¯ã®å…ˆé ­ã«è¦ç´ ã‚’è¿½åŠ ã—ã¾ã™ã€‚
 	void Enqueue(const T& value) { m_queue.push_back(value); }
 
-	/// ƒLƒ…[‚Ìæ“ª‚Ì—v‘f‚ğíœ‚µ‚Ü‚·B
+	/// ã‚­ãƒ¥ãƒ¼ã®å…ˆé ­ã®è¦ç´ ã‚’å‰Šé™¤ã—ã¾ã™ã€‚
 	void Dequeue(T* outHead = NULL) { if (outHead) *outHead = GetHead(); m_queue.pop_front(); }
 
-	/// ƒLƒ…[‚Ìæ“ª‚Ì—v‘f‚ğæ“¾‚µ‚Ü‚·B
+	/// ã‚­ãƒ¥ãƒ¼ã®å…ˆé ­ã®è¦ç´ ã‚’å–å¾—ã—ã¾ã™ã€‚
 	T& GetHead() { return m_queue.front(); }
 	const T& GetHead() const { return m_queue.front(); }
 
