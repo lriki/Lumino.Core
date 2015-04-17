@@ -157,10 +157,20 @@ void PathUtils::CanonicalizePath(const char* srcPath, char* outPath)
 {
 #ifdef _WIN32
 	char* canonPath = _fullpath(outPath, srcPath, LN_MAX_PATH);
-#else
-	char* canonPath = realpath(srcPath, outPath);
-#endif
 	LN_THROW(canonPath != NULL, ArgumentException);
+#else
+	char* canonPath = realpath(srcPath, outPath);	// C:/ とかあるとエラーになり、NULL を返す
+	
+	// realpath() は、パスの示すファイルが実際に存在しない場合も NULL を返す。
+	// outPath は生成されているが、もしそれ以外の理由でエラーになっている場合は例外にする。
+	if (canonPath == NULL)
+	{
+		if (errno != ENOENT &&		// 指定されたファイルが存在しない。
+			errno != ENOTDIR) {		// パスのディレクトリ要素が、ディレクトリでない。
+			LN_THROW(0, ArgumentException);
+		}
+	}
+#endif
 }
 template<>
 void PathUtils::CanonicalizePath(const wchar_t* srcPath, wchar_t* outPath)
@@ -245,7 +255,7 @@ int PathUtils::Compare(const TChar* path1, const TChar* path2)
 				// 継続
 			}
 			else {
-				return ((StringUtils::ToUpper(*s1) - StringUtils::ToUpper(*s2)));
+				return (*s1 - *s2);
 			}
 		}
 		s1++;

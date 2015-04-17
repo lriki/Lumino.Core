@@ -28,11 +28,13 @@ TEST_F(Test_Base_Array, Add)
 //-----------------------------------------------------------------------------
 TEST_F(Test_Base_Array, Contains)
 {
-	PathNameA p1("C:/LuminoCore/include/Lumino/Base/NonCopyable.h");
-	PathNameA p2("C:/LuminoCore/include/Lumino/Base/NonCopyable.h");
+	PathNameA p1("LuminoCore/include/Lumino/Base/NonCopyable.h");
+	PathNameA p2("LuminoCore/include/Lumino/Base/NonCopyable.h");
+	PathNameA p3("LuminoCore/include/Lumino/Base/NonCopyable.c");
 	Array<PathNameA> pathes;
 	pathes.Add(p1);
 	ASSERT_TRUE(pathes.Contains(p2));
+	ASSERT_FALSE(pathes.Contains(p3));
 
 
 

@@ -35,9 +35,14 @@ bool Environment::IsLittleEndian()
 //-----------------------------------------------------------------------------
 uint64_t Environment::GetTickCount()
 {
+#ifdef _WIN32
 	// timeGetTime() ÇÕ timeBeginPeriod() Ç…ÇÊÇ¡Çƒê∏ìxÇ™ïœÇÌÇÈÇΩÇﬂÅA
 	// GetTickCount() ÇÃï˚Ç™ñ≥ìÔÇ©Ç‡ÇµÇÍÇ»Ç¢
 	return ::GetTickCount();
+#else
+	LN_THROW(0, NotImplementedException);
+	return 0;
+#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -45,6 +50,7 @@ uint64_t Environment::GetTickCount()
 //-----------------------------------------------------------------------------
 uint64_t Environment::GetTickCountNS()
 {
+#ifdef _WIN32
 	static LARGE_INTEGER freq = {};
 	static bool initGetTickCount = false;
 
@@ -62,6 +68,10 @@ uint64_t Environment::GetTickCountNS()
 		return static_cast<long long>(((double)current.QuadPart) * 1000 * 1000 * 1000 / freq.QuadPart);		// ns íPà 
 	}
 	return 0;
+#else
+	LN_THROW(0, NotImplementedException);
+	return 0;
+#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -73,6 +83,7 @@ const char* Environment::GetNewLine<char>()
 #ifdef LN_WIN32
 	return "\r\n";
 #else
+	return "\n";
 #endif
 }
 template<>
@@ -81,6 +92,7 @@ const wchar_t* Environment::GetNewLine<wchar_t>()
 #ifdef LN_WIN32
 	return L"\r\n";
 #else
+	return L"\n";
 #endif
 }
 

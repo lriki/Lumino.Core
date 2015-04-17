@@ -13,7 +13,11 @@ set(LN_UNIT_TEST_LINK_LIBS "")
 #------------------------------------------------------------------------------
 
 # Unicode char set.
+if (WIN32)
 option(LN_USE_UNICODE_CHAR_SET "Use unicode char set." ON)
+else()
+option(LN_USE_UNICODE_CHAR_SET "Use unicode char set." OFF)
+endif()
 
 # MSVC Runtime library.
 option(MSVC_LINK_MULTI_THREAD_STATIC_RUNTIME "static runtime (/MT, /MTd) or DLL runtime (/MD, /MDd) or to link either." ON)
@@ -121,7 +125,6 @@ elseif (UNIX)
 	# platform sources.
 	set(LN_PLATFORM_SOURCES
 		src/IO/Unix/FileUtils_unix.cpp
-		src/Platform/Environment_unix.cpp
 		src/Platform/X11/X11WindowManager.cpp
 		src/Platform/X11/X11Window.cpp
 		src/Platform/X11/PlatformSupport_X11.cpp)

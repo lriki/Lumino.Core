@@ -15,8 +15,8 @@ public:
 	static const uint8_t VolumeSeparatorChar		= ':';
 #else
 	static const uint8_t DirectorySeparatorChar		= '/';
-	static const uint8_t AltDirectorySeparatorChar	= NULL;
-	static const uint8_t VolumeSeparatorChar		= NULL;
+	static const uint8_t AltDirectorySeparatorChar	= 0x00;
+	static const uint8_t VolumeSeparatorChar		= 0x00;
 #endif
 
 public:

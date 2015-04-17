@@ -1,6 +1,4 @@
 
-#pragma once
-
 #include "../Internal.h"
 #include "../../include/Lumino/IO/File.h"
 #include "../../include/Lumino/IO/FileUtils.h"

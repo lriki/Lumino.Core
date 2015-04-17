@@ -1,5 +1,9 @@
 
 #include "../Internal.h"
+#ifdef _WIN32
+#else
+	#include <dlfcn.h>	// Ubuntu
+#endif
 #include <Lumino/Base/DllLoader.h>
 
 namespace Lumino
@@ -15,7 +19,7 @@ static void* LoadDLL(const TCHAR* filePath)
 	return ::LoadLibrary(filePath);
 #else
 	LN_LOCAL_MBCS_FILEPATH(mbcsPath, filePath);
-	returndlopen(mbcsPath, RTLD_LAZY);
+	return dlopen(mbcsPath, RTLD_LAZY);
 #endif
 }
 

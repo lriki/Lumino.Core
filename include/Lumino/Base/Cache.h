@@ -10,6 +10,7 @@
 
 namespace Lumino
 {
+class CacheManager;
 
 /**
 	@brief	キャッシュの検索キーです。

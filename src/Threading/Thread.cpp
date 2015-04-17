@@ -260,7 +260,7 @@ void Thread::Wait()
 	{
 		// 待機
 		pthread_join(mThread, NULL);
-		mThread = NULL;
+		mThread = 0;
 
 		// スレッドで例外が発生していれば throw する
 		if ( mLastException != NULL ) {

@@ -42,5 +42,5 @@
 
 #include "Lumino/Platform/Application.h"
 #include "Lumino/Platform/Window.h"
-#include "Lumino/Platform/PlatformSupport.h"
+//#include "Lumino/Platform/PlatformSupport.h"	// 環境依存のコードを書くソースファイルで各々 include する。そうしないと、X11 のヘッダとかすべてのファイルに include しなければならなくなる。
 

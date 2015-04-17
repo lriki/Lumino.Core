@@ -176,7 +176,6 @@ void ByteBuffer::SetReferenceBuffer(void* buffer, size_t size)
 void ByteBuffer::Copy(const void* data, size_t size)
 {
 	LN_THROW(m_buffer != NULL, InvalidOperationException);
-	LN_THROW(size != NULL, ArgumentException);
 	LN_THROW(size <= m_size, ArgumentException);
 	memcpy_s(m_buffer, m_size, data, size);
 }
@@ -187,7 +186,6 @@ void ByteBuffer::Copy(const void* data, size_t size)
 void ByteBuffer::Copy(size_t offset, const void* data, size_t size)
 {
 	LN_THROW(m_buffer != NULL, InvalidOperationException);
-	LN_THROW(size != NULL, ArgumentException);
 	LN_THROW(offset + size <= m_size, ArgumentException);
 	memcpy_s(m_buffer + offset, m_size - offset, data, size);
 }
