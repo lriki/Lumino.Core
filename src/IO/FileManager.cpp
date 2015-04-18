@@ -26,9 +26,13 @@ FileManager& FileManager::GetInstance()
 FileManager::FileManager()
 	: m_fileAccessPriority(FileAccessPriority_DirectoryFirst)
 	, m_dummyArchive(LN_NEW DummyArchive())
+	, m_endRequested(false)
+	, m_isAsyncTaskListEmpty(true)
 {
 	m_archiveList.Add(m_dummyArchive);
 	m_dummyArchive->AddRef();	// m_archiveList からの参照を示す
+
+	m_asyncProcThread.Start(LN_CreateDelegate(this, &FileManager::Thread_ASyncProc));
 }
 
 //-----------------------------------------------------------------------------
@@ -36,6 +40,10 @@ FileManager::FileManager()
 //-----------------------------------------------------------------------------
 FileManager::~FileManager()
 {
+	// 非同期処理のスレッドを停止する
+	m_endRequested.SetTrue();
+	m_asyncProcThread.Wait();
+
 	LN_FOREACH(IArchive* a, m_archiveList) {
 		a->Release();
 	}
@@ -138,6 +146,33 @@ CaseSensitivity FileManager::GetFileSystemCaseSensitivity() const
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+void FileManager::RequestASyncTask(AsyncIOTask* task)
+{
+	if (m_endRequested.IsTrue()) {
+		return;		// 終了要求が来ている場合は追加しない
+	}
+
+	Threading::MutexScopedLock lock(m_asyncTaskListMutex);
+
+	// Idle 状態でなければ追加できない
+	LN_THROW(task->m_state == AsyncIOState_Idle, InvalidOperationException);
+
+	task->m_state = AsyncIOState_Ready;
+	m_asyncTaskList.Add(task);
+	m_isAsyncTaskListEmpty.SetFalse();
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void FileManager::WaitForAllASyncTask()
+{
+	m_isAsyncTaskListEmpty.Wait();
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 void FileManager::RefreshArchiveList()
 {
 	// 一度ダミーをリストから外す
@@ -159,6 +194,59 @@ void FileManager::RefreshArchiveList()
 	}
 	// アーカイブのみであればダミーを追加する必要は無い
 	else {
+	}
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void FileManager::Thread_ASyncProc()
+{
+	// 終了フラグが ON でも、リストに何か残っていればすべて処理する
+	while (m_endRequested.IsFalse() || m_isAsyncTaskListEmpty.IsFalse())
+	{
+		// 読み込みリクエストを取り出す
+		AsyncIOTask* task = NULL;
+		{
+			Threading::MutexScopedLock lock(m_asyncTaskListMutex);
+			if (!m_asyncTaskList.IsEmpty())
+			{
+				task = m_asyncTaskList.GetFront();
+				task->m_state = AsyncIOState_Processing;	// 処理中状態にする
+				m_asyncTaskList.RemoveAt(0);				// 先頭要素を削除する (Queue の方がよかったかも…？)
+			}
+		}
+
+		// 読み込みリクエスト実行
+		if (task)
+		{
+			try
+			{
+				task->Execute();							// 実行
+				task->m_state = AsyncIOState_Completed;		// 処理完了状態にする
+			}
+			catch (Exception& e)
+			{
+				task->m_state = AsyncIOState_Failed;		// 処理失敗状態にする
+				task->m_exception = e.Copy();				// メインスレッドがエラー内容を確認できるように例外を保持しておく
+			}
+			catch (...)
+			{
+				task->m_state = AsyncIOState_Failed;		// 処理失敗状態にする
+			}
+		}
+
+		// この時点でリストが空ならすべて処理が終わったことにする
+		{
+			Threading::MutexScopedLock lock(m_asyncTaskListMutex);
+			if (m_asyncTaskList.IsEmpty())
+			{
+				m_isAsyncTaskListEmpty.SetTrue();
+			}
+		}
+
+		// 適当に待って、CPU 使用率が MAX にならないようにする
+		Threading::Thread::Sleep(10);
 	}
 }
 

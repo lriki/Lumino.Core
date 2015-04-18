@@ -35,6 +35,9 @@ public:
 	/// 値が true かを判定する
 	bool IsTrue() const;
 
+	/// 値が false かを判定する
+	bool IsFalse() const;
+
 	/// 値が true になるまで待機する
     void Wait();
 

@@ -32,10 +32,13 @@ public:
 
 	/**
 		@brief		通知レベルを指定して書式指定メッセージを書き込みます。
+		@param[in]	level	: 通知レベル (指定しない場合は Level_Info)
 		@details	ログ機能が初期化されていない場合は何もしません。
 	*/
 	static void WriteLine(Level level, const char* format, ...) throw();
 	static void WriteLine(Level level, const wchar_t* format, ...) throw();		///< @overload WriteLine
+	static void WriteLine(const char* format, ...) throw();						///< @overload WriteLine
+	static void WriteLine(const wchar_t* format, ...) throw();					///< @overload WriteLine
 
 };
 

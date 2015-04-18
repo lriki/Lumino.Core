@@ -8,6 +8,7 @@
 #include "PathName.h"
 #include "../Threading/Thread.h"
 #include "../Threading/Mutex.h"
+#include "AsyncIOTask.h"
 
 namespace Lumino
 {
@@ -54,28 +55,42 @@ public:
 	Stream* CreateFileStream(const PathName& filePath);	///< @overload CreateInFileStream
 
 	/**
-		@brief		リクエストされているすべての非同期読み込み/書き込み処理の終了を待機します。
-	*/
-	void WaitForAllASyncProcess();
-
-	/**
 		@brief		現在の環境のファイルシステムが、パス文字列の大文字と小文字を区別するかを確認します。
 	*/
 	CaseSensitivity GetFileSystemCaseSensitivity() const;
+
+	/**
+		@brief		非同期処理をリクエストします。
+		@details	処理が完了するまで task を解放しないでください。
+	*/
+	void RequestASyncTask(AsyncIOTask* task);
+
+	/**
+		@brief		リクエストされているすべての非同期読み込み/書き込み処理の終了を待機します。
+	*/
+	void WaitForAllASyncTask();
 
 private:
 	FileManager();
 	virtual ~FileManager();
 
 	void RefreshArchiveList();
+	void Thread_ASyncProc();
 
 private:
 	typedef ArrayList<IArchive*>	ArchiveList;
+	typedef ArrayList<AsyncIOTask*>	AsyncIOTaskList;
 
-	FileAccessPriority	m_fileAccessPriority;
-	ArchiveList			m_archiveList;
-	IArchive*			m_dummyArchive;
-	Threading::Mutex	m_mutex;
+	FileAccessPriority			m_fileAccessPriority;
+	ArchiveList					m_archiveList;
+	IArchive*					m_dummyArchive;
+	Threading::Mutex			m_mutex;
+
+	AsyncIOTaskList				m_asyncTaskList;
+	Threading::Mutex			m_asyncTaskListMutex;
+	Threading::EventFlag		m_endRequested;
+	Threading::EventFlag		m_isAsyncTaskListEmpty;
+	Threading::DelegateThread	m_asyncProcThread;
 };
 
 } // namespace Lumino

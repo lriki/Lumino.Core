@@ -23,6 +23,7 @@
 #include "Lumino/Base/Rect.h"
 #include "Lumino/Base/Stack.h"
 #include "Lumino/Base/Environment.h"
+#include "Lumino/Base/Logger.h"
 
 #include "Lumino/IO/PathName.h"
 #include "Lumino/IO/PathUtils.h"
@@ -33,6 +34,8 @@
 #include "Lumino/IO/FileUtils.h"
 #include "Lumino/IO/File.h"
 #include "Lumino/IO/BinaryReader.h"
+#include "Lumino/IO/AsyncIOTask.h"
+#include "Lumino/IO/FileManager.h"
 
 #include "Lumino/Threading/Atomic.h"
 #include "Lumino/Threading/EventFlag.h"

@@ -155,5 +155,55 @@ void Logger::WriteLine(Level level, const wchar_t* format, ...) throw()
 	}
 
 }
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void Logger::WriteLine(const char* format, ...) throw()
+{
+	if (g_logFilePath[0] == '\0') {
+		return;
+	}
+	FILE* stream;
+	if (_tfopen_s(&stream, g_logFilePath, _T("a+")) == 0)
+	{
+		char buf[TEMP_BUFFER_SIZE];
+
+		va_list args;
+		va_start(args, format);
+		StringUtils::VSPrintf(buf, TEMP_BUFFER_SIZE, format, args);
+		va_end(args);
+
+		fprintf(stream, "%d %s: ", Environment::GetTickCount() - g_logStartTime, GetInfoString(Level_Info));
+		fprintf(stream, "%s\n", buf);
+
+		fclose(stream);
+	}
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void Logger::WriteLine(const wchar_t* format, ...) throw()
+{
+	if (g_logFilePath[0] == '\0') {
+		return;
+	}
+	FILE* stream;
+	if (_tfopen_s(&stream, g_logFilePath, _T("a+")) == 0)
+	{
+		wchar_t buf[TEMP_BUFFER_SIZE];
+
+		va_list args;
+		va_start(args, format);
+		StringUtils::VSPrintf(buf, TEMP_BUFFER_SIZE, format, args);
+		va_end(args);
+
+		fprintf(stream, "%d %s: ", Environment::GetTickCount() - g_logStartTime, GetInfoString(Level_Info));
+		fwprintf(stream, L"%s\n", buf);
+
+		fclose(stream);
+	}
+
+}
 
 } // namespace Lumino

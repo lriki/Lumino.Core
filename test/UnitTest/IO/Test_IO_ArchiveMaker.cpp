@@ -1,4 +1,4 @@
-#include <TestConfig.h>
+﻿#include <TestConfig.h>
 #include "../../../src/IO/ArchiveMaker.h"
 #include "../../../src/IO/Archive.h"
 

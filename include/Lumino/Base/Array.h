@@ -107,6 +107,10 @@ public:
 	reference GetAt(int index) { return m_vector.at(index); }				// VC++ や GCC では bool は特殊化され、T& には変換できない。reference で返さないとコンパイルエラーとなる
 	const_reference GetAt(int index) const { return m_vector.at(index); }
 
+	/// 先頭要素の参照を返します。
+	T& GetFront() { return m_vector.front(); }
+	const T& GetFront() const { return m_vector.front(); }
+
 	/// 終端要素の参照を返します。
 	T& GetLast() { return *(m_vector.rbegin()); }
 	const T& GetLast() const { return *(m_vector.rbegin()); }

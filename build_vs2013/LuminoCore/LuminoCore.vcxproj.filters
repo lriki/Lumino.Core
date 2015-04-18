@@ -229,6 +229,9 @@
     <ClInclude Include="..\..\include\Lumino\Version.h">
       <Filter>Base</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Lumino\IO\AsyncIOTask.h">
+      <Filter>IO</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\include\Lumino\Base\Delegate.inl">
@@ -385,6 +388,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\Base\Version.cpp">
       <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\IO\AsyncIOTask.cpp">
+      <Filter>IO</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
