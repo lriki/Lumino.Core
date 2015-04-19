@@ -1,4 +1,5 @@
 
+#include <Lumino/Base/Exception.h>
 #include <Lumino/IO/AsyncIOTask.h>
 
 namespace Lumino
@@ -14,6 +15,7 @@ namespace Lumino
 AsyncIOTask::AsyncIOTask()
 	: m_state(AsyncIOState_Idle)
 	, m_exception(NULL)
+	, m_autoDelete(true)
 {
 }
 
@@ -23,6 +25,14 @@ AsyncIOTask::AsyncIOTask()
 AsyncIOTask::~AsyncIOTask()
 {
 	LN_SAFE_DELETE(m_exception);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void AsyncIOTask::SetAutoDelete(bool autoDelete)
+{
+	m_autoDelete = autoDelete;
 }
 
 //-----------------------------------------------------------------------------

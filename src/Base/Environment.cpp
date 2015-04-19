@@ -14,7 +14,7 @@ namespace Lumino
 //-----------------------------------------------------------------------------
 ByteOrder Environment::GetByteOrder()
 {
-	if (IsLittleEndian) {
+	if (IsLittleEndian()) {
 		return ByteOrder_Little;
 	}
 	return ByteOrder_Big;

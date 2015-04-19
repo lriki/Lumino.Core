@@ -234,6 +234,11 @@ void FileManager::Thread_ASyncProc()
 			{
 				task->m_state = AsyncIOState_Failed;		// 処理失敗状態にする
 			}
+
+			// 自動削除する場合は削除する
+			if (task->m_autoDelete) {
+				delete task;
+			}
 		}
 
 		// この時点でリストが空ならすべて処理が終わったことにする
