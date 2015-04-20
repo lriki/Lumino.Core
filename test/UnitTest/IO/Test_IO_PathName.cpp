@@ -7,10 +7,15 @@ protected:
 	virtual void TearDown() {}
 };
 
-
 //-----------------------------------------------------------------------------
 TEST_F(Test_IO_PathName, GetFileName)
 {
+	char path[LN_MAX_PATH] = "C:/../dir/file.txt";
+	size_t len = strlen(path);
+	bool r = CanonicalizePath(path, &len);
+
+
+
 	PathName path1(_T("dir/file.txt"));
 	ASSERT_STREQ(_T("file.txt"), path1.GetFileName());
 

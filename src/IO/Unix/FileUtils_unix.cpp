@@ -157,6 +157,11 @@ void FileUtils::SetAttribute(const wchar_t* filePath, uint32_t attrs)
 //-----------------------------------------------------------------------------
 void FileUtils::Copy(const char* sourceFileName, const char* destFileName, bool overwrite)
 {
+	// コピー先ファイルの存在確認
+	if (!overwrite && Exists(destFileName)) {
+		LN_THROW(0, IOException);
+	}
+	
 	// http://ppp-lab.sakura.ne.jp/ProgrammingPlacePlus/c/044.html
 	FILE* fpSrc = fopen(sourceFileName, "rb");
 	if (fpSrc == NULL){

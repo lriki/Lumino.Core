@@ -81,6 +81,7 @@ Exception& Exception::SetSourceLocationInfo(const char* filePath, int fileLine)
 		sprintf_s(mSymbolBuffer, LN_ARRAY_SIZE_OF(mSymbolBuffer), "File:%s Line:%d", filePath, fileLine);
 	}
 
+#ifdef LN_UNICODE
 	// ワイド文字列へ変換 (文字コードは考慮しない)
 	memset(mSourceFilePath, 0, sizeof(mSourceFilePath));
 	size_t size;
@@ -88,6 +89,9 @@ Exception& Exception::SetSourceLocationInfo(const char* filePath, int fileLine)
 	if (err != 0) {
 		return *this;
 	}
+#else
+	strcpy(mSourceFilePath, filePath);
+#endif
 
 	mSourceFileLine = fileLine;
 	return *this;
