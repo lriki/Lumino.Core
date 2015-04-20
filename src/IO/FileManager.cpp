@@ -27,7 +27,7 @@ FileManager::FileManager()
 	: m_fileAccessPriority(FileAccessPriority_DirectoryFirst)
 	, m_dummyArchive(LN_NEW DummyArchive())
 	, m_endRequested(false)
-	, m_isAsyncTaskListEmpty(true)
+	, m_isASyncTaskListEmpty(true)
 {
 	m_archiveList.Add(m_dummyArchive);
 	m_dummyArchive->AddRef();	// m_archiveList からの参照を示す
@@ -146,7 +146,7 @@ CaseSensitivity FileManager::GetFileSystemCaseSensitivity() const
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void FileManager::RequestASyncTask(AsyncIOTask* task)
+void FileManager::RequestASyncTask(ASyncIOObject* task)
 {
 	if (m_endRequested.IsTrue()) {
 		return;		// 終了要求が来ている場合は追加しない
@@ -155,11 +155,12 @@ void FileManager::RequestASyncTask(AsyncIOTask* task)
 	Threading::MutexScopedLock lock(m_asyncTaskListMutex);
 
 	// Idle 状態でなければ追加できない
-	LN_THROW(task->m_state == AsyncIOState_Idle, InvalidOperationException);
+	LN_THROW(task->m_ayncIOState == ASyncIOState_Idle, InvalidOperationException);
 
-	task->m_state = AsyncIOState_Ready;
+	task->m_ayncIOState = ASyncIOState_Ready;
+	task->AddRef();
 	m_asyncTaskList.Add(task);
-	m_isAsyncTaskListEmpty.SetFalse();
+	m_isASyncTaskListEmpty.SetFalse();
 }
 
 //-----------------------------------------------------------------------------
@@ -167,7 +168,7 @@ void FileManager::RequestASyncTask(AsyncIOTask* task)
 //-----------------------------------------------------------------------------
 void FileManager::WaitForAllASyncTask()
 {
-	m_isAsyncTaskListEmpty.Wait();
+	m_isASyncTaskListEmpty.Wait();
 }
 
 //-----------------------------------------------------------------------------
@@ -203,16 +204,16 @@ void FileManager::RefreshArchiveList()
 void FileManager::Thread_ASyncProc()
 {
 	// 終了フラグが ON でも、リストに何か残っていればすべて処理する
-	while (m_endRequested.IsFalse() || m_isAsyncTaskListEmpty.IsFalse())
+	while (m_endRequested.IsFalse() || m_isASyncTaskListEmpty.IsFalse())
 	{
 		// 読み込みリクエストを取り出す
-		AsyncIOTask* task = NULL;
+		ASyncIOObject* task = NULL;
 		{
 			Threading::MutexScopedLock lock(m_asyncTaskListMutex);
 			if (!m_asyncTaskList.IsEmpty())
 			{
 				task = m_asyncTaskList.GetFront();
-				task->m_state = AsyncIOState_Processing;	// 処理中状態にする
+				task->m_ayncIOState = ASyncIOState_Processing;	// 処理中状態にする
 				m_asyncTaskList.RemoveAt(0);				// 先頭要素を削除する (Queue の方がよかったかも…？)
 			}
 		}
@@ -222,23 +223,24 @@ void FileManager::Thread_ASyncProc()
 		{
 			try
 			{
-				task->Execute();							// 実行
-				task->m_state = AsyncIOState_Completed;		// 処理完了状態にする
+				task->OnASyncIOProc();							// 実行
+				task->m_ayncIOState = ASyncIOState_Completed;		// 処理完了状態にする
 			}
 			catch (Exception& e)
 			{
-				task->m_state = AsyncIOState_Failed;		// 処理失敗状態にする
-				task->m_exception = e.Copy();				// メインスレッドがエラー内容を確認できるように例外を保持しておく
+				task->m_ayncIOState = ASyncIOState_Failed;		// 処理失敗状態にする
+				task->m_ayncIOException = e.Copy();				// メインスレッドがエラー内容を確認できるように例外を保持しておく
 			}
 			catch (...)
 			{
-				task->m_state = AsyncIOState_Failed;		// 処理失敗状態にする
+				task->m_ayncIOState = ASyncIOState_Failed;		// 処理失敗状態にする
 			}
 
 			// 自動削除する場合は削除する
-			if (task->m_autoDelete) {
-				delete task;
-			}
+			//if (task->m_autoDelete) {
+			//	delete task;
+			//}
+			task->Release();
 		}
 
 		// この時点でリストが空ならすべて処理が終わったことにする
@@ -246,7 +248,7 @@ void FileManager::Thread_ASyncProc()
 			Threading::MutexScopedLock lock(m_asyncTaskListMutex);
 			if (m_asyncTaskList.IsEmpty())
 			{
-				m_isAsyncTaskListEmpty.SetTrue();
+				m_isASyncTaskListEmpty.SetTrue();
 			}
 		}
 

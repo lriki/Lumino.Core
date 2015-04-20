@@ -46,15 +46,15 @@ enum FileAccessPriority
 };
 
 /// 非同期処理の状態
-enum AsyncIOState
+enum ASyncIOState
 {
-	AsyncIOState_Idle = 0,				///< 待機状態 (初期状態)
-	AsyncIOState_Ready,					///< 実行可能状態 (実行待ちキューに入っている状態)
-	AsyncIOState_Processing,			///< 実行状態 (処理中)
-	AsyncIOState_Completed,				///< 終了状態 (処理終了後)
-	AsyncIOState_Failed,				///< 終了状態 (処理終了後・処理に失敗した)
+	ASyncIOState_Idle = 0,				///< 待機状態 (初期状態)
+	ASyncIOState_Ready,					///< 実行可能状態 (実行待ちキューに入っている状態)
+	ASyncIOState_Processing,			///< 実行状態 (処理中)
+	ASyncIOState_Completed,				///< 終了状態 (処理終了後)
+	ASyncIOState_Failed,				///< 終了状態 (処理終了後・処理に失敗した)
 
-	AsyncIOState_Max,
+	ASyncIOState_Max,
 };
 
 #pragma pack(1)

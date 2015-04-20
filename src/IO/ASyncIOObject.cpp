@@ -1,54 +1,70 @@
 
 #include <Lumino/Base/Exception.h>
-#include <Lumino/IO/AsyncIOTask.h>
+#include <Lumino/IO/ASyncIOObject.h>
+#include <Lumino/IO/FileManager.h>
 
 namespace Lumino
 {
 
 //=============================================================================
-// AsyncIOTask
+// ASyncIOObject
 //=============================================================================
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-AsyncIOTask::AsyncIOTask()
-	: m_state(AsyncIOState_Idle)
-	, m_exception(NULL)
-	, m_autoDelete(true)
+ASyncIOObject::ASyncIOObject()
+	: m_ayncIOState(ASyncIOState_Idle)
+	, m_ayncIOException(NULL)
 {
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-AsyncIOTask::~AsyncIOTask()
+ASyncIOObject::~ASyncIOObject()
 {
-	LN_SAFE_DELETE(m_exception);
+	LN_SAFE_DELETE(m_ayncIOException);
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void AsyncIOTask::SetAutoDelete(bool autoDelete)
+ASyncIOState ASyncIOObject::GetASyncIOState() const
 {
-	m_autoDelete = autoDelete;
+	return m_ayncIOState;
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-AsyncIOState AsyncIOTask::GetAsyncIOState() const
+Exception* ASyncIOObject::GetASyncIOException() const
 {
-	return m_state;
+	return m_ayncIOException;
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-Exception* AsyncIOTask::GetException() const
+void ASyncIOObject::InvokeIOProc(bool isASync, FileManager* fileManager)
 {
-	return m_exception;
+	if (isASync) {
+		fileManager->RequestASyncTask(this);
+	}
+	else
+	{
+		m_ayncIOState = ASyncIOState_Processing;
+		try
+		{
+			OnASyncIOProc();
+		}
+		catch (...)
+		{
+			m_ayncIOState = ASyncIOState_Failed;
+			throw;	// ƒƒ“ƒo‚É‚Í•Û‚¹‚¸AŒÄ‚Ño‚µ‘¤‚É“Š‚°‚é
+		}
+		m_ayncIOState = ASyncIOState_Completed;
+	}
 }
 
 } // namespace Lumino

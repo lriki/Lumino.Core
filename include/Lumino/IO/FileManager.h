@@ -8,7 +8,7 @@
 #include "PathName.h"
 #include "../Threading/Thread.h"
 #include "../Threading/Mutex.h"
-#include "AsyncIOTask.h"
+#include "ASyncIOObject.h"
 
 namespace Lumino
 {
@@ -63,7 +63,7 @@ public:
 		@brief		非同期処理をリクエストします。
 		@details	処理が完了するまで task を解放しないでください。
 	*/
-	void RequestASyncTask(AsyncIOTask* task);
+	void RequestASyncTask(ASyncIOObject* task);
 
 	/**
 		@brief		リクエストされているすべての非同期読み込み/書き込み処理の終了を待機します。
@@ -78,18 +78,18 @@ private:
 	void Thread_ASyncProc();
 
 private:
-	typedef ArrayList<IArchive*>	ArchiveList;
-	typedef ArrayList<AsyncIOTask*>	AsyncIOTaskList;
+	typedef ArrayList<IArchive*>		ArchiveList;
+	typedef ArrayList<ASyncIOObject*>	ASyncIOObjectList;
 
 	FileAccessPriority			m_fileAccessPriority;
 	ArchiveList					m_archiveList;
 	IArchive*					m_dummyArchive;
 	Threading::Mutex			m_mutex;
 
-	AsyncIOTaskList				m_asyncTaskList;
+	ASyncIOObjectList			m_asyncTaskList;
 	Threading::Mutex			m_asyncTaskListMutex;
 	Threading::EventFlag		m_endRequested;
-	Threading::EventFlag		m_isAsyncTaskListEmpty;
+	Threading::EventFlag		m_isASyncTaskListEmpty;
 	Threading::DelegateThread	m_asyncProcThread;
 };
 

@@ -34,7 +34,7 @@
 #include "Lumino/IO/FileUtils.h"
 #include "Lumino/IO/File.h"
 #include "Lumino/IO/BinaryReader.h"
-#include "Lumino/IO/AsyncIOTask.h"
+#include "Lumino/IO/ASyncIOObject.h"
 #include "Lumino/IO/FileManager.h"
 
 #include "Lumino/Threading/Atomic.h"

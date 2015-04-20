@@ -35,7 +35,7 @@
     <ClInclude Include="..\..\include\Lumino\Base\String.h" />
     <ClInclude Include="..\..\include\Lumino\Base\StringUtils.h" />
     <ClInclude Include="..\..\include\Lumino\Base\Typedef.h" />
-    <ClInclude Include="..\..\include\Lumino\IO\AsyncIOTask.h" />
+    <ClInclude Include="..\..\include\Lumino\IO\ASyncIOObject.h" />
     <ClInclude Include="..\..\include\Lumino\IO\BinaryReader.h" />
     <ClInclude Include="..\..\include\Lumino\IO\Common.h" />
     <ClInclude Include="..\..\include\Lumino\IO\DirectoryUtils.h" />
@@ -96,7 +96,7 @@
     <ClCompile Include="..\..\src\Base\Version.cpp" />
     <ClCompile Include="..\..\src\IO\Archive.cpp" />
     <ClCompile Include="..\..\src\IO\ArchiveMaker.cpp" />
-    <ClCompile Include="..\..\src\IO\AsyncIOTask.cpp" />
+    <ClCompile Include="..\..\src\IO\ASyncIOObject.cpp" />
     <ClCompile Include="..\..\src\IO\BinaryReader.cpp" />
     <ClCompile Include="..\..\src\IO\DirectoryUtils.cpp" />
     <ClCompile Include="..\..\src\IO\File.cpp" />

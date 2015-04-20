@@ -154,7 +154,7 @@ set(LN_SOURCES
 	src/Base/StringUtils.cpp
 	src/Base/Version.cpp
 	src/IO/Archive.cpp
-	src/IO/AsyncIOTask.cpp
+	src/IO/ASyncIOObject.cpp
 	src/IO/BinaryReader.cpp
 	src/IO/DirectoryUtils.cpp
 	src/IO/File.cpp
