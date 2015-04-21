@@ -60,7 +60,7 @@ void* MemoryStream::GetBuffer()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-bool MemoryStream::CanRead()
+bool MemoryStream::CanRead() const
 {
 	return true;
 }
@@ -68,7 +68,7 @@ bool MemoryStream::CanRead()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-bool MemoryStream::CanWrite()
+bool MemoryStream::CanWrite() const
 {
 	return true;
 }

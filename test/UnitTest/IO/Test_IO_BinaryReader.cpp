@@ -10,7 +10,7 @@ protected:
 //-----------------------------------------------------------------------------
 TEST_F(Test_IO_BinaryReader, Basic)
 {
-	FileStream file(LOCALFILE("TestData/BinaryReaderTest.dat"), FileMode_Open, FileAccess_Read);
+	FileStream file(LOCALFILE("TestData/BinaryReaderTest.dat"), FileOpenMode_Read);
 	BinaryReader reader(&file);
 
 	// 1byte
@@ -53,7 +53,7 @@ TEST_F(Test_IO_BinaryReader, Basic)
 //-----------------------------------------------------------------------------
 TEST_F(Test_IO_BinaryReader, BytesSpecified)
 {
-	FileStream file(LOCALFILE("TestData/BinaryReaderTest.dat"), FileMode_Open, FileAccess_Read);
+	FileStream file(LOCALFILE("TestData/BinaryReaderTest.dat"), FileOpenMode_Read);
 	BinaryReader reader(&file);
 
 	// 1byte

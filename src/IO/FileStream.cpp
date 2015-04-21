@@ -10,19 +10,19 @@ namespace Lumino
 //
 //-----------------------------------------------------------------------------
 FileStream::FileStream()
-	: mStream(NULL)
-	, mFileAccess(FileAccess_Max)
+	: m_stream(NULL)
+	, m_openModeFlags(0)
 {
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-FileStream::FileStream(const TCHAR* filePath, FileMode fileMode, FileAccess fileAccess) 
-	: mStream(NULL)
-	, mFileAccess(FileAccess_Max)
+FileStream::FileStream(const TCHAR* filePath, uint32_t openMode)
+	: m_stream(NULL)
+	, m_openModeFlags(0)
 {
-	Open(filePath, fileMode, fileAccess);
+	Open(filePath, openMode);
 }
 
 //-----------------------------------------------------------------------------
@@ -36,24 +36,51 @@ FileStream::~FileStream()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void FileStream::Open( const TCHAR* filePath, FileMode fileMode, FileAccess fileAccess )
+void FileStream::Open(const TCHAR* filePath, uint32_t openMode)
 {
 	LN_ASSERT( filePath );
 	Close();
 
-	mFileAccess = fileAccess;
+	const TCHAR* mode = NULL;
+	if ((openMode & FileOpenMode_ReadWrite) == FileOpenMode_ReadWrite)
+	{
+		if (openMode & FileOpenMode_Append) {
+			mode = _T("a+");		// 読み取りと書き込み (末尾に追加する)
+		}
+		else if (openMode & FileOpenMode_Truncate) {
+			mode = _T("w+");		// 読み取りと書き込み (ファイルを空にする)
+		}
+		else {
+			mode = _T("r+");		// 読み取りと書き込み (ファイルが存在しない場合はエラー)
+		}
+	}
+	else if (openMode & FileOpenMode_Write)
+	{
+		if (openMode & FileOpenMode_Append) {
+			mode = _T("a");			// 書き込み (末尾に追加する。ファイルが無ければ新規作成)
+		}
+		else if (openMode & FileOpenMode_Truncate) {
+			mode = _T("w");			// 書き込み (ファイルを空にする)
+		}
+		else {
+			mode = _T("w");			// 書き込み (モード省略。Truncate)
+		}
+	}
+	else if (openMode & FileOpenMode_Read)
+	{
+		if (openMode & FileOpenMode_Append) {
+			mode = NULL;			// 読み込みなのに末尾追加はできない
+		}
+		else if (openMode & FileOpenMode_Truncate) {
+			mode = NULL;			// 読み込みなのにファイルを空にはできない
+		}
+		else {
+			mode = _T("r");			// 書き込み (モード省略。Truncate)
+		}
+	}
+	LN_THROW(mode, ArgumentException);
 
-	const TCHAR* modeTable[FileMode_Max][FileAccess_Max] = {
-		// FileAccess_Read	FileAccess_ReadWrite	FileAccess_Write
-		{  NULL,			_T("w+b"),				_T("wb") },		// FileMode_Create
-		{  _T("rb"),		_T("w+b"),				_T("wb") },		// FileMode_Open
-		{  _T("ab"),		_T("a+b"),				_T("a+b") },	// FileMode_Append
-	};
-
-	const TCHAR* mode = modeTable[fileMode][fileAccess];
-	LN_THROW(mode, FileNotFoundException);
-
-	errno_t err = _tfopen_s(&mStream, filePath, mode);
+	errno_t err = _tfopen_s(&m_stream, filePath, mode);
 	LN_THROW(err == 0, FileNotFoundException);
 }
 
@@ -62,9 +89,25 @@ void FileStream::Open( const TCHAR* filePath, FileMode fileMode, FileAccess file
 //-----------------------------------------------------------------------------
 void FileStream::Close()
 {
-	if (mStream != NULL) {
-		fclose(mStream);
+	if (m_stream != NULL) {
+		fclose(m_stream);
 	}
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+bool FileStream::CanRead() const
+{
+	return ((m_openModeFlags & FileOpenMode_Read) != 0);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+bool FileStream::CanWrite() const
+{
+	return ((m_openModeFlags & FileOpenMode_Write) != 0);
 }
 
 //-----------------------------------------------------------------------------
@@ -72,7 +115,7 @@ void FileStream::Close()
 //-----------------------------------------------------------------------------
 int64_t FileStream::GetLength() const
 {
-	return (size_t)FileUtils::GetFileSize( mStream );
+	return (size_t)FileUtils::GetFileSize( m_stream );
 }
 
 //-----------------------------------------------------------------------------
@@ -81,7 +124,7 @@ int64_t FileStream::GetLength() const
 int64_t FileStream::GetPosition() const
 {
 	// TODO: 64bit 確認 → ftello?
-	return ftell(mStream);
+	return ftell(m_stream);
 }
 
 //-----------------------------------------------------------------------------
@@ -89,8 +132,8 @@ int64_t FileStream::GetPosition() const
 //-----------------------------------------------------------------------------
 size_t FileStream::Read(void* buffer, size_t readCount)
 {
-	LN_THROW(mStream, InvalidOperationException);
-	return fread(buffer, 1, readCount, mStream);
+	LN_THROW(m_stream, InvalidOperationException);
+	return fread(buffer, 1, readCount, m_stream);
 }
 
 //-----------------------------------------------------------------------------
@@ -98,9 +141,9 @@ size_t FileStream::Read(void* buffer, size_t readCount)
 //-----------------------------------------------------------------------------
 void FileStream::Write( const void* data, size_t byteCount )
 {
-	LN_THROW(mStream, InvalidOperationException);
+	LN_THROW(m_stream, InvalidOperationException);
 
-	size_t nWriteSize = fwrite( data, 1, byteCount, mStream );
+	size_t nWriteSize = fwrite( data, 1, byteCount, m_stream );
 	LN_THROW(nWriteSize == byteCount, NotSupportedException);
 }
 
@@ -109,14 +152,14 @@ void FileStream::Write( const void* data, size_t byteCount )
 //-----------------------------------------------------------------------------
 void FileStream::Seek(int64_t offset, SeekOrigin origin)
 {
-	LN_THROW(mStream, InvalidOperationException);
+	LN_THROW(m_stream, InvalidOperationException);
 
 #ifdef LN_WIN32
-	_fseeki64(mStream, offset, origin);
+	_fseeki64(m_stream, offset, origin);
 #else
 	// TODO:
 	// http://stackoverflow.com/questions/1035657/seeking-and-reading-large-files-in-a-linux-c-application
-	fseek(mStream, offset, origin);
+	fseek(m_stream, offset, origin);
 #endif
 }
 
@@ -125,8 +168,8 @@ void FileStream::Seek(int64_t offset, SeekOrigin origin)
 //-----------------------------------------------------------------------------
 void FileStream::Flush()
 {
-	LN_THROW(mStream, InvalidOperationException);
-	fflush(mStream);
+	LN_THROW(m_stream, InvalidOperationException);
+	fflush(m_stream);
 }
 
 } // namespace Lumino

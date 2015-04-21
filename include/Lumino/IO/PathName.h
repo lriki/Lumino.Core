@@ -201,6 +201,11 @@ public:
 	bool operator == (const PathNameT& path) const { return Equals(path); }
 
 public:
+	
+	/**
+		@brief		カレントディレクトリのパスを取得します。
+	*/
+	static PathNameT GetCurrentDirectory();
 
 	/**	
 		@brief		あるフォルダ内でユニークなファイルパス(絶対パス)を生成して返す

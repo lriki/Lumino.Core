@@ -41,10 +41,10 @@ public:
 
 	/**
 		@brief		コンストラクタで指定されたファイルパスを使用してファイルストリームを開きます。
-		@param[in]	mode	: ファイルを開く方法
-		@param[in]	access	: ファイルへのアクセス方法
+		@param[in]	mode		: ファイルを開く方法
+		@param		openMode	: ファイルを開く方法 (FileOpenMode のフラグの組み合わせ)
 	*/
-	void Open(FileMode mode, FileAccess access);
+	void Open(FileOpenMode openMode);
 
 	/**
 		@brief		開いているファイルストリームを閉じます。
@@ -73,8 +73,8 @@ public:
 
 public:
 	// override Stream
-	virtual bool CanRead();
-	virtual bool CanWrite();
+	virtual bool CanRead() const;
+	virtual bool CanWrite() const;
 	virtual int64_t GetLength() const;
 	virtual int64_t GetPosition() const;
 	virtual size_t Read(void* buffer, size_t byteCount);
@@ -83,9 +83,8 @@ public:
 	virtual void Flush();
 
 private:
-	PathName	m_filePath;
-	FileAccess	m_fileAccess;
-	FILE*		m_stream;
+	PathName		m_filePath;
+	FileStream*		m_fileStream;
 
 };
 

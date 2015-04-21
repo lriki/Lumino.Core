@@ -101,6 +101,7 @@
     <ClCompile Include="..\..\test\UnitTest\IO\Test_IO_ASync.cpp" />
     <ClCompile Include="..\..\test\UnitTest\IO\Test_IO_BinaryReader.cpp" />
     <ClCompile Include="..\..\test\UnitTest\IO\Test_IO_File.cpp" />
+    <ClCompile Include="..\..\test\UnitTest\IO\Test_IO_FileStream.cpp" />
     <ClCompile Include="..\..\test\UnitTest\IO\Test_IO_FileUtils.cpp" />
     <ClCompile Include="..\..\test\UnitTest\IO\Test_IO_MemoryStream.cpp" />
     <ClCompile Include="..\..\test\UnitTest\IO\Test_IO_PathName.cpp" />

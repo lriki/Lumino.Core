@@ -10,5 +10,5 @@ protected:
 TEST_F(Test_IO_File, Open)
 {
 	File file1(LOCALFILE("TestData/test1.txt"));
-	file1.Open(FileMode_Open, FileAccess_Read);
+	file1.Open(FileOpenMode_Read);
 }

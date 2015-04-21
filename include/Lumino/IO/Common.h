@@ -6,6 +6,18 @@ namespace Lumino
 {
 class IArchive;
 
+///< ファイルを開く方法
+enum FileOpenMode
+{
+	FileOpenMode_Read		= 0x0001,									///< 読み取りアクセス
+	FileOpenMode_Write		= 0x0002,									///< 書き込みアクセス
+	FileOpenMode_ReadWrite	= FileOpenMode_Read | FileOpenMode_Write,	///< 読み取り及び書き込みアクセス
+
+	FileOpenMode_Append		= 0x0004,		///< ファイルを開き、ファイルの末尾をシークする
+	FileOpenMode_Truncate	= 0x0008,		///< ファイルが存在する場合、サイズを 0 にする
+};
+
+#if 0
 /// ファイルを開く方法または作成する方法
 enum FileMode
 {
@@ -36,6 +48,7 @@ enum FileShare
 
 	FileShare_Max,				///< (terminator)
 };
+#endif
 
 /// ファイルへのアクセス優先度
 enum FileAccessPriority
@@ -45,14 +58,22 @@ enum FileAccessPriority
 	FileAccessPriority_ArchiveOnly,			///< アーカイブのみ   
 };
 
+/// シーク位置の指定の基準
+enum SeekOrigin
+{
+	SeekOrigin_Begin	= SEEK_SET,			/// ストリームの先頭
+	SeekOrigin_Current	= SEEK_CUR,			/// ストリームの現在位置
+	SeekOrigin_End		= SEEK_END,			/// ストリームの末尾
+};
+
 /// 非同期処理の状態
 enum ASyncIOState
 {
-	ASyncIOState_Idle = 0,				///< 待機状態 (初期状態)
-	ASyncIOState_Ready,					///< 実行可能状態 (実行待ちキューに入っている状態)
-	ASyncIOState_Processing,			///< 実行状態 (処理中)
-	ASyncIOState_Completed,				///< 終了状態 (処理終了後)
-	ASyncIOState_Failed,				///< 終了状態 (処理終了後・処理に失敗した)
+	ASyncIOState_Idle = 0,					///< 待機状態 (初期状態)
+	ASyncIOState_Ready,						///< 実行可能状態 (実行待ちキューに入っている状態)
+	ASyncIOState_Processing,				///< 実行状態 (処理中)
+	ASyncIOState_Completed,					///< 終了状態 (処理終了後)
+	ASyncIOState_Failed,					///< 終了状態 (処理終了後・処理に失敗した)
 
 	ASyncIOState_Max,
 };

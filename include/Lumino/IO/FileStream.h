@@ -18,10 +18,9 @@ public:
 	/**
 		@brief	ファイルをバイナリモードで開く
 		@param	filePath	: ファイル名
-		@param	fileMode	: ファイルを開く方法または作成する方法
-		@param	fileAccess	: ファイルにアクセスする方法
+		@param	openMode	: ファイルを開く方法 (FileOpenMode のフラグの組み合わせ)
 	*/
-	FileStream(const TCHAR* filePath, FileMode fileMode, FileAccess fileAccess);
+	FileStream(const TCHAR* filePath, uint32_t openMode);
 
 	virtual ~FileStream();
 
@@ -30,10 +29,9 @@ public:
 	/**
 		@brief	ファイルをバイナリモードで開く
 		@param	filePath	: ファイル名
-		@param	fileMode	: ファイルを開く方法または作成する方法
-		@param	fileAccess	: ファイルにアクセスする方法
+		@param	openMode	: ファイルを開く方法 (FileOpenMode のフラグの組み合わせ)
 	*/
-	void Open(const TCHAR* filePath, FileMode fileMode, FileAccess fileAccess);
+	void Open(const TCHAR* filePath, uint32_t openMode);
 
 	/**
 		@brief	ファイルを閉じる
@@ -42,8 +40,8 @@ public:
 
 public:
 	// override
-	virtual bool CanRead() { return (mFileAccess == FileAccess_Read) || (mFileAccess == FileAccess_ReadWrite); }
-	virtual bool CanWrite() { return (mFileAccess == FileAccess_Write) || (mFileAccess == FileAccess_ReadWrite); }
+	virtual bool CanRead() const;
+	virtual bool CanWrite() const;
 	virtual int64_t GetLength() const;
 	virtual int64_t GetPosition() const;
 	virtual size_t Read(void* buffer, size_t byteCount);
@@ -52,8 +50,8 @@ public:
 	virtual void Flush();
 
 private:
-	FILE*		mStream;
-	FileAccess	mFileAccess;
+	FILE*		m_stream;
+	uint32_t	m_openModeFlags;
 };
 
 } // namespace Lumino

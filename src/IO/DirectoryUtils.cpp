@@ -5,6 +5,32 @@
 
 namespace Lumino
 {
+	
+//=============================================================================
+// DirectoryUtils
+//=============================================================================
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<>
+size_t DirectoryUtils::GetCurrentDirectory(char* outPath)
+{
+#ifdef LN_WIN32
+	return ::GetCurrentDirectoryA(LN_MAX_PATH, outPath);
+#else
+	return strlen(getcwd(outPath, LN_MAX_PATH));
+#endif
+}
+template<>
+size_t DirectoryUtils::GetCurrentDirectory(wchar_t* outPath)
+{
+#ifdef LN_WIN32
+	return ::GetCurrentDirectoryW(LN_MAX_PATH, outPath);
+#else
+	LN_THROW(0, NotImplementedException);
+#endif
+}
 
 //-----------------------------------------------------------------------------
 //

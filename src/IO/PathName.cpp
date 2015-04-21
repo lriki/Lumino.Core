@@ -5,9 +5,14 @@
 #include <Lumino/IO/FileUtils.h>
 #include <Lumino/IO/PathName.h>
 #include <Lumino/IO/FileManager.h>
+#include <Lumino/IO/DirectoryUtils.h>
 
 namespace Lumino
 {
+
+//=============================================================================
+// BasicPathName
+//=============================================================================
 
 //-----------------------------------------------------------------------------
 //
@@ -215,6 +220,24 @@ std::string BasicPathName<TChar>::ToLocalChar() const
 	BasicString<char> tmp;
 	tmp.AssignCStr(m_path.GetCStr());
 	return std::string(tmp.GetCStr());
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+BasicPathName<TChar> BasicPathName<TChar>::GetCurrentDirectory()
+{
+	static BasicPathName<TChar> path;
+
+	TChar curDir[LN_MAX_PATH];
+	size_t len = DirectoryUtils::GetCurrentDirectory(curDir);
+
+	// メモリ確保を抑える。
+	if (path.m_path != curDir) {
+		path = curDir;
+	}
+	return path;
 }
 
 //-----------------------------------------------------------------------------

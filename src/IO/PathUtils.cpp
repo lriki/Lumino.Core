@@ -2,10 +2,41 @@
 #include "../Internal.h"
 #include "../../include/Lumino/Base/StringUtils.h"
 #include "../../include/Lumino/IO/PathUtils.h"
+#include "../../include/Lumino/IO/DirectoryUtils.h"
 
 namespace Lumino
 {
-	
+
+//=============================================================================
+// PathUtils
+//=============================================================================
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+bool PathUtils::IsSeparatorChar(TChar ch)
+{
+#ifdef LN_WIN32
+	return (ch == '\\' || ch == '/');
+#else
+	return (ch == '/');
+#endif
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+bool PathUtils::IsVolumeSeparatorChar(TChar ch)
+{
+#ifdef LN_WIN32
+	return (ch == ':');
+#else
+	return false;
+#endif
+}
+
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
@@ -169,10 +200,291 @@ template const wchar_t* PathUtils::GetFileNameSub(const wchar_t* path);
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+template<typename TChar>
+int PathUtils::CanonicalizePath(const TChar* srcPath, size_t srcLen, TChar* outPath)
+{
+	/*	
+		Ubuntu の realpath は実際にファイルが存在しないと変なパスを返した。(/A/B/../C が /A だけになってしまう)
+		なので、自前実装。
+
+		パスは以下のように、/ を右寄せしたトークンのように解析する。
+
+		C:/Projects/bin/Debug/	→ [C:/][Projects/][bin/][Debug/]
+		/mnt/test				→ [/][mnt/][test]
+		A/B/.					→ [A/][B/][.]
+		
+		解析は srcPath の後ろから行っている。
+		後ろから前へ行うことで、一時バッファや巻き戻しを使用することなく、比較的シンプルに実装できる。
+		ただし、結果は outPath に右詰で出力されるため、最後に左詰にする必要がある。
+	*/
+
+	if (srcLen == 0) {
+		outPath[0] = '\0';
+		return 0;
+	}
+
+	const TChar*	readPos = (srcPath + srcLen);		// 終端 \0 を指す
+	TChar*			writeEnd = (outPath + srcLen);		// 書き込み先の終端。
+	TChar*			writePos = writeEnd;				// 書き込み位置。この1つ前から書ける
+	int				depth = 0;							// /.. の深さ
+	bool			isFullPath = false;
+
+	while (srcPath < readPos)
+	{
+		// 1つ前の / を探す
+		const TChar* tokenBegin = readPos - 1;	// readPos はこの時点では終端 \0 か前回のトークンの先頭文字を指している
+		for (; srcPath < tokenBegin && !IsSeparatorChar(*(tokenBegin - 1)); --tokenBegin);
+		//++tokenBegin;
+		size_t tokenLen = readPos - tokenBegin;
+
+		bool isSpecial = false;
+		if (tokenLen > 0)
+		{
+			// [/]
+			if (tokenLen == 1 && IsSeparatorChar(tokenBegin[0]))
+			{
+				if (tokenBegin == srcPath) {
+					isFullPath = true;	// 先頭文字の / だったらルート要素扱い
+										// スキップせずに / を出力する
+				}
+				else {
+					// 書き込みはスキップ
+					isSpecial = true;
+				}
+			}
+			// [.] or [./]
+			else if (	(tokenLen == 1 && tokenBegin[0] == '.') ||
+						(tokenLen == 2 && tokenBegin[0] == '.' && IsSeparatorChar(tokenBegin[1])))
+			{
+				// 書き込みはスキップ
+				isSpecial = true;
+			}
+			// [..] or [../]
+			else if (	(tokenLen == 2 && tokenBegin[0] == '.' && tokenBegin[1] == '.') ||
+						(tokenLen == 3 && tokenBegin[0] == '.' && tokenBegin[1] == '.' && IsSeparatorChar(tokenBegin[2])))
+			{
+				// .. をカウントして書き込みはスキップ
+				++depth;
+				isSpecial = true;
+			}
+		}
+
+		// [xxxx] or [xxxx/]
+		if (!isSpecial)
+		{
+			// パスの先頭トークンである場合、ルート要素であるかチェック
+			if (tokenBegin == srcPath)
+			{
+#ifdef LN_WIN32
+				for (size_t i = 0; i < tokenLen; ++i) {
+					if (IsVolumeSeparatorChar(tokenBegin[i])) {
+						isFullPath = true;	// "C:" のように、トークン内に : が含まれていた
+						break;
+					}
+				}
+#else
+				//if (IsSeparatorChar(tokenBegin[0])) {
+				//	isRoot = true;		// パス先頭が / である
+				//	isFullPath = true;
+				//}
+#endif
+			}
+
+			// .. のネストが 0 か、ルート要素を示すトークンであれば出力する
+			if (depth == 0 || isFullPath)
+			{
+				writePos -= tokenLen;
+				if (memcpy_s(writePos, (writeEnd - writePos) * sizeof(TChar), tokenBegin, tokenLen * sizeof(TChar)) != 0) {
+					return -1;	// FailSafe.
+				}
+			}
+			else if (depth > 0) {
+				// .. がある場合、このフォルダ名は捨てて、.. のカウントを下げる
+				--depth;
+			}
+		}
+
+		readPos = tokenBegin;
+	}
+
+	// outPath には右詰でパス文字列が格納されているので、左に詰める
+	int outLen = writeEnd - writePos;
+	while (writePos < writeEnd)
+	{
+		*outPath = *writePos;
+		++outPath;
+		++writePos;
+	}
+
+	// 入力パスの末尾が / だったのに、生成した出力パスの末尾は / ではなかった。("./" などで発生する)
+	// .NET の動作にあわせ、/ をつける
+	if (IsSeparatorChar(*(srcPath + srcLen - 1)) && !IsSeparatorChar(*(outPath - 1))) {
+		*outPath = *(srcPath + srcLen - 1);
+		++outPath;
+	}
+
+	*outPath = '\0';
+	return outLen;
+
+#if 0	// ↓はトークンの / を左詰するパターン。↑の方が若干短くなったけどあまり変わらなかったかも。。。
+	/*	
+		Ubuntu の realpath は実際にファイルが存在しないと変なパスを返した。(/A/B/../C が /A だけになってしまう)
+		なので、自前実装。
+
+		パスは以下のように、/ を左寄せしたトークンのように解析する。
+
+		C:/Projects/ConsoleApplication1/bin/Debug/	→ [C:][/Projects][/ConsoleApplication1][/bin][/Debug][/]
+		/mnt/test									→ [/mnt][/test]
+		A/B/.										→ [A][/B][/.]
+		
+		解析は srcPath の後ろから行っている。
+		後ろから前へ行うことで、一時バッファや巻き戻しを使用することなく、比較的シンプルに実装できる。
+		ただし、結果は outPath に右詰で出力されるため、最後に左詰にする必要がある。
+	*/
+
+	const TChar*	readPos = (srcPath + srcLen);		// 終端 \0 を指す
+	TChar*			writeEnd = (outPath + srcLen);		// 書き込み先の終端。
+	TChar*			writePos = writeEnd;				// 書き込み位置。この1つ前から書ける
+	int				depth = 0;							// /.. の深さ
+	bool			isFullPath = false;
+
+	while (srcPath < readPos)
+	{
+		// 1つ前の / を探す
+		const TChar* tokenBegin = readPos - 1;	// readPos はこの時点では終端 \0 か前回のトークンの / を指している
+		for (; srcPath < tokenBegin && !IsSeparatorChar(*tokenBegin); --tokenBegin);
+		size_t tokenLen = readPos - tokenBegin;
+
+		// 名前部分の先頭を指しておく (/ があれば / の次)	/* "./A" に備える */
+		const TChar* nameBegin = tokenBegin;
+		const TChar* tokenEnd = tokenBegin + tokenLen;
+		if (IsSeparatorChar(tokenBegin[0])) {
+			++nameBegin;
+		}
+		size_t nameLen = tokenEnd - nameBegin;
+
+		bool isSpecial = false;
+		if (tokenLen > 0 /*&& tokenBegin[0] == '/'*/)
+		{
+			// [空]
+			if (nameBegin == tokenEnd/*tokenLen == 1*/) {
+				isSpecial = true;
+				// 書き込みはスキップ
+			}
+			// [.]
+			else if (nameLen == 1 && /*tokenLen == 2 && */nameBegin[0] == '.')
+			{
+				isSpecial = true;
+				// 書き込みはスキップ
+			}
+			// [..]
+			else if (nameLen == 2 && /*tokenLen == 3 && */nameBegin[0] == '.' && nameBegin[1] == '.')
+			{
+				isSpecial = true;
+				// .. をカウントして書き込みはスキップ
+				++depth;
+			}
+		}
+
+		// [/xxxx] or [xxxx]
+		if (!isSpecial)
+		{
+			// パスの先頭トークンである場合、ルート要素であるかチェック
+			bool isRoot = false;
+			if (tokenBegin == srcPath)
+			{
+#ifdef LN_WIN32
+				for (size_t i = 0; i < tokenLen; ++i) {
+					if (IsVolumeSeparatorChar(tokenBegin[i])) {
+						isRoot = true;	// "C:" のように、トークン内に : が含まれていた
+						isFullPath = false;
+						break;
+					}
+				}
+#else
+				if (IsSeparatorChar(tokenBegin[0])) {
+					isRoot = true;		// パス先頭が / である
+					isFullPath = false;
+				}
+#endif
+			}
+
+			// .. のネストが 0 か、ルート要素を示すトークンであれば出力する
+			if (depth == 0 || isRoot)
+			{
+				writePos -= tokenLen;
+				if (memcpy_s(writePos, (writeEnd - writePos) * sizeof(TChar), tokenBegin, tokenLen * sizeof(TChar)) != 0) {
+					return -1;	// FailSafe.
+				}
+			}
+			else if (depth > 0) {
+				// .. がある場合、このフォルダ名は捨てて、.. のカウントを下げる
+				--depth;
+			}
+		}
+
+		readPos = tokenBegin;
+	}
+
+	if (!isFullPath && IsSeparatorChar(writePos[0])) {
+		++writePos;
+	}
+
+	// outPath には右詰でパス文字列が格納されているので、左に詰める
+	int outLen = writeEnd - writePos;
+	while (writePos < writeEnd)
+	{
+		*outPath = *writePos;
+		++outPath;
+		++writePos;
+	}
+	*outPath = '\0';
+	return outLen;
+#endif
+}
+template int PathUtils::CanonicalizePath(const char* srcPath, size_t srcLen, char* outPath);
+template int PathUtils::CanonicalizePath(const wchar_t* srcPath, size_t srcLen, wchar_t* outPath);
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+void PathUtils::CanonicalizePath(const TChar* srcPath, TChar* outPath)
+{
+	size_t srcLen = StringUtils::StrLen(srcPath);
+	if (IsAbsolutePath(srcPath)) {
+		// 絶対パスであればそのまま出力してしまう
+		CanonicalizePath(srcPath, srcLen, outPath);
+	}
+	else
+	{
+		// 相対パスであれば、カレントディレクトリと結合してから変換する
+		TChar src[LN_MAX_PATH];
+		size_t len2 = DirectoryUtils::GetCurrentDirectory(src);
+		src[len2] = DirectorySeparatorChar;
+		++len2;
+		StringUtils::StrNCpy(src + len2, LN_MAX_PATH - len2, srcPath, srcLen);
+		srcLen += len2;
+		CanonicalizePath(src, srcLen, outPath);
+	}
+	// セパレータを統一する
+	NormalizeSeparator(outPath);
+}
+template void PathUtils::CanonicalizePath<char>(const char* srcPath, char* outPath);
+template void PathUtils::CanonicalizePath<wchar_t>(const wchar_t* srcPath, wchar_t* outPath);
+#if 0
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 template<>
 void PathUtils::CanonicalizePath(const char* srcPath, char* outPath)
 {
-#ifdef _WIN32
+	if (IsAbsolutePath(srcPath)) {
+		char src[LN_MAX_PATH];
+		str
+	}
+#if 0
+#ifdef LN_WIN32
 	char* canonPath = _fullpath(outPath, srcPath, LN_MAX_PATH);
 	LN_THROW(canonPath != NULL, ArgumentException);
 #else
@@ -188,11 +500,13 @@ void PathUtils::CanonicalizePath(const char* srcPath, char* outPath)
 		}
 	}
 #endif
+#endif
 }
 template<>
 void PathUtils::CanonicalizePath(const wchar_t* srcPath, wchar_t* outPath)
 {
-#ifdef _WIN32
+#if 0
+#ifdef LN_WIN32
 	wchar_t* canonPath = _wfullpath(outPath, srcPath, LN_MAX_PATH);
 #else
 	char mbcsSrc[LN_MAX_PATH];
@@ -209,9 +523,29 @@ void PathUtils::CanonicalizePath(const wchar_t* srcPath, wchar_t* outPath)
 	}
 #endif
 	LN_THROW(canonPath != NULL, ArgumentException);
+#endif
 }
+#endif
 //template void PathUtils::CanonicalizePath<char>(const TChar* srcPath, TChar* outPath);
 //template void PathUtils::CanonicalizePath<wchar_t>(const TChar* srcPath, TChar* outPath);
+
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+void PathUtils::NormalizeSeparator(TChar* srcPath)
+{
+#ifdef LN_WIN32
+	for (; *srcPath; ++srcPath)
+	{
+		if (*srcPath == AltDirectorySeparatorChar) {
+			*srcPath = DirectorySeparatorChar;
+		}
+	}
+#endif
+}
+
 
 /**
 @brief		2つのパス文字列を比較する

@@ -6,13 +6,16 @@
 namespace Lumino
 {
 
+//=============================================================================
+// File
+//=============================================================================
+
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 File::File(const String& filePath)
 	: m_filePath(filePath)
-	, m_fileAccess(FileAccess_Read)
-	, m_stream(NULL)
+	, m_fileStream(NULL)
 {
 }
 
@@ -31,29 +34,16 @@ File::File(const String& filePath)
 //-----------------------------------------------------------------------------
 File::~File()
 {
+	Close();
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void File::Open(FileMode mode, FileAccess access)
+void File::Open(FileOpenMode openMode)
 {
-	LN_THROW(m_stream == NULL, InvalidOperationException);	// すでにファイルが開かれている
-
-	m_fileAccess = access;
-
-	const TCHAR* modeTable[FileMode_Max][FileAccess_Max] = {
-		// FileAccess_Read	FileAccess_ReadWrite	FileAccess_Write
-		{ NULL,				_T("w+b"),				_T("wb") },		// FileMode_Create
-		{ _T("rb"),			_T("w+b"),				_T("wb") },		// FileMode_Open
-		{ _T("ab"),			_T("a+b"),				_T("a+b") },	// FileMode_Append
-	};
-
-	const TCHAR* modeStr = modeTable[mode][access];
-	LN_THROW(modeStr, FileNotFoundException);
-
-	errno_t err = _tfopen_s(&m_stream, m_filePath.GetCStr(), modeStr);
-	LN_THROW(err == 0, FileNotFoundException);
+	LN_THROW(m_fileStream == NULL, InvalidOperationException);	// すでにファイルが開かれている
+	m_fileStream = LN_NEW FileStream(m_filePath.GetCStr(), openMode);
 }
 
 //-----------------------------------------------------------------------------
@@ -61,10 +51,7 @@ void File::Open(FileMode mode, FileAccess access)
 //-----------------------------------------------------------------------------
 void File::Close()
 {
-	if (m_stream != NULL) {
-		fclose(m_stream);
-		m_stream = NULL;
-	}
+	LN_SAFE_RELEASE(m_fileStream);
 }
 
 //-----------------------------------------------------------------------------
@@ -86,17 +73,19 @@ String File::GetFileName() const
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-bool File::CanRead()
+bool File::CanRead() const
 {
-	return (m_fileAccess == FileAccess_Read) || (m_fileAccess == FileAccess_ReadWrite);
+	LN_THROW(m_fileStream, InvalidOperationException);
+	return m_fileStream->CanRead();
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-bool File::CanWrite()
+bool File::CanWrite() const
 {
-	return (m_fileAccess == FileAccess_Write) || (m_fileAccess == FileAccess_ReadWrite);
+	LN_THROW(m_fileStream, InvalidOperationException);
+	return m_fileStream->CanWrite();
 }
 
 //-----------------------------------------------------------------------------
@@ -104,7 +93,8 @@ bool File::CanWrite()
 //-----------------------------------------------------------------------------
 int64_t File::GetLength() const
 {
-	return FileUtils::GetFileSize(m_filePath.GetCStr());
+	LN_THROW(m_fileStream, InvalidOperationException);
+	return m_fileStream->GetLength();
 }
 
 //-----------------------------------------------------------------------------
@@ -112,8 +102,8 @@ int64_t File::GetLength() const
 //-----------------------------------------------------------------------------
 int64_t File::GetPosition() const
 {
-	// TODO: 64bit 確認 → ftello?
-	return ftell(m_stream);
+	LN_THROW(m_fileStream, InvalidOperationException);
+	return m_fileStream->GetPosition();
 }
 
 //-----------------------------------------------------------------------------
@@ -121,8 +111,8 @@ int64_t File::GetPosition() const
 //-----------------------------------------------------------------------------
 size_t File::Read(void* buffer, size_t readCount)
 {
-	LN_THROW(m_stream, InvalidOperationException);
-	return fread(buffer, 1, readCount, m_stream);
+	LN_THROW(m_fileStream, InvalidOperationException);
+	return m_fileStream->Read(buffer, readCount);
 }
 
 //-----------------------------------------------------------------------------
@@ -130,9 +120,8 @@ size_t File::Read(void* buffer, size_t readCount)
 //-----------------------------------------------------------------------------
 void File::Write(const void* data, size_t byteCount)
 {
-	LN_THROW(m_stream, InvalidOperationException);
-	size_t writeSize = fwrite(data, 1, byteCount, m_stream);
-	LN_THROW(writeSize == byteCount, NotSupportedException);
+	LN_THROW(m_fileStream, InvalidOperationException);
+	m_fileStream->Write(data, byteCount);
 }
 
 //-----------------------------------------------------------------------------
@@ -140,15 +129,8 @@ void File::Write(const void* data, size_t byteCount)
 //-----------------------------------------------------------------------------
 void File::Seek(int64_t offset, SeekOrigin origin)
 {
-	LN_THROW(m_stream, InvalidOperationException);
-
-#ifdef LN_WIN32
-	_fseeki64(m_stream, offset, origin);
-#else
-	// TODO:
-	// http://stackoverflow.com/questions/1035657/seeking-and-reading-large-files-in-a-linux-c-application
-	fseek(m_stream, offset, origin);
-#endif
+	LN_THROW(m_fileStream, InvalidOperationException);
+	m_fileStream->Seek(offset, origin);
 }
 
 //-----------------------------------------------------------------------------
@@ -156,8 +138,8 @@ void File::Seek(int64_t offset, SeekOrigin origin)
 //-----------------------------------------------------------------------------
 void File::Flush()
 {
-	LN_THROW(m_stream, InvalidOperationException);
-	fflush(m_stream);
+	LN_THROW(m_fileStream, InvalidOperationException);
+	m_fileStream->Flush();
 }
 
 } // namespace Lumino

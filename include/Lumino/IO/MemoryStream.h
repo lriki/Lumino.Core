@@ -45,8 +45,8 @@ public:
 
 public:
 	// override Stream
-	virtual bool CanRead();
-	virtual bool CanWrite();
+	virtual bool CanRead() const;
+	virtual bool CanWrite() const;
 	virtual int64_t GetLength() const;
 	virtual int64_t GetPosition() const;
 	virtual size_t Read(void* buffer, size_t byteCount) { LN_THROW(0, NotImplementedException); return 0; }

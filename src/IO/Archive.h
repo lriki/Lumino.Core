@@ -146,8 +146,8 @@ private:
 	virtual ~ArchiveStream();
 
 public:
-	virtual bool CanRead() { return true; }
-	virtual bool CanWrite() { return false; }
+	virtual bool CanRead() const { return true; }
+	virtual bool CanWrite() const { return false; }
 	virtual int64_t GetLength() const { return m_dataSize; }
 	virtual int64_t GetPosition() const { return m_seekPoint; }
 	virtual size_t Read(void* buffer, size_t byteCount);

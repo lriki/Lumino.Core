@@ -326,7 +326,7 @@ String FileUtils::ReadAllText(const TCHAR* filePath, const Text::Encoding* encod
 void FileUtils::WriteAllBytes(const TCHAR* filePath, const void* buffer, size_t size)
 {
 	FileStream stream;
-	stream.Open(filePath, FileMode_Create, FileAccess_Write);
+	stream.Open(filePath, FileOpenMode_Write | FileOpenMode_Truncate);
 	stream.Write(buffer, size);
 }
 

@@ -43,7 +43,7 @@ GTEST_API_ int main(int argc, char **argv) {
 	char* testArgs[] = {
 		argv[0],
 		//"--gtest_filter=Test_Text_EncodingDetector.*"
-		"--gtest_filter=Test_IO_BinaryReader.*"
+		"--gtest_filter=Test_IO_PathName.*"
 	};
 	argc = sizeof(testArgs) / sizeof(char*);
 	testing::InitGoogleTest(&argc, (char**)testArgs);

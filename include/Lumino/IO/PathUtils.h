@@ -21,6 +21,14 @@ public:
 
 public:
 
+	/// 文字がディレクトリセパレータ (DirectorySeparatorChar or AltDirectorySeparatorChar) であるかを判定する
+	template<typename TChar>
+	static bool IsSeparatorChar(TChar ch);
+
+	/// ボリュームセパレータであるかを判定する
+	template<typename TChar>
+	static bool IsVolumeSeparatorChar(TChar ch);
+
 	/// path がルートパスであるかを判定する ("C:/", "C:", "/" 等)
 	template<typename TChar>
 	static bool IsRootPath(const TChar* path);
@@ -66,6 +74,20 @@ public:
 	*/
 	template<typename TChar>
 	static void CanonicalizePath(const TChar* srcPath, TChar* outPath);
+
+	/**
+		@brief		パスを単純化する
+		@return		-1 を返した場合は失敗。
+		@details	このオーバーロードは現在内部処理用です。
+	*/
+	template<typename TChar>
+	static int CanonicalizePath(const TChar* srcPath, size_t srcLen, TChar* outPath);
+
+	/**
+		@brief		パスに含まれるディレクトリセパレータを統一する。
+	*/
+	template<typename TChar>
+	static void NormalizeSeparator(TChar* srcPath);
 
 	/**
 		@brief		2つのパス文字列を比較する

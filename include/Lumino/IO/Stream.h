@@ -2,17 +2,10 @@
 #pragma once
 
 #include "../Base/RefObject.h"
+#include "Common.h"
 
 namespace Lumino
 {
-
-/// ストリーム位置の指定の基準
-enum SeekOrigin
-{
-	SeekOrigin_Begin	= SEEK_SET,		/// ストリームの先頭
-	SeekOrigin_Current	= SEEK_CUR,		/// ストリームの現在位置
-	SeekOrigin_End		= SEEK_END,		/// ストリームの末尾
-};
 
 /**
 	@brief		ストリームのベースクラス
@@ -21,20 +14,16 @@ class Stream
     : public RefObject
 {
 public:
-	Stream() {}
-	virtual ~Stream() {}
-
-public:
 
 	/**
 		@brief	読み取りをサポートするかどうか
 	*/
-	virtual bool CanRead() = 0;
+	virtual bool CanRead() const = 0;
 
 	/**
 		@brief	書き込みをサポートするかどうか
 	*/
-	virtual bool CanWrite() = 0;
+	virtual bool CanWrite() const = 0;
 
 	/**
 		@brief	ストリームの長さ (バイト単位) を取得します。
