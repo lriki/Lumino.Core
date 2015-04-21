@@ -2,6 +2,7 @@
 
 #include "Common.h"
 #include "Stream.h"
+#include "PathName.h"
 
 namespace Lumino
 {
@@ -50,8 +51,13 @@ public:
 	virtual void Flush();
 
 private:
-	FILE*		m_stream;
-	uint32_t	m_openModeFlags;
+	void CheckOpen() const;
+	void Open() const;
+
+private:
+	mutable FILE*	m_stream;
+	PathName		m_filePath;
+	uint32_t		m_openModeFlags;
 };
 
 } // namespace Lumino

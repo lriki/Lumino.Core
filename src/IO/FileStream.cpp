@@ -41,47 +41,13 @@ void FileStream::Open(const TCHAR* filePath, uint32_t openMode)
 	LN_ASSERT( filePath );
 	Close();
 
-	const TCHAR* mode = NULL;
-	if ((openMode & FileOpenMode_ReadWrite) == FileOpenMode_ReadWrite)
-	{
-		if (openMode & FileOpenMode_Append) {
-			mode = _T("a+");		// 読み取りと書き込み (末尾に追加する)
-		}
-		else if (openMode & FileOpenMode_Truncate) {
-			mode = _T("w+");		// 読み取りと書き込み (ファイルを空にする)
-		}
-		else {
-			mode = _T("r+");		// 読み取りと書き込み (ファイルが存在しない場合はエラー)
-		}
-	}
-	else if (openMode & FileOpenMode_Write)
-	{
-		if (openMode & FileOpenMode_Append) {
-			mode = _T("a");			// 書き込み (末尾に追加する。ファイルが無ければ新規作成)
-		}
-		else if (openMode & FileOpenMode_Truncate) {
-			mode = _T("w");			// 書き込み (ファイルを空にする)
-		}
-		else {
-			mode = _T("w");			// 書き込み (モード省略。Truncate)
-		}
-	}
-	else if (openMode & FileOpenMode_Read)
-	{
-		if (openMode & FileOpenMode_Append) {
-			mode = NULL;			// 読み込みなのに末尾追加はできない
-		}
-		else if (openMode & FileOpenMode_Truncate) {
-			mode = NULL;			// 読み込みなのにファイルを空にはできない
-		}
-		else {
-			mode = _T("r");			// 書き込み (モード省略。Truncate)
-		}
-	}
-	LN_THROW(mode, ArgumentException);
+	m_filePath = filePath;
+	m_openModeFlags = openMode;
 
-	errno_t err = _tfopen_s(&m_stream, filePath, mode);
-	LN_THROW(err == 0, FileNotFoundException);
+	// 遅延オープンでなければここで開いてしまう
+	if ((m_openModeFlags & FileOpenMode_Deferring) == 0) {
+		Open();
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -115,6 +81,7 @@ bool FileStream::CanWrite() const
 //-----------------------------------------------------------------------------
 int64_t FileStream::GetLength() const
 {
+	CheckOpen();
 	return (size_t)FileUtils::GetFileSize( m_stream );
 }
 
@@ -123,6 +90,7 @@ int64_t FileStream::GetLength() const
 //-----------------------------------------------------------------------------
 int64_t FileStream::GetPosition() const
 {
+	CheckOpen();
 	// TODO: 64bit 確認 → ftello?
 	return ftell(m_stream);
 }
@@ -132,7 +100,7 @@ int64_t FileStream::GetPosition() const
 //-----------------------------------------------------------------------------
 size_t FileStream::Read(void* buffer, size_t readCount)
 {
-	LN_THROW(m_stream, InvalidOperationException);
+	CheckOpen();
 	return fread(buffer, 1, readCount, m_stream);
 }
 
@@ -141,8 +109,7 @@ size_t FileStream::Read(void* buffer, size_t readCount)
 //-----------------------------------------------------------------------------
 void FileStream::Write( const void* data, size_t byteCount )
 {
-	LN_THROW(m_stream, InvalidOperationException);
-
+	CheckOpen();
 	size_t nWriteSize = fwrite( data, 1, byteCount, m_stream );
 	LN_THROW(nWriteSize == byteCount, NotSupportedException);
 }
@@ -152,7 +119,7 @@ void FileStream::Write( const void* data, size_t byteCount )
 //-----------------------------------------------------------------------------
 void FileStream::Seek(int64_t offset, SeekOrigin origin)
 {
-	LN_THROW(m_stream, InvalidOperationException);
+	CheckOpen();
 
 #ifdef LN_WIN32
 	_fseeki64(m_stream, offset, origin);
@@ -168,8 +135,76 @@ void FileStream::Seek(int64_t offset, SeekOrigin origin)
 //-----------------------------------------------------------------------------
 void FileStream::Flush()
 {
-	LN_THROW(m_stream, InvalidOperationException);
+	CheckOpen();
 	fflush(m_stream);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void FileStream::CheckOpen() const
+{
+	if ((m_openModeFlags & FileOpenMode_Deferring) != 0)
+	{
+		if (m_stream == NULL)
+		{
+			Open();
+		}
+	}
+	else
+	{
+		LN_THROW(m_stream != NULL, InvalidOperationException);
+	}
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void FileStream::Open() const
+{
+	LN_THROW(m_stream == NULL, InvalidOperationException);
+
+	const TCHAR* mode = NULL;
+	if ((m_openModeFlags & FileOpenMode_ReadWrite) == FileOpenMode_ReadWrite)
+	{
+		if (m_openModeFlags & FileOpenMode_Append) {
+			mode = _T("a+");		// 読み取りと書き込み (末尾に追加する)
+		}
+		else if (m_openModeFlags & FileOpenMode_Truncate) {
+			mode = _T("w+");		// 読み取りと書き込み (ファイルを空にする)
+		}
+		else {
+			mode = _T("r+");		// 読み取りと書き込み (ファイルが存在しない場合はエラー)
+		}
+	}
+	else if (m_openModeFlags & FileOpenMode_Write)
+	{
+		if (m_openModeFlags & FileOpenMode_Append) {
+			mode = _T("a");			// 書き込み (末尾に追加する。ファイルが無ければ新規作成)
+		}
+		else if (m_openModeFlags & FileOpenMode_Truncate) {
+			mode = _T("w");			// 書き込み (ファイルを空にする)
+		}
+		else {
+			mode = _T("w");			// 書き込み (モード省略。Truncate)
+		}
+	}
+	else if (m_openModeFlags & FileOpenMode_Read)
+	{
+		if (m_openModeFlags & FileOpenMode_Append) {
+			mode = NULL;			// 読み込みなのに末尾追加はできない
+		}
+		else if (m_openModeFlags & FileOpenMode_Truncate) {
+			mode = NULL;			// 読み込みなのにファイルを空にはできない
+		}
+		else {
+			mode = _T("r");			// 書き込み (モード省略。Truncate)
+		}
+	}
+	LN_THROW(mode, ArgumentException);
+
+	errno_t err = _tfopen_s(&m_stream, m_filePath, mode);
+	LN_THROW(err == 0, FileNotFoundException);
 }
 
 } // namespace Lumino

@@ -15,6 +15,8 @@ enum FileOpenMode
 
 	FileOpenMode_Append		= 0x0004,		///< ファイルを開き、ファイルの末尾をシークする
 	FileOpenMode_Truncate	= 0x0008,		///< ファイルが存在する場合、サイズを 0 にする
+
+	FileOpenMode_Deferring	= 0x0100,		///< ファイルを遅延モードで開く
 };
 
 #if 0
