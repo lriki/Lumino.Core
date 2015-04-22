@@ -74,7 +74,7 @@ enum ASyncIOState
 	ASyncIOState_Idle = 0,					///< 待機状態 (初期状態)
 	ASyncIOState_Ready,						///< 実行可能状態 (実行待ちキューに入っている状態)
 	ASyncIOState_Processing,				///< 実行状態 (処理中)
-	ASyncIOState_Completed,					///< 終了状態 (処理終了後)
+	ASyncIOState_Completed,					///< 終了状態 (正常終了)
 	ASyncIOState_Failed,					///< 終了状態 (処理終了後・処理に失敗した)
 
 	ASyncIOState_Max,
