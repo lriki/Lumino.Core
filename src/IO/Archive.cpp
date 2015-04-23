@@ -221,7 +221,7 @@ bool Archive::TryCreateStream(const PathName& fileFullPath, Stream** outStream)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-size_t Archive::ReadArchiveStream(byte_t* buffer, uint32_t count, FILE* stream, uint64_t dataOffset, uint64_t seekPos)
+size_t Archive::ReadArchiveStream(byte_t* buffer, size_t count, FILE* stream, uint64_t dataOffset, uint64_t seekPos)
 {
 	Threading::MutexScopedLock lock(m_mutex);
 	byte_t tmpSrcBuf[16];	// 復号前データ
@@ -239,7 +239,7 @@ size_t Archive::ReadArchiveStream(byte_t* buffer, uint32_t count, FILE* stream, 
 		fread(tmpSrcBuf, 1, 16, m_stream);	// アーカイブ内のデータは必ず 16byte にパディングされているので 16 読み取ってしまってよい
 		Camellia_DecryptBlock(KEY_SIZE, tmpSrcBuf, m_keyTable, tmpDstBuf);
 
-		uint32_t size = std::min(count, (uint32_t)(16 - frontLeadCount));	// 余分を除いたデータサイズ (min は count 以上書きこまないため)
+		uint32_t size = std::min(count, (size_t)(16 - frontLeadCount));	// 余分を除いたデータサイズ (min は count 以上書きこまないため)
 		memcpy(buffer, (tmpDstBuf + frontLeadCount), size);
 		buffer += size;
 		count -= size;

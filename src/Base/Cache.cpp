@@ -504,13 +504,21 @@ void CacheManager::ClearCache()
 void CacheManager::AddCacheUnusedList(ICacheObject* obj)
 {
 	LN_ASSERT(obj != NULL);
-	Threading::MutexScopedLock lock(m_mutex);
-
 	bool addedObj = false;
-	if (m_cacheUnusedList != NULL)	// Finalize() 済みチェック
 	{
-		m_cacheUsingMap.erase(obj->GetCacheObjectInfo().Key);
-		addedObj = m_cacheUnusedList->AddObject(obj);
+		/*	この関数の最後で DeleteCachedObject を呼び出すが、
+			obj がこの CacheManager を参照する最後のオブジェクトである場合
+			delete したとき、CacheManager も delete される。
+			その状態で MutexScopedLock が Unlock すると解放済みのオブジェクトを操作することになるので NG。
+			DeleteCachedObject() は排他処理したくないので、ブロックをひとつ下げて逃げる。
+		*/
+		Threading::MutexScopedLock lock(m_mutex);
+
+		if (m_cacheUnusedList != NULL)	// Finalize() 済みチェック
+		{
+			m_cacheUsingMap.erase(obj->GetCacheObjectInfo().Key);
+			addedObj = m_cacheUnusedList->AddObject(obj);
+		}
 	}
 
 	// 追加できなかったら、参照カウント 0 なのにキャッシュに入れなかったということ。delete する
