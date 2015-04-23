@@ -115,6 +115,7 @@ elseif (UNIX)
 	# link librarys.
 	list(APPEND LN_LINK_LIBS "dl")
 	list(APPEND LN_LINK_LIBS "bfd")
+	list(APPEND LN_LINK_LIBS "rt")
     find_package(X11 REQUIRED)
 
     #list(APPEND glfw_INCLUDE_DIRS ${X11_X11_INCLUDE_PATH})
