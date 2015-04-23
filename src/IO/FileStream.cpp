@@ -168,25 +168,25 @@ void FileStream::Open() const
 	if ((m_openModeFlags & FileOpenMode_ReadWrite) == FileOpenMode_ReadWrite)
 	{
 		if (m_openModeFlags & FileOpenMode_Append) {
-			mode = _T("a+");		// 読み取りと書き込み (末尾に追加する)
+			mode = _T("a+b");		// 読み取りと書き込み (末尾に追加する)
 		}
 		else if (m_openModeFlags & FileOpenMode_Truncate) {
-			mode = _T("w+");		// 読み取りと書き込み (ファイルを空にする)
+			mode = _T("w+b");		// 読み取りと書き込み (ファイルを空にする)
 		}
 		else {
-			mode = _T("r+");		// 読み取りと書き込み (ファイルが存在しない場合はエラー)
+			mode = _T("r+b");		// 読み取りと書き込み (ファイルが存在しない場合はエラー)
 		}
 	}
 	else if (m_openModeFlags & FileOpenMode_Write)
 	{
 		if (m_openModeFlags & FileOpenMode_Append) {
-			mode = _T("a");			// 書き込み (末尾に追加する。ファイルが無ければ新規作成)
+			mode = _T("ab");		// 書き込み (末尾に追加する。ファイルが無ければ新規作成)
 		}
 		else if (m_openModeFlags & FileOpenMode_Truncate) {
-			mode = _T("w");			// 書き込み (ファイルを空にする)
+			mode = _T("wb");		// 書き込み (ファイルを空にする)
 		}
 		else {
-			mode = _T("w");			// 書き込み (モード省略。Truncate)
+			mode = _T("wb");		// 書き込み (モード省略。Truncate)
 		}
 	}
 	else if (m_openModeFlags & FileOpenMode_Read)
@@ -198,7 +198,7 @@ void FileStream::Open() const
 			mode = NULL;			// 読み込みなのにファイルを空にはできない
 		}
 		else {
-			mode = _T("r");			// 書き込み (モード省略。Truncate)
+			mode = _T("rb");		// 読み込み
 		}
 	}
 	LN_THROW(mode, ArgumentException);

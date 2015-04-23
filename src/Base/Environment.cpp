@@ -1,4 +1,5 @@
 ﻿
+#include <time.h>
 #include "../Internal.h"
 #include <Lumino/Base/Environment.h>
 
@@ -39,8 +40,11 @@ uint64_t Environment::GetTickCount()
 	// GetTickCount() の方が無難かもしれない
 	return ::GetTickCount();
 #else
-	LN_THROW(0, NotImplementedException);
-	return 0;
+	struct timespec ts;
+	if (clock_gettime(CLOCK_MONOTONIC, &ts) != 0) {
+		return 0;
+	}
+	return ts.tv_nsec / 1000000;
 #endif
 }
 
