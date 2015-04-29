@@ -48,6 +48,12 @@ TEST_F(Test_Base_Rect, Basic)
 
 	ASSERT_TRUE(rc1.IsZero());
 	ASSERT_FALSE(rc5.IsZero());
+
+
+	ASSERT_TRUE(Rect(0, 1, 2, 3) == Rect(0, 1, 2, 3));
+	ASSERT_FALSE(Rect(0, 1, 2, 3) == Rect(5, 6, 7, 8));
+	ASSERT_FALSE(Rect(0, 1, 2, 3) != Rect(0, 1, 2, 3));
+	ASSERT_TRUE(Rect(0, 1, 2, 3) != Rect(5, 6, 7, 8));
 }
 
 //-----------------------------------------------------------------------------
