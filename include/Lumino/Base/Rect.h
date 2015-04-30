@@ -161,7 +161,7 @@ public:
 		int r = (GetRight() > rect.GetRight()) ? rect.GetRight() : GetRight();
 		int b = (GetBottom() > rect.GetBottom()) ? rect.GetBottom() : GetBottom();
 		X = l;
-		Y = r;
+		Y = t;
 		Width = r - l;
 		Height = b - t;
 	}
