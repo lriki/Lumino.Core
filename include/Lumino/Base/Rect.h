@@ -151,6 +151,21 @@ public:
 			Y + Height >= rect.Y + rect.Height);
 	}
 
+	/**
+		@brief	指定した矩形に収まるように、この矩形をクリッピングします。
+	*/
+	void Clip(const Rect& rect)
+	{
+		int l = (X < rect.X) ? rect.X : X;
+		int t = (Y < rect.Y) ? rect.Y : Y;
+		int r = (GetRight() > rect.GetRight()) ? rect.GetRight() : GetRight();
+		int b = (GetBottom() > rect.GetBottom()) ? rect.GetBottom() : GetBottom();
+		X = l;
+		Y = r;
+		Width = r - l;
+		Height = b - t;
+	}
+
 public:
 	bool operator == (const Rect& obj) const { return (X == obj.X && Y == obj.Y && Width == obj.Width && Height == obj.Height); }
 	bool operator != (const Rect& obj) const { return !operator==(obj); }
