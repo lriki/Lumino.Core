@@ -16,7 +16,7 @@ public:
 
 	/// item と一致する最初の要素を削除する
 	template <class T, typename TItem/*, typename TAllocator*/>
-	static void Remove(T& vec, const TItem& item)
+	static bool Remove(T& vec, const TItem& item)
 	{
 		typename T::iterator itr = vec.begin();
 		typename T::iterator end = vec.end();
@@ -24,9 +24,10 @@ public:
 		{
 			if (*itr == item) {
 				vec.erase(itr);
-				return;
+				return true;
 			}
 		}
+		return false;
 	}
 
 	/// vector から等しい要素をすべて削除する

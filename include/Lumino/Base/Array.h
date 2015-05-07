@@ -85,8 +85,8 @@ public:
 	/// 全ての要素を削除します。
 	void Clear() { m_vector.clear(); }
 
-	/// item に一致する最初の要素を削除します。
-	void Remove(const T& item) { STLUtils::Remove(m_vector, item); }
+	/// item に一致する最初の要素を削除します。(正常に削除された場合は true を返す。要素が見つからなければ false を返す)
+	bool Remove(const T& item) { return STLUtils::Remove(m_vector, item); }
 
 	/// 指定したインデックスにある要素を削除します。
 	void RemoveAt(int index) { m_vector.erase(m_vector.begin() + index); }
