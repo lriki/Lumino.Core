@@ -24,6 +24,7 @@
 #include "Lumino/Base/Stack.h"
 #include "Lumino/Base/Environment.h"
 #include "Lumino/Base/Logger.h"
+#include "Lumino/Base/Nullable.h"
 
 #include "Lumino/IO/PathName.h"
 #include "Lumino/IO/PathUtils.h"
