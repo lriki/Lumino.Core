@@ -503,9 +503,9 @@ ArrayList< BasicString<TChar> > StringUtils::Split(const BasicString<TChar>& str
 template ArrayList< BasicString<char> > StringUtils::Split(const BasicString<char>& str, const char* delim, StringSplitOptions option);
 template ArrayList< BasicString<wchar_t> > StringUtils::Split(const BasicString<wchar_t>& str, const wchar_t* delim, StringSplitOptions option);
 
-//----------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 //
-//----------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 template<typename T>
 int StringUtils::CheckNewLineSequence(const T* start, const T* end)
 {
@@ -528,5 +528,26 @@ int StringUtils::CheckNewLineSequence(const T* start, const T* end)
 template int StringUtils::CheckNewLineSequence<byte_t>(const byte_t* start, const byte_t* end);
 template int StringUtils::CheckNewLineSequence<char>(const char* start, const char* end);
 template int StringUtils::CheckNewLineSequence<wchar_t>(const wchar_t* start, const wchar_t* end);
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+static bool StringUtils::Match(const TChar* pattern, const TChar* str)
+{
+	switch (*pattern)
+	{
+	case _T('\0'):
+		return _T('\0') == *str;
+	case _T('*'):
+		return Match(pattern + 1, str) || ((_T('\0') != *str) && Match(pattern, str + 1));
+	case _T('?'):
+		return (_T('\0') != *str) && Match(pattern + 1, str + 1);
+	default:
+		return (*pattern == *str) && Match(pattern + 1, str + 1);
+	}
+}
+template bool StringUtils::Match<char>(const char* pattern, const char* str);
+template bool StringUtils::Match<wchar_t>(const wchar_t* pattern, const wchar_t* str);
 
 } // namespace Lumino

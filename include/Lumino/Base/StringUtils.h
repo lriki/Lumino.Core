@@ -184,6 +184,15 @@ public:
 	*/
 	template<typename TChar>
 	static int CheckNewLineSequence(const TChar* start, const TChar* end);
+	
+	/*
+		@brief		ワイルドカード('*', '?')を考慮して文字列を比較する
+		@param[in]	puttern		: ワイルドカードを含むパターン文字列
+		@param[in]	str			: 比較対象の文字列
+	*/
+	template<typename TChar>
+	static bool Match(const TChar* pattern, const TChar* str);
+	
 };
 
 } // namespace Lumino

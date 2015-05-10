@@ -334,7 +334,11 @@ void BasicString<TChar>::Format(const TChar* format, ...)
 template<typename TChar>
 void BasicString<TChar>::AssignCStr(const char* str, int begin, int length, bool* outUsedDefaultChar)
 {
-	LN_THROW(str != NULL, ArgumentException);	// std::string の assing は NULL が渡されたときの動作は未定義。VS2013 では制御が返ってこなくなった
+	if (str == NULL) {
+		SetEmpty();
+		return;
+	}
+	//LN_THROW(str != NULL, ArgumentException);	// std::string の assing は NULL が渡されたときの動作は未定義。VS2013 では制御が返ってこなくなった
 
 	if (length <= -1) {
 		length = INT_MAX;
@@ -366,7 +370,11 @@ void BasicString<TChar>::AssignCStr(const char* str, bool* usedDefaultChar)
 template<typename TChar>
 void BasicString<TChar>::AssignCStr(const wchar_t* str, int begin, int length, bool* outUsedDefaultChar)
 {
-	LN_THROW(str != NULL, ArgumentException);	// std::string の assing は NULL が渡されたときの動作は未定義。VS2013 では制御が返ってこなくなった
+	if (str == NULL) {
+		SetEmpty();
+		return;
+	}
+	//LN_THROW(str != NULL, ArgumentException);	// std::string の assing は NULL が渡されたときの動作は未定義。VS2013 では制御が返ってこなくなった
 
 	if (length <= -1) {
 		length = INT_MAX;

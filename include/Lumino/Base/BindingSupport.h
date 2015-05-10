@@ -93,7 +93,7 @@ protected:
 	void OnItemAdded(RefObject* item) {}
 	void OnItemRemoved(RefObject* item) {}
 
-private:
+protected:
 	ArrayList<RefObject*>	m_list;
 };
 

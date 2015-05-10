@@ -209,7 +209,7 @@ public:
     }
 
     /// convert
-    operator T*			() { return mPtr; }
+	operator T*			() const { return mPtr; }
     operator const T*	() const { return mPtr; }
 
 private:
