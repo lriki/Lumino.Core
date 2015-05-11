@@ -51,6 +51,10 @@ class ArrayList : public RefObject
 {
 public:
 	typedef typename std::vector<T, TAllocator>		std_vector;
+	typedef typename std_vector::value_type			value_type;
+	typedef typename std_vector::difference_type	difference_type;
+	typedef typename std_vector::pointer			pointer;
+	typedef typename std_vector::const_pointer		const_pointer;
 	typedef typename std_vector::iterator			iterator;
 	typedef typename std_vector::const_iterator		const_iterator;
 	typedef typename std_vector::reference			reference;

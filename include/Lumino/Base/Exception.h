@@ -315,9 +315,14 @@ public:
 	COMException(uint32_t hresult);
 	virtual ~COMException() throw();
 
+	uint32_t GetHRESULT() const { return m_HRESULT; }
+
 public:
 	// override Exception
 	virtual Exception* Copy() const;
+
+private:
+	uint32_t	m_HRESULT;
 };
 #endif
 

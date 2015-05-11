@@ -218,6 +218,7 @@ Win32Exception::Win32Exception(uint32_t/*DWORD*/ dwLastError)
 //
 //-----------------------------------------------------------------------------
 COMException::COMException(uint32_t hresult)
+	: m_HRESULT(hresult)
 {
 }
 

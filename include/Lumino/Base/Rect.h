@@ -37,6 +37,16 @@ public:
 	Rect(const Point& point, const Size& size) { Set(point.X, point.Y, size.Width, size.Height); }
 
 	/**
+		@brief	位置とサイズを指定して初期化します。
+	*/
+	Rect(int x, int y, const Size& size) { Set(x, y, size.Width, size.Height); }
+
+	/**
+		@brief	位置とサイズを指定して初期化します。
+	*/
+	Rect(const Point& point, int width, int height) { Set(point.X, point.Y, width, height); }
+
+	/**
 		@brief	指定した矩形をコピーして初期化します。
 	*/
 	Rect(const Rect& rect) { Set(rect.X, rect.Y, rect.Width, rect.Height); }
