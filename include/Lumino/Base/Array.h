@@ -306,21 +306,21 @@ public:
 		typename ObjectArray::iterator itr, end;
 
 		// 追加
-		if (!m_registerList.empty())
+		if (!m_registerList.IsEmpty())
 		{
 			itr = m_registerList.begin();
 			end = m_registerList.end();
 			for (; itr != end; ++itr)
 			{
-				m_objectArray.push_back(*itr);
+				m_objectArray.Add(*itr);
 				// 参照カウントは m_registerList から外す分と m_objectArray に
 				// 追加する分で ±0 なので操作はしない
 			}
-			m_registerList.clear();
+			m_registerList.Clear();
 		}
 
 		// 削除
-		if (!m_unregisterList.empty())
+		if (!m_unregisterList.IsEmpty())
 		{
 			itr = m_unregisterList.begin();
 			end = m_unregisterList.end();
@@ -334,7 +334,7 @@ public:
 					m_objectArray.erase(pos);
 				}
 			}
-			m_unregisterList.clear();
+			m_unregisterList.Clear();
 		}
 	}
 
@@ -359,6 +359,9 @@ public:
 
 	/// 追加予約中配列取得
 	ObjectArray& GetRegistOrderObjectArray() { return m_registerList; }
+
+	/// 削除予約中配列取得
+	ObjectArray& GetUnegistOrderObjectArray() { return m_unregisterList; }
 
 	/// 配列取得
 	ObjectArray& GetObjectArray() { return m_objectArray; }
