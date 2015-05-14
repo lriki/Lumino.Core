@@ -53,7 +53,7 @@ ByteBuffer::ByteBuffer(void* data, size_t size, bool refMode)
 	, m_refMode(false)
 {
 	if (refMode) {
-		SetReferenceBuffer(data, size);
+		Attach(data, size);
 	}
 	else {
 		Alloc(data, size);
@@ -162,7 +162,7 @@ void ByteBuffer::Resize(size_t size, bool zeroClear)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void ByteBuffer::SetReferenceBuffer(void* buffer, size_t size)
+void ByteBuffer::Attach(void* buffer, size_t size)
 {
 	Dispose();
 	m_buffer = (byte_t*)buffer;

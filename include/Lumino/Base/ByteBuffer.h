@@ -97,10 +97,24 @@ public:
 
 	/**
 		@brief		指定したメモリアドレスをデータストアとして参照します。
-		@param[in]	data		: 参照先アドレス
+		@param[in]	buffer		: 参照先アドレス
 		@param[in]	size		: 参照先データのバイト数
+		@details	メモリ確保は行いません。
+					data のバッファを参照するだけになり、Clear() や Copy() 等の書き込み操作は
+					このバッファに直接書き込まれます。
+					また、このクラスは data のバッファを開放しません。
+		@code
+					// refMode の使用例
+					char* data = new char[5];
+					ByteBuffer buf;
+					buf.Attach(data, 5);
+					buf.Clear();
+					buf.Copy("abc", 3);
+					printf(data);		// => "abc"
+					delete[] data;
+		@endcode
 	*/
-	void SetReferenceBuffer(void* buffer, size_t size);
+	void Attach(void* buffer, size_t size);
 
 	/**
 		@brief		指定したバッファからこのバッファにデータをコピーします。

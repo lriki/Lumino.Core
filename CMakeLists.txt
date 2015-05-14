@@ -146,6 +146,7 @@ set(LN_SOURCES
 	src/Base/ByteBuffer.cpp
 	src/Base/Cache.cpp
 	src/Base/DllLoader.cpp
+	src/Base/ElapsedTimer.cpp
 	src/Base/Environment.cpp
 	src/Base/Exception.cpp
 	src/Base/Logger.cpp

@@ -110,11 +110,11 @@ TEST_F(Test_Base_ByteBuffer, Resize)
 }
 
 //-----------------------------------------------------------------------------
-TEST_F(Test_Base_ByteBuffer, SetReferenceBuffer)
+TEST_F(Test_Base_ByteBuffer, Attach)
 {
 	char data2[2];
 	ByteBuffer buf1;
-	buf1.SetReferenceBuffer(data2, 2);
+	buf1.Attach(data2, 2);
 	buf1.Copy("ab", 2);
 	ASSERT_EQ(2, buf1.GetSize());
 	ASSERT_TRUE(TestUtils::CheckArrays(data2, buf1.GetData(), 2));

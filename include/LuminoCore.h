@@ -25,6 +25,7 @@
 #include "Lumino/Base/Environment.h"
 #include "Lumino/Base/Logger.h"
 #include "Lumino/Base/Nullable.h"
+#include "Lumino/Base/ElapsedTimer.h"
 
 #include "Lumino/IO/PathName.h"
 #include "Lumino/IO/PathUtils.h"
