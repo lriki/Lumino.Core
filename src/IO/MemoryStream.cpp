@@ -12,6 +12,7 @@ namespace Lumino
 MemoryStream::MemoryStream()
 	: m_seekPos(0)
 	, m_fixedBuffer(NULL)
+	, m_constfixedBuffer(NULL)
 	, m_fixedBufferSize(0)
 {
 	// 要素が1つ以上無いと [0] にもアクセスできない (assert が発生する)
@@ -46,6 +47,15 @@ void MemoryStream::Create(void* buffer, size_t size)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+void MemoryStream::Create(const void* buffer, size_t size)
+{
+	m_constfixedBuffer = buffer;
+	m_fixedBufferSize = size;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 void* MemoryStream::GetBuffer()
 {
 	if (m_fixedBuffer != NULL) {
@@ -70,7 +80,7 @@ bool MemoryStream::CanRead() const
 //-----------------------------------------------------------------------------
 bool MemoryStream::CanWrite() const
 {
-	return true;
+	return (m_constfixedBuffer == NULL);
 }
 
 //-----------------------------------------------------------------------------
@@ -78,7 +88,12 @@ bool MemoryStream::CanWrite() const
 //-----------------------------------------------------------------------------
 int64_t MemoryStream::GetLength() const
 {
-	return m_buffer.size();
+	if (m_fixedBuffer != NULL || m_constfixedBuffer != NULL){
+		return m_fixedBufferSize;
+	}
+	else {
+		return m_buffer.size();
+	}
 }
 
 //-----------------------------------------------------------------------------

@@ -82,6 +82,16 @@ public:
 	uint64_t ReadUInt(int byteCount, ByteOrder dataByteOrder = ByteOrder_Little);
 
 	/**
+		@brief		4 バイト浮動小数点値を読み取り、ストリームの現在位置を 4 バイト進めます。
+	*/
+	float ReadFloat();
+
+	/**
+		@brief		8 バイト浮動小数点値を読み取り、ストリームの現在位置を 8 バイト進めます。
+	*/
+	double ReadDouble();
+
+	/**
 		@brief		指定したバイト数のデータを読み取り、ストリームの現在位置を進めます。
 	*/
 	size_t Read(void* buffer, size_t count);
