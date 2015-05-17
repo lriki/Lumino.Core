@@ -26,8 +26,13 @@
 		va_end(args); \
 	}
 
+/// 式が true であるとアサートし、続くブロックを実行する
+///		例)  LN_VERIFY(a != NULL) { return 0; }
+#define LN_VERIFY(exp)	if (!(exp) && ::Lumino::lnAssert(exp))
+
 namespace Lumino
 {
+inline bool lnAssert(bool exp) { assert(exp); return true; }
 
 /**
 	@brief	例外ベースクラス

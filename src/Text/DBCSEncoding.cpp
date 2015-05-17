@@ -105,6 +105,9 @@ void DBCSEncoding::DBCSDecoder::ConvertToUTF16(const byte_t* inBuffer, size_t in
 		// 先行バイト未発見状態の場合
 		if (m_lastLeadByte == 0x00)
 		{
+			if (b == 0x00) {
+				break;	// \0 が見つかった。ここで終了
+			}
 			if (CheckDBCSLeadByte(m_tableInfo, b)) {
 				m_lastLeadByte = b;	// 先行バイト発見状態にする
 			}

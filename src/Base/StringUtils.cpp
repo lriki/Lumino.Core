@@ -224,6 +224,8 @@ template int StringUtils::LastIndexOf<wchar_t>(const wchar_t* str1, int str1Len,
 template<typename TChar>
 int StringUtils::Compare(const TChar* str1, const TChar* str2, int count, CaseSensitivity cs)
 {
+	count = (count < 0) ? INT_MAX : count;
+	
 	if (cs == CaseSensitivity_CaseSensitive)
 	{
 		while (count > 0)

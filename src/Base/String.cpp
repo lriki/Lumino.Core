@@ -269,7 +269,7 @@ bool BasicString<TChar>::operator==(const TChar* right) const
 template<typename TChar>
 bool BasicString<TChar>::operator < (const BasicString& right) const
 {
-	return Compare(right.GetCStr(), right.GetLength(), CaseSensitivity_CaseSensitive) < 0;
+	return Compare(right.GetCStr(), -1, CaseSensitivity_CaseSensitive) < 0;
 }
 template<typename TChar>
 bool BasicString<TChar>::operator < (const TChar* right) const
@@ -608,7 +608,7 @@ bool BasicString<TChar>::EndsWith(TChar ch, CaseSensitivity cs) const
 template<typename TChar>
 int BasicString<TChar>::Compare(const TChar* str, int count, CaseSensitivity cs) const
 {
-	return StringUtils::Compare(GetCStr(), str, (count < 0) ? GetLength() : count, cs);
+	return StringUtils::Compare(GetCStr(), str, count/*(count < 0) ? GetLength() : count*/, cs);
 }
 
 //-----------------------------------------------------------------------------
