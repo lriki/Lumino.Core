@@ -201,6 +201,25 @@ ByteBuffer* Encoding::Convert(
 	return targetBuf;
 }
 
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+size_t Encoding::CheckPreamble(const byte_t* buffer, size_t bufferSize) const
+{
+	LN_VERIFY(buffer != NULL) { return false; }
+
+	const char* bom = (const char*)GetPreamble();
+	size_t bomLen = strlen(bom);
+	if (bufferSize < bomLen) {
+		return 0;
+	}
+
+	if (memcmp(buffer, bom, bomLen) == 0) {
+		return bomLen;
+	}
+	return 0;
+}
+
 //=============================================================================
 // SystemMultiByteEncoding
 //=============================================================================

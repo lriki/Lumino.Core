@@ -171,6 +171,12 @@ public:
 	*/
 	virtual byte_t* GetPreamble() const = 0;
 
+	/**
+		@brief		指定されたバッファの先頭バイト列が、前文文字列と一致するかを確認します。
+		@return		一致した場合は前文文字列のバイト数を返します。そうでなければ 0 を返します。
+	*/
+	size_t CheckPreamble(const byte_t* buffer, size_t bufferSize) const;
+
 protected:
 	uint32_t	mFallbackReplacementChar;
 };

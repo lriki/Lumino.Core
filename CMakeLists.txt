@@ -1,10 +1,8 @@
 # e.g.) $ cmake -DLN_EXCEPTION_BACKTRACE=OFF ..
 
-
 cmake_minimum_required (VERSION 2.8.7)
 project (LuminoCore)
 
-set(LN_STATIC_LIB_OUTPUT_NAME "LuminoCore")
 set(LN_LINK_LIBS "")
 set(LN_UNIT_TEST_LINK_LIBS "")
 
@@ -28,7 +26,175 @@ option(LN_EXCEPTION_BACKTRACE "In some unix environment there is a possibility t
 # Architecture.
 #option(LN_BUILD_X64 "Architecture." OFF)
 
-#option(LN_BUILD_SHARED_LIB "Build Shared lib." OFF)
+#------------------------------------------------------------------------------
+# Files
+#------------------------------------------------------------------------------
+#--------------------------------------
+# Source files.
+set(LN_SOURCES_Base
+	include/Lumino/Base/Array.h
+	include/Lumino/Base/BindingSupport.h
+	include/Lumino/Base/ByteBuffer.h
+	include/Lumino/Base/Cache.h
+	include/Lumino/Base/Common.h
+	include/Lumino/Base/CRT.h
+	include/Lumino/Base/Delegate.h
+	include/Lumino/Base/Delegate.inl
+	include/Lumino/Base/DllLoader.h
+	include/Lumino/Base/ElapsedTimer.h
+	include/Lumino/Base/Environment.h
+	include/Lumino/Base/Exception.h
+	include/Lumino/Base/List.h
+	include/Lumino/Base/Logger.h
+	include/Lumino/Base/Memory.h
+	include/Lumino/Base/NonCopyable.h
+	include/Lumino/Base/Nullable.h
+	include/Lumino/Base/Point.h
+	include/Lumino/Base/Queue.h
+	include/Lumino/Base/Rect.h
+	include/Lumino/Base/RefObject.h
+	include/Lumino/Base/Size.h
+	include/Lumino/Base/Stack.h
+	include/Lumino/Base/STLUtils.h
+	include/Lumino/Base/String.h
+	include/Lumino/Base/StringUtils.h
+	include/Lumino/Base/Typedef.h
+	src/Base/ByteBuffer.cpp
+	src/Base/Cache.cpp
+	src/Base/DllLoader.cpp
+	src/Base/ElapsedTimer.cpp
+	src/Base/Environment.cpp
+	src/Base/Exception.cpp
+	src/Base/Logger.cpp
+	src/Base/Memory.cpp
+	src/Base/RefObject.cpp
+	src/Base/String.cpp
+	src/Base/StringUtils.cpp
+	src/Base/Version.cpp
+	external/camellia/camellia.cpp)
+	
+set(LN_SOURCES_Text
+	include/Lumino/Text/Encoding.h
+	include/Lumino/Text/EncodingDetector.h
+	include/Lumino/Text/UnicodeUtils.h
+	src/Text/ASCIIEncoding.cpp
+	src/Text/DBCSEncoding.cpp
+	src/Text/UTF16Encoding.cpp
+	src/Text/UTF32Encoding.cpp
+	src/Text/Encoding.cpp
+	src/Text/EncodingDetector.cpp
+	src/Text/UnicodeUtils.cpp
+	src/Text/ConvertTable_Big5.c
+	src/Text/ConvertTable_EUCKR.c
+	src/Text/ConvertTable_GB2312.c
+	src/Text/ConvertTable_SJIS.c)
+
+set(LN_SOURCES_IO
+	include/Lumino/IO/ASyncIOObject.h
+	include/Lumino/IO/BinaryReader.h
+	include/Lumino/IO/Common.h
+	include/Lumino/IO/DirectoryUtils.h
+	include/Lumino/IO/File.h
+	include/Lumino/IO/FileManager.h
+	include/Lumino/IO/FileStream.h
+	include/Lumino/IO/FileUtils.h
+	include/Lumino/IO/MemoryStream.h
+	include/Lumino/IO/PathName.h
+	include/Lumino/IO/PathUtils.h
+	include/Lumino/IO/Stream.h
+	src/IO/Archive.cpp
+	src/IO/ASyncIOObject.cpp
+	src/IO/BinaryReader.cpp
+	src/IO/DirectoryUtils.cpp
+	src/IO/File.cpp
+	src/IO/FileManager.cpp
+	src/IO/FileStream.cpp
+	src/IO/FileUtils.cpp
+	src/IO/MemoryStream.cpp
+	src/IO/PathName.cpp
+	src/IO/PathUtils.cpp
+	src/IO/File.cpp)
+
+set(LN_SOURCES_Thread
+	include/Lumino/Threading/Atomic.h
+	include/Lumino/Threading/EventFlag.h
+	include/Lumino/Threading/Mutex.h
+	include/Lumino/Threading/ReadWriteMutex.h
+	include/Lumino/Threading/Thread.h
+	include/Lumino/Threading/ThreadingExceptions.h
+	src/Threading/ThreadingExceptions.cpp
+	src/Threading/Thread.cpp
+	src/Threading/Atomic.cpp
+	src/Threading/EventFlag.cpp
+	src/Threading/Mutex.cpp
+	src/Threading/ReadWriteMutex.cpp)
+
+set(LN_SOURCES_Platform
+	include/Lumino/Platform/Application.h
+	include/Lumino/Platform/EventArgs.h
+	include/Lumino/Platform/EventListener.h
+	include/Lumino/Platform/PlatformSupport.h
+	include/Lumino/Platform/Window.h
+	src/Platform/WindowManagerBase.cpp
+	src/Platform/WindowBase.cpp
+	src/Platform/Window.cpp
+	src/Platform/Application.cpp)
+
+set(LN_SOURCES_Testing
+	src/Testing/TestUtils.cpp)
+	
+#--------------------------------------
+# Platform source files.
+if (WIN32)
+
+	set(LN_SOURCES_IO
+		${LN_SOURCES_IO}
+		src/IO/ArchiveMaker.cpp
+		src/IO/Win32/FileUtils_win32.cpp)
+		
+	set(LN_SOURCES_Platform
+		${LN_SOURCES_Platform}
+		src/Platform/Win32/Win32WindowManager.cpp
+		src/Platform/Win32/Win32WindowBase.cpp
+		src/Platform/Win32/Win32Window.cpp
+		src/Platform/Win32/PlatformSupport_Win32.cpp)
+
+elseif (APPLE)
+	
+elseif (UNIX)
+
+	set(LN_SOURCES_IO
+		${LN_SOURCES_IO}
+		src/IO/Unix/FileUtils_unix.cpp)
+		
+	set(LN_SOURCES_Platform
+		${LN_SOURCES_Platform}
+		src/Platform/X11/X11WindowManager.cpp
+		src/Platform/X11/X11Window.cpp
+		src/Platform/X11/PlatformSupport_X11.cpp)
+		
+endif()
+
+#--------------------------------------
+# Grouping.
+source_group("Base"		FILES ${LN_SOURCES_Base})
+source_group("Text"		FILES ${LN_SOURCES_Text})
+source_group("IO"		FILES ${LN_SOURCES_IO})
+source_group("Thread"	FILES ${LN_SOURCES_Thread})
+source_group("Platform"	FILES ${LN_SOURCES_Platform})
+source_group("Testing"	FILES ${LN_SOURCES_Testing})
+
+set(LN_SOURCES 
+	${LN_SOURCES_Base}
+	${LN_SOURCES_Text}
+	${LN_SOURCES_IO}
+	${LN_SOURCES_Thread}
+	${LN_SOURCES_Platform}
+	${LN_SOURCES_Testing})
+
+set(LN_INCLUDE_DIRECTORIES
+	${PROJECT_SOURCE_DIR}/include)
+include_directories(${LN_INCLUDE_DIRECTORIES})
 
 #------------------------------------------------------------------------------
 # Apply options
@@ -48,30 +214,30 @@ if (WIN32)
 	#	{ProjectName}_{msvcVer}{Arch}_static_{Runtime}
 	#	e.g)	LuminoMath_msvc120x86_static_MTd.lib
 	if (MSVC_VERSION EQUAL 1400)
-		set(LN_STATIC_LIB_OUTPUT_NAME "${LN_STATIC_LIB_OUTPUT_NAME}_msvc80")
+		set(LN_LIB_POSTFIX "${LN_LIB_POSTFIX}_msvc80")
 	elseif (MSVC_VERSION EQUAL 1500)
-		set(LN_STATIC_LIB_OUTPUT_NAME "${LN_STATIC_LIB_OUTPUT_NAME}_msvc90")
+		set(LN_LIB_POSTFIX "${LN_LIB_POSTFIX}_msvc90")
 	elseif (MSVC_VERSION EQUAL 1600)
-		set(LN_STATIC_LIB_OUTPUT_NAME "${LN_STATIC_LIB_OUTPUT_NAME}_msvc100")
+		set(LN_LIB_POSTFIX "${LN_LIB_POSTFIX}_msvc100")
 	elseif (MSVC_VERSION EQUAL 1700)
-		set(LN_STATIC_LIB_OUTPUT_NAME "${LN_STATIC_LIB_OUTPUT_NAME}_msvc110")
+		set(LN_LIB_POSTFIX "${LN_LIB_POSTFIX}_msvc110")
 	elseif (MSVC_VERSION EQUAL 1800)
-		set(LN_STATIC_LIB_OUTPUT_NAME "${LN_STATIC_LIB_OUTPUT_NAME}_msvc120")
+		set(LN_LIB_POSTFIX "${LN_LIB_POSTFIX}_msvc120")
 	endif()
 	
 	# Architecture.
 	# http://stackoverflow.com/questions/5334095/cmake-multiarchitecture-compilation
 	if (${CMAKE_EXE_LINKER_FLAGS} MATCHES "/machine:x64")	# /machine:x64 
-		set(LN_STATIC_LIB_OUTPUT_NAME "${LN_STATIC_LIB_OUTPUT_NAME}x64")
+		set(LN_LIB_POSTFIX "${LN_LIB_POSTFIX}x64")
 	else()
-		set(LN_STATIC_LIB_OUTPUT_NAME "${LN_STATIC_LIB_OUTPUT_NAME}x86")
+		set(LN_LIB_POSTFIX "${LN_LIB_POSTFIX}x86")
 	endif()
 	
-	set(LN_STATIC_LIB_OUTPUT_NAME "${LN_STATIC_LIB_OUTPUT_NAME}_static")
+	set(LN_LIB_POSTFIX "${LN_LIB_POSTFIX}_static")
 	
 	# MSVC Runtime library.
 	if (MSVC_LINK_MULTI_THREAD_STATIC_RUNTIME)
-		set(LN_STATIC_LIB_OUTPUT_NAME "${LN_STATIC_LIB_OUTPUT_NAME}_MT")
+		set(LN_LIB_POSTFIX "${LN_LIB_POSTFIX}_MT")
 		# Overwrite options.
 		foreach (flag
 			CMAKE_C_FLAGS
@@ -88,7 +254,7 @@ if (WIN32)
 			endif()
 		endforeach()
 	else()
-		set(LN_STATIC_LIB_OUTPUT_NAME "${LN_STATIC_LIB_OUTPUT_NAME}_MD")
+		set(LN_LIB_POSTFIX "${LN_LIB_POSTFIX}_MD")
 	endif()
 	set(CMAKE_DEBUG_POSTFIX "d")
 	# end   Make static lib name.
@@ -97,14 +263,7 @@ if (WIN32)
 	# link librarys.
 	list(APPEND LN_LINK_LIBS "imagehlp.lib")
 	
-	# platform sources.
-	set(LN_PLATFORM_SOURCES
-		src/IO/ArchiveMaker.cpp
-		src/IO/Win32/FileUtils_win32.cpp
-		src/Platform/Win32/Win32WindowManager.cpp
-		src/Platform/Win32/Win32WindowBase.cpp
-		src/Platform/Win32/Win32Window.cpp
-		src/Platform/Win32/PlatformSupport_Win32.cpp)
+	
 
 elseif (APPLE)
 	set(LN_UNIT_TEST_LINK_LIBS "pthread")
@@ -123,77 +282,12 @@ elseif (UNIX)
 
 	#list(APPEND glfw_INCLUDE_DIRS ${OPENGL_INCLUDE_DIR})
     list(APPEND LN_LINK_LIBS ${OPENGL_gl_LIBRARY})
-
-	# platform sources.
-	set(LN_PLATFORM_SOURCES
-		src/IO/Unix/FileUtils_unix.cpp
-		src/Platform/X11/X11WindowManager.cpp
-		src/Platform/X11/X11Window.cpp
-		src/Platform/X11/PlatformSupport_X11.cpp)
 	
 else()
 	# Not support.
     message(FATAL_ERROR "No supported platform was detected.")
 endif()
 
-#------------------------------------------------------------------------------
-# Files
-#------------------------------------------------------------------------------
-#--------------------------------------
-# Source files.
-set(LN_SOURCES
-	external/camellia/camellia.cpp
-	src/Base/ByteBuffer.cpp
-	src/Base/Cache.cpp
-	src/Base/DllLoader.cpp
-	src/Base/ElapsedTimer.cpp
-	src/Base/Environment.cpp
-	src/Base/Exception.cpp
-	src/Base/Logger.cpp
-	src/Base/Memory.cpp
-	src/Base/RefObject.cpp
-	src/Base/String.cpp
-	src/Base/StringUtils.cpp
-	src/Base/Version.cpp
-	src/IO/Archive.cpp
-	src/IO/ASyncIOObject.cpp
-	src/IO/BinaryReader.cpp
-	src/IO/DirectoryUtils.cpp
-	src/IO/File.cpp
-	src/IO/FileManager.cpp
-	src/IO/FileStream.cpp
-	src/IO/FileUtils.cpp
-	src/IO/MemoryStream.cpp
-	src/IO/PathName.cpp
-	src/IO/PathUtils.cpp
-	src/IO/File.cpp
-	src/Text/ASCIIEncoding.cpp
-	src/Text/DBCSEncoding.cpp
-	src/Text/UTF16Encoding.cpp
-	src/Text/UTF32Encoding.cpp
-	src/Text/Encoding.cpp
-	src/Text/EncodingDetector.cpp
-	src/Text/UnicodeUtils.cpp
-	src/Text/ConvertTable_Big5.c
-	src/Text/ConvertTable_EUCKR.c
-	src/Text/ConvertTable_GB2312.c
-	src/Text/ConvertTable_SJIS.c
-	src/Threading/ThreadingExceptions.cpp
-	src/Threading/Thread.cpp
-	src/Threading/Atomic.cpp
-	src/Threading/EventFlag.cpp
-	src/Threading/Mutex.cpp
-	src/Threading/ReadWriteMutex.cpp
-	src/Platform/WindowManagerBase.cpp
-	src/Platform/WindowBase.cpp
-	src/Platform/Window.cpp
-	src/Platform/Application.cpp
-	src/Testing/TestUtils.cpp
-	${LN_PLATFORM_SOURCES})
-
-set(LN_INCLUDE_DIRECTORIES
-	${PROJECT_SOURCE_DIR}/include)
-include_directories(${LN_INCLUDE_DIRECTORIES})
 
 #------------------------------------------------------------------------------
 # Output
@@ -212,33 +306,13 @@ endif()
 #--------------------------------------
 # Static library.
 add_library(${PROJECT_NAME}_Static STATIC ${LN_SOURCES})
-set_target_properties(${PROJECT_NAME}_Static PROPERTIES OUTPUT_NAME ${LN_STATIC_LIB_OUTPUT_NAME})
+set_target_properties(${PROJECT_NAME}_Static PROPERTIES OUTPUT_NAME "${PROJECT_NAME}${LN_LIB_POSTFIX}")
 target_link_libraries(${PROJECT_NAME}_Static ${LN_LINK_LIBS})
 add_custom_command(TARGET ${PROJECT_NAME}_Static POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${PROJECT_NAME}_Static> "${PROJECT_SOURCE_DIR}/lib")
-
-#--------------------------------------
-# Shared library.
-if (LN_BUILD_SHARED_LIB)
-	add_library(LuminoCore_Shared SHARED ${LN_SOURCES})
-	set_target_properties(LuminoCore_Shared PROPERTIES OUTPUT_NAME ${PROJECT_NAME})
-	set_target_properties(LuminoCore_Shared PROPERTIES DEBUG_POSTFIX "_d")
-	set_target_properties(LuminoCore_Shared PROPERTIES COMPILE_DEFINITIONS "LUMINO_BUILD_DLL")
-	set_target_properties(
-		LuminoCore_Shared PROPERTIES INCLUDE_DIRECTORIES
-		"${PROJECT_SOURCE_DIR}/include/Lumino")
-	target_link_libraries(LuminoCore_Shared ${LN_LINK_LIBS})
-	add_custom_command(
-		TARGET LuminoCore_Shared
-		POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:LuminoCore_Shared> "${PROJECT_SOURCE_DIR}/lib")
-	add_custom_command(
-		TARGET LuminoCore_Shared
-		POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_LINKER_FILE:LuminoCore_Shared> "${PROJECT_SOURCE_DIR}/lib")
-endif()
 
 # Unit test.
 add_subdirectory(test)
 
 # samples.
 #add_subdirectory(sample)
+

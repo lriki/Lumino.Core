@@ -262,10 +262,18 @@ TEST_F(Test_Base_String, Replace)
 //---------------------------------------------------------------------
 TEST_F(Test_Base_String, Compare)
 {
-	String str1("abc");
-	EXPECT_EQ(0, str1.Compare(_T("abc")));
-	EXPECT_LE(0, str1.Compare(_T("ab")));	// v1 < v2
-	EXPECT_GT(0, str1.Compare(_T("abd")));	// v1 > v2
+	{
+		String str1("abc");
+		EXPECT_EQ(0, str1.Compare(_T("abc")));
+		EXPECT_LE(0, str1.Compare(_T("ab")));	// v1 < v2
+		EXPECT_GT(0, str1.Compare(_T("abd")));	// v1 > v2
+	}
+
+	{
+		String str1("abc");
+		String str2("abcd");
+		ASSERT_TRUE(str1 < str2);
+	}
 }
 
 //---------------------------------------------------------------------
