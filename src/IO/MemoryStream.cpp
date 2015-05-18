@@ -107,6 +107,22 @@ int64_t MemoryStream::GetPosition() const
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+size_t MemoryStream::Read(void* buffer, size_t byteCount)
+{
+	//size_t newPos = m_seekPos + byteCount;
+	size_t readSize = std::min(byteCount, m_fixedBufferSize);
+	if (m_constfixedBuffer != NULL)
+	{
+		memcpy_s(buffer, byteCount, &(((byte_t*)m_constfixedBuffer)[m_seekPos]), readSize);
+		m_seekPos += readSize;
+		return readSize;
+	}
+	LN_THROW(0, NotImplementedException);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 void MemoryStream::Write(const void* data, size_t byteCount)
 {
 	size_t newPos = m_seekPos + byteCount;

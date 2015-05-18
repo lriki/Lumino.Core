@@ -27,6 +27,7 @@ public:
 private:
 	JsonError		m_error;
 	JsonHandler*	m_handler;
+	Text::Encoding*	m_inputEncoding;
 	MemoryStream	m_tmpStream;
 };
 
