@@ -319,6 +319,9 @@ public:
 	/// 現在の環境で定義されている改行文字列を取得する
 	static const StringT& GetNewLine();
 
+	/// 空文字列を取得する
+	static const StringT& GetEmpty();
+
 private:
 	void AssignTString(const TChar* str, int len);
 	void Realloc();

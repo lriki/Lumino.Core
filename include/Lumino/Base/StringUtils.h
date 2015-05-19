@@ -50,6 +50,7 @@ public:
 	static int VSPrintf(wchar_t* out, int charCount, const wchar_t* format, va_list args);
 
 
+
 	/**
 		@brief		マルチバイト文字列をワイド文字列に変換する
 		@details	input の文字コードは setlocale() に依存します。
@@ -66,6 +67,10 @@ public:
 	static int StrNCmp(const wchar_t* str1, const wchar_t* str2, size_t count) { return wcsncmp(str1, str2, count); }
 	static int StrNICmp(const char* str1, const char* str2, size_t count);
 	static int StrNICmp(const wchar_t* str1, const wchar_t* str2, size_t count);
+
+	/// strtod の overload 実装
+	static double StrToD(const char* str, char** endptr) { return strtod(str, endptr); }
+	static double StrToD(const wchar_t* str, wchar_t** endptr) { return wcstod(str, endptr); }
 
 	/**
 		@brief		文字列を検索し、見つかった最初の文字のインデックスを返します。

@@ -47,9 +47,9 @@ public:
 	void Create(const void* buffer, size_t size);
 
 	/**
-		@brief		バイト配列の先頭アドレスを取得します。
-		*/
-	void* GetBuffer();
+		@brief		データの読み書き先バイト配列の先頭アドレスを取得します。
+	*/
+	void* GetBuffer(size_t index = 0);
 
 public:
 	// override Stream

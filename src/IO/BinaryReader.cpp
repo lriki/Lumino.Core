@@ -275,7 +275,7 @@ void BinaryReader::Seek(int offset)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-int64_t BinaryReader::GetPosition()
+int64_t BinaryReader::GetPosition() const
 {
 	LN_ASSERT(m_stream != NULL);	// コンストラクタで必ず入力が必要なのでありえないはず
 	return m_stream->GetPosition();

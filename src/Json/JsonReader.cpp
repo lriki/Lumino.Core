@@ -1,64 +1,75 @@
 
 #include "../Internal.h"
 #include <Lumino/Base/StringUtils.h>
-#include <Lumino/IO/MemoryStream.h>
+#include <Lumino/IO/StringReader.h>
 #include <Lumino/Json/JsonReader.h>
-#include "JsonInputStream.h"
 
 namespace Lumino
 {
 namespace Json
 {
 
+//=============================================================================
+// JsonReader
+//=============================================================================
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-template<typename TChar>
-void JsonReader<TChar>::Parse(const TChar* text, int len = -1, Text::Encoding* encoding)
+JsonReader::JsonReader(JsonHandler* handler)
+	: m_error()
+	, m_handler(handler)
+	, m_reader(NULL)
+	, m_tmpStream()
 {
-	LN_VERIFY(text != NULL) { return; }
-	LN_VERIFY(encoding != NULL) { return; }
-
-	MemoryStream stream;
-	stream.Create(text, (len == -1) ? StringUtils::StrLen(text) : len);
-	Parse(&stream, encoding);
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-template<typename TChar>
-void JsonReader<TChar>::Parse(Stream* inputStream, Text::Encoding* encoding)
+JsonReader::~JsonReader()
 {
-	LN_VERIFY(inputStream != NULL) { return; }
-	LN_VERIFY(encoding != NULL) { return; }
+}
 
-	// 一時バッファは入力と同じサイズ確保しておけば十分。
-	// もし足りなければ拡張される。
-	m_tmpStream.Create(inputStream->GetLength());
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void JsonReader::Parse(const TCHAR* text, int len)
+{
+	LN_VERIFY(text != NULL) { return; }
 
-	InputStream<TChar> is(inputStream, encoding);
+	StringReader textReader(String(text, len));
+	Parse(&textReader);
+}
 
-	// バッファ先頭の空白と BOM を読み飛ばす
-	is.SkipWhitespace();
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void JsonReader::Parse(TextReader* textReader)
+{
+	LN_VERIFY(textReader != NULL) { return; }
+	m_reader = textReader;
 
-	if (is.IsEOF())
+	// 一時バッファ。もし足りなければ拡張される
+	m_tmpStream.Create(512);
+
+	// バッファ先頭の空白を読み飛ばす
+	if (!SkipWhitespace())
 	{
 		// Error: バッファが空だった
-		m_error.SetError(ParseError_DocumentEmpty, is.GetReadCharCount());
+		m_error.SetError(ParseError_DocumentEmpty, m_reader->GetPosition());
 		return;
 	}
 
 	// ルート要素の解析
-	ParseValue(&is);
+	if (!ParseValue()) {
+		return;
+	}
 
 	// バッファ終端の空白を読み飛ばす
-	is.SkipWhitespace();
-
-	if (is.IsEOF())
+	if (SkipWhitespace())
 	{
 		// Error: 複数のルート要素が見つかった
-		m_error.SetError(ParseError_DocumentRootNotSingular, is.GetReadCharCount());
+		m_error.SetError(ParseError_DocumentRootNotSingular, m_reader->GetPosition());
 		return;
 	}
 }
@@ -66,80 +77,179 @@ void JsonReader<TChar>::Parse(Stream* inputStream, Text::Encoding* encoding)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-template<typename TChar>
-void JsonReader<TChar>::ParseValue(InputStream* is)
+bool JsonReader::SkipWhitespace()
 {
-	switch (is.Peek())
+	while (m_reader->Peek() == ' ' || m_reader->Peek() == '\n' || m_reader->Peek() == '\r' || m_reader->Peek() == '\t') {
+		m_reader->Read();
+	}
+	return !m_reader->IsEOF();
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+bool JsonReader::ParseValue()
+{
+	switch (m_reader->Peek())
 	{
-		case 'n': ParseNull(is); break;				// null かもしれない
-		case 't': ParseTrue(is); break;				// true かもしれない
-		case 'f': ParseFalse(is); break;			// false かもしれない
-		case '"': ParseString(is, false); break;	// 文字列かもしれない
-		case '[': ParseArray(is); break;			// 配列かもしれない
-		case '{': ParseObject(is); break;			// オブジェクトかもしれない
-		default: ParseNumber(is); break;			// 数値かもしれない
+		case 'n': return ParseNull();			// null かもしれない
+		case 't': return ParseTrue();			// true かもしれない
+		case 'f': return ParseFalse();			// false かもしれない
+		case '"': return ParseString(false);	// 文字列かもしれない
+		case '[': return ParseArray();			// 配列かもしれない
+		case '{': return ParseObject();			// オブジェクトかもしれない
+		default: return ParseNumber();			// 数値かもしれない
 	}
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-template<typename TChar>
-void JsonReader<TChar>::ParseNull(InputStream* is)
+bool JsonReader::ParseNull()
 {
-	is->Take();
-	if (is.Take() == 'u' && is.Take() == 'l' && is.Take() == 'l') {
-		if (!handler.OnNull()) {
-			m_error.SetError(ParseError_Termination, is.GetReadCharCount());
+	m_reader->Read();	// skip 'n'
+	if (m_reader->Read() == 'u' &&
+		m_reader->Read() == 'l' &&
+		m_reader->Read() == 'l')
+	{
+		if (!m_handler->OnNull())
+		{
+			// 中断
+			m_error.SetError(ParseError_Termination, m_reader->GetPosition());
+			return false;
 		}
 	}
-	else {
-		m_error.SetError(ParseError_ValueInvalid, is.GetReadCharCount() - 1);
+	else
+	{
+		// Error: "null" ではなかった
+		m_error.SetError(ParseError_ValueInvalid, m_reader->GetPosition());
+		return false;
 	}
+	return true;
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-template<typename TChar>
-void JsonReader<TChar>::ParseTrue(InputStream* is)
+bool JsonReader::ParseTrue()
 {
-	is->Take();
-	if (is.Take() == 'r' && is.Take() == 'u' && is.Take() == 'e') {
-		if (!handler.OnBool(true)) {
-			m_error.SetError(ParseError_Termination, is.GetReadCharCount());
+	m_reader->Read();	// skip 't'
+	if (m_reader->Read() == 'r' &&
+		m_reader->Read() == 'u' &&
+		m_reader->Read() == 'e')
+	{
+		if (!m_handler->OnBool(true))
+		{
+			// 中断
+			m_error.SetError(ParseError_Termination, m_reader->GetPosition());
+			return false;
 		}
 	}
-	else {
-		m_error.SetError(ParseError_ValueInvalid, is.GetReadCharCount() - 1);
+	else
+	{
+		// Error: "true" ではなかった
+		m_error.SetError(ParseError_ValueInvalid, m_reader->GetPosition());
+		return false;
 	}
+	return true;
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-template<typename TChar>
-void JsonReader<TChar>::ParseFalse(InputStream* is)
+bool JsonReader::ParseFalse()
 {
-	is->Take();
-	if (is.Take() == 'a' && is.Take() == 'l' && is.Take() == 's' && is.Take() == 'e') {
-		if (!handler.OnBool(false)) {
-			m_error.SetError(ParseError_Termination, is.GetReadCharCount());
+	m_reader->Read();	// skip 'f'
+	if (m_reader->Read() == 'a' &&
+		m_reader->Read() == 'l' &&
+		m_reader->Read() == 's' &&
+		m_reader->Read() == 'e')
+	{
+		if (!m_handler->OnBool(false))
+		{
+			// 中断
+			m_error.SetError(ParseError_Termination, m_reader->GetPosition());
+			return false;
 		}
 	}
-	else {
-		m_error.SetError(ParseError_ValueInvalid, is.GetReadCharCount() - 1);
+	else
+	{
+		// Error: "false" ではなかった
+		m_error.SetError(ParseError_ValueInvalid, m_reader->GetPosition());
+		return false;
 	}
+	return true;
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-template<typename TChar>
-void JsonReader<TChar>::ParseString(InputStream* is, bool isKey)
+bool JsonReader::ParseNumber()
+{
+	// 数値への変換には strtod を使用する。そのため、まずは数値扱いできる文字を全て読み取る
+	m_tmpStream.Seek(0, SeekOrigin_Begin);
+	int len = 0;
+	TCHAR ch;
+	while (true)
+	{
+		ch = m_reader->Peek();	// 読むだけ。ポインタは進めない
+		if (ch == '.' ||
+			('0' <= ch && ch <= '9') ||
+			(ch == 'e' || ch == 'E') ||
+			(ch == '+' || ch == '-'))
+		{
+			m_tmpStream.Write(&ch, sizeof(TCHAR));
+			++len;
+			m_reader->Read();	// ここで1つ進める
+		}
+		else {
+			break;				// 一致しなければポインタは進めない
+		}
+	}
+	if (len == 0)
+	{
+		// Error: 数値っぽい文字が見つからなかった
+		m_error.SetError(ParseError_NumberInvalid, m_reader->GetPosition());
+		return false;
+	}
+	ch = '\0';
+	m_tmpStream.Write(&ch, sizeof(TCHAR));	// 終端 \0
+
+	// double へ変換する
+	TCHAR* str = (TCHAR*)m_tmpStream.GetBuffer();
+	TCHAR* endptr = NULL;
+	double value = StringUtils::StrToD(str, &endptr);
+	if ((endptr - str) != len)	// 正常に変換できていれば、読み取った文字数が全て消費されるはず
+	{
+		// Error: 構文が正しくない
+		m_error.SetError(ParseError_NumberInvalid, m_reader->GetPosition());
+		return false;
+	}
+	if (value == HUGE_VAL || value == -HUGE_VAL)
+	{
+		// Error: オーバーフローが発生した
+		m_error.SetError(ParseError_NumberOverflow, m_reader->GetPosition());
+		return false;
+	}
+
+	// Handler に通知する
+	if (!m_handler->OnDouble(value))
+	{
+		// 中断
+		m_error.SetError(ParseError_Termination, m_reader->GetPosition());
+		return false;
+	}
+	return true;
+}
+
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+bool JsonReader::ParseString(bool isKey)
 {
 	// http://json.org/json-ja.html
-	static const TChar escapeTable[256] =
+	static const TCHAR escapeTable[256] =
 	{
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
@@ -159,212 +269,225 @@ void JsonReader<TChar>::ParseString(InputStream* is, bool isKey)
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	};
 
+	// 1つずつ読んだ文字を格納していく一時バッファ。シーク位置を先頭に戻しておく
 	m_tmpStream.Seek(0, SeekOrigin_Begin);
-	is->Take();	// skip "
 
+	m_reader->Read();	// skip '"'
 	while (true)
 	{
-		TChar c = is.Peek();
+		TCHAR c = m_reader->Peek();
+
+		// エスケープシーケンス
 		if (c == '\\')
 		{
-			is.Take();	// skip '\'
-			TChar e = is.Take();
+			m_reader->Read();	// skip '\'
+			TCHAR esc = m_reader->Read();
 			// 基本的なエスケープ
-			if ((sizeof(Ch) == 1 || unsigned(e) < 256) && escape[(unsigned char)e])
+			if (unsigned(esc) < 256 && escapeTable[(unsigned char)esc])
 			{
-				m_tmpStream.Write(&escapeTable[(unsigned char)e], sizeof(TChar));
+				m_tmpStream.Write(&escapeTable[(unsigned char)esc], sizeof(TCHAR));
 			}
 			// Unicode エスケープ
-			else if (e == 'u')
+			else if (esc == 'u')
 			{
 				// 未実装
-				m_error.SetError(ParseError_StringEscapeInvalid, is->GetReadCharCount() - 1);
-				return;
+				m_error.SetError(ParseError_StringEscapeInvalid, m_reader->GetPosition());
+				return false;
 			}
 			else
 			{
 				// Error: 無効なエスケープ
-				m_error.SetError(ParseError_StringEscapeInvalid, is->GetReadCharCount() - 1);
-				return;
+				m_error.SetError(ParseError_StringEscapeInvalid, m_reader->GetPosition());
+				return false;
 			}
 		}
-		else if (c == '"') {    // Closing double quote
-			is.Take();
+		// 文字列終端
+		else if (c == '"')
+		{
+			m_reader->Read();	// skip '"'
 			break;
 		}
-		else if (c == '\0') {
+		// 文字列の途中でバッファが切れた
+		else if (m_reader->IsEOF() || c == '\0')
+		{
 			// Error: " が一致しなかった
-			m_error.SetError(ParseError_StringMissQuotationMark, is->GetReadCharCount() - 1);
-			return;
+			m_error.SetError(ParseError_StringMissQuotationMark, m_reader->GetPosition());
+			return false;
 		}
-		else if ((unsigned)c < 0x20) {	// 0x20 未満の制御文字は使えない
+		// 0x20 未満の制御文字は使えない
+		else if ((unsigned)c < 0x20) {
 			// RFC 4627: unescaped = %x20-21 / %x23-5B / %x5D-10FFFF
-			m_error.SetError(ParseError_StringEscapeInvalid, is->GetReadCharCount() - 1);
+			m_error.SetError(ParseError_StringEscapeInvalid, m_reader->GetPosition());
+			return false;
 		}
+		// 普通の文字
 		else
 		{
-			// 普通の文字
-			m_tmpStream.Write(&c, sizeof(TChar));
-			is.Take();
+			m_tmpStream.Write(&c, sizeof(TCHAR));
+			m_reader->Read();
 		}
 	}
 
-	// 不正文字チェック
-	if (m_inputEncoding->Validate(m_tmpStream.GetBuffer(), m_tmpStream.GetPosition()))
-	{
-		m_handler->OnString((TChar*)m_tmpStream.GetBuffer(), m_tmpStream.GetPosition() / sizeof(TChar));
+	// Handler に通知
+	bool cont = false;
+	if (isKey) {
+		cont = m_handler->OnKey((TCHAR*)m_tmpStream.GetBuffer(), ((int)m_tmpStream.GetPosition()) / sizeof(TCHAR));
 	}
-	else
-	{
-		// Error: 変換できなかった
-		m_error.SetError(ParseError_StringInvalidEncoding, is->GetReadCharCount() - 1);
+	else {
+		cont = m_handler->OnString((TCHAR*)m_tmpStream.GetBuffer(), ((int)m_tmpStream.GetPosition()) / sizeof(TCHAR));
 	}
-}
-
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-template<typename TChar>
-void JsonReader<TChar>::ParseArray(InputStream* is)
-{
-	is.Take();  // skip '['
-
-	if (!m_handler->OnStartArray()) {
-		// 中断
-		m_error.SetError(ParseError_Termination, is->GetReadCharCount());
-	}
-
-	SkipWhitespace(is);
-
-	if (is.Peek() == ']')
-	{
-		is.Take();	// ']' の次を指しておく
-		// 空配列だった
-		if (!m_handler->OnEndArray(0)) {
-			// 中断
-			m_error.SetError(ParseError_Termination, is->GetReadCharCount());
-		}
-		return;
-	}
-
-	size_t elementCount = 0;
-	while (true)
-	{
-		if (!ParseValue(is)) {
-			return false;	// エラーは処理済み
-		}
-
-		++elementCount;
-		SkipWhitespace(is);
-
-		switch (is->Take())
-		{
-		case ',':
-			SkipWhitespace(is);
-			break;
-		case ']':
-			if (!m_handler->OnEndArray(elementCount)) {
-				// 中断
-				m_error.SetError(ParseError_Termination, is->GetReadCharCount());
-				return false;
-			}
-			return true;
-		default:
-			m_error.SetError(ParseError_ArrayMissCommaOrSquareBracket, is->GetReadCharCount());
-			return false;
-		}
-	}
-}
-
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-template<typename TChar>
-void JsonReader<TChar>::ParseObject(InputStream* is)
-{
-	is.Take();  // Skip '{'
-
-	// オブジェクト定義の開始
-	if (!m_handler->StartObject())
+	if (!cont)
 	{
 		// 中断
-		m_error.SetError(ParseError_Termination, is->GetReadCharCount());
+		m_error.SetError(ParseError_Termination, m_reader->GetPosition());
 		return false;
 	}
-
-	SkipWhitespace(is);
-
-	if (is->Peek() == '}')
-	{
-		is.Take();	// '}' の次を指しておく
-		// 空配列だった
-		if (!m_handler->OnEndObject(0))
-		{
-			// 中断
-			m_error.SetError(ParseError_Termination, is->GetReadCharCount());
-			return false;
-		}
-		return;
-	}
-
-	SizeType memberCount = 0;
-	while (true)
-	{
-		// 最初はメンバ名
-		if (is.Peek() != '"')
-		{
-			// Error: メンバ名の開始が見つからなかった
-			m_error.SetError(ParseError_ObjectMissKeyStart, is->GetReadCharCount());
-		}
-		if (!ParseString(is, true) return false;
-		SkipWhitespace(is);
-
-		// 続いて ':'
-		if (is.Take() != ':')
-		{
-			// Error: ':' が見つからなかった
-			m_error.SetError(kParseErrorObjectMissColon, is->GetReadCharCount());
-		}
-		SkipWhitespace(is);
-
-		// 最後に値
-		if (!ParseValue(is, handler)) return false;
-		SkipWhitespace(is);
-
-		// TODO: Handler に通知しないの？
-
-		++memberCount;
-
-		switch (is->Take())
-		{
-		case ',':
-			SkipWhitespace(is);
-			break;
-		case '}':
-			// オブジェクト定義終端
-			if (!handler.EndObject(memberCount))
-			{
-				// 中断
-				m_error.SetError(ParseError_Termination, is->GetReadCharCount());
-				return false;
-			}
-			return true;
-		default:
-			m_error.SetError(ParseError_ObjectMissCommaOrCurlyBracket, is->GetReadCharCount());
-			return false;
-		}
-	}
-
-	// ここには来ないはず
 	return true;
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-template<typename TChar>
-void JsonReader<TChar>::ParseObject(InputStream* is)
+bool JsonReader::ParseArray()
 {
+	m_reader->Read();  // skip '['
+
+	// Handler に Array の開始を通知
+	if (!m_handler->OnStartArray())
+	{
+		// 中断
+		m_error.SetError(ParseError_Termination, m_reader->GetPosition());
+		return false;
+	}
+
+	SkipWhitespace();
+	if (m_reader->Peek() == ']')
+	{
+		// 空配列だった。Array の終了を通知する
+		m_reader->Read(); 	// ']' の次を指しておく
+		if (!m_handler->OnEndArray(0))
+		{
+			// 中断
+			m_error.SetError(ParseError_Termination, m_reader->GetPosition());
+			return false;
+		}
+		return true;
+	}
+
+	SkipWhitespace();
+	size_t elementCount = 0;
+	while (true)
+	{
+		if (!ParseValue()) {
+			return false;	// エラーは処理済み
+		}
+
+		++elementCount;
+		SkipWhitespace();
+
+		switch (m_reader->Read())
+		{
+		case ',':
+			SkipWhitespace();
+			break;
+		case ']':
+			// 配列の終端
+			if (!m_handler->OnEndArray(elementCount))
+			{
+				// 中断
+				m_error.SetError(ParseError_Termination, m_reader->GetPosition());
+				return false;
+			}
+			SkipWhitespace();
+			return true;
+		default:
+			m_error.SetError(ParseError_ArrayMissCommaOrSquareBracket, m_reader->GetPosition());
+			return false;
+		}
+	}
+
+	// ここに来ることはない
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+bool JsonReader::ParseObject()
+{
+	m_reader->Read();  // Skip '{'
+
+	// オブジェクト定義の開始
+	if (!m_handler->OnStartObject())
+	{
+		// 中断
+		m_error.SetError(ParseError_Termination, m_reader->GetPosition());
+		return false;
+	}
+
+	SkipWhitespace();
+	if (m_reader->Peek() == '}')
+	{
+		// メンバが1つも無かった
+		m_reader->Read();	// '}' の次を指しておく
+		if (!m_handler->OnEndObject(0))
+		{
+			// 中断
+			m_error.SetError(ParseError_Termination, m_reader->GetPosition());
+			return false;
+		}
+		return true;
+	}
+
+	int memberCount = 0;
+	while (true)
+	{
+		// 最初はメンバ名
+		if (m_reader->Peek() != '"')
+		{
+			// Error: メンバ名の開始が見つからなかった
+			m_error.SetError(ParseError_ObjectMissKeyStart, m_reader->GetPosition());
+			return false;
+		}
+		if (!ParseString(true)) return false;
+		SkipWhitespace();
+
+		// 続いて ':'
+		if (m_reader->Read() != ':')
+		{
+			// Error: ':' が見つからなかった
+			m_error.SetError(ParseError_ObjectMissColon, m_reader->GetPosition());
+			return false;
+		}
+		SkipWhitespace();
+
+		// 最後に値
+		if (!ParseValue()) return false;
+		SkipWhitespace();
+
+		++memberCount;
+
+		switch (m_reader->Read())
+		{
+		case ',':
+			SkipWhitespace();
+			break;
+		case '}':
+			// オブジェクト定義終端
+			if (!m_handler->OnEndObject(memberCount))
+			{
+				// 中断
+				m_error.SetError(ParseError_Termination, m_reader->GetPosition());
+				return false;
+			}
+			SkipWhitespace();
+			return true;
+		default:
+			m_error.SetError(ParseError_ObjectMissCommaOrCurlyBracket, m_reader->GetPosition());
+			return false;
+		}
+	}
+
+	// ここには来ないはず
 }
 
 } // namespace Json

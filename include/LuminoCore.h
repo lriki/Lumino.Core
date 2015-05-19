@@ -38,6 +38,12 @@
 #include "Lumino/IO/BinaryReader.h"
 #include "Lumino/IO/ASyncIOObject.h"
 #include "Lumino/IO/FileManager.h"
+#include "Lumino/IO/StringReader.h"
+
+#include "Lumino/Json/JsonValue.h"
+#include "Lumino/Json/JsonHandler.h"
+#include "Lumino/Json/JsonReader.h"
+#include "Lumino/Json/JsonDocument.h"
 
 #include "Lumino/Threading/Atomic.h"
 #include "Lumino/Threading/EventFlag.h"

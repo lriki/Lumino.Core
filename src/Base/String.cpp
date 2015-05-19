@@ -703,6 +703,16 @@ const BasicString<TChar>& BasicString<TChar>::GetNewLine()
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
+const BasicString<TChar>& BasicString<TChar>::GetEmpty()
+{
+	static BasicString<TChar> str;
+	return str;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
 void BasicString<TChar>::AssignTString(const TChar* str, int len)
 {
 	LN_SAFE_RELEASE(m_string);

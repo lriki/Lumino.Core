@@ -23,6 +23,9 @@ enum ParseError
 	ParseError_ObjectMissColon,					///< オブジェクトメンバの : が見つからなかった
 	ParseError_ObjectMissCommaOrCurlyBracket,	///< オブジェクトメンバの後に , か } が見つからなかった
 
+	ParseError_NumberInvalid,					///< 無効な数値
+	ParseError_NumberOverflow,					///< 数値の変換でオーバーフローが発生した
+
 	ParseError_Termination,						///< Hander で中断された
 };
 
@@ -31,6 +34,13 @@ enum ParseError
 */
 class JsonError
 {
+public:
+	JsonError()
+		: ErrorCode(ParseError_NoError)
+		, Offset(0)
+		, Message()
+	{}
+
 public:
 	void SetError(ParseError errorCode, int offset) { ErrorCode = errorCode; Offset = offset; }
 

@@ -104,7 +104,7 @@ public:
 	/**
 		@brief		ストリームの現在位置を取得します。
 	*/
-	int64_t GetPosition();
+	int64_t GetPosition() const;
 
 	/**
 		@brief		ファイル終端に到達しているかを確認します。

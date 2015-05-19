@@ -56,14 +56,21 @@ void MemoryStream::Create(const void* buffer, size_t size)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void* MemoryStream::GetBuffer()
+void* MemoryStream::GetBuffer(size_t index)
 {
+	byte_t* buf = NULL;
+	size_t size = 0;
 	if (m_fixedBuffer != NULL) {
-		return m_fixedBuffer;
+		buf = (byte_t*)m_fixedBuffer;
+		size = m_fixedBufferSize;
 	}
 	else {
-		return &(m_buffer[0]);
+		buf = (byte_t*)&(m_buffer[0]);
+		size = m_buffer.size();
 	}
+
+	LN_THROW(index < size, ArgumentException);
+	return buf + index;
 }
 
 
@@ -109,15 +116,29 @@ int64_t MemoryStream::GetPosition() const
 //-----------------------------------------------------------------------------
 size_t MemoryStream::Read(void* buffer, size_t byteCount)
 {
-	//size_t newPos = m_seekPos + byteCount;
-	size_t readSize = std::min(byteCount, m_fixedBufferSize);
+	// const 固定長のバッファを使用している場合
 	if (m_constfixedBuffer != NULL)
 	{
+		size_t readSize = std::min(byteCount, m_fixedBufferSize);
 		memcpy_s(buffer, byteCount, &(((byte_t*)m_constfixedBuffer)[m_seekPos]), readSize);
 		m_seekPos += readSize;
 		return readSize;
 	}
-	LN_THROW(0, NotImplementedException);
+	// 固定長のバッファを使用している場合
+	else  if (m_fixedBuffer != NULL)
+	{
+		LN_THROW(0, NotImplementedException);
+		return 0;
+	}
+	// 可変長のバッファを使用している場合
+	else
+	{
+		size_t readSize = std::min(byteCount, m_buffer.size());
+		void* p = &(m_buffer[m_seekPos]);
+		memcpy_s(buffer, byteCount, p, readSize);
+		m_seekPos += readSize;
+		return readSize;
+	}
 }
 
 //-----------------------------------------------------------------------------

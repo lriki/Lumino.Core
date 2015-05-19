@@ -52,7 +52,6 @@ template bool StringUtils::IsSpace(UTF32 ch);
 
 
 
-
 // 標準関数をオーバーロードするための実装
 //static size_t			StrLen(const char* input) { return ::strlen(input); }
 //static size_t			StrLen(const wchar_t* input) { return ::wcslen(input); }

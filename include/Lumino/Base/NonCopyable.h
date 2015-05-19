@@ -16,8 +16,8 @@ protected:
     virtual ~NonCopyable() {}
 
 private:
-    NonCopyable( NonCopyable const& );
-    NonCopyable& operator=( NonCopyable const& );
+	NonCopyable(const NonCopyable &);
+	NonCopyable& operator=(const NonCopyable &);
 };
 
 } // namespace Lumino
