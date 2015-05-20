@@ -129,17 +129,6 @@ set(LN_SOURCES_Thread
 	src/Threading/Mutex.cpp
 	src/Threading/ReadWriteMutex.cpp)
 
-set(LN_SOURCES_Platform
-	include/Lumino/Platform/Application.h
-	include/Lumino/Platform/EventArgs.h
-	include/Lumino/Platform/EventListener.h
-	include/Lumino/Platform/PlatformSupport.h
-	include/Lumino/Platform/Window.h
-	src/Platform/WindowManagerBase.cpp
-	src/Platform/WindowBase.cpp
-	src/Platform/Window.cpp
-	src/Platform/Application.cpp)
-
 set(LN_SOURCES_Testing
 	src/Testing/TestUtils.cpp)
 	
@@ -151,13 +140,6 @@ if (WIN32)
 		${LN_SOURCES_IO}
 		src/IO/ArchiveMaker.cpp
 		src/IO/Win32/FileUtils_win32.cpp)
-		
-	set(LN_SOURCES_Platform
-		${LN_SOURCES_Platform}
-		src/Platform/Win32/Win32WindowManager.cpp
-		src/Platform/Win32/Win32WindowBase.cpp
-		src/Platform/Win32/Win32Window.cpp
-		src/Platform/Win32/PlatformSupport_Win32.cpp)
 
 elseif (APPLE)
 	
@@ -167,12 +149,6 @@ elseif (UNIX)
 		${LN_SOURCES_IO}
 		src/IO/Unix/FileUtils_unix.cpp)
 		
-	set(LN_SOURCES_Platform
-		${LN_SOURCES_Platform}
-		src/Platform/X11/X11WindowManager.cpp
-		src/Platform/X11/X11Window.cpp
-		src/Platform/X11/PlatformSupport_X11.cpp)
-		
 endif()
 
 #--------------------------------------
@@ -181,7 +157,6 @@ source_group("Base"		FILES ${LN_SOURCES_Base})
 source_group("Text"		FILES ${LN_SOURCES_Text})
 source_group("IO"		FILES ${LN_SOURCES_IO})
 source_group("Thread"	FILES ${LN_SOURCES_Thread})
-source_group("Platform"	FILES ${LN_SOURCES_Platform})
 source_group("Testing"	FILES ${LN_SOURCES_Testing})
 
 set(LN_SOURCES 
@@ -189,7 +164,6 @@ set(LN_SOURCES
 	${LN_SOURCES_Text}
 	${LN_SOURCES_IO}
 	${LN_SOURCES_Thread}
-	${LN_SOURCES_Platform}
 	${LN_SOURCES_Testing})
 
 set(LN_INCLUDE_DIRECTORIES

@@ -50,8 +50,3 @@
 #include "Lumino/Threading/Mutex.h"
 #include "Lumino/Threading/ReadWriteMutex.h"
 #include "Lumino/Threading/Thread.h"
-
-#include "Lumino/Platform/Application.h"
-#include "Lumino/Platform/Window.h"
-//#include "Lumino/Platform/PlatformSupport.h"	// 環境依存のコードを書くソースファイルで各々 include する。そうしないと、X11 のヘッダとかすべてのファイルに include しなければならなくなる。
-
