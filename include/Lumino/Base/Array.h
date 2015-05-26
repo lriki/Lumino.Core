@@ -2,6 +2,7 @@
 #pragma once
 
 #include <vector>
+#include <algorithm>
 #include "STLUtils.h"
 #include "RefObject.h"
 
@@ -143,7 +144,7 @@ private:
 	@brief		キーの "operator <" の実装により値を並べ替える動的配列
 */
 template<typename TKey, typename TValue, typename TAllocator = STLAllocator< std::pair<TKey, TValue> > >
-class SortedArray
+class SortedArray	// TODO: 名前 SortedList
 {
 public:
 
@@ -152,6 +153,55 @@ public:
 
 	/// item に一致する最初の要素を削除する
 	void Remove(const TValue& item);
+
+	/// 指定したキーに値を設定します。(キーが存在しなければ追加する)
+	void SetValue(const TKey& key, const TValue& value)
+	{
+		int index = Find(key);
+		if (index >= 0) {
+			mArray[index].second = value;
+		}
+		else {
+			Add(key, value);
+		}
+	}
+
+	/// 指定したキーに関連付けられている値を取得します。
+	bool TryGetValue(const TKey& key, TValue* value) const
+	{
+		int index = Find(key);
+		if (index >= 0) {
+			*value = mArray[index].second;
+			return true;
+		}
+		return false;
+	}
+
+private:
+
+	int Find(const TKey& key) const
+	{
+		size_t low = 0;					// 範囲の下限
+		size_t high = mArray.size();	// 範囲の上限。解はあれば [low, high] の中に存在する
+		while (low < high)
+		{
+			size_t mid = (low + high) / 2;		// 中心点
+			const Entry& midval = mArray[mid];	// 中心の値
+
+			// 見つかった
+			if (midval.first == key) {
+				return mid;
+			}
+			// 見つからなかった。範囲を狭める
+			if (midval.first < key) {	// key の方が大きい → 目的の値は後半にある
+				low = mid + 1;
+			}
+			else {
+				high = mid;				// key の方が小さい → 目的の値は前半にある
+			}
+		}
+		return -1;	// 見つからなかった
+	}
 
 public:
 

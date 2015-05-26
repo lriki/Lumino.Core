@@ -176,6 +176,19 @@ public:
 		Height = b - t;
 	}
 
+	/**
+		@brief	四角形を拡大または縮小します。
+	*/
+	void Inflate(int width, int height)
+	{
+		X -= width;
+		Y -= height;
+		Width += width * 2;
+		Height += height * 2;
+		if (Width < 0) Width = 0;
+		if (Height < 0) Height = 0;
+	}
+
 public:
 	bool operator == (const Rect& obj) const { return (X == obj.X && Y == obj.Y && Width == obj.Width && Height == obj.Height); }
 	bool operator != (const Rect& obj) const { return !operator==(obj); }
@@ -213,6 +226,11 @@ public:
 		@brief	指定した矩形をコピーして初期化します。
 	*/
 	RectF(const RectF& rect) { Set(rect.X, rect.Y, rect.Width, rect.Height); }
+
+	/**
+		@brief	指定した矩形をコピーして初期化します。
+	*/
+	RectF(const Rect& rect) { Set((float)rect.X, (float)rect.Y, (float)rect.Width, (float)rect.Height); }
 
 public:
 
