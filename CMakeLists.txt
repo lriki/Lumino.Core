@@ -92,6 +92,7 @@ set(LN_SOURCES_Text
 set(LN_SOURCES_IO
 	include/Lumino/IO/ASyncIOObject.h
 	include/Lumino/IO/BinaryReader.h
+	include/Lumino/IO/BinaryWriter.h
 	include/Lumino/IO/Common.h
 	include/Lumino/IO/DirectoryUtils.h
 	include/Lumino/IO/File.h
@@ -102,9 +103,12 @@ set(LN_SOURCES_IO
 	include/Lumino/IO/PathName.h
 	include/Lumino/IO/PathUtils.h
 	include/Lumino/IO/Stream.h
+	include/Lumino/IO/StringReader.h
+	include/Lumino/IO/TextReader.h
 	src/IO/Archive.cpp
 	src/IO/ASyncIOObject.cpp
 	src/IO/BinaryReader.cpp
+	src/IO/BinaryWriter.cpp
 	src/IO/DirectoryUtils.cpp
 	src/IO/File.cpp
 	src/IO/FileManager.cpp
@@ -113,9 +117,21 @@ set(LN_SOURCES_IO
 	src/IO/MemoryStream.cpp
 	src/IO/PathName.cpp
 	src/IO/PathUtils.cpp
-	src/IO/File.cpp)
+	src/IO/StringReader.cpp)
+	
+set(LN_SOURCES_Json
+	include/Lumino/Json/JsonReader.h
+	include/Lumino/Json/JsonValue.h
+	include/Lumino/Json/JsonWriter.h
+	include/Lumino/Json/JsonDocument.h
+	include/Lumino/Json/JsonError.h
+	include/Lumino/Json/JsonHandler.h
+	src/Json/JsonDocument.cpp
+	src/Json/JsonHandler.cpp
+	src/Json/JsonReader.cpp
+	src/Json/JsonValue.cpp)
 
-set(LN_SOURCES_Thread
+set(LN_SOURCES_Threading
 	include/Lumino/Threading/Atomic.h
 	include/Lumino/Threading/EventFlag.h
 	include/Lumino/Threading/Mutex.h
@@ -128,6 +144,13 @@ set(LN_SOURCES_Thread
 	src/Threading/EventFlag.cpp
 	src/Threading/Mutex.cpp
 	src/Threading/ReadWriteMutex.cpp)
+
+set(LN_SOURCES_Xml
+	include/Lumino/Xml/XmlReader.h
+	include/Lumino/Xml/XmlDocument.h
+	include/Lumino/Xml/XmlError.h
+	src/Xml/XmlReader.cpp
+	src/Xml/XmlDocument.cpp)
 
 set(LN_SOURCES_Testing
 	src/Testing/TestUtils.cpp)
@@ -153,17 +176,21 @@ endif()
 
 #--------------------------------------
 # Grouping.
-source_group("Base"		FILES ${LN_SOURCES_Base})
-source_group("Text"		FILES ${LN_SOURCES_Text})
-source_group("IO"		FILES ${LN_SOURCES_IO})
-source_group("Thread"	FILES ${LN_SOURCES_Thread})
-source_group("Testing"	FILES ${LN_SOURCES_Testing})
+source_group("Base"			FILES ${LN_SOURCES_Base})
+source_group("Text"			FILES ${LN_SOURCES_Text})
+source_group("IO"			FILES ${LN_SOURCES_IO})
+source_group("Json"			FILES ${LN_SOURCES_Json})
+source_group("Threading"	FILES ${LN_SOURCES_Threading})
+source_group("Xml"			FILES ${LN_SOURCES_Xml})
+source_group("Testing"		FILES ${LN_SOURCES_Testing})
 
 set(LN_SOURCES 
 	${LN_SOURCES_Base}
 	${LN_SOURCES_Text}
 	${LN_SOURCES_IO}
-	${LN_SOURCES_Thread}
+	${LN_SOURCES_Json}
+	${LN_SOURCES_Threading}
+	${LN_SOURCES_Xml}
 	${LN_SOURCES_Testing})
 
 set(LN_INCLUDE_DIRECTORIES

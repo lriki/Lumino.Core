@@ -23,11 +23,14 @@ set(LN_TEST_SOURCES
 	UnitTest/IO/Test_IO_FileUtils.cpp
 	UnitTest/IO/Test_IO_MemoryStream.cpp
 	UnitTest/IO/Test_IO_PathName.cpp
+	UnitTest/Json/Test_Json_JsonDocument.cpp
+	UnitTest/Json/Test_Json_JsonReader.cpp
 	UnitTest/Text/Test_Text_DBCSEncoding.cpp
 	UnitTest/Text/Test_Text_EncodingDetector.cpp
 	UnitTest/Threading/Test_Threading_Atomic.cpp
 	UnitTest/Threading/Test_Threading_EventFlag.cpp
-	UnitTest/Threading/Test_Threading_Thread.cpp)
+	UnitTest/Threading/Test_Threading_Thread.cpp
+	UnitTest/Xml/Test_Xml_XmlReader.cpp)
 
 include_directories(
 	"${PROJECT_SOURCE_DIR}/include"

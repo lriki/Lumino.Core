@@ -99,6 +99,9 @@ public:
 	/// item に一致する全ての要素を削除します。
 	void RemoveAll(const T& item) { STLUtils::RemoveAll(m_vector, item); }
 
+	/// 終端要素を削除します。
+	void RemoveLast() { RemoveAt(GetCount() - 1); }
+
 	/// ある要素がこの配列内に存在するかどうかを判断します。
 	bool Contains(const T& item) const { return std::find(m_vector.begin(), m_vector.end(), item) != m_vector.end(); }
 

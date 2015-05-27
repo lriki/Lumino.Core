@@ -50,3 +50,5 @@
 #include "Lumino/Threading/Mutex.h"
 #include "Lumino/Threading/ReadWriteMutex.h"
 #include "Lumino/Threading/Thread.h"
+
+#include "Lumino/Xml/XmlReader.h"

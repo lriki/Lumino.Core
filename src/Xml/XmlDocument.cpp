@@ -1,4 +1,7 @@
 ﻿/*
+「Extensible Markup Language (XML) 1.1 (第二版)」
+http://www.eplusx.net/translation/W3C/REC-xml11-20060816/#NT-elementdecl
+
 目次 Table of Contents
 
 1 導入
