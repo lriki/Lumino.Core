@@ -13,7 +13,55 @@ http://www.atmarkit.co.jp/fxml/tecs/007entity/07.html
 &lt; とかのエンティティは解決してからハンドラに通知しなければ意味が無いので
 StringRef 使うことは無いかも。
 
+
+
+アルゴリズム メモ：
+
+	可能な限り alloc を抑えるため、少し特殊なアルゴリズムになっている。
+
+	1 度に解析するのは、要素1つ分または要素の外側1領域分。
+	つまり、
+
+		<a b="b"> C&AAA; </a>
+
+	という XML 文字列は 3 回に分かれて解析される。
+
+	テキスト " C&AAA; " は、[Text][EntitiyReference][WhiteSpace] の 3 つに分かれることに注意。
+	この場合、最初の Read() では [Text]、次の Read() では [EntitiyReference] を返し、
+	全て返し終わった次の Read() で、次のノードの解析に移る。
+
+
+	キャッシュについて・・・
+
+		<data a="1" b="2">
+
+	を構成するノードは [Element][Attribute][Attribute] の3つ。
+	解析されたノードは m_nodes に追加されていく。
+
+	同時に名前と値の文字列は m_textCache に追加されていく。
+	この例を読み取ると m_textCache には "data12" が入っている。
+	この m_textCache のうちどこからどこまでが1つの文字列なのかは、各ノードが知っている。
+
+	m_nodes と m_textCache は Read() で次のノードを読み取りにいくときにクリアされる。
+
 */
+
+// "  2<test>"  // タグの前に変な文字があるとエラー
+
+// 4&book1;     // "  4" が Text、"&book1;" が EntityReference
+
+/*
+* lt などの定義済みエンティティは EntityReference にならない。
+* 対して、自分で lt2 とか定義すると EntityReference になる。
+*
+* XML仕様ではこうなっているが、
+* <!ENTITY lt     "&#38;#60;">
+*
+* <!ENTITY lt2     "&#38;#60;">
+* A&lt2;S      // "A" "EntityReference" "S" に分かれる
+*
+*/
+// & lt;   エンティティ参照の間にスペースはNG
 
 #include "../Internal.h"
 #include <Lumino/Base/StringUtils.h>
@@ -37,11 +85,11 @@ struct Entity
 static const int ReservedEntitiesCount = 5;
 static const Entity ReservedEntities[ReservedEntitiesCount] =
 {
-	{ _T("quot"),	4, '\"' },
-	{ _T("amp"),	3, '&' },
-	{ _T("apos"),	4, '\'' },
 	{ _T("lt"),		2, '<' },
 	{ _T("gt"),		2, '>' },
+	{ _T("amp"),	3, '&' },
+	{ _T("apos"),	4, '\'' },
+	{ _T("quot"),	4, '\"' },
 };
 
 //-----------------------------------------------------------------------------
@@ -49,7 +97,7 @@ static const Entity ReservedEntities[ReservedEntitiesCount] =
 //-----------------------------------------------------------------------------
 XmlReader::XmlReader(const String& str)
 	: m_reader(LN_NEW StringReader(str))
-	, m_currentNodesPos(0)
+	, m_currentElementNodePos(0)
 	, m_line(1)
 	, m_col(1)
 	, m_stockElementCount(0)
@@ -63,7 +111,7 @@ XmlReader::XmlReader(const String& str)
 //-----------------------------------------------------------------------------
 XmlReader::XmlReader(TextReader* textReader)
 	: m_reader(textReader, true)
-	, m_currentNodesPos(0)
+	, m_currentElementNodePos(0)
 	, m_line(1)
 	, m_col(1)
 	, m_stockElementCount(0)
@@ -84,9 +132,24 @@ XmlReader::~XmlReader()
 //-----------------------------------------------------------------------------
 bool XmlReader::Read()
 {
+	if (m_stockElementCount > 0)
+	{
+		m_currentElementNodePos += m_currentNode->AttrCount;	// 属性ノードを読み飛ばす (と言っても現在は Text ノードのみこの if に入ってくるから実質意味は無いが)
+		m_currentElementNodePos++;								// 次のノードを指す
+		m_currentNode = &m_nodes[m_currentElementNodePos];
+		m_currentAttrCount = m_currentNode->AttrCount;
+		m_stockElementCount--;
+		return true;
+	}
+
 	m_textCache.Clear();
 	m_nodes.Clear();
-	m_currentNodesPos = 0;
+	m_currentElementNodePos = 0;
+	m_currentAttrCount = 0;
+	m_currentNode = NULL;
+	m_currentAttrIndex = -1;
+
+
 
 	int ch = m_reader->Peek();
 	if (ch < 0) { return false; }	// もう読み取れる文字が無い
@@ -97,8 +160,11 @@ bool XmlReader::Read()
 		if (!ParseElementOuter()) { return false; }
 	}
 
-	m_currentNodesPos = 0;
+	m_currentElementNodePos = 0;
 	m_stockElementCount--;
+
+	m_currentNode = &m_nodes[m_currentElementNodePos];
+	m_currentAttrCount = m_currentNode->AttrCount;
 
 	return true;
 }
@@ -111,7 +177,7 @@ XmlNodeType XmlReader::GetNodeType()  const
 	if (m_nodes.IsEmpty()) {
 		return XmlNodeType_None;
 	}
-	return m_nodes[m_currentNodesPos].Type;
+	return m_currentNode->Type;
 }
 
 //-----------------------------------------------------------------------------
@@ -124,8 +190,14 @@ const String& XmlReader::GetName()
 	}
 	else
 	{
-		const TCHAR* name = &m_textCache[m_nodes[m_currentNodesPos].NameStartPos];
-		m_tmpName.AssignCStr(name, m_nodes[m_currentNodesPos].NameLen);
+		if (m_currentNode->NameStartPos == -1 || m_currentNode->NameLen == 0) {
+			m_tmpName.SetEmpty();	// Node はあるけど名前が無かった
+		}
+		else
+		{
+			const TCHAR* name = &m_textCache[m_currentNode->NameStartPos];
+			m_tmpName.AssignCStr(name, m_currentNode->NameLen);
+		}
 	}
 	return m_tmpName;
 }
@@ -140,14 +212,16 @@ const String& XmlReader::GetValue()
 	}
 	else
 	{
-		NodeData& data = m_nodes[m_currentNodesPos];
-		if (data.ValueStartPos == -1 || data.ValueLen == 0) {
+		if (m_currentNode->ValueStartPos == -1 || m_currentNode->ValueLen == 0) {
 			m_tmpName.SetEmpty();	// Node はあるけど値が無かった
 		}
 		else
 		{
-			const TCHAR* name = &m_textCache[data.ValueStartPos];
-			m_tmpName.AssignCStr(name, data.ValueLen);
+			const TCHAR* name = &m_textCache[m_currentNode->ValueStartPos];
+			m_tmpName.AssignCStr(name, m_currentNode->ValueLen);
+
+			// 定義済み Entity を展開する
+			ExpandReservedEntities(&m_tmpName[0], m_tmpName.GetLength());
 		}
 	}
 	return m_tmpName;
@@ -161,7 +235,57 @@ bool XmlReader::IsEmptyElement() const
 	if (m_nodes.IsEmpty()) {
 		return false;
 	}
-	return m_nodes[m_currentNodesPos].IsEmptyElement;
+	return m_currentNode->IsEmptyElement;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+int XmlReader::GetAttributeCount() const
+{
+	return m_currentAttrCount;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+bool XmlReader::MoveToFirstAttribute()
+{
+	if (m_currentAttrCount <= 0) {
+		return false;
+	}
+
+	m_currentAttrIndex = 0;
+	m_currentNode = &m_nodes[m_currentElementNodePos + 1];
+	return true;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+bool XmlReader::MoveToNextAttribute()
+{
+	if (m_currentAttrIndex + 1 >= m_currentAttrCount) {
+		return false;
+	}
+
+	m_currentAttrIndex++;
+	m_currentNode = &m_nodes[m_currentElementNodePos + 1 + m_currentAttrIndex];
+	return true;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+bool XmlReader::MoveToElement()
+{
+	if (m_currentNode == NULL || m_currentNode->Type != XmlNodeType_Attribute) {
+		return false;
+	}
+
+	m_currentAttrIndex = -1;
+	m_currentNode = &m_nodes[m_currentElementNodePos];
+	return true;
 }
 
 //-----------------------------------------------------------------------------
@@ -296,6 +420,7 @@ bool XmlReader::ParseElementOuter()
 			{
 				if (IsReservedEntity(&m_textCache[entityRefStart], m_textCache.GetCount() - entityRefStart)) {
 					// &amp; 等、予約済み Entity は XmlNodeType_EntityReference にしない。Text として結合するため、ここではなにもしない。
+					tokenIsSpaceOnly = false;
 				}
 				else
 				{
@@ -305,19 +430,23 @@ bool XmlReader::ParseElementOuter()
 					data1.ValueStartPos = tokenStart;
 					data1.ValueLen = entityRefStart - tokenStart;
 					m_nodes.Add(data1);
+					++m_stockElementCount;
 
-					// &～; までを1つの NodeData としてストックしておく
+					// &～; の内部を1つの NodeData としてストックしておく
 					NodeData data2;
 					data2.Type = XmlNodeType_EntityReference;
-					data2.ValueStartPos = entityRefStart;
-					data2.ValueLen = m_textCache.GetCount() - entityRefStart;
+					data2.NameStartPos = entityRefStart + 1;
+					data2.NameLen = (m_textCache.GetCount() - entityRefStart) - 2;
 					m_nodes.Add(data2);
+					++m_stockElementCount;
+
+					// 状態を元に戻す
+					tokenStart = m_textCache.GetCount();	// ; の次を指す
+					tokenIsSpaceOnly = true;
 				}
 
 				// & を探している状態にする
 				entityRefSeq = Seq_FindAmp;
-				tokenStart = m_textCache.GetCount();	// ; の次を指す
-				tokenIsSpaceOnly = false;
 			}
 		}
 	}
@@ -520,7 +649,7 @@ bool XmlReader::ParseAttribute()
 	int ch = 0;
 	for (;;)
 	{
-		int ch = m_reader->Read();
+		ch = m_reader->Read();
 		if (ch < 0) { break; }		// EOF
 		if (ch == '"') { break; }	// 文字列終端
 		m_textCache.Add(ch);
@@ -541,7 +670,7 @@ bool XmlReader::ParseAttribute()
 	data.ValueStartPos = valueStart;
 	data.ValueLen = m_textCache.GetCount() - valueStart;
 	m_nodes.Add(data);
-	++m_stockElementCount;
+	//++m_stockElementCount;	// 属性の場合はストック数を上げない
 	return true;
 }
 
@@ -678,13 +807,59 @@ bool XmlReader::ParseWhiteSpace()
 	return false;
 }
 
-
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 bool XmlReader::IsAlphaNum(int ch)
 {
 	return (ch < 128) ? (isalnum(ch)!=0) : true;
+}
+
+//-----------------------------------------------------------------------------
+// text は len+1 の領域があること (終端に \0 を格納する)
+//-----------------------------------------------------------------------------
+void XmlReader::ExpandReservedEntities(TCHAR* text, int len)
+{
+	/*
+		予約済み Entity は全て 1 文字。
+		展開した後にバッファが増えることは無い。
+	*/
+
+	TCHAR* rp = text;	// read pointer
+	TCHAR* wp = text;	// write pointer
+	TCHAR* end = text + len;
+	while (rp < end)
+	{
+		if (*rp == '&')
+		{
+			int i = 0;
+			for (; i < ReservedEntitiesCount; ++i)
+			{
+				if (StringUtils::StrNCmp(rp + 1, ReservedEntities[i].Pattern, ReservedEntities[i].Length) == 0 &&
+					*(rp + ReservedEntities[i].Length + 1) == ';')
+				{
+					*wp = ReservedEntities[i].Value;
+					++wp;
+					rp += ReservedEntities[i].Length + 2;
+					break;
+				}
+			}
+			// 予約済み Entity ではなかった
+			if (i == ReservedEntitiesCount)
+			{
+				*wp = *rp;
+				++rp;
+				++wp;
+			}
+		}
+		else
+		{
+			*wp = *rp;
+			++rp;
+			++wp;
+		}
+	}
+	*wp = '\0';
 }
 
 } // namespace Lumino

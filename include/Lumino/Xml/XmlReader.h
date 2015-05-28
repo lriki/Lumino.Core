@@ -58,7 +58,7 @@ enum XmlNodeType
 	@brief		SAX スタイルの XML パーサです。
 	@details	「Extensible Markup Language (XML) 1.1 (第二版)」をベースに実装されています。
 				http://www.eplusx.net/translation/W3C/REC-xml11-20060816/#NT-elementdecl <br>
-				しかし、現在全ての仕様には対応されていません。
+				ただし、現在全ての仕様には対応されていません。
 				対応している仕様は、上記リンク先の目次「2 文書」、「4.3.1 テキスト宣言」および「4.6 定義済み実体」の内容です。
 				それ以外はノードの種別のみ認識します。<br>
 				例えば <!DOCTYPE...> はノード種別として認識しますが、内容の読み取りはスキップします。
@@ -70,31 +70,58 @@ public:
 	XmlReader(TextReader* textReader);
 	~XmlReader();
 
-	/*
-		@brief	次のノード読み取ります。
-		@return	正常に読み取られた場合は true。それ以上読み取るノードが存在しない場合は false。
+	/**
+		@brief		次のノード読み取ります。
+		@return		正常に読み取られた場合は true。それ以上読み取るノードが存在しない場合は false。
 	*/
 	bool Read();
 
-	/*
-		@brief	現在のノードの種類を取得します。
+	/**
+		@brief		現在のノードの種類を取得します。
 	*/
 	XmlNodeType GetNodeType() const;
 
-	/*
-		@brief	現在のノードの名前を取得します。
+	/**
+		@brief		現在のノードの名前を取得します。
 	*/
 	const String& GetName();
 
-	/*
-		@brief	現在のノードの値 (文字列) を取得します。
+	/**
+		@brief		現在のノードの値 (文字列形式) を取得します。
+		@details	値が無い場合は空文字列を返します。
 	*/
 	const String& GetValue();
 
-	/*
-		@brief	現在のノードが空要素(<book/> 等) かどうかを確認します。
+	/**
+		@brief		現在のノードが空要素(<book/> 等) かどうかを確認します。
 	*/
 	bool IsEmptyElement() const;
+
+	/**
+		@brief		現在のノードの属性数を取得します。
+	*/
+	int GetAttributeCount() const;
+
+	/**
+		@brief		現在のノードの最初の属性に移動します。
+		@return		属性が存在する場合は true。それ以外の場合は false。
+		@details	属性が存在しない場合、現在位置は変更されません。
+	*/
+	bool MoveToFirstAttribute();
+
+	/**
+		@brief		次の属性に移動します。
+		@return		次の属性が存在する場合は true。それ以上属性が存在しない場合は false。
+		@details	次の属性が存在しない場合、現在位置は変更されません。
+	*/
+	bool MoveToNextAttribute();
+
+	/**
+		@brief		現在の属性ノードを含む要素に移動します。
+		@return		現在位置が属性であった場合は true。それ以外の場合は false。
+		@details	現在位置が属性でない場合、現在位置は変更されません。
+	*/
+	bool MoveToElement();
 
 private:
 	bool ParseElementInner();	// '<' から始まる
@@ -124,6 +151,8 @@ private:
 
 	bool IsAlphaNum(int ch);
 
+	void ExpandReservedEntities(TCHAR* text, int len);
+
 private:
 	struct NodeData
 	{
@@ -138,7 +167,7 @@ private:
 
 		NodeData()
 			: Type(XmlNodeType_None)
-			, NameStartPos(0)
+			, NameStartPos(-1)
 			, NameLen(0)
 			, ValueStartPos(-1)
 			, ValueLen(0)
@@ -151,12 +180,15 @@ private:
 	RefPtr<TextReader>		m_reader;
 	ArrayList<TCHAR>		m_textCache;
 	ArrayList<NodeData>		m_nodes;
-	int						m_currentNodesPos;
+	NodeData*				m_currentNode;
+	int						m_currentElementNodePos;
+	int						m_currentAttrIndex;		///< 属性ノードを指している場合、その属性インデックス。指していなければ -1
 	int						m_line;
 	int						m_col;
 	XmlError				m_errorInfo;
 	int						m_stockElementCount;
 	String					m_tmpName;
+	int						m_currentAttrCount;		///< 現在のノードの属性数
 };
 
 } // namespace Lumino

@@ -99,7 +99,7 @@ public:
 	bool operator==(const TChar* right) const;
 	bool operator < (const BasicString& right) const;
 	bool operator < (const TChar* right) const;
-	//TChar& operator[](int index);
+	TChar& operator[](int index);
 	const TChar& operator[](int index) const;
 	operator const TChar*() const;
 
