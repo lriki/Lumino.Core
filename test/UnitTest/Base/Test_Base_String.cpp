@@ -474,3 +474,76 @@ TEST_F(Test_Base_String, NewLine)
 	ASSERT_EQ(_T('\0'), tnl[1]);
 #endif
 }
+
+//---------------------------------------------------------------------
+TEST_F(Test_Base_String, ToInt)
+{
+	// 実行できるか
+	ASSERT_EQ(10, String(_T("10")).ToInt8());
+	ASSERT_EQ(10, String(_T("10")).ToInt16());
+	ASSERT_EQ(10, String(_T("10")).ToInt32());
+	ASSERT_EQ(10, String(_T("10")).ToInt64());
+	ASSERT_EQ(10, String(_T("10")).ToUInt8());
+	ASSERT_EQ(10, String(_T("10")).ToUInt16());
+	ASSERT_EQ(10, String(_T("10")).ToUInt32());
+	ASSERT_EQ(10, String(_T("10")).ToUInt64());
+
+	// 異常系
+	ASSERT_THROW(String(_T("10")).ToInt8(1), ArgumentException);
+	ASSERT_THROW(String(_T("-")).ToInt8(), InvalidFormatException);
+	ASSERT_THROW(String(_T("qwer")).ToInt8(), InvalidFormatException);
+	ASSERT_THROW(String(_T("0xfffffffffffffffff")).ToInt8(), OverflowException);
+}
+
+//---------------------------------------------------------------------
+TEST_F(Test_Base_String, TryToInt)
+{
+	// 実行できるか
+	{
+		int8_t v;
+		ASSERT_TRUE(String(_T("10")).TryToInt8(&v));
+		ASSERT_EQ(10, v);
+	}
+	{
+		int16_t v;
+		ASSERT_TRUE(String(_T("10")).TryToInt16(&v));
+		ASSERT_EQ(10, v);
+	}
+	{
+		int32_t v;
+		ASSERT_TRUE(String(_T("10")).TryToInt32(&v));
+		ASSERT_EQ(10, v);
+	}
+	{
+		int64_t v;
+		ASSERT_TRUE(String(_T("10")).TryToInt64(&v));
+		ASSERT_EQ(10, v);
+	}
+	{
+		uint8_t v;
+		ASSERT_TRUE(String(_T("10")).TryToUInt8(&v));
+		ASSERT_EQ(10, v);
+	}
+	{
+		uint16_t v;
+		ASSERT_TRUE(String(_T("10")).TryToUInt16(&v));
+		ASSERT_EQ(10, v);
+	}
+	{
+		uint32_t v;
+		ASSERT_TRUE(String(_T("10")).TryToUInt32(&v));
+		ASSERT_EQ(10, v);
+	}
+	{
+		uint64_t v;
+		ASSERT_TRUE(String(_T("10")).TryToUInt64(&v));
+		ASSERT_EQ(10, v);
+	}
+
+	// 異常系
+	int8_t v;
+	ASSERT_FALSE(String(_T("10")).TryToInt8(&v, 1));
+	ASSERT_FALSE(String(_T("-")).TryToInt8(&v));
+	ASSERT_FALSE(String(_T("qwer")).TryToInt8(&v));
+	ASSERT_FALSE(String(_T("0xfffffffffffffffff")).TryToInt8(&v));
+}

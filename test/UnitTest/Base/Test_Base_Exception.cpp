@@ -8,8 +8,66 @@ protected:
 };
 
 //---------------------------------------------------------------------
+TEST_F(Test_Base_Exception, Assertion)
+{
+	// LN_VERIFY OK
+	{
+		int* p = (int*)1;
+		if (LN_VERIFY(p != NULL)) {
+			// ここを通る
+		}
+		else {
+			FAIL();	// ここにきてはダメ
+		}
+	}
+
+	// LN_VERIFY NG
+	{
+		int* p = NULL;
+		try
+		{
+			if (LN_VERIFY(p != NULL)) {
+			}
+			FAIL();	// ここにきてはダメ
+		}
+		catch (Exception&) {
+			// ここを通る
+		}
+	}
+
+	// LN_VERIFY_ASSERT OK
+	{
+		int* p = (int*)1;
+		if (LN_VERIFY_ASSERT(p != NULL)) {
+			FAIL();	// ここにきてはダメ
+		}
+		else {
+			// ここを通る
+		}
+	}
+
+	// LN_VERIFY_ASSERT NG
+	{
+		int* p = NULL;
+		try
+		{
+			if (LN_VERIFY_ASSERT(p != NULL)) {
+				// ここを通る条件だが、例外なので来ない
+			}
+			FAIL();	// ここにきてはダメ
+		}
+		catch (Exception&) {
+			// ここを通る
+		}
+	}
+}
+
+//---------------------------------------------------------------------
 TEST_F(Test_Base_Exception, Basic)
 {
+
+
+
 	// char 可変長 message
 	try
 	{

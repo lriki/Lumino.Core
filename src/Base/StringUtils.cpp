@@ -10,6 +10,7 @@ namespace Lumino
 {
 
 
+
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
@@ -69,6 +70,13 @@ int				StringUtils::VSPrintf(wchar_t* out, int charCount, const wchar_t* format,
 	return vswprintf(out, charCount, format, args);
 }
 #endif
+
+
+
+
+
+
+
 
 
 /*
@@ -550,5 +558,262 @@ static bool StringUtils::Match(const TChar* pattern, const TChar* str)
 }
 template bool StringUtils::Match<char>(const char* pattern, const char* str);
 template bool StringUtils::Match<wchar_t>(const wchar_t* pattern, const wchar_t* str);
+
+//-----------------------------------------------------------------------------
+// Note:C言語標準では uint64_t 用の 変換関数が無いため自作した。
+//		ちなみに C++ の istream も uint64_t 用の変換は標準ではない。(VC++にはあるが)
+//-----------------------------------------------------------------------------
+template<typename TChar, typename TSigned, typename TUnigned>
+static NumberConversionResult StrToNumInternal(
+	const TChar* str,
+	int len,			// -1 可
+	int base,
+	bool reqUnsigned,	// unsigned として読み取りたいかどうか
+	TSigned signedMin,
+	TSigned signedMax,
+	TUnigned unsignedMax,
+	const TChar** outEndPtr,	// NULL 可。処理完了後、str+len と一致しなかったら後ろに数字ではない文字がある。
+	TUnigned* outNumber)		// NULL 可 (文字数カウント用)
+{
+	if (outNumber != NULL) { *outNumber = 0; }
+
+	if (str == NULL) { return NumberConversionResult_ArgsError; }
+	if (!(base == 0 || base == 2 || base == 8 || base == 10 || base == 16)) { return NumberConversionResult_ArgsError; }
+
+	const TChar* p = str;
+	const TChar* end = str + (len < 0 ? StringUtils::StrLen(str) : len);
+
+	// 空白をスキップ
+	while (StringUtils::IsSpace(*p)) { ++p; }
+
+	// 符号チェック
+	bool isNeg = false;
+	if (*p == '-') {
+		isNeg = true;	// マイナス符号有り
+		++p;
+	}
+	else if (*p == '+') {
+		++p;			// プラス符号はスキップするだけ
+	}
+	if (p >= end) { return NumberConversionResult_FormatError; }	// 符号しかなかった
+
+	// 基数が 0 の場合は自動判別する
+	if (base == 0)
+	{
+		if (p[0] != '0') {
+			base = 10;
+		}
+		else if (p[1] == 'x' || p[1] == 'X') {
+			base = 16;
+		}
+		else {
+			base = 8;
+		}
+	}
+
+	// 基数によってプレフィックスをスキップする
+	if (base == 8)
+	{
+		if (p[0] == '0') {
+			++p;
+		}
+	}
+	else if (base == 16)
+	{
+		if (p[0] == '0' && (p[1] == 'x' || p[1] == 'X')) {
+			++p;
+			++p;
+			if (p >= end) { return NumberConversionResult_FormatError; }	// 0x しかなかった
+		}
+	}
+
+	TUnigned num = 0;
+	TUnigned overflowMax = unsignedMax / base;	// 乗算しようとするとき、この値以上であれば次の乗算でオーバフローする
+	TUnigned baseMax = unsignedMax % base;
+	int count = 0;	// 読み取った文字数
+	bool isOverflow = false;
+	for (;;)
+	{
+		// 1文字読み取る
+		TUnigned d;
+		if (isdigit(*p)) {
+			d = *p - '0';
+		}
+		else if ('A' <= *p && *p <= 'F') {
+			d = *p - 'A' + 10;
+		}
+		else if ('a' <= *p && *p <= 'f') {
+			d = *p - 'a' + 10;
+		}
+		else {
+			break;
+		}
+		if (d >= (TUnigned)base) {
+			// 基数より大きい桁が見つかった (10進数なのに A があったなど)
+			return NumberConversionResult_FormatError;
+		}
+		++count;
+
+		// 計算する前にオーバーフローを確認する
+		if (num < overflowMax ||					// 例) uint8(Max 255) のとき、num は 25 より小さければOK
+			(num == overflowMax && d <= baseMax)) {	// 例) num が 25 のときは d が 5 以下であればOK
+			num = num * base + d;
+		}
+		else {
+			isOverflow = true;
+		}
+
+		// 次の文字へ
+		++p;
+		if (p >= end) { break; }
+	}
+
+	if (outEndPtr != NULL) {
+		*outEndPtr = p;
+	}
+
+	// オーバーフローしていたら最大値に丸めておく
+	NumberConversionResult result = NumberConversionResult_Success;
+	if (isOverflow)
+	{
+		num = unsignedMax;
+		result = NumberConversionResult_Overflow;
+	}
+	else if (!reqUnsigned)	// signed のオーバフローチェック
+	{
+		if (isNeg && num > (TUnigned)(-signedMin))
+		{
+			num = (TUnigned)(-signedMin);
+			result = NumberConversionResult_Overflow;
+		}
+		else if (!isNeg && num > (TUnigned)signedMax)
+		{
+			num = signedMax;
+			result = NumberConversionResult_Overflow;
+		}
+	}
+
+	// マイナス符合がある場合は signed 値を unsigned として返し、
+	// 呼び出し側で signed にキャストして返す。
+	if (isNeg) {
+		num = (TUnigned)(-(TSigned)num);
+	}
+
+	if (outNumber != NULL) { *outNumber = num; }
+	return result;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+int8_t StringUtils::ToInt8(const TChar* str, int len, int base, const TChar** outEndPtr, NumberConversionResult* outResult)
+{
+	uint8_t n;
+	NumberConversionResult r = StrToNumInternal<TChar, int8_t, uint8_t>(str, len, base, false, INT8_MIN, INT8_MAX, UINT8_MAX, outEndPtr, &n);
+	if (outResult != NULL) { *outResult = r; }
+	return (int8_t)n;
+}
+template int8_t StringUtils::ToInt8<char>(const char* str, int len, int base, const char** outEndPtr, NumberConversionResult* outResult);
+template int8_t StringUtils::ToInt8<wchar_t>(const wchar_t* str, int len, int base, const wchar_t** outEndPtr, NumberConversionResult* outResult);
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+uint8_t StringUtils::ToUInt8(const TChar* str, int len, int base, const TChar** outEndPtr, NumberConversionResult* outResult)
+{
+	uint8_t n;
+	NumberConversionResult r = StrToNumInternal<TChar, int8_t, uint8_t>(str, len, base, true, INT8_MIN, INT8_MAX, UINT8_MAX, outEndPtr, &n);
+	if (outResult != NULL) { *outResult = r; }
+	return n;
+}
+template uint8_t StringUtils::ToUInt8<char>(const char* str, int len, int base, const char** outEndPtr, NumberConversionResult* outResult);
+template uint8_t StringUtils::ToUInt8<wchar_t>(const wchar_t* str, int len, int base, const wchar_t** outEndPtr, NumberConversionResult* outResult);
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+int16_t StringUtils::ToInt16(const TChar* str, int len, int base, const TChar** outEndPtr, NumberConversionResult* outResult)
+{
+	uint16_t n;
+	NumberConversionResult r = StrToNumInternal<TChar, int16_t, uint16_t>(str, len, base, false, INT16_MIN, INT16_MAX, UINT16_MAX, outEndPtr, &n);
+	if (outResult != NULL) { *outResult = r; }
+	return (int16_t)n;
+}
+template int16_t StringUtils::ToInt16<char>(const char* str, int len, int base, const char** outEndPtr, NumberConversionResult* outResult);
+template int16_t StringUtils::ToInt16<wchar_t>(const wchar_t* str, int len, int base, const wchar_t** outEndPtr, NumberConversionResult* outResult);
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+uint16_t StringUtils::ToUInt16(const TChar* str, int len, int base, const TChar** outEndPtr, NumberConversionResult* outResult)
+{
+	uint16_t n;
+	NumberConversionResult r = StrToNumInternal<TChar, int16_t, uint16_t>(str, len, base, true, INT16_MIN, INT16_MAX, UINT16_MAX, outEndPtr, &n);
+	if (outResult != NULL) { *outResult = r; }
+	return n;
+}
+template uint16_t StringUtils::ToUInt16<char>(const char* str, int len, int base, const char** outEndPtr, NumberConversionResult* outResult);
+template uint16_t StringUtils::ToUInt16<wchar_t>(const wchar_t* str, int len, int base, const wchar_t** outEndPtr, NumberConversionResult* outResult);
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+int32_t StringUtils::ToInt32(const TChar* str, int len, int base, const TChar** outEndPtr, NumberConversionResult* outResult)
+{
+	uint32_t n;
+	NumberConversionResult r = StrToNumInternal<TChar, int32_t, uint32_t>(str, len, base, false, INT32_MIN, INT32_MAX, UINT32_MAX, outEndPtr, &n);
+	if (outResult != NULL) { *outResult = r; }
+	return (int32_t)n;
+}
+template int32_t StringUtils::ToInt32<char>(const char* str, int len, int base, const char** outEndPtr, NumberConversionResult* outResult);
+template int32_t StringUtils::ToInt32<wchar_t>(const wchar_t* str, int len, int base, const wchar_t** outEndPtr, NumberConversionResult* outResult);
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+uint32_t StringUtils::ToUInt32(const TChar* str, int len, int base, const TChar** outEndPtr, NumberConversionResult* outResult)
+{
+	uint32_t n;
+	NumberConversionResult r = StrToNumInternal<TChar, int32_t, uint32_t>(str, len, base, true, INT32_MIN, INT32_MAX, UINT32_MAX, outEndPtr, &n);
+	if (outResult != NULL) { *outResult = r; }
+	return n;
+}
+template uint32_t StringUtils::ToUInt32<char>(const char* str, int len, int base, const char** outEndPtr, NumberConversionResult* outResult);
+template uint32_t StringUtils::ToUInt32<wchar_t>(const wchar_t* str, int len, int base, const wchar_t** outEndPtr, NumberConversionResult* outResult);
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+int64_t StringUtils::ToInt64(const TChar* str, int len, int base, const TChar** outEndPtr, NumberConversionResult* outResult)
+{
+	uint64_t n;
+	NumberConversionResult r = StrToNumInternal<TChar, int64_t, uint64_t>(str, len, base, false, INT64_MIN, INT64_MAX, UINT64_MAX, outEndPtr, &n);
+	if (outResult != NULL) { *outResult = r; }
+	return (int64_t)n;
+}
+template int64_t StringUtils::ToInt64<char>(const char* str, int len, int base, const char** outEndPtr, NumberConversionResult* outResult);
+template int64_t StringUtils::ToInt64<wchar_t>(const wchar_t* str, int len, int base, const wchar_t** outEndPtr, NumberConversionResult* outResult);
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+uint64_t StringUtils::ToUInt64(const TChar* str, int len, int base, const TChar** outEndPtr, NumberConversionResult* outResult)
+{
+	uint64_t n;
+	NumberConversionResult r = StrToNumInternal<TChar, int64_t, uint64_t>(str, len, base, true, INT64_MIN, INT64_MAX, UINT64_MAX, outEndPtr, &n);
+	if (outResult != NULL) { *outResult = r; }
+	return n;
+}
+template uint64_t StringUtils::ToUInt64<char>(const char* str, int len, int base, const char** outEndPtr, NumberConversionResult* outResult);
+template uint64_t StringUtils::ToUInt64<wchar_t>(const wchar_t* str, int len, int base, const wchar_t** outEndPtr, NumberConversionResult* outResult);
+
 
 } // namespace Lumino

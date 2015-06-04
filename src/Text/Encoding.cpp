@@ -206,7 +206,7 @@ ByteBuffer* Encoding::Convert(
 //-----------------------------------------------------------------------------
 size_t Encoding::CheckPreamble(const byte_t* buffer, size_t bufferSize) const
 {
-	LN_VERIFY(buffer != NULL) { return false; }
+	if (LN_VERIFY_ASSERT_ARG(buffer != NULL)) { return false; }
 
 	const char* bom = (const char*)GetPreamble();
 	size_t bomLen = strlen(bom);

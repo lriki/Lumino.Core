@@ -650,12 +650,85 @@ ArrayList< BasicString<TChar> > BasicString<TChar>::Split(const TChar* delim, St
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+#define TO_INT_DEF(type, func) \
+	const TChar* str; \
+	const TChar* end; \
+	int len; \
+	NumberConversionResult res; \
+	StringUtils::Trim(GetCStr(), GetLength(), &str, &len); \
+	type num = StringUtils::func(str, len, base, &end, &res); \
+	if (res == NumberConversionResult_ArgsError)	{ LN_THROW(0, ArgumentException); } \
+	if (res == NumberConversionResult_FormatError)	{ LN_THROW(0, InvalidFormatException); } \
+	if (res == NumberConversionResult_Overflow)		{ LN_THROW(0, OverflowException); } \
+	LN_THROW(end == str + len, InvalidFormatException); \
+	return num;
+
+template<typename TChar>
+int8_t BasicString<TChar>::ToInt8(int base) const { TO_INT_DEF(int8_t, ToInt8); }
+template<typename TChar>
+int16_t BasicString<TChar>::ToInt16(int base) const { TO_INT_DEF(int16_t, ToInt16); }
+template<typename TChar>
+int32_t BasicString<TChar>::ToInt32(int base) const { TO_INT_DEF(int32_t, ToInt32); }
+template<typename TChar>
+int64_t BasicString<TChar>::ToInt64(int base) const { TO_INT_DEF(int64_t, ToInt64); }
+template<typename TChar>
+uint8_t BasicString<TChar>::ToUInt8(int base) const { TO_INT_DEF(uint8_t, ToUInt8); }
+template<typename TChar>
+uint16_t BasicString<TChar>::ToUInt16(int base) const { TO_INT_DEF(uint16_t, ToUInt16); }
+template<typename TChar>
+uint32_t BasicString<TChar>::ToUInt32(int base) const { TO_INT_DEF(uint32_t, ToUInt32); }
+template<typename TChar>
+uint64_t BasicString<TChar>::ToUInt64(int base) const { TO_INT_DEF(uint64_t, ToUInt64); }
+
+#undef TO_INT_DEF
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+#define TRY_TO_INT_DEF(type, func) \
+	const TChar* str; \
+	const TChar* end; \
+	int len; \
+	NumberConversionResult res; \
+	StringUtils::Trim(GetCStr(), GetLength(), &str, &len); \
+	type num = StringUtils::func(str, len, base, &end, &res); \
+	if (end != str + len) { return false; } \
+	if (res != NumberConversionResult_Success) { return false; } \
+	if (outValue != NULL) { *outValue = num; } \
+	return true;
+
+template<typename TChar>
+bool BasicString<TChar>::TryToInt8(int8_t* outValue, int base) const { TRY_TO_INT_DEF(int8_t, ToInt8); }
+template<typename TChar>
+bool BasicString<TChar>::TryToInt16(int16_t* outValue, int base = 0) const { TRY_TO_INT_DEF(int16_t, ToInt16); }
+template<typename TChar>
+bool BasicString<TChar>::TryToInt32(int32_t* outValue, int base = 0) const { TRY_TO_INT_DEF(int32_t, ToInt32); }
+template<typename TChar>
+bool BasicString<TChar>::TryToInt64(int64_t* outValue, int base = 0) const { TRY_TO_INT_DEF(int64_t, ToInt64); }
+template<typename TChar>
+bool BasicString<TChar>::TryToUInt8(uint8_t* outValue, int base = 0) const { TRY_TO_INT_DEF(uint8_t, ToUInt8); }
+template<typename TChar>
+bool BasicString<TChar>::TryToUInt16(uint16_t* outValue, int base = 0) const { TRY_TO_INT_DEF(uint16_t, ToUInt16); }
+template<typename TChar>
+bool BasicString<TChar>::TryToUInt32(uint32_t* outValue, int base = 0) const { TRY_TO_INT_DEF(uint32_t, ToUInt32); }
+template<typename TChar>
+bool BasicString<TChar>::TryToUInt64(uint64_t* outValue, int base = 0) const { TRY_TO_INT_DEF(uint64_t, ToUInt64); }
+
+#undef TRY_TO_INT_DEF
+
+#if 0
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 static bool StrToInt(const char* str, int* value)
 {
 	// TODO:str はコピーされ、内部では std::string として保持される。
 	//		独自の stream を作ってコピーしないようにすれば高速化の余地がある。
 	std::istringstream iss(str);
 	iss >> *value;
+
+	__int64 f;
+	iss >> f;
 	return iss.eof();
 }
 static bool StrToInt(const wchar_t* str, int* value)
@@ -679,6 +752,7 @@ bool BasicString<TChar>::ToInt(int* value) const
 {
 	return StrToInt(Trim().GetCStr(), value);
 }
+#endif
 
 //-----------------------------------------------------------------------------
 //

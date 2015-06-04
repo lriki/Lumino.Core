@@ -71,7 +71,7 @@ void JsonValue::SetBool(bool value)
 //-----------------------------------------------------------------------------
 bool JsonValue::GetBool() const
 {
-	LN_VERIFY(m_type == Type_Bool) { return false; }
+	if (LN_VERIFY_ASSERT(m_type == Type_Bool)) { return false; }
 	return m_bool;
 }
 
@@ -90,7 +90,7 @@ void JsonValue::SetDouble(double value)
 //-----------------------------------------------------------------------------
 double JsonValue::GetDouble() const
 {
-	LN_VERIFY(m_type == Type_Double) { return 0.0; }
+	if (LN_VERIFY_ASSERT(m_type == Type_Double)) { return 0.0; }
 	return m_double;
 }
 
@@ -109,7 +109,7 @@ void JsonValue::SetString(const String& str)
 //-----------------------------------------------------------------------------
 const String& JsonValue::GetString() const
 {
-	LN_VERIFY(m_type == Type_String && m_string != NULL) { return String::GetEmpty(); }
+	if (LN_VERIFY_ASSERT(m_type == Type_String && m_string != NULL)) { return String::GetEmpty(); }
 	return *m_string;
 }
 
@@ -128,7 +128,7 @@ void JsonValue::SetArray()
 //-----------------------------------------------------------------------------
 int JsonValue::GetCount() const
 {
-	LN_VERIFY(m_type == Type_Array && m_valueList != NULL) { return 0; }
+	if (LN_VERIFY_ASSERT(m_type == Type_Array && m_valueList != NULL)) { return 0; }
 	return m_valueList->GetCount();
 }
 
@@ -147,7 +147,7 @@ void JsonValue::SetObject()
 //-----------------------------------------------------------------------------
 int JsonValue::GetMemberCount() const
 {
-	LN_VERIFY(m_type == Type_Object && m_memberList != NULL) { return 0; }
+	if (LN_VERIFY_ASSERT(m_type == Type_Object && m_memberList != NULL)) { return 0; }
 	return m_memberList->GetCount();
 }
 

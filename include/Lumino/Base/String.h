@@ -299,18 +299,46 @@ public:
 	int GetByteCount() const { return GetLength() * sizeof(TChar); }
 
 	/**
-		@brief		文字列を整数値に変換する
-		@details	std::istringstream による変換です。
-					全ての文字をパース出来ず途中で失敗した場合は例外が throw されます。
+		@brief		この文字列を整数値に変換します。
+		@param[in]	base		: 基数 (0、2、8、10、16 のいずれかであること)
+		@return		変換結果の数値
+		@details	次の書式に従い、文字列を数値に変換します。<br>
+					[whitespace] [{+ | – }] [0 [{ x | X }]] [digits | letters]		<br>
+					16 進数値のアルファベットは大文字と小文字を区別しません。		<br><br>
+					
+					基数に 0 を指定すると、文字列の先頭文字から基数を自動判別します。<br>
+					"0x" または "0X" であれば 16 進数、"0" であれば 8 進数、それ以外であれば 10 進数です。
+					基数に 8 または 16 が指定されている際、文字列の先頭は "0" または "0x" である必要はありません。
+
+		@exception	InvalidFormatException	指定された基数に対して有効な桁を示す数字以外の文字が含まれていました。または、書式の前後に空白以外の文字が存在しました。
+		@exception	OverflowException		数値に変換する際にオーバーフローが発生しました。
 	*/
-	int ToInt() const;
+	int8_t		ToInt8(int base = 0) const;
+	int16_t		ToInt16(int base = 0) const;	///< @copydoc ToInt8
+	int32_t		ToInt32(int base = 0) const;	///< @copydoc ToInt8
+	int64_t		ToInt64(int base = 0) const;	///< @copydoc ToInt8
+	uint8_t		ToUInt8(int base = 0) const;	///< @copydoc ToInt8
+	uint16_t	ToUInt16(int base = 0) const;	///< @copydoc ToInt8
+	uint32_t	ToUInt32(int base = 0) const;	///< @copydoc ToInt8
+	uint64_t	ToUInt64(int base = 0) const;	///< @copydoc ToInt8
 
 	/**
-		@brief		文字列を整数値に変換する
-		@details	パースに失敗した場合は例外を throw するのではなく false を返します。
-					大量のループ内部等、例外によるパフォーマンスへの影響が懸念される場合に使用してください。
+		@brief		この文字列を整数値に変換し、成否を返します。
+		@param[in]	outValue	: 結果を格納する変数のポインタ (NULL を指定すると成否のみを返す)
+		@param[in]	base		: 基数 (0、2、8、10、16 のいずれかであること)
+		@return		正常に変換された場合は true。それ以外の場合は false。
+		@details	例外が発生しない点を除けば ToInt8 等と同様です。
+					大量のループの内部等、例外によるパフォーマンスへの影響が懸念される場合に使用してください。
+		@sa			ToInt8
 	*/
-	bool ToInt(int* value) const;
+	bool		TryToInt8(int8_t* outValue, int base = 0) const;
+	bool		TryToInt16(int16_t* outValue, int base = 0) const;		///< @copydoc TryToInt8
+	bool		TryToInt32(int32_t* outValue, int base = 0) const;		///< @copydoc TryToInt8
+	bool		TryToInt64(int64_t* outValue, int base = 0) const;		///< @copydoc TryToInt8
+	bool		TryToUInt8(uint8_t* outValue, int base = 0) const;		///< @copydoc TryToInt8
+	bool		TryToUInt16(uint16_t* outValue, int base = 0) const;	///< @copydoc TryToInt8
+	bool		TryToUInt32(uint32_t* outValue, int base = 0) const;	///< @copydoc TryToInt8
+	bool		TryToUInt64(uint64_t* outValue, int base = 0) const;	///< @copydoc TryToInt8
 
 	/// 終端 \0 までの文字数を返す (マルチバイト文字は考慮しない。CString::GetLength と同様の関数です)
 	int GetLength() const;

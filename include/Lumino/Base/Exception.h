@@ -26,13 +26,85 @@
 		va_end(args); \
 	}
 
-/// 式が true であるとアサートし、続くブロックを実行する
-///		例)  LN_VERIFY(a != NULL) { return 0; }
-#define LN_VERIFY(exp)	if (!(exp) && ::Lumino::lnAssert(exp))
+
+#define LN_DO_CHECK	// TODO: とりあえず
+#define LN_DO_CHECK_THROW	// TODO: とりあえず
+
+#ifdef LN_DO_CHECK
+	#ifdef LN_DO_CHECK_THROW
+		#define _LN_VERIFY_ASSERT_INTERNAL(exp, exception)	(AssertInternalThrow<exception>(exp, __FILE__, __LINE__))
+	#else
+		#define _LN_VERIFY_ASSERT_INTERNAL(exp, exception)	(AssertInternal(exp))
+	#endif
+#else
+	#define _LN_VERIFY_ASSERT_INTERNAL(exp, exception)	(exp)
+#endif
+
+#ifdef LN_DO_CHECK_THROW
+	#define _LN_ENSURE_ASSERT_INTERNAL(exp, exception)	(AssertInternalThrow<exception>(exp, __FILE__, __LINE__))
+#else
+	#define _LN_ENSURE_ASSERT_INTERNAL(exp, exception)	(AssertInternal(exp))
+#endif
+
+/*
+	LN_VERIFY	… assert と似た動作をするが、Release モードでも表現式は実行される。
+	LN_ENSURE	… Release モードでもエラーが生成される。現在は例外を throw する。
+*/
+
+/**
+	@brief	LN_DO_CHECK が有効の場合、表現式を実行し結果が false であればアサートします。LN_DO_CHECK が無効でも表現式は実行されます。
+	@code
+			if (LN_VERIFY(stream != NULL))
+			{
+				stream->Read(...);
+			}
+	@endcode
+*/
+#define LN_VERIFY(exp)	_LN_VERIFY_ASSERT_INTERNAL(exp, Exception)
+
+/**
+	@brief	LN_DO_CHECK が有効の場合、表現式を実行し結果が true であればアサートします。LN_DO_CHECK が無効でも表現式は実行されます。
+	@code
+			if (LN_VERIFY_ASSERT(stream != NULL)) { return; }
+			stream->Read(...);
+	@endcode
+*/
+#define LN_VERIFY_ASSERT(exp)	(!(_LN_VERIFY_ASSERT_INTERNAL(exp, Exception)))
+
+/**
+	@brief	引数チェックであることを示すための LN_VERIFY_ASSERT です。
+	@code
+			void Parse(const char* text, char** outPos)
+			{
+				if (LN_VERIFY_ASSERT_ARG(text != NULL)) { return; }
+				if (LN_VERIFY_ASSERT_ARG(outPos != NULL)) { return; }
+				...
+			}
+	@endcode
+*/
+#define LN_VERIFY_ASSERT_ARG(exp)	(!(_LN_VERIFY_ASSERT_INTERNAL(exp, ArgumentException)))
+
+
+
 
 namespace Lumino
 {
-inline bool lnAssert(bool exp) { assert(exp); return true; }
+	inline bool AssertInternal(bool result) 	// result が false であれば assert
+	{ 
+		assert(result);
+		return result;
+	}
+
+	template<typename TException>
+	inline bool AssertInternalThrow(bool result, const char* file, int line)	// result が false であれば throw
+	{ 
+		if (!result) {
+			TException e = TException();// (__VA_ARGS__)
+			e.SetSourceLocationInfo(file, line);
+			throw e;
+		}
+		return result;
+	}
 
 /**
 	@brief	例外ベースクラス
@@ -283,6 +355,22 @@ public:
 public:
 	// override Exception
 	virtual Exception* Copy() const { return LN_NEW EncodingFallbackException(*this); }
+};
+
+/**
+	@brief	数値演算によるオーバーフローが発生した。
+*/
+class OverflowException
+	: public Exception
+{
+public:
+	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(OverflowException);
+	OverflowException() {}
+	virtual ~OverflowException() throw() {}
+
+public:
+	// override Exception
+	virtual Exception* Copy() const { return LN_NEW OverflowException(*this); }
 };
 
 

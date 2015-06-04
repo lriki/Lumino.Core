@@ -11,6 +11,14 @@
 namespace Lumino
 {
 
+enum NumberConversionResult
+{
+	NumberConversionResult_Success = 0,
+	NumberConversionResult_ArgsError,
+	NumberConversionResult_FormatError,
+	NumberConversionResult_Overflow,
+};
+
 /**
 	@brief		文字列ユーティリティ
 	@details	char および wchar_t 型文字列に対する各操作を行うユーティリティ関数郡です。
@@ -197,7 +205,49 @@ public:
 	*/
 	template<typename TChar>
 	static bool Match(const TChar* pattern, const TChar* str);
-	
+
+	/*
+		@brief		文字列を整数値に変換します。
+		@param[in]	str			: 変換元の文字列
+		@param[in]	len			: str の文字数 (-1 を指定すると \0 まで変換する)
+		@param[in]	base		: 基数 (0、2、8、10、16 のいずれかであること)
+		@param[in]	outEndPtr	: スキャンの終了位置を格納する変数のアドレス
+		@param[in]	outResult	: エラーコードを格納する変数のアドレス
+		@return		変換結果の数値
+		@details	次の書式に従い、文字列を数値に変換します。<br>
+					[whitespace] [{+ | – }] [0 [{ x | X }]] [digits | letters]		<br>
+					16 進数値のアルファベットは大文字と小文字を区別しません。		<br><br>
+					
+					基数に 0 を指定すると、文字列の先頭文字から基数を自動判別します。<br>
+					"0x" または "0X" であれば 16 進数、"0" であれば 8 進数、それ以外であれば 10 進数です。
+					基数に 8 または 16 が指定されている際、文字列の先頭は "0" または "0x" である必要はありません。<br><br>
+
+					outEndPtr は C言語の strtol() のように使用します。
+					この値が str+len と一致しなければ、文字列が全て読み取られなかったことを示します。
+	*/
+	template<typename TChar>
+	static int8_t ToInt8(const TChar* str, int len = -1, int base = 0, const TChar** outEndPtr = NULL, NumberConversionResult* outResult = NULL);
+	/// @copydoc ToInt8
+	template<typename TChar>
+	static uint8_t ToUInt8(const TChar* str, int len = -1, int base = 0, const TChar** outEndPtr = NULL, NumberConversionResult* outResult = NULL);
+	/// @copydoc ToInt8
+	template<typename TChar>
+	static int16_t ToInt16(const TChar* str, int len = -1, int base = 0, const TChar** outEndPtr = NULL, NumberConversionResult* outResult = NULL);
+	/// @copydoc ToInt8
+	template<typename TChar>
+	static uint16_t ToUInt16(const TChar* str, int len = -1, int base = 0, const TChar** outEndPtr = NULL, NumberConversionResult* outResult = NULL);
+	/// @copydoc ToInt8
+	template<typename TChar>
+	static int32_t ToInt32(const TChar* str, int len = -1, int base = 0, const TChar** outEndPtr = NULL, NumberConversionResult* outResult = NULL);
+	/// @copydoc ToInt8
+	template<typename TChar>
+	static uint32_t ToUInt32(const TChar* str, int len = -1, int base = 0, const TChar** outEndPtr = NULL, NumberConversionResult* outResult = NULL);
+	/// @copydoc ToInt8
+	template<typename TChar>
+	static int64_t ToInt64(const TChar* str, int len = -1, int base = 0, const TChar** outEndPtr = NULL, NumberConversionResult* outResult = NULL);
+	/// @copydoc ToInt8
+	template<typename TChar>
+	static uint64_t ToUInt64(const TChar* str, int len = -1, int base = 0, const TChar** outEndPtr = NULL, NumberConversionResult* outResult = NULL);
 };
 
 } // namespace Lumino

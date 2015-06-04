@@ -49,7 +49,7 @@ JsonDOMHandler::JsonDOMHandler(JsonDocument* document)
 	, m_valueRawData()
 	, m_writer(&m_valueRawData)
 {
-	LN_VERIFY(document != NULL) { return; }
+	if (LN_VERIFY_ASSERT(document != NULL)) { return; }
 	m_valueRawData.Create(2048);
 }
 
@@ -227,7 +227,7 @@ void JsonDOMHandler::BuildValue(BinaryReader* reader, JsonValue* v)
 void JsonDOMHandler::BuildMember(BinaryReader* reader, JsonMember* m)
 {
 	// Ží•Ê‚Í•K‚¸ Key ‚Å‚ ‚é‚Í‚¸
-	LN_VERIFY(reader->ReadUInt8() == (0x80 | Type_String)) { return; }
+	if (LN_VERIFY_ASSERT(reader->ReadUInt8() == (0x80 | Type_String))) { return; }
 
 	// ƒL[•¶Žš—ñ
 	int len = reader->ReadInt32();

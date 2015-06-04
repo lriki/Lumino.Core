@@ -16,7 +16,7 @@ namespace Lumino
 BinaryWriter::BinaryWriter(Stream* stream)
 	: m_stream(NULL)
 {
-	LN_VERIFY(stream != NULL) { return; }
+	if (LN_VERIFY_ASSERT(stream != NULL)) { return; }
 	LN_REFOBJ_SET(m_stream, stream);
 }
 
