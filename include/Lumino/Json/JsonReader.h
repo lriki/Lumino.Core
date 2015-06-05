@@ -1,6 +1,5 @@
 
 #pragma once
-
 #include "../IO/TextReader.h"
 #include "../IO/MemoryStream.h"
 #include "JsonError.h"

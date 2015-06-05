@@ -444,4 +444,21 @@ TEST_F(Test_Base_StringUtils, ToUInt)
 
 	// 文字数指定
 	ASSERT_EQ(12, StringUtils::ToInt32(_T("123"), 2));
+
+	/*
+	https://msdn.microsoft.com/ja-jp/library/dwhawy9k(v=vs.110).aspx#FFormatString
+	//double dd = 123.12345678901234;     // -> 123.123456789012
+	//double dd = 5123.12345678901234;    // -> 5123.12345678901
+	// double dd = 12.005;    // -> 12.005
+	//double dd = 1.005;    // -> 1.005
+	//double dd = 0.005;    // -> 0.005
+	//double dd = .0000023;   // ->2.3E-06
+	//double dd = 0.000023;   // ->2.3E-05
+	// double dd = 0.00023;   // ->0.00023
+	//double dd = 0.000235;   // ->0.000235
+	double dd = 5.0000023;   // ->5.0000023
+	var s = dd.ToString();
+	*/
+	//printf("%f", 5.000000001);
+	//_itoa(10, );
 }

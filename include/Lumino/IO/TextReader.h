@@ -17,28 +17,29 @@ public:
 	
 public:
 
-	/*
+	/**
 		@brief		現在位置の文字を取得します。
 		@return		EOF に到達しているかエラーが発生した場合は -1 を返します。
 					戻り値が -1 かをチェックした後、TCHAR にキャストすることで文字として使用できます。
 	*/
 	virtual int Peek() const = 0;
 
-	/*
+	/**
 		@brief		現在位置の文字を取得し、現在位置を次の文字に移動します。
 		@return		EOF に到達しているかエラーが発生した場合は -1 を返します。
 					戻り値が -1 かをチェックした後、TCHAR にキャストすることで文字として使用できます。
 	*/
 	virtual int Read() = 0;
 
-	/*
+	/**
 		@brief		現在位置から 1 行分の文字列を読み取り、現在位置を移動します。
 		@param[out]	line	: 読み取った文字列を格納する変数のアドレス (改行文字は含まない)
 		@return		既に EOF に到達している場合は false を返します。
+		@details	line が NULL の場合は現在位置を 1 行すすめるだけで、文字列を返しません。
 	*/
 	virtual bool ReadLine(String* line) = 0;
 	
-	/*
+	/**
 		@brief		現在位置から全ての文字列を読み取ります。
 		@return		読み取った文字列
 	*/
@@ -46,6 +47,7 @@ public:
 
 	/**
 		@brief		Rader の現在位置を取得します。
+		@details	現在位置は文字単位 (TCHAR) です。ストリームのシーク位置とは異なる点に注意してください。
 	*/
 	virtual int GetPosition() const = 0;
 
