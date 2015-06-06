@@ -118,7 +118,7 @@ public:
 
 	void operator ()() const { Call(); }
 
-	Delegate00& operator = ( const Delegate00& d )
+	Delegate00& operator = (const Delegate00& d)
 	{
         LN_SAFE_ADDREF( d.mDelegate );
 		ReleaseMethod();
