@@ -342,6 +342,19 @@ public:
 			Y + Height >= rect.Y + rect.Height);
 	}
 
+	/**
+		@brief	四角形を拡大または縮小します。
+	*/
+	void Inflate(float width, float height)
+	{
+		X -= width;
+		Y -= height;
+		Width += width * 2;
+		Height += height * 2;
+		if (Width < 0) Width = 0;
+		if (Height < 0) Height = 0;
+	}
+
 public:
 	bool operator == (const RectF& obj) const { return (X == obj.X && Y == obj.Y && Width == obj.Width && Height == obj.Height); }
 	bool operator != (const RectF& obj) const { return !operator==(obj); }
