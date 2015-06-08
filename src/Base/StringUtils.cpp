@@ -862,7 +862,7 @@ static double StrToD_L(const wchar_t* str, wchar_t** endptr, _locale_t locale) {
 #endif
 
 template<typename TChar>
-double StringUtils::ToDouble(const TChar* str, int len, TChar** outEndPtr, NumberConversionResult* outResult)
+double StringUtils::ToDouble(const TChar* str, int len, const TChar** outEndPtr, NumberConversionResult* outResult)
 {
 	if (outResult != NULL) { *outResult = NumberConversionResult_Success; }
 
@@ -886,8 +886,13 @@ double StringUtils::ToDouble(const TChar* str, int len, TChar** outEndPtr, Numbe
 	StrNCpy(tmp, 512, str, len);
 	tmp[len] = '\0';
 
-	double v = StrToD_L(tmp, outEndPtr, GetCLocale());
+	TChar* end;
+	errno = 0;
+	double v = StrToD_L(tmp, &end, GetCLocale());
 
+	if (outEndPtr != NULL) { *outEndPtr = str + (end - tmp); }
+
+	int aa = errno;
 	if (errno == ERANGE || v == HUGE_VAL || v == -HUGE_VAL) {
 		if (outResult != NULL) { *outResult = NumberConversionResult_Overflow; }
 		return v;
@@ -895,7 +900,7 @@ double StringUtils::ToDouble(const TChar* str, int len, TChar** outEndPtr, Numbe
 	return v;
 }
 
-template double StringUtils::ToDouble<char>(const char* str, int len, char** outEndPtr, NumberConversionResult* outResult);
-template double StringUtils::ToDouble<wchar_t>(const wchar_t* str, int len, wchar_t** outEndPtr, NumberConversionResult* outResult);
+template double StringUtils::ToDouble<char>(const char* str, int len, const char** outEndPtr, NumberConversionResult* outResult);
+template double StringUtils::ToDouble<wchar_t>(const wchar_t* str, int len, const wchar_t** outEndPtr, NumberConversionResult* outResult);
 
 } // namespace Lumino

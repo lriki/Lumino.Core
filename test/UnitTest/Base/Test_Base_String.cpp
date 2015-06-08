@@ -21,6 +21,27 @@ TEST_F(Test_Base_String, Constructor)
 		//EXPECT_TRUE(str1.empty());
 	}
 
+	{
+		StringA strA((char*)NULL);
+		ASSERT_TRUE(strA.IsEmpty());
+		StringW strW((wchar_t*)NULL);
+		ASSERT_TRUE(strW.IsEmpty());
+	}
+
+}
+
+//---------------------------------------------------------------------
+TEST_F(Test_Base_String, Operators)
+{
+	// 同型の NULL ポインタを代入する
+	{
+		StringA strA;
+		strA = ((char*)NULL);
+		ASSERT_TRUE(strA.IsEmpty());
+		StringW strW;
+		strW = ((wchar_t*)NULL);
+		ASSERT_TRUE(strW.IsEmpty());
+	}
 }
 
 //---------------------------------------------------------------------
@@ -82,17 +103,28 @@ TEST_F(Test_Base_String, AssignCStr)
 		ASSERT_STREQ(L"te", wstr1);
 	}
 
-	// 例外
+	// 同型の NULL ポインタを指定する => 空文字が設定される
 	{
-		StringA str1;
-		ASSERT_THROW(
-			str1.AssignCStr((const char*)NULL, 1, 1),
-			ArgumentException);
+		StringA strA;
+		strA.AssignCStr((char*)NULL, 1, 1);
+		ASSERT_TRUE(strA.IsEmpty());
 
-		ASSERT_THROW(
-			str1.AssignCStr((const wchar_t*)NULL, 1, 1),
-			ArgumentException);
+		StringW strW;
+		strW.AssignCStr((wchar_t*)NULL, 1, 1);
+		ASSERT_TRUE(strA.IsEmpty());
 	}
+
+	//// 例外
+	//{
+	//	StringA str1;
+	//	ASSERT_THROW(
+	//		str1.AssignCStr((const char*)NULL, 1, 1),
+	//		ArgumentException);
+
+	//	ASSERT_THROW(
+	//		str1.AssignCStr((const wchar_t*)NULL, 1, 1),
+	//		ArgumentException);
+	//}
 }
 
 //---------------------------------------------------------------------

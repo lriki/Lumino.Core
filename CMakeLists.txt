@@ -45,6 +45,7 @@ set(LN_SOURCES_Base
 	include/Lumino/Base/Environment.h
 	include/Lumino/Base/Exception.h
 	include/Lumino/Base/List.h
+	include/Lumino/Base/Locale.h
 	include/Lumino/Base/Logger.h
 	include/Lumino/Base/Memory.h
 	include/Lumino/Base/NonCopyable.h
@@ -65,6 +66,7 @@ set(LN_SOURCES_Base
 	src/Base/ElapsedTimer.cpp
 	src/Base/Environment.cpp
 	src/Base/Exception.cpp
+	src/Base/Locale.cpp
 	src/Base/Logger.cpp
 	src/Base/Memory.cpp
 	src/Base/RefObject.cpp
@@ -105,6 +107,7 @@ set(LN_SOURCES_IO
 	include/Lumino/IO/Stream.h
 	include/Lumino/IO/StringReader.h
 	include/Lumino/IO/TextReader.h
+	include/Lumino/IO/TextWriter.h
 	src/IO/Archive.cpp
 	src/IO/ASyncIOObject.cpp
 	src/IO/BinaryReader.cpp

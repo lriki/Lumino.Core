@@ -217,7 +217,7 @@ bool JsonReader::ParseNumber()
 
 	// double ‚Ö•ÏŠ·‚·‚é
 	TCHAR* str = (TCHAR*)m_tmpStream.GetBuffer();
-	TCHAR* endptr = NULL;
+	const TCHAR* endptr = NULL;
 	NumberConversionResult result;
 	double value = StringUtils::ToDouble(str, len, &endptr, &result);
 	if ((endptr - str) != len)	// ³í‚É•ÏŠ·‚Å‚«‚Ä‚¢‚ê‚ÎA“Ç‚İæ‚Á‚½•¶š”‚ª‘S‚ÄÁ”ï‚³‚ê‚é‚Í‚¸
