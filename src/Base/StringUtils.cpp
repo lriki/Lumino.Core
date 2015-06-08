@@ -1,5 +1,6 @@
 ﻿
 #include "../Internal.h"
+#include <math.h>
 #include <wctype.h>
 #include "../../include/Lumino/Base/RefObject.h"
 #include "../../include/Lumino/Base/ByteBuffer.h"
@@ -550,7 +551,7 @@ template int StringUtils::CheckNewLineSequence<wchar_t>(const wchar_t* start, co
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-static bool StringUtils::Match(const TChar* pattern, const TChar* str)
+bool StringUtils::Match(const TChar* pattern, const TChar* str)
 {
 	switch (*pattern)
 	{
@@ -845,19 +846,32 @@ static double StrToD_L(const wchar_t* str, wchar_t** endptr, _locale_t locale) {
 
 #else
 static bool g_localeInitialized = false;
-static locale_t g_locale;
+
+class CLocale
+{
+public:
+	locale_t m_locale;
+	CLocale() : m_locale(0) { }
+	~CLocale()
+	{
+		if (m_locale != NULL) {
+			freelocale(m_locale);
+		}
+	}
+};
+static CLocale g_cLocale;
 
 static locale_t GetCLocale()
 {
 	if (!g_localeInitialized)
 	{
-		g_locale = newlocale(LC_ALL_MASK, NULL, NULL);
+		g_cLocale.m_locale = newlocale(LC_ALL_MASK, "C", NULL);
 		g_localeInitialized = true;
 	}
-	return g_locale;
+	return g_cLocale.m_locale;
 }
-static double StrToD_L(const char* str, char** endptr, _locale_t locale) { return strtod_l(str, endptr, locale); }
-static double StrToD_L(const wchar_t* str, wchar_t** endptr, _locale_t locale) { return wcstod_l(str, endptr, locale); }
+static double StrToD_L(const char* str, char** endptr, locale_t locale) { return strtod_l(str, endptr, locale); }
+static double StrToD_L(const wchar_t* str, wchar_t** endptr, locale_t locale) { return wcstod_l(str, endptr, locale); }
 
 #endif
 

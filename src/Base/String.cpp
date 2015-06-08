@@ -700,19 +700,19 @@ uint64_t BasicString<TChar>::ToUInt64(int base) const { TO_INT_DEF(uint64_t, ToU
 template<typename TChar>
 bool BasicString<TChar>::TryToInt8(int8_t* outValue, int base) const { TRY_TO_INT_DEF(int8_t, ToInt8); }
 template<typename TChar>
-bool BasicString<TChar>::TryToInt16(int16_t* outValue, int base = 0) const { TRY_TO_INT_DEF(int16_t, ToInt16); }
+bool BasicString<TChar>::TryToInt16(int16_t* outValue, int base) const { TRY_TO_INT_DEF(int16_t, ToInt16); }
 template<typename TChar>
-bool BasicString<TChar>::TryToInt32(int32_t* outValue, int base = 0) const { TRY_TO_INT_DEF(int32_t, ToInt32); }
+bool BasicString<TChar>::TryToInt32(int32_t* outValue, int base) const { TRY_TO_INT_DEF(int32_t, ToInt32); }
 template<typename TChar>
-bool BasicString<TChar>::TryToInt64(int64_t* outValue, int base = 0) const { TRY_TO_INT_DEF(int64_t, ToInt64); }
+bool BasicString<TChar>::TryToInt64(int64_t* outValue, int base) const { TRY_TO_INT_DEF(int64_t, ToInt64); }
 template<typename TChar>
-bool BasicString<TChar>::TryToUInt8(uint8_t* outValue, int base = 0) const { TRY_TO_INT_DEF(uint8_t, ToUInt8); }
+bool BasicString<TChar>::TryToUInt8(uint8_t* outValue, int base) const { TRY_TO_INT_DEF(uint8_t, ToUInt8); }
 template<typename TChar>
-bool BasicString<TChar>::TryToUInt16(uint16_t* outValue, int base = 0) const { TRY_TO_INT_DEF(uint16_t, ToUInt16); }
+bool BasicString<TChar>::TryToUInt16(uint16_t* outValue, int base) const { TRY_TO_INT_DEF(uint16_t, ToUInt16); }
 template<typename TChar>
-bool BasicString<TChar>::TryToUInt32(uint32_t* outValue, int base = 0) const { TRY_TO_INT_DEF(uint32_t, ToUInt32); }
+bool BasicString<TChar>::TryToUInt32(uint32_t* outValue, int base) const { TRY_TO_INT_DEF(uint32_t, ToUInt32); }
 template<typename TChar>
-bool BasicString<TChar>::TryToUInt64(uint64_t* outValue, int base = 0) const { TRY_TO_INT_DEF(uint64_t, ToUInt64); }
+bool BasicString<TChar>::TryToUInt64(uint64_t* outValue, int base) const { TRY_TO_INT_DEF(uint64_t, ToUInt64); }
 
 #undef TRY_TO_INT_DEF
 

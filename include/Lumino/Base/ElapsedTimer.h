@@ -25,6 +25,8 @@ private:
 #ifdef LN_WIN32
     LARGE_INTEGER   mFreq;
     LARGE_INTEGER   mBefore;
+#else
+	uint64_t		m_start;	// (us)
 #endif
 };
 
