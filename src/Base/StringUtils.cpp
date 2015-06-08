@@ -6,10 +6,18 @@
 #include "../../include/Lumino/Base/String.h"
 #include "../../include/Lumino/Base/StringUtils.h"
 
+// for ToDouble()
+#ifdef _WIN32
+	#include <stdlib.h>
+	#include <locale.h>
+#else
+	#include <stdlib.h>
+	#include <xlocale.h>
+#endif
+
+
 namespace Lumino
 {
-
-
 
 //-----------------------------------------------------------------------------
 //
@@ -815,5 +823,79 @@ uint64_t StringUtils::ToUInt64(const TChar* str, int len, int base, const TChar*
 template uint64_t StringUtils::ToUInt64<char>(const char* str, int len, int base, const char** outEndPtr, NumberConversionResult* outResult);
 template uint64_t StringUtils::ToUInt64<wchar_t>(const wchar_t* str, int len, int base, const wchar_t** outEndPtr, NumberConversionResult* outResult);
 
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+#ifdef _WIN32
+static bool g_localeInitialized = false;
+static _locale_t g_locale;
+
+static _locale_t GetCLocale()
+{
+	if (!g_localeInitialized)
+	{
+		g_locale = _create_locale(LC_ALL, "C");
+		g_localeInitialized = true;
+	}
+	return g_locale;
+}
+
+static double StrToD_L(const char* str, char** endptr, _locale_t locale) { return _strtod_l(str, endptr, locale); }
+static double StrToD_L(const wchar_t* str, wchar_t** endptr, _locale_t locale) { return _wcstod_l(str, endptr, locale); }
+
+#else
+static bool g_localeInitialized = false;
+static locale_t g_locale;
+
+static locale_t GetCLocale()
+{
+	if (!g_localeInitialized)
+	{
+		g_locale = newlocale(LC_ALL_MASK, NULL, NULL);
+		g_localeInitialized = true;
+	}
+	return g_locale;
+}
+static double StrToD_L(const char* str, char** endptr, _locale_t locale) { return strtod_l(str, endptr, locale); }
+static double StrToD_L(const wchar_t* str, wchar_t** endptr, _locale_t locale) { return wcstod_l(str, endptr, locale); }
+
+#endif
+
+template<typename TChar>
+double StringUtils::ToDouble(const TChar* str, int len, TChar** outEndPtr, NumberConversionResult* outResult)
+{
+	if (outResult != NULL) { *outResult = NumberConversionResult_Success; }
+
+	if (str == NULL) {
+		if (outResult != NULL) { *outResult = NumberConversionResult_ArgsError; }
+		return 0.0;
+	}
+
+	len = (len < 0 ? StringUtils::StrLen(str) : len);
+	if (len >= 512) {
+		if (outResult != NULL) { *outResult = NumberConversionResult_ArgsError; }
+		return 0.0;
+	}
+
+	// 標準関数の strtod は長さを渡せないので一時バッファにコピーして終端\0にする。
+	// 最大長さはとりあえず 512。
+	// IEEE 形式では仮数部の桁数は 2^53=9007199254740992 で16桁で、指数部は 308。
+	// IBM 形式では仮数部の桁数は 2^24=16777216 で8桁で、指数部は 16^63で、7.237005577332262213973186563043e+75。
+	// 0 を 308 個並べられるかは確認していないが、できたとしても 512 文字分のサイズがあれば十分。
+	TChar tmp[512] = { 0 };
+	StrNCpy(tmp, 512, str, len);
+	tmp[len] = '\0';
+
+	double v = StrToD_L(tmp, outEndPtr, GetCLocale());
+
+	if (errno == ERANGE || v == HUGE_VAL || v == -HUGE_VAL) {
+		if (outResult != NULL) { *outResult = NumberConversionResult_Overflow; }
+		return v;
+	}
+	return v;
+}
+
+template double StringUtils::ToDouble<char>(const char* str, int len, char** outEndPtr, NumberConversionResult* outResult);
+template double StringUtils::ToDouble<wchar_t>(const wchar_t* str, int len, wchar_t** outEndPtr, NumberConversionResult* outResult);
 
 } // namespace Lumino

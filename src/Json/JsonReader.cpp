@@ -218,15 +218,15 @@ bool JsonReader::ParseNumber()
 	// double へ変換する
 	TCHAR* str = (TCHAR*)m_tmpStream.GetBuffer();
 	TCHAR* endptr = NULL;
-	double value = StringUtils::StrToD(str, &endptr);
+	NumberConversionResult result;
+	double value = StringUtils::ToDouble(str, len, &endptr, &result);
 	if ((endptr - str) != len)	// 正常に変換できていれば、読み取った文字数が全て消費されるはず
 	{
 		// Error: 構文が正しくない
 		m_error.SetError(ParseError_NumberInvalid, m_reader->GetPosition());
 		return false;
 	}
-	if (value == HUGE_VAL || value == -HUGE_VAL)
-	{
+	if (result == NumberConversionResult_Overflow) {
 		// Error: オーバーフローが発生した
 		m_error.SetError(ParseError_NumberOverflow, m_reader->GetPosition());
 		return false;

@@ -260,7 +260,7 @@ public:
 					JSON 等の '.' が小数点として定められている文字列を変換する場合、この関数を使用します。
 	*/
 	template<typename TChar>
-	static double ToDouble(const TChar* str, int len = -1, const TChar** outEndPtr = NULL, NumberConversionResult* outResult = NULL);
+	static double ToDouble(const TChar* str, int len = -1, TChar** outEndPtr = NULL, NumberConversionResult* outResult = NULL);
 
 };
 

@@ -467,4 +467,34 @@ TEST_F(Test_Base_StringUtils, ToUInt)
 	//double d = strtod(str2, &end2);
 
 	//printf("%f", 5.000000001);
+	//DBL_MANT_DIG;
+	//DBL_MAX_EXP;
+}
+
+//-----------------------------------------------------------------------------
+TEST_F(Test_Base_StringUtils, ToDouble)
+{
+	const TCHAR* str;
+	TCHAR* end;
+	NumberConversionResult r;
+
+	// 普通に
+	str = _T("1.52");
+	ASSERT_DOUBLE_EQ(1.52, StringUtils::ToDouble(str, -1, &end, &r));
+	ASSERT_EQ(NumberConversionResult_Success, r);
+
+	// 文字数指定
+	str = _T("1.52");
+	ASSERT_DOUBLE_EQ(1.5, StringUtils::ToDouble(str, 3, &end, &r));
+	ASSERT_EQ(NumberConversionResult_Success, r);
+
+	// オーバーフロー
+	str = _T("1.52E+999");
+	StringUtils::ToDouble(str, -1, &end, &r);
+	ASSERT_EQ(NumberConversionResult_Overflow, r);
+
+	// オーバーフロー
+	str = _T("1.52E-999");
+	StringUtils::ToDouble(str, -1, &end, &r);
+	ASSERT_EQ(NumberConversionResult_Overflow, r);
 }
