@@ -461,4 +461,10 @@ TEST_F(Test_Base_StringUtils, ToUInt)
 	*/
 	//printf("%f", 5.000000001);
 	//_itoa(10, );
+
+	//const char* str2 = "1.5";
+	//char* end2;
+	//double d = strtod(str2, &end2);
+
+	//printf("%f", 5.000000001);
 }

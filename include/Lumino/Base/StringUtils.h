@@ -198,7 +198,7 @@ public:
 	template<typename TChar>
 	static int CheckNewLineSequence(const TChar* start, const TChar* end);
 	
-	/*
+	/**
 		@brief		ワイルドカード('*', '?')を考慮して文字列を比較する
 		@param[in]	puttern		: ワイルドカードを含むパターン文字列
 		@param[in]	str			: 比較対象の文字列
@@ -206,7 +206,7 @@ public:
 	template<typename TChar>
 	static bool Match(const TChar* pattern, const TChar* str);
 
-	/*
+	/**
 		@brief		文字列を整数値に変換します。
 		@param[in]	str			: 変換元の文字列
 		@param[in]	len			: str の文字数 (-1 を指定すると \0 まで変換する)
@@ -248,6 +248,20 @@ public:
 	/// @copydoc ToInt8
 	template<typename TChar>
 	static uint64_t ToUInt64(const TChar* str, int len = -1, int base = 0, const TChar** outEndPtr = NULL, NumberConversionResult* outResult = NULL);
+
+	/**
+		@brief		文字列を実数値に変換します。
+		@details	次の書式に従い、文字列を数値に変換します。	<br>
+					[whitespace] [sign] [digits] [.digits] [ {e | E }[sign]digits]	<br><br>
+					
+					この変換処理はロケールに依存せず、'.' を小数点とみなします。
+					標準関数の strtod はロケールに依存し、例えばフランス語として設定されている場合、
+					',' を小数点として認識してしまいます。('.' はエラーとなります)
+					JSON 等の '.' が小数点として定められている文字列を変換する場合、この関数を使用します。
+	*/
+	template<typename TChar>
+	static double ToDouble(const TChar* str, int len = -1, const TChar** outEndPtr = NULL, NumberConversionResult* outResult = NULL);
+
 };
 
 } // namespace Lumino
