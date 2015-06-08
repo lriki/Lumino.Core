@@ -378,8 +378,11 @@ private:
 		inline void Release()
 		{
 			--m_recCount;
-			if (m_recCount <= 0) {
-				delete this;
+			if (m_recCount <= 0)
+			{
+				if (this != GetSharedEmpty()) {		// グローバル変数として定義された String からの解放済み delete 対策
+					delete this;
+				}
 			}
 		}
 
