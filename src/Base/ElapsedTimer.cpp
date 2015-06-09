@@ -1,4 +1,3 @@
-
 #include "../Internal.h"
 #ifdef LN_WIN32
 #else
@@ -54,7 +53,6 @@ uint64_t ElapsedTimer::GetElapsedTime() const
 // ElapsedTimer
 //=============================================================================
 
-
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
@@ -76,7 +74,7 @@ ElapsedTimer::~ElapsedTimer()
 void ElapsedTimer::Start()
 {
 	timeval t;
-	gettimeofday(&t, NULL);	// 第２引数は廃止予定 http://linuxjm.osdn.jp/html/LDP_man-pages/man2/gettimeofday.2.html
+	gettimeofday(&t, NULL);	// 第2引数は廃止予定 http://linuxjm.osdn.jp/html/LDP_man-pages/man2/gettimeofday.2.html
 	m_start = (uint64_t)t.tv_sec * 1000000 + (uint64_t)t.tv_usec;
 }
 
@@ -86,9 +84,8 @@ void ElapsedTimer::Start()
 uint64_t ElapsedTimer::GetElapsedTime() const
 {
 	timeval t;
-	gettimeofday(&t, NULL);	// 第２引数は廃止予定 http://linuxjm.osdn.jp/html/LDP_man-pages/man2/gettimeofday.2.html
+	gettimeofday(&t, NULL);
 	uint64_t ct = (uint64_t)t.tv_sec * 1000000 + (uint64_t)t.tv_usec;
-
 	return (ct - m_start) / 1000;	// us　単位なので ms に変換する
 }
 

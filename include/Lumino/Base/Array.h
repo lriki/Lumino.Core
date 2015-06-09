@@ -150,6 +150,10 @@ template<typename TKey, typename TValue, typename TAllocator = STLAllocator< std
 class SortedArray	// TODO: 名前 SortedList
 {
 public:
+	typedef typename std::pair<TKey, TValue> Pair;
+	typedef typename std::vector<Pair, TAllocator> InternalArray;
+	typedef typename InternalArray::iterator Internal_iterator;
+	typedef typename InternalArray::const_iterator Internal_const_iterator;
 
 	/// 末尾に要素を追加する
 	void Add(const TKey& key, const TValue& value);
@@ -180,6 +184,13 @@ public:
 		return false;
 	}
 
+	/// 格納されている要素数を取得します。
+	int GetCount() const { return (int)m_vector.size(); }
+
+public:
+	Pair& operator[] (int index) { return m_vector[index]; }
+	const Pair& operator[] (int index) const { return m_vector[index]; }
+
 private:
 
 	int Find(const TKey& key) const
@@ -189,7 +200,7 @@ private:
 		while (low < high)
 		{
 			size_t mid = (low + high) / 2;		// 中心点
-			const Entry& midval = mArray[mid];	// 中心の値
+			const Pair& midval = mArray[mid];	// 中心の値
 
 			// 見つかった
 			if (midval.first == key) {
@@ -208,10 +219,6 @@ private:
 
 public:
 
-	typedef typename std::pair<TKey, TValue> Entry;
-	typedef typename std::vector<Entry, TAllocator> InternalArray;
-	typedef typename InternalArray::iterator Internal_iterator;
-	typedef typename InternalArray::const_iterator Internal_const_iterator;
 
 
 	class iterator
@@ -220,8 +227,8 @@ public:
 		iterator() { mPos = NULL; }
 		iterator(const iterator& obj) { mPos = obj.mPos; }
 		iterator(Internal_iterator pos) { mPos = pos; }
-		TValue& operator*() const { return mPos->second; }
-		TValue* operator->() const { return &mPos->second;  }
+		Pair& operator*() { return *mPos; }//Pair* p = &mPos; return *p; }
+		Pair* operator->() { return &mPos; }
 		iterator& operator++() { ++mPos; return(*this); }
 		iterator operator++(int) { iterator t = *this; ++(*this); return t; }
 		iterator& operator--() { --mPos; return(*this); }
@@ -239,8 +246,8 @@ public:
 		const_iterator() { mPos = NULL;  }
 		const_iterator(const const_iterator& obj) { mPos = obj.mPos; }
 		const_iterator(Internal_const_iterator pos) { mPos = pos; }
-		const TValue& operator*() const { return mPos->second; }
-		const TValue* operator->() const { return &mPos->second; }
+		const Pair& operator*() const { return mPos; }
+		const Pair* operator->() const { return &mPos; }
 		iterator& operator++() { ++mPos; return(*this); }
 		iterator operator++(int) { iterator t = *this; ++(*this); return t; }
 		iterator& operator--() { --mPos; return(*this); }
@@ -256,7 +263,7 @@ public:
 	iterator end() { return mArray.end(); }
 
 private:
-	std::vector<Entry, TAllocator>	mArray;
+	std::vector<Pair, TAllocator>	mArray;
 };
 
 
@@ -268,14 +275,14 @@ inline void SortedArray<TKey, TValue, TAllocator>::Add(const TKey& key, const TV
 {
 	struct Cmp
 	{
-		static bool CmpEventListener(const Entry& left, const Entry& right)
+		static bool CmpEventListener(const Pair& left, const Pair& right)
 		{
 			return left.first < right.first;
 		}
 	};
 
 	// 追加後、ソートを掛ける
-	Entry e;
+	Pair e;
 	e.first = key;
 	e.second = value;
 	mArray.push_back(e);

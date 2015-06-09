@@ -193,4 +193,51 @@ Delegate00 LN_CreateDelegate( T* objPtr, void (T::*method)() )
 #define LN_DELEGATE_TEMPLATE_TYPES  A1, A2, A3, A4, A5, A6, A7, A8
 #include "Delegate.inl"
 
+
+
+
+
+
+
+template<typename A1, typename A2>
+class Event02 : public RefObject
+{
+public:
+	typedef Delegate02<A1, A2> DelegateType;
+
+public:
+	void AddHandler(const DelegateType& handler)
+	{
+		m_handlerList.Add(handler);
+	}
+
+	void RemoveHandler(const DelegateType& handler)
+	{
+		m_handlerList.Remove(handler);
+	}
+
+	void operator += (const DelegateType& handler)
+	{
+		m_handlerList.Add(handler);
+	}
+
+	void operator -= (const DelegateType& handler)
+	{
+		m_handlerList.Remove(handler);
+	}
+
+	void Raise(A1 a1, A2 a2)	// GUI の EventArgs は Handler を返したいときがあるので const 参照にはしない
+	{
+		LN_FOREACH(DelegateType& d, m_handlerList)
+		{
+			d.Call(a1, a2);
+		}
+	}
+
+private:
+	ArrayList<DelegateType> m_handlerList;
+};
+
+
+
 } // namespace Lumino
