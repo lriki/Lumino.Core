@@ -25,6 +25,7 @@ set(LN_TEST_SOURCES
 	UnitTest/IO/Test_IO_FileUtils.cpp
 	UnitTest/IO/Test_IO_MemoryStream.cpp
 	UnitTest/IO/Test_IO_PathName.cpp
+	UnitTest/IO/Test_IO_TextWriter.cpp
 	UnitTest/Json/Test_Json_JsonDocument.cpp
 	UnitTest/Json/Test_Json_JsonReader.cpp
 	UnitTest/Text/Test_Text_DBCSEncoding.cpp

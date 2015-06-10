@@ -25,7 +25,7 @@ StreamWriter::StreamWriter(const PathName& filePath, Text::Encoding* encoding, F
 	}
 	
 	// ファイルを開く
-	m_stream.Attach(LN_NEW FileStream(filePath, mode));
+	m_stream.Attach(LN_NEW FileStream(filePath, openMode));
 
 	// エンコーディング指定
 	SetEncoding(encoding);

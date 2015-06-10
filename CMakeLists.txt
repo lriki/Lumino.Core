@@ -108,6 +108,7 @@ set(LN_SOURCES_IO
 	include/Lumino/IO/PathName.h
 	include/Lumino/IO/PathUtils.h
 	include/Lumino/IO/Stream.h
+	include/Lumino/IO/StreamWriter.h
 	include/Lumino/IO/StringReader.h
 	include/Lumino/IO/TextReader.h
 	include/Lumino/IO/TextWriter.h
@@ -123,7 +124,9 @@ set(LN_SOURCES_IO
 	src/IO/MemoryStream.cpp
 	src/IO/PathName.cpp
 	src/IO/PathUtils.cpp
-	src/IO/StringReader.cpp)
+	src/IO/StreamWriter.cpp
+	src/IO/StringReader.cpp
+	src/IO/TextWriter.cpp)
 	
 set(LN_SOURCES_Json
 	include/Lumino/Json/JsonReader.h

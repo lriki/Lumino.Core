@@ -42,6 +42,8 @@ void TextWriter::SetEncoding(Text::Encoding* encoding)
 
 	if (m_encoding != NULL)
 	{
+		m_encoder.Attach(m_encoding->CreateEncoder());
+
 		// 中間バッファを指定エンコーディングに全て変換したときに必要になる最大バッファサイズを計算し、メモリ確保
 		size_t maxSize = Text::Encoding::GetConversionRequiredByteCount(Text::Encoding::GetUTF16Encoding(), m_encoding, m_utf16Buffer.GetSize());
 		m_outputBuffer.Resize(maxSize, false);
@@ -98,43 +100,43 @@ void TextWriter::WriteChar(TCHAR ch)
 }
 void TextWriter::WriteInt16(int16_t value)
 {
-	TCHAR buf[64] = { 0 };
+	TCHAR buf[64];
 	int len = _stprintf_s(buf, 64, _T("%d"), value);
 	WriteInternal(buf, len);
 }
 void TextWriter::WriteInt32(int32_t value)
 {
-	TCHAR buf[64] = { 0 };
+	TCHAR buf[64];
 	int len = _stprintf_s(buf, 64, _T("%d"), value);
 	WriteInternal(buf, len);
 }
 void TextWriter::WriteInt64(int64_t value)
 {
-	TCHAR buf[64] = { 0 };
+	TCHAR buf[64];
 	int len = _stprintf_s(buf, 64, _T("%lld"), value);
 	WriteInternal(buf, len);
 }
 void TextWriter::WriteByte(byte_t value)
 {
-	TCHAR buf[64] = { 0 };
+	TCHAR buf[64];
 	int len = _stprintf_s(buf, 64, _T("%u"), value);
 	WriteInternal(buf, len);
 }
 void TextWriter::WriteUInt16(uint16_t value)
 {
-	TCHAR buf[64] = { 0 };
+	TCHAR buf[64];
 	int len = _stprintf_s(buf, 64, _T("%u"), value);
 	WriteInternal(buf, len);
 }
 void TextWriter::WriteUInt32(uint32_t value)
 {
-	TCHAR buf[64] = { 0 };
+	TCHAR buf[64];
 	int len = _stprintf_s(buf, 64, _T("%u"), value);
 	WriteInternal(buf, len);
 }
 void TextWriter::WriteUInt64(uint64_t value)
 {
-	TCHAR buf[64] = { 0 };
+	TCHAR buf[64];
 	int len = _stprintf_s(buf, 64, _T("%llu"), value);
 	WriteInternal(buf, len);
 }
@@ -249,7 +251,7 @@ void TextWriter::WriteInternal(const TCHAR* str, int len)
 	if (m_encoding != NULL && m_decoder != NULL && m_encoder != NULL)
 	{
 		// 変換状態を保持できる Encoding であれば余分にメモリを確保しないで変換できる。
-		if (m_decoder->CanRemain() && m_encoder->CanRemain())
+		if (m_decoder->CanRemain()/* && m_encoder->CanRemain()*/)	// encoder 側は状態保存できなくても良い
 		{
 			// 後のコードがキャストだらけにならないように
 			Text::UTF16* utf16Buf = (Text::UTF16*)m_utf16Buffer.GetData();
@@ -261,14 +263,14 @@ void TextWriter::WriteInternal(const TCHAR* str, int len)
 				int charCount = std::min(len - convCount, m_safeTCharCount);
 
 				// TCHAR を中間コードへ
-				size_t outBufferUsed, outCharsUsed;
-				m_decoder->ConvertToUTF16((byte_t*)&str[convCount], charCount * sizeof(TCHAR), utf16Buf, utf16CharCount, &outBufferUsed, &outCharsUsed);
+				size_t outBytesUsed, outCharsUsed;
+				m_decoder->ConvertToUTF16((byte_t*)&str[convCount], charCount * sizeof(TCHAR), utf16Buf, utf16CharCount, &outBytesUsed, &outCharsUsed);
 
 				// 中間コードを出力コードへ
-				m_encoder->ConvertFromUTF16(utf16Buf, outCharsUsed, m_outputBuffer.GetData(), m_outputBuffer.GetSize(), &outBufferUsed, &outCharsUsed);
+				m_encoder->ConvertFromUTF16(utf16Buf, outCharsUsed, m_outputBuffer.GetData(), m_outputBuffer.GetSize(), &outBytesUsed, &outCharsUsed);
 
 				// 出力
-				WriteOverride(m_outputBuffer.GetData(), m_outputBuffer.GetSize());
+				WriteOverride(m_outputBuffer.GetData(), outBytesUsed);
 
 				convCount += charCount;
 			}
