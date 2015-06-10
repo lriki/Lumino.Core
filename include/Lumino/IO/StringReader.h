@@ -15,7 +15,7 @@ class StringReader
 {
 public:
 
-	/*
+	/**
 		@brief		指定した文字列から読み取る StringReader クラスの新しいインスタンスを初期化します。
 		@param[in]	str		: 読み取り元の文字列
 	*/

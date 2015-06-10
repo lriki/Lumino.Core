@@ -13,10 +13,17 @@ enum FileOpenMode
 	FileOpenMode_Write		= 0x0002,									///< 書き込みアクセス
 	FileOpenMode_ReadWrite	= FileOpenMode_Read | FileOpenMode_Write,	///< 読み取り及び書き込みアクセス
 
-	FileOpenMode_Append		= 0x0004,		///< ファイルを開き、ファイルの末尾をシークする
+	FileOpenMode_Append		= 0x0004,		///< ファイルを開き、ファイルの末尾をシークする (追記モード)
 	FileOpenMode_Truncate	= 0x0008,		///< ファイルが存在する場合、サイズを 0 にする
 
 	FileOpenMode_Deferring	= 0x0100,		///< ファイルを遅延モードで開く
+};
+
+///< ファイルを書き込みモードでオープンする際の概要
+enum FileWriteMode
+{
+	FileWriteMode_Truncate = 0,				///< ファイルが存在する場合、サイズを 0 にする
+	FileWriteMode_Append,					///< ファイルを開き、ファイルの末尾をシークする (追記モード)
 };
 
 #if 0

@@ -10,8 +10,11 @@ namespace Lumino
 class Size
 {
 public:
-	int		Width;		///< X 方向の大きさ
-	int		Height;		///< Y 方向の大きさ
+	static const Size	Zero;	///< Size(0, 0)	
+
+public:
+	int		Width;				///< X 方向の大きさ
+	int		Height;				///< Y 方向の大きさ
 
 public:
 
@@ -53,8 +56,11 @@ public:
 class SizeF
 {
 public:
-	float	Width;		///< X 方向の大きさ
-	float	Height;		///< Y 方向の大きさ
+	static const SizeF	Zero;	///< SizeF(0, 0)	
+
+public:
+	float	Width;				///< X 方向の大きさ
+	float	Height;				///< Y 方向の大きさ
 
 public:
 

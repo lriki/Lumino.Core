@@ -1,4 +1,4 @@
-#include "../Internal.h"
+﻿#include "../Internal.h"
 #ifdef LN_WIN32
 #else
 	#include <sys/time.h>
@@ -86,7 +86,7 @@ uint64_t ElapsedTimer::GetElapsedTime() const
 	timeval t;
 	gettimeofday(&t, NULL);
 	uint64_t ct = (uint64_t)t.tv_sec * 1000000 + (uint64_t)t.tv_usec;
-	return (ct - m_start) / 1000;	// us　単位なので ms に変換する
+	return (ct - m_start) / 1000;	// us 単位なので ms に変換する
 }
 
 #endif

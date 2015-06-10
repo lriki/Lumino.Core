@@ -27,11 +27,25 @@ namespace Lumino
 						printf("%d", value);
 					}
 					void Main() {
-						Run(LN_CreateDelegate(this, &Test::Thread_StoreAllTestPoints));
+						Run(LN_CreateDelegate(this, &Test::Callback));
 					}
 				}
 	@endcode
- */
+
+	@par		Delegate の比較について
+
+				Delegate は比較をサポートします。
+				比較はインスタンスのポインタと関数ポインタをもとに行い、双方が一致している場合、同一の Delegate であるとみなします。
+	@code
+				Delegate01<int>	d1 = LN_CreateDelegate(&class1, &Class1::Callback1);
+				Delegate01<int>	d2 = LN_CreateDelegate(&class1, &Class1::Callback1);
+				Delegate01<int>	d3 = LN_CreateDelegate(&class2, &Class1::Callback1);
+				Delegate01<int>	d4 = LN_CreateDelegate(&class1, &Class1::Callback2);
+				d1 == d2;	// true
+				d1 == d3;	// false
+				d1 == d4;	// false
+	@endcode
+*/
 class LUMINO_EXPORT Delegate00
 {
 private:
@@ -192,52 +206,5 @@ Delegate00 LN_CreateDelegate( T* objPtr, void (T::*method)() )
 #define LN_DELEGATE_CALL_ARGS 		a1, a2, a3, a4, a5, a6, a7, a8
 #define LN_DELEGATE_TEMPLATE_TYPES  A1, A2, A3, A4, A5, A6, A7, A8
 #include "Delegate.inl"
-
-
-
-
-
-
-
-template<typename A1, typename A2>
-class Event02 : public RefObject
-{
-public:
-	typedef Delegate02<A1, A2> DelegateType;
-
-public:
-	void AddHandler(const DelegateType& handler)
-	{
-		m_handlerList.Add(handler);
-	}
-
-	void RemoveHandler(const DelegateType& handler)
-	{
-		m_handlerList.Remove(handler);
-	}
-
-	void operator += (const DelegateType& handler)
-	{
-		m_handlerList.Add(handler);
-	}
-
-	void operator -= (const DelegateType& handler)
-	{
-		m_handlerList.Remove(handler);
-	}
-
-	void Raise(A1 a1, A2 a2)	// GUI の EventArgs は Handler を返したいときがあるので const 参照にはしない
-	{
-		LN_FOREACH(DelegateType& d, m_handlerList)
-		{
-			d.Call(a1, a2);
-		}
-	}
-
-private:
-	ArrayList<DelegateType> m_handlerList;
-};
-
-
 
 } // namespace Lumino

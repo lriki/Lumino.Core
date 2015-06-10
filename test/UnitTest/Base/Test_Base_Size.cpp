@@ -16,6 +16,14 @@ protected:
 	ASSERT_FLOAT_EQ(y, v.Height);
 
 //-----------------------------------------------------------------------------
+TEST_F(Test_Base_Size, Constants)
+{
+	ASSERT_EQ_SIZE(0, 0, Size::Zero);
+
+	ASSERT_EQ_SIZE(0, 0, SizeF::Zero);
+}
+
+//-----------------------------------------------------------------------------
 TEST_F(Test_Base_Size, Basic)
 {
 	Size s1;

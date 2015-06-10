@@ -126,7 +126,7 @@ public:
 	bool Equals(const LN_DELEGATE_CLASS_NAME& obj) const
 	{
 		if (m_isStatic != obj.m_isStatic) { return false; }
-		if (mDelegate != obj.mDelegate) { return false; }
+		if (mDelegate == NULL &&  obj.mDelegate == NULL) { return true; }
 		//if (IsEmpty() && obj.IsEmpty()) { return true; }
 
 		if (mDelegate != NULL && obj.mDelegate != NULL)

@@ -43,6 +43,8 @@ set(LN_SOURCES_Base
 	include/Lumino/Base/DllLoader.h
 	include/Lumino/Base/ElapsedTimer.h
 	include/Lumino/Base/Environment.h
+	include/Lumino/Base/Event.h
+	include/Lumino/Base/Event.inl
 	include/Lumino/Base/Exception.h
 	include/Lumino/Base/List.h
 	include/Lumino/Base/Locale.h
@@ -70,6 +72,7 @@ set(LN_SOURCES_Base
 	src/Base/Logger.cpp
 	src/Base/Memory.cpp
 	src/Base/RefObject.cpp
+	src/Base/Size.cpp
 	src/Base/String.cpp
 	src/Base/StringUtils.cpp
 	src/Base/Version.cpp

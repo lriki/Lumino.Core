@@ -103,6 +103,11 @@ public:
 	static Encoding* GetEncodingTemplate();
 
 	/**
+		@brief		文字コードを from から to へ fromByteCount バイト分だけ変換する際に必要な、変換先バッファの最大バイト数を取得します。
+	*/
+	static size_t GetConversionRequiredByteCount(Encoding* from, Encoding* to, size_t fromByteCount);
+
+	/**
 		@brief		文字コードを変換する (不正シーケンスがあったら例外)
 		@param[in]	src				: 変換元
 		@param[in]	srcByteCount	: 変換元のバイト数
@@ -172,7 +177,7 @@ public:
 	virtual byte_t* GetPreamble() const = 0;
 
 	/**
-		@brief		指定されたバッファの先頭バイト列が、前文文字列と一致するかを確認します。
+		@brief		指定されたバッファの先頭バイト列が、前文文字列 (BOM) と一致するかを確認します。
 		@return		一致した場合は前文文字列のバイト数を返します。そうでなければ 0 を返します。
 	*/
 	size_t CheckPreamble(const byte_t* buffer, size_t bufferSize) const;
@@ -191,6 +196,7 @@ protected:
 
 /**
 	@brief		エンコード済みバイトシーケンスから内部文字コード (UTF16) への変換を行うクラス
+
 	@details	Decoder は1つの文字列ストリームの変換中、任意の回数 ConvertToUTF16() を呼び出すことができます。
 				その間、変換ステータスを保存します。
 				つまり、バッファリングIO等で長大な文章を複数のメモリバッファに分割して読み取る場合に、

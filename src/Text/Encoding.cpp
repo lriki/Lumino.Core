@@ -131,6 +131,22 @@ Encoding* Encoding::GetEncodingTemplate<wchar_t>()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+size_t Encoding::GetConversionRequiredByteCount(Encoding* from, Encoding* to, size_t fromByteCount)
+{
+	LN_THROW(from != NULL, ArgumentException);
+	LN_THROW(to != NULL, ArgumentException);
+
+	// from に入っている最悪パターンの文字数
+	size_t srcMaxCharCount = fromByteCount / from->GetMinByteCount();
+	srcMaxCharCount += 1;	// Decoder・Encoder の状態保存により前回の余り文字が1つ追加されるかもしれない
+
+	// 出力バッファに必要な最大バイト数
+	return srcMaxCharCount * to->GetMaxByteCount();
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 ByteBuffer* Encoding::Convert(
 	const void* src, size_t srcByteCount, const Encoding* srcEncoding,
 	const Encoding* targetEncoding,
@@ -152,11 +168,10 @@ ByteBuffer* Encoding::Convert(
 	LN_THROW(src != NULL, ArgumentException);
 	LN_THROW(decoder != NULL, ArgumentException);
 	LN_THROW(encoder != NULL, ArgumentException);
-	//LN_THROW(srcByteCount >= (size_t)decoder->GetMinByteCount(), ArgumentException);	// バッファのバイト数は、そのバッファのエンコーディングの最低バイト数以上でなければならない
 
 	// src に入っている最悪パターンの文字数
 	size_t srcMaxCharCount = srcByteCount / decoder->GetMinByteCount();
-	srcMaxCharCount += 1;	// Decoder・Encoder の状態保存により前回のあまり文字が1つ追加されるかもしれない
+	srcMaxCharCount += 1;	// Decoder・Encoder の状態保存により前回の余り文字が1つ追加されるかもしれない
 
 	// 中間バッファに必要な最大バイト数
 	size_t utf16MaxByteCount = srcMaxCharCount * 4;	// UTF16 は1文字最大4バイト

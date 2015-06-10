@@ -1,13 +1,34 @@
 ﻿#include <TestConfig.h>
 
+static int g_Value = 0;
+
 class Test_Base_Delegate : public ::testing::Test
 {
 protected:
 	virtual void SetUp() {}
 	virtual void TearDown() {}
+
+	// テスト用クラス
+	class Class1
+	{
+	public:
+
+		void Callback01_1(int v) { g_Value += v; }
+		void Callback01_2(int v) { g_Value += v * 10; }
+
+		void Callback02_1(int v1, int v2) { g_Value += v1; }
+		void Callback02_2(int v1, int v2) { g_Value += v1 * 10; }
+
+		void Callback03_1(int v1, int v2, int v3) { g_Value += v1; }
+		void Callback03_2(int v1, int v2, int v3) { g_Value += v1 * 10; }
+
+		void Callback04_1(int v1, int v2, int v3, int v4) { g_Value += v1; }
+		void Callback04_2(int v1, int v2, int v3, int v4) { g_Value += v1 * 10; }
+
+	};
+
 };
 
-static int g_Value = 0;
 
 
 //---------------------------------------------------------------------
@@ -89,7 +110,7 @@ public:
 	}
 };
 	
-	
+//---------------------------------------------------------------------
 TEST_F(Test_Base_Delegate, Delegate01)
 {
 	int value = 0;
@@ -126,3 +147,17 @@ TEST_F(Test_Base_Delegate, Delegate01)
 	d5(6);
 	ASSERT_EQ(16, g_Value);
 }
+
+//---------------------------------------------------------------------
+TEST_F(Test_Base_Delegate, Equals)
+{
+	Class1 class1, class2;
+	Delegate01<int>	d1 = LN_CreateDelegate(&class1, &Class1::Callback01_1);
+	Delegate01<int>	d2 = LN_CreateDelegate(&class1, &Class1::Callback01_1);
+	Delegate01<int>	d3 = LN_CreateDelegate(&class2, &Class1::Callback01_1);
+	Delegate01<int>	d4 = LN_CreateDelegate(&class1, &Class1::Callback01_2);
+	ASSERT_TRUE(d1 == d2);	// true
+	ASSERT_FALSE(d1 == d3);	// false
+	ASSERT_FALSE(d1 == d4);	// false
+}
+
