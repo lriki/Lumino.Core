@@ -21,7 +21,7 @@ namespace Lumino
 #define LN_REFOBJ_SET( a, b ) \
 { \
     LN_SAFE_ADDREF( b ); \
-    LN_SAFE_RELEASE( a ); \
+	if (a) a->Release(); \
     a = b; \
 }
 

@@ -17,6 +17,11 @@ h1.groupheader {
 	margin: 10px 2px;
 }
 
+h1 {
+	font-size: 120%;
+	margin: 30px 0px 2px 2px;
+}
+
 h2.groupheader {
 	border-bottom: 1px solid #888888;
 	color: #333333;

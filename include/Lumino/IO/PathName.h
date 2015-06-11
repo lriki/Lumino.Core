@@ -39,8 +39,8 @@ public:
 	static const TChar VolumeSeparator	= (TChar)PathUtils::VolumeSeparatorChar;
 
 public:
-	typedef BasicPathName<TChar> PathNameT;
-	typedef BasicString<TChar> BasicStringT;
+	typedef BasicPathName<TChar>	PathNameT;
+	typedef GenericString<TChar>	GenericStringT;
 
 public:
 	BasicPathName() {}
@@ -51,19 +51,19 @@ public:
 	/// @overload Assign
 	BasicPathName(const wchar_t* path) { Assign(path); }
 	/// @overload Assign
-	explicit BasicPathName(const BasicStringT& path) { Assign(path); }
+	explicit BasicPathName(const GenericStringT& path) { Assign(path); }
 
 	/// @overload AssignUnderBasePath
 	BasicPathName(const PathNameT& basePath, const char* relativePath) { AssignUnderBasePath(basePath, relativePath); }
 	/// @overload AssignUnderBasePath
 	BasicPathName(const PathNameT& basePath, const wchar_t* relativePath) { AssignUnderBasePath(basePath, relativePath); }
 	/// @overload AssignUnderBasePath
-	BasicPathName(const PathNameT& basePath, const BasicStringT& relativePath) { AssignUnderBasePath(basePath, relativePath); }
+	BasicPathName(const PathNameT& basePath, const GenericStringT& relativePath) { AssignUnderBasePath(basePath, relativePath); }
 	/// @overload AssignUnderBasePath
 	BasicPathName(const PathNameT& basePath, const PathNameT& relativePath) { AssignUnderBasePath(basePath, relativePath); }
 
 	// operators
-	BasicPathName& operator = (const BasicStringT& str)	{ Assign(str.GetCStr()); return (*this); }
+	BasicPathName& operator = (const GenericStringT& str)	{ Assign(str.GetCStr()); return (*this); }
 	BasicPathName& operator = (const char* str) { Assign(str); return (*this); }
 	BasicPathName& operator = (const wchar_t* str) { Assign(str); return (*this); }
 	bool operator < (const BasicPathName& right) const { return PathUtils::Compare(m_path.GetCStr(), right.m_path.GetCStr()) < 0; }
@@ -81,7 +81,7 @@ public:
 	/// @overload Assign
 	void Assign(const wchar_t* path);
 	/// @overload Assign
-	void Assign(const BasicStringT& path) { Assign(path.GetCStr()); }
+	void Assign(const GenericStringT& path) { Assign(path.GetCStr()); }
 
 	/**
 		@brief		ベースパスと相対パスを連結して、パスを作成する
@@ -93,7 +93,7 @@ public:
 	/// @overload AssignUnderBasePath
 	void AssignUnderBasePath(const PathNameT& basePath, const wchar_t* relativePath);
 	/// @overload AssignUnderBasePath
-	void AssignUnderBasePath(const PathNameT& basePath, const BasicStringT& relativePath) { AssignUnderBasePath(basePath, relativePath.GetCStr()); }
+	void AssignUnderBasePath(const PathNameT& basePath, const GenericStringT& relativePath) { AssignUnderBasePath(basePath, relativePath.GetCStr()); }
 	/// @overload AssignUnderBasePath
 	void AssignUnderBasePath(const PathNameT& basePath, const PathNameT& relativePath) { AssignUnderBasePath(basePath, relativePath.GetCStr()); }
 
@@ -111,16 +111,16 @@ public:
 	void SetEmpty() { m_path.SetEmpty(); }
 
 	/// パス文字列の中から拡張子を含むファイル名の部分を返す (空パスの場合は空文字列を返す)
-	BasicStringT GetFileName() const { return PathUtils::GetFileName(m_path.GetCStr()); }
+	GenericStringT GetFileName() const { return PathUtils::GetFileName(m_path.GetCStr()); }
 
 	/// パスの TChar 文字列を返す
 	const TChar* GetCStr() const { return m_path.GetCStr(); }
 	
 	/// パス文字列を返す
-	const BasicStringT& GetString() const { return m_path; }
+	const GenericStringT& GetString() const { return m_path; }
 
 	/// パス文字列を返す (末尾に必ずセパレータをひとつ付加する)
-	const BasicString<TChar> GetStrEndSeparator() const;
+	const GenericString<TChar> GetStrEndSeparator() const;
 
 	/**
 		@brief		このパスから拡張子を取り除いたパスを返します。
@@ -196,7 +196,7 @@ public:
 	/// @overload Equals
 	bool Equals(const PathNameT& path) const { return PathUtils::Equals(m_path.GetCStr(), path.GetCStr()); }
 	/// @overload Equals
-	bool Equals(const BasicStringT& path) const { return PathUtils::Equals(m_path.GetCStr(), path.GetCStr()); }
+	bool Equals(const GenericStringT& path) const { return PathUtils::Equals(m_path.GetCStr(), path.GetCStr()); }
 	/// @overload Equals
 	bool operator == (const PathNameT& path) const { return Equals(path); }
 
@@ -220,13 +220,13 @@ public:
 	static PathNameT GetUniqueFilePathInDirectory(const PathNameT& directory, const TChar* filePrefix, const TChar* extName);
 
 	/// (こちらはファイル名だけを返す)
-	static BasicStringT GetUniqueFileNameInDirectory(const PathNameT& directory, const TChar* filePrefix, const TChar* extName);
+	static GenericStringT GetUniqueFileNameInDirectory(const PathNameT& directory, const TChar* filePrefix, const TChar* extName);
 
 private:
-	BasicStringT	m_path;
+	GenericStringT	m_path;
 
 private:
-	//void ConvertSeparatorToInternal(BasicStringT* path);
+	//void ConvertSeparatorToInternal(GenericStringT* path);
 };
 
 typedef BasicPathName<TCHAR>	PathName;

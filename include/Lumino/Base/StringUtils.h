@@ -133,13 +133,13 @@ public:
 					GetCStr() 等で取得した文字列ポインタ型を指定してください。
 	*/
 	template<typename TChar>
-	static BasicString<TChar> Format(const TChar* format, ...);
+	static GenericString<TChar> Format(const TChar* format, ...);
 
 	/**
 		@brief		書式文字列と可変長引数リストから文字列を生成する
 	*/
 	template<typename TChar>
-	static void FormatVAList(const TChar* format, va_list args, BasicString<TChar>* out);
+	static void FormatVAList(const TChar* format, va_list args, GenericString<TChar>* out);
 
 	/**
 		@brief		文字列の末尾が一致するかを調べる
@@ -149,7 +149,7 @@ public:
 		if (EndsWith(str, -1, "def", -1)) {
 			// 一致した
 		}
-		@endcodes
+		@endcode
 	*/
 	template<typename TChar>
 	static bool EndsWith(const TChar* str1, int len1, const TChar* str2, int len2, CaseSensitivity cs);
@@ -161,7 +161,7 @@ public:
 		@return		抽出された文字列
 	*/
 	template<typename TChar>
-	static BasicString<TChar> Left(const TChar* str, int count);
+	static GenericString<TChar> Left(const TChar* str, int count);
 
 	/**
 		@brief		文字列の右側(末尾)から指定した文字数を抽出します。
@@ -170,7 +170,7 @@ public:
 		@return		抽出された文字列
 	*/
 	template<typename TChar>
-	static BasicString<TChar> Right(const TChar* str, int count);
+	static GenericString<TChar> Right(const TChar* str, int count);
 
 	/**
 		@brief		文字列の部分文字列を抽出します。
@@ -180,7 +180,7 @@ public:
 		@return		抽出された文字列
 	*/
 	template<typename TChar>
-	static BasicString<TChar> Mid(const TChar* str, int start, int count = -1);
+	static GenericString<TChar> Mid(const TChar* str, int start, int count = -1);
 
 	/**
 		@brief		文字列をデリミタで分割する
@@ -190,7 +190,7 @@ public:
 		@return		分割結果の文字列配列
 	*/
 	template<typename TChar>
-	static ArrayList< BasicString<TChar> > Split(const BasicString<TChar>& str, const TChar* delim, StringSplitOptions option = StringSplitOptions_None);
+	static ArrayList< GenericString<TChar> > Split(const GenericString<TChar>& str, const TChar* delim, StringSplitOptions option = StringSplitOptions_None);
 
 	/**
 		@brief		[start] ～ [end - 1] の範囲の先頭が改行かを判別し、一致したら文字数を返す ("\r" か "\n" なら 1、"\r\n" なら 2)

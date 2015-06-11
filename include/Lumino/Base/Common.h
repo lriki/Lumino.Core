@@ -150,4 +150,20 @@
 namespace Lumino
 {
 	class ImplAccessor;
+
+	template<typename BaseType = char>	// GCC では GenericString 内部に定義できないので外に出している
+	class GenericStringTraits
+	{
+	public:
+		typedef char	XCHAR;
+		typedef wchar_t	YCHAR;
+	};
+	template<>
+	class GenericStringTraits<wchar_t>
+	{
+	public:
+		typedef wchar_t	XCHAR;
+		typedef char	YCHAR;
+	};
+
 } // namespace Lumino

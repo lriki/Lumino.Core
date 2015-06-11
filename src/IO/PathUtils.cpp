@@ -99,7 +99,7 @@ template bool PathUtils::IsAbsolutePath<wchar_t>(const wchar_t* path);
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-BasicString<TChar> PathUtils::GetDirectoryPath(const TChar* path)
+GenericString<TChar> PathUtils::GetDirectoryPath(const TChar* path)
 {
 	LN_THROW(path != NULL, ArgumentException);
 
@@ -124,9 +124,9 @@ BasicString<TChar> PathUtils::GetDirectoryPath(const TChar* path)
 		}
 	}
 
-	BasicString<TChar> str;
+	GenericString<TChar> str;
 	if (pos >= 0) {
-		str = BasicString<TChar>(path, pos);
+		str = GenericString<TChar>(path, pos);
 
 		// ルートパスの末尾は必ずセパレータにする
 		if (IsRootPath(str.GetCStr()))
@@ -157,19 +157,19 @@ BasicString<TChar> PathUtils::GetDirectoryPath(const TChar* path)
 
 	return str;
 }
-template BasicString<char> PathUtils::GetDirectoryPath<char>(const char* path);
-template BasicString<wchar_t> PathUtils::GetDirectoryPath<wchar_t>(const wchar_t* path);
+template GenericString<char> PathUtils::GetDirectoryPath<char>(const char* path);
+template GenericString<wchar_t> PathUtils::GetDirectoryPath<wchar_t>(const wchar_t* path);
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-BasicString<TChar> PathUtils::GetFileName(const TChar* path)
+GenericString<TChar> PathUtils::GetFileName(const TChar* path)
 {
-	return BasicString<TChar>(GetFileNameSub(path));
+	return GenericString<TChar>(GetFileNameSub(path));
 }
-template BasicString<char> PathUtils::GetFileName(const char* path);
-template BasicString<wchar_t> PathUtils::GetFileName(const wchar_t* path);
+template GenericString<char> PathUtils::GetFileName(const char* path);
+template GenericString<wchar_t> PathUtils::GetFileName(const wchar_t* path);
 
 
 //-----------------------------------------------------------------------------
@@ -187,7 +187,7 @@ const TChar* PathUtils::GetFileNameSub(const TChar* path)
 		if (path[pos] != 0x00)
 		{
 			if (path[pos] == DirectorySeparatorChar || path[pos] == AltDirectorySeparatorChar || path[pos] == VolumeSeparatorChar) {
-				return &path[pos + 1];//BasicString<TChar>(&path[pos + 1], len - pos - 1);
+				return &path[pos + 1];
 			}
 		}
 		--pos;

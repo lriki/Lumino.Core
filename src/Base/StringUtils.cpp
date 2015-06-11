@@ -240,6 +240,19 @@ template int StringUtils::LastIndexOf<wchar_t>(const wchar_t* str1, int str1Len,
 template<typename TChar>
 int StringUtils::Compare(const TChar* str1, const TChar* str2, int count, CaseSensitivity cs)
 {
+	if (str1 == NULL || str2 == NULL)
+	{
+		if (str1 == NULL && str2 == NULL) {
+			return 0;
+		}
+		else if (str1 == NULL) {
+			return -1;		// NULL < ""
+		}
+		else {
+			return 1;		// "" > NULL 
+		}
+	}
+
 	count = (count < 0) ? INT_MAX : count;
 	
 	if (cs == CaseSensitivity_CaseSensitive)
@@ -322,9 +335,9 @@ template void StringUtils::Trim<wchar_t>(const wchar_t* begin, int length, const
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-BasicString<TChar> StringUtils::Format(const TChar* format, ...)
+GenericString<TChar> StringUtils::Format(const TChar* format, ...)
 {
-	BasicString<TChar> str;
+	GenericString<TChar> str;
 	va_list args;
 	va_start(args, format);
 	try {
@@ -337,16 +350,16 @@ BasicString<TChar> StringUtils::Format(const TChar* format, ...)
 	}
 	return str;
 }
-template BasicString<char> StringUtils::Format(const char* format, ...);
-template BasicString<wchar_t> StringUtils::Format(const wchar_t* format, ...);
+template GenericString<char> StringUtils::Format(const char* format, ...);
+template GenericString<wchar_t> StringUtils::Format(const wchar_t* format, ...);
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-void StringUtils::FormatVAList(const TChar* format, va_list args, BasicString<TChar>* out)
+void StringUtils::FormatVAList(const TChar* format, va_list args, GenericString<TChar>* out)
 {
-	static const int nMaxLength = BasicString<TChar>::MaxFormatLength;
+	static const int nMaxLength = GenericString<TChar>::MaxFormatLength;
 
 	TChar buf[nMaxLength + 1];
 	memset(buf, 0, sizeof(buf));
@@ -355,8 +368,8 @@ void StringUtils::FormatVAList(const TChar* format, va_list args, BasicString<TC
 	LN_THROW(0 <= validSize && validSize <= nMaxLength, ArgumentException);
 	*out = buf;
 }
-template void StringUtils::FormatVAList<char>(const char* format, va_list args, BasicString<char>* out);
-template void StringUtils::FormatVAList<wchar_t>(const wchar_t* format, va_list args, BasicString<wchar_t>* out);
+template void StringUtils::FormatVAList<char>(const char* format, va_list args, GenericString<char>* out);
+template void StringUtils::FormatVAList<wchar_t>(const wchar_t* format, va_list args, GenericString<wchar_t>* out);
 
 //-----------------------------------------------------------------------------
 //
@@ -407,7 +420,7 @@ template bool StringUtils::EndsWith<wchar_t>(const wchar_t* str1, int len1, cons
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-BasicString<TChar> StringUtils::Left(const TChar* str, int count)
+GenericString<TChar> StringUtils::Left(const TChar* str, int count)
 {
 	if (count < 0) {
 		count = 0;
@@ -415,18 +428,18 @@ BasicString<TChar> StringUtils::Left(const TChar* str, int count)
 
 	int len = StrLen(str);
 	if (count >= len) {
-		return BasicString<TChar>(str);
+		return GenericString<TChar>(str);
 	}
-	return BasicString<TChar>(str, count);
+	return GenericString<TChar>(str, count);
 }
-template BasicString<char> StringUtils::Left<char>(const char* str, int count);
-template BasicString<wchar_t> StringUtils::Left<wchar_t>(const wchar_t* str, int count);
+template GenericString<char> StringUtils::Left<char>(const char* str, int count);
+template GenericString<wchar_t> StringUtils::Left<wchar_t>(const wchar_t* str, int count);
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-BasicString<TChar> StringUtils::Right(const TChar* str, int count)
+GenericString<TChar> StringUtils::Right(const TChar* str, int count)
 {
 	if (count < 0) {
 		count = 0;
@@ -434,18 +447,18 @@ BasicString<TChar> StringUtils::Right(const TChar* str, int count)
 
 	int len = StrLen(str);
 	if (count >= len) {
-		return BasicString<TChar>(str);
+		return GenericString<TChar>(str);
 	}
-	return BasicString<TChar>(str + len - count, count);
+	return GenericString<TChar>(str + len - count, count);
 }
-template BasicString<char> StringUtils::Right<char>(const char* str, int count);
-template BasicString<wchar_t> StringUtils::Right<wchar_t>(const wchar_t* str, int count);
+template GenericString<char> StringUtils::Right<char>(const char* str, int count);
+template GenericString<wchar_t> StringUtils::Right<wchar_t>(const wchar_t* str, int count);
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-BasicString<TChar> StringUtils::Mid(const TChar* str, int start, int count)
+GenericString<TChar> StringUtils::Mid(const TChar* str, int start, int count)
 {
 	int len = StrLen(str);
 
@@ -464,21 +477,21 @@ BasicString<TChar> StringUtils::Mid(const TChar* str, int start, int count)
 	}
 
 	if (start == 0 && count == len) {
-		return BasicString<TChar>(str);
+		return GenericString<TChar>(str);
 	}
 
-	return BasicString<TChar>(str + start, count);
+	return GenericString<TChar>(str + start, count);
 }
-template BasicString<char> StringUtils::Mid<char>(const char* str, int start, int count);
-template BasicString<wchar_t> StringUtils::Mid<wchar_t>(const wchar_t* str, int start, int count);
+template GenericString<char> StringUtils::Mid<char>(const char* str, int start, int count);
+template GenericString<wchar_t> StringUtils::Mid<wchar_t>(const wchar_t* str, int start, int count);
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-ArrayList< BasicString<TChar> > StringUtils::Split(const BasicString<TChar>& str, const TChar* delim, StringSplitOptions option)
+ArrayList< GenericString<TChar> > StringUtils::Split(const GenericString<TChar>& str, const TChar* delim, StringSplitOptions option)
 {
-	ArrayList< BasicString<TChar> > result;
+	ArrayList< GenericString<TChar> > result;
 
 	// 最初の区切り文字を探す
 	int tokenStart = 0;
@@ -518,8 +531,8 @@ ArrayList< BasicString<TChar> > StringUtils::Split(const BasicString<TChar>& str
 
 	return result;
 }
-template ArrayList< BasicString<char> > StringUtils::Split(const BasicString<char>& str, const char* delim, StringSplitOptions option);
-template ArrayList< BasicString<wchar_t> > StringUtils::Split(const BasicString<wchar_t>& str, const wchar_t* delim, StringSplitOptions option);
+template ArrayList< GenericString<char> > StringUtils::Split(const GenericString<char>& str, const char* delim, StringSplitOptions option);
+template ArrayList< GenericString<wchar_t> > StringUtils::Split(const GenericString<wchar_t>& str, const wchar_t* delim, StringSplitOptions option);
 
 //-----------------------------------------------------------------------------
 //

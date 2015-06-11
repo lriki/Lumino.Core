@@ -51,7 +51,7 @@ public:
 					- "/" → ""
 	*/
 	template<typename TChar>
-	static BasicString<TChar> GetDirectoryPath(const TChar* path);
+	static GenericString<TChar> GetDirectoryPath(const TChar* path);
 
 	/**
 		@brief		パス文字列の中から拡張子を含むファイル名の部分を返す
@@ -59,7 +59,7 @@ public:
 		@details	path が NULL の場合は空文字列を返します。
 	*/
 	template<typename TChar>
-	static BasicString<TChar> GetFileName(const TChar* path);
+	static GenericString<TChar> GetFileName(const TChar* path);
 
 	/**
 		@brief		パス文字列の中から拡張子を含むファイル名の部分を返す

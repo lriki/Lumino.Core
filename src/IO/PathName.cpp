@@ -62,7 +62,7 @@ void BasicPathName<TChar>::AssignUnderBasePath(const PathNameT& basePath, const 
 		}
 
 		// relativePath 結合
-		BasicStringT rel;
+		GenericStringT rel;
 		rel.AssignCStr(relativePath);
 		m_path += rel;
 	}
@@ -90,7 +90,7 @@ void BasicPathName<TChar>::AssignUnderBasePath(const PathNameT& basePath, const 
 		}
 
 		// relativePath 結合
-		BasicStringT rel;
+		GenericStringT rel;
 		rel.AssignCStr(relativePath);
 		m_path += rel;
 	}
@@ -117,9 +117,9 @@ void BasicPathName<TChar>::Append(const TChar* path)
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-const BasicString<TChar> BasicPathName<TChar>::GetStrEndSeparator() const
+const GenericString<TChar> BasicPathName<TChar>::GetStrEndSeparator() const
 {
-	BasicStringT newStr = m_path;
+	GenericStringT newStr = m_path;
 	if (!newStr.IsEmpty() && !newStr.EndsWith(Separator)/*(*newStr.rbegin()) != Separator*/) {	// 末尾セパレータ
 		newStr += Separator;
 	}
@@ -217,7 +217,7 @@ BasicPathName<TChar> BasicPathName<TChar>::CanonicalizePath() const
 template<typename TChar>
 std::string BasicPathName<TChar>::ToLocalChar() const
 {
-	BasicString<char> tmp;
+	GenericString<char> tmp;
 	tmp.AssignCStr(m_path.GetCStr());
 	return std::string(tmp.GetCStr());
 }
@@ -246,13 +246,13 @@ BasicPathName<TChar> BasicPathName<TChar>::GetCurrentDirectory()
 template<typename TChar>
 BasicPathName<TChar> BasicPathName<TChar>::GetUniqueFilePathInDirectory(const PathNameT& directory, const TChar* filePrefix, const TChar* extName)
 {
-	BasicStringT dirPath = directory.GetStrEndSeparator();
+	GenericStringT dirPath = directory.GetStrEndSeparator();
 	uint64_t key = static_cast<uint64_t>(::time(NULL));
 
 	// 同番号のファイルがあればインクリメントしつつ空き番号を調べる
 	int number = 1;
-	BasicStringT filePath;
-	BasicStringT work;
+	GenericStringT filePath;
+	GenericStringT work;
 	do
 	{
 		if (filePrefix != NULL && extName != NULL) {
@@ -277,7 +277,7 @@ BasicPathName<TChar> BasicPathName<TChar>::GetUniqueFilePathInDirectory(const Pa
 
 /// (こちらはファイル名だけを返す)
 template<typename TChar>
-BasicString<TChar> BasicPathName<TChar>::GetUniqueFileNameInDirectory(const PathNameT& directory, const TChar* filePrefix, const TChar* extName)
+GenericString<TChar> BasicPathName<TChar>::GetUniqueFileNameInDirectory(const PathNameT& directory, const TChar* filePrefix, const TChar* extName)
 {
 	return GetUniqueFilePathInDirectory(directory,filePrefix, extName).GetFileName();
 }

@@ -29,79 +29,120 @@ enum StringSplitOptions
 	StringSplitOptions_RemoveEmptyEntries,	///< 出力は空の文字列を含まない
 };
 
-template<typename BaseType = char>	// GCC では BasicString 内部に定義できないので外に出している
-class BasicStringTraits
-{
-public:
-	typedef char XCHAR;
-	typedef wchar_t YCHAR;
-};
-template<>
-class BasicStringTraits<wchar_t>
-{
-public:
-	typedef wchar_t XCHAR;
-	typedef char YCHAR;
-};
-
 /**
-	@brief		文字列のクラス
+	@brief		文字列を表すクラスです。
+
+	@details	このクラスは任意の長さの文字配列を管理するユーティリティクラスです。<br>
+				C文字列からの構築、連結と比較、抽出、検索と置換など、文字列に対する一般的な操作を備えています。
+				操作中は必要に応じて文字列の長さを拡張します。<br>
+				内部では、メモリ使用量を削減し、データの不必要なコピーを避けるためにコピーオンライトの共有を行います。
+
+
+	@section	文字列型について
+
+	GenericString は型引数として char または wchar_t を受け取ります。
+	StringA と StringW はそれぞれ GenericString<char> と GenericString<wchar_t> のインスタンスです。	<br>
+	String は、UNICODE または LN_UNICODE シンボルのどちらが定義されている場合は GenericString<wchar_t>、
+	それ以外は GenericString<char> としてサポートされます。	
+
+	String を使用する場合、併せて TCHAR 型および _T マクロを使用するべきです。
+	これらは Windows プログラミングの国際対応で用いられるもので、本ライブラリでは Windows 以外の環境でも
+	UNICODE または LN_UNICODE シンボルの定義に合わせて char または wchar_t 用に定義されます。
+
+	なお、Windows 以外の環境ではできるだけ LN_UNICODE 及び wchar_t の使用は避け、char を使用してください。
+	これは、特に Linux 環境でワイド文字のサポートが十分ではなく、wcs 系の標準関数が意図した結果を出力しないためです。
+
+
+	@section	エンコーディング（文字コード）について
+
+	GenericString とそのインスタンスである String、StringA、StringW は、いずれもエンコーディングを規定しません。
+	規定されるのは型のみで、エンコーディングは環境に依存します。<br>
+	- char 型
+		- Windows		… ユーザーロケールに依存するマルチバイトエンコーディング (日本語 OSであれば Shift_JIS)
+		- Linux, Mac	… UTF-8
+	- wchar_t 型
+		- Windows		… UTF-16
+		- Linux, Mac	… UTF-32
+
+	例えば VisualStudio (Windows) で LN_UNICODE シンボルを定義している場合、
+	String は wchar_t 型であり、エンコーディングは UTF-16 として扱われます。
+
+	現在の環境のエンコーディングは Encoding::GetTCharEncoding() により取得することができます。
+
+
+	@section	比較について
+
+	このクラスを通じて2つの文字列を比較する場合、NULL と 空文字列は同一視されます。<br>
+	また、比較時にロケールは考慮しません。ロケールを考慮した比較を行う場合、Locale クラスの関数を使用してください。<br>
+
+	なお、NULL を代入したり NULL で初期化した場合、インスタンスは空文字列として初期化されます。
+
+
 */
 template<typename TChar>
-class BasicString
+class GenericString
 {
 public:
-
 	static const int MaxFormatLength = 2048;
 
-	typedef typename BasicStringTraits<TChar>::XCHAR XCHAR;
-	typedef typename BasicStringTraits<TChar>::YCHAR YCHAR;
+	typedef typename GenericStringTraits<TChar>::XCHAR XCHAR;
+	typedef typename GenericStringTraits<TChar>::YCHAR YCHAR;
 
-	typedef BasicString<TChar>			StringT;
-    typedef std::size_t size_type;		// need GCC
+	typedef GenericString<TChar>	StringT;
+    typedef std::size_t size_type;	// for GCC
 
 public:
-	BasicString();
-	~BasicString();
+	GenericString();
+	~GenericString();
 
 	// TChar (同一の文字型は assign だけにし、高速化を図る)
-	BasicString(const BasicString& str);
-	BasicString(const BasicString& str, size_type length);
-	BasicString(const BasicString& str, size_type begin, size_type length);
-	BasicString(const TChar* str);
-	BasicString(const TChar* str, size_type length);
-	BasicString(const TChar* str, size_type begin, size_type length);
-	BasicString& operator=(const BasicString& right);
-	BasicString& operator=(const std::basic_string<TChar>& right);
-	BasicString& operator=(const TChar* right);
+	GenericString(const GenericString& str);
+	GenericString(const GenericString& str, size_type length);
+	GenericString(const GenericString& str, size_type begin, size_type length);
+	GenericString(const TChar* str);
+	GenericString(const TChar* str, size_type length);
+	GenericString(const TChar* str, size_type begin, size_type length);
 
 	// YCHAR (対の文字型は AssignCStr で文字コード変換を行う)
-	BasicString(const BasicString<YCHAR>& str);
-	BasicString(const BasicString<YCHAR>& str, size_type length);
-	BasicString(const BasicString<YCHAR>& str, size_type begin, size_type length);
-	BasicString(const YCHAR* str);
-	BasicString(const YCHAR* str, size_type length);
-	BasicString(const YCHAR* str, size_type begin, size_type length);
-	BasicString& operator=(const BasicString<YCHAR>& right);
-	BasicString& operator=(const std::basic_string<YCHAR>& right);
-	BasicString& operator=(const YCHAR* right);
+	GenericString(const GenericString<YCHAR>& str);
+	GenericString(const GenericString<YCHAR>& str, size_type length);
+	GenericString(const GenericString<YCHAR>& str, size_type begin, size_type length);
+	GenericString(const YCHAR* str);
+	GenericString(const YCHAR* str, size_type length);
+	GenericString(const YCHAR* str, size_type begin, size_type length);
 
-	// override std::basic_string
-	//explicit BasicString(const std_basic_string& str) : std_basic_string(str) {}
-	//		 BasicString(size_type count, TChar ch)	: std_basic_string(count, ch) {}
-	
-	// operators
-	BasicString& operator+=(const BasicString& right);
-	BasicString& operator+=(const std::basic_string<TChar>& right);
-	BasicString& operator+=(const TChar* ptr);
-	BasicString& operator+=(TChar ch);
-	bool operator==(const BasicString& right) const;
-	bool operator==(const TChar* right) const;
-	bool operator < (const BasicString& right) const;
-	bool operator < (const TChar* right) const;
+	/// @name Operators
+	/// @{
+	GenericString& operator=(const GenericString& right);
+	GenericString& operator=(const std::basic_string<TChar>& right);
+	GenericString& operator=(const TChar* right);
+	GenericString& operator=(const GenericString<YCHAR>& right);
+	GenericString& operator=(const std::basic_string<YCHAR>& right);
+	GenericString& operator=(const YCHAR* right);
+
+	GenericString& operator+=(const GenericString& right);
+	GenericString& operator+=(const TChar* ptr);
+	GenericString& operator+=(TChar ch);
+
+	bool operator==(const GenericString& right) const	{ return Equals(right); }		///< @see Equals
+	bool operator==(const TChar* right) const			{ return Equals(right); }		///< @see Equals
+	bool operator!=(const GenericString& right) const	{ return !operator==(right); }	///< @see Equals
+	bool operator!=(const TChar* right) const			{ return !operator==(right); }	///< @see Equals
+
+	bool operator<(const GenericString& right) const;
+	bool operator<(const TChar* right) const;
+	bool operator>(const GenericString& right) const;
+	bool operator>(const TChar* right) const;
+	bool operator<=(const GenericString& right) const	{ return !operator>(right); }
+	bool operator<=(const TChar* right) const			{ return !operator>(right); }
+	bool operator>=(const GenericString& right) const	{ return !operator<(right); }
+	bool operator>=(const TChar* right) const			{ return !operator<(right); }
+
 	TChar& operator[](int index);
 	const TChar& operator[](int index) const;
+
 	operator const TChar*() const;
+	/// @}
 
 public:
 
@@ -112,16 +153,13 @@ public:
 	bool IsEmpty() const;
 
 	/**
-		@brief		書式文字列と可変長引数リストから文字列を生成する
-		@param[in]	format		: 書式文字列
-		@param[in]	...			: 引数リスト
-		@attention	生成される文字数は MaxFormatLength 以内に収まらなければなりません。(あふれた場合、例外をthrowします)
-					これは、_vsnwprintf に相当する関数がWindows以外では使用できず、あらかじめ生成後の必要バッファサイズを測ることができないためです。<br>
-					Format() は基本的に数値からの変換等、短い文字列にのみ使用し、文字列の連結は += 演算子等を使用してください。
-					また、可変長引数リストにこのクラスのインスタンスを直接指定することはできません。
-					GetCStr() 等で取得した文字列ポインタ型を指定してください。
+		@brief		この文字列の末尾に指定された文字列を追加します。
+		@param[in]	str		: 追加する文字列
+		@param[in]	len		: 追加する文字数 (-1 を指定すると \0 まで)
 	*/
-	void Format(const TChar* format, ...);
+	void Append(const GenericString& str, int len = -1);
+	void Append(const TChar* str, int len = -1);			///< @overload Append
+	void Append(TChar ch);									///< @overload Append
 
 	/**
 		@brief		ネイティブ型文字列を割り当てる
@@ -232,10 +270,19 @@ public:
 					if (str.EndsWith(".txt")) {
 						// 一致した
 					}
-		@endcodes
+		@endcode
 	*/
 	bool EndsWith(const TChar* str, CaseSensitivity cs = CaseSensitivity_CaseSensitive) const;
 	bool EndsWith(TChar ch,         CaseSensitivity cs = CaseSensitivity_CaseSensitive) const;	///< @overload EndsWith
+	
+	/**
+		@brief		文字列が同一かを判断します。
+		@param[in]	str		: この文字列と比較する文字列
+		@details	大文字/小文字を区別し、ロケールに依存しない比較を行います。
+					また、str が NULL の場合は空文字とみなして比較を行います。
+	*/
+	bool Equals(const GenericString& str) const;
+	bool Equals(const TChar* str) const;			///< @overload Equals
 
 	/**
 		@brief		この文字列と、指定した文字列を比較します。
@@ -258,7 +305,7 @@ public:
 					s.Left(2)		=> _T("ab");
 		@endcode
 	*/
-	BasicString<TChar> Left(int count) const;
+	GenericString<TChar> Left(int count) const;
 
 	/**
 		@brief		文字列の右側(末尾)から指定した文字数を抽出します。
@@ -270,7 +317,7 @@ public:
 					s.Right(2)		=> _T("ef");
 		@endcode
 	*/
-	BasicString<TChar> Right(int count) const;
+	GenericString<TChar> Right(int count) const;
 
 	/**
 		@brief		文字列の部分文字列を抽出します。
@@ -283,7 +330,7 @@ public:
 					s.Mid(2, 3)		=> _T("cde");
 		@endcode
 	*/
-	BasicString<TChar> Mid(int start, int count = -1) const;
+	GenericString<TChar> Mid(int start, int count = -1) const;
 
 	/**
 		@brief		文字列をデリミタで分割する
@@ -291,7 +338,7 @@ public:
 		@param[in]	option	: 分割方法
 		@return		分割結果の文字列配列
 	*/
-	ArrayList< BasicString<TChar> > Split(const TChar* delim, StringSplitOptions option = StringSplitOptions_None) const;
+	ArrayList< GenericString<TChar> > Split(const TChar* delim, StringSplitOptions option = StringSplitOptions_None) const;
 
 	/**
 		@brief		文字列を構成するバイト数を取得する
@@ -329,7 +376,7 @@ public:
 		@return		正常に変換された場合は true。それ以外の場合は false。
 		@details	例外が発生しない点を除けば ToInt8 等と同様です。
 					大量のループの内部等、例外によるパフォーマンスへの影響が懸念される場合に使用してください。
-		@sa			ToInt8
+		@see		ToInt8
 	*/
 	bool		TryToInt8(int8_t* outValue, int base = 0) const;
 	bool		TryToInt16(int16_t* outValue, int base = 0) const;		///< @copydoc TryToInt8
@@ -343,6 +390,8 @@ public:
 	/// 終端 \0 までの文字数を返す (マルチバイト文字は考慮しない。CString::GetLength と同様の関数です)
 	int GetLength() const;
 
+
+
 public:
 	/// 現在の環境で定義されている改行文字列を取得する
 	static const StringT& GetNewLine();
@@ -350,28 +399,34 @@ public:
 	/// 空文字列を取得する
 	static const StringT& GetEmpty();
 
+	/**
+		@brief		書式文字列と可変長引数リストから文字列を生成する
+		@param[in]	format		: 書式文字列
+		@param[in]	...			: 引数リスト
+		@attention	生成される文字数は MaxFormatLength 以内に収まらなければなりません。(あふれた場合、例外をthrowします)
+					これは、_vsnwprintf に相当する関数がWindows以外では使用できず、あらかじめ生成後の必要バッファサイズを測ることができないためです。<br>
+					Format() は基本的に数値からの変換等、短い文字列にのみ使用し、文字列の連結は += 演算子等を使用してください。
+					また、可変長引数リストにこのクラスのインスタンスを直接指定することはできません。
+					GetCStr() 等で取得した文字列ポインタ型を指定してください。
+	*/
+	static GenericString Format(const GenericString& format, ...);
+	static GenericString Format(const TChar* format, ...);				///< @overload Format
+
 private:
 	void AssignTString(const TChar* str, int len);
 	void Realloc();
-	void Append(const TChar* str, int len);
 	TChar& InternalGetAt(int index);
 	const TChar& InternalGetAt(int index) const;
 
 	Text::Encoding* GetThisTypeEncoding() const;
 
 private:
-
-	//template<typename TChar>
-	class BasicStringCore
+	class GenericStringCore
 		: public std::basic_string<TChar, std::char_traits<TChar>, STLAllocator<TChar> >
 	{
 	public:
-		//static const TChar EmptyString[1];	// "\0"
-
-
-	public:
-		BasicStringCore() : m_recCount(1) {}
-		~BasicStringCore() {}
+		GenericStringCore() : m_recCount(1) {}
+		~GenericStringCore() {}
 
 		inline bool IsShared() const { return (m_recCount > 1); }
 		inline void AddRef() { ++m_recCount; }
@@ -386,43 +441,47 @@ private:
 			}
 		}
 
-		static BasicStringCore* GetSharedEmpty() { return &m_sharedEmpty; }
+		static GenericStringCore* GetSharedEmpty() { return &m_sharedEmpty; }
 
 	public:
 		int		m_recCount;
 
-		static BasicStringCore	m_sharedEmpty;
+		static GenericStringCore	m_sharedEmpty;
 	};
 
 	const TChar* m_ref;		///< 可変長の実引数にされることに備え、クラス先頭のメンバは m_string->c_str() を指しておく
-	BasicStringCore/*<TChar>*/*	m_string;
+	GenericStringCore*	m_string;
 };
 
 template<typename TChar>
-inline BasicString<TChar> operator+(const BasicString<TChar>& left, const BasicString<TChar>& right)
+inline GenericString<TChar> operator+(const GenericString<TChar>& left, const GenericString<TChar>& right)
 {
-	BasicString<TChar> str;
+	GenericString<TChar> str;
 	str.reserve(left.size() + right.size());
 	str += left;
 	str += right;
 	return str;
 }
 template<typename TChar>
-inline BasicString<TChar> operator+(const BasicString<TChar>& left, const TChar* right)
+inline GenericString<TChar> operator+(const GenericString<TChar>& left, const TChar* right)
 {
-	BasicString<TChar> str;
+	GenericString<TChar> str;
 	str += left;
 	str += right;
 	return str;
 }
 
 #ifdef LN_DOXYGEN
-/// @sa BasicStringCore
+/// @see GenericString
 class String {};
+/// @see GenericString
+class StringA {};	
+/// @see GenericString
+class StringW {};		
 #else
-typedef BasicString<TCHAR>		String;
-typedef BasicString<char>		StringA;
-typedef BasicString<wchar_t>	StringW;
+typedef GenericString<TCHAR>	String;
+typedef GenericString<char>		StringA;
+typedef GenericString<wchar_t>	StringW;
 #endif
 
 } // namespace Lumino
