@@ -451,6 +451,10 @@ private:
 
 	const TChar* m_ref;		///< 可変長の実引数にされることに備え、クラス先頭のメンバは m_string->c_str() を指しておく
 	GenericStringCore*	m_string;
+
+#ifdef LN_GenericString_Extensions
+	LN_GenericString_Extensions;
+#endif
 };
 
 template<typename TChar>

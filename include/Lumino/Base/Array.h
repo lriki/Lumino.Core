@@ -166,7 +166,7 @@ public:
 	{
 		int index = Find(key);
 		if (index >= 0) {
-			mArray[index].second = value;
+			m_vector[index].second = value;
 		}
 		else {
 			Add(key, value);
@@ -178,7 +178,7 @@ public:
 	{
 		int index = Find(key);
 		if (index >= 0) {
-			*value = mArray[index].second;
+			*value = m_vector[index].second;
 			return true;
 		}
 		return false;
@@ -196,11 +196,11 @@ private:
 	int Find(const TKey& key) const
 	{
 		size_t low = 0;					// 範囲の下限
-		size_t high = mArray.size();	// 範囲の上限。解はあれば [low, high] の中に存在する
+		size_t high = m_vector.size();	// 範囲の上限。解はあれば [low, high] の中に存在する
 		while (low < high)
 		{
 			size_t mid = (low + high) / 2;		// 中心点
-			const Pair& midval = mArray[mid];	// 中心の値
+			const Pair& midval = m_vector[mid];	// 中心の値
 
 			// 見つかった
 			if (midval.first == key) {
@@ -224,46 +224,46 @@ public:
 	class iterator
 	{
 	public:
-		iterator() { mPos = NULL; }
-		iterator(const iterator& obj) { mPos = obj.mPos; }
-		iterator(Internal_iterator pos) { mPos = pos; }
-		Pair& operator*() { return *mPos; }//Pair* p = &mPos; return *p; }
-		Pair* operator->() { return &mPos; }
-		iterator& operator++() { ++mPos; return(*this); }
+		iterator() { m_pos = NULL; }
+		iterator(const iterator& obj) { m_pos = obj.m_pos; }
+		iterator(Internal_iterator pos) { m_pos = pos; }
+		Pair& operator*() { return *m_pos; }//Pair* p = &m_pos; return *p; }
+		Pair* operator->() { return &m_pos; }
+		iterator& operator++() { ++m_pos; return(*this); }
 		iterator operator++(int) { iterator t = *this; ++(*this); return t; }
-		iterator& operator--() { --mPos; return(*this); }
+		iterator& operator--() { --m_pos; return(*this); }
 		iterator operator--(int) { iterator t = *this; --(*this); return t; }
-		bool operator==(const iterator& right) const { return (mPos == right.mPos); }
+		bool operator==(const iterator& right) const { return (m_pos == right.m_pos); }
 		bool operator!=(const iterator& right) const { return (!(*this == right)); }
 
 	private:
-		Internal_iterator	mPos;
+		Internal_iterator	m_pos;
 	};
 
 	class const_iterator
 	{
 	public:
-		const_iterator() { mPos = NULL;  }
-		const_iterator(const const_iterator& obj) { mPos = obj.mPos; }
-		const_iterator(Internal_const_iterator pos) { mPos = pos; }
-		const Pair& operator*() const { return mPos; }
-		const Pair* operator->() const { return &mPos; }
-		iterator& operator++() { ++mPos; return(*this); }
+		const_iterator() { m_pos = NULL;  }
+		const_iterator(const const_iterator& obj) { m_pos = obj.m_pos; }
+		const_iterator(Internal_const_iterator pos) { m_pos = pos; }
+		const Pair& operator*() const { return m_pos; }
+		const Pair* operator->() const { return &m_pos; }
+		iterator& operator++() { ++m_pos; return(*this); }
 		iterator operator++(int) { iterator t = *this; ++(*this); return t; }
-		iterator& operator--() { --mPos; return(*this); }
+		iterator& operator--() { --m_pos; return(*this); }
 		iterator operator--(int) { iterator t = *this; --(*this); return t; }
-		bool operator==(const iterator& right) const { return (mPos == right.mPos); }
+		bool operator==(const iterator& right) const { return (m_pos == right.m_pos); }
 		bool operator!=(const iterator& right) const { return (!(*this == right)); }
 
 	private:
-		Internal_const_iterator	mPos;
+		Internal_const_iterator	m_pos;
 	};
 
-	iterator begin() { return mArray.begin(); }
-	iterator end() { return mArray.end(); }
+	iterator begin() { return m_vector.begin(); }
+	iterator end() { return m_vector.end(); }
 
 private:
-	std::vector<Pair, TAllocator>	mArray;
+	std::vector<Pair, TAllocator>	m_vector;
 };
 
 
@@ -285,8 +285,8 @@ inline void SortedArray<TKey, TValue, TAllocator>::Add(const TKey& key, const TV
 	Pair e;
 	e.first = key;
 	e.second = value;
-	mArray.push_back(e);
-	std::stable_sort(mArray.begin(), mArray.end(), Cmp::CmpEventListener);
+	m_vector.push_back(e);
+	std::stable_sort(m_vector.begin(), m_vector.end(), Cmp::CmpEventListener);
 }
 
 //-----------------------------------------------------------------------------
@@ -295,12 +295,12 @@ inline void SortedArray<TKey, TValue, TAllocator>::Add(const TKey& key, const TV
 template<typename TKey, typename TValue, typename TAllocator>
 inline void SortedArray<TKey, TValue, TAllocator>::Remove(const TValue& item)
 {
-	typename InternalArray::iterator itr = mArray.begin();
-	typename InternalArray::iterator end = mArray.end();
+	typename InternalArray::iterator itr = m_vector.begin();
+	typename InternalArray::iterator end = m_vector.end();
 	for (; itr != end; ++itr)
 	{
 		if (itr->second == item) {
-			mArray.erase(itr);
+			m_vector.erase(itr);
 			return;
 		}
 	}

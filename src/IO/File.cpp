@@ -40,7 +40,7 @@ File::~File()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void File::Open(FileOpenMode openMode)
+void File::Open(uint32_t openMode)
 {
 	LN_THROW(m_fileStream == NULL, InvalidOperationException);	// すでにファイルが開かれている
 	m_fileStream = LN_NEW FileStream(m_filePath.GetCStr(), openMode);
