@@ -35,7 +35,7 @@ JsonReader::~JsonReader()
 //-----------------------------------------------------------------------------
 void JsonReader::Parse(const TCHAR* text, int len)
 {
-	if (LN_VERIFY_ASSERT_ARG(text != NULL)) { return; }
+	LN_VERIFY_RETURN(text != NULL);
 
 	StringReader textReader(String(text, len));
 	Parse(&textReader);
@@ -46,7 +46,8 @@ void JsonReader::Parse(const TCHAR* text, int len)
 //-----------------------------------------------------------------------------
 void JsonReader::Parse(TextReader* textReader)
 {
-	if (LN_VERIFY_ASSERT_ARG(textReader != NULL)) { return; }
+	LN_VERIFY_RETURN(textReader != NULL);
+
 	m_reader = textReader;
 
 	// 一時バッファ。もし足りなければ拡張される

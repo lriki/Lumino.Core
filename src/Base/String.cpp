@@ -399,7 +399,7 @@ void GenericString<TChar>::AssignCStr(const char* str, int begin, int length, bo
 		SetEmpty();
 		return;
 	}
-	//LN_THROW(str != NULL, ArgumentException);	// std::string の assing は NULL が渡されたときの動作は未定義。VS2013 では制御が返ってこなくなった
+	//LN_THROW(str != NULL, ArgumentException);	// std::string の assign は NULL が渡されたときの動作は未定義。VS2013 では制御が返ってこなくなった
 
 	if (length <= -1) {
 		length = INT_MAX;
@@ -435,7 +435,7 @@ void GenericString<TChar>::AssignCStr(const wchar_t* str, int begin, int length,
 		SetEmpty();
 		return;
 	}
-	//LN_THROW(str != NULL, ArgumentException);	// std::string の assing は NULL が渡されたときの動作は未定義。VS2013 では制御が返ってこなくなった
+	//LN_THROW(str != NULL, ArgumentException);	// std::string の assign は NULL が渡されたときの動作は未定義。VS2013 では制御が返ってこなくなった
 
 	if (length <= -1) {
 		length = INT_MAX;

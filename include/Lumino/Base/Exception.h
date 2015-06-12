@@ -1,6 +1,7 @@
-﻿
+﻿/**
+	@file	Exception.h
+*/
 #pragma once
-
 #include "String.h"
 
 // exp の条件が満たされなかった場合、type に指定した例外を throw する
@@ -72,20 +73,36 @@
 #define LN_VERIFY_ASSERT(exp)	(!(_LN_VERIFY_ASSERT_INTERNAL(exp, Exception)))
 
 /**
-	@brief	引数チェックであることを示すための LN_VERIFY_ASSERT です。
+	@brief		式の結果が false であれば return により処理を中断します。
+	@details	assert と似ていますが、DEBUG シンボルの定義有無にかかわらず式は必ず実行されます。
+				LN_DO_CHECK が有効の場合、式の結果が false であればアサートします。
 	@code
-			void Parse(const char* text, char** outPos)
-			{
-				if (LN_VERIFY_ASSERT_ARG(text != NULL)) { return; }
-				if (LN_VERIFY_ASSERT_ARG(outPos != NULL)) { return; }
-				...
-			}
+				void ToInt(const char* text, int** outValue)
+				{
+					LN_VERIFY_RETURN(text != NULL);
+					LN_VERIFY_RETURN(outPos != NULL, "outValue is NULL.");
+					...
+					*outValue = XXXX;
+				}
 	@endcode
 */
-#define LN_VERIFY_ASSERT_ARG(exp)	(!(_LN_VERIFY_ASSERT_INTERNAL(exp, ArgumentException)))
+#define LN_VERIFY_RETURN(exp, ...)					if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::Lumino::VerifyException)) { return; }
 
-
-
+/**
+	@brief		式の結果が false であれば return により処理を中断します。return で使用する戻り値を指定します。
+	@see		LN_VERIFY_RETURN
+	@code
+				bool ToInt(const char* text, int** outValue)
+				{
+					LN_VERIFY_RETURN(text != NULL, false);
+					LN_VERIFY_RETURN(outValue != NULL, false, "outValue is NULL.");
+					...
+					*outValue = XXXX;
+					return true;
+				}
+	@endcode
+*/
+#define LN_VERIFY_RETURNV(exp, returnValue, ...)	if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::Lumino::VerifyException)) { return returnValue; }
 
 namespace Lumino
 {
@@ -163,8 +180,23 @@ private:
 };
 
 /**
-	@brief	メモリ不足例外
+	@brief	前提条件の検証エラーです。
+*/
+class VerifyException 
+	: public Exception
+{
+public:
+	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(VerifyException);
+	VerifyException() {}
+	virtual ~VerifyException() throw() {}
 
+public:
+	// override Exception
+	virtual Exception* Copy() const { return LN_NEW VerifyException(*this); }
+};
+
+/**
+	@brief	メモリ不足例外
 */
 class OutOfMemoryException 
 	: public Exception

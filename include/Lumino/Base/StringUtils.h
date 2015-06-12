@@ -57,6 +57,9 @@ public:
 	static int VSPrintf(char* out, int charCount, const char* format, va_list args);
 	static int VSPrintf(wchar_t* out, int charCount, const wchar_t* format, va_list args);
 
+	static int SPrintf(char* out, int charCount, const char* format, ...);
+	static int SPrintf(wchar_t* out, int charCount, const wchar_t* format, ...);
+
 
 
 	/**

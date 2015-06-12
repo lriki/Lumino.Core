@@ -340,13 +340,12 @@ TEST_F(Test_Base_String, Format)
 			buf1[i] = 'a';
 		}
 
-		StringA str1;
-		str1.Format("%s", buf1);
+		StringA str1 = StringA::Format("%s", buf1);
 		ASSERT_STREQ(str1, buf1);	// 同じ文字ができていればOK
 		
 
 		ASSERT_THROW(
-			str1.Format("%sb", buf1),	// 1文字多い。失敗する
+			StringA::Format("%sb", buf1),	// 1文字多い。失敗する
 			ArgumentException);
 	}
 
@@ -354,8 +353,7 @@ TEST_F(Test_Base_String, Format)
 	// 可変長実引数への指定は保障外だが、一応動くか見ておく。ちなみに GCC ではコンパイルエラーになる。
 	{
 		String str1(_T("str1"));
-		String str2;
-		str2.Format(_T("[%s]"), str1);
+		String str2 = String::Format(_T("[%s]"), str1);
 		ASSERT_STREQ(_T("[str1]"), str2);
 	}
 #endif
@@ -368,12 +366,11 @@ TEST_F(Test_Base_String, Format)
 			buf1[i] = L'a';
 		}
 
-		StringW str1;
-		str1.Format(L"%s", buf1);
+		StringW str1 = StringW::Format(L"%s", buf1);
 		ASSERT_TRUE(str1 == buf1);	// 同じ文字ができていればOK
 
 		ASSERT_THROW(
-			str1.Format(L"%sb", buf1),	// 1文字多い。失敗する
+			StringW::Format(L"%sb", buf1),	// 1文字多い。失敗する
 			ArgumentException);
 	}
 #endif

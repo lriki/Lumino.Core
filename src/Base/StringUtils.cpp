@@ -81,6 +81,24 @@ int				StringUtils::VSPrintf(wchar_t* out, int charCount, const wchar_t* format,
 #endif
 
 
+int StringUtils::SPrintf(char* out, int charCount, const char* format, ...)
+{
+	va_list args;
+	va_start(args, format);
+	int r = VSPrintf(out, charCount, format, args);
+	va_end(args);
+	return r;
+}
+int StringUtils::SPrintf(wchar_t* out, int charCount, const wchar_t* format, ...)
+{
+	va_list args;
+	va_start(args, format);
+	int r = VSPrintf(out, charCount, format, args);
+	va_end(args);
+	return r;
+}
+
+
 
 
 

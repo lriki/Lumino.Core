@@ -8,19 +8,22 @@
 
 #pragma once
 
-enum LNMemoryFlag
+namespace Lumino
 {
-	LN_MM_NORMAL_BLOCK = 1,
-};
+	enum MemoryFlag
+	{
+		LN_MM_NORMAL_BLOCK = 1,
+	};
+}
 
 //void* LN_CDECL operator new ( size_t size );
 //void  LN_CDECL operator delete ( void* ptr );
 
-void* LN_CDECL operator new ( size_t size, LNMemoryFlag flag );
-void* LN_CDECL operator new[] ( size_t size, LNMemoryFlag flag );
-void  LN_CDECL operator delete ( void* ptr, LNMemoryFlag flag );
-void  LN_CDECL operator delete[] ( void* ptr, LNMemoryFlag flag );
+void* LN_CDECL operator new (size_t size, ::Lumino::MemoryFlag flag);
+void* LN_CDECL operator new[](size_t size, ::Lumino::MemoryFlag flag);
+void  LN_CDECL operator delete (void* ptr, ::Lumino::MemoryFlag flag);
+void  LN_CDECL operator delete[](void* ptr, ::Lumino::MemoryFlag flag);
 
-#define LN_NEW						new(LN_MM_NORMAL_BLOCK)
-#define LN_OPERATOR_NEW(size)		::operator new(size, LN_MM_NORMAL_BLOCK)
+#define LN_NEW						new(::Lumino::LN_MM_NORMAL_BLOCK)
+#define LN_OPERATOR_NEW(size)		::operator new(size,::Lumino:: LN_MM_NORMAL_BLOCK)
 #define LN_OPERATOR_DELETE(ptr) {	::operator delete(ptr); (ptr) = 0; }

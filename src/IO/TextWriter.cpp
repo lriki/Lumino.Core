@@ -101,43 +101,43 @@ void TextWriter::WriteChar(TCHAR ch)
 void TextWriter::WriteInt16(int16_t value)
 {
 	TCHAR buf[64];
-	int len = _stprintf_s(buf, 64, _T("%d"), value);
+	int len = StringUtils::SPrintf(buf, 64, _T("%d"), value);
 	WriteInternal(buf, len);
 }
 void TextWriter::WriteInt32(int32_t value)
 {
 	TCHAR buf[64];
-	int len = _stprintf_s(buf, 64, _T("%d"), value);
+	int len = StringUtils::SPrintf(buf, 64, _T("%d"), value);
 	WriteInternal(buf, len);
 }
 void TextWriter::WriteInt64(int64_t value)
 {
 	TCHAR buf[64];
-	int len = _stprintf_s(buf, 64, _T("%lld"), value);
+	int len = StringUtils::SPrintf(buf, 64, _T("%lld"), value);
 	WriteInternal(buf, len);
 }
 void TextWriter::WriteByte(byte_t value)
 {
 	TCHAR buf[64];
-	int len = _stprintf_s(buf, 64, _T("%u"), value);
+	int len = StringUtils::SPrintf(buf, 64, _T("%u"), value);
 	WriteInternal(buf, len);
 }
 void TextWriter::WriteUInt16(uint16_t value)
 {
 	TCHAR buf[64];
-	int len = _stprintf_s(buf, 64, _T("%u"), value);
+	int len = StringUtils::SPrintf(buf, 64, _T("%u"), value);
 	WriteInternal(buf, len);
 }
 void TextWriter::WriteUInt32(uint32_t value)
 {
 	TCHAR buf[64];
-	int len = _stprintf_s(buf, 64, _T("%u"), value);
+	int len = StringUtils::SPrintf(buf, 64, _T("%u"), value);
 	WriteInternal(buf, len);
 }
 void TextWriter::WriteUInt64(uint64_t value)
 {
 	TCHAR buf[64];
-	int len = _stprintf_s(buf, 64, _T("%llu"), value);
+	int len = StringUtils::SPrintf(buf, 64, _T("%llu"), value);
 	WriteInternal(buf, len);
 }
 void TextWriter::WriteFloat(float value)

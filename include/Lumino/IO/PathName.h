@@ -31,7 +31,7 @@ namespace Lumino
 				http://www.qtcentre.org/threads/38941-QFile-exists%28%29-and-QFileInfo-exists%28%29-and-case-sensitive-file-names
 */
 template<typename TChar>
-class BasicPathName
+class GenericPathName
 {
 public:
 	static const TChar Separator		= (TChar)PathUtils::DirectorySeparatorChar;
@@ -39,34 +39,34 @@ public:
 	static const TChar VolumeSeparator	= (TChar)PathUtils::VolumeSeparatorChar;
 
 public:
-	typedef BasicPathName<TChar>	PathNameT;
+	typedef GenericPathName<TChar>	PathNameT;
 	typedef GenericString<TChar>	GenericStringT;
 
 public:
-	BasicPathName() {}
-	BasicPathName(const BasicPathName& obj);
+	GenericPathName() {}
+	GenericPathName(const GenericPathName& obj);
 
 	/// @overload Assign
-	BasicPathName(const char* path) { Assign(path); }
+	GenericPathName(const char* path) { Assign(path); }
 	/// @overload Assign
-	BasicPathName(const wchar_t* path) { Assign(path); }
+	GenericPathName(const wchar_t* path) { Assign(path); }
 	/// @overload Assign
-	explicit BasicPathName(const GenericStringT& path) { Assign(path); }
+	explicit GenericPathName(const GenericStringT& path) { Assign(path); }
 
 	/// @overload AssignUnderBasePath
-	BasicPathName(const PathNameT& basePath, const char* relativePath) { AssignUnderBasePath(basePath, relativePath); }
+	GenericPathName(const PathNameT& basePath, const char* relativePath) { AssignUnderBasePath(basePath, relativePath); }
 	/// @overload AssignUnderBasePath
-	BasicPathName(const PathNameT& basePath, const wchar_t* relativePath) { AssignUnderBasePath(basePath, relativePath); }
+	GenericPathName(const PathNameT& basePath, const wchar_t* relativePath) { AssignUnderBasePath(basePath, relativePath); }
 	/// @overload AssignUnderBasePath
-	BasicPathName(const PathNameT& basePath, const GenericStringT& relativePath) { AssignUnderBasePath(basePath, relativePath); }
+	GenericPathName(const PathNameT& basePath, const GenericStringT& relativePath) { AssignUnderBasePath(basePath, relativePath); }
 	/// @overload AssignUnderBasePath
-	BasicPathName(const PathNameT& basePath, const PathNameT& relativePath) { AssignUnderBasePath(basePath, relativePath); }
+	GenericPathName(const PathNameT& basePath, const PathNameT& relativePath) { AssignUnderBasePath(basePath, relativePath); }
 
 	// operators
-	BasicPathName& operator = (const GenericStringT& str)	{ Assign(str.GetCStr()); return (*this); }
-	BasicPathName& operator = (const char* str) { Assign(str); return (*this); }
-	BasicPathName& operator = (const wchar_t* str) { Assign(str); return (*this); }
-	bool operator < (const BasicPathName& right) const { return PathUtils::Compare(m_path.GetCStr(), right.m_path.GetCStr()) < 0; }
+	GenericPathName& operator = (const GenericStringT& str)	{ Assign(str.GetCStr()); return (*this); }
+	GenericPathName& operator = (const char* str) { Assign(str); return (*this); }
+	GenericPathName& operator = (const wchar_t* str) { Assign(str); return (*this); }
+	bool operator < (const GenericPathName& right) const { return PathUtils::Compare(m_path.GetCStr(), right.m_path.GetCStr()) < 0; }
 	bool operator < (const TChar* right) const { return PathUtils::Compare(m_path.GetCStr(), right) < 0; }
 	operator const TChar*() const { return m_path.GetCStr(); }
 
@@ -136,7 +136,7 @@ public:
 					".git"				=> ""
 		@endcode
 	*/
-	BasicPathName<TChar> GetWithoutExtension() const;
+	GenericPathName<TChar> GetWithoutExtension() const;
 
 	/// パスが空であるかを確認する
 	bool IsEmpty() const { return m_path.IsEmpty(); }
@@ -229,8 +229,8 @@ private:
 	//void ConvertSeparatorToInternal(GenericStringT* path);
 };
 
-typedef BasicPathName<TCHAR>	PathName;
-typedef BasicPathName<char>		PathNameA;
-typedef BasicPathName<wchar_t>	PathNameW;
+typedef GenericPathName<TCHAR>		PathName;
+typedef GenericPathName<char>		PathNameA;
+typedef GenericPathName<wchar_t>	PathNameW;
 
 } // namespace Lumino

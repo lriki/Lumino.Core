@@ -6,7 +6,7 @@
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void* LN_CDECL operator new ( size_t size, LNMemoryFlag flag )
+void* LN_CDECL operator new ( size_t size, ::Lumino::MemoryFlag flag )
 {
 	void* ptr = NULL;
 	try
@@ -25,7 +25,7 @@ void* LN_CDECL operator new ( size_t size, LNMemoryFlag flag )
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void* LN_CDECL operator new[] ( size_t size, LNMemoryFlag flag )
+void* LN_CDECL operator new[] ( size_t size, ::Lumino::MemoryFlag flag )
 {
 	void* ptr = NULL;
 	try
@@ -44,7 +44,7 @@ void* LN_CDECL operator new[] ( size_t size, LNMemoryFlag flag )
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void  LN_CDECL operator delete ( void* ptr, LNMemoryFlag flag )
+void  LN_CDECL operator delete ( void* ptr, ::Lumino::MemoryFlag flag )
 {
 	return ::operator delete(ptr);
 }
@@ -52,7 +52,7 @@ void  LN_CDECL operator delete ( void* ptr, LNMemoryFlag flag )
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void  LN_CDECL operator delete[] ( void* ptr, LNMemoryFlag flag )
+void  LN_CDECL operator delete[] ( void* ptr, ::Lumino::MemoryFlag flag )
 {
 	return ::operator delete[](ptr);
 }

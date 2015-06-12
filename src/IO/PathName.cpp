@@ -11,14 +11,14 @@ namespace Lumino
 {
 
 //=============================================================================
-// BasicPathName
+// GenericPathName
 //=============================================================================
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-BasicPathName<TChar>::BasicPathName(const BasicPathName& obj)
+GenericPathName<TChar>::GenericPathName(const GenericPathName& obj)
 	: m_path(obj.m_path)
 {
 }
@@ -27,7 +27,7 @@ BasicPathName<TChar>::BasicPathName(const BasicPathName& obj)
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-void BasicPathName<TChar>::Assign(const char* path)
+void GenericPathName<TChar>::Assign(const char* path)
 {
 	m_path.AssignCStr(path);
 }
@@ -36,7 +36,7 @@ void BasicPathName<TChar>::Assign(const char* path)
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-void BasicPathName<TChar>::Assign(const wchar_t* path)
+void GenericPathName<TChar>::Assign(const wchar_t* path)
 {
 	m_path.AssignCStr(path);
 }
@@ -45,7 +45,7 @@ void BasicPathName<TChar>::Assign(const wchar_t* path)
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-void BasicPathName<TChar>::AssignUnderBasePath(const PathNameT& basePath, const char* relativePath)
+void GenericPathName<TChar>::AssignUnderBasePath(const PathNameT& basePath, const char* relativePath)
 {
 	// フルパスの場合はそのまま割り当てる
 	if (PathUtils::IsAbsolutePath(relativePath))
@@ -72,7 +72,7 @@ void BasicPathName<TChar>::AssignUnderBasePath(const PathNameT& basePath, const 
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-void BasicPathName<TChar>::AssignUnderBasePath(const PathNameT& basePath, const wchar_t* relativePath)
+void GenericPathName<TChar>::AssignUnderBasePath(const PathNameT& basePath, const wchar_t* relativePath)
 {
 	// フルパスの場合はそのまま割り当てる
 	if (PathUtils::IsAbsolutePath(relativePath))
@@ -100,7 +100,7 @@ void BasicPathName<TChar>::AssignUnderBasePath(const PathNameT& basePath, const 
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-void BasicPathName<TChar>::Append(const TChar* path)
+void GenericPathName<TChar>::Append(const TChar* path)
 {
 	if (PathUtils::IsAbsolutePath(path)) {
 		m_path = path;
@@ -117,7 +117,7 @@ void BasicPathName<TChar>::Append(const TChar* path)
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-const GenericString<TChar> BasicPathName<TChar>::GetStrEndSeparator() const
+const GenericString<TChar> GenericPathName<TChar>::GetStrEndSeparator() const
 {
 	GenericStringT newStr = m_path;
 	if (!newStr.IsEmpty() && !newStr.EndsWith(Separator)/*(*newStr.rbegin()) != Separator*/) {	// 末尾セパレータ
@@ -130,7 +130,7 @@ const GenericString<TChar> BasicPathName<TChar>::GetStrEndSeparator() const
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-BasicPathName<TChar> BasicPathName<TChar>::GetWithoutExtension() const
+GenericPathName<TChar> GenericPathName<TChar>::GetWithoutExtension() const
 {
 	CaseSensitivity cs = FileManager::GetInstance().GetFileSystemCaseSensitivity();
 
@@ -151,14 +151,14 @@ BasicPathName<TChar> BasicPathName<TChar>::GetWithoutExtension() const
 		return (*this);		// "dir.sub/file" のように、. の後ろにセパレータがあった。ファイル名に付く . ではないので、何もせずそのまま返す
 	}
 
-	return BasicPathName<TChar>(m_path.Left(dotPos));
+	return GenericPathName<TChar>(m_path.Left(dotPos));
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-bool BasicPathName<TChar>::IsAbsolutePath() const
+bool GenericPathName<TChar>::IsAbsolutePath() const
 {
 	return PathUtils::IsAbsolutePath(m_path.GetCStr());
 }
@@ -167,7 +167,7 @@ bool BasicPathName<TChar>::IsAbsolutePath() const
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-bool BasicPathName<TChar>::IsRoot() const
+bool GenericPathName<TChar>::IsRoot() const
 {
 	return PathUtils::IsRootPath(m_path.GetCStr());
 }
@@ -176,7 +176,7 @@ bool BasicPathName<TChar>::IsRoot() const
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-bool BasicPathName<TChar>::CheckExt(const TChar* ext) const
+bool GenericPathName<TChar>::CheckExt(const TChar* ext) const
 {
 	// TODO: 大文字小文字の区別をする
 	return StringUtils::EndsWith(m_path.GetCStr(), m_path.GetLength(), ext, -1, CaseSensitivity_CaseInsensitive);
@@ -186,7 +186,7 @@ bool BasicPathName<TChar>::CheckExt(const TChar* ext) const
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-BasicPathName<TChar> BasicPathName<TChar>::GetParent() const
+GenericPathName<TChar> GenericPathName<TChar>::GetParent() const
 {
 	/* 参考：他のライブラリの、空文字やセパレータが無いなどで親ディレクトリが取れない時の動作
 		- Qt (QFileInfo::dir())		… "." を返す
@@ -196,26 +196,26 @@ BasicPathName<TChar> BasicPathName<TChar>::GetParent() const
 		- Java (os.nio.Paths)		… null を返す
 		- C# (Path, Uri)			… "" を返す (入力が "" だった場合は例外)
 	*/
-	return BasicPathName(PathUtils::GetDirectoryPath(m_path.GetCStr()).GetCStr());
+	return GenericPathName(PathUtils::GetDirectoryPath(m_path.GetCStr()).GetCStr());
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-BasicPathName<TChar> BasicPathName<TChar>::CanonicalizePath() const
+GenericPathName<TChar> GenericPathName<TChar>::CanonicalizePath() const
 {
 	TChar tmpPath[LN_MAX_PATH + 1];
 	memset(tmpPath, 0, sizeof(tmpPath));
 	PathUtils::CanonicalizePath(m_path.GetCStr(), tmpPath);
-	return BasicPathName<TChar>(tmpPath);
+	return GenericPathName<TChar>(tmpPath);
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-std::string BasicPathName<TChar>::ToLocalChar() const
+std::string GenericPathName<TChar>::ToLocalChar() const
 {
 	GenericString<char> tmp;
 	tmp.AssignCStr(m_path.GetCStr());
@@ -226,9 +226,9 @@ std::string BasicPathName<TChar>::ToLocalChar() const
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-BasicPathName<TChar> BasicPathName<TChar>::GetCurrentDirectory()
+GenericPathName<TChar> GenericPathName<TChar>::GetCurrentDirectory()
 {
-	static BasicPathName<TChar> path;
+	static GenericPathName<TChar> path;
 
 	TChar curDir[LN_MAX_PATH];
 	size_t len = DirectoryUtils::GetCurrentDirectory(curDir);
@@ -244,7 +244,7 @@ BasicPathName<TChar> BasicPathName<TChar>::GetCurrentDirectory()
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-BasicPathName<TChar> BasicPathName<TChar>::GetUniqueFilePathInDirectory(const PathNameT& directory, const TChar* filePrefix, const TChar* extName)
+GenericPathName<TChar> GenericPathName<TChar>::GetUniqueFilePathInDirectory(const PathNameT& directory, const TChar* filePrefix, const TChar* extName)
 {
 	GenericStringT dirPath = directory.GetStrEndSeparator();
 	uint64_t key = static_cast<uint64_t>(::time(NULL));
@@ -277,13 +277,13 @@ BasicPathName<TChar> BasicPathName<TChar>::GetUniqueFilePathInDirectory(const Pa
 
 /// (こちらはファイル名だけを返す)
 template<typename TChar>
-GenericString<TChar> BasicPathName<TChar>::GetUniqueFileNameInDirectory(const PathNameT& directory, const TChar* filePrefix, const TChar* extName)
+GenericString<TChar> GenericPathName<TChar>::GetUniqueFileNameInDirectory(const PathNameT& directory, const TChar* filePrefix, const TChar* extName)
 {
 	return GetUniqueFilePathInDirectory(directory,filePrefix, extName).GetFileName();
 }
 
 // テンプレートのインスタンス化
-template class BasicPathName<char>;
-template class BasicPathName<wchar_t>;
+template class GenericPathName<char>;
+template class GenericPathName<wchar_t>;
 
 } // namespace Lumino
