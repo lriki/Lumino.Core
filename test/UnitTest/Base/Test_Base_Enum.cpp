@@ -7,35 +7,114 @@ protected:
 	virtual void TearDown() {}
 };
 
+class Enum
+{
+protected:
 
-#define LN_ENUM_CLASS(name) \
-	class name \
+	template<typename TEnum>
+	struct EnumParser
+	{
+		// LN_ENUM_DECLARE マクロが非常に長くなるのを避けるため、部分的にクラス化した
+	public:
+		struct Pair { String Name; TEnum Value; };
+		static ArrayList<Pair>& GetMemberList()
+		{
+			static ArrayList<Pair> members; return members;	// ヘッダ include だけで済ますため、static 変数は関数内に閉じ込めておく
+		}
+		void Init(const TEnum* values, int valuesCount, const char* argNames)
+		{
+			ArrayList<Pair>& members = GetMemberList();
+			String names = argNames;
+			ArrayList<String> tokens = names.Split(_T(","));
+			for (int i = 0; i < valuesCount; ++i)
+			{
+				Pair p;
+				p.Name = tokens[i].Trim();
+				p.Value = values[i];
+				members.Add(p);
+			}
+		}
+		static const TCHAR* ToString(int value)
+		{
+			ArrayList<Pair>& members = GetMemberList();
+			for (int i = 0; i < members.GetCount(); ++i)
+			{
+				if (members[i].Value == value) {
+					return members[i].Name.GetCStr();
+				}
+			}
+			LN_ASSERT(0);
+			return NULL;
+		}
+		static TEnum Parse(const TCHAR* str)
+		{
+			int value;
+			if (TryParse(str, &value)) {
+				return (TEnum)value;
+			}
+			LN_THROW(0, ArgumentException);
+			return TEnum();
+		}
+		static bool TryParse(const TCHAR* str, int* outValue)
+		{
+			ArrayList<Pair>& members = GetMemberList();
+			for (int i = 0; i < members.GetCount(); ++i)
+			{
+				if (members[i].Name == str)
+				{
+					*outValue = members[i].Value;
+					return true;
+				}
+			}
+			return false;
+		}
+	};
+
+};
+
+
+#define LN_ENUM(name) \
+	class name : public Enum \
 	{ \
 	public: \
 		enum _##name
 
-#define LN_ENUM_CLASS_DECLARE(name) \
+#define LN_ENUM_DECLARE(name) \
 	private: \
 		int	m_value; \
 	public: \
 		typedef _##name enum_type; \
 		name() : m_value(0) {} \
 		name(enum_type v) : m_value(v) {} \
+		inline operator int() const { return m_value; } \
 		bool operator==(name right) const { return m_value == right.m_value; } \
 		bool operator==(enum_type right) const { return m_value == right; } \
 		bool operator!=(name right) const { return !operator==(right); } \
 		bool operator!=(enum_type right) const { return !operator==(right); } \
 		friend inline bool operator==(name::enum_type left, name right) throw(); \
+		friend inline bool operator!=(name::enum_type left, name right) throw(); \
 	}; \
-	inline bool operator==(name::enum_type left, name right) throw() { return left == right.m_value; }
+	inline bool operator==(name::enum_type left, name right) throw() { return left == right.m_value; } \
+	inline bool operator!=(name::enum_type left, name right) throw() { return left != right.m_value; }
 
-#define LN_ENUM_CLASS_FLAGS(name) \
-	class name \
+#define LN_ENUM_REFLECTION(enumName, ...) \
+private: \
+	typedef _##enumName enum_type; \
+	struct LocalEnumParser : public EnumParser <enum_type> { LocalEnumParser() { enumName::enum_type values[] = { __VA_ARGS__ };  Init(values, LN_ARRAY_SIZE_OF(values), #__VA_ARGS__); } }; \
+	static LocalEnumParser& GetEnumParser() { static LocalEnumParser parser; return parser; } \
+public: \
+	const TCHAR* ToString() const { return GetEnumParser().ToString(m_value); } \
+	static enumName Parse(const TCHAR* str) { return GetEnumParser().Parse(str); }; \
+	static bool TryParse(const TCHAR* str, enumName* outValue) { return GetEnumParser().TryParse(str, (outValue) ? &outValue->m_value : NULL); }
+
+
+#define LN_ENUM_FLAGS(name) \
+	class name : public Enum \
 	{ \
 	public: \
 		enum _##name
 
-#define LN_ENUM_CLASS_FLAGS_DECLARE(name) \
+#define LN_ENUM_FLAGS_DECLARE(name) \
 	private: \
 		int	m_value; \
 	public: \
@@ -56,91 +135,31 @@ protected:
 
 
 
-template < typename TEnumClass, typename TEnum >
-struct EnumParser
+
+LN_ENUM(TestValues0)
 {
-	// LN_ENUM_CLASS_DECLARE マクロが非常に長くなるのを避けるため、部分的にクラス化した
-public:
-	struct Pair { String Name; TEnum Value; };
-	static ArrayList<Pair>& GetMemberList()
-	{
-		static ArrayList<Pair> members; return members;	// ヘッダ include だけで済ますため、static 変数は関数内に閉じ込めておく
-	}
-	void Init(const TEnum* values, int valuesCount, const char* argNames)
-	{
-		ArrayList<Pair>& members = GetMemberList();
-		String names = argNames;
-		ArrayList<String> tokens = names.Split(_T(","));
-		for (int i = 0; i < valuesCount; ++i)
-		{
-			Pair p;
-			p.Name = tokens[i].Trim();
-			p.Value = values[i];
-			members.Add(p);
-		}
-	}
-	static const TCHAR* ToString(int value)
-	{
-		ArrayList<Pair>& members = GetMemberList();
-		for (int i = 0; i < members.GetCount(); ++i)
-		{
-			if (members[i].Value == value) {
-				return members[i].Name.GetCStr();
-			}
-		}
-		LN_ASSERT(0);
-		return NULL;
-	}
-	static TEnumClass Parse(const TCHAR* str)
-	{
-		TestValues value;
-		if (TryParse(str, &value)) {
-			return value;
-		}
-		LN_THROW(0, ArgumentException);
-		return TEnumClass();
-	}
-	static bool TryParse(const TCHAR* str, TEnumClass* outValue)
-	{
-		ArrayList<Pair>& members = GetMemberList();
-		for (int i = 0; i < members.GetCount(); ++i)
-		{
-			if (members[i].Name == str)
-			{
-				*outValue = members[i].Value;
-				return true;
-			}
-		}
-		LN_THROW(0, ArgumentException);
-		return false;
-	}
+	Value1 = 100,
+	Value2,
+	Value3,
 };
+LN_ENUM_DECLARE(TestValues0);
 
-
-
-LN_ENUM_CLASS(TestValues)
+LN_ENUM(TestValues)
 {
 	ID1 = 0,
 	ID2,
-	ID3,
+	ID3 = TestValues0::Value3,
 };
+LN_ENUM_REFLECTION(TestValues, ID1, ID2, ID3);
+LN_ENUM_DECLARE(TestValues);
 
-private:
-	struct LocalEnumParser : public EnumParser <TestValues, _TestValues> { LocalEnumParser() { _TestValues values[] = { ID1, ID2, ID3 };  Init(values, LN_ARRAY_SIZE_OF(values), "ID1, ID2, ID3"); } };
-	static LocalEnumParser& GetEnumParser() { static LocalEnumParser parser; return parser; }
-public:
-	const TCHAR* ToString() const { return GetEnumParser().ToString(m_value); }
-	static TestValues Parse(const TCHAR* str) { return GetEnumParser().Parse(str); };
-	static bool TryParse(const TCHAR* str, TestValues* outValue) { return GetEnumParser().TryParse(str, outValue); }
-LN_ENUM_CLASS_DECLARE(TestValues);
-
-LN_ENUM_CLASS_FLAGS(TestFlags)
+LN_ENUM_FLAGS(TestFlags)
 {
 	Option1 = 0x01,
 	Option2 = 0x02,
 	Option3 = 0x04,
 };
-LN_ENUM_CLASS_FLAGS_DECLARE(TestFlags);
+LN_ENUM_FLAGS_DECLARE(TestFlags);
 
 //-----------------------------------------------------------------------------
 TEST_F(Test_Base_Enum, Basic)
@@ -172,6 +191,11 @@ TEST_F(Test_Base_Enum, Parse)
 	{
 		TestValues v1 = TestValues::Parse(_T("ID2"));
 		ASSERT_EQ(TestValues::ID2, v1);
+	}
+	// <Test> 別の enum の値でメンバの値を設定できる。
+	{
+		TestValues v1 = TestValues::Parse(_T("ID3"));
+		ASSERT_EQ(102, v1);
 	}
 }
 
