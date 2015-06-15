@@ -7,9 +7,12 @@ set(LN_TEST_SOURCES
 	UnitTest/Base/Test_Base_Delegate.cpp
 	UnitTest/Base/Test_Base_Encoding.cpp
 	UnitTest/Base/Test_Base_Encoding_UTF8.cpp
+	UnitTest/Base/Test_Base_Enum.cpp
 	UnitTest/Base/Test_Base_Event.cpp
 	UnitTest/Base/Test_Base_Exception.cpp
 	UnitTest/Base/Test_Base_List.cpp
+	UnitTest/Base/Test_Base_Locale.cpp
+	UnitTest/Base/Test_Base_Point.cpp
 	UnitTest/Base/Test_Base_Rect.cpp
 	UnitTest/Base/Test_Base_Size.cpp
 	UnitTest/Base/Test_Base_STLUtils.cpp
