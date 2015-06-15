@@ -434,7 +434,7 @@ bool DummyArchive::TryCreateStream(const PathName& fileFullPath, Stream** outStr
 {
 	try
 	{
-		*outStream = LN_NEW FileStream(fileFullPath, FileOpenMode_Read);
+		*outStream = LN_NEW FileStream(fileFullPath, FileOpenMode::Read);
 		return true;
 	}
 	catch (...) {

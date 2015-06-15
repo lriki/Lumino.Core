@@ -21,7 +21,7 @@ public:
 		@param	filePath	: ファイル名
 		@param	openMode	: ファイルを開く方法 (FileOpenMode のフラグの組み合わせ)
 	*/
-	FileStream(const TCHAR* filePath, uint32_t openMode);
+	FileStream(const TCHAR* filePath, FileOpenMode openMode);
 
 	virtual ~FileStream();
 
@@ -32,7 +32,7 @@ public:
 		@param	filePath	: ファイル名
 		@param	openMode	: ファイルを開く方法 (FileOpenMode のフラグの組み合わせ)
 	*/
-	void Open(const TCHAR* filePath, uint32_t openMode);
+	void Open(const TCHAR* filePath, FileOpenMode openMode);
 
 	/**
 		@brief	ファイルを閉じる
@@ -57,7 +57,7 @@ private:
 private:
 	mutable FILE*	m_stream;
 	PathName		m_filePath;
-	uint32_t		m_openModeFlags;
+	FileOpenMode	m_openModeFlags;
 };
 
 } // namespace Lumino

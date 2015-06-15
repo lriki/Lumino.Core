@@ -12,25 +12,25 @@ TEST_F(Test_IO_FileStream, Open)
 {
 	// Write
 	{
-		FileStream file1(LOCALFILE("TestData/Test_IO_FileStream1.txt"), FileOpenMode_Write);
+		FileStream file1(LOCALFILE("TestData/Test_IO_FileStream1.txt"), FileOpenMode::Write);
 		ASSERT_EQ(0, file1.GetLength());	// 空ファイルになる
 		file1.Write("A", 1);
 	}
 	// Write | Truncate (↑と同じ動作)
 	{
-		FileStream file1(LOCALFILE("TestData/Test_IO_FileStream1.txt"), FileOpenMode_Write | FileOpenMode_Truncate);
+		FileStream file1(LOCALFILE("TestData/Test_IO_FileStream1.txt"), FileOpenMode::Write | FileOpenMode::Truncate);
 		ASSERT_EQ(0, file1.GetLength());	// 空ファイルになる
 		file1.Write("B", 1);
 	}
 	// Write | Append
 	{
-		FileStream file1(LOCALFILE("TestData/Test_IO_FileStream1.txt"), FileOpenMode_Write | FileOpenMode_Append);
+		FileStream file1(LOCALFILE("TestData/Test_IO_FileStream1.txt"), FileOpenMode::Write | FileOpenMode::Append);
 		ASSERT_EQ(1, file1.GetLength());	// "B" が書かれている
 		file1.Write("C", 1);
 	}
 	// ReadWrite
 	{
-		FileStream file1(LOCALFILE("TestData/Test_IO_FileStream1.txt"), FileOpenMode_ReadWrite);
+		FileStream file1(LOCALFILE("TestData/Test_IO_FileStream1.txt"), FileOpenMode::ReadWrite);
 		ASSERT_EQ(2, file1.GetLength());	// "BC" が書かれている
 		char buf[2];
 		file1.Read(buf, 2);
@@ -42,7 +42,7 @@ TEST_F(Test_IO_FileStream, Open)
 	}
 	// ReadWrite | Append
 	{
-		FileStream file1(LOCALFILE("TestData/Test_IO_FileStream1.txt"), FileOpenMode_ReadWrite | FileOpenMode_Append);
+		FileStream file1(LOCALFILE("TestData/Test_IO_FileStream1.txt"), FileOpenMode::ReadWrite | FileOpenMode::Append);
 		ASSERT_EQ(2, file1.GetLength());	// "DC" が書かれている
 		file1.Write("E", 1);
 		file1.Seek(0, SeekOrigin_Begin);
@@ -52,7 +52,7 @@ TEST_F(Test_IO_FileStream, Open)
 	}
 	// ReadWrite | Truncate
 	{
-		FileStream file1(LOCALFILE("TestData/Test_IO_FileStream1.txt"), FileOpenMode_ReadWrite | FileOpenMode_Truncate);
+		FileStream file1(LOCALFILE("TestData/Test_IO_FileStream1.txt"), FileOpenMode::ReadWrite | FileOpenMode::Truncate);
 		ASSERT_EQ(0, file1.GetLength());	// 空ファイルになる
 		file1.Write("F", 1);
 		file1.Seek(0, SeekOrigin_Begin);
@@ -62,7 +62,7 @@ TEST_F(Test_IO_FileStream, Open)
 	}
 	// Read | Truncate
 	{
-		FileStream file1(LOCALFILE("TestData/Test_IO_FileStream1.txt"), FileOpenMode_Read);
+		FileStream file1(LOCALFILE("TestData/Test_IO_FileStream1.txt"), FileOpenMode::Read);
 		char buf[2] = { 0 };
 		file1.Read(buf, 1);
 		ASSERT_STREQ("F", buf);
@@ -74,25 +74,25 @@ TEST_F(Test_IO_FileStream, FileOpenMode_Deferring)
 {
 	// Write
 	{
-		FileStream file1(LOCALFILE("TestData/Test_IO_FileStream1.txt"), FileOpenMode_Write | FileOpenMode_Deferring);
+		FileStream file1(LOCALFILE("TestData/Test_IO_FileStream1.txt"), FileOpenMode::Write | FileOpenMode::Deferring);
 		ASSERT_EQ(0, file1.GetLength());	// 空ファイルになる
 		file1.Write("A", 1);
 	}
 	// Write | Truncate (↑と同じ動作)
 	{
-		FileStream file1(LOCALFILE("TestData/Test_IO_FileStream1.txt"), FileOpenMode_Write | FileOpenMode_Truncate | FileOpenMode_Deferring);
+		FileStream file1(LOCALFILE("TestData/Test_IO_FileStream1.txt"), FileOpenMode::Write | FileOpenMode::Truncate | FileOpenMode::Deferring);
 		ASSERT_EQ(0, file1.GetLength());	// 空ファイルになる
 		file1.Write("B", 1);
 	}
 	// Write | Append
 	{
-		FileStream file1(LOCALFILE("TestData/Test_IO_FileStream1.txt"), FileOpenMode_Write | FileOpenMode_Append | FileOpenMode_Deferring);
+		FileStream file1(LOCALFILE("TestData/Test_IO_FileStream1.txt"), FileOpenMode::Write | FileOpenMode::Append | FileOpenMode::Deferring);
 		ASSERT_EQ(1, file1.GetLength());	// "B" が書かれている
 		file1.Write("C", 1);
 	}
 	// ReadWrite
 	{
-		FileStream file1(LOCALFILE("TestData/Test_IO_FileStream1.txt"), FileOpenMode_ReadWrite | FileOpenMode_Deferring);
+		FileStream file1(LOCALFILE("TestData/Test_IO_FileStream1.txt"), FileOpenMode::ReadWrite | FileOpenMode::Deferring);
 		ASSERT_EQ(2, file1.GetLength());	// "BC" が書かれている
 		char buf[2];
 		file1.Read(buf, 2);
@@ -104,7 +104,7 @@ TEST_F(Test_IO_FileStream, FileOpenMode_Deferring)
 	}
 	// ReadWrite | Append
 	{
-		FileStream file1(LOCALFILE("TestData/Test_IO_FileStream1.txt"), FileOpenMode_ReadWrite | FileOpenMode_Append | FileOpenMode_Deferring);
+		FileStream file1(LOCALFILE("TestData/Test_IO_FileStream1.txt"), FileOpenMode::ReadWrite | FileOpenMode::Append | FileOpenMode::Deferring);
 		ASSERT_EQ(2, file1.GetLength());	// "DC" が書かれている
 		file1.Write("E", 1);
 		file1.Seek(0, SeekOrigin_Begin);
@@ -114,7 +114,7 @@ TEST_F(Test_IO_FileStream, FileOpenMode_Deferring)
 	}
 	// ReadWrite | Truncate
 	{
-		FileStream file1(LOCALFILE("TestData/Test_IO_FileStream1.txt"), FileOpenMode_ReadWrite | FileOpenMode_Truncate | FileOpenMode_Deferring);
+		FileStream file1(LOCALFILE("TestData/Test_IO_FileStream1.txt"), FileOpenMode::ReadWrite | FileOpenMode::Truncate | FileOpenMode::Deferring);
 		ASSERT_EQ(0, file1.GetLength());	// 空ファイルになる
 		file1.Write("F", 1);
 		file1.Seek(0, SeekOrigin_Begin);
@@ -124,7 +124,7 @@ TEST_F(Test_IO_FileStream, FileOpenMode_Deferring)
 	}
 	// Read | Truncate
 	{
-		FileStream file1(LOCALFILE("TestData/Test_IO_FileStream1.txt"), FileOpenMode_Read | FileOpenMode_Deferring);
+		FileStream file1(LOCALFILE("TestData/Test_IO_FileStream1.txt"), FileOpenMode::Read | FileOpenMode::Deferring);
 		char buf[2] = { 0 };
 		file1.Read(buf, 1);
 		ASSERT_STREQ("F", buf);

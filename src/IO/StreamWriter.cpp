@@ -16,12 +16,12 @@ namespace Lumino
 StreamWriter::StreamWriter(const PathName& filePath, Text::Encoding* encoding, FileWriteMode mode)
 {
 	// モード選択
-	uint32_t openMode;
+	FileOpenMode openMode;
 	if (mode == FileWriteMode_Truncate) {
-		openMode = FileOpenMode_Write | FileOpenMode_Truncate;
+		openMode = FileOpenMode::Write | FileOpenMode::Truncate;
 	}
 	else {
-		openMode = FileOpenMode_Write | FileOpenMode_Append;
+		openMode = FileOpenMode::Write | FileOpenMode::Append;
 	}
 	
 	// ファイルを開く

@@ -11,16 +11,16 @@ namespace Lumino
 //-----------------------------------------------------------------------------
 FileStream::FileStream()
 	: m_stream(NULL)
-	, m_openModeFlags(0)
+	, m_openModeFlags(FileOpenMode::None)
 {
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-FileStream::FileStream(const TCHAR* filePath, uint32_t openMode)
+FileStream::FileStream(const TCHAR* filePath, FileOpenMode openMode)
 	: m_stream(NULL)
-	, m_openModeFlags(0)
+	, m_openModeFlags(FileOpenMode::None)
 {
 	Open(filePath, openMode);
 }
@@ -36,7 +36,7 @@ FileStream::~FileStream()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void FileStream::Open(const TCHAR* filePath, uint32_t openMode)
+void FileStream::Open(const TCHAR* filePath, FileOpenMode openMode)
 {
 	LN_ASSERT( filePath );
 	Close();
@@ -45,7 +45,7 @@ void FileStream::Open(const TCHAR* filePath, uint32_t openMode)
 	m_openModeFlags = openMode;
 
 	// 遅延オープンでなければここで開いてしまう
-	if ((m_openModeFlags & FileOpenMode_Deferring) == 0) {
+	if (!m_openModeFlags.TestFlag(FileOpenMode::Deferring)) {
 		Open();
 	}
 }
@@ -65,7 +65,7 @@ void FileStream::Close()
 //-----------------------------------------------------------------------------
 bool FileStream::CanRead() const
 {
-	return ((m_openModeFlags & FileOpenMode_Read) != 0);
+	return (m_openModeFlags.TestFlag(FileOpenMode::Read));
 }
 
 //-----------------------------------------------------------------------------
@@ -73,7 +73,7 @@ bool FileStream::CanRead() const
 //-----------------------------------------------------------------------------
 bool FileStream::CanWrite() const
 {
-	return ((m_openModeFlags & FileOpenMode_Write) != 0);
+	return (m_openModeFlags.TestFlag(FileOpenMode::Write));
 }
 
 //-----------------------------------------------------------------------------
@@ -144,7 +144,7 @@ void FileStream::Flush()
 //-----------------------------------------------------------------------------
 void FileStream::CheckOpen() const
 {
-	if ((m_openModeFlags & FileOpenMode_Deferring) != 0)
+	if (m_openModeFlags.TestFlag(FileOpenMode::Deferring))
 	{
 		if (m_stream == NULL)
 		{
@@ -165,36 +165,36 @@ void FileStream::Open() const
 	LN_THROW(m_stream == NULL, InvalidOperationException);
 
 	const TCHAR* mode = NULL;
-	if ((m_openModeFlags & FileOpenMode_ReadWrite) == FileOpenMode_ReadWrite)
+	if (m_openModeFlags.TestFlag(FileOpenMode::ReadWrite))
 	{
-		if (m_openModeFlags & FileOpenMode_Append) {
+		if (m_openModeFlags.TestFlag(FileOpenMode::Append)) {
 			mode = _T("a+b");		// 読み取りと書き込み (末尾に追加する)
 		}
-		else if (m_openModeFlags & FileOpenMode_Truncate) {
+		else if (m_openModeFlags.TestFlag(FileOpenMode::Truncate)) {
 			mode = _T("w+b");		// 読み取りと書き込み (ファイルを空にする)
 		}
 		else {
 			mode = _T("r+b");		// 読み取りと書き込み (ファイルが存在しない場合はエラー)
 		}
 	}
-	else if (m_openModeFlags & FileOpenMode_Write)
+	else if (m_openModeFlags.TestFlag(FileOpenMode::Write))
 	{
-		if (m_openModeFlags & FileOpenMode_Append) {
+		if (m_openModeFlags.TestFlag(FileOpenMode::Append)) {
 			mode = _T("ab");		// 書き込み (末尾に追加する。ファイルが無ければ新規作成)
 		}
-		else if (m_openModeFlags & FileOpenMode_Truncate) {
+		else if (m_openModeFlags.TestFlag(FileOpenMode::Truncate)) {
 			mode = _T("wb");		// 書き込み (ファイルを空にする)
 		}
 		else {
 			mode = _T("wb");		// 書き込み (モード省略。Truncate)
 		}
 	}
-	else if (m_openModeFlags & FileOpenMode_Read)
+	else if (m_openModeFlags.TestFlag(FileOpenMode::Read))
 	{
-		if (m_openModeFlags & FileOpenMode_Append) {
+		if (m_openModeFlags.TestFlag(FileOpenMode::Append)) {
 			mode = NULL;			// 読み込みなのに末尾追加はできない
 		}
-		else if (m_openModeFlags & FileOpenMode_Truncate) {
+		else if (m_openModeFlags.TestFlag(FileOpenMode::Truncate)) {
 			mode = NULL;			// 読み込みなのにファイルを空にはできない
 		}
 		else {
