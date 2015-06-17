@@ -42,6 +42,7 @@ set(LN_SOURCES_Base
 	include/Lumino/Base/Delegate.inl
 	include/Lumino/Base/DllLoader.h
 	include/Lumino/Base/ElapsedTimer.h
+	include/Lumino/Base/EnumExtension.h
 	include/Lumino/Base/Environment.h
 	include/Lumino/Base/Event.h
 	include/Lumino/Base/Event.inl
@@ -318,7 +319,7 @@ endif()
 add_library(${PROJECT_NAME}_Static STATIC ${LN_SOURCES})
 set_target_properties(${PROJECT_NAME}_Static PROPERTIES OUTPUT_NAME "${PROJECT_NAME}${LN_LIB_POSTFIX}")
 target_link_libraries(${PROJECT_NAME}_Static ${LN_LINK_LIBS})
-add_custom_command(TARGET ${PROJECT_NAME}_Static POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${PROJECT_NAME}_Static> "${PROJECT_SOURCE_DIR}/lib")
+add_custom_command(TARGET ${PROJECT_NAME}_Static POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${PROJECT_NAME}_Static> "${CMAKE_SOURCE_DIR}/lib")
 
 # Unit test.
 add_subdirectory(test)

@@ -95,3 +95,9 @@ TEST_F(Test_Base_Encoding_UTF8, Basic)
 		}
 	}
 }
+
+////---------------------------------------------------------------------
+//TEST_F(Test_Base_Encoding_UTF8, Issues)
+//{
+//
+//}

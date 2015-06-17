@@ -1,6 +1,7 @@
-﻿
+﻿/**
+	@file	Delegate.h
+*/
 #pragma once
-
 #include "RefObject.h"
 
 namespace Lumino
