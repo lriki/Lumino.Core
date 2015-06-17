@@ -2,7 +2,7 @@
 	@file	ArchiveMaker.h
 */
 #pragma once
-
+#ifdef LN_UNICODE
 #include <Lumino/IO/PathName.h>
 
 namespace Lumino
@@ -77,6 +77,8 @@ private:
 	uint32_t				m_fileCount;		///< ファイル数
 	KEY_TABLE_TYPE			m_keyTable;
     int						m_blockLength;
-};
+}
 
 } // namespace Lumino
+
+#endif
