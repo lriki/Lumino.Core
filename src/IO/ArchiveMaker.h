@@ -77,7 +77,7 @@ private:
 	uint32_t				m_fileCount;		///< ファイル数
 	KEY_TABLE_TYPE			m_keyTable;
     int						m_blockLength;
-}
+};
 
 } // namespace Lumino
 
