@@ -68,6 +68,27 @@ public:
 	static const TChar* GetFileNameSub(const TChar* path);
 
 	/**
+		@brief		指定したパス文字列のファイル名を拡張子を付けずに返します。
+		@param[in]	path	: パス文字列
+		@param[out]	outPath	: ファイル名を格納するバッファ (LN_MAX_PATH 文字の領域があること)
+	*/
+	template<typename TChar>
+	static void GetFileNameWithoutExtension(const TChar* path, TChar* outPath);
+
+	/**
+		@brief		パス文字列の中から拡張子を返します。
+		@param[in]	path	: パス文字列
+		@param[out]	outExt	: '.' を含む拡張子を格納するバッファ (LN_MAX_PATH 文字の領域があること)
+		@code
+					"file.txt"			=> ".txt"
+					"dir.a\file"		=> ""
+					"file."				=> ""
+		@endcode
+	*/
+	template<typename TChar>
+	static void GetExtension(const TChar* path, TChar* outExt);
+
+	/**
 		@brief		パスを単純化する
 		@param[in]	srcPath	: 元ファイルパス
 		@param[in]	outPath	: 単純化したパスの格納先 (LN_MAX_PATH + 1 の領域があること)

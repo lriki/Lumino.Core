@@ -201,6 +201,60 @@ template const wchar_t* PathUtils::GetFileNameSub(const wchar_t* path);
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
+void PathUtils::GetFileNameWithoutExtension(const TChar* path, TChar* outExt)
+{
+	if (path == NULL || outExt == NULL) { return; }
+	outExt[0] = 0x00;
+
+	const TChar* fileName = GetFileNameSub(path);
+	int len = StringUtils::StrLen(fileName);
+	int i = StringUtils::LastIndexOf(fileName, len, LN_T(TChar, "."), 1, 0, len, CaseSensitivity_CaseSensitive);
+	if (i >= 0) {
+		StringUtils::StrNCpy(outExt, LN_MAX_PATH, fileName, i);
+		outExt[i] = '\0';
+	}
+	else {
+		StringUtils::StrNCpy(outExt, LN_MAX_PATH, fileName, len);
+		outExt[len] = '\0';
+	}
+}
+template void PathUtils::GetFileNameWithoutExtension(const char* path, char* outExt);
+template void PathUtils::GetFileNameWithoutExtension(const wchar_t* path, wchar_t* outExt);
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+void PathUtils::GetExtension(const TChar* path, TChar* outExt)
+{
+	if (path == NULL || outExt == NULL) { return; }
+
+	outExt[0] = 0x00;
+	int len = StringUtils::StrLen(path);
+	for (int i = len; i >= 0; --i)
+	{
+		TChar ch = path[i];
+		if (ch == '.')
+		{
+			if (i != len - 1) {
+				StringUtils::StrNCpy(outExt, LN_MAX_PATH, &path[i], len - i);
+			}
+			else {
+				break;	// "file." のようなパターン
+			}
+		}
+		if (ch == DirectorySeparatorChar || ch == AltDirectorySeparatorChar || ch == VolumeSeparatorChar) {
+			break;		// . の前にセパレータが見つかった
+		}
+	}
+}
+template void PathUtils::GetExtension(const char* path, char* outExt);
+template void PathUtils::GetExtension(const wchar_t* path, wchar_t* outExt);
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
 int PathUtils::CanonicalizePath(const TChar* srcPath, size_t srcLen, TChar* outPath)
 {
 	/*	
