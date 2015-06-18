@@ -10,6 +10,8 @@
 	@endcode
 */
 #pragma once
+#include "Array.h"
+#include "String.h"
 
 /**
 	@brief	ägí£ enum å^ÇíËã`ÇµÇ‹Ç∑ÅB
@@ -49,8 +51,7 @@
 */
 #define LN_ENUM_REFLECTION(enumName, ...) \
 private: \
-	typedef _##enumName enum_type; \
-	struct LocalEnumParser : public EnumParser <enum_type> { LocalEnumParser() { enumName::enum_type values[] = { __VA_ARGS__ };  Init(values, LN_ARRAY_SIZE_OF(values), #__VA_ARGS__); } }; \
+	struct LocalEnumParser : public EnumParser <_##enumName> { LocalEnumParser() { _##enumName values[] = { __VA_ARGS__ };  Init(values, LN_ARRAY_SIZE_OF(values), #__VA_ARGS__); } }; \
 	static LocalEnumParser& GetEnumParser() { static LocalEnumParser parser; return parser; } \
 public: \
 	String ToString() const { return GetEnumParser().ToString(m_value); } \
@@ -119,8 +120,7 @@ public: \
 */
 #define LN_ENUM_FLAGS_REFLECTION(enumName, ...) \
 private: \
-	typedef _##enumName enum_type; \
-	struct LocalEnumParser : public EnumFlagsParser <enum_type> { LocalEnumParser() { enumName::enum_type values[] = { __VA_ARGS__ };  Init(values, LN_ARRAY_SIZE_OF(values), #__VA_ARGS__); } }; \
+	struct LocalEnumParser : public EnumFlagsParser <_##enumName> { LocalEnumParser() { _##enumName values[] = { __VA_ARGS__ };  Init(values, LN_ARRAY_SIZE_OF(values), #__VA_ARGS__); } }; \
 	static LocalEnumParser& GetEnumParser() { static LocalEnumParser parser; return parser; } \
 public: \
 	String ToString(const TCHAR* separator = _T("|")) const { return GetEnumParser().ToString(m_value, separator); } \
@@ -204,10 +204,11 @@ protected:
 	struct EnumFlagsParser : public EnumParser<TEnum>
 	{
 	public:
+		typedef typename EnumParser<TEnum>::Pair Pair;
 
 		static String ToString(int value, const TCHAR* separator)
 		{
-			ArrayList<Pair>& members = GetMemberList();
+			ArrayList<Pair>& members = EnumParser<TEnum>::GetMemberList();
 			String out;
 			for (int i = 0; i < members.GetCount(); ++i)
 			{
@@ -306,10 +307,11 @@ protected:
 
 		static bool TryParseInternal(const TCHAR* str, int len, int* outValue)
 		{
-			ArrayList<Pair>& members = GetMemberList();
+			ArrayList<Pair>& members = EnumParser<TEnum>::GetMemberList();
 			for (int i = 0; i < members.GetCount(); ++i)
 			{
-				if (_tcsncmp(members[i].Name.GetCStr(), str, len) == 0)
+				//if (_tcsncmp(members[i].Name.GetCStr(), str, len) == 0)
+				if (members[i].Name.Compare(str, len) == 0)
 				{
 					*outValue = members[i].Value;
 					return true;
