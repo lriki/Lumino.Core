@@ -32,7 +32,7 @@ public:
     T Get() const 
     {
         if (m_isSet) return m_value;
-        else throw std::logic_error("Value of Nullable is not set.");
+        LN_THROW(0, InvalidOperationException);
     }
 
 	bool IsSet() const { return m_isSet; }

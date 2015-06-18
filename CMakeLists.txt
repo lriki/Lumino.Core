@@ -18,7 +18,7 @@ option(LN_USE_UNICODE_CHAR_SET "Use unicode char set." OFF)
 endif()
 
 # MSVC Runtime library.
-option(MSVC_LINK_MULTI_THREAD_STATIC_RUNTIME "static runtime (/MT, /MTd) or DLL runtime (/MD, /MDd) or to link either." ON)
+option(LN_MSVC_LINK_MULTI_THREAD_STATIC_RUNTIME "static runtime (/MT, /MTd) or DLL runtime (/MD, /MDd) or to link either." ON)
 
 # Exceprion Backtrace.
 option(LN_EXCEPTION_BACKTRACE "In some unix environment there is a possibility that can not be compiled." ON)
@@ -247,7 +247,7 @@ if (WIN32)
 	set(LN_LIB_POSTFIX "${LN_LIB_POSTFIX}_static")
 	
 	# MSVC Runtime library.
-	if (MSVC_LINK_MULTI_THREAD_STATIC_RUNTIME)
+	if (LN_MSVC_LINK_MULTI_THREAD_STATIC_RUNTIME)
 		set(LN_LIB_POSTFIX "${LN_LIB_POSTFIX}_MT")
 		# Overwrite options.
 		foreach (flag
