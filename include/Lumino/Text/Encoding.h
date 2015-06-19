@@ -89,6 +89,12 @@ public:
 	static Encoding* GetUTF16Encoding();
 
 	/**
+		@brief		UTF-16 (Little) エンコーディングを取得する。
+		@details	返されるポインタはグローバルなインスタンスです。このポインタは解放しないでください。
+	*/
+	static Encoding* GetUTF32Encoding();
+
+	/**
 		@brief		種類を指定してエンコーディングを取得します。
 		@details	返されるポインタはグローバルなインスタンスです。このポインタは解放しないでください。
 	*/
@@ -136,6 +142,39 @@ public:
 	static ByteBuffer* Convert(
 		const void* src, size_t srcByteCount, Decoder* decoder,
 		Encoder* encoder,
+		EncodingConversionResult* result);
+
+	/**
+		@brief		文字コードを変換します。
+		@param[in]	src				: 変換元
+		@param[in]	srcByteCount	: src のバイト数
+		@param[in]	srcEncoding		: src のエンコーディング
+		@param[in]	dest			: 変換結果を格納するバッファ
+		@param[in]	destByteCount	: dest のバイト数
+		@param[in]	destEncoding	: dest のエンコーディング
+		@param[out]	result			: 変換の結果情報
+		@details	\0終端文字は付加されません。result.BytesUsed により使用バイト数を確認できます。
+	*/
+	static void Convert(
+		const void* src, size_t srcByteCount, Encoding* srcEncoding,
+		void* dest, size_t destByteCount, Encoding* destEncoding,
+		EncodingConversionResult* result);
+
+	/**
+		@brief		文字コードを変換します。
+		@param[in]	src				: 変換元
+		@param[in]	srcByteCount	: src のバイト数
+		@param[in]	srcDecoder		: src に対するデコーダ
+		@param[in]	dest			: 変換結果を格納するバッファ
+		@param[in]	destByteCount	: dest のバイト数
+		@param[in]	destEncoder		: dest に対するエンコーダ
+		@param[out]	result			: 変換の結果情報
+		@details	指定された Encoder と Decoder は、変換ステータスを保持できる場合は保持します。
+					\0終端文字は付加されません。result.BytesUsed により使用バイト数を確認できます。
+	*/
+	static void Convert(
+		const void* src, size_t srcByteCount, Decoder* srcDecoder,
+		void* dest, size_t destByteCount, Encoder* destEncoder,
 		EncodingConversionResult* result);
 
 public:

@@ -76,6 +76,15 @@ Encoding* Encoding::GetUTF16Encoding()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+Encoding* Encoding::GetUTF32Encoding()
+{
+	static UTF32Encoding encoding(false, false);
+	return &encoding;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 Encoding* Encoding::GetEncoding(EncodingType type)
 {
 	switch (type)
@@ -214,6 +223,79 @@ ByteBuffer* Encoding::Convert(
 	targetBuf->Resize(bytesUsed);	// 出力バッファの見かけ上のサイズを、実際に使用したバイト数にする
 	targetBuf.SafeAddRef();
 	return targetBuf;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void Encoding::Convert(
+	const void* src, size_t srcByteCount, Encoding* srcEncoding,
+	void* dest, size_t destByteCount, Encoding* destEncoding,
+	EncodingConversionResult* result)
+{
+	// TODO: できればメモリ確保はしたくないが…
+	RefPtr<Decoder> decoder(srcEncoding->CreateDecoder());
+	RefPtr<Encoder> encoder(destEncoding->CreateEncoder());
+	return Convert(src, srcByteCount, decoder.GetObjectPtr(), dest, destByteCount, encoder.GetObjectPtr(), result);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void Encoding::Convert(
+	const void* src_, size_t srcByteCount, Decoder* srcDecoder,
+	void* dest_, size_t destByteCount, Encoder* destEncoder,
+	EncodingConversionResult* result)
+{
+	/* メモリ確保を一切行わないようにするため、とりあえず1文字ずつ変換している。
+	 * 仮想関数呼び出しのオーバーヘッドが気になるようなら数文字ずつ変換するのもアリ。
+	 */
+
+	UTF16 utf16[3];
+	size_t totalBytesUsed;
+	size_t totalCharsUsed;
+	size_t bytesUsed;
+	size_t charsUsed;
+	const byte_t* src = (const byte_t*)src_;
+	byte_t* dest = (byte_t*)dest_;
+	size_t srcPos = 0;
+	size_t destPos = 0;
+
+	for (;;)
+	{
+		if (srcPos >= srcByteCount || destPos >= destByteCount)
+		{
+			// 1文字だけ UTF16 へ
+			srcDecoder->ConvertToUTF16(
+				&src[srcPos],
+				srcByteCount,
+				utf16,
+				2,
+				&bytesUsed,
+				&charsUsed);
+			srcPos += bytesUsed;
+			
+			// UTF16 文字をターゲットへ
+			destEncoder->ConvertFromUTF16(
+				utf16,
+				bytesUsed,
+				&dest[destPos],
+				destByteCount - destPos,
+				&bytesUsed,
+				&charsUsed);
+			destPos += bytesUsed;
+
+			totalBytesUsed += bytesUsed;
+			totalCharsUsed += charsUsed;
+		}
+	}
+
+	if (result)
+	{
+		result->BytesUsed = totalBytesUsed;
+		result->CharsUsed = totalCharsUsed;
+		result->UsedDefaultChar = (srcDecoder->UsedDefaultCharCount() > 0 || destEncoder->UsedDefaultCharCount() > 0);
+	}
 }
 
 //-----------------------------------------------------------------------------

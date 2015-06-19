@@ -47,6 +47,7 @@ set(LN_SOURCES_Base
 	include/Lumino/Base/Event.h
 	include/Lumino/Base/Event.inl
 	include/Lumino/Base/Exception.h
+	include/Lumino/Base/Hash.h
 	include/Lumino/Base/List.h
 	include/Lumino/Base/Locale.h
 	include/Lumino/Base/Logger.h
@@ -69,6 +70,7 @@ set(LN_SOURCES_Base
 	src/Base/ElapsedTimer.cpp
 	src/Base/Environment.cpp
 	src/Base/Exception.cpp
+	src/Base/Hash.cpp
 	src/Base/Locale.cpp
 	src/Base/Logger.cpp
 	src/Base/Memory.cpp
