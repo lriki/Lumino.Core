@@ -70,7 +70,7 @@ void UTF16Encoding::UTF16Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t 
 	uint16_t* inWords = (uint16_t*)inBuffer;
 	size_t charCount = 0;
 	size_t usedByteCount = 0;
-	for (; inWordPos == SIZE_T_MAX || inWordPos < inWordCount;)
+	for (; inWordPos == SIZE_T_MAX || (inWordPos < inWordCount && outWordPos < outBufferCharCount);)
 	{
 		uint16_t ch = (inWordPos == SIZE_T_MAX) ? curLead : inWords[inWordPos];	// 途切れたバイトと結合した最初の1文字を考慮
 	

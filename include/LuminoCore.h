@@ -6,8 +6,6 @@
 #include "Lumino/Text/Encoding.h"
 #include "Lumino/Text/UnicodeUtils.h"
 #include "Lumino/Text/EncodingDetector.h"
-#include "Lumino/Text/UTF16Encoding.h"
-#include "Lumino/Text/UTF32Encoding.h"
 
 #include "Lumino/Base/String.h"
 #include "Lumino/Base/StringUtils.h"

@@ -1,5 +1,4 @@
 ﻿
-#ifdef LN_UNICODE
 #include <string>
 #include "../../external/camellia/camellia.h"
 #include <Lumino/IO/Common.h>
@@ -108,10 +107,10 @@ void ArchiveMaker::Close()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-bool ArchiveMaker::AddFile(const wchar_t* filePath, const wchar_t* aliasPath)
+bool ArchiveMaker::AddFile(const PathName& filePath, const wchar_t* aliasPath)
 {
 	FILE* stream;
-	errno_t err = _tfopen_s(&stream, filePath, "rb");
+	errno_t err = _tfopen_s(&stream, filePath, _T("rb"));
 	if (err == 0)
 	{
         // アクセス用の名前がなければ、ファイル名を代わりに使う
@@ -250,5 +249,3 @@ void ArchiveMaker::WriteU32Padding16(uint32_t v0, uint32_t v1)
 }
 
 } // namespace Lumino
-
-#endif

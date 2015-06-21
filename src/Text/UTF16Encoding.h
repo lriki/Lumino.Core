@@ -17,7 +17,7 @@ public:
 
 public:
 	// override Encoding
-	virtual int GetMinByteCount() const { return 4; }
+	virtual int GetMinByteCount() const { return 2; }
 	virtual int GetMaxByteCount() const { return 4; }
 	virtual Decoder* CreateDecoder() const { return LN_NEW UTF16Decoder(); }
 	virtual Encoder* CreateEncoder() const { return LN_NEW UTF16Encoder(); }

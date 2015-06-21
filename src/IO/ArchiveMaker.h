@@ -2,7 +2,6 @@
 	@file	ArchiveMaker.h
 */
 #pragma once
-#ifdef LN_UNICODE
 #include <Lumino/IO/PathName.h>
 
 namespace Lumino
@@ -49,7 +48,7 @@ public:
 		@return		true=成功 / false=失敗
 		@details	デストラクタでも呼び出されます。
 	*/
-	bool AddFile(const wchar_t* filePath, const wchar_t* aliasPath);
+	bool AddFile(const PathName& filePath, const wchar_t* aliasPath);
 
 private:
 
@@ -81,4 +80,3 @@ private:
 
 } // namespace Lumino
 
-#endif

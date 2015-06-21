@@ -252,8 +252,8 @@ void Encoding::Convert(
 	 */
 
 	UTF16 utf16[3];
-	size_t totalBytesUsed;
-	size_t totalCharsUsed;
+	size_t totalBytesUsed = 0;
+	size_t totalCharsUsed = 0;
 	size_t bytesUsed;
 	size_t charsUsed;
 	const byte_t* src = (const byte_t*)src_;
@@ -263,31 +263,32 @@ void Encoding::Convert(
 
 	for (;;)
 	{
-		if (srcPos >= srcByteCount || destPos >= destByteCount)
-		{
-			// 1文字だけ UTF16 へ
-			srcDecoder->ConvertToUTF16(
-				&src[srcPos],
-				srcByteCount,
-				utf16,
-				2,
-				&bytesUsed,
-				&charsUsed);
-			srcPos += bytesUsed;
-			
-			// UTF16 文字をターゲットへ
-			destEncoder->ConvertFromUTF16(
-				utf16,
-				bytesUsed,
-				&dest[destPos],
-				destByteCount - destPos,
-				&bytesUsed,
-				&charsUsed);
-			destPos += bytesUsed;
-
-			totalBytesUsed += bytesUsed;
-			totalCharsUsed += charsUsed;
+		if (srcPos >= srcByteCount || destPos >= destByteCount) {
+			break;
 		}
+
+		// 1文字だけ UTF16 へ
+		srcDecoder->ConvertToUTF16(
+			&src[srcPos],
+			srcByteCount,
+			utf16,
+			2,
+			&bytesUsed,
+			&charsUsed);
+		srcPos += bytesUsed;
+			
+		// UTF16 文字をターゲットへ
+		destEncoder->ConvertFromUTF16(
+			utf16,
+			bytesUsed / sizeof(UTF16),
+			&dest[destPos],
+			destByteCount - destPos,
+			&bytesUsed,
+			&charsUsed);
+		destPos += bytesUsed;
+
+		totalBytesUsed += bytesUsed;
+		totalCharsUsed += charsUsed;
 	}
 
 	if (result)
