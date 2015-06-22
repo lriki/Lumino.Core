@@ -6,6 +6,11 @@
 #include <stdlib.h>
 #include <dbghelp.h>
 
+#ifdef LN_DEBUG
+#else
+#include LN_BACKTRACE_LOG_HIDE	1
+#endif
+
 namespace Lumino
 {
 class BackTrace
@@ -251,8 +256,11 @@ public:
 		}
 
 		// 一通り揃った (ファイル名は出さないでおく。フルパスで出るのでローカルのフォルダ構成丸わかりだし… 関数名と行番号があれば十分)
+#ifdef LN_BACKTRACE_LOG_HIDE
 		_snprintf_s(outBuffer, len, _TRUNCATE, "0x%p @ %s @ %s @ XXXX:%d", address, imageModule.ModuleName, imageSymbol->Name, line.LineNumber);
-		//_snprintf_s(outBuffer, len, _TRUNCATE, "0x%p @ %s @ %s @ %s:%d", address, imageModule.ModuleName, imageSymbol->Name, line.FileName, line.LineNumber);
+#else
+		_snprintf_s(outBuffer, len, _TRUNCATE, "0x%p @ %s @ %s @ %s:%d", address, imageModule.ModuleName, imageSymbol->Name, line.FileName, line.LineNumber);
+#endif
 	}
 #endif // #ifdef LN_X64
 
@@ -274,13 +282,15 @@ public:
 
 			if (len - writesize >= 3) {
 				strncat_s(outBuffer + writesize, len - writesize, "\r\n", 3);
-				writesize += 3;
+				writesize += 2;
 			}
 
 			if (len <= writesize) {
 				break;
 			}
 		}
+
+		outBuffer[writesize] = '\0';
 	}
 
 	//バックトレースの取得して画面に表示

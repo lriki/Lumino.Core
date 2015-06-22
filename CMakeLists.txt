@@ -86,16 +86,22 @@ set(LN_SOURCES_Text
 	include/Lumino/Text/EncodingDetector.h
 	include/Lumino/Text/UnicodeUtils.h
 	src/Text/ASCIIEncoding.cpp
-	src/Text/DBCSEncoding.cpp
-	src/Text/UTF16Encoding.cpp
-	src/Text/UTF32Encoding.cpp
-	src/Text/Encoding.cpp
-	src/Text/EncodingDetector.cpp
-	src/Text/UnicodeUtils.cpp
+	src/Text/ASCIIEncoding.h
 	src/Text/ConvertTable_Big5.c
 	src/Text/ConvertTable_EUCKR.c
 	src/Text/ConvertTable_GB2312.c
-	src/Text/ConvertTable_SJIS.c)
+	src/Text/ConvertTable_SJIS.c
+	src/Text/DBCSEncoding.cpp
+	src/Text/DBCSEncoding.h
+	src/Text/Encoding.cpp
+	src/Text/EncodingDetector.cpp
+	src/Text/UnicodeUtils.cpp
+	src/Text/UTF8Encoding.cpp
+	src/Text/UTF8Encoding.h
+	src/Text/UTF16Encoding.cpp
+	src/Text/UTF16Encoding.h
+	src/Text/UTF32Encoding.cpp
+	src/Text/UTF32Encoding.h)
 
 set(LN_SOURCES_IO
 	include/Lumino/IO/ASyncIOObject.h

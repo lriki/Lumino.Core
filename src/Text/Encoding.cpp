@@ -6,6 +6,7 @@
 #include "../../include/Lumino/Text/Encoding.h"
 #include "ASCIIEncoding.h"
 #include "DBCSEncoding.h"
+#include "UTF8Encoding.h"
 #include "UTF16Encoding.h"
 #include "UTF32Encoding.h"
 
@@ -17,6 +18,8 @@ namespace Text
 //=============================================================================
 // Encoding
 //=============================================================================
+
+static const size_t CommonMaxBytes = 6;	///< 全Encoding中、最大の文字バイト数 (UTF8)
 
 //-----------------------------------------------------------------------------
 //
@@ -251,7 +254,7 @@ void Encoding::Convert(
 	 * 仮想関数呼び出しのオーバーヘッドが気になるようなら数文字ずつ変換するのもアリ。
 	 */
 
-	UTF16 utf16[3];
+	UTF16 utf16[CommonMaxBytes * sizeof(UTF16)];	// 一度に変換されるであろう最大文字数で中間バッファを用意
 	size_t totalBytesUsed = 0;
 	size_t totalCharsUsed = 0;
 	size_t bytesUsed;
@@ -267,15 +270,16 @@ void Encoding::Convert(
 			break;
 		}
 
-		// 1文字だけ UTF16 へ
+		// UTF16 へ
+		size_t srcBytes = std::min(srcByteCount - srcPos, CommonMaxBytes);
 		srcDecoder->ConvertToUTF16(
 			&src[srcPos],
-			srcByteCount,
+			srcBytes,
 			utf16,
-			2,
+			CommonMaxBytes,
 			&bytesUsed,
 			&charsUsed);
-		srcPos += bytesUsed;
+		srcPos += srcBytes;
 			
 		// UTF16 文字をターゲットへ
 		destEncoder->ConvertFromUTF16(
@@ -621,137 +625,6 @@ void SystemMultiByteEncoding::SystemMultiByteEncoder::ConvertFromUTF16(const UTF
 #endif
 	*/
 }
-
-//=============================================================================
-// UTF8Encoding
-//=============================================================================
-
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-UTF8Encoding::UTF8Encoding(bool byteOrderMark)
-	: m_byteOrderMark(byteOrderMark)
-{
-}
-
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-byte_t* UTF8Encoding::GetPreamble() const
-{
-	static byte_t bom[] = { 0xEF, 0xBB, 0xBF, NULL };
-	return bom;
-}
-
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-void UTF8Encoding::UTF8Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t inBufferByteCount, UTF16* outBuffer, size_t outBufferCharCount, size_t* outBytesUsed, size_t* outCharsUsed)
-{
-	// 変換設定
-	UTFConversionOptions options;
-	memset(&options, 0, sizeof(options));
-	options.ReplacementChar = mFallbackReplacementChar;
-
-	// BOM 付きの場合は取り除く (バッファ縮小)
-	if (m_byteOrderMark) {
-		static byte_t bom[] = { 0xEF, 0xBB, 0xBF };
-		int r = memcmp(inBuffer, bom, 3);
-		LN_THROW(r == 0, EncodingFallbackException);
-		inBuffer += 3;
-		inBufferByteCount -= 3;
-	}
-	
-	// 変換
-	UTFConversionResult result = UnicodeUtils::ConvertUTF8toUTF16(
-		(UnicodeUtils::UTF8*)inBuffer, 
-		inBufferByteCount,
-		(UnicodeUtils::UTF16*)outBuffer, 
-		outBufferCharCount,
-		&options);
-	LN_THROW(result == UTFConversionResult_Success, EncodingFallbackException);
-
-	// 出力
-	*outBytesUsed = options.ConvertedTargetLength * sizeof(UnicodeUtils::UTF16);
-	*outCharsUsed = options.CharCount;
-}
-
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-void UTF8Encoding::UTF8Encoder::ConvertFromUTF16(const UTF16* inBuffer, size_t inBufferCharCount, byte_t* outBuffer, size_t outBufferByteCount, size_t* outBytesUsed, size_t* outCharsUsed)
-{
-	// 変換設定
-	UTFConversionOptions options;
-	memset(&options, 0, sizeof(options));
-	options.ReplacementChar = mFallbackReplacementChar;
-	
-	// 変換
-	UTFConversionResult result = UnicodeUtils::ConvertUTF16toUTF8(
-		(UnicodeUtils::UTF16*)inBuffer, 
-		inBufferCharCount,
-		(UnicodeUtils::UTF8*)outBuffer, 
-		outBufferByteCount,
-		&options);
-	LN_THROW(result == UTFConversionResult_Success, EncodingFallbackException);
-
-	// 出力
-	*outBytesUsed = options.ConvertedTargetLength;
-	*outCharsUsed = options.CharCount;
-}
-
-
-#if 0
-//=============================================================================
-// UTF16Encoding
-//=============================================================================
-
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-byte_t* UTF16Encoding::GetPreamble() const
-{
-	// UTF-16 little endian byte order
-	static byte_t bom[] = { 0xFF, 0xFE, NULL };
-	return bom;
-}
-
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-void UTF16Encoding::UTF16Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t inBufferByteCount, UTF16* outBuffer, size_t outBufferCharCount, size_t* outBytesUsed, size_t* outCharsUsed)
-{
-	// UTF16 から UTF16 への変換。そのままコピーでよい
-	errno_t err = memcpy_s(outBuffer, outBufferCharCount * sizeof(UTF16), inBuffer, inBufferByteCount);
-	LN_THROW(err == 0, ArgumentException);
-
-	// 文字数はカウントする
-	int count;
-	UTFConversionResult r = UnicodeUtils::GetUTF16CharCount((UnicodeUtils::UTF16*)inBuffer, inBufferByteCount / sizeof(UnicodeUtils::UTF16), true, &count);
-	LN_THROW(r == UTFConversionResult_Success, EncodingFallbackException);
-
-	*outBytesUsed = inBufferByteCount;
-	*outCharsUsed = count;
-}
-
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-void UTF16Encoding::UTF16Encoder::ConvertFromUTF16(const UTF16* inBuffer, size_t inBufferCharCount, byte_t* outBuffer, size_t outBufferByteCount, size_t* outBytesUsed, size_t* outCharsUsed)
-{
-	// UTF16 から UTF16 への変換。そのままコピーでよい
-	errno_t err = memcpy_s(outBuffer, outBufferByteCount, inBuffer, inBufferCharCount * sizeof(UTF16));
-	LN_THROW(err == 0, ArgumentException);
-
-	// 文字数はカウントする
-	int count;
-	UTFConversionResult r = UnicodeUtils::GetUTF16CharCount((UnicodeUtils::UTF16*)inBuffer, inBufferCharCount, true, &count);
-	LN_THROW(r == UTFConversionResult_Success, EncodingFallbackException);
-
-	*outBytesUsed = inBufferCharCount * sizeof(UTF16);
-	*outCharsUsed = count;
-}
-#endif
 
 } // namespace Text
 } // namespace Lumino

@@ -33,6 +33,9 @@ set(LN_TEST_SOURCES
 	UnitTest/Json/Test_Json_JsonReader.cpp
 	UnitTest/Text/Test_Text_DBCSEncoding.cpp
 	UnitTest/Text/Test_Text_EncodingDetector.cpp
+	UnitTest/Text/Test_Text_UTF8Encoding.cpp
+	UnitTest/Text/Test_Text_UTF16Encoding.cpp
+	UnitTest/Text/Test_Text_UTF32Encoding.cpp
 	UnitTest/Threading/Test_Threading_Atomic.cpp
 	UnitTest/Threading/Test_Threading_EventFlag.cpp
 	UnitTest/Threading/Test_Threading_Thread.cpp
