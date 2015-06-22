@@ -19,7 +19,7 @@ namespace Text
 // Encoding
 //=============================================================================
 
-static const size_t CommonMaxBytes = 6;	///< 全Encoding中、最大の文字バイト数 (UTF8)
+//static const size_t CommonMaxBytes = 6;	///< 全Encoding中、最大の文字バイト数 (UTF8)
 
 //-----------------------------------------------------------------------------
 //
@@ -250,11 +250,13 @@ void Encoding::Convert(
 	void* dest_, size_t destByteCount, Encoder* destEncoder,
 	EncodingConversionResult* result)
 {
-	/* メモリ確保を一切行わないようにするため、とりあえず1文字ずつ変換している。
-	 * 仮想関数呼び出しのオーバーヘッドが気になるようなら数文字ずつ変換するのもアリ。
-	 */
+	LN_VERIFY_RETURN(srcDecoder != NULL);
+	LN_VERIFY_RETURN(srcDecoder->CanRemain());
+	LN_VERIFY_RETURN(destEncoder != NULL);
+	LN_VERIFY_RETURN(destEncoder->CanRemain());
 
-	UTF16 utf16[CommonMaxBytes * sizeof(UTF16)];	// 一度に変換されるであろう最大文字数で中間バッファを用意
+	const size_t BufferingElements = 512;
+	UTF16 utf16[BufferingElements];
 	size_t totalBytesUsed = 0;
 	size_t totalCharsUsed = 0;
 	size_t bytesUsed;
@@ -271,16 +273,16 @@ void Encoding::Convert(
 		}
 
 		// UTF16 へ
-		size_t srcBytes = std::min(srcByteCount - srcPos, CommonMaxBytes);
+		size_t srcBytes = std::min(srcByteCount - srcPos, BufferingElements);
 		srcDecoder->ConvertToUTF16(
 			&src[srcPos],
 			srcBytes,
 			utf16,
-			CommonMaxBytes,
+			BufferingElements,
 			&bytesUsed,
 			&charsUsed);
 		srcPos += srcBytes;
-			
+
 		// UTF16 文字をターゲットへ
 		destEncoder->ConvertFromUTF16(
 			utf16,
