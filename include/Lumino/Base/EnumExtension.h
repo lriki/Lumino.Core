@@ -147,13 +147,15 @@ protected:
 		// LN_ENUM_DECLARE マクロが非常に長くなるのを避けるため、部分的にクラス化した
 	public:
 		struct Pair { String Name; TEnum Value; };
-		static ArrayList<Pair>& GetMemberList()
+		typedef typename ArrayList<Pair> PairList;
+
+		static PairList& GetMemberList()
 		{
-			static ArrayList<Pair> members; return members;	// ヘッダ include だけで済ますため、static 変数は関数内に閉じ込めておく
+			static PairList members; return members;	// ヘッダ include だけで済ますため、static 変数は関数内に閉じ込めておく
 		}
 		void Init(const TEnum* values, int valuesCount, const char* argNames)
 		{
-			ArrayList<Pair>& members = GetMemberList();
+			PairList& members = GetMemberList();
 			String names = argNames;
 			ArrayList<String> tokens = names.Split(_T(","));
 			for (int i = 0; i < valuesCount; ++i)
@@ -166,7 +168,7 @@ protected:
 		}
 		static String ToString(int value)
 		{
-			ArrayList<Pair>& members = GetMemberList();
+			PairList& members = GetMemberList();
 			for (int i = 0; i < members.GetCount(); ++i)
 			{
 				if (members[i].Value == value) {
@@ -187,7 +189,7 @@ protected:
 		}
 		static bool TryParse(const TCHAR* str, int* outValue)
 		{
-			ArrayList<Pair>& members = GetMemberList();
+			PairList& members = GetMemberList();
 			for (int i = 0; i < members.GetCount(); ++i)
 			{
 				if (members[i].Name == str)
@@ -208,7 +210,7 @@ protected:
 
 		static String ToString(int value, const TCHAR* separator)
 		{
-			ArrayList<Pair>& members = EnumParser<TEnum>::GetMemberList();
+			PairList& members = EnumParser<TEnum>::GetMemberList();
 			String out;
 			for (int i = 0; i < members.GetCount(); ++i)
 			{
@@ -307,7 +309,7 @@ protected:
 
 		static bool TryParseInternal(const TCHAR* str, int len, int* outValue)
 		{
-			ArrayList<Pair>& members = EnumParser<TEnum>::GetMemberList();
+			PairList& members = EnumParser<TEnum>::GetMemberList();
 			for (int i = 0; i < members.GetCount(); ++i)
 			{
 				//if (_tcsncmp(members[i].Name.GetCStr(), str, len) == 0)
