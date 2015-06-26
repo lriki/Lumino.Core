@@ -479,14 +479,12 @@ void GenericString<TChar>::ConvertFrom(const void* buffer, size_t byteCount, con
 	else
 	{
 		Text::EncodingConversionResult info;
-		RefPtr<ByteBuffer> tmpBuffer(
-			Text::Encoding::Convert(buffer, byteCount, encoding, thisTypeEncoding,
-			&info));
+		const ByteBuffer tmpBuffer = Text::Encoding::Convert(buffer, byteCount, encoding, thisTypeEncoding, &info);
 		if (outUsedDefaultChar != NULL) {
 			*outUsedDefaultChar = info.UsedDefaultChar;
 		}
 
-		AssignTString((const TChar*)tmpBuffer->GetData(), info.BytesUsed / sizeof(TChar));
+		AssignTString((const TChar*)tmpBuffer.GetData(), info.BytesUsed / sizeof(TChar));
 	}
 }
 
@@ -494,14 +492,11 @@ void GenericString<TChar>::ConvertFrom(const void* buffer, size_t byteCount, con
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-ByteBuffer* GenericString<TChar>::ConvertTo(const Text::Encoding* encoding, bool* outUsedDefaultChar) const
+ByteBuffer GenericString<TChar>::ConvertTo(const Text::Encoding* encoding, bool* outUsedDefaultChar) const
 {
 	Text::EncodingConversionResult info;
 
-	ByteBuffer* buf = Text::Encoding::Convert(
-		GetCStr(), GetByteCount(), GetThisTypeEncoding(),
-		encoding,
-		&info);
+	const ByteBuffer buf = Text::Encoding::Convert(GetCStr(), GetByteCount(), GetThisTypeEncoding(), encoding, &info);
 	if (outUsedDefaultChar != NULL) {
 		*outUsedDefaultChar = info.UsedDefaultChar;
 	}
@@ -720,7 +715,7 @@ GenericString<TChar> GenericString<TChar>::Mid(int start, int count) const
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-ArrayList< GenericString<TChar> > GenericString<TChar>::Split(const TChar* delim, StringSplitOptions option) const
+Array< GenericString<TChar> > GenericString<TChar>::Split(const TChar* delim, StringSplitOptions option) const
 {
 	return StringUtils::Split(*this, delim, option);
 }

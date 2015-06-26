@@ -3,7 +3,6 @@
 #include <math.h>
 #include <wctype.h>
 #include "../../include/Lumino/Base/RefObject.h"
-#include "../../include/Lumino/Base/ByteBuffer.h"
 #include "../../include/Lumino/Base/String.h"
 #include "../../include/Lumino/Base/StringUtils.h"
 
@@ -507,9 +506,9 @@ template GenericString<wchar_t> StringUtils::Mid<wchar_t>(const wchar_t* str, in
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-ArrayList< GenericString<TChar> > StringUtils::Split(const GenericString<TChar>& str, const TChar* delim, StringSplitOptions option)
+Array< GenericString<TChar> > StringUtils::Split(const GenericString<TChar>& str, const TChar* delim, StringSplitOptions option)
 {
-	ArrayList< GenericString<TChar> > result;
+	Array< GenericString<TChar> > result;
 
 	// 最初の区切り文字を探す
 	int tokenStart = 0;
@@ -549,8 +548,8 @@ ArrayList< GenericString<TChar> > StringUtils::Split(const GenericString<TChar>&
 
 	return result;
 }
-template ArrayList< GenericString<char> > StringUtils::Split(const GenericString<char>& str, const char* delim, StringSplitOptions option);
-template ArrayList< GenericString<wchar_t> > StringUtils::Split(const GenericString<wchar_t>& str, const wchar_t* delim, StringSplitOptions option);
+template Array< GenericString<char> > StringUtils::Split(const GenericString<char>& str, const char* delim, StringSplitOptions option);
+template Array< GenericString<wchar_t> > StringUtils::Split(const GenericString<wchar_t>& str, const wchar_t* delim, StringSplitOptions option);
 
 //-----------------------------------------------------------------------------
 //

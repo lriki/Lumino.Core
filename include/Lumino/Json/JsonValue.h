@@ -135,8 +135,8 @@ private:
 	JsonMember& GetAtMember(int index) { return m_memberList->GetAt(index); }
 
 private:
-	typedef ArrayList<JsonValue>	ValueList;
-	typedef ArrayList<JsonMember>	MemberList;
+	typedef Array<JsonValue>	ValueList;
+	typedef Array<JsonMember>	MemberList;
 
 	Type	m_type;
 	union

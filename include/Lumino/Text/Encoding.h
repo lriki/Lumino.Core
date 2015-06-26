@@ -123,7 +123,7 @@ public:
 		@return		\0終端文字は付加されません。GetSize() により使用バイト数を確認できます。
 					使用後、Release() で開放する必要があります。
 	*/
-	static ByteBuffer* Convert(
+	static ByteBuffer Convert(
 		const void* src, size_t srcByteCount, const Encoding* srcEncoding,
 		const Encoding* targetEncoding,
 		EncodingConversionResult* result);
@@ -139,7 +139,7 @@ public:
 		@return		\0終端文字は付加されません。GetSize() により使用バイト数を確認できます。
 					使用後、Release() で開放する必要があります。
 	*/
-	static ByteBuffer* Convert(
+	static ByteBuffer Convert(
 		const void* src, size_t srcByteCount, Decoder* decoder,
 		Encoder* encoder,
 		EncodingConversionResult* result);

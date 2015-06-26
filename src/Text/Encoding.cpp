@@ -159,7 +159,7 @@ size_t Encoding::GetConversionRequiredByteCount(Encoding* from, Encoding* to, si
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-ByteBuffer* Encoding::Convert(
+ByteBuffer Encoding::Convert(
 	const void* src, size_t srcByteCount, const Encoding* srcEncoding,
 	const Encoding* targetEncoding,
 	EncodingConversionResult* result)
@@ -172,7 +172,7 @@ ByteBuffer* Encoding::Convert(
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-ByteBuffer* Encoding::Convert(
+ByteBuffer Encoding::Convert(
 	const void* src, size_t srcByteCount, Decoder* decoder,
 	Encoder* encoder,
 	EncodingConversionResult* result)
@@ -192,10 +192,10 @@ ByteBuffer* Encoding::Convert(
 	size_t outputMaxByteCount = srcMaxCharCount * encoder->GetMaxByteCount();
 
 	// 中間バッファ作成
-	RefPtr<ByteBuffer> tmpBuf(LN_NEW ByteBuffer(utf16MaxByteCount + sizeof(uint16_t), false));	// 終端 \0 考慮 (mbstowcs_s は \0 を書き込もうとする)
+	ByteBuffer tmpBuf(utf16MaxByteCount + sizeof(uint16_t), false);	// 終端 \0 考慮 (mbstowcs_s は \0 を書き込もうとする)
 
 	// 変換先バッファを、最大要素数で確保
-	RefPtr<ByteBuffer> targetBuf(LN_NEW ByteBuffer(outputMaxByteCount + encoder->GetMaxByteCount(), false));	// 終端 \0 考慮 (mbstowcs_s は \0 を書き込もうとする)
+	ByteBuffer targetBuf(outputMaxByteCount + encoder->GetMaxByteCount(), false);	// 終端 \0 考慮 (mbstowcs_s は \0 を書き込もうとする)
 
 	// 変換実行
 	size_t bytesUsed;
@@ -204,16 +204,16 @@ ByteBuffer* Encoding::Convert(
 	decoder->ConvertToUTF16(
 		(const byte_t*)src,
 		srcByteCount,
-		(UTF16*)tmpBuf->GetData(),
+		(UTF16*)tmpBuf.GetData(),
 		utf16MaxByteCount / sizeof(UTF16),			// \0 強制格納に備え、1文字分余裕のあるサイズを指定する
 		&bytesUsed,
 		&charsUsed);
 	// 中間フォーマットからターゲットフォーマットへ
 	encoder->ConvertFromUTF16(
-		(const UTF16*)tmpBuf->GetData(),
+		(const UTF16*)tmpBuf.GetData(),
 		bytesUsed / sizeof(UTF16),
-		(byte_t*)targetBuf->GetData(),
-		targetBuf->GetSize(),		// \0 強制格納に備え、1文字分余裕のあるサイズを指定する
+		(byte_t*)targetBuf.GetData(),
+		targetBuf.GetSize(),		// \0 強制格納に備え、1文字分余裕のあるサイズを指定する
 		&bytesUsed,
 		&charsUsed);
 
@@ -223,8 +223,7 @@ ByteBuffer* Encoding::Convert(
 		result->CharsUsed = charsUsed;
 		result->UsedDefaultChar = (decoder->UsedDefaultCharCount() > 0 || encoder->UsedDefaultCharCount() > 0);
 	}
-	targetBuf->Resize(bytesUsed);	// 出力バッファの見かけ上のサイズを、実際に使用したバイト数にする
-	targetBuf.SafeAddRef();
+	targetBuf.Resize(bytesUsed);	// 出力バッファの見かけ上のサイズを、実際に使用したバイト数にする
 	return targetBuf;
 }
 

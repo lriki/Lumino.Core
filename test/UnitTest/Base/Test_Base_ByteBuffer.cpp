@@ -13,7 +13,7 @@ TEST_F(Test_Base_ByteBuffer, Constructor)
 {
 	// デフォルト
 	ByteBuffer buf1;
-	ASSERT_EQ(NULL, buf1.GetData());
+	ASSERT_TRUE(buf1.GetData() != NULL);
 	ASSERT_EQ(0, buf1.GetSize());
 
 	// サイズ指定 + 0 クリア
@@ -53,6 +53,88 @@ TEST_F(Test_Base_ByteBuffer, Constructor)
 	ASSERT_EQ('e', buf6[1]);
 	ASSERT_EQ('s', buf6[2]);
 	ASSERT_EQ('t', buf6[3]);
+
+	// <Test> 0byte 確保
+	{
+		ByteBuffer buf((size_t)0);
+		ASSERT_TRUE(buf1.GetData() != NULL);
+		ASSERT_EQ(0, buf1.GetSize());
+	}
+}
+
+//-----------------------------------------------------------------------------
+TEST_F(Test_Base_ByteBuffer, CopyInstance)
+{
+	char buf[] = "abc";
+
+	// <Test> デフォルトの空バッファをコピーコンストラクタで共有
+	{
+		ByteBuffer buf1;
+		ByteBuffer buf2 = buf1;
+		ASSERT_EQ(buf1.GetData(), buf2.GetData());
+	}
+	// <Test> デフォルトの空バッファをoperator = で共有
+	{
+		ByteBuffer buf1, buf2;
+		buf2 = buf1;
+		ASSERT_EQ(buf1.GetData(), buf2.GetData());
+	}
+	// <Test> 非 const GetData() の呼び出しで再確保される。
+	{
+		ByteBuffer buf1(buf, 3);
+		ByteBuffer buf2 = buf1;
+		buf1.GetData();
+		ASSERT_NE(buf1.GetData(), buf2.GetData());	// 再確保が走ってしまうがやむなし。
+	}
+	// <Test> const GetData() の暗黙的呼び出しで再確保されない。
+	{
+		const ByteBuffer buf1(buf, 3);
+		const ByteBuffer buf2 = buf1;
+		ASSERT_EQ(buf1.GetData(), buf2.GetData());	// 再確保は走らない。
+	}
+	// <Test> バッファをコピーコンストラクタで共有
+	{
+		const ByteBuffer buf1(buf, 3);
+		const ByteBuffer buf2 = buf1;
+		ASSERT_EQ(buf1.GetData(), buf2.GetData());
+		ASSERT_EQ(3, buf1.GetSize());
+		ASSERT_EQ(3, buf2.GetSize());
+		ASSERT_TRUE(memcmp(buf2.GetData(), buf, 3) == 0);
+	}
+	// <Test> バッファをoperator = で共有
+	{
+		const ByteBuffer buf1(buf, 3);
+		ByteBuffer buf2;
+		buf2 = buf1;
+		ASSERT_EQ(buf1.GetConstData(), buf2.GetConstData());
+		ASSERT_EQ(3, buf1.GetSize());
+		ASSERT_EQ(3, buf2.GetSize());
+		ASSERT_TRUE(memcmp(buf2.GetData(), buf, 3) == 0);
+	}
+	// <Test> 共有後、Resize するとメモリは再配置されるが内容は維持される。
+	{
+		ByteBuffer buf1(buf, 3);
+		ByteBuffer buf2 = buf1;
+		const byte_t* ptr = buf2.GetConstData();
+		buf2.Resize(100);
+		ASSERT_EQ(100, buf2.GetSize());
+		ASSERT_NE(ptr, buf2.GetConstData());
+		ASSERT_TRUE(memcmp(buf2.GetConstData(), buf, 3) == 0);
+	}
+	// <Test> 自己代入できる。
+	{
+		ByteBuffer buf1(buf, 3);
+		buf1 = buf1;
+		ASSERT_EQ(3, buf1.GetSize());
+		ASSERT_TRUE(memcmp(buf1.GetConstData(), buf, 3) == 0);
+	}
+	// <Test> 共有されていなければ GetData() を読んでも再配置は行われない。
+	{
+		ByteBuffer buf1(buf, 3);
+		const byte_t* ptr = buf1.GetConstData();
+		buf1.GetData();
+		ASSERT_EQ(ptr, buf1.GetConstData());
+	}
 }
 
 //-----------------------------------------------------------------------------

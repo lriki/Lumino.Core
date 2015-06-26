@@ -381,9 +381,9 @@ TEST_F(Test_Base_String, ConvertTo)
 {
 	{
 		StringA str1("test");
-		RefPtr<ByteBuffer> buf(str1.ConvertTo(Text::Encoding::GetWideCharEncoding()));
-		wchar_t* wstr = (wchar_t*)buf->GetData();
-		ASSERT_EQ(sizeof(wchar_t) * 4, buf->GetSize());
+		ByteBuffer buf = str1.ConvertTo(Text::Encoding::GetWideCharEncoding());
+		wchar_t* wstr = (wchar_t*)buf.GetData();
+		ASSERT_EQ(sizeof(wchar_t) * 4, buf.GetSize());
 		ASSERT_EQ(L't', wstr[0]);
 		ASSERT_EQ(L'e', wstr[1]);
 		ASSERT_EQ(L's', wstr[2]);
@@ -392,9 +392,9 @@ TEST_F(Test_Base_String, ConvertTo)
 
 	{
 		StringW str1(L"test");
-		RefPtr<ByteBuffer> buf(str1.ConvertTo(Text::Encoding::GetSystemMultiByteEncoding()));
-		char* astr = (char*)buf->GetData();
-		ASSERT_EQ(4, buf->GetSize());
+		ByteBuffer buf = str1.ConvertTo(Text::Encoding::GetSystemMultiByteEncoding());
+		char* astr = (char*)buf.GetData();
+		ASSERT_EQ(4, buf.GetSize());
 		ASSERT_EQ('t', astr[0]);
 		ASSERT_EQ('e', astr[1]);
 		ASSERT_EQ('s', astr[2]);
@@ -547,7 +547,7 @@ TEST_F(Test_Base_String, Split)
 	// 普通の分割
 	{
 		String str(_T("a,b,c"));
-		ArrayList<String> lines = str.Split(_T(","), StringSplitOptions_None);
+		Array<String> lines = str.Split(_T(","), StringSplitOptions_None);
 		EXPECT_EQ(3, lines.GetCount());
 		ASSERT_STREQ(_T("a"), lines[0]);
 		ASSERT_STREQ(_T("b"), lines[1]);
@@ -557,63 +557,63 @@ TEST_F(Test_Base_String, Split)
 	// 空文字
 	{
 		String str = _T("");
-		ArrayList<String> lines = str.Split(_T(","), StringSplitOptions_None);
+		Array<String> lines = str.Split(_T(","), StringSplitOptions_None);
 		EXPECT_EQ(1, lines.GetCount());
 	}
 
 	// 空文字の RemoveEmptyEntries
 	{
 		String str = _T("");
-		ArrayList<String> lines = str.Split(_T(","), StringSplitOptions_RemoveEmptyEntries);
+		Array<String> lines = str.Split(_T(","), StringSplitOptions_RemoveEmptyEntries);
 		EXPECT_EQ(0, lines.GetCount());
 	}
 
 	// 区切り無し
 	{
 		String str = _T("abc");
-		ArrayList<String> lines = str.Split(_T(","), StringSplitOptions_None);
+		Array<String> lines = str.Split(_T(","), StringSplitOptions_None);
 		EXPECT_EQ(1, lines.GetCount());
 	}
 
 	// 区切り無し RemoveEmptyEntries
 	{
 		String str = _T("abc");
-		ArrayList<String> lines = str.Split(_T(","), StringSplitOptions_RemoveEmptyEntries);
+		Array<String> lines = str.Split(_T(","), StringSplitOptions_RemoveEmptyEntries);
 		EXPECT_EQ(1, lines.GetCount());
 	}
 
 	// トークン無し
 	{
 		String str = _T(",");
-		ArrayList<String> lines = str.Split(_T(","), StringSplitOptions_None);
+		Array<String> lines = str.Split(_T(","), StringSplitOptions_None);
 		EXPECT_EQ(2, lines.GetCount());
 	}
 
 	// トークン無し RemoveEmptyEntries
 	{
 		String str = _T(",");
-		ArrayList<String> lines = str.Split(_T(","), StringSplitOptions_RemoveEmptyEntries);
+		Array<String> lines = str.Split(_T(","), StringSplitOptions_RemoveEmptyEntries);
 		EXPECT_EQ(0, lines.GetCount());
 	}
 
 	// トークン無し 2
 	{
 		String str = _T(",,");
-		ArrayList<String> lines = str.Split(_T(","), StringSplitOptions_None);
+		Array<String> lines = str.Split(_T(","), StringSplitOptions_None);
 		EXPECT_EQ(3, lines.GetCount());
 	}
 
 	// トークン無し 2 RemoveEmptyEntries
 	{
 		String str = _T(",,");
-		ArrayList<String> lines = str.Split(_T(","), StringSplitOptions_RemoveEmptyEntries);
+		Array<String> lines = str.Split(_T(","), StringSplitOptions_RemoveEmptyEntries);
 		EXPECT_EQ(0, lines.GetCount());
 	}
 
 	// 空要素付き
 	{
 		String str = _T("a,,c");
-		ArrayList<String> lines = str.Split(_T(","), StringSplitOptions_None);
+		Array<String> lines = str.Split(_T(","), StringSplitOptions_None);
 		EXPECT_EQ(3, lines.GetCount());
 		ASSERT_STREQ(_T("a"), lines[0]);
 		ASSERT_STREQ(_T(""), lines[1]);
@@ -623,7 +623,7 @@ TEST_F(Test_Base_String, Split)
 	// 空要素付き RemoveEmptyEntries
 	{
 		String str = _T("a,,c");
-		ArrayList<String> lines = str.Split(_T(","), StringSplitOptions_RemoveEmptyEntries);
+		Array<String> lines = str.Split(_T(","), StringSplitOptions_RemoveEmptyEntries);
 		EXPECT_EQ(2, lines.GetCount());
 		ASSERT_STREQ(_T("a"), lines[0]);
 		ASSERT_STREQ(_T("c"), lines[1]);
@@ -632,7 +632,7 @@ TEST_F(Test_Base_String, Split)
 	// 先頭空要素付き
 	{
 		String str = _T(",b,c");
-		ArrayList<String> lines = str.Split(_T(","), StringSplitOptions_None);
+		Array<String> lines = str.Split(_T(","), StringSplitOptions_None);
 		EXPECT_EQ(3, lines.GetCount());
 		ASSERT_STREQ(_T(""), lines[0]);
 		ASSERT_STREQ(_T("b"), lines[1]);
@@ -642,7 +642,7 @@ TEST_F(Test_Base_String, Split)
 	// 先頭空要素付き RemoveEmptyEntries
 	{
 		String str = _T(",b,c");
-		ArrayList<String> lines = str.Split(_T(","), StringSplitOptions_RemoveEmptyEntries);
+		Array<String> lines = str.Split(_T(","), StringSplitOptions_RemoveEmptyEntries);
 		EXPECT_EQ(2, lines.GetCount());
 		ASSERT_STREQ(_T("b"), lines[0]);
 		ASSERT_STREQ(_T("c"), lines[1]);
@@ -651,7 +651,7 @@ TEST_F(Test_Base_String, Split)
 	// 終端空要素付き
 	{
 		String str = _T("a,b,");
-		ArrayList<String> lines = str.Split(_T(","), StringSplitOptions_None);
+		Array<String> lines = str.Split(_T(","), StringSplitOptions_None);
 		EXPECT_EQ(3, lines.GetCount());
 		ASSERT_STREQ(_T("a"), lines[0]);
 		ASSERT_STREQ(_T("b"), lines[1]);
@@ -661,7 +661,7 @@ TEST_F(Test_Base_String, Split)
 	// 終端空要素付き RemoveEmptyEntries
 	{
 		String str = _T("a,b,");
-		ArrayList<String> lines = str.Split(_T(","), StringSplitOptions_RemoveEmptyEntries);
+		Array<String> lines = str.Split(_T(","), StringSplitOptions_RemoveEmptyEntries);
 		EXPECT_EQ(2, lines.GetCount());
 		ASSERT_STREQ(_T("a"), lines[0]);
 		ASSERT_STREQ(_T("b"), lines[1]);
@@ -670,7 +670,7 @@ TEST_F(Test_Base_String, Split)
 	// 両端空要素付き
 	{
 		String str = _T(",b,");
-		ArrayList<String> lines = str.Split(_T(","), StringSplitOptions_None);
+		Array<String> lines = str.Split(_T(","), StringSplitOptions_None);
 		EXPECT_EQ(3, lines.GetCount());
 		ASSERT_STREQ(_T(""), lines[0]);
 		ASSERT_STREQ(_T("b"), lines[1]);
@@ -680,7 +680,7 @@ TEST_F(Test_Base_String, Split)
 	// 両端空要素付き RemoveEmptyEntries
 	{
 		String str = _T(",b,");
-		ArrayList<String> lines = str.Split(_T(","), StringSplitOptions_RemoveEmptyEntries);
+		Array<String> lines = str.Split(_T(","), StringSplitOptions_RemoveEmptyEntries);
 		EXPECT_EQ(1, lines.GetCount());
 		ASSERT_STREQ(_T("b"), lines[0]);
 	}

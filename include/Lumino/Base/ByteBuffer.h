@@ -2,9 +2,7 @@
 	@file	FileManager.h
 */
 #pragma once
-
 #include "Common.h"
-#include "RefObject.h"
 
 namespace Lumino
 {
@@ -13,7 +11,7 @@ namespace Lumino
 	@brief	参照カウント付のメモリバッファ (バイト配列) を表すクラスです。
 */
 class ByteBuffer
-	: public RefObject
+	/*: public RefObject*/
 {
 public:
 
@@ -67,6 +65,12 @@ public:
 	*/
 	ByteBuffer(const char* str);
 	ByteBuffer(const wchar_t* str);
+
+	/**
+		@brief		他のバッファのコピーを作成します。
+		@details	内部的にはコピーオンライトの共有が行われます。
+	*/
+	ByteBuffer(const ByteBuffer& buffer);
 
 	virtual ~ByteBuffer();
 
@@ -139,26 +143,58 @@ public:
 	/**
 		@brief		バッファの先頭アドレスを取得します。
 	*/
-	byte_t* GetData() { return m_buffer; }
-	const byte_t* GetData() const { return m_buffer; }
-	
+	byte_t* GetData() { CheckDetachShared(); return m_core->m_buffer; }
+	const byte_t* GetData() const { return m_core->m_buffer; }
+
+	/**
+		@brief		バッファの先頭アドレスを取得します。メモリの再割り当ては行われません。
+	*/
+	const byte_t* GetConstData() const { return m_core->m_buffer; }
+
 	/**
 		@brief		バッファのサイズ (バイト数) を取得します。
 	*/
 	size_t GetSize() const { return m_size; }
 	
+	/**
+		@brief		メモリを解放します。
+		@details	コピーオンライト用にメモリを共有している場合は参照を外すだけです。
+					Clear() とは異なり、メモリそのものを解放します。
+	*/
+	void Release();
 
 public:
+	ByteBuffer& operator=(const ByteBuffer& right);
 	byte_t& operator[] (size_t index);
+	const byte_t& operator[] (size_t index) const;
 
 private:
 	void Dispose();
+	void CheckDetachShared();
 
 private:
-	byte_t*		m_buffer;
-	size_t		m_capacity;
-	size_t		m_size;
-	bool		m_refMode;
+	class ByteBufferCore
+	{
+	public:
+		ByteBufferCore(size_t size);
+		ByteBufferCore(byte_t* sharedBuffer);
+		~ByteBufferCore();
+		inline bool IsShared() const;
+		inline void AddRef();
+		inline void Release();
+
+		byte_t*		m_buffer;
+
+	private:
+		int			m_refCount;
+		bool		m_refMode;
+	};
+	static ByteBufferCore SharedCoreEmpty;
+
+	ByteBufferCore*	m_core;
+	size_t			m_capacity;
+	size_t			m_size;
+	// TODO: capacity と size も共有しても良いかも。
 };
 
 } // namespace Lumino

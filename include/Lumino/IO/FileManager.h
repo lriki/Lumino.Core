@@ -78,8 +78,8 @@ private:
 	void Thread_ASyncProc();
 
 private:
-	typedef ArrayList<IArchive*>		ArchiveList;
-	typedef ArrayList<ASyncIOObject*>	ASyncIOObjectList;
+	typedef Array<IArchive*>		ArchiveList;
+	typedef Array<ASyncIOObject*>	ASyncIOObjectList;
 
 	FileAccessPriority			m_fileAccessPriority;
 	ArchiveList					m_archiveList;

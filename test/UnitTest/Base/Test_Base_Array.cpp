@@ -11,7 +11,7 @@ protected:
 TEST_F(Test_Base_Array, Add)
 {
 	// 配列の結合
-	ArrayList<String> list;
+	Array<String> list;
 
 	String str1(_T(".c;.cc;"));
 	list.Add(str1.Split(_T(";"), StringSplitOptions_RemoveEmptyEntries));

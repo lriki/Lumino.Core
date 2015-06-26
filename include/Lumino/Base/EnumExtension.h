@@ -147,7 +147,7 @@ protected:
 		// LN_ENUM_DECLARE マクロが非常に長くなるのを避けるため、部分的にクラス化した
 	public:
 		struct Pair { String Name; TEnum Value; };
-		typedef typename ArrayList<Pair> PairList;
+		typedef typename Array<Pair> PairList;
 
 		static PairList& GetMemberList()
 		{
@@ -157,7 +157,7 @@ protected:
 		{
 			PairList& members = GetMemberList();
 			String names = argNames;
-			ArrayList<String> tokens = names.Split(_T(","));
+			Array<String> tokens = names.Split(_T(","));
 			for (int i = 0; i < valuesCount; ++i)
 			{
 				Pair p;

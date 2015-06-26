@@ -178,8 +178,8 @@ private:
 	};
 
 	RefPtr<TextReader>		m_reader;
-	ArrayList<TCHAR>		m_textCache;
-	ArrayList<NodeData>		m_nodes;
+	Array<TCHAR>			m_textCache;
+	Array<NodeData>			m_nodes;
 	NodeData*				m_currentNode;
 	int						m_currentElementNodePos;
 	int						m_currentAttrIndex;		///< 属性ノードを指している場合、その属性インデックス。指していなければ -1

@@ -9,20 +9,20 @@ namespace Lumino
 
 /// 参照カウントのインクリメント
 #ifndef LN_SAFE_ADDREF
-	#define LN_SAFE_ADDREF( p ) { if ( p ) { p->AddRef(); } }
+	#define LN_SAFE_ADDREF( p ) { if ( p ) { (p)->AddRef(); } }
 #endif
 
 /// 参照カウントのデクリメント
 #ifndef LN_SAFE_RELEASE
-	#define LN_SAFE_RELEASE( p ) { if ( p ) { ( p )->Release(); ( p ) = NULL; } }
+	#define LN_SAFE_RELEASE( p ) { if ( p ) { (p)->Release(); (p)= NULL; } }
 #endif
 
 /// a に b を格納するユーティリティ
 #define LN_REFOBJ_SET( a, b ) \
 { \
     LN_SAFE_ADDREF( b ); \
-	if (a) a->Release(); \
-    a = b; \
+	if (a) (a)->Release(); \
+    (a) = (b); \
 }
 
 /**

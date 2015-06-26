@@ -45,7 +45,7 @@ public:
 	}
 
 private:
-	ArrayList<DelegateType> m_handlerList;
+	Array<DelegateType> m_handlerList;
 };
 
 #undef LN_EVENT_CLASS_NAME

@@ -6,14 +6,13 @@
 
 #include <vector>
 #include <string>
-#include "Array.h"
 #include "Common.h"
+#include "Array.h"
+#include "ByteBuffer.h"
 
 namespace Lumino
 {
 namespace Text { class Encoding; }
-
-class ByteBuffer;
 
 /// 大文字と小文字の区別指定
 enum CaseSensitivity
@@ -48,9 +47,6 @@ enum StringSplitOptions
 	String を使用する場合、併せて TCHAR 型および _T マクロを使用するべきです。
 	これらは Windows プログラミングの国際対応で用いられるもので、本ライブラリでは Windows 以外の環境でも
 	UNICODE または LN_UNICODE シンボルの定義に合わせて char または wchar_t 用に定義されます。
-
-	なお、Windows 以外の環境ではできるだけ LN_UNICODE 及び wchar_t の使用は避け、char を使用してください。
-	これは、特に Linux 環境でワイド文字のサポートが十分ではなく、wcs 系の標準関数が意図した結果を出力しないためです。
 
 
 	@section	エンコーディング（文字コード）について
@@ -196,7 +192,7 @@ public:
 		@return		\0終端文字は付加されません。GetSize() により使用バイト数を確認できます。
 					使用後、Release() で開放する必要があります。
 	*/
-	ByteBuffer* ConvertTo(const Text::Encoding* encoding, bool* usedDefaultChar = NULL) const;
+	ByteBuffer ConvertTo(const Text::Encoding* encoding, bool* usedDefaultChar = NULL) const;
 
 	/**
 		@brief		空文字列を設定する
@@ -338,7 +334,7 @@ public:
 		@param[in]	option	: 分割方法
 		@return		分割結果の文字列配列
 	*/
-	ArrayList< GenericString<TChar> > Split(const TChar* delim, StringSplitOptions option = StringSplitOptions_None) const;
+	Array< GenericString<TChar> > Split(const TChar* delim, StringSplitOptions option = StringSplitOptions_None) const;
 
 	/**
 		@brief		文字列を構成するバイト数を取得する
@@ -425,15 +421,15 @@ private:
 		: public std::basic_string<TChar, std::char_traits<TChar>, STLAllocator<TChar> >
 	{
 	public:
-		GenericStringCore() : m_recCount(1) {}
+		GenericStringCore() : m_refCount(1) {}
 		~GenericStringCore() {}
 
-		inline bool IsShared() const { return (m_recCount > 1); }
-		inline void AddRef() { ++m_recCount; }
+		inline bool IsShared() const { return (m_refCount > 1); }
+		inline void AddRef() { ++m_refCount; }
 		inline void Release()
 		{
-			--m_recCount;
-			if (m_recCount <= 0)
+			--m_refCount;
+			if (m_refCount <= 0)
 			{
 				if (this != GetSharedEmpty()) {		// グローバル変数として定義された String からの解放済み delete 対策
 					delete this;
@@ -444,7 +440,7 @@ private:
 		static GenericStringCore* GetSharedEmpty() { return &m_sharedEmpty; }
 
 	public:
-		int		m_recCount;
+		int		m_refCount;
 
 		static GenericStringCore	m_sharedEmpty;
 	};

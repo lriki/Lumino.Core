@@ -275,31 +275,26 @@ size_t FileUtils::GetFileSize( FILE* stream )
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-ByteBuffer* FileUtils::ReadAllBytes(const char* filePath)
+ByteBuffer FileUtils::ReadAllBytes(const char* filePath)
 {
 	FILE* fp;
 	errno_t err = fopen_s(&fp, filePath, "rb");
 	LN_THROW(err == 0, FileNotFoundException);
 	size_t size = (size_t)GetFileSize(fp);
 
-	
-	RefPtr<ByteBuffer> buffer(LN_NEW ByteBuffer(size));
-	fread(buffer->GetData(), 1, size, fp);
-
-	buffer.SafeAddRef();
+	ByteBuffer buffer(size);
+	fread(buffer.GetData(), 1, size, fp);
 	return buffer;
 }
-ByteBuffer* FileUtils::ReadAllBytes(const wchar_t* filePath)
+ByteBuffer FileUtils::ReadAllBytes(const wchar_t* filePath)
 {
 	FILE* fp;
 	errno_t err = _wfopen_s(&fp, filePath, L"rb");
 	LN_THROW(err == 0, FileNotFoundException);
 	size_t size = (size_t)GetFileSize(fp);
 
-	RefPtr<ByteBuffer> buffer(LN_NEW ByteBuffer(size));
-	fread(buffer->GetData(), 1, size, fp);
-
-	buffer.SafeAddRef();
+	ByteBuffer buffer(size);
+	fread(buffer.GetData(), 1, size, fp);
 	return buffer;
 }
 
@@ -309,13 +304,13 @@ ByteBuffer* FileUtils::ReadAllBytes(const wchar_t* filePath)
 String FileUtils::ReadAllText(const TCHAR* filePath, const Text::Encoding* encoding)
 {
 	// TODO: BOM
-	RefPtr<ByteBuffer> buffer(FileUtils::ReadAllBytes(filePath));
+	const ByteBuffer buffer(FileUtils::ReadAllBytes(filePath));
 	String str;
 	if (encoding) {
-		str.ConvertFrom(buffer->GetData(), buffer->GetSize(), encoding);
+		str.ConvertFrom(buffer.GetData(), buffer.GetSize(), encoding);
 	}
 	else {
-		str.ConvertFrom(buffer->GetData(), buffer->GetSize(), Text::Encoding::GetTCharEncoding());
+		str.ConvertFrom(buffer.GetData(), buffer.GetSize(), Text::Encoding::GetTCharEncoding());
 	}
 	return str;
 }
@@ -335,8 +330,8 @@ void FileUtils::WriteAllBytes(const TCHAR* filePath, const void* buffer, size_t 
 //-----------------------------------------------------------------------------
 void FileUtils::WriteAllText(const TCHAR* filePath, const String& str, const Text::Encoding* encoding)
 {
-	RefPtr<ByteBuffer> buffer(str.ConvertTo(encoding));
-	WriteAllBytes(filePath, buffer->GetData(), buffer->GetSize());
+	const ByteBuffer buffer(str.ConvertTo(encoding));
+	WriteAllBytes(filePath, buffer.GetData(), buffer.GetSize());
 }
 
 //----------------------------------------------------------------------

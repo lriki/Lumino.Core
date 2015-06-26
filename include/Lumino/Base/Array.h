@@ -10,45 +10,12 @@ namespace Lumino
 {
 
 /**
-	@brief	動的配列 (デフォルトのアロケータにカスタムアロケータを指定)
+	@brief		動的配列のテンプレートクラスです。
+	@details	隣接するメモリ位置に要素を格納し、高速なランダムアクセスを行うことができます。
+				(現在は内部的に std::vector で実装されています)
 */
 template<typename T, typename TAllocator = STLAllocator<T> >
-class Array : public std::vector<T, TAllocator >
-{
-public:
-	typedef std::vector<T, TAllocator> std_vector;
-
-public:
-	/// 配列のインデックスとして有効な整数値であるかを確認する
-	bool CheckValidIndex(int index) const { return (0 <= index && index < GetCount()); }
-	
-	/// 要素数を取得する
-	int GetCount() const { return (int)std_vector::size(); }
-
-	/// 末尾に要素を追加する
-	void Add(const T& value) { std_vector::push_back(value); }
-
-	/// 終端要素の参照を返す
-	T& GetLast() { return *(std_vector::rbegin()); }
-
-	/// 終端要素の参照を返す
-	const T& GetLast() const { return *(std_vector::rbegin()); }
-
-	/// item に一致する最初の要素を削除する
-	void Remove(const T& item) { STLUtils::Remove(*this, item); }
-
-	/// item に一致する全ての要素を削除する
-	void RemoveAll(const T& item) { STLUtils::RemoveAll(*this, item); }
-
-	/// ある要素がこの配列内に存在するかどうかを判断します。
-	bool Contains(const T& item) const { return std::find(std_vector::begin(), std_vector::end(), item) != std_vector::end(); }
-};
-
-/**
-	@brief	参照カウントを持つ動的配列のクラスです。
-*/
-template<typename T, typename TAllocator = STLAllocator<T> >
-class ArrayList : public RefObject
+class Array
 {
 public:
 	typedef typename std::vector<T, TAllocator>		std_vector;
@@ -63,9 +30,9 @@ public:
 
 public:
 
-	ArrayList() {}
+	Array() {}
 
-	ArrayList(const ArrayList<T, TAllocator>& ary) : m_vector(ary.m_vector) { }
+	Array(const Array<T, TAllocator>& ary) : m_vector(ary.m_vector) { }
 	
 public:
 
@@ -82,7 +49,7 @@ public:
 	void Add(const T& item) { m_vector.push_back(item); }
 
 	/// 末尾に別の配列を連結します。
-	void Add(const ArrayList<T>& items) { m_vector.insert(m_vector.end(), items.m_vector.begin(), items.m_vector.end()); }
+	void Add(const Array<T>& items) { m_vector.insert(m_vector.end(), items.m_vector.begin(), items.m_vector.end()); }
 
 	/// 指定したインデックスの位置に要素を挿入します。
 	void Insert(int index, const T& item) { m_vector.insert(m_vector.begin() + index, item); }
@@ -124,7 +91,10 @@ public:
 	const T& GetLast() const { return *(m_vector.rbegin()); }
 
 	/// 別の配列をこの配列に上書きコピーします。
-	void CopyFrom(const ArrayList<T>& ary) { m_vector = ary.m_vector; }
+	void CopyFrom(const Array<T>& ary) { m_vector = ary.m_vector; }
+
+	/// 追加のメモリ割り当てを行わずに追加できる要素の最大数を取得します。
+	int GetCapacity() const { return m_vector.capacity(); }
 
 public:
 	T& operator[] (int index) { return m_vector[index]; }
@@ -147,7 +117,7 @@ private:
 	@brief		キーの "operator <" の実装により値を並べ替える動的配列
 */
 template<typename TKey, typename TValue, typename TAllocator = STLAllocator< std::pair<TKey, TValue> > >
-class SortedArray	// TODO: 名前 SortedList
+class SortedArray
 {
 public:
 	typedef typename std::pair<TKey, TValue> Pair;
@@ -305,147 +275,5 @@ inline void SortedArray<TKey, TValue, TAllocator>::Remove(const TValue& item)
 		}
 	}
 }
-
-
-/**
-	@brief		複数のスレッドからの要素の追加・削除を補助する RefObject の配列です。
-	@details	要素の追加・削除は AddObject() と RemoveObject() で行います。
-				追加または削除されても直ちに配列本体を更新するわけではありません。
-				配列本体が別のスレッドでイテレート中であることに備え、追加または削除待ちリストに追加されます。
-				Commit() が呼ばれた時点で待ちリストを使用し、配列本体を更新します。
-*/
-template<typename TRefObj>
-class MultiThreadingRefObjectList
-{
-public:
-	typedef ArrayList<TRefObj>	ObjectArray;
-
-private:
-	ObjectArray	m_objectArray;		///< メインのリスト
-	ObjectArray	m_registerList;		///< メインのリストへの追加待ちリスト
-	ObjectArray	m_unregisterList;	///< メインのリストからの削除待ちリスト
-
-public:
-	MultiThreadingRefObjectList() {}
-	~MultiThreadingRefObjectList() { Clear(); }
-
-public:
-
-	/// 追加
-	void AddObject(TRefObj obj)
-	{
-		assert(obj);
-		assert(std::find(m_registerList.begin(), m_registerList.end(), obj) == m_registerList.end());	// 既に追加要求されている
-		assert(std::find(m_objectArray.begin(), m_objectArray.end(), obj) == m_objectArray.end());		// 現在削除待ちである
-		m_registerList.Add(obj);
-		obj->AddRef();
-	}
-
-	/// 削除
-	void RemoveObject(TRefObj obj)
-	{
-		assert(obj);
-
-		// 登録リストに入ってたらこの時点で削除してしまう
-		typename ObjectArray::iterator itr = std::find(m_registerList.begin(), m_registerList.end(), obj);
-		if (itr != m_registerList.end())
-		{
-			m_registerList.erase(itr);
-			return;
-		}
-
-		assert(std::find(m_unregisterList.begin(), m_unregisterList.end(), obj) == m_unregisterList.end());
-		assert(std::find(m_objectArray.begin(), m_objectArray.end(), obj) != m_objectArray.end());
-		m_unregisterList.Add(obj);
-		obj->AddRef();
-	}
-
-	/// 同期
-	void Commit()
-	{
-		typename ObjectArray::iterator itr, end;
-
-		// 追加
-		if (!m_registerList.IsEmpty())
-		{
-			itr = m_registerList.begin();
-			end = m_registerList.end();
-			for (; itr != end; ++itr)
-			{
-				m_objectArray.Add(*itr);
-				// 参照カウントは m_registerList から外す分と m_objectArray に
-				// 追加する分で ±0 なので操作はしない
-			}
-			m_registerList.Clear();
-		}
-
-		// 削除
-		if (!m_unregisterList.IsEmpty())
-		{
-			itr = m_unregisterList.begin();
-			end = m_unregisterList.end();
-			for (; itr != end; ++itr)
-			{
-				typename ObjectArray::iterator pos = std::find(m_objectArray.begin(), m_objectArray.end(), (*itr));
-				if (pos != m_objectArray.end())
-				{
-					(*pos)->Release();	// m_unregisterList から外す分
-					(*pos)->Release();	// m_registerList から外す分
-					m_objectArray.erase(pos);
-				}
-			}
-			m_unregisterList.Clear();
-		}
-	}
-
-	/// このリストからしか参照されていないオブジェクト (参照カウントが 1 であるオブジェクト) を取り除きます。
-	void CollectGC()
-	{
-		typename ObjectArray::iterator itr = m_objectArray.begin();
-		typename ObjectArray::iterator end = m_objectArray.end();
-		for (; itr != end;)
-		{
-			if ((*itr)->GetRefCount() == 1)
-			{
-				(*itr)->Release();
-				itr = m_objectArray.erase(itr);
-				end = m_objectArray.end();
-			}
-			else {
-				++itr;
-			}
-		}
-	}
-
-	/// 追加予約中配列取得
-	ObjectArray& GetRegistOrderObjectArray() { return m_registerList; }
-
-	/// 削除予約中配列取得
-	ObjectArray& GetUnegistOrderObjectArray() { return m_unregisterList; }
-
-	/// 配列取得
-	ObjectArray& GetObjectArray() { return m_objectArray; }
-
-	/// すべてクリア (終了処理用。Clear() を呼ぶスレッド以外は停止していること)
-	void Clear()
-	{
-		typename ObjectArray::iterator itr, end;
-
-		itr = m_registerList.begin();
-		end = m_registerList.end();
-		for (; itr != end; ++itr) (*itr)->Release();
-		m_registerList.Clear();
-
-		itr = m_unregisterList.begin();
-		end = m_unregisterList.end();
-		for (; itr != end; ++itr) (*itr)->Release();
-		m_unregisterList.Clear();
-
-		itr = m_objectArray.begin();
-		end = m_objectArray.end();
-		for (; itr != end; ++itr) (*itr)->Release();
-		m_objectArray.Clear();
-	}
-};
 
 } // namespace Lumino
