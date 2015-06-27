@@ -73,6 +73,7 @@ set(LN_SOURCES_Base
 	src/Base/Locale.cpp
 	src/Base/Logger.cpp
 	src/Base/Memory.cpp
+	src/Base/Point.cpp
 	src/Base/RefObject.cpp
 	src/Base/Size.cpp
 	src/Base/String.cpp

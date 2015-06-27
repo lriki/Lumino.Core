@@ -10,6 +10,9 @@ namespace Lumino
 class Point
 {
 public:
+	static const Point	Zero;	///< Point(0, 0)
+
+public:
 	int		X;		///< X 座標
 	int		Y;		///< Y 座標
 
@@ -47,6 +50,9 @@ public:
 */
 class PointF
 {
+public:
+	static const PointF	Zero;	///< PointF(0, 0)
+
 public:
 	float	X;		///< X 座標
 	float	Y;		///< Y 座標
