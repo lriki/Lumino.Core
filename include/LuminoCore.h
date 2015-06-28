@@ -4,8 +4,9 @@
 #include "Lumino/Base/Common.h"
 
 #include "Lumino/Text/Encoding.h"
-#include "Lumino/Text/UnicodeUtils.h"
+#include "Lumino/Text/EncodingConverter.h"
 #include "Lumino/Text/EncodingDetector.h"
+#include "Lumino/Text/UnicodeUtils.h"
 
 #include "Lumino/Base/String.h"
 #include "Lumino/Base/StringUtils.h"

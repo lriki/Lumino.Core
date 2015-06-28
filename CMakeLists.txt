@@ -83,6 +83,7 @@ set(LN_SOURCES_Base
 	
 set(LN_SOURCES_Text
 	include/Lumino/Text/Encoding.h
+	include/Lumino/Text/EncodingConverter.h
 	include/Lumino/Text/EncodingDetector.h
 	include/Lumino/Text/UnicodeUtils.h
 	src/Text/ASCIIEncoding.cpp
@@ -94,6 +95,7 @@ set(LN_SOURCES_Text
 	src/Text/DBCSEncoding.cpp
 	src/Text/DBCSEncoding.h
 	src/Text/Encoding.cpp
+	src/Text/EncodingConverter.cpp
 	src/Text/EncodingDetector.cpp
 	src/Text/UnicodeUtils.cpp
 	src/Text/UTF8Encoding.cpp
