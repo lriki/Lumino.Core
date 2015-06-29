@@ -117,7 +117,7 @@ set(LN_SOURCES_IO
 	include/Lumino/IO/FileUtils.h
 	include/Lumino/IO/MemoryStream.h
 	include/Lumino/IO/PathName.h
-	include/Lumino/IO/PathUtils.h
+	include/Lumino/IO/PathTraits.h
 	include/Lumino/IO/Stream.h
 	include/Lumino/IO/StreamWriter.h
 	include/Lumino/IO/StringReader.h
@@ -134,7 +134,7 @@ set(LN_SOURCES_IO
 	src/IO/FileUtils.cpp
 	src/IO/MemoryStream.cpp
 	src/IO/PathName.cpp
-	src/IO/PathUtils.cpp
+	src/IO/PathTraits.cpp
 	src/IO/StreamWriter.cpp
 	src/IO/StringReader.cpp
 	src/IO/TextWriter.cpp)

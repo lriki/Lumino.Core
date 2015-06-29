@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "../Base/String.h"
-#include "PathUtils.h"
+#include "PathTraits.h"
 
 namespace Lumino
 {
@@ -34,9 +34,9 @@ template<typename TChar>
 class GenericPathName
 {
 public:
-	static const TChar Separator		= (TChar)PathUtils::DirectorySeparatorChar;
-	static const TChar AltSeparator		= (TChar)PathUtils::AltDirectorySeparatorChar;
-	static const TChar VolumeSeparator	= (TChar)PathUtils::VolumeSeparatorChar;
+	static const TChar Separator		= (TChar)PathTraits::DirectorySeparatorChar;
+	static const TChar AltSeparator		= (TChar)PathTraits::AltDirectorySeparatorChar;
+	static const TChar VolumeSeparator	= (TChar)PathTraits::VolumeSeparatorChar;
 
 public:
 	typedef GenericPathName<TChar>	PathNameT;
@@ -66,8 +66,8 @@ public:
 	GenericPathName& operator = (const GenericStringT& str)	{ Assign(str.GetCStr()); return (*this); }
 	GenericPathName& operator = (const char* str) { Assign(str); return (*this); }
 	GenericPathName& operator = (const wchar_t* str) { Assign(str); return (*this); }
-	bool operator < (const GenericPathName& right) const { return PathUtils::Compare(m_path.GetCStr(), right.m_path.GetCStr()) < 0; }
-	bool operator < (const TChar* right) const { return PathUtils::Compare(m_path.GetCStr(), right) < 0; }
+	bool operator < (const GenericPathName& right) const { return PathTraits::Compare(m_path.GetCStr(), right.m_path.GetCStr()) < 0; }
+	bool operator < (const TChar* right) const { return PathTraits::Compare(m_path.GetCStr(), right) < 0; }
 	operator const TChar*() const { return m_path.GetCStr(); }
 
 
@@ -111,7 +111,7 @@ public:
 	void SetEmpty() { m_path.SetEmpty(); }
 
 	/// パス文字列の中から拡張子を含むファイル名の部分を返す (空パスの場合は空文字列を返す)
-	GenericStringT GetFileName() const { return PathUtils::GetFileName(m_path.GetCStr()); }
+	GenericStringT GetFileName() const { return PathTraits::GetFileName(m_path.GetCStr()); }
 
 	/// パスの TChar 文字列を返す
 	const TChar* GetCStr() const { return m_path.GetCStr(); }
@@ -192,11 +192,11 @@ public:
 					http://helpx.adobe.com/jp/x-productkb/global/cpsid_83180.html
 					http://www.clip-studio.com/clip_site/support/faq/detail/svc/52/tid/37429
 	*/
-	bool Equals(const TChar* path) const { return PathUtils::Equals(m_path.GetCStr(), path); }
+	bool Equals(const TChar* path) const { return PathTraits::Equals(m_path.GetCStr(), path); }
 	/// @overload Equals
-	bool Equals(const PathNameT& path) const { return PathUtils::Equals(m_path.GetCStr(), path.GetCStr()); }
+	bool Equals(const PathNameT& path) const { return PathTraits::Equals(m_path.GetCStr(), path.GetCStr()); }
 	/// @overload Equals
-	bool Equals(const GenericStringT& path) const { return PathUtils::Equals(m_path.GetCStr(), path.GetCStr()); }
+	bool Equals(const GenericStringT& path) const { return PathTraits::Equals(m_path.GetCStr(), path.GetCStr()); }
 	/// @overload Equals
 	bool operator == (const PathNameT& path) const { return Equals(path); }
 

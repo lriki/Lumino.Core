@@ -413,12 +413,29 @@ TEST_F(Test_Base_String, IndexOf)
 //---------------------------------------------------------------------
 TEST_F(Test_Base_String, LastIndexOf)
 {
-	String str = "abcdef";
-	ASSERT_EQ(3, str.LastIndexOf(_T("de")));
-	ASSERT_EQ(1, str.LastIndexOf(_T("bc"), 2));
-	ASSERT_EQ(-1, str.LastIndexOf(_T("cd"), 2));
-	ASSERT_EQ(2, str.LastIndexOf(_T("cd"), 4, 3));
-	ASSERT_EQ(-1, str.LastIndexOf(_T("bc"), 4, 3));
+	{
+		String str = "abcdef";
+		ASSERT_EQ(3, str.LastIndexOf(_T("de")));
+		ASSERT_EQ(1, str.LastIndexOf(_T("bc"), 2));
+		ASSERT_EQ(-1, str.LastIndexOf(_T("cd"), 2));
+		ASSERT_EQ(2, str.LastIndexOf(_T("cd"), 4, 3));
+		ASSERT_EQ(-1, str.LastIndexOf(_T("bc"), 4, 3));
+	}
+	// .NET の System.String.LastIndexOf() と同様の動作
+	{
+		String str = "crazy azimuths";
+		String se = "";
+		ASSERT_EQ(6, str.LastIndexOf("az"));       // 6
+		ASSERT_EQ(2, str.LastIndexOf("az", 6));    // 2 ("crazy a")
+		ASSERT_EQ(6, str.LastIndexOf("az", 7));    // 6 ("crazy az")
+		ASSERT_EQ(0, str.LastIndexOf("cr", 6));    // 0
+		ASSERT_EQ(-1, str.LastIndexOf("cr", 6, 4));    // -1
+		ASSERT_EQ(-1, str.LastIndexOf("cr", 6, 6));    // -1
+		ASSERT_EQ(0, str.LastIndexOf("cr", 6, 7));    // 0
+		ASSERT_EQ(5, str.LastIndexOf("", 5, 2));    // 5
+		ASSERT_EQ(3, str.LastIndexOf("", 3, 0));
+		ASSERT_EQ(0, se.LastIndexOf(""));
+	}
 }
 
 //---------------------------------------------------------------------

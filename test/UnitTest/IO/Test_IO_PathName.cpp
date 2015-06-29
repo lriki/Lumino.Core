@@ -65,7 +65,7 @@ TEST_F(Test_IO_PathName, CanonicalizePath)
 	{ \
 		TCHAR path1[LN_MAX_PATH] = _T(src); \
 		TCHAR path2[LN_MAX_PATH]; \
-		PathUtils::CanonicalizePath(path1, _tcslen(path1), path2); \
+		PathTraits::CanonicalizePath(path1, _tcslen(path1), path2); \
 		ASSERT_STREQ(_T(result), path2); \
 	}
 

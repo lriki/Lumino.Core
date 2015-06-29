@@ -33,7 +33,7 @@
 #include "Lumino/Base/ElapsedTimer.h"
 
 #include "Lumino/IO/PathName.h"
-#include "Lumino/IO/PathUtils.h"
+#include "Lumino/IO/PathTraits.h"
 #include "Lumino/IO/Stream.h"
 #include "Lumino/IO/DirectoryUtils.h"
 #include "Lumino/IO/FileStream.h"

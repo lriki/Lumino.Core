@@ -48,7 +48,7 @@ template<typename TChar>
 void GenericPathName<TChar>::AssignUnderBasePath(const PathNameT& basePath, const char* relativePath)
 {
 	// フルパスの場合はそのまま割り当てる
-	if (PathUtils::IsAbsolutePath(relativePath))
+	if (PathTraits::IsAbsolutePath(relativePath))
 	{
 		m_path.AssignCStr(relativePath);
 	}
@@ -75,7 +75,7 @@ template<typename TChar>
 void GenericPathName<TChar>::AssignUnderBasePath(const PathNameT& basePath, const wchar_t* relativePath)
 {
 	// フルパスの場合はそのまま割り当てる
-	if (PathUtils::IsAbsolutePath(relativePath))
+	if (PathTraits::IsAbsolutePath(relativePath))
 	{
 		m_path.AssignCStr(relativePath);
 	}
@@ -102,7 +102,7 @@ void GenericPathName<TChar>::AssignUnderBasePath(const PathNameT& basePath, cons
 template<typename TChar>
 void GenericPathName<TChar>::Append(const TChar* path)
 {
-	if (PathUtils::IsAbsolutePath(path)) {
+	if (PathTraits::IsAbsolutePath(path)) {
 		m_path = path;
 	}
 	else {
@@ -160,7 +160,7 @@ GenericPathName<TChar> GenericPathName<TChar>::GetWithoutExtension() const
 template<typename TChar>
 bool GenericPathName<TChar>::IsAbsolutePath() const
 {
-	return PathUtils::IsAbsolutePath(m_path.GetCStr());
+	return PathTraits::IsAbsolutePath(m_path.GetCStr());
 }
 
 //-----------------------------------------------------------------------------
@@ -169,7 +169,7 @@ bool GenericPathName<TChar>::IsAbsolutePath() const
 template<typename TChar>
 bool GenericPathName<TChar>::IsRoot() const
 {
-	return PathUtils::IsRootPath(m_path.GetCStr());
+	return PathTraits::IsRootPath(m_path.GetCStr());
 }
 
 //-----------------------------------------------------------------------------
@@ -196,7 +196,7 @@ GenericPathName<TChar> GenericPathName<TChar>::GetParent() const
 		- Java (os.nio.Paths)		… null を返す
 		- C# (Path, Uri)			… "" を返す (入力が "" だった場合は例外)
 	*/
-	return GenericPathName(PathUtils::GetDirectoryPath(m_path.GetCStr()).GetCStr());
+	return GenericPathName(PathTraits::GetDirectoryPath(m_path.GetCStr()).GetCStr());
 }
 
 //-----------------------------------------------------------------------------
@@ -207,7 +207,7 @@ GenericPathName<TChar> GenericPathName<TChar>::CanonicalizePath() const
 {
 	TChar tmpPath[LN_MAX_PATH + 1];
 	memset(tmpPath, 0, sizeof(tmpPath));
-	PathUtils::CanonicalizePath(m_path.GetCStr(), tmpPath);
+	PathTraits::CanonicalizePath(m_path.GetCStr(), tmpPath);
 	return GenericPathName<TChar>(tmpPath);
 }
 

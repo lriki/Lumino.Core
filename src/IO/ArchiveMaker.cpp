@@ -162,7 +162,7 @@ bool ArchiveMaker::AddFile(const PathName& filePath, String aliasPath)
 void ArchiveMaker::NormalizePath(StringW* path)
 {
 	if (path->GetLength() > 0) {
-		for (size_t i = 0; i < path->GetLength(); ++i) {
+		for (int i = 0; i < path->GetLength(); ++i) {
 			if ((*path)[i] == L'\\') (*path)[i] = L'/';
 		}
 	}

@@ -1,21 +1,21 @@
 ﻿
 #include "../Internal.h"
 #include "../../include/Lumino/Base/StringUtils.h"
-#include "../../include/Lumino/IO/PathUtils.h"
+#include "../../include/Lumino/IO/PathTraits.h"
 #include "../../include/Lumino/IO/DirectoryUtils.h"
 
 namespace Lumino
 {
 
 //=============================================================================
-// PathUtils
+// PathTraits
 //=============================================================================
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-bool PathUtils::IsSeparatorChar(TChar ch)
+bool PathTraits::IsSeparatorChar(TChar ch)
 {
 #ifdef LN_WIN32
 	return (ch == '\\' || ch == '/');
@@ -28,7 +28,7 @@ bool PathUtils::IsSeparatorChar(TChar ch)
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-bool PathUtils::IsVolumeSeparatorChar(TChar ch)
+bool PathTraits::IsVolumeSeparatorChar(TChar ch)
 {
 #ifdef LN_WIN32
 	return (ch == ':');
@@ -41,7 +41,7 @@ bool PathUtils::IsVolumeSeparatorChar(TChar ch)
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-bool PathUtils::IsRootPath(const TChar* path)
+bool PathTraits::IsRootPath(const TChar* path)
 {
 #ifdef LN_WIN32
 	// windows の場合
@@ -67,14 +67,14 @@ bool PathUtils::IsRootPath(const TChar* path)
 	return false;
 #endif
 }
-template bool PathUtils::IsRootPath<char>(const char* path);
-template bool PathUtils::IsRootPath<wchar_t>(const wchar_t* path);
+template bool PathTraits::IsRootPath<char>(const char* path);
+template bool PathTraits::IsRootPath<wchar_t>(const wchar_t* path);
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-bool PathUtils::IsAbsolutePath(const TChar* path)
+bool PathTraits::IsAbsolutePath(const TChar* path)
 {
 	LN_THROW(path != NULL, ArgumentException);
 
@@ -92,14 +92,14 @@ bool PathUtils::IsAbsolutePath(const TChar* path)
 	}
 	return false;
 }
-template bool PathUtils::IsAbsolutePath<char>(const char* path);
-template bool PathUtils::IsAbsolutePath<wchar_t>(const wchar_t* path);
+template bool PathTraits::IsAbsolutePath<char>(const char* path);
+template bool PathTraits::IsAbsolutePath<wchar_t>(const wchar_t* path);
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-GenericString<TChar> PathUtils::GetDirectoryPath(const TChar* path)
+GenericString<TChar> PathTraits::GetDirectoryPath(const TChar* path)
 {
 	LN_THROW(path != NULL, ArgumentException);
 
@@ -157,26 +157,26 @@ GenericString<TChar> PathUtils::GetDirectoryPath(const TChar* path)
 
 	return str;
 }
-template GenericString<char> PathUtils::GetDirectoryPath<char>(const char* path);
-template GenericString<wchar_t> PathUtils::GetDirectoryPath<wchar_t>(const wchar_t* path);
+template GenericString<char> PathTraits::GetDirectoryPath<char>(const char* path);
+template GenericString<wchar_t> PathTraits::GetDirectoryPath<wchar_t>(const wchar_t* path);
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-GenericString<TChar> PathUtils::GetFileName(const TChar* path)
+GenericString<TChar> PathTraits::GetFileName(const TChar* path)
 {
 	return GenericString<TChar>(GetFileNameSub(path));
 }
-template GenericString<char> PathUtils::GetFileName(const char* path);
-template GenericString<wchar_t> PathUtils::GetFileName(const wchar_t* path);
+template GenericString<char> PathTraits::GetFileName(const char* path);
+template GenericString<wchar_t> PathTraits::GetFileName(const wchar_t* path);
 
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-const TChar* PathUtils::GetFileNameSub(const TChar* path)
+const TChar* PathTraits::GetFileNameSub(const TChar* path)
 {
 	int len = StringUtils::StrLen(path);
 	int pos = len - 1;
@@ -194,21 +194,23 @@ const TChar* PathUtils::GetFileNameSub(const TChar* path)
 	}
 	return path;
 }
-template const char* PathUtils::GetFileNameSub(const char* path);
-template const wchar_t* PathUtils::GetFileNameSub(const wchar_t* path);
+template const char* PathTraits::GetFileNameSub(const char* path);
+template const wchar_t* PathTraits::GetFileNameSub(const wchar_t* path);
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-void PathUtils::GetFileNameWithoutExtension(const TChar* path, TChar* outExt)
+void PathTraits::GetFileNameWithoutExtension(const TChar* path, TChar* outExt)
 {
-	if (path == NULL || outExt == NULL) { return; }
+	if (outExt == NULL) { return; }
 	outExt[0] = 0x00;
+
+	if (path == NULL) { return; }
 
 	const TChar* fileName = GetFileNameSub(path);
 	int len = StringUtils::StrLen(fileName);
-	int i = StringUtils::LastIndexOf(fileName, len, LN_T(TChar, "."), 1, 0, len, CaseSensitivity_CaseSensitive);
+	int i = StringUtils::LastIndexOf(fileName, len, LN_T(TChar, "."), 1, (len-1), len, CaseSensitivity_CaseSensitive);
 	if (i >= 0) {
 		StringUtils::StrNCpy(outExt, LN_MAX_PATH, fileName, i);
 		outExt[i] = '\0';
@@ -218,14 +220,14 @@ void PathUtils::GetFileNameWithoutExtension(const TChar* path, TChar* outExt)
 		outExt[len] = '\0';
 	}
 }
-template void PathUtils::GetFileNameWithoutExtension(const char* path, char* outExt);
-template void PathUtils::GetFileNameWithoutExtension(const wchar_t* path, wchar_t* outExt);
+template void PathTraits::GetFileNameWithoutExtension(const char* path, char* outExt);
+template void PathTraits::GetFileNameWithoutExtension(const wchar_t* path, wchar_t* outExt);
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-void PathUtils::GetExtension(const TChar* path, TChar* outExt)
+void PathTraits::GetExtension(const TChar* path, TChar* outExt)
 {
 	if (path == NULL || outExt == NULL) { return; }
 
@@ -248,14 +250,14 @@ void PathUtils::GetExtension(const TChar* path, TChar* outExt)
 		}
 	}
 }
-template void PathUtils::GetExtension(const char* path, char* outExt);
-template void PathUtils::GetExtension(const wchar_t* path, wchar_t* outExt);
+template void PathTraits::GetExtension(const char* path, char* outExt);
+template void PathTraits::GetExtension(const wchar_t* path, wchar_t* outExt);
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-int PathUtils::CanonicalizePath(const TChar* srcPath, size_t srcLen, TChar* outPath)
+int PathTraits::CanonicalizePath(const TChar* srcPath, size_t srcLen, TChar* outPath)
 {
 	/*	
 		Ubuntu の realpath は実際にファイルが存在しないと変なパスを返した。(/A/B/../C が /A だけになってしまう)
@@ -496,14 +498,14 @@ int PathUtils::CanonicalizePath(const TChar* srcPath, size_t srcLen, TChar* outP
 	return outLen;
 #endif
 }
-template int PathUtils::CanonicalizePath(const char* srcPath, size_t srcLen, char* outPath);
-template int PathUtils::CanonicalizePath(const wchar_t* srcPath, size_t srcLen, wchar_t* outPath);
+template int PathTraits::CanonicalizePath(const char* srcPath, size_t srcLen, char* outPath);
+template int PathTraits::CanonicalizePath(const wchar_t* srcPath, size_t srcLen, wchar_t* outPath);
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-void PathUtils::CanonicalizePath(const TChar* srcPath, TChar* outPath)
+void PathTraits::CanonicalizePath(const TChar* srcPath, TChar* outPath)
 {
 	size_t srcLen = StringUtils::StrLen(srcPath);
 	if (IsAbsolutePath(srcPath)) {
@@ -524,14 +526,14 @@ void PathUtils::CanonicalizePath(const TChar* srcPath, TChar* outPath)
 	// セパレータを統一する
 	NormalizeSeparator(outPath);
 }
-template void PathUtils::CanonicalizePath<char>(const char* srcPath, char* outPath);
-template void PathUtils::CanonicalizePath<wchar_t>(const wchar_t* srcPath, wchar_t* outPath);
+template void PathTraits::CanonicalizePath<char>(const char* srcPath, char* outPath);
+template void PathTraits::CanonicalizePath<wchar_t>(const wchar_t* srcPath, wchar_t* outPath);
 #if 0
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 template<>
-void PathUtils::CanonicalizePath(const char* srcPath, char* outPath)
+void PathTraits::CanonicalizePath(const char* srcPath, char* outPath)
 {
 	if (IsAbsolutePath(srcPath)) {
 		char src[LN_MAX_PATH];
@@ -557,7 +559,7 @@ void PathUtils::CanonicalizePath(const char* srcPath, char* outPath)
 #endif
 }
 template<>
-void PathUtils::CanonicalizePath(const wchar_t* srcPath, wchar_t* outPath)
+void PathTraits::CanonicalizePath(const wchar_t* srcPath, wchar_t* outPath)
 {
 #if 0
 #ifdef LN_WIN32
@@ -580,15 +582,15 @@ void PathUtils::CanonicalizePath(const wchar_t* srcPath, wchar_t* outPath)
 #endif
 }
 #endif
-//template void PathUtils::CanonicalizePath<char>(const TChar* srcPath, TChar* outPath);
-//template void PathUtils::CanonicalizePath<wchar_t>(const TChar* srcPath, TChar* outPath);
+//template void PathTraits::CanonicalizePath<char>(const TChar* srcPath, TChar* outPath);
+//template void PathTraits::CanonicalizePath<wchar_t>(const TChar* srcPath, TChar* outPath);
 
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-void PathUtils::NormalizeSeparator(TChar* srcPath)
+void PathTraits::NormalizeSeparator(TChar* srcPath)
 {
 #ifdef LN_WIN32
 	for (; *srcPath; ++srcPath)
@@ -613,7 +615,7 @@ void PathUtils::NormalizeSeparator(TChar* srcPath)
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-int PathUtils::Compare(const TChar* path1, const TChar* path2)
+int PathTraits::Compare(const TChar* path1, const TChar* path2)
 {
 	// まずは正規化。セキュリティ的推奨事項
 	// https://www.jpcert.or.jp/java-rules/ids02-j.html
@@ -675,11 +677,11 @@ int PathUtils::Compare(const TChar* path1, const TChar* path2)
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-bool PathUtils::Equals(const TChar* path1, const TChar* path2)
+bool PathTraits::Equals(const TChar* path1, const TChar* path2)
 {
 	return Compare(path1, path2) == 0;
 }
-template bool PathUtils::Equals<char>(const char* path1, const char* path2);
-template bool PathUtils::Equals<wchar_t>(const wchar_t* path1, const wchar_t* path2);
+template bool PathTraits::Equals<char>(const char* path1, const char* path2);
+template bool PathTraits::Equals<wchar_t>(const wchar_t* path1, const wchar_t* path2);
 
 } // namespace Lumino

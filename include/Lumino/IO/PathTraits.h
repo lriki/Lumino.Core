@@ -6,7 +6,7 @@ namespace Lumino
 /**
 	@brief	ネイティブ文字列に対するパス文字列操作をまとめたクラス
 */
-class PathUtils
+class PathTraits
 {
 public:
 #ifdef _WIN32

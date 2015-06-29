@@ -198,25 +198,30 @@ template int StringUtils::IndexOf<wchar_t>(const wchar_t* str1, const wchar_t* s
 template<typename TChar>
 int StringUtils::LastIndexOf(const TChar* str1, int str1Len, const TChar* str2, int str2Len, int startIndex, int count, CaseSensitivity cs)
 {
-	LN_THROW(str1 != NULL && str2 != NULL, ArgumentException);	// 各文字列は NULL でないこと。
-	LN_THROW(startIndex < str1Len, ArgumentException);			// startIndex は str1 の長さを超えてはいけない。
+	str1 = (str1 == NULL) ? LN_T(TChar, "") : str1;
+	str2 = (str2 == NULL) ? LN_T(TChar, "") : str2;
+	str1Len = (str1Len < 0) ? StrLen(str1) : str1Len;
+	str2Len = (str2Len < 0) ? StrLen(str2) : str2Len;
+	startIndex = (startIndex < 0) ? (str1Len-1) : startIndex;
 
-	if (str1Len == 0 || str2Len == 0) {
-		return -1;	// それぞれ長さが 0 であれば見つかるはずがない
-	}
-	if (startIndex == 0 || count == 0) {
-		return -1;	// 検索範囲がつぶれてる
-	}
-
-	if (startIndex < 0) {
-		startIndex = StrLen(str1) - 1;
+	// 検索対象文字列の長さが 0 の場合は特別な前提処理
+	if (str1Len == 0 && (startIndex == -1 || startIndex == 0)) {
+		return (str2Len == 0) ? 0 : -1;
 	}
 
-	const TChar* pos = str1 + startIndex;							// 検索範囲の末尾の文字を指す
-	const TChar* end = (count < 0) ? str1 : pos - (count - 1);		// 検索範囲の先頭の文字を指す
-	LN_THROW(end <= pos, ArgumentException);						// 末尾と先頭が逆転してないこと。
+	LN_VERIFY_RETURNV(startIndex >= 0, -1);			// startIndex は 0 以上でなければならない。
+	LN_VERIFY_RETURNV(startIndex < str1Len, -1);	// startIndex は str1 の長さを超えてはならない。
 
-	if (pos - end < str2Len) {
+	// 検索文字数が 0 の場合は必ず検索開始位置でヒットする (strstr と同じ動作)
+	if (str2Len == 0 && count >= 0 && startIndex - count + 1 >= 0) {
+		return startIndex;
+	}
+
+	const TChar* pos = str1 + startIndex;							// 検索範囲の末尾の文字を指す。
+	const TChar* end = (count < 0) ? str1 : pos - (count - 1);		// 検索範囲の先頭の文字を指す。
+	LN_VERIFY_RETURNV(end <= pos, -1);								// 末尾と先頭が逆転してないこと。
+
+	if (pos - end < (str2Len-1)) {
 		return -1;	// 検索範囲が検索文字数よりも少ない場合は見つかるはずがない
 	}
 
