@@ -15,6 +15,9 @@ protected:
 //---------------------------------------------------------------------
 TEST_F(Test_Base_UTF32Encoding, Basic)
 {
+	Text::EncodingConversionOptions options;
+	options.NullTerminated = false;
+
 	// UTF-32 → UTF-16
 	{
 		// 'あ' little
@@ -24,7 +27,7 @@ TEST_F(Test_Base_UTF32Encoding, Basic)
 		RefPtr<Decoder> decoder(utf32Enc.CreateDecoder());
 		RefPtr<Encoder> encoder(Encoding::GetUTF16Encoding()->CreateEncoder());
 		EncodingConversionResult info;
-		ByteBuffer result1 = Encoding::Convert(buf1, 4, decoder, encoder, &info);
+		ByteBuffer result1 = Encoding::Convert(buf1, 4, decoder, encoder, options, &info);
 
 		byte_t* utf16buf = (byte_t*)result1.GetData();
 		ASSERT_EQ(2, info.BytesUsed);
@@ -44,13 +47,13 @@ TEST_F(Test_Base_UTF32Encoding, Basic)
 		EncodingConversionResult info;
 
 		// 1回目の変換。2byte分。出てくるのは何もない。decoder に状態記憶される。
-		ByteBuffer result1 = Encoding::Convert(&buf1[0], 2, decoder, encoder, &info);
+		ByteBuffer result1 = Encoding::Convert(&buf1[0], 2, decoder, encoder, options, &info);
 		ASSERT_EQ(0, info.BytesUsed);
 		ASSERT_EQ(0, info.CharsUsed);
 		ASSERT_EQ(false, info.UsedDefaultChar);
 
 		// 2回目の変換。ここで1文字完成して出てくる。
-		ByteBuffer result2 = Encoding::Convert(&buf1[2], 2, decoder, encoder, &info);
+		ByteBuffer result2 = Encoding::Convert(&buf1[2], 2, decoder, encoder, options, &info);
 		byte_t* utf16buf = (byte_t*)result2.GetData();
 		ASSERT_EQ(2, info.BytesUsed);
 		ASSERT_EQ(1, info.CharsUsed);
@@ -68,7 +71,7 @@ TEST_F(Test_Base_UTF32Encoding, Basic)
 		RefPtr<Decoder> decoder(Encoding::GetUTF16Encoding()->CreateDecoder());
 		RefPtr<Encoder> encoder(utf32Enc.CreateEncoder());
 		EncodingConversionResult info;
-		ByteBuffer result1 = Encoding::Convert(uttf16buf, 2, decoder, encoder, &info);
+		ByteBuffer result1 = Encoding::Convert(uttf16buf, 2, decoder, encoder, options, &info);
 
 		byte_t* utf32buf = (byte_t*)result1.GetData();
 		ASSERT_EQ(4, info.BytesUsed);
@@ -91,13 +94,13 @@ TEST_F(Test_Base_UTF32Encoding, Basic)
 		EncodingConversionResult info;
 
 		// 1回目の変換。2byte分。出てくるのは何もない。状態記憶される。
-		ByteBuffer result1 = Encoding::Convert(&uttf16buf[0], 2, decoder, encoder, &info);
+		ByteBuffer result1 = Encoding::Convert(&uttf16buf[0], 2, decoder, encoder, options, &info);
 		ASSERT_EQ(0, info.BytesUsed);
 		ASSERT_EQ(0, info.CharsUsed);
 		ASSERT_EQ(false, info.UsedDefaultChar);
 
 		// 2回目の変換。ここで1文字完成して出てくる。
-		ByteBuffer result2 = Encoding::Convert(&uttf16buf[2], 2, decoder, encoder, &info);
+		ByteBuffer result2 = Encoding::Convert(&uttf16buf[2], 2, decoder, encoder, options, &info);
 
 		byte_t* utf32buf = (byte_t*)result2.GetData();
 		ASSERT_EQ(4, info.BytesUsed);
@@ -120,25 +123,25 @@ TEST_F(Test_Base_UTF32Encoding, Basic)
 		EncodingConversionResult info;
 
 		// 1回目の変換。1byte分。出てくるのは何もない。状態記憶される。
-		ByteBuffer result1 = Encoding::Convert(&uttf16buf[0], 1, decoder, encoder, &info);
+		ByteBuffer result1 = Encoding::Convert(&uttf16buf[0], 1, decoder, encoder, options, &info);
 		ASSERT_EQ(0, info.BytesUsed);
 		ASSERT_EQ(0, info.CharsUsed);
 		ASSERT_EQ(false, info.UsedDefaultChar);
 
 		// 2回目の変換。1byte分。出てくるのは何もない。状態記憶される。
-		ByteBuffer result2 = Encoding::Convert(&uttf16buf[1], 1, decoder, encoder, &info);
+		ByteBuffer result2 = Encoding::Convert(&uttf16buf[1], 1, decoder, encoder, options, &info);
 		ASSERT_EQ(0, info.BytesUsed);
 		ASSERT_EQ(0, info.CharsUsed);
 		ASSERT_EQ(false, info.UsedDefaultChar);
 
 		// 3回目の変換。1byte分。出てくるのは何もない。状態記憶される。
-		ByteBuffer result3 = Encoding::Convert(&uttf16buf[2], 1, decoder, encoder, &info);
+		ByteBuffer result3 = Encoding::Convert(&uttf16buf[2], 1, decoder, encoder, options, &info);
 		ASSERT_EQ(0, info.BytesUsed);
 		ASSERT_EQ(0, info.CharsUsed);
 		ASSERT_EQ(false, info.UsedDefaultChar);
 
 		// 4回目の変換。ここで1文字完成して出てくる。
-		ByteBuffer result4 = Encoding::Convert(&uttf16buf[3], 1, decoder, encoder, &info);
+		ByteBuffer result4 = Encoding::Convert(&uttf16buf[3], 1, decoder, encoder, options, &info);
 
 		byte_t* utf32buf = (byte_t*)result4.GetData();
 		ASSERT_EQ(4, info.BytesUsed);

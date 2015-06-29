@@ -37,21 +37,24 @@ TEST_F(Test_Base_Encoding, Basic)
 //---------------------------------------------------------------------
 TEST_F(Test_Base_Encoding, Convert)
 {
+	Text::EncodingConversionOptions options;
+	options.NullTerminated = false;
+
 	const char* buf1 = "123";
 	RefPtr<Decoder> decoder(Encoding::GetSystemMultiByteEncoding()->CreateDecoder());
 	RefPtr<Encoder> encoder(Encoding::GetWideCharEncoding()->CreateEncoder());
 
 	// src が無い
 	ASSERT_THROW(
-		Encoding::Convert(NULL, 0, (Decoder*)NULL, NULL, NULL),
+		Encoding::Convert(NULL, 0, (Decoder*)NULL, NULL, options, NULL),
 		ArgumentException);
 	// decoder が無い
 	ASSERT_THROW(
-		Encoding::Convert(buf1, 0, (Decoder*)NULL, NULL, NULL),
+		Encoding::Convert(buf1, 0, (Decoder*)NULL, NULL, options, NULL),
 		ArgumentException);
 	// encoder が無い
 	ASSERT_THROW(
-		Encoding::Convert(buf1, 0, decoder, NULL, NULL),
+		Encoding::Convert(buf1, 0, decoder, NULL, options, NULL),
 		ArgumentException);
 
 	// ↓ストリーミング用状態記憶対応のため、許可する

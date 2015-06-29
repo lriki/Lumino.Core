@@ -14,6 +14,9 @@ protected:
 //---------------------------------------------------------------------
 TEST_F(Test_Base_Encoding_UTF8, Basic)
 {
+	Text::EncodingConversionOptions options;
+	options.NullTerminated = false;
+
 	// 最小バイト数
 	{
 		Encoding* e = Encoding::GetUTF8Encoding();
@@ -37,7 +40,7 @@ TEST_F(Test_Base_Encoding_UTF8, Basic)
 		//size_t charsUsed;
 		//bool usedDefaultChar;
 		EncodingConversionResult info;
-		ByteBuffer buf1 = Encoding::Convert(str1, 9, decoder, encoder, &info);
+		ByteBuffer buf1 = Encoding::Convert(str1, 9, decoder, encoder, options, &info);
 		
 		uint16_t* utf16str = (uint16_t*)buf1.GetData();
 
@@ -60,7 +63,7 @@ TEST_F(Test_Base_Encoding_UTF8, Basic)
 		//size_t charsUsed;
 		//bool usedDefaultChar;
 		EncodingConversionResult info;
-		ByteBuffer buf1 = Encoding::Convert(utf16str, 6, decoder, encoder, &info);
+		ByteBuffer buf1 = Encoding::Convert(utf16str, 6, decoder, encoder, options, &info);
 
 		uint8_t* utf8str = (uint8_t*)buf1.GetData();
 

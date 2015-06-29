@@ -465,7 +465,7 @@ void GenericString<TChar>::AssignCStr(const wchar_t* str, bool* usedDefaultChar)
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-void GenericString<TChar>::ConvertFrom(const void* buffer, size_t byteCount, const Text::Encoding* encoding, bool* outUsedDefaultChar)
+void GenericString<TChar>::ConvertFrom(const void* buffer, int byteCount, const Text::Encoding* encoding, bool* outUsedDefaultChar)
 {
 	LN_THROW(encoding, ArgumentException);
 
@@ -478,13 +478,16 @@ void GenericString<TChar>::ConvertFrom(const void* buffer, size_t byteCount, con
 	}
 	else
 	{
-		Text::EncodingConversionResult info;
-		const ByteBuffer tmpBuffer = Text::Encoding::Convert(buffer, byteCount, encoding, thisTypeEncoding, &info);
+		Text::EncodingConversionOptions options;
+		options.NullTerminated = false;
+
+		Text::EncodingConversionResult result;
+		const ByteBuffer tmpBuffer = Text::Encoding::Convert(buffer, byteCount, encoding, thisTypeEncoding, options, &result);
 		if (outUsedDefaultChar != NULL) {
-			*outUsedDefaultChar = info.UsedDefaultChar;
+			*outUsedDefaultChar = result.UsedDefaultChar;
 		}
 
-		AssignTString((const TChar*)tmpBuffer.GetData(), info.BytesUsed / sizeof(TChar));
+		AssignTString((const TChar*)tmpBuffer.GetData(), result.BytesUsed / sizeof(TChar));
 	}
 }
 
@@ -494,11 +497,13 @@ void GenericString<TChar>::ConvertFrom(const void* buffer, size_t byteCount, con
 template<typename TChar>
 ByteBuffer GenericString<TChar>::ConvertTo(const Text::Encoding* encoding, bool* outUsedDefaultChar) const
 {
-	Text::EncodingConversionResult info;
+	Text::EncodingConversionOptions options;
+	options.NullTerminated = true;
 
-	const ByteBuffer buf = Text::Encoding::Convert(GetCStr(), GetByteCount(), GetThisTypeEncoding(), encoding, &info);
+	Text::EncodingConversionResult result;
+	const ByteBuffer buf = Text::Encoding::Convert(GetCStr(), GetByteCount(), GetThisTypeEncoding(), encoding, options, &result);
 	if (outUsedDefaultChar != NULL) {
-		*outUsedDefaultChar = info.UsedDefaultChar;
+		*outUsedDefaultChar = result.UsedDefaultChar;
 	}
 
 	return buf;

@@ -40,6 +40,12 @@ enum EncodingType
 };
 
 /// 文字コード変換の結果を受け取るための構造体
+struct EncodingConversionOptions
+{
+	bool	NullTerminated;		///< 変換結果の終端に \0 文字を付加する
+};
+
+/// 文字コード変換の結果を受け取るための構造体
 struct EncodingConversionResult
 {
 	size_t	BytesUsed;			///< 変換後の有効バイト数
@@ -126,6 +132,7 @@ public:
 	static ByteBuffer Convert(
 		const void* src, size_t srcByteCount, const Encoding* srcEncoding,
 		const Encoding* targetEncoding,
+		const EncodingConversionOptions& options,
 		EncodingConversionResult* result);
 
 	/**
@@ -142,6 +149,7 @@ public:
 	static ByteBuffer Convert(
 		const void* src, size_t srcByteCount, Decoder* decoder,
 		Encoder* encoder,
+		const EncodingConversionOptions& options,
 		EncodingConversionResult* result);
 
 	/**

@@ -162,11 +162,12 @@ size_t Encoding::GetConversionRequiredByteCount(Encoding* from, Encoding* to, si
 ByteBuffer Encoding::Convert(
 	const void* src, size_t srcByteCount, const Encoding* srcEncoding,
 	const Encoding* targetEncoding,
+	const EncodingConversionOptions& options,
 	EncodingConversionResult* result)
 {
 	RefPtr<Decoder> decoder(srcEncoding->CreateDecoder());
 	RefPtr<Encoder> encoder(targetEncoding->CreateEncoder());
-	return Convert(src, srcByteCount, decoder.GetObjectPtr(), encoder.GetObjectPtr(), result);
+	return Convert(src, srcByteCount, decoder.GetObjectPtr(), encoder.GetObjectPtr(), options, result);
 }
 
 //-----------------------------------------------------------------------------
@@ -175,6 +176,7 @@ ByteBuffer Encoding::Convert(
 ByteBuffer Encoding::Convert(
 	const void* src, size_t srcByteCount, Decoder* decoder,
 	Encoder* encoder,
+	const EncodingConversionOptions& options,
 	EncodingConversionResult* result)
 {
 	LN_THROW(src != NULL, ArgumentException);
@@ -183,7 +185,8 @@ ByteBuffer Encoding::Convert(
 
 	// src に入っている最悪パターンの文字数
 	size_t srcMaxCharCount = srcByteCount / decoder->GetMinByteCount();
-	srcMaxCharCount += 1;	// Decoder・Encoder の状態保存により前回の余り文字が1つ追加されるかもしれない
+	srcMaxCharCount += 1;									// Decoder・Encoder の状態保存により前回の余り文字が1つ追加されるかもしれない
+	if (options.NullTerminated) { srcMaxCharCount += 1; }	// \0 の分
 
 	// 中間バッファに必要な最大バイト数
 	size_t utf16MaxByteCount = srcMaxCharCount * 4;	// UTF16 は1文字最大4バイト
@@ -216,6 +219,17 @@ ByteBuffer Encoding::Convert(
 		targetBuf.GetSize(),		// \0 強制格納に備え、1文字分余裕のあるサイズを指定する
 		&bytesUsed,
 		&charsUsed);
+
+	// \0 終端文字
+	if (options.NullTerminated)
+	{
+		size_t nullBytes = encoder->GetMinByteCount();
+		byte_t* buf = (byte_t*)targetBuf.GetData();
+		for (size_t i = 0; i < nullBytes; ++i) {
+			buf[bytesUsed + i] = 0x00;
+		}
+		bytesUsed += nullBytes;
+	}
 
 	if (result)
 	{

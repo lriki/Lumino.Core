@@ -383,22 +383,24 @@ TEST_F(Test_Base_String, ConvertTo)
 		StringA str1("test");
 		ByteBuffer buf = str1.ConvertTo(Text::Encoding::GetWideCharEncoding());
 		wchar_t* wstr = (wchar_t*)buf.GetData();
-		ASSERT_EQ(sizeof(wchar_t) * 4, buf.GetSize());
+		ASSERT_EQ(sizeof(wchar_t) * 5, buf.GetSize());
 		ASSERT_EQ(L't', wstr[0]);
 		ASSERT_EQ(L'e', wstr[1]);
 		ASSERT_EQ(L's', wstr[2]);
 		ASSERT_EQ(L't', wstr[3]);
+		ASSERT_EQ(L'\0', wstr[4]);
 	}
 
 	{
 		StringW str1(L"test");
 		ByteBuffer buf = str1.ConvertTo(Text::Encoding::GetSystemMultiByteEncoding());
 		char* astr = (char*)buf.GetData();
-		ASSERT_EQ(4, buf.GetSize());
+		ASSERT_EQ(5, buf.GetSize());
 		ASSERT_EQ('t', astr[0]);
 		ASSERT_EQ('e', astr[1]);
 		ASSERT_EQ('s', astr[2]);
 		ASSERT_EQ('t', astr[3]);
+		ASSERT_EQ('\0', astr[4]);
 	}
 }
 
