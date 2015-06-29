@@ -107,25 +107,25 @@ void ArchiveMaker::Close()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-bool ArchiveMaker::AddFile(const PathName& filePath, const wchar_t* aliasPath)
+bool ArchiveMaker::AddFile(const PathName& filePath, String aliasPath)
 {
 	FILE* stream;
 	errno_t err = _tfopen_s(&stream, filePath, _T("rb"));
 	if (err == 0)
 	{
         // アクセス用の名前がなければ、ファイル名を代わりに使う
-		if (!aliasPath)
+		if (aliasPath.IsEmpty())
         {
-			aliasPath = filePath;
+			aliasPath = filePath.GetCStr();
         }
 
         // アクセス用ファイル名のスラッシュをバックスラッシュ化
-		std::wstring filename = aliasPath;
+		StringW filename = aliasPath;
 		NormalizePath(&filename);
 
         //-------------------------------------------------
         // ファイル名の長さとファイルのサイズを書き込む
-		uint32_t nameSize = filename.size();
+		uint32_t nameSize = filename.GetLength();
 		uint32_t fileSize = (uint32_t)FileUtils::GetFileSize(stream);
 
 		WriteU32Padding16(nameSize, fileSize);
@@ -134,7 +134,7 @@ bool ArchiveMaker::AddFile(const PathName& filePath, const wchar_t* aliasPath)
         // ファイル名とファイル内容を書き込む
 
         // ファイル名を書き込む (終端NULLはナシ)
-		WritePadding16((byte_t*)filename.c_str(), nameSize * sizeof(wchar_t));
+		WritePadding16((byte_t*)filename.GetCStr(), nameSize * sizeof(wchar_t));
 
 		//wprintf(L"filename : %s\n", filename.c_str());
 		//wprintf(L"seek     : %u\n", ftell(m_stream));
@@ -159,10 +159,10 @@ bool ArchiveMaker::AddFile(const PathName& filePath, const wchar_t* aliasPath)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void ArchiveMaker::NormalizePath(std::wstring* path)
+void ArchiveMaker::NormalizePath(StringW* path)
 {
-	if (path->size() > 0) {
-		for (size_t i = 0; i < path->size(); ++i) {
+	if (path->GetLength() > 0) {
+		for (size_t i = 0; i < path->GetLength(); ++i) {
 			if ((*path)[i] == L'\\') (*path)[i] = L'/';
 		}
 	}

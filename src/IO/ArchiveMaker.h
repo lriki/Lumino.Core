@@ -48,7 +48,7 @@ public:
 		@return		true=成功 / false=失敗
 		@details	デストラクタでも呼び出されます。
 	*/
-	bool AddFile(const PathName& filePath, const wchar_t* aliasPath);
+	bool AddFile(const PathName& filePath, String aliasPath);
 
 private:
 
@@ -59,7 +59,7 @@ private:
 	void WriteU32Padding16(uint32_t v0, uint32_t v1);
 
 	/// ディレクトリセパレータを / に変換する
-	void NormalizePath(std::wstring* path);
+	void NormalizePath(StringW* path);
 
 private:
 
