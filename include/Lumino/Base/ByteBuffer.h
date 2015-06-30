@@ -8,10 +8,11 @@ namespace Lumino
 {
 
 /**
-	@brief	参照カウント付のメモリバッファ (バイト配列) を表すクラスです。
+	@brief		バイト配列を表すクラスです。
+	@details	インスタンスは = 演算子等でコピーすることができます。
+				内部的にはメモリ使用量を削減するため、コピーオンライトの共有が行われます。
 */
 class ByteBuffer
-	/*: public RefObject*/
 {
 public:
 
