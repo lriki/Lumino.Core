@@ -427,16 +427,16 @@ TEST_F(Test_Base_String, LastIndexOf)
 	{
 		String str = "crazy azimuths";
 		String se = "";
-		ASSERT_EQ(6, str.LastIndexOf("az"));       // 6
-		ASSERT_EQ(2, str.LastIndexOf("az", 6));    // 2 ("crazy a")
-		ASSERT_EQ(6, str.LastIndexOf("az", 7));    // 6 ("crazy az")
-		ASSERT_EQ(0, str.LastIndexOf("cr", 6));    // 0
-		ASSERT_EQ(-1, str.LastIndexOf("cr", 6, 4));    // -1
-		ASSERT_EQ(-1, str.LastIndexOf("cr", 6, 6));    // -1
-		ASSERT_EQ(0, str.LastIndexOf("cr", 6, 7));    // 0
-		ASSERT_EQ(5, str.LastIndexOf("", 5, 2));    // 5
-		ASSERT_EQ(3, str.LastIndexOf("", 3, 0));
-		ASSERT_EQ(0, se.LastIndexOf(""));
+		ASSERT_EQ(6, str.LastIndexOf(_T("az")));       // 6
+		ASSERT_EQ(2, str.LastIndexOf(_T("az"), 6));    // 2 ("crazy a")
+		ASSERT_EQ(6, str.LastIndexOf(_T("az"), 7));    // 6 ("crazy az")
+		ASSERT_EQ(0, str.LastIndexOf(_T("cr"), 6));    // 0
+		ASSERT_EQ(-1, str.LastIndexOf(_T("cr"), 6, 4));    // -1
+		ASSERT_EQ(-1, str.LastIndexOf(_T("cr"), 6, 6));    // -1
+		ASSERT_EQ(0, str.LastIndexOf(_T("cr"), 6, 7));    // 0
+		ASSERT_EQ(5, str.LastIndexOf(_T(""), 5, 2));    // 5
+		ASSERT_EQ(3, str.LastIndexOf(_T(""), 3, 0));
+		ASSERT_EQ(0, se.LastIndexOf(_T("")));
 	}
 }
 
