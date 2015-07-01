@@ -20,7 +20,7 @@ enum FileAttribute
 /**
 	@brief	ファイルユーティリティ
 */
-class FileUtils
+class FileUtils	// TODO 名前→FileSystem
 {
 public:
 	/// fopen の template 実装
@@ -95,6 +95,11 @@ public:
 
 	/// 現在の位置とデータ(ファイル)サイズ、オフセット、基準(SEEK_xxxx)を受け取って、新しいシーク位置を返す
 	static int64_t CalcSeekPoint(int64_t curPoint, int64_t maxSize, int64_t offset, int origin);
+	
+	/**
+		@brief		現在の環境のファイルシステムが、パス文字列の大文字と小文字を区別するかを確認します。
+	*/
+	static CaseSensitivity GetFileSystemCaseSensitivity();
 };
 
 } // namespace Lumino

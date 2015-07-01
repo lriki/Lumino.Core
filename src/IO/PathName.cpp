@@ -4,7 +4,6 @@
 #include <Lumino/Base/StringUtils.h>
 #include <Lumino/IO/FileUtils.h>
 #include <Lumino/IO/PathName.h>
-#include <Lumino/IO/FileManager.h>
 #include <Lumino/IO/DirectoryUtils.h>
 
 namespace Lumino
@@ -132,7 +131,7 @@ const GenericString<TChar> GenericPathName<TChar>::GetStrEndSeparator() const
 template<typename TChar>
 GenericPathName<TChar> GenericPathName<TChar>::GetWithoutExtension() const
 {
-	CaseSensitivity cs = FileManager::GetInstance().GetFileSystemCaseSensitivity();
+	CaseSensitivity cs = FileUtils::GetFileSystemCaseSensitivity();
 
 	// 最後の . 位置確認
 	int dotPos = m_path.LastIndexOf('.', -1, -1, cs);

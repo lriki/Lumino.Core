@@ -20,8 +20,6 @@ set(LN_TEST_SOURCES
 	UnitTest/Base/Test_Base_StringUtils.cpp
 	UnitTest/Base/Test_Base_UnicodeUtils.cpp
 	UnitTest/Base/Test_Base_UTF32Encoding.cpp
-	UnitTest/IO/Test_IO_ArchiveMaker.cpp
-	UnitTest/IO/Test_IO_ASync.cpp
 	UnitTest/IO/Test_IO_BinaryReader.cpp
 	UnitTest/IO/Test_IO_File.cpp
 	UnitTest/IO/Test_IO_FileStream.cpp

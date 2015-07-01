@@ -364,4 +364,16 @@ int64_t FileUtils::CalcSeekPoint(int64_t curPoint, int64_t maxSize, int64_t offs
 	return newPoint;
 }
 
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+CaseSensitivity FileUtils::GetFileSystemCaseSensitivity()
+{
+#ifdef LN_WIN32
+	return CaseSensitivity_CaseInsensitive;
+#else
+	return CaseSensitivity_CaseSensitive;
+#endif
+}
+
 } // namespace Lumino

@@ -41,8 +41,6 @@
 #include "Lumino/IO/FileUtils.h"
 #include "Lumino/IO/File.h"
 #include "Lumino/IO/BinaryReader.h"
-#include "Lumino/IO/ASyncIOObject.h"
-#include "Lumino/IO/FileManager.h"
 #include "Lumino/IO/StreamWriter.h"
 #include "Lumino/IO/StringReader.h"
 #include "Lumino/IO/TextWriter.h"

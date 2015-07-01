@@ -79,7 +79,7 @@ set(LN_SOURCES_Base
 	src/Base/String.cpp
 	src/Base/StringUtils.cpp
 	src/Base/Version.cpp
-	external/camellia/camellia.cpp)
+)
 	
 set(LN_SOURCES_Text
 	include/Lumino/Text/Encoding.h
@@ -103,16 +103,15 @@ set(LN_SOURCES_Text
 	src/Text/UTF16Encoding.cpp
 	src/Text/UTF16Encoding.h
 	src/Text/UTF32Encoding.cpp
-	src/Text/UTF32Encoding.h)
+	src/Text/UTF32Encoding.h
+)
 
 set(LN_SOURCES_IO
-	include/Lumino/IO/ASyncIOObject.h
 	include/Lumino/IO/BinaryReader.h
 	include/Lumino/IO/BinaryWriter.h
 	include/Lumino/IO/Common.h
 	include/Lumino/IO/DirectoryUtils.h
 	include/Lumino/IO/File.h
-	include/Lumino/IO/FileManager.h
 	include/Lumino/IO/FileStream.h
 	include/Lumino/IO/FileUtils.h
 	include/Lumino/IO/MemoryStream.h
@@ -123,13 +122,10 @@ set(LN_SOURCES_IO
 	include/Lumino/IO/StringReader.h
 	include/Lumino/IO/TextReader.h
 	include/Lumino/IO/TextWriter.h
-	src/IO/Archive.cpp
-	src/IO/ASyncIOObject.cpp
 	src/IO/BinaryReader.cpp
 	src/IO/BinaryWriter.cpp
 	src/IO/DirectoryUtils.cpp
 	src/IO/File.cpp
-	src/IO/FileManager.cpp
 	src/IO/FileStream.cpp
 	src/IO/FileUtils.cpp
 	src/IO/MemoryStream.cpp
@@ -137,8 +133,9 @@ set(LN_SOURCES_IO
 	src/IO/PathTraits.cpp
 	src/IO/StreamWriter.cpp
 	src/IO/StringReader.cpp
-	src/IO/TextWriter.cpp)
-	
+	src/IO/TextWriter.cpp
+)
+
 set(LN_SOURCES_Json
 	include/Lumino/Json/JsonReader.h
 	include/Lumino/Json/JsonValue.h
@@ -149,7 +146,8 @@ set(LN_SOURCES_Json
 	src/Json/JsonDocument.cpp
 	src/Json/JsonHandler.cpp
 	src/Json/JsonReader.cpp
-	src/Json/JsonValue.cpp)
+	src/Json/JsonValue.cpp
+)
 
 set(LN_SOURCES_Threading
 	include/Lumino/Threading/Atomic.h
@@ -163,25 +161,27 @@ set(LN_SOURCES_Threading
 	src/Threading/Atomic.cpp
 	src/Threading/EventFlag.cpp
 	src/Threading/Mutex.cpp
-	src/Threading/ReadWriteMutex.cpp)
+	src/Threading/ReadWriteMutex.cpp
+)
 
 set(LN_SOURCES_Xml
 	include/Lumino/Xml/XmlReader.h
 	include/Lumino/Xml/XmlDocument.h
 	include/Lumino/Xml/XmlError.h
 	src/Xml/XmlReader.cpp
-	src/Xml/XmlDocument.cpp)
+	src/Xml/XmlDocument.cpp
+)
 
 set(LN_SOURCES_Testing
-	src/Testing/TestUtils.cpp)
-	
+	src/Testing/TestUtils.cpp
+)
+
 #--------------------------------------
 # Platform source files.
 if (WIN32)
 
 	set(LN_SOURCES_IO
 		${LN_SOURCES_IO}
-		src/IO/ArchiveMaker.cpp
 		src/IO/Win32/FileUtils_win32.cpp)
 
 elseif (APPLE)
