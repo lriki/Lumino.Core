@@ -23,7 +23,7 @@ set(LN_TEST_SOURCES
 	UnitTest/IO/Test_IO_BinaryReader.cpp
 	UnitTest/IO/Test_IO_File.cpp
 	UnitTest/IO/Test_IO_FileStream.cpp
-	UnitTest/IO/Test_IO_FileUtils.cpp
+	UnitTest/IO/Test_IO_FileSystem.cpp
 	UnitTest/IO/Test_IO_MemoryStream.cpp
 	UnitTest/IO/Test_IO_PathName.cpp
 	UnitTest/IO/Test_IO_PathTraits.cpp

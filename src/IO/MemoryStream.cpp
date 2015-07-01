@@ -1,7 +1,7 @@
 ﻿
 #include "../Internal.h"
 #include "../../include/Lumino/IO/MemoryStream.h"
-#include "../../include/Lumino/IO/FileUtils.h"
+#include "../../include/Lumino/IO/FileSystem.h"
 
 namespace Lumino
 {
@@ -174,7 +174,7 @@ void MemoryStream::Write(const void* data, size_t byteCount)
 //-----------------------------------------------------------------------------
 void MemoryStream::Seek(int64_t offset, SeekOrigin origin)
 {
-	m_seekPos = (size_t)FileUtils::CalcSeekPoint(m_seekPos, m_buffer.size(), offset, origin);
+	m_seekPos = (size_t)FileSystem::CalcSeekPoint(m_seekPos, m_buffer.size(), offset, origin);
 }
 
 } // namespace Lumino

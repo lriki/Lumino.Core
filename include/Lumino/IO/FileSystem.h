@@ -1,5 +1,7 @@
-﻿#pragma once
-
+﻿/**
+	@file	FileSystem.h
+*/
+#pragma once
 #include <stdio.h>
 #include "../Base/RefObject.h"
 #include "../Base/String.h"
@@ -20,7 +22,7 @@ enum FileAttribute
 /**
 	@brief	ファイルユーティリティ
 */
-class FileUtils	// TODO 名前→FileSystem
+class FileSystem
 {
 public:
 	/// fopen の template 実装

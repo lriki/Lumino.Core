@@ -11,7 +11,7 @@ protected:
 //---------------------------------------------------------------------
 TEST_F(Test_Json_JsonDocument, Basic)
 {
-	String str = FileUtils::ReadAllText(LOCALFILE("TestData/ReaderTest1.txt"), Text::Encoding::GetSystemMultiByteEncoding());
+	String str = FileSystem::ReadAllText(LOCALFILE("TestData/ReaderTest1.txt"), Text::Encoding::GetSystemMultiByteEncoding());
 	Json::JsonDocument doc;
 
 	ElapsedTimer t;

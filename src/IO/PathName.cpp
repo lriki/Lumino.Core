@@ -2,7 +2,7 @@
 #include <time.h>
 #include "../Internal.h"
 #include <Lumino/Base/StringUtils.h>
-#include <Lumino/IO/FileUtils.h>
+#include <Lumino/IO/FileSystem.h>
 #include <Lumino/IO/PathName.h>
 #include <Lumino/IO/DirectoryUtils.h>
 
@@ -131,7 +131,7 @@ const GenericString<TChar> GenericPathName<TChar>::GetStrEndSeparator() const
 template<typename TChar>
 GenericPathName<TChar> GenericPathName<TChar>::GetWithoutExtension() const
 {
-	CaseSensitivity cs = FileUtils::GetFileSystemCaseSensitivity();
+	CaseSensitivity cs = FileSystem::GetFileSystemCaseSensitivity();
 
 	// 最後の . 位置確認
 	int dotPos = m_path.LastIndexOf('.', -1, -1, cs);
@@ -268,7 +268,7 @@ GenericPathName<TChar> GenericPathName<TChar>::GetUniqueFilePathInDirectory(cons
 		}
 
 		number++;
-	} while (FileUtils::Exists(filePath.GetCStr()));
+	} while (FileSystem::Exists(filePath.GetCStr()));
 
 	return PathNameT(filePath.GetCStr());
 }

@@ -1,6 +1,6 @@
 ﻿
 #include "../Internal.h"
-#include "../../include/Lumino/IO/FileUtils.h"
+#include "../../include/Lumino/IO/FileSystem.h"
 #include "../../include/Lumino/IO/FileStream.h"
 
 namespace Lumino
@@ -82,7 +82,7 @@ bool FileStream::CanWrite() const
 int64_t FileStream::GetLength() const
 {
 	CheckOpen();
-	return (size_t)FileUtils::GetFileSize( m_stream );
+	return (size_t)FileSystem::GetFileSize(m_stream);
 }
 
 //-----------------------------------------------------------------------------

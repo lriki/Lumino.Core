@@ -1,12 +1,12 @@
 ﻿
 #include <sys/types.h>
 #include <sys/stat.h>
-#include "../../Internal.h"
-#include "../../../include/Lumino/Base/ByteBuffer.h"
-#include "../../../include/Lumino/Text/Encoding.h"
-#include "../../../include/Lumino/IO/FileStream.h"
-#include "../../../include/Lumino/IO/FileUtils.h"
-#include "../../../include/Lumino/IO/PathUtils.h"
+#include "../Internal.h"
+#include "../../include/Lumino/Base/ByteBuffer.h"
+#include "../../include/Lumino/Text/Encoding.h"
+#include "../../include/Lumino/IO/FileStream.h"
+#include "../../include/Lumino/IO/FileSystem.h"
+#include "../../include/Lumino/IO/PathUtils.h"
 
 namespace Lumino
 {
@@ -38,7 +38,7 @@ static bool is_stat_writable(struct stat *st, const char *path)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-bool FileUtils::Exists(const char* filePath)
+bool FileSystem::Exists(const char* filePath)
 {
 	if (filePath == NULL) {
 		return false;
@@ -76,7 +76,7 @@ bool FileUtils::Exists(const char* filePath)
 	return true;
 #endif
 }
-bool FileUtils::Exists(const wchar_t* filePath)
+bool FileSystem::Exists(const wchar_t* filePath)
 {
 	if (filePath == NULL) {
 		return false;
@@ -88,7 +88,7 @@ bool FileUtils::Exists(const wchar_t* filePath)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-uint32_t FileUtils::GetAttribute(const char* filePath)
+uint32_t FileSystem::GetAttribute(const char* filePath)
 {
 	// Unix 系の場合、ファイルの先頭が . であれば隠しファイルである。
 	// mono-master/mono/io-layer/io.c の、_wapi_stat_to_file_attributes が参考になる。
@@ -122,7 +122,7 @@ uint32_t FileUtils::GetAttribute(const char* filePath)
 	return attrs;
 }
 
-uint32_t FileUtils::GetAttribute(const wchar_t* filePath)
+uint32_t FileSystem::GetAttribute(const wchar_t* filePath)
 {
 	MBCS_FILEPATH(mbcsFilePath, filePath);
 	return GetAttribute(mbcsFilePath);
@@ -131,7 +131,7 @@ uint32_t FileUtils::GetAttribute(const wchar_t* filePath)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void FileUtils::SetAttribute(const char* filePath, uint32_t attrs)
+void FileSystem::SetAttribute(const char* filePath, uint32_t attrs)
 {
 	struct stat st;
 	int ret = ::stat(filePath, &st);
@@ -146,7 +146,7 @@ void FileUtils::SetAttribute(const char* filePath, uint32_t attrs)
 	}
 	LN_THROW(ret != -1, IOException);
 }
-void FileUtils::SetAttribute(const wchar_t* filePath, uint32_t attrs)
+void FileSystem::SetAttribute(const wchar_t* filePath, uint32_t attrs)
 {
 	MBCS_FILEPATH(mbcsFilePath, filePath);
 	return SetAttribute(mbcsFilePath, attrs);
@@ -155,7 +155,7 @@ void FileUtils::SetAttribute(const wchar_t* filePath, uint32_t attrs)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void FileUtils::Copy(const char* sourceFileName, const char* destFileName, bool overwrite)
+void FileSystem::Copy(const char* sourceFileName, const char* destFileName, bool overwrite)
 {
 	// コピー先ファイルの存在確認
 	if (!overwrite && Exists(destFileName)) {
@@ -194,7 +194,7 @@ void FileUtils::Copy(const char* sourceFileName, const char* destFileName, bool 
 	fclose(fpSrc);
 }
 
-void FileUtils::Copy(const wchar_t* sourceFileName, const wchar_t* destFileName, bool overwrite)
+void FileSystem::Copy(const wchar_t* sourceFileName, const wchar_t* destFileName, bool overwrite)
 {
 	MBCS_FILEPATH(mbcsSrc, sourceFileName);
 	MBCS_FILEPATH(mbcsDest, destFileName);
@@ -204,12 +204,12 @@ void FileUtils::Copy(const wchar_t* sourceFileName, const wchar_t* destFileName,
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void FileUtils::Delete(const char* filePath)
+void FileSystem::Delete(const char* filePath)
 {
 	int ret = remove(filePath);
 	if (ret == -1) LN_THROW(0, IOException, strerror(errno));
 }
-void FileUtils::Delete(const wchar_t* filePath)
+void FileSystem::Delete(const wchar_t* filePath)
 {
 	MBCS_FILEPATH(mbcsFilePath, filePath);
 	Delete(mbcsFilePath);
@@ -218,7 +218,7 @@ void FileUtils::Delete(const wchar_t* filePath)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-uint64_t FileUtils::GetFileSize(const TCHAR* filePath)
+uint64_t FileSystem::GetFileSize(const TCHAR* filePath)
 {
 	LN_THROW( filePath != NULL, ArgumentException );
 
@@ -243,7 +243,7 @@ uint64_t FileUtils::GetFileSize(const TCHAR* filePath)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-uint64_t FileUtils::GetFileSize( FILE* stream )
+uint64_t FileSystem::GetFileSize( FILE* stream )
 {
 	struct stat stbuf;
 	int handle = fileno( stream );

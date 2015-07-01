@@ -12,6 +12,35 @@ class Stream;
 
 /**
 	@brief	ストリームからバイナリデータを読み取るクラスです。
+
+
+	@code
+	// Wave ファイルのフォーマットを読み取る例
+
+	struct WaveFileHeader
+	{
+		byte_t		RIFF[4];
+		uint32_t	Size;
+		byte_t		WaveHeader[4];
+	};
+
+	FileStream stream("sound.wav");
+	BinaryReader reader(stream);
+
+	WaveFileHeader header;
+	reader.Read(&header, sizeof(WaveFileHeader));
+	header.RIFF;		// "RIFF"
+	header.WaveHeader;	// "WAVE"
+
+	uint32_t ChunkSize		= reader.ReadUInt32();
+	uint16_t FormatTag		= reader.ReadUInt16();
+	uint16_t Channels		= reader.ReadUInt16();
+	uint32_t SamplesPerSec	= reader.ReadUInt32();
+	uint32_t AvgBytesPerSec	= reader.ReadUInt32();
+	uint16_t BlockAlign		= reader.ReadUInt16();
+	uint16_t BitsPerSample	= reader.ReadUInt16();
+
+	@endcode
 */
 class BinaryReader
 {

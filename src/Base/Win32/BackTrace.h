@@ -8,7 +8,7 @@
 
 #ifdef LN_DEBUG
 #else
-#include LN_BACKTRACE_LOG_HIDE	1
+#define LN_BACKTRACE_LOG_HIDE	1
 #endif
 
 namespace Lumino

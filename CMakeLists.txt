@@ -113,7 +113,7 @@ set(LN_SOURCES_IO
 	include/Lumino/IO/DirectoryUtils.h
 	include/Lumino/IO/File.h
 	include/Lumino/IO/FileStream.h
-	include/Lumino/IO/FileUtils.h
+	include/Lumino/IO/FileSystem.h
 	include/Lumino/IO/MemoryStream.h
 	include/Lumino/IO/PathName.h
 	include/Lumino/IO/PathTraits.h
@@ -127,7 +127,7 @@ set(LN_SOURCES_IO
 	src/IO/DirectoryUtils.cpp
 	src/IO/File.cpp
 	src/IO/FileStream.cpp
-	src/IO/FileUtils.cpp
+	src/IO/FileSystem.cpp
 	src/IO/MemoryStream.cpp
 	src/IO/PathName.cpp
 	src/IO/PathTraits.cpp
@@ -182,7 +182,7 @@ if (WIN32)
 
 	set(LN_SOURCES_IO
 		${LN_SOURCES_IO}
-		src/IO/Win32/FileUtils_win32.cpp)
+		src/IO/FileSystem_Win32.cpp)
 
 elseif (APPLE)
 	
@@ -190,7 +190,7 @@ elseif (UNIX)
 
 	set(LN_SOURCES_IO
 		${LN_SOURCES_IO}
-		src/IO/Unix/FileUtils_unix.cpp)
+		src/IO/FileSystem_Unix.cpp)
 		
 endif()
 

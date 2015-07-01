@@ -5,7 +5,7 @@
 #include "../../include/Lumino/Base/ByteBuffer.h"
 #include "../../include/Lumino/Text/Encoding.h"
 #include "../../include/Lumino/IO/FileStream.h"
-#include "../../include/Lumino/IO/FileUtils.h"
+#include "../../include/Lumino/IO/FileSystem.h"
 
 namespace Lumino
 {
@@ -36,7 +36,7 @@ static bool is_stat_writable(struct stat *st, const char *path)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-bool FileUtils::Exists(const char* filePath)
+bool FileSystem::Exists(const char* filePath)
 {
 	// ※fopen によるチェックはNG。ファイルが排他ロックで開かれていた時に失敗する。
 #ifdef _WIN32
@@ -62,7 +62,7 @@ bool FileUtils::Exists(const char* filePath)
 	return true;
 #endif
 }
-bool FileUtils::Exists(const wchar_t* filePath)
+bool FileSystem::Exists(const wchar_t* filePath)
 {
 #ifdef _WIN32
 	DWORD attr = ::GetFileAttributesW(filePath);
@@ -77,7 +77,7 @@ bool FileUtils::Exists(const wchar_t* filePath)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-uint32_t FileUtils::GetAttribute(const char* filePath)
+uint32_t FileSystem::GetAttribute(const char* filePath)
 {
 #ifdef _WIN32
 	DWORD attr = ::GetFileAttributesA(filePath);
@@ -121,7 +121,7 @@ uint32_t FileUtils::GetAttribute(const char* filePath)
 #endif
 }
 
-uint32_t FileUtils::GetAttribute(const wchar_t* filePath)
+uint32_t FileSystem::GetAttribute(const wchar_t* filePath)
 {
 #ifdef _WIN32
 	DWORD attr = ::GetFileAttributesW(filePath);
@@ -141,7 +141,7 @@ uint32_t FileUtils::GetAttribute(const wchar_t* filePath)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void FileUtils::Copy(const char* sourceFileName, const char* destFileName, bool overwrite)
+void FileSystem::Copy(const char* sourceFileName, const char* destFileName, bool overwrite)
 {
 #ifdef _WIN32
 	BOOL bRes = ::CopyFileA(sourceFileName, destFileName, (overwrite) ? FALSE : TRUE);
@@ -181,7 +181,7 @@ void FileUtils::Copy(const char* sourceFileName, const char* destFileName, bool 
 #endif
 }
 
-void FileUtils::Copy(const wchar_t* sourceFileName, const wchar_t* destFileName, bool overwrite)
+void FileSystem::Copy(const wchar_t* sourceFileName, const wchar_t* destFileName, bool overwrite)
 {
 #ifdef _WIN32
 	BOOL bRes = ::CopyFileW(sourceFileName, destFileName, (overwrite) ? FALSE : TRUE);
@@ -196,7 +196,7 @@ void FileUtils::Copy(const wchar_t* sourceFileName, const wchar_t* destFileName,
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void FileUtils::Delete(const char* filePath)
+void FileSystem::Delete(const char* filePath)
 {
 #ifdef _WIN32
 	BOOL r = ::DeleteFileA(filePath);
@@ -206,7 +206,7 @@ void FileUtils::Delete(const char* filePath)
 	if (ret == -1) LN_THROW(IOException, strerror(errno));
 #endif
 }
-void FileUtils::Delete(const wchar_t* filePath)
+void FileSystem::Delete(const wchar_t* filePath)
 {
 #ifdef _WIN32
 	BOOL r = ::DeleteFileW(filePath);
@@ -220,7 +220,7 @@ void FileUtils::Delete(const wchar_t* filePath)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-size_t FileUtils::GetFileSize(const TCHAR* filePath)
+size_t FileSystem::GetFileSize(const TCHAR* filePath)
 {
 	LN_THROW( filePath != NULL, ArgumentException );
 
@@ -245,7 +245,7 @@ size_t FileUtils::GetFileSize(const TCHAR* filePath)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-size_t FileUtils::GetFileSize( FILE* stream )
+size_t FileSystem::GetFileSize( FILE* stream )
 {
 #if defined(LN_WIN32)
 	struct _stat stbuf;
@@ -275,7 +275,7 @@ size_t FileUtils::GetFileSize( FILE* stream )
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-ByteBuffer FileUtils::ReadAllBytes(const char* filePath)
+ByteBuffer FileSystem::ReadAllBytes(const char* filePath)
 {
 	FILE* fp;
 	errno_t err = fopen_s(&fp, filePath, "rb");
@@ -286,7 +286,7 @@ ByteBuffer FileUtils::ReadAllBytes(const char* filePath)
 	fread(buffer.GetData(), 1, size, fp);
 	return buffer;
 }
-ByteBuffer FileUtils::ReadAllBytes(const wchar_t* filePath)
+ByteBuffer FileSystem::ReadAllBytes(const wchar_t* filePath)
 {
 	FILE* fp;
 	errno_t err = _wfopen_s(&fp, filePath, L"rb");
@@ -301,10 +301,10 @@ ByteBuffer FileUtils::ReadAllBytes(const wchar_t* filePath)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-String FileUtils::ReadAllText(const TCHAR* filePath, const Text::Encoding* encoding)
+String FileSystem::ReadAllText(const TCHAR* filePath, const Text::Encoding* encoding)
 {
 	// TODO: BOM
-	const ByteBuffer buffer(FileUtils::ReadAllBytes(filePath));
+	const ByteBuffer buffer(FileSystem::ReadAllBytes(filePath));
 	String str;
 	if (encoding) {
 		str.ConvertFrom(buffer.GetData(), buffer.GetSize(), encoding);
@@ -318,7 +318,7 @@ String FileUtils::ReadAllText(const TCHAR* filePath, const Text::Encoding* encod
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void FileUtils::WriteAllBytes(const TCHAR* filePath, const void* buffer, size_t size)
+void FileSystem::WriteAllBytes(const TCHAR* filePath, const void* buffer, size_t size)
 {
 	FileStream stream;
 	stream.Open(filePath, FileOpenMode::Write | FileOpenMode::Truncate);
@@ -328,7 +328,7 @@ void FileUtils::WriteAllBytes(const TCHAR* filePath, const void* buffer, size_t 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void FileUtils::WriteAllText(const TCHAR* filePath, const String& str, const Text::Encoding* encoding)
+void FileSystem::WriteAllText(const TCHAR* filePath, const String& str, const Text::Encoding* encoding)
 {
 	const ByteBuffer buffer(str.ConvertTo(encoding));
 	WriteAllBytes(filePath, buffer.GetData(), buffer.GetSize());
@@ -337,7 +337,7 @@ void FileUtils::WriteAllText(const TCHAR* filePath, const String& str, const Tex
 //----------------------------------------------------------------------
 //
 //----------------------------------------------------------------------
-int64_t FileUtils::CalcSeekPoint(int64_t curPoint, int64_t maxSize, int64_t offset, int origin)
+int64_t FileSystem::CalcSeekPoint(int64_t curPoint, int64_t maxSize, int64_t offset, int origin)
 {
 	int64_t newPoint = curPoint;
 	switch (origin)
@@ -367,7 +367,7 @@ int64_t FileUtils::CalcSeekPoint(int64_t curPoint, int64_t maxSize, int64_t offs
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-CaseSensitivity FileUtils::GetFileSystemCaseSensitivity()
+CaseSensitivity FileSystem::GetFileSystemCaseSensitivity()
 {
 #ifdef LN_WIN32
 	return CaseSensitivity_CaseInsensitive;
