@@ -93,19 +93,19 @@ public:
 
 	// TChar (同一の文字型は assign だけにし、高速化を図る)
 	GenericString(const GenericString& str);
-	GenericString(const GenericString& str, size_type length);
-	GenericString(const GenericString& str, size_type begin, size_type length);
+	GenericString(const GenericString& str, int length);
+	GenericString(const GenericString& str, int begin, int length);
 	GenericString(const TChar* str);
-	GenericString(const TChar* str, size_type length);
-	GenericString(const TChar* str, size_type begin, size_type length);
+	GenericString(const TChar* str, int length);
+	GenericString(const TChar* str, int begin, int length);
 
 	// YCHAR (対の文字型は AssignCStr で文字コード変換を行う)
 	GenericString(const GenericString<YCHAR>& str);
-	GenericString(const GenericString<YCHAR>& str, size_type length);
-	GenericString(const GenericString<YCHAR>& str, size_type begin, size_type length);
+	GenericString(const GenericString<YCHAR>& str, int length);
+	GenericString(const GenericString<YCHAR>& str, int begin, int length);
 	GenericString(const YCHAR* str);
-	GenericString(const YCHAR* str, size_type length);
-	GenericString(const YCHAR* str, size_type begin, size_type length);
+	GenericString(const YCHAR* str, int length);
+	GenericString(const YCHAR* str, int begin, int length);
 
 	/// @name Operators
 	/// @{
@@ -203,7 +203,7 @@ public:
 		@param[in]	startIndex	: 文字列の 0 から始まる開始文字位置
 		@param[in]	length		: 部分文字列の文字数 (省略した場合は末尾まで)
 	*/
-	StringT SubString(size_type startIndex = 0, size_type length = std::string::npos) const;
+	StringT SubString(int startIndex = 0, int length = -1) const;
 
 	/**
 		@brief		文字列の先頭と末尾の空白を全て削除する

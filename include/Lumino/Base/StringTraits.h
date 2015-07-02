@@ -26,9 +26,12 @@ enum NumberConversionResult
 				ただし、実装を cpp に隠蔽するため明示的インスタンス化を行っています。
 				このため char まはた wchar_t 型のみにしか使えません。(ほとんど問題ないと思いますが)
 */
-class StringUtils
+class StringTraits
 {
 public:
+	//-------------------------------------------------------------------
+	/** @name ランタイム関数のオーバーロードユーティリティ */
+	/** @{ */
 
 	/**
 		@brief	NULL 終端文字列の長さを求めます。
@@ -82,6 +85,10 @@ public:
 	/// strtod の overload 実装
 	static double StrToD(const char* str, char** endptr) { return strtod(str, endptr); }
 	static double StrToD(const wchar_t* str, wchar_t** endptr) { return wcstod(str, endptr); }
+
+	/** @} */
+
+	//-------------------------------------------------------------------
 
 	/**
 		@brief		文字列を検索し、見つかった最初の文字のインデックスを返します。

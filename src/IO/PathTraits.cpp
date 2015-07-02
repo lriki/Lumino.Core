@@ -1,6 +1,6 @@
 ﻿
 #include "../Internal.h"
-#include "../../include/Lumino/Base/StringUtils.h"
+#include "../../include/Lumino/Base/StringTraits.h"
 #include "../../include/Lumino/IO/PathTraits.h"
 #include "../../include/Lumino/IO/DirectoryUtils.h"
 
@@ -45,7 +45,7 @@ bool PathTraits::IsRootPath(const TChar* path)
 {
 #ifdef LN_WIN32
 	// windows の場合
-	size_t len = StringUtils::StrLen(path);
+	size_t len = StringTraits::StrLen(path);
 	if (IsAbsolutePath(path) && len >= 2)
 	{
 		if (path[len - 1] == VolumeSeparatorChar) {
@@ -60,7 +60,7 @@ bool PathTraits::IsRootPath(const TChar* path)
 	return false;
 #else
 	// UNIX の場合、/ だけであるか
-	size_t len = StringUtils::StrLen(path);
+	size_t len = StringTraits::StrLen(path);
 	if (len == 1 && path[0] == '/') {
 		return true;
 	}
@@ -115,7 +115,7 @@ GenericString<TChar> PathTraits::GetDirectoryPath(const TChar* path)
 	*/
 
 	// 後ろから前に調べて、最初に \\ か / が見つかるところを探す
-	size_t pos = StringUtils::StrLen(path);
+	size_t pos = StringTraits::StrLen(path);
 	TChar lastSep = 0;
 	for ( ; pos >= 0; --pos ) {
 		if ( path[pos] == '\\' || path[pos] == '/' ) {
@@ -178,7 +178,7 @@ template GenericString<wchar_t> PathTraits::GetFileName(const wchar_t* path);
 template<typename TChar>
 const TChar* PathTraits::GetFileNameSub(const TChar* path)
 {
-	int len = StringUtils::StrLen(path);
+	int len = StringTraits::StrLen(path);
 	int pos = len - 1;
 
 	// 後ろから前に調べて、最初にセパレータが見つかるところを探す
@@ -209,14 +209,14 @@ void PathTraits::GetFileNameWithoutExtension(const TChar* path, TChar* outExt)
 	if (path == NULL) { return; }
 
 	const TChar* fileName = GetFileNameSub(path);
-	int len = StringUtils::StrLen(fileName);
-	int i = StringUtils::LastIndexOf(fileName, len, LN_T(TChar, "."), 1, (len-1), len, CaseSensitivity_CaseSensitive);
+	int len = StringTraits::StrLen(fileName);
+	int i = StringTraits::LastIndexOf(fileName, len, LN_T(TChar, "."), 1, (len-1), len, CaseSensitivity_CaseSensitive);
 	if (i >= 0) {
-		StringUtils::StrNCpy(outExt, LN_MAX_PATH, fileName, i);
+		StringTraits::StrNCpy(outExt, LN_MAX_PATH, fileName, i);
 		outExt[i] = '\0';
 	}
 	else {
-		StringUtils::StrNCpy(outExt, LN_MAX_PATH, fileName, len);
+		StringTraits::StrNCpy(outExt, LN_MAX_PATH, fileName, len);
 		outExt[len] = '\0';
 	}
 }
@@ -232,14 +232,14 @@ void PathTraits::GetExtension(const TChar* path, TChar* outExt)
 	if (path == NULL || outExt == NULL) { return; }
 
 	outExt[0] = 0x00;
-	int len = StringUtils::StrLen(path);
+	int len = StringTraits::StrLen(path);
 	for (int i = len; i >= 0; --i)
 	{
 		TChar ch = path[i];
 		if (ch == '.')
 		{
 			if (i != len - 1) {
-				StringUtils::StrNCpy(outExt, LN_MAX_PATH, &path[i], len - i);
+				StringTraits::StrNCpy(outExt, LN_MAX_PATH, &path[i], len - i);
 			}
 			else {
 				break;	// "file." のようなパターン
@@ -507,7 +507,7 @@ template int PathTraits::CanonicalizePath(const wchar_t* srcPath, size_t srcLen,
 template<typename TChar>
 void PathTraits::CanonicalizePath(const TChar* srcPath, TChar* outPath)
 {
-	size_t srcLen = StringUtils::StrLen(srcPath);
+	size_t srcLen = StringTraits::StrLen(srcPath);
 	if (IsAbsolutePath(srcPath)) {
 		// 絶対パスであればそのまま出力してしまう
 		CanonicalizePath(srcPath, srcLen, outPath);
@@ -519,7 +519,7 @@ void PathTraits::CanonicalizePath(const TChar* srcPath, TChar* outPath)
 		size_t len2 = DirectoryUtils::GetCurrentDirectory(src);
 		src[len2] = DirectorySeparatorChar;
 		++len2;
-		StringUtils::StrNCpy(src + len2, LN_MAX_PATH - len2, srcPath, srcLen);
+		StringTraits::StrNCpy(src + len2, LN_MAX_PATH - len2, srcPath, srcLen);
 		srcLen += len2;
 		CanonicalizePath(src, srcLen, outPath);
 	}
@@ -633,7 +633,7 @@ int PathTraits::Compare(const TChar* path1, const TChar* path2)
 	// 大文字小文字区別せず、文字が等しい間繰り返す
 	while (*s1 && *s2)
 	{
-		if (StringUtils::ToUpper(*s1) != StringUtils::ToUpper(*s2))
+		if (StringTraits::ToUpper(*s1) != StringTraits::ToUpper(*s2))
 		{
 			// セパレータの差は区別しない
 			if ((*s1 == DirectorySeparatorChar || *s1 == AltDirectorySeparatorChar) &&
@@ -642,14 +642,14 @@ int PathTraits::Compare(const TChar* path1, const TChar* path2)
 				// 継続
 			}
 			else {
-				return ((StringUtils::ToUpper(*s1) - StringUtils::ToUpper(*s2)));
+				return ((StringTraits::ToUpper(*s1) - StringTraits::ToUpper(*s2)));
 			}
 		}
 		s1++;
 		s2++;
 	}
 
-	return ((StringUtils::ToUpper(*s1) - StringUtils::ToUpper(*s2)));
+	return ((StringTraits::ToUpper(*s1) - StringTraits::ToUpper(*s2)));
 #else
 	while (*s1 && *s2)
 	{

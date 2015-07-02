@@ -1,6 +1,6 @@
 
 #include "../Internal.h"
-#include <Lumino/Base/StringUtils.h>
+#include <Lumino/Base/StringTraits.h>
 #include <Lumino/IO/StringReader.h>
 #include <Lumino/Json/JsonReader.h>
 
@@ -220,7 +220,7 @@ bool JsonReader::ParseNumber()
 	TCHAR* str = (TCHAR*)m_tmpStream.GetBuffer();
 	const TCHAR* endptr = NULL;
 	NumberConversionResult result;
-	double value = StringUtils::ToDouble(str, len, &endptr, &result);
+	double value = StringTraits::ToDouble(str, len, &endptr, &result);
 	if ((endptr - str) != len)	// ³í‚É•ÏŠ·‚Å‚«‚Ä‚¢‚ê‚ÎA“Ç‚İæ‚Á‚½•¶š”‚ª‘S‚ÄÁ”ï‚³‚ê‚é‚Í‚¸
 	{
 		// Error: \•¶‚ª³‚µ‚­‚È‚¢

@@ -2,7 +2,7 @@
 #pragma once
 
 #include "../Internal.h"
-#include <Lumino/Base/StringUtils.h>
+#include <Lumino/Base/StringTraits.h>
 #include <Lumino/IO/StringReader.h>
 #include <Lumino/Json/JsonHandler.h>
 #include <Lumino/Json/JsonReader.h>
@@ -24,7 +24,7 @@ void JsonDocument::Parse(const TCHAR* text, int len)
 {
 	if (LN_VERIFY_ASSERT(text != NULL)) { return; }
 
-	StringReader textReader(String(text, (len < 0) ? StringUtils::StrLen(text) : len));
+	StringReader textReader(String(text, (len < 0) ? StringTraits::StrLen(text) : len));
 	Parse(&textReader);
 }
 

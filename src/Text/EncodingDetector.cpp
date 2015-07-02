@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "../Internal.h"
-#include "../../include/Lumino/Base/StringUtils.h"
+#include "../../include/Lumino/Base/StringTraits.h"
 #include "../../include/Lumino/Text/UnicodeUtils.h"
 #include "../../include/Lumino/Text/EncodingDetector.h"
 
@@ -92,7 +92,7 @@ bool EncodingDetector::CheckASCII() const
 		byte_t b1 = m_buffer[pos];
 		if (b1 <= 0x7F)	// ASCII (0x00-0x7F)
 		{
-			int n = StringUtils::CheckNewLineSequence(&m_buffer[pos], bufferEnd);
+			int n = StringTraits::CheckNewLineSequence(&m_buffer[pos], bufferEnd);
 			if (n > 0) {
 				pos += n - 1;
 			}
@@ -172,7 +172,7 @@ void UTF8NDetector::Detect(bool untilUnmatch)
 		byte_t b1 = m_buffer[m_pos];
 		if (b1 <= 0x7F)	// ASCII (0x00-0x7F)
 		{
-			int n = StringUtils::CheckNewLineSequence(&m_buffer[m_pos], bufferEnd);
+			int n = StringTraits::CheckNewLineSequence(&m_buffer[m_pos], bufferEnd);
 			if (n > 0) {
 				m_pos += n - 1;
 				++m_lineNum;
@@ -228,7 +228,7 @@ void SJISDetector::Detect(bool untilUnmatch)
 			b1 == 0xFE ||	// cp932
 			b1 == 0xFF)		// cp932
 		{
-			int n = StringUtils::CheckNewLineSequence(&m_buffer[m_pos], m_buffer + m_bufferSize);
+			int n = StringTraits::CheckNewLineSequence(&m_buffer[m_pos], m_buffer + m_bufferSize);
 			if (n > 0) {
 				m_pos += n - 1;
 				++m_lineNum;

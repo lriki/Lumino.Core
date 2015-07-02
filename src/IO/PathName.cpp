@@ -1,7 +1,7 @@
 ﻿
 #include <time.h>
 #include "../Internal.h"
-#include <Lumino/Base/StringUtils.h>
+#include <Lumino/Base/StringTraits.h>
 #include <Lumino/IO/FileSystem.h>
 #include <Lumino/IO/PathName.h>
 #include <Lumino/IO/DirectoryUtils.h>
@@ -178,7 +178,7 @@ template<typename TChar>
 bool GenericPathName<TChar>::CheckExt(const TChar* ext) const
 {
 	// TODO: 大文字小文字の区別をする
-	return StringUtils::EndsWith(m_path.GetCStr(), m_path.GetLength(), ext, -1, CaseSensitivity_CaseInsensitive);
+	return StringTraits::EndsWith(m_path.GetCStr(), m_path.GetLength(), ext, -1, CaseSensitivity_CaseInsensitive);
 }
 
 //-----------------------------------------------------------------------------

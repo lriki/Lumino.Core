@@ -17,7 +17,7 @@ set(LN_TEST_SOURCES
 	UnitTest/Base/Test_Base_Size.cpp
 	UnitTest/Base/Test_Base_STLUtils.cpp
 	UnitTest/Base/Test_Base_String.cpp
-	UnitTest/Base/Test_Base_StringUtils.cpp
+	UnitTest/Base/Test_Base_StringTraits.cpp
 	UnitTest/Base/Test_Base_UnicodeUtils.cpp
 	UnitTest/Base/Test_Base_UTF32Encoding.cpp
 	UnitTest/IO/Test_IO_BinaryReader.cpp

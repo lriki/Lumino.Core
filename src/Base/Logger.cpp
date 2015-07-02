@@ -2,7 +2,7 @@
 #include "../Internal.h"
 #include <time.h>
 #include <Lumino/Version.h>
-#include <Lumino/Base/StringUtils.h>
+#include <Lumino/Base/StringTraits.h>
 #include <Lumino/Base/Environment.h>
 #include <Lumino/Base/Logger.h>
 
@@ -120,7 +120,7 @@ void Logger::WriteLine(Level level, const char* format, ...) throw()
 
 		va_list args;
 		va_start(args, format);
-		StringUtils::VSPrintf(buf, TEMP_BUFFER_SIZE, format, args);
+		StringTraits::VSPrintf(buf, TEMP_BUFFER_SIZE, format, args);
 		va_end(args);
 
 		fprintf(stream, "%d %s: ", Environment::GetTickCount() - g_logStartTime, GetInfoString(level));
@@ -145,7 +145,7 @@ void Logger::WriteLine(Level level, const wchar_t* format, ...) throw()
 
 		va_list args;
 		va_start(args, format);
-		StringUtils::VSPrintf(buf, TEMP_BUFFER_SIZE, format, args);
+		StringTraits::VSPrintf(buf, TEMP_BUFFER_SIZE, format, args);
 		va_end(args);
 
 		fprintf(stream, "%d %s: ", Environment::GetTickCount() - g_logStartTime, GetInfoString(level));
@@ -170,7 +170,7 @@ void Logger::WriteLine(const char* format, ...) throw()
 
 		va_list args;
 		va_start(args, format);
-		StringUtils::VSPrintf(buf, TEMP_BUFFER_SIZE, format, args);
+		StringTraits::VSPrintf(buf, TEMP_BUFFER_SIZE, format, args);
 		va_end(args);
 
 		fprintf(stream, "%d %s: ", Environment::GetTickCount() - g_logStartTime, GetInfoString(Level_Info));
@@ -195,7 +195,7 @@ void Logger::WriteLine(const wchar_t* format, ...) throw()
 
 		va_list args;
 		va_start(args, format);
-		StringUtils::VSPrintf(buf, TEMP_BUFFER_SIZE, format, args);
+		StringTraits::VSPrintf(buf, TEMP_BUFFER_SIZE, format, args);
 		va_end(args);
 
 		fprintf(stream, "%d %s: ", Environment::GetTickCount() - g_logStartTime, GetInfoString(Level_Info));

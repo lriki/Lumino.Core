@@ -147,7 +147,7 @@
 #include "../Internal.h"
 #include "../../include/Lumino/Base/CRT.h"
 #include "../../include/Lumino/Base/Exception.h"
-#include "../../include/Lumino/Base/StringUtils.h"
+#include "../../include/Lumino/Base/StringTraits.h"
 
 #ifdef LN_EXCEPTION_BACKTRACE
 	#ifdef LN_WIN32	// Cygwin もこっち
@@ -266,7 +266,7 @@ void Exception::SetMessage(const char* format, va_list args)
 	static const int BUFFER_SIZE = MaxMessageBufferSize;
 	char buf[BUFFER_SIZE];
 
-	int len = StringUtils::VSPrintf(buf, BUFFER_SIZE, format, args);
+	int len = StringTraits::VSPrintf(buf, BUFFER_SIZE, format, args);
 	if (len >= BUFFER_SIZE)
 	{
 		// バッファに収まりきらない場合は終端を ... にして切る
@@ -293,7 +293,7 @@ void Exception::SetMessage(const wchar_t* format, va_list args)
 	static const int BUFFER_SIZE = MaxMessageBufferSize;
 	wchar_t buf[BUFFER_SIZE];
 
-	int len = StringUtils::VSPrintf(buf, BUFFER_SIZE, format, args);
+	int len = StringTraits::VSPrintf(buf, BUFFER_SIZE, format, args);
 	if (len >= BUFFER_SIZE)
 	{
 		// バッファに収まりきらない場合は終端を ... にして切る

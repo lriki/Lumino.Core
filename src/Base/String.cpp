@@ -3,7 +3,7 @@
 #include <sstream>
 #include <Lumino/Base/ByteBuffer.h>
 #include <Lumino/Text/Encoding.h>
-#include <Lumino/Base/StringUtils.h>
+#include <Lumino/Base/StringTraits.h>
 #include <Lumino/Base/String.h>
 #include <Lumino/Base/Environment.h>
 
@@ -140,14 +140,14 @@ GenericString<TChar>::GenericString(const GenericString& str)
 	m_ref = m_string->c_str();
 }
 template<typename TChar>
-GenericString<TChar>::GenericString(const GenericString& str, size_type length)
+GenericString<TChar>::GenericString(const GenericString& str, int length)
 	: m_ref(NULL)
 	, m_string(NULL)
 {
 	AssignTString(str.m_string->c_str(), length);
 }
 template<typename TChar>
-GenericString<TChar>::GenericString(const GenericString& str, size_type begin, size_type length)
+GenericString<TChar>::GenericString(const GenericString& str, int begin, int length)
 	: m_ref(NULL)
 	, m_string(NULL)
 {
@@ -161,14 +161,14 @@ GenericString<TChar>::GenericString(const TChar* str)
 	AssignTString(str, -1);
 }
 template<typename TChar>
-GenericString<TChar>::GenericString(const TChar* str, size_type length)
+GenericString<TChar>::GenericString(const TChar* str, int length)
 	: m_ref(NULL)
 	, m_string(NULL)
 {
 	AssignTString(str, length);
 }
 template<typename TChar>
-GenericString<TChar>::GenericString(const TChar* str, size_type begin, size_type length)
+GenericString<TChar>::GenericString(const TChar* str, int begin, int length)
 	: m_ref(NULL)
 	, m_string(NULL)
 {
@@ -186,14 +186,14 @@ GenericString<TChar>::GenericString(const GenericString<YCHAR>& str)
 	AssignCStr(str.GetCStr());
 }
 template<typename TChar>
-GenericString<TChar>::GenericString(const GenericString<YCHAR>& str, size_type length)
+GenericString<TChar>::GenericString(const GenericString<YCHAR>& str, int length)
 	: m_ref(NULL)
 	, m_string(NULL)
 {
 	AssignCStr(str.GetCStr(), length);
 }
 template<typename TChar>
-GenericString<TChar>::GenericString(const GenericString<YCHAR>& str, size_type begin, size_type length)
+GenericString<TChar>::GenericString(const GenericString<YCHAR>& str, int begin, int length)
 	: m_ref(NULL)
 	, m_string(NULL)
 {
@@ -207,14 +207,14 @@ GenericString<TChar>::GenericString(const YCHAR* str)
 	AssignCStr(str);
 }
 template<typename TChar>
-GenericString<TChar>::GenericString(const YCHAR* str, size_type length)
+GenericString<TChar>::GenericString(const YCHAR* str, int length)
 	: m_ref(NULL)
 	, m_string(NULL)
 {
 	AssignCStr(str, length);
 }
 template<typename TChar>
-GenericString<TChar>::GenericString(const YCHAR* str, size_type begin, size_type length)
+GenericString<TChar>::GenericString(const YCHAR* str, int begin, int length)
 	: m_ref(NULL)
 	, m_string(NULL)
 {
@@ -380,7 +380,7 @@ void GenericString<TChar>::Append(const TChar* str, int len)
 		return;		// 空文字列なので何もしない
 	}
 	Realloc();	// 共有参照を切る
-	m_string->append(str, (len < 0) ? StringUtils::StrLen(str) : len);
+	m_string->append(str, (len < 0) ? StringTraits::StrLen(str) : len);
 	m_ref = m_string->c_str();
 }
 template<typename TChar>
@@ -522,7 +522,7 @@ void GenericString<TChar>::SetEmpty()
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-GenericString<TChar> GenericString<TChar>::SubString(size_type startIndex, size_type length) const
+GenericString<TChar> GenericString<TChar>::SubString(int startIndex, int length) const
 {
 	return StringT(*this, startIndex, length);
 }
@@ -535,7 +535,7 @@ GenericString<TChar> GenericString<TChar>::Trim() const
 {
 	const TChar* begin;
 	int length;
-	StringUtils::Trim(GetCStr(), GetLength(), &begin, &length);
+	StringTraits::Trim(GetCStr(), GetLength(), &begin, &length);
 	return GenericString<TChar>(begin, length);
 }
 
@@ -553,7 +553,7 @@ template<typename TChar>
 struct CmpCaseInsensitive
 {
 	TChar ch;
-	bool operator()(TChar value) { return StringUtils::ToUpper(ch) == StringUtils::ToUpper(value); }
+	bool operator()(TChar value) { return StringTraits::ToUpper(ch) == StringTraits::ToUpper(value); }
 };
 
 template<typename TChar>
@@ -597,8 +597,8 @@ GenericString<TChar> GenericString<TChar>::Replace(const TChar* from, const TCha
 	}
 
 	size_type pos = 0;
-	size_t fromLength = StringUtils::StrLen(from);
-	size_t toLength = StringUtils::StrLen(to);
+	size_t fromLength = StringTraits::StrLen(from);
+	size_t toLength = StringTraits::StrLen(to);
 
 	while (pos = newStr.m_string->find(from, pos), pos != std::basic_string<TChar>::npos)
 	{
@@ -641,12 +641,12 @@ int GenericString<TChar>::IndexOf(TChar ch, int startIndex) const
 template<typename TChar>
 int GenericString<TChar>::LastIndexOf(const TChar* str, int startIndex, int count, CaseSensitivity cs) const
 {
-	return StringUtils::LastIndexOf(GetCStr(), GetLength(), str, StringUtils::StrLen(str), startIndex, count, cs);
+	return StringTraits::LastIndexOf(GetCStr(), GetLength(), str, StringTraits::StrLen(str), startIndex, count, cs);
 }
 template<typename TChar>
 int GenericString<TChar>::LastIndexOf(TChar ch, int startIndex, int count, CaseSensitivity cs) const
 {
-	return StringUtils::LastIndexOf(GetCStr(), GetLength(), &ch, 1, startIndex, count, cs);
+	return StringTraits::LastIndexOf(GetCStr(), GetLength(), &ch, 1, startIndex, count, cs);
 }
 
 //-----------------------------------------------------------------------------
@@ -655,12 +655,12 @@ int GenericString<TChar>::LastIndexOf(TChar ch, int startIndex, int count, CaseS
 template<typename TChar>
 bool GenericString<TChar>::EndsWith(const TChar* str, CaseSensitivity cs) const
 {
-	return StringUtils::EndsWith(GetCStr(), GetLength(), str, StringUtils::StrLen(str), cs);
+	return StringTraits::EndsWith(GetCStr(), GetLength(), str, StringTraits::StrLen(str), cs);
 }
 template<typename TChar>
 bool GenericString<TChar>::EndsWith(TChar ch, CaseSensitivity cs) const
 {
-	return StringUtils::EndsWith(GetCStr(), GetLength(), &ch, 1, cs);
+	return StringTraits::EndsWith(GetCStr(), GetLength(), &ch, 1, cs);
 }
 
 //-----------------------------------------------------------------------------
@@ -686,7 +686,7 @@ bool GenericString<TChar>::Equals(const TChar* str) const
 template<typename TChar>
 int GenericString<TChar>::Compare(const TChar* str, int count, CaseSensitivity cs) const
 {
-	return StringUtils::Compare(GetCStr(), str, count/*(count < 0) ? GetLength() : count*/, cs);
+	return StringTraits::Compare(GetCStr(), str, count/*(count < 0) ? GetLength() : count*/, cs);
 }
 
 //-----------------------------------------------------------------------------
@@ -695,7 +695,7 @@ int GenericString<TChar>::Compare(const TChar* str, int count, CaseSensitivity c
 template<typename TChar>
 GenericString<TChar> GenericString<TChar>::Left(int count) const
 {
-	return StringUtils::Left(GetCStr(), count);
+	return StringTraits::Left(GetCStr(), count);
 }
 
 //-----------------------------------------------------------------------------
@@ -704,7 +704,7 @@ GenericString<TChar> GenericString<TChar>::Left(int count) const
 template<typename TChar>
 GenericString<TChar> GenericString<TChar>::Right(int count) const
 {
-	return StringUtils::Right(GetCStr(), count);
+	return StringTraits::Right(GetCStr(), count);
 }
 
 //-----------------------------------------------------------------------------
@@ -713,7 +713,7 @@ GenericString<TChar> GenericString<TChar>::Right(int count) const
 template<typename TChar>
 GenericString<TChar> GenericString<TChar>::Mid(int start, int count) const
 {
-	return StringUtils::Mid(GetCStr(), start, count);
+	return StringTraits::Mid(GetCStr(), start, count);
 }
 
 //-----------------------------------------------------------------------------
@@ -722,7 +722,7 @@ GenericString<TChar> GenericString<TChar>::Mid(int start, int count) const
 template<typename TChar>
 Array< GenericString<TChar> > GenericString<TChar>::Split(const TChar* delim, StringSplitOptions option) const
 {
-	return StringUtils::Split(*this, delim, option);
+	return StringTraits::Split(*this, delim, option);
 }
 
 //-----------------------------------------------------------------------------
@@ -733,8 +733,8 @@ Array< GenericString<TChar> > GenericString<TChar>::Split(const TChar* delim, St
 	const TChar* end; \
 	int len; \
 	NumberConversionResult res; \
-	StringUtils::Trim(GetCStr(), GetLength(), &str, &len); \
-	type num = StringUtils::func(str, len, base, &end, &res); \
+	StringTraits::Trim(GetCStr(), GetLength(), &str, &len); \
+	type num = StringTraits::func(str, len, base, &end, &res); \
 	if (res == NumberConversionResult_ArgsError)	{ LN_THROW(0, ArgumentException); } \
 	if (res == NumberConversionResult_FormatError)	{ LN_THROW(0, InvalidFormatException); } \
 	if (res == NumberConversionResult_Overflow)		{ LN_THROW(0, OverflowException); } \
@@ -768,8 +768,8 @@ uint64_t GenericString<TChar>::ToUInt64(int base) const { TO_INT_DEF(uint64_t, T
 	const TChar* end; \
 	int len; \
 	NumberConversionResult res; \
-	StringUtils::Trim(GetCStr(), GetLength(), &str, &len); \
-	type num = StringUtils::func(str, len, base, &end, &res); \
+	StringTraits::Trim(GetCStr(), GetLength(), &str, &len); \
+	type num = StringTraits::func(str, len, base, &end, &res); \
 	if (end != str + len) { return false; } \
 	if (res != NumberConversionResult_Success) { return false; } \
 	if (outValue != NULL) { *outValue = num; } \
@@ -871,7 +871,7 @@ GenericString<TChar> GenericString<TChar>::Format(const GenericString<TChar>& fo
 	va_list args;
 	va_start(args, format);
 	try {
-		StringUtils::FormatVAList(format.GetCStr(), args, &result);
+		StringTraits::FormatVAList(format.GetCStr(), args, &result);
 		va_end(args);
 	}
 	catch (...) {
@@ -887,7 +887,7 @@ GenericString<TChar> GenericString<TChar>::Format(const TChar* format, ...)
 	va_list args;
 	va_start(args, format);
 	try {
-		StringUtils::FormatVAList(format, args, &result);
+		StringTraits::FormatVAList(format, args, &result);
 		va_end(args);
 	}
 	catch (...) {
@@ -903,7 +903,7 @@ GenericString<TChar> GenericString<TChar>::Format(const TChar* format, ...)
 //	va_list args;
 //	va_start(args, format);
 //	try {
-//		StringUtils::FormatVAList(format, args, this);
+//		StringTraits::FormatVAList(format, args, this);
 //		va_end(args);
 //	}
 //	catch (...) {
@@ -926,7 +926,7 @@ void GenericString<TChar>::AssignTString(const TChar* str, int len)
 	}
 	else {
 		m_string = LN_NEW GenericStringCore();	// 参照カウントは 1
-		m_string->assign(str, (len < 0) ? StringUtils::StrLen(str) : len);
+		m_string->assign(str, (len < 0) ? StringTraits::StrLen(str) : len);
 	}
 	m_ref = m_string->c_str();
 }

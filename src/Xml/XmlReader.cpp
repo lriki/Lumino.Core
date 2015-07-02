@@ -64,7 +64,7 @@ StringRef 使うことは無いかも。
 // & lt;   エンティティ参照の間にスペースはNG
 
 #include "../Internal.h"
-#include <Lumino/Base/StringUtils.h>
+#include <Lumino/Base/StringTraits.h>
 #include <Lumino/IO/StringReader.h>
 #include <Lumino/Xml/XmlReader.h>
 
@@ -771,7 +771,7 @@ bool XmlReader::IsReservedEntity(const TCHAR* text, int len)
 	for (int i = 0; i < ReservedEntitiesCount; ++i)
 	{
 		if (ReservedEntities[i].Length == len &&
-			StringUtils::StrNCmp(ReservedEntities[i].Pattern, text, len) == 0)
+			StringTraits::StrNCmp(ReservedEntities[i].Pattern, text, len) == 0)
 		{
 			return true;
 		}
@@ -835,7 +835,7 @@ void XmlReader::ExpandReservedEntities(TCHAR* text, int len)
 			int i = 0;
 			for (; i < ReservedEntitiesCount; ++i)
 			{
-				if (StringUtils::StrNCmp(rp + 1, ReservedEntities[i].Pattern, ReservedEntities[i].Length) == 0 &&
+				if (StringTraits::StrNCmp(rp + 1, ReservedEntities[i].Pattern, ReservedEntities[i].Length) == 0 &&
 					*(rp + ReservedEntities[i].Length + 1) == ';')
 				{
 					*wp = ReservedEntities[i].Value;

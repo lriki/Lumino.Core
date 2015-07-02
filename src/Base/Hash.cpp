@@ -77,7 +77,8 @@ static uint32_t CalcCRCHash(const char* str, int len)
 //-----------------------------------------------------------------------------
 uint32_t Hash::CalcHash(const char* str, int len)
 {
-	return CalcCRCHash(str, (len < 0) ? strlen(str) : len);
+	len = static_cast<int>((len < 0) ? strlen(str) : len);
+	return CalcCRCHash(str, len);
 }
 
 //-----------------------------------------------------------------------------
@@ -85,7 +86,8 @@ uint32_t Hash::CalcHash(const char* str, int len)
 //-----------------------------------------------------------------------------
 uint32_t Hash::CalcHash(const wchar_t* str, int len)
 {
-	return CalcCRCHash((const char*)str, ((len < 0) ? wcslen(str) : len) * sizeof(wchar_t));
+	len = static_cast<int>(((len < 0) ? wcslen(str) : len) * sizeof(wchar_t));
+	return CalcCRCHash((const char*)str, len);
 }
 
 } // namespace Lumino
