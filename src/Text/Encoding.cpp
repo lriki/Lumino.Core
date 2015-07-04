@@ -1,5 +1,6 @@
 ﻿
 #include "../Internal.h"
+#include <algorithm>
 #include "../../include/Lumino/Base/RefObject.h"
 #include "../../include/Lumino/Base/ByteBuffer.h"
 #include "../../include/Lumino/Text/UnicodeUtils.h"

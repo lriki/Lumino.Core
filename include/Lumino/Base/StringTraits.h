@@ -4,7 +4,7 @@
 #include <ctype.h>
 #include <wctype.h>
 #include <string>
-//#include "TChar.h"
+#include "String.h"
 #include "STLUtils.h"
 #include "Array.h"
 

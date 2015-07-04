@@ -1,5 +1,7 @@
 ﻿
 #include "../Internal.h"
+#include <algorithm>
+#include <Lumino/Base/RefObject.h>
 #include <Lumino/Base/ByteBuffer.h>
 
 namespace Lumino

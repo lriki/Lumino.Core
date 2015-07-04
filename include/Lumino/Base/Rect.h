@@ -220,6 +220,11 @@ public:
 	/**
 		@brief	位置とサイズを指定して初期化します。
 	*/
+	RectF(float x, float y, const SizeF& size) { Set(x, y, size.Width, size.Height); }
+
+	/**
+		@brief	位置とサイズを指定して初期化します。
+	*/
 	RectF(const PointF& point, const SizeF& size) { Set(point.X, point.Y, size.Width, size.Height); }
 
 	/**

@@ -16,6 +16,7 @@
 */
 
 #include "../Internal.h"
+#include <locale.h>
 #include <Lumino/Base/Locale.h>
 
 namespace Lumino

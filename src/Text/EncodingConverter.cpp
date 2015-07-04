@@ -1,4 +1,5 @@
 
+#include <algorithm>
 #include "../Internal.h"
 #include "../../include/Lumino/Text/EncodingConverter.h"
 

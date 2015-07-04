@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <algorithm>
+#include "Exception.h"
 #include "STLUtils.h"
 #include "RefObject.h"
 
@@ -141,6 +142,17 @@ public:
 		else {
 			Add(key, value);
 		}
+	}
+
+	/// 指定したキーに関連付けられている値を取得します。
+	const TValue& GetValue(const TKey& key) const
+	{
+		int index = Find(key);
+		if (index >= 0) {
+			return m_vector[index].second;
+		}
+		LN_THROW(0, KeyNotFoundException);
+		return TValue();
 	}
 
 	/// 指定したキーに関連付けられている値を取得します。

@@ -2,7 +2,9 @@
 	@file	Exception.h
 */
 #pragma once
-#include "String.h"
+#include "Common.h"
+#include <exception>
+#include <assert.h>
 
 // exp の条件が満たされなかった場合、type に指定した例外を throw する
 #define LN_THROW( exp, type, ... )	{ if (!(exp)) { type e = type(__VA_ARGS__); e.SetSourceLocationInfo(__FILE__, __LINE__); throw e; } }
@@ -355,6 +357,22 @@ public:
 public:
 	// override Exception
 	virtual Exception* Copy() const { return LN_NEW NotImplementedException( *this ); }
+};
+
+/**
+	@brief	検索に使用したキーが、コレクションのいずれのキーとも一致しない場合にスローされる例外です。
+*/
+class KeyNotFoundException
+	: public Exception
+{
+public:
+	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(KeyNotFoundException);
+	KeyNotFoundException() {}
+	virtual ~KeyNotFoundException() throw() {}
+
+public:
+	// override Exception
+	virtual Exception* Copy() const { return LN_NEW KeyNotFoundException(*this); }
 };
 
 /**
