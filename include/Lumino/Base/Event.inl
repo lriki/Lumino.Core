@@ -16,6 +16,11 @@ public:
 		m_handlerList.Remove(handler);
 	}
 
+	void Clear()
+	{
+		m_handlerList.Clear();
+	}
+
 	void Raise(LN_EVENT_ARGS_DECL)
 	{
 		LN_FOREACH(DelegateType& d, m_handlerList)
