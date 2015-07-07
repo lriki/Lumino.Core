@@ -6,7 +6,7 @@
 #include "../../include/Lumino/Text/Encoding.h"
 #include "../../include/Lumino/IO/FileStream.h"
 #include "../../include/Lumino/IO/FileSystem.h"
-#include "../../include/Lumino/IO/PathUtils.h"
+#include "../../include/Lumino/IO/PathTraits.h"
 
 namespace Lumino
 {
@@ -98,7 +98,7 @@ uint32_t FileSystem::GetAttribute(const char* filePath)
 		LN_THROW(0, IOException);
 	}
 	
-	const char* fileName = PathUtils::GetFileNameSub(filePath);
+	const char* fileName = PathTraits::GetFileNameSub(filePath);
 	uint32_t attrs = 0;
 	if (S_ISDIR(st.st_mode))
 	{

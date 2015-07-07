@@ -147,9 +147,10 @@ protected:
 		// LN_ENUM_DECLARE マクロが非常に長くなるのを避けるため、部分的にクラス化した
 	public:
 		struct Pair { String Name; TEnum Value; };
-		typedef typename Array<Pair> PairList;
+		typedef typename ::Lumino::Array<Pair> PairList;
+		typedef typename ::Lumino::Array<Pair>& PairListReference;
 
-		static PairList& GetMemberList()
+		static PairListReference GetMemberList()
 		{
 			static PairList members; return members;	// ヘッダ include だけで済ますため、static 変数は関数内に閉じ込めておく
 		}
@@ -207,10 +208,11 @@ protected:
 	{
 	public:
 		typedef typename EnumParser<TEnum>::Pair Pair;
+		typedef typename EnumParser<TEnum>::PairListReference PairListReference;
 
 		static String ToString(int value, const TCHAR* separator)
 		{
-			PairList& members = EnumParser<TEnum>::GetMemberList();
+			PairListReference members = EnumParser<TEnum>::GetMemberList();
 			// 先に完全一致を探す (White=Red|Green|Blue のようなパターン用)
 			for (size_t i = 0; i < members.GetCount(); ++i)
 			{
@@ -317,7 +319,7 @@ protected:
 
 		static bool TryParseInternal(const TCHAR* str, int len, int* outValue)
 		{
-			PairList& members = EnumParser<TEnum>::GetMemberList();
+			PairListReference members = EnumParser<TEnum>::GetMemberList();
 			for (int i = 0; i < members.GetCount(); ++i)
 			{
 				//if (_tcsncmp(members[i].Name.GetCStr(), str, len) == 0)
