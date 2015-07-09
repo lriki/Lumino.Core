@@ -214,7 +214,7 @@ protected:
 		{
 			PairListReference members = EnumParser<TEnum>::GetMemberList();
 			// 先に完全一致を探す (White=Red|Green|Blue のようなパターン用)
-			for (size_t i = 0; i < members.GetCount(); ++i)
+			for (int i = 0; i < members.GetCount(); ++i)
 			{
 				if (members[i].Value == value) {
 					return members[i].Name;
