@@ -87,6 +87,10 @@ public:
 	}
 };
 
+#ifdef LN_DYNAMIC_TRACE
+#define LN_FOREACH( var_, col_ ) for (var_ : col_)
+#else
+
 //==============================================================================
 /*	LN_FOREACH マクロ
 
@@ -193,5 +197,6 @@ inline typename COL_T::iterator& get_itr( any_itr_t any_itr_, COL_T& )
 }
 
 } // namespace ForeachCore
+#endif
 
 } // namespace Lumino
