@@ -11,6 +11,7 @@ class TestUtils
 public:
 	/// baseFilePath のファイルと同じディレクトリの fileName を指すパスを得る
 	static String GetFilePath(const char* baseFilePath, const char* fileName);
+	static String GetFilePath(const char* baseFilePath, const wchar_t* fileName) { return GetFilePathW(baseFilePath, fileName).GetCStr(); }
 
 	/// baseFilePath のファイルと同じディレクトリの fileName を指すパスを得る
 	static PathName GetDirPath(const char* baseFilePath);
