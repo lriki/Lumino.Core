@@ -188,7 +188,7 @@ public:
 	/**
 		@brief		指定したエンコーディングを使用し、変換した文字列バッファを取得する
 		@param[in]	encoding			: 変換先文字エンコーディング
-		@param[out]	pUsedDefaultChar	: 変換不可文字をデフォルト文字 ('?') に変換したかどうか
+		@param[out]	usedDefaultChar		: 変換不可文字をデフォルト文字 ('?') に変換したかどうか
 		@return		バッファ終端には encoding に合わせた \0 終端文字が付加されます。
 	*/
 	ByteBuffer ConvertTo(const Text::Encoding* encoding, bool* usedDefaultChar = NULL) const;

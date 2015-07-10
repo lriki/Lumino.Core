@@ -97,6 +97,9 @@ public:
 	/// 追加のメモリ割り当てを行わずに追加できる要素の最大数を取得します。
 	int GetCapacity() const { return m_vector.capacity(); }
 
+	/// 配列のインデックスとして有効な整数値であるかを確認する
+	bool CheckValidIndex(int index) const { return (0 <= index && index < GetCount()); }
+
 public:
 	T& operator[] (int index) { return m_vector[index]; }
 	const T& operator[] (int index) const { return m_vector[index]; }
@@ -145,7 +148,8 @@ public:
 	}
 
 	/// 指定したキーに関連付けられている値を取得します。
-	const TValue& GetValue(const TKey& key) const
+	/// (値で返す点に注意)
+	const TValue GetValue(const TKey& key) const
 	{
 		int index = Find(key);
 		if (index >= 0) {
