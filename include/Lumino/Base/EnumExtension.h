@@ -21,20 +21,17 @@
 	class enumName : public Enum \
 	{ \
 	public: \
-		enum _##enumName
+enum _##enumName
 
 /**
 	@brief	拡張 enum 型を定義します。
 	@see	Doc_EnumExtension_1
 */
 #define LN_ENUM_DECLARE(enumName) \
-	private: \
-		int	m_value; \
 	public: \
 		typedef _##enumName enum_type; \
-		enumName() : m_value(0) {} \
-		enumName(enum_type v) : m_value(v) {} \
-		inline operator int() const { return m_value; } \
+		enumName() { m_value = 0; } \
+		enumName(enum_type v) { m_value = v; } \
 		inline bool operator==(enumName right) const { return m_value == right.m_value; } \
 		inline bool operator==(enum_type right) const { return m_value == right; } \
 		inline bool operator!=(enumName right) const { return !operator==(right); } \
@@ -66,21 +63,18 @@ public: \
 	class enumName : public Enum \
 	{ \
 	public: \
-		enum _##enumName
+enum _##enumName
 
 /**
 	@brief	ビットフィールドとしてフラグの組み合わせを表す 拡張 enum 型を定義します。
 	@see	Doc_EnumExtension_1
 */
 #define LN_ENUM_FLAGS_DECLARE(enumName) \
-	private: \
-		int	m_value; \
 	public: \
 		typedef _##enumName enum_type; \
-		enumName() : m_value(0) {} \
-		enumName(enum_type v) : m_value(v) {} \
+		enumName() { m_value = 0; } \
+		enumName(enum_type v) { m_value = v; } \
 		inline bool TestFlag(enum_type f) const throw() { return (m_value & f) == f && (f != 0 || m_value == f); } \
-		inline operator int() const { return m_value; } \
 		inline bool operator==(enumName right) const { return m_value == right.m_value; } \
 		inline bool operator==(_##enumName right) const { return m_value == right; } \
 		inline bool operator!=(enumName right) const { return !operator==(right); } \
@@ -137,6 +131,11 @@ namespace Lumino
 class Enum
 {
 protected:
+	int	m_value;
+
+
+public:
+	inline operator int() const { return m_value; }
 
 	// C++ operators
 	// https://en.wikipedia.org/wiki/Operators_in_C_and_C++
@@ -144,8 +143,8 @@ protected:
 	template<typename TEnum>
 	struct EnumParser
 	{
-		// LN_ENUM_DECLARE マクロが非常に長くなるのを避けるため、部分的にクラス化した
-	public:
+	// LN_ENUM_DECLARE マクロが非常に長くなるのを避けるため、部分的にクラス化した
+
 		struct Pair { String Name; TEnum Value; };
 		typedef typename ::Lumino::Array<Pair> PairList;
 		typedef typename ::Lumino::Array<Pair>& PairListReference;
