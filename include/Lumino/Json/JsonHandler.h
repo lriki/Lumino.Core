@@ -13,7 +13,7 @@ class JsonDocument;
 class JsonValue;
 class JsonMember;
 
-/*
+/**
 	@brief	SAX スタイルの JSON パーサから通知を受け取るインターフェイスです。
 */
 class JsonHandler
@@ -33,7 +33,7 @@ public:
 	virtual bool OnEndObject(int memberCount) = 0;
 };
 
-/*
+/**
 	@brief	JsonDocument を構築するための JsonHandler の実装です。
 */
 class JsonDOMHandler

@@ -1,6 +1,5 @@
 
 #pragma once
-
 #include "../Internal.h"
 #include <Lumino/Json/JsonValue.h>
 

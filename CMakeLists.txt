@@ -137,16 +137,17 @@ set(LN_SOURCES_IO
 )
 
 set(LN_SOURCES_Json
-	include/Lumino/Json/JsonReader.h
-	include/Lumino/Json/JsonValue.h
-	include/Lumino/Json/JsonWriter.h
 	include/Lumino/Json/JsonDocument.h
 	include/Lumino/Json/JsonError.h
 	include/Lumino/Json/JsonHandler.h
+	include/Lumino/Json/JsonReader.h
+	include/Lumino/Json/JsonValue.h
+	include/Lumino/Json/JsonWriter.h
 	src/Json/JsonDocument.cpp
 	src/Json/JsonHandler.cpp
 	src/Json/JsonReader.cpp
 	src/Json/JsonValue.cpp
+	src/Json/JsonWriter.cpp
 )
 
 set(LN_SOURCES_Threading
