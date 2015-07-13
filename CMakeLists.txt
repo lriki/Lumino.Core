@@ -74,6 +74,7 @@ set(LN_SOURCES_Base
 	src/Base/Logger.cpp
 	src/Base/Memory.cpp
 	src/Base/Point.cpp
+	src/Base/Rect.cpp
 	src/Base/RefObject.cpp
 	src/Base/Size.cpp
 	src/Base/String.cpp

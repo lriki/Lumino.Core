@@ -13,7 +13,10 @@ namespace Lumino
 class Rect
 {
 public:
+	static const Rect	Zero;	///< RectF(0, 0, 0, 0)
+	static const Rect	Empty;	///< RectF(0, 0, -1, -1)
 
+public:
 	int		X;			///< 左辺の X 座標
 	int		Y;			///< 上辺の Y 座標
 	int		Width;		///< 幅
@@ -119,11 +122,9 @@ public:
 	Size GetSize() const { return Size(Width, Height); }
 
 	/**
-		@brief		正方向の幅または高さを持たないかを判定します。
-		@details	幅と高さのどちらか一方が 0 または負の値であれば true を返します。
-					0 であるかを判定することはできませんので注意してください。
+		@brief	幅または高さを持たないかを判定します。
 	*/
-	bool IsEmpty() const { return (Width <= 0 || Height <= 0); }
+	bool IsEmpty() const { return (Width < 0 || Height < 0); }
 
 	/**
 		@brief	要素がすべて 0 かを判定します。
@@ -199,6 +200,10 @@ public:
 */
 class RectF
 {
+public:
+	static const RectF Zero;	///< RectF(0, 0, 0, 0)
+	static const RectF Empty;	///< RectF(0, 0, -1, -1)
+
 public:
 	float		X;			///< 左辺の X 座標
 	float		Y;			///< 上辺の Y 座標
@@ -305,11 +310,9 @@ public:
 	SizeF GetSize() const { return SizeF(Width, Height); }
 
 	/**
-		@brief		正方向の幅または高さを持たないかを判定します。
-		@details	幅と高さのどちらか一方が 0 または負の値であれば true を返します。
-					0 であるかを判定することはできませんので注意してください。
+		@brief	幅または高さを持たないかを判定します。
 	*/
-	bool IsEmpty() const { return (Width <= 0 || Height <= 0); }
+	bool IsEmpty() const { return (Width < 0 || Height < 0); }
 
 	/**
 		@brief	要素がすべて 0 かを判定します。
