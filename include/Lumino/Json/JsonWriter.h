@@ -22,11 +22,11 @@ public:
 	void EndObject();
 	void StartArray();
 	void EndArray();
-	void WriteKey(const TCHAR* str, int length);
+	void WriteKey(const TCHAR* str, int length = 0);
 	void WriteNull();
 	void WriteBool(bool value);
 	void WriteDouble(double value);
-	void WriteString(const TCHAR* str, int length);
+	void WriteString(const TCHAR* str, int length = 0);
 	bool IsComplete() const;
 
 protected:

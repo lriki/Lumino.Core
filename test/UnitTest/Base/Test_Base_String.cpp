@@ -343,10 +343,11 @@ TEST_F(Test_Base_String, Format)
 		StringA str1 = StringA::Format("%s", buf1);
 		ASSERT_STREQ(str1, buf1);	// 同じ文字ができていればOK
 		
-
+#if 0	// 制限撤廃
 		ASSERT_THROW(
 			StringA::Format("%sb", buf1),	// 1文字多い。失敗する
 			ArgumentException);
+#endif
 	}
 
 #ifdef LN_MSVC
@@ -358,7 +359,6 @@ TEST_F(Test_Base_String, Format)
 	}
 #endif
 
-#if _WIN32	// unix not impl
 	// StringW Max 文字数チェック
 	{
 		wchar_t buf1[2048 + 1] = { 0 };
@@ -368,12 +368,13 @@ TEST_F(Test_Base_String, Format)
 
 		StringW str1 = StringW::Format(L"%s", buf1);
 		ASSERT_TRUE(str1 == buf1);	// 同じ文字ができていればOK
-
+		
+#if 0	// 制限撤廃
 		ASSERT_THROW(
 			StringW::Format(L"%sb", buf1),	// 1文字多い。失敗する
 			ArgumentException);
-	}
 #endif
+	}
 }
 
 //---------------------------------------------------------------------

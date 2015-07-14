@@ -61,6 +61,7 @@ set(LN_SOURCES_Base
 	include/Lumino/Base/Stack.h
 	include/Lumino/Base/STLUtils.h
 	include/Lumino/Base/String.h
+	include/Lumino/Base/StringBuilder.h
 	include/Lumino/Base/StringTraits.h
 	include/Lumino/Base/Typedef.h
 	src/Base/ByteBuffer.cpp
@@ -78,6 +79,7 @@ set(LN_SOURCES_Base
 	src/Base/RefObject.cpp
 	src/Base/Size.cpp
 	src/Base/String.cpp
+	src/Base/StringBuilder.cpp
 	src/Base/StringTraits.cpp
 	src/Base/Version.cpp
 )
@@ -121,6 +123,7 @@ set(LN_SOURCES_IO
 	include/Lumino/IO/Stream.h
 	include/Lumino/IO/StreamWriter.h
 	include/Lumino/IO/StringReader.h
+	include/Lumino/IO/StringWriter.h
 	include/Lumino/IO/TextReader.h
 	include/Lumino/IO/TextWriter.h
 	src/IO/BinaryReader.cpp
@@ -134,6 +137,7 @@ set(LN_SOURCES_IO
 	src/IO/PathTraits.cpp
 	src/IO/StreamWriter.cpp
 	src/IO/StringReader.cpp
+	src/IO/StringWriter.cpp
 	src/IO/TextWriter.cpp
 )
 

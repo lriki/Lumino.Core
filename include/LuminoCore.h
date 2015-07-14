@@ -9,6 +9,7 @@
 #include "Lumino/Text/UnicodeUtils.h"
 
 #include "Lumino/Base/String.h"
+#include "Lumino/Base/StringBuilder.h"
 #include "Lumino/Base/StringTraits.h"
 #include "Lumino/Base/RefObject.h"
 #include "Lumino/Base/ByteBuffer.h"
@@ -43,11 +44,13 @@
 #include "Lumino/IO/BinaryReader.h"
 #include "Lumino/IO/StreamWriter.h"
 #include "Lumino/IO/StringReader.h"
+#include "Lumino/IO/StringWriter.h"
 #include "Lumino/IO/TextWriter.h"
 
 #include "Lumino/Json/JsonValue.h"
 #include "Lumino/Json/JsonHandler.h"
 #include "Lumino/Json/JsonReader.h"
+#include "Lumino/Json/JsonWriter.h"
 #include "Lumino/Json/JsonDocument.h"
 
 #include "Lumino/Threading/Atomic.h"

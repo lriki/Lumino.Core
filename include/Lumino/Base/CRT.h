@@ -342,6 +342,35 @@ inline errno_t _wfopen_s(
 	// http://www.linuxquestions.org/questions/programming-9/_wfopen-does-not-work-on-linux-692380/
 }
 
+
+//-----------------------------------------------------------------------------
+//// https://msdn.microsoft.com/en-us/library/w05tbk72.aspx
+////-----------------------------------------------------------------------------
+//inline errno_t _vscprintf(
+//	const char *format,
+//	va_list argptr )
+//{
+//	FILE *stdnul = fopen( "/dev/null", "wb" );   
+//	if ( ! stdnul ) return EOF ;   
+//
+//	int retvalue = vfprintf(stdnul, format, args);   
+//
+//	fclose(stdnul);
+//	return retvalue;
+//}
+//inline errno_t _vscwprintf(
+//	const wchar_t *format,
+//	va_list argptr )
+//{
+//	FILE *stdnul = fopen("/dev/null", "wb");
+//	if (!stdnul) return EOF;
+//
+//	int retvalue = vfwprintf(stdnul, format, args);
+//
+//	fclose(stdnul);
+//	return retvalue;
+//}
+
 } // namespace Lumino
 
 #endif

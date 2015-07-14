@@ -43,7 +43,7 @@ TEST_F(Test_Base_Rect, Basic)
 
 	Rect rc5(0, 0, -1, -2);
 	ASSERT_TRUE(rc5.IsEmpty());
-	ASSERT_TRUE(rc1.IsEmpty());
+	ASSERT_FALSE(rc1.IsEmpty());
 	ASSERT_FALSE(rc3.IsEmpty());
 
 	ASSERT_TRUE(rc1.IsZero());

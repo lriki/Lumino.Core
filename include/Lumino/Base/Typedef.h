@@ -1,8 +1,10 @@
 ﻿
 #pragma once
 
-// VisualC++
 #if defined(_MSC_VER)
+//----------------------------------------------------------------------
+// VisualC++
+
 #if _MSC_VER >=1600 // VC2010(VC10.0)以降
 	#include <stdint.h>
 #else
@@ -56,15 +58,25 @@
 	#define UINTPTR_MAX			0xffffffff
 #endif
 
-// GCC
 #else
+
+//----------------------------------------------------------------------
+// GCC
 #include <stdint.h>
+#include <locale.h>
+
 #endif
 
 // lib types
 namespace Lumino
 {
 	typedef	uint8_t		byte_t;
+
+#if defined(_MSC_VER)
+	typedef _locale_t	NativeLocale_t;
+#else
+	typedef locale_t	NativeLocale_t;
+#endif
 }
 
 

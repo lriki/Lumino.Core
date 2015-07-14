@@ -142,11 +142,15 @@ void TextWriter::WriteUInt64(uint64_t value)
 }
 void TextWriter::WriteFloat(float value)
 {
-	LN_THROW(0, NotImplementedException);
+	TCHAR buf[64];
+	int len = StringTraits::tsnprintf_l(buf, 64, _T("%f"), m_locale.GetNativeLocale(), value);
+	WriteInternal(buf, len);
 }
 void TextWriter::WriteDouble(double value)
 {
-	LN_THROW(0, NotImplementedException);
+	TCHAR buf[64];
+	int len = StringTraits::tsnprintf_l(buf, 64, _T("%lf"), m_locale.GetNativeLocale(), value);
+	WriteInternal(buf, len);
 }
 
 //-----------------------------------------------------------------------------
@@ -248,7 +252,7 @@ void TextWriter::WriteInternal(const TCHAR* str, int len)
 		return;
 	}
 
-	if (m_encoding != NULL && m_decoder != NULL && m_encoder != NULL)
+	if (m_decoder != NULL && m_encoder != NULL)
 	{
 		// 変換状態を保持できる Encoding であれば余分にメモリを確保しないで変換できる。
 		if (m_decoder->CanRemain()/* && m_encoder->CanRemain()*/)	// encoder 側は状態保存できなくても良い
@@ -278,6 +282,11 @@ void TextWriter::WriteInternal(const TCHAR* str, int len)
 		else {
 			LN_THROW(0, NotImplementedException);
 		}
+	}
+	// エンコーダが無い (SetEncoding() されていない) 場合は、文字コード変換を行わず TCHAR をそのまま出力する
+	else if (m_encoder == NULL)
+	{
+		WriteOverride(str, len * sizeof(TCHAR));
 	}
 	else {
 		LN_THROW(0, NotImplementedException);

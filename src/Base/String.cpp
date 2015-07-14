@@ -5,6 +5,7 @@
 #include <Lumino/Text/Encoding.h>
 #include <Lumino/Base/StringTraits.h>
 #include <Lumino/Base/String.h>
+#include <Lumino/Base/Locale.h>
 #include <Lumino/Base/Environment.h>
 
 
@@ -107,6 +108,8 @@ typename GenericString<TChar>::GenericStringCore/*<TChar>*/ GenericString<TChar>
 //=============================================================================
 // GenericString
 //=============================================================================
+
+static const int MaxFormatLength = 1024;
 
 //-----------------------------------------------------------------------------
 //
@@ -867,34 +870,50 @@ const GenericString<TChar>& GenericString<TChar>::GetEmpty()
 template<typename TChar>
 GenericString<TChar> GenericString<TChar>::Format(const GenericString<TChar>& format, ...)
 {
-	GenericString<TChar> result;
 	va_list args;
 	va_start(args, format);
-	try {
-		StringTraits::FormatVAList(format.GetCStr(), args, &result);
+	int len = StringTraits::tvscprintf_l(format.GetCStr(), Locale::GetC().GetNativeLocale(), args);	// 文字数を求める
+
+	// 文字数が一定以内ならメモリ確保せずにスタックを使い、速度向上を図る
+	if (len < MaxFormatLength)
+	{
+		TChar buf[MaxFormatLength + 1];
+		memset(buf, 0, sizeof(buf));
+		StringTraits::VSPrintf(buf, MaxFormatLength + 1, format, args);
 		va_end(args);
+		return GenericString<TChar>(buf);
 	}
-	catch (...) {
+	else
+	{
+		ByteBuffer buf(len + 1);
+		StringTraits::VSPrintf((TChar*)buf.GetData(), buf.GetSize(), format, args);
 		va_end(args);
-		throw;
+		return GenericString<TChar>((TChar*)buf.GetData());
 	}
-	return result;
 }
 template<typename TChar>
 GenericString<TChar> GenericString<TChar>::Format(const TChar* format, ...)
 {
-	GenericString<TChar> result;
 	va_list args;
 	va_start(args, format);
-	try {
-		StringTraits::FormatVAList(format, args, &result);
+	int len = StringTraits::tvscprintf_l(format, Locale::GetC().GetNativeLocale(), args);	// 文字数を求める
+
+	// 文字数が一定以内ならメモリ確保せずにスタックを使い、速度向上を図る
+	if (len < MaxFormatLength)
+	{
+		TChar buf[MaxFormatLength + 1];
+		memset(buf, 0, sizeof(buf));
+		StringTraits::VSPrintf(buf, MaxFormatLength + 1, format, args);
 		va_end(args);
+		return GenericString<TChar>(buf);
 	}
-	catch (...) {
+	else
+	{
+		ByteBuffer buf((len + 1) * sizeof(TChar));
+		StringTraits::VSPrintf((TChar*)buf.GetData(), buf.GetSize(), format, args);
 		va_end(args);
-		throw;
+		return GenericString<TChar>((TChar*)buf.GetData());
 	}
-	return result;
 }
 
 //template<typename TChar>

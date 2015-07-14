@@ -33,6 +33,15 @@ public:
 	/** @name ランタイム関数のオーバーロードユーティリティ */
 	/** @{ */
 
+	static int tvscprintf_l(const char* format, NativeLocale_t locale, va_list args);
+	static int tvscprintf_l(const wchar_t* format, NativeLocale_t locale, va_list args);
+	static int tvsnprintf_l(char* out, int charCount, const char* format, NativeLocale_t locale, va_list args);
+	static int tvsnprintf_l(wchar_t* out, int charCount, const wchar_t* format, NativeLocale_t locale, va_list args);
+	static int tsnprintf_l(char* out, int charCount, const char* format, NativeLocale_t locale, ...);
+	static int tsnprintf_l(wchar_t* out, int charCount, const wchar_t* format, NativeLocale_t locale, ...);
+
+
+
 	/**
 		@brief	NULL 終端文字列の長さを求めます。
 	*/
@@ -142,14 +151,14 @@ public:
 					また、可変長引数リストに文字列クラスのインスタンスを直接指定することはできません。
 					GetCStr() 等で取得した文字列ポインタ型を指定してください。
 	*/
-	template<typename TChar>
-	static GenericString<TChar> Format(const TChar* format, ...);
+	//template<typename TChar>
+	//static GenericString<TChar> Format(const TChar* format, ...);
 
 	/**
 		@brief		書式文字列と可変長引数リストから文字列を生成する
 	*/
-	template<typename TChar>
-	static void FormatVAList(const TChar* format, va_list args, GenericString<TChar>* out);
+	//template<typename TChar>
+	//static void FormatVAList(const TChar* format, va_list args, GenericString<TChar>* out);
 
 	/**
 		@brief		文字列の末尾が一致するかを調べる

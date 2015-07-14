@@ -19,6 +19,79 @@
 namespace Lumino
 {
 
+#ifdef LN_WIN32
+int StringTraits::tvscprintf_l(const char* format, NativeLocale_t locale, va_list args)
+{
+	return _vscprintf_l(format, locale, args);
+}
+int StringTraits::tvscprintf_l(const wchar_t* format, NativeLocale_t locale, va_list args)
+{
+	return _vscwprintf_l(format, locale, args);
+}
+int StringTraits::tvsnprintf_l(char* out, int charCount, const char* format, NativeLocale_t locale, va_list args)
+{
+	return _vsnprintf_s_l(out, charCount, _TRUNCATE, format, locale, args);
+}
+int StringTraits::tvsnprintf_l(wchar_t* out, int charCount, const wchar_t* format, NativeLocale_t locale, va_list args)
+{
+	return _vsnwprintf_s_l(out, charCount, _TRUNCATE, format, locale, args);
+}
+#else
+// スコープ内でスレッドのロケールを変更する
+class ScopedLocaleRAII
+{
+	locale_t m_old;
+public:
+	ScopedLocaleRAII(NativeLocale_t loc) { m_old = uselocale(loc); }
+	~ScopedLocaleRAII() { uselocale(m_old); }
+};
+
+int StringTraits::tvscprintf_l(const char* format, NativeLocale_t locale, va_list args)
+{
+	ScopedLocaleRAII _loc(locale);
+	FILE *stdnul = fopen("/dev/null", "wb");   
+	if (!stdnul) { return EOF; } 
+	int retvalue = vfwprintf(stdnul, format, args);   
+	fclose(stdnul);
+	return retvalue;
+}
+int StringTraits::tvscprintf_l(const wchar_t* format, NativeLocale_t locale, va_list args)
+{
+	ScopedLocaleRAII _loc(locale);
+	FILE *stdnul = fopen("/dev/null", "wb");   
+	if (!stdnul) { return EOF; } 
+	int retvalue = vfwprintf(stdnul, format, args);   
+	fclose(stdnul);
+	return retvalue;
+}
+int StringTraits::tvsnprintf_l(char* out, int charCount, const char* format, NativeLocale_t locale, va_list args)
+{
+	ScopedLocaleRAII _loc(locale);
+	return vsnprintf(out, charCount, format, args);
+}
+int StringTraits::tvsnprintf_l(wchar_t* out, int charCount, const wchar_t* format, NativeLocale_t locale, va_list args)
+{
+	ScopedLocaleRAII _loc(locale);
+	return vswprintf(out, charCount, format, args);
+}
+#endif
+int StringTraits::tsnprintf_l(char* out, int charCount, const char* format, NativeLocale_t locale, ...)
+{
+	va_list args;
+	va_start(args, format);
+	int r = tvsnprintf_l(out, charCount, format, locale, args);
+	va_end(args);
+	return r;
+}
+int StringTraits::tsnprintf_l(wchar_t* out, int charCount, const wchar_t* format, NativeLocale_t locale, ...)
+{
+	va_list args;
+	va_start(args, format);
+	int r = tvsnprintf_l(out, charCount, format, locale, args);
+	va_end(args);
+	return r;
+}
+
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
@@ -356,42 +429,42 @@ template void StringTraits::Trim<wchar_t>(const wchar_t* begin, int length, cons
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-template<typename TChar>
-GenericString<TChar> StringTraits::Format(const TChar* format, ...)
-{
-	GenericString<TChar> str;
-	va_list args;
-	va_start(args, format);
-	try {
-		StringTraits::FormatVAList(format, args, &str);
-		va_end(args);
-	}
-	catch (...) {
-		va_end(args);
-		throw;
-	}
-	return str;
-}
-template GenericString<char> StringTraits::Format(const char* format, ...);
-template GenericString<wchar_t> StringTraits::Format(const wchar_t* format, ...);
-
+//template<typename TChar>
+//GenericString<TChar> StringTraits::Format(const TChar* format, ...)
+//{
+//	GenericString<TChar> str;
+//	va_list args;
+//	va_start(args, format);
+//	try {
+//		StringTraits::FormatVAList(format, args, &str);
+//		va_end(args);
+//	}
+//	catch (...) {
+//		va_end(args);
+//		throw;
+//	}
+//	return str;
+//}
+//template GenericString<char> StringTraits::Format(const char* format, ...);
+//template GenericString<wchar_t> StringTraits::Format(const wchar_t* format, ...);
+//
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-template<typename TChar>
-void StringTraits::FormatVAList(const TChar* format, va_list args, GenericString<TChar>* out)
-{
-	static const int nMaxLength = GenericString<TChar>::MaxFormatLength;
-
-	TChar buf[nMaxLength + 1];
-	memset(buf, 0, sizeof(buf));
-	int validSize = VSPrintf(buf, nMaxLength + 1, format, args);
-
-	LN_THROW(0 <= validSize && validSize <= nMaxLength, ArgumentException);
-	*out = buf;
-}
-template void StringTraits::FormatVAList<char>(const char* format, va_list args, GenericString<char>* out);
-template void StringTraits::FormatVAList<wchar_t>(const wchar_t* format, va_list args, GenericString<wchar_t>* out);
+//template<typename TChar>
+//void StringTraits::FormatVAList(const TChar* format, va_list args, GenericString<TChar>* out)
+//{
+//	static const int nMaxLength = GenericString<TChar>::MaxFormatLength;
+//
+//	TChar buf[nMaxLength + 1];
+//	memset(buf, 0, sizeof(buf));
+//	int validSize = VSPrintf(buf, nMaxLength + 1, format, args);
+//
+//	LN_THROW(0 <= validSize && validSize <= nMaxLength, ArgumentException);
+//	*out = buf;
+//}
+//template void StringTraits::FormatVAList<char>(const char* format, va_list args, GenericString<char>* out);
+//template void StringTraits::FormatVAList<wchar_t>(const wchar_t* format, va_list args, GenericString<wchar_t>* out);
 
 //-----------------------------------------------------------------------------
 //

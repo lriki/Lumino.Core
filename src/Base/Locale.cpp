@@ -13,6 +13,27 @@
 	■ MSDN ロケール名　書式
 	https://msdn.microsoft.com/ja-jp/library/hzz3tw78.aspx
 
+
+	■ 各OSの標準ライブラリの locale 事情
+		ロケールを考慮した文字列生成を、スレッドセーフで実装したいのだが・・・。
+
+		共通:
+			setlocale は「プログラム」のロケールを変更する、とある。
+			スレッド単位と決め付けることは出来ないので、基本的に使わない方針で。
+
+		Windows:
+			_printf_l のように、_l が付いている関数はロケールを引数で指定できる。
+
+		Max:
+			(実際に動かしてはいないが) Windows と同じく、printf_l のような関数が用意されているようだ。
+			ただし、Windows と違って先頭に _ が付かない。
+
+		Linux:
+			これも種類によって差が大きい。
+			FreeBSD は Max と同様らしい。
+			Ubuntu は _l が付く関数は無い。変わりに、uselocale を使うとスレッドのロケールを変更できる。
+			(__locale_raii でググるといろいろ出てくる)
+		
 */
 
 #include "../Internal.h"
@@ -26,14 +47,74 @@ namespace Lumino
 // Locale
 //=============================================================================
 
+
+#ifdef LN_WIN32
+//---------------------------------------------
+class ScopedLocaleRAII
+{
+public:
+	ScopedLocaleRAII(NativeLocale_t loc) {}
+};
+
+//---------------------------------------------
+static NativeLocale_t CreateNativeLocale(const wchar_t* locale)
+{
+	return _wcreate_locale(LC_ALL, locale);
+}
+
+//---------------------------------------------
+static void GetNativeDefaultLocale(NativeLocale_t* outLocale, StringW* outName)
+{
+	// setlocale を使用した方法は Windows でも可能だが、取得できるのは必ずシステムロケールになってしまう。
+	// Qt 等のほかのフレームワークでもユーザーロケールを優先しているし、
+	// Office 等のメジャーなツールもユーザーロケールでUIを表示している。
+	// これらに合わせておく。
+	WCHAR strNameBuffer[LOCALE_NAME_MAX_LENGTH];
+	LCID  lcid = ::GetUserDefaultLCID();
+	if (LCIDToLocaleName(lcid, strNameBuffer, LOCALE_NAME_MAX_LENGTH, 0) == 0)
+	{
+		// エラーが発生したら変わりに "C" を使う
+		*outLocale = _wcreate_locale(LC_ALL, _T("C"));
+		*outName = _T("C");
+		return;
+	}
+	*outLocale = _wcreate_locale(LC_ALL, strNameBuffer);
+	*outName = strNameBuffer;
+}
+
+#else
+//---------------------------------------------
+class ScopedLocaleRAII
+{
+	locale_t m_old;
+public:
+	ScopedLocaleRAII(NativeLocale_t loc)
+	{
+		m_old = uselocale(loc);
+	}
+	~ScopedLocaleRAII()
+	{
+		uselocale(m_old);
+	}
+};
+//---------------------------------------------
 static NativeLocale_t CreateNativeLocale(const char* locale)
 {
-#ifdef LN_WIN32
-	return _create_locale(LC_ALL, locale);
-#else
 	return newlocale(LC_ALL_MASK, locale, NULL);
-#endif
 }
+//---------------------------------------------
+static void GetNativeDefaultLocale(NativeLocale_t* outLocale, StringA* outName)
+{
+	//// How Programs Set the Locale
+	//// http://www.gnu.org/software/libc/manual/html_node/Setting-the-Locale.html
+	//StringA oldLocale = setlocale(LC_ALL, NULL);
+	//char* newLocale = setlocale(LC_ALL, "");
+	//setlocale(LC_ALL, oldLocale.GetCStr());
+
+	*outLocale = newlocale(LC_ALL_MASK, "", NULL);
+	*outName = "";
+}
+#endif
 
 static void FreeNativeLocale(NativeLocale_t locale)
 {
@@ -44,39 +125,34 @@ static void FreeNativeLocale(NativeLocale_t locale)
 #endif
 }
 
-static NativeLocale_t GetNativeDefaultLocale()
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+Locale::Locale()
+	: m_nativeLocale(0)
+	, m_nativeName()
 {
-#ifdef LN_WIN32
-	// setlocale を使用した方法は Windows でも可能だが、取得できるのは必ずシステムロケールになってしまう。
-	// Qt 等のほかのフレームワークでもユーザーロケールを優先しているし、
-	// Office 等のメジャーなツールもユーザーロケールでUIを表示している。
-	// これらに合わせておく。
-
-	WCHAR strNameBuffer[LOCALE_NAME_MAX_LENGTH];
-	LCID  lcid = ::GetUserDefaultLCID();
-	if (LCIDToLocaleName(lcid, strNameBuffer, LOCALE_NAME_MAX_LENGTH, 0) == 0)
-	{
-		// エラーが発生したら変わりに "C" を使う
-		return _create_locale(LC_ALL, "C");
-	}
-	return _wcreate_locale(LC_ALL, strNameBuffer);
-#else
-	//// How Programs Set the Locale
-	//// http://www.gnu.org/software/libc/manual/html_node/Setting-the-Locale.html
-	//StringA oldLocale = setlocale(LC_ALL, NULL);
-	//char* newLocale = setlocale(LC_ALL, "");
-	//setlocale(LC_ALL, oldLocale.GetCStr());
-
-	return newlocale(LC_ALL_MASK, "", NULL);
-#endif
+	GetNativeDefaultLocale(&m_nativeLocale, &m_nativeName);
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-Locale::Locale()
-	: m_nativeLocale(GetNativeDefaultLocale())
+Locale::Locale(const Locale& locale)
+	: m_nativeLocale(0)
+	, m_nativeName(locale.m_nativeName)
 {
+	m_nativeLocale = CreateNativeLocale(m_nativeName);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+Locale& Locale::operator=(const Locale& locale)
+{
+	m_nativeName = locale.m_nativeName;
+	m_nativeLocale = CreateNativeLocale(m_nativeName);
+	return (*this);
 }
 
 //-----------------------------------------------------------------------------
@@ -84,7 +160,23 @@ Locale::Locale()
 //-----------------------------------------------------------------------------
 Locale::~Locale()
 {
+	Release();
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void Locale::Release()
+{
 	FreeNativeLocale(m_nativeLocale);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+NativeLocale_t Locale::GetNativeLocale() const
+{
+	return m_nativeLocale;
 }
 
 //-----------------------------------------------------------------------------
@@ -93,7 +185,6 @@ Locale::~Locale()
 const Locale& Locale::GetDefault()
 {
 	static Locale locale;
-	locale.m_nativeLocale = GetNativeDefaultLocale();
 	return locale;
 }
 
@@ -106,10 +197,37 @@ const Locale& Locale::GetC()
 	static bool init = false;
 	if (!init)
 	{
+#ifdef LN_WIN32
+		locale.m_nativeLocale = CreateNativeLocale(L"C");
+		locale.m_nativeName = L"C";
+#else
 		locale.m_nativeLocale = CreateNativeLocale("C");
+		locale.m_nativeName = "C";
+#endif
 		init = true;
 	}
 	return locale;
+}
+
+//=============================================================================
+// GenericLocalizer
+//=============================================================================
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+GenericLocalizer<TChar>::GenericLocalizer(const Locale& locale)
+	: m_locale(locale)
+{
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+int GenericLocalizer<TChar>::Format(TChar* outBuf, int outBufLength, const TChar* format, ...)
+{
+
 }
 
 } // namespace Lumino

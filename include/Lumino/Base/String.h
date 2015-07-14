@@ -79,8 +79,6 @@ template<typename TChar>
 class GenericString
 {
 public:
-	static const int MaxFormatLength = 2048;
-
 	typedef typename GenericStringTraits<TChar>::XCHAR XCHAR;
 	typedef typename GenericStringTraits<TChar>::YCHAR YCHAR;
 
@@ -395,14 +393,9 @@ public:
 	static const StringT& GetEmpty();
 
 	/**
-		@brief		書式文字列と可変長引数リストから文字列を生成する
-		@param[in]	format		: 書式文字列
+		@brief		書式文字列と可変長引数リストから文字列を生成します。
+		@param[in]	format		: 書式文字列 (printf の書式指定構文)
 		@param[in]	...			: 引数リスト
-		@attention	生成される文字数は MaxFormatLength 以内に収まらなければなりません。(あふれた場合、例外をthrowします)
-					これは、_vsnwprintf に相当する関数がWindows以外では使用できず、あらかじめ生成後の必要バッファサイズを測ることができないためです。<br>
-					Format() は基本的に数値からの変換等、短い文字列にのみ使用し、文字列の連結は += 演算子等を使用してください。
-					また、可変長引数リストにこのクラスのインスタンスを直接指定することはできません。
-					GetCStr() 等で取得した文字列ポインタ型を指定してください。
 	*/
 	static GenericString Format(const GenericString& format, ...);
 	static GenericString Format(const TChar* format, ...);				///< @overload Format

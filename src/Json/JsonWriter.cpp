@@ -1,6 +1,7 @@
 
 #pragma once
 #include "../Internal.h"
+#include <Lumino/Base/StringTraits.h>
 #include <Lumino/Json/JsonWriter.h>
 
 namespace Lumino
@@ -15,7 +16,9 @@ namespace Json
 //
 //-----------------------------------------------------------------------------
 JsonWriter::JsonWriter(TextWriter* textWriter)
+	: m_textWriter(textWriter)
 {
+	LN_VERIFY_RETURN(m_textWriter != NULL);
 	m_levelStack.Reserve(32);
 }
 
@@ -81,6 +84,7 @@ void JsonWriter::EndArray()
 void JsonWriter::WriteKey(const TCHAR* str, int length)
 {
 	LN_VERIFY_RETURN(m_levelStack.GetCount() >= 1);
+	length = (length <= -1) ? StringTraits::StrLen(str) : 0;
 
 	WritePrefix();
 	OnKey(str, length);
@@ -129,6 +133,7 @@ void JsonWriter::WriteDouble(double value)
 void JsonWriter::WriteString(const TCHAR* str, int length)
 {
 	LN_VERIFY_RETURN(m_levelStack.GetCount() >= 1);
+	length = (length <= -1) ? StringTraits::StrLen(str) : 0;
 
 	WritePrefix();
 	OnString(str, length);
