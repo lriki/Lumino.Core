@@ -15,7 +15,7 @@ namespace Lumino
 	char mbcsPath[LN_MAX_PATH + 1]; \
 	if (wcstombs(mbcsPath, srcWPath, LN_MAX_PATH) < 0) { \
 		LN_THROW(0, IOException); \
-		}
+	}
 
 //-----------------------------------------------------------------------------
 //

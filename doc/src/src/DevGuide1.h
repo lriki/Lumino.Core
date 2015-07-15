@@ -4,14 +4,14 @@
 /**
 	@page DevGuide1 開発ガイド
 	
-	- @ref Install1_anchor1 "エラー処理"<br>
+	- @ref Install1_anchor1 "エラーハンドリング"<br>
 	
 	@anchor Install1_anchor1
 	<hr>
-	@par エラー処理
+	@par エラーハンドリング
 	<br>
+	Lumino は、自身で回復できないエラーを通知するために例外をスローします。
 	
-	test
 	
 	
 */

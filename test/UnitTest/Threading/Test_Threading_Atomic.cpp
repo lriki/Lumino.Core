@@ -1,4 +1,5 @@
 ﻿#include <TestConfig.h>
+#include <atomic>
 using namespace Lumino::Threading;
 
 class Test_Threading_Atomic : public ::testing::Test
@@ -11,6 +12,8 @@ protected:
 //-----------------------------------------------------------------------------
 TEST_F(Test_Threading_Atomic, Basic)
 {
+	std::atomic<int> a;
+
 	class IncrThread : public Thread
 	{
 	public:

@@ -156,13 +156,13 @@ void JsonWriter::WritePrefix()
 	if (!m_levelStack.IsEmpty())
 	{
 		Level& level = m_levelStack.GetTop();
-		if (level.ValueCount > 0)
+		if (level.justSawKey) {
+			OnPrefix(PrefixType_Key, level.ValueCount);
+		}
+		else if (level.ValueCount > 0)
 		{
 			if (level.InArray) {
 				OnPrefix(PrefixType_Array, level.ValueCount);
-			}
-			else if (level.justSawKey) {
-				OnPrefix(PrefixType_Key, level.ValueCount);
 			}
 			else {
 				OnPrefix(PrefixType_Object, level.ValueCount);
@@ -216,7 +216,7 @@ void JsonWriter::OnStartArray()
 //-----------------------------------------------------------------------------
 void JsonWriter::OnEndArray()
 {
-	m_textWriter->WriteChar(_T('['));
+	m_textWriter->WriteChar(_T(']'));
 }
 
 //-----------------------------------------------------------------------------
@@ -261,7 +261,9 @@ void JsonWriter::OnDouble(double value)
 //-----------------------------------------------------------------------------
 void JsonWriter::OnString(const TCHAR* str, int length)
 {
+	m_textWriter->Write(_T("\""), 1);
 	m_textWriter->Write(str, length);
+	m_textWriter->Write(_T("\""), 1);
 }
 
 } // namespace Json

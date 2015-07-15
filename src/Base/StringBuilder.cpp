@@ -42,7 +42,7 @@ void StringBuilder::Append(const TCHAR* str, int length)
 //-----------------------------------------------------------------------------
 String StringBuilder::ToString() const
 {
-	return String((const TCHAR*)m_buffer.GetConstData(), m_buffer.GetSize() / sizeof(TCHAR));
+	return String((const TCHAR*)m_buffer.GetConstData(), m_bufferUsed / sizeof(TCHAR));
 }
 
 //-----------------------------------------------------------------------------
@@ -65,6 +65,8 @@ void StringBuilder::WriteInternal(const TCHAR* str, int length)
 	byte_t* ptr = &(m_buffer.GetData()[m_bufferUsed]);
 	size_t size = m_buffer.GetSize() - m_bufferUsed;
 	memcpy_s(ptr, size, str, byteCount);
+
+	m_bufferUsed += byteCount;
 }
 
 } // namespace Lumino

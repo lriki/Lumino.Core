@@ -78,7 +78,7 @@ int StringTraits::tvsnprintf_l(wchar_t* out, int charCount, const wchar_t* forma
 int StringTraits::tsnprintf_l(char* out, int charCount, const char* format, NativeLocale_t locale, ...)
 {
 	va_list args;
-	va_start(args, format);
+	va_start(args, locale);
 	int r = tvsnprintf_l(out, charCount, format, locale, args);
 	va_end(args);
 	return r;
@@ -86,7 +86,7 @@ int StringTraits::tsnprintf_l(char* out, int charCount, const char* format, Nati
 int StringTraits::tsnprintf_l(wchar_t* out, int charCount, const wchar_t* format, NativeLocale_t locale, ...)
 {
 	va_list args;
-	va_start(args, format);
+	va_start(args, locale);
 	int r = tvsnprintf_l(out, charCount, format, locale, args);
 	va_end(args);
 	return r;
