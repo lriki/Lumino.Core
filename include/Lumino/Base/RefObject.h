@@ -60,6 +60,12 @@ class RefPtr
 {
 public:
 
+	template<typename... TArgs>
+	static RefPtr<T> Create(TArgs... args)
+	{
+		return RefPtr<T>(LN_NEW T(args...));
+	}
+
 	/**
 		@brief		コンストラクタ
 	*/
