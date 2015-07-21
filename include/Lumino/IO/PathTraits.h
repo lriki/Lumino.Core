@@ -123,7 +123,7 @@ public:
 
 
 	/**
-		@brief		2つのパス文字列が等しいかをチェックする
+		@brief		2つのパス文字列が等しいかをチェックします。
 		@param[in]	path1	: パス文字列
 		@param[in]	path2	: パス文字列
 		@details	DirectorySeparatorChar と AltDirectorySeparatorChar は等価とみなします。
