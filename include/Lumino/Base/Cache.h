@@ -22,7 +22,7 @@ public:
 
 public:
 	CacheKey();
-	explicit CacheKey(uint32_t hashCode);
+	explicit CacheKey(uint64_t hashCode);
 	explicit CacheKey(const TCHAR* str);
 	explicit CacheKey(const String& str);
 	explicit CacheKey(const PathName& path);
@@ -43,7 +43,7 @@ private:
 	};
 
 	Type		m_keyType;
-	uint32_t	m_hashCode;
+	uint64_t	m_hashCode;
 	String		m_string;
 	PathName	m_pathName;
 };

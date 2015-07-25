@@ -26,7 +26,7 @@ CacheKey::CacheKey()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-CacheKey::CacheKey(uint32_t hashCode)
+CacheKey::CacheKey(uint64_t hashCode)
 	: m_keyType(Type_HashCode)
 	, m_hashCode(hashCode)
 	, m_string()
