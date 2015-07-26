@@ -6,7 +6,7 @@ namespace Lumino
 {
 
 //=============================================================================
-// StringBuilder
+// GenericStringBuilderCore
 //=============================================================================
 
 const int DefaultCapacity = 512;
@@ -14,7 +14,8 @@ const int DefaultCapacity = 512;
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-StringBuilder::StringBuilder()
+template<typename TChar>
+GenericStringBuilderCore<TChar>::GenericStringBuilderCore()
 	: m_buffer()
 	, m_bufferUsed(0)
 {
@@ -24,14 +25,25 @@ StringBuilder::StringBuilder()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-StringBuilder::~StringBuilder()
+template<typename TChar>
+GenericStringBuilderCore<TChar>::~GenericStringBuilderCore()
 {
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void StringBuilder::Append(const TCHAR* str, int length)
+template<typename TChar>
+void GenericStringBuilderCore<TChar>::Clear()
+{
+	m_bufferUsed = 0;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+void GenericStringBuilderCore<TChar>::Append(const TChar* str, int length)
 {
 	if (str == NULL || length <= 0) { return; }	// コピーの必要無し
 	WriteInternal(str, length);
@@ -40,19 +52,39 @@ void StringBuilder::Append(const TCHAR* str, int length)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-String StringBuilder::ToString() const
+template<typename TChar>
+void GenericStringBuilderCore<TChar>::Append(const byte_t* buffer, int byteCount)
 {
-	return String((const TCHAR*)m_buffer.GetConstData(), m_bufferUsed / sizeof(TCHAR));
+	Append((const TChar*)buffer, byteCount / sizeof(TChar));
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void StringBuilder::WriteInternal(const TCHAR* str, int length)
+template<typename TChar>
+void GenericStringBuilderCore<TChar>::Append(const ByteBuffer& buffer)
+{
+	Append(buffer.GetData(), buffer.GetSize());
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+//template<typename TChar>
+//GenericString<TChar> GenericStringBuilderCore<TChar>::ToString() const
+//{
+//	return GenericString<TChar>((const TChar*)m_buffer.GetConstData(), m_bufferUsed / sizeof(TChar));
+//}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+void GenericStringBuilderCore<TChar>::WriteInternal(const TChar* str, int length)
 {
 	LN_ASSERT(str != NULL);
 
-	size_t byteCount = sizeof(TCHAR) * length;
+	size_t byteCount = sizeof(TChar) * length;
 
 	// バッファが足りなければ拡張する
 	if (m_bufferUsed + byteCount > m_buffer.GetSize())
@@ -68,5 +100,10 @@ void StringBuilder::WriteInternal(const TCHAR* str, int length)
 
 	m_bufferUsed += byteCount;
 }
+
+// テンプレートのインスタンス化
+template class GenericStringBuilderCore<char>;
+template class GenericStringBuilderCore<wchar_t>;
+template class GenericStringBuilderCore<UTF32>;
 
 } // namespace Lumino

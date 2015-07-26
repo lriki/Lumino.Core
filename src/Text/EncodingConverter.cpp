@@ -73,7 +73,11 @@ const ByteBuffer& EncodingConverter::Convert(const void* data, size_t byteCount,
 
 	if (m_srcDecoder->CanRemain())
 	{
+		EncodingConversionResult localResult;
+		if (outResult == NULL) { outResult = &localResult; }	// outResult ‚ª NULL ‚Å‚àŒ‹‰Ê‚ðŽó‚¯Žæ‚è‚½‚¢
+
 		ConvertDecoderRemain(data, byteCount, m_srcDecoder, m_outputBuffer.GetData(), size, m_dstEncoder, outResult);
+		m_outputBuffer.Resize(outResult->BytesUsed);
 	}
 	else {
 		LN_THROW(0, NotImplementedException);
