@@ -1,7 +1,7 @@
 
 #pragma once
-#include "Array.h"
-#include "Delegate.h"
+#include "../Base/Array.h"
+#include "../Base/Delegate.h"
 
 namespace Lumino
 {

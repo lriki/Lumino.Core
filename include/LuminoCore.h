@@ -17,7 +17,6 @@
 #include "Lumino/Base/Typedef.h"
 #include "Lumino/Base/CRT.h"
 #include "Lumino/Base/Delegate.h"
-#include "Lumino/Base/Event.h"
 #include "Lumino/Base/Exception.h"
 #include "Lumino/Base/Locale.h"
 #include "Lumino/Base/Logger.h"
@@ -60,3 +59,5 @@
 #include "Lumino/Threading/Thread.h"
 
 #include "Lumino/Xml/XmlReader.h"
+
+#include "Lumino/DataModel/Event.h"

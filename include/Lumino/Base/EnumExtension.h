@@ -40,7 +40,8 @@ enum _##enumName
 		friend inline bool operator!=(enumName::enum_type left, enumName right) throw(); \
 	}; \
 	inline bool operator==(enumName::enum_type left, enumName right) throw() { return left == right.m_value; } \
-	inline bool operator!=(enumName::enum_type left, enumName right) throw() { return left != right.m_value; }
+	inline bool operator!=(enumName::enum_type left, enumName right) throw() { return left != right.m_value; } \
+
 
 /**
 	@brief	拡張 enum 型の型情報にアクセスする機能を定義します。
@@ -132,7 +133,6 @@ class Enum
 {
 protected:
 	int	m_value;
-
 
 public:
 	inline operator int() const { return m_value; }

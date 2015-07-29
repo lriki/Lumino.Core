@@ -43,8 +43,6 @@ set(LN_SOURCES_Base
 	include/Lumino/Base/ElapsedTimer.h
 	include/Lumino/Base/EnumExtension.h
 	include/Lumino/Base/Environment.h
-	include/Lumino/Base/Event.h
-	include/Lumino/Base/Event.inl
 	include/Lumino/Base/Exception.h
 	include/Lumino/Base/Hash.h
 	include/Lumino/Base/List.h
@@ -176,6 +174,12 @@ set(LN_SOURCES_Xml
 	include/Lumino/Xml/XmlError.h
 	src/Xml/XmlReader.cpp
 	src/Xml/XmlDocument.cpp
+)
+
+
+set(LN_SOURCES_DataModel
+	include/Lumino/Base/Event.h
+	include/Lumino/Base/Event.inl
 )
 
 set(LN_SOURCES_Testing
