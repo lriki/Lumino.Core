@@ -21,6 +21,9 @@ public:
 	/// Œo‰ßŽžŠÔ‚ÌŽæ“¾ (ms)
 	uint64_t GetElapsedTime() const;
 
+	/// Œo‰ßŽžŠÔ‚ÌŽæ“¾ (ns)
+	uint64_t GetElapsedTimeNS() const;
+
 private:
 #ifdef LN_WIN32
     LARGE_INTEGER   mFreq;

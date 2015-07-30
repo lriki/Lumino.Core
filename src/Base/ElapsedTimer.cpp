@@ -47,6 +47,15 @@ uint64_t ElapsedTimer::GetElapsedTime() const
 	::QueryPerformanceCounter(&counter);
 	return (uint64_t)((counter.QuadPart - mBefore.QuadPart) * (1000) / mFreq.QuadPart);
 }
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+uint64_t ElapsedTimer::GetElapsedTimeNS() const
+{
+	LARGE_INTEGER counter;
+	::QueryPerformanceCounter(&counter);
+	return (uint64_t)((counter.QuadPart - mBefore.QuadPart) * (1000 * 1000 * 1000) / mFreq.QuadPart);
+}
 
 #else
 //=============================================================================
