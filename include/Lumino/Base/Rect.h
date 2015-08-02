@@ -231,6 +231,11 @@ public:
 		@brief	位置とサイズを指定して初期化します。
 	*/
 	RectF(const PointF& point, const SizeF& size) { Set(point.X, point.Y, size.Width, size.Height); }
+	
+	/**
+		@brief	位置とサイズを指定して初期化します。
+	*/
+	RectF(const PointF& point, float width, float height) { Set(point.X, point.Y, width,height); }
 
 	/**
 		@brief	指定した矩形をコピーして初期化します。

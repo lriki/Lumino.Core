@@ -106,6 +106,13 @@
 */
 #define LN_VERIFY_RETURNV(exp, returnValue, ...)	if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::Lumino::VerifyException)) { return returnValue; }
 
+
+// 試験運用中
+#define LN_VERIFY_ARGS(exp)			_LN_VERIFY_ASSERT_INTERNAL(exp, Lumino::rgumentException)
+#define LN_VERIFY_ARGS_RETURN(exp)	if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::Lumino::ArgumentException)) { return; }
+#define LN_VERIFY_ARGS_RETURNV(exp)	if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::Lumino::ArgumentException)) { return returnValue; }
+
+
 namespace Lumino
 {
 	inline bool AssertInternal(bool result) 	// result が false であれば assert
