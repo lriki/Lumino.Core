@@ -1,6 +1,6 @@
 
 #pragma once
-
+#include "../Base/EnumExtension.h"
 #include "../Base/Array.h"
 #include "../Base/String.h"
 
@@ -10,119 +10,116 @@ namespace Json
 {
 class JsonMember;
 
-/// Json の値の型
-enum Type
+/** Json の値の型を示します。*/
+LN_ENUM(JsonType)
 {
-	Type_Null = 0,
-	Type_Bool,
-	Type_Double,
-	Type_String,
-	Type_Array,
-	Type_Object,
+	Null = 0,
+	Bool,
+	Double,
+	String,
+	Array,
+	Object,
 };
+LN_ENUM_DECLARE(JsonType);
 
-/*
+/**
 	@brief	JSONの値を表します。
 */
 class JsonValue
 {
 public:
 	JsonValue();
+	explicit JsonValue(bool value);
+	JsonValue(double value);
+	explicit JsonValue(const TCHAR* value);
+	explicit JsonValue(const String& value);
+	explicit JsonValue(const JsonValue& value);
+	explicit JsonValue(JsonType::enum_type type);
 	virtual ~JsonValue();
-	JsonValue(const JsonValue& obj);
 	JsonValue& operator=(const JsonValue& obj);
 
 public:
-	Type GetType()  const { return m_type; }
-	bool IsNull()   const { return m_type == Type_Null; }
-	bool IsBool()   const { return m_type == Type_Bool; }
-	bool IsDouble() const { return m_type == Type_Double; }
-	bool IsString() const { return m_type == Type_String; }
-	bool IsArray()  const { return m_type == Type_Array; }
-	bool IsObject() const { return m_type == Type_Object; }
+	JsonType GetType()  const { return m_type; }
+	bool IsNull()   const { return m_type == JsonType::Null; }
+	bool IsBool()   const { return m_type == JsonType::Bool; }
+	bool IsDouble() const { return m_type == JsonType::Double; }
+	bool IsString() const { return m_type == JsonType::String; }
+	bool IsArray()  const { return m_type == JsonType::Array; }
+	bool IsObject() const { return m_type == JsonType::Object; }
 
-	///@name Null
-	//@{
-	/*
-		@brief	この値に Null を設定します。
-	*/
+	/*-----------------------------------------------------------------------*/
+	/** @name Null */
+	/** @{ */
+
+	/** この値に Null を設定します。*/
 	void SetNull();
-	//@}
 
-	///@name Bool
-	//@{
+	/** @} */
+	/*-----------------------------------------------------------------------*/
+	/** @name Bool */
+	/** @{ */
 
-	/*
-		@brief	この値に Bool 値を設定します。
-	*/
+	/** この値に Bool 値を設定します。*/
 	void SetBool(bool value);
 
-	/*
-		@brief	この値の Bool 値を取得します。
-	*/
+	/** この値の Bool 値を取得します。*/
 	bool GetBool() const;
 
-	//@}
+	/** @} */
+	/*-----------------------------------------------------------------------*/
+	/** @name Double */
+	/** @{ */
 
-	///@name Double
-	//@{
-
-	/*
-		@brief	この値に Double 値を設定します。
-	*/
+	/** この値に Double 値を設定します。*/
 	void SetDouble(double value);
 
-	/*
-		@brief	この値の Double 値を取得します。
-	*/
+	/** この値の Double 値を取得します。*/
 	double GetDouble() const;
 
-	//@}
+	/** @} */
+	/*-----------------------------------------------------------------------*/
+	/** @name String */
+	/** @{ */
 
-	///@name String
-	//@{
-
-	/*
-		@brief	この値に文字列を設定します。
-	*/
+	/** この値に文字列を設定します。*/
 	void SetString(const String& str);
 
-	/*
-		@brief	この値の文字列を取得します。
-	*/
+	/** この値の文字列を取得します。*/
 	const String& GetString() const;
 
-	//@}
+	/** @} */
+	/*-----------------------------------------------------------------------*/
+	/** @name Array */
+	/** @{ */
 
-	///@name Array
-	//@{
-
-	/*
-		@brief	この値に空の配列を設定します。
-	*/
+	/** この値に空の配列を設定します。*/
 	void SetArray();
 
-	/*
-		@brief	この配列に含まれている値の数を取得します。
-	*/
-	int GetCount() const;
+	/** この配列に含まれている値の数を取得します。*/
+	int GetItemCount() const;
 
-	//@}
+	/** この配列の末尾に要素を追加します。*/
+	void AddItem(const JsonValue& value);
 
-	///@name Object
-	//@{
+	/** 指定したインデックスの要素を取得します。*/
+	JsonValue& operator[](int index);
+	const JsonValue& operator[](int index) const;		/**< @copydoc operator[] */
 
-	/*
-		@brief	この値に空のオブジェクトを設定します。
-	*/
+	/** @} */
+	/*-----------------------------------------------------------------------*/
+	/** @name Object */
+	/** @{ */
+
+	/** この値に空のオブジェクトを設定します。*/
 	void SetObject();
 
-	/*
-		@brief	このオブジェクトに含まれているメンバの数を取得します。
-	*/
+	/** このオブジェクトに含まれているメンバの数を取得します。*/
 	int GetMemberCount() const;
-	
-	//@}
+
+	/** このオブジェクトに新しいメンバを追加します。*/
+	void AddMember(const String& name, const JsonValue& value);
+
+	/** @} */
 
 private:
 	void Copy(const JsonValue& obj);
@@ -138,7 +135,7 @@ private:
 	typedef Array<JsonValue>	ValueList;
 	typedef Array<JsonMember>	MemberList;
 
-	Type	m_type;
+	JsonType	m_type;
 	union
 	{
 		uint64_t	m_uint;
@@ -150,7 +147,7 @@ private:
 	};
 };
 
-/*
+/**
 	@brief	JSON の Object 型の値が持つメンバを表します。
 */
 class JsonMember

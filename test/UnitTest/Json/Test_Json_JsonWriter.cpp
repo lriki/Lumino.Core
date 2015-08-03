@@ -34,6 +34,7 @@ TEST_F(Test_Json_JsonWriter, Example)
 	writer.EndArray();
 	writer.EndObject();
 
-	auto a = s.ToString();
-	printf("");
+	ASSERT_STREQ(
+		_T("{\"hello\":\"world\",\"t\":true,\"f\":false,\"n\":null,\"i\":123.000000,\"pi\":3.141600,\"a\":[0.000000,1.000000,2.000000,3.000000]}"),
+		s.ToString());
 }

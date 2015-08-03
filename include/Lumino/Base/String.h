@@ -10,6 +10,8 @@
 #include "Array.h"
 #include "ByteBuffer.h"
 
+#include "../Threading/Atomic.h"
+
 namespace Lumino
 {
 namespace Text { class Encoding; }
@@ -34,7 +36,7 @@ enum StringSplitOptions
 	@details	このクラスは任意の長さの文字配列を扱うユーティリティクラスです。<br>
 				C文字列からの構築、連結と比較、抽出、検索と置換など、文字列に対する一般的な操作を備えています。
 				操作中は必要に応じて文字列の長さを拡張します。<br>
-				内部では、メモリ使用量を削減し、データの不必要なコピーを避けるためにコピーオンライトの共有を行います。
+				内部では、メモリ使用量を削減し、データの不必要なコピーを避けるためにコピーオンライト(COW)の共有を行います。
 
 
 	@section	文字列型について
@@ -73,6 +75,24 @@ enum StringSplitOptions
 
 	なお、NULL を代入したり NULL で初期化した場合、インスタンスは空文字列として初期化されます。
 
+
+	@attention
+	このクラスは読み取りと書き込み共にスレッドセーフではありません。
+	これは COW の共有で使用している参照カウントの操作がスレッドセーフではないためです。
+	この参照カウントは頻繁に操作されるため、ロックしてしまうとそのコストが COW のメリットをつぶしてしまう可能性があり、現在はスレッドセーフとしていません。
+	もし別のスレッドに渡したい場合は次のようにして文字列本体をコピーするように強制します。
+	m_thread2Str = m_thread1Str.GetCStr();
+	このクラスに限らず、COW で実装される各種コンテナ (ByteBufferなど) も同様にスレッドセーフではありません。
+	
+
+	@note
+	[2015/8/3] VS2013 では InterlockedIncrement() を使った参照カウント操作は std::string のコピーよりも高いスコアを出した。
+	他の環境でもよいスコアが出ればスレッドセーフ化も検討するかもしれない。
+
+	1000文字の代入を 100000 回行った平均時間は以下のとおり。
+	- String (Atomic無し)	: 2ms
+	- String (Atomic有り)	: 3ms
+	- wstring (VS2013)		: 10ms
 
 */
 template<typename TChar>
@@ -416,6 +436,24 @@ private:
 		GenericStringCore() : m_refCount(1) {}
 		~GenericStringCore() {}
 
+		static GenericStringCore* GetSharedEmpty() { return &m_sharedEmpty; }
+
+#if 0
+		inline bool IsShared() const { return (m_refCount.Get() > 1); }
+		inline void AddRef() { m_refCount.Increment(); }
+		inline void Release()
+		{
+			m_refCount.Decrement();
+			if (m_refCount.Get() <= 0)
+			{
+				if (this != GetSharedEmpty()) {		// グローバル変数として定義された String からの解放済み delete 対策
+					delete this;
+				}
+			}
+		}
+	public:
+		Threading::Atomic		m_refCount;
+#else
 		inline bool IsShared() const { return (m_refCount > 1); }
 		inline void AddRef() { ++m_refCount; }
 		inline void Release()
@@ -428,11 +466,9 @@ private:
 				}
 			}
 		}
-
-		static GenericStringCore* GetSharedEmpty() { return &m_sharedEmpty; }
-
 	public:
 		int		m_refCount;
+#endif
 
 		static GenericStringCore	m_sharedEmpty;
 	};

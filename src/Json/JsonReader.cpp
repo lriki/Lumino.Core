@@ -57,7 +57,7 @@ void JsonReader::Parse(TextReader* textReader)
 	if (!SkipWhitespace())
 	{
 		// Error: バッファが空だった
-		m_error.SetError(ParseError_DocumentEmpty, m_reader->GetPosition());
+		m_error.SetError(JsonParseError::DocumentEmpty, m_reader->GetPosition());
 		return;
 	}
 
@@ -70,7 +70,7 @@ void JsonReader::Parse(TextReader* textReader)
 	if (SkipWhitespace())
 	{
 		// Error: 複数のルート要素が見つかった
-		m_error.SetError(ParseError_DocumentRootNotSingular, m_reader->GetPosition());
+		m_error.SetError(JsonParseError::DocumentRootNotSingular, m_reader->GetPosition());
 		return;
 	}
 }
@@ -116,14 +116,14 @@ bool JsonReader::ParseNull()
 		if (!m_handler->OnNull())
 		{
 			// 中断
-			m_error.SetError(ParseError_Termination, m_reader->GetPosition());
+			m_error.SetError(JsonParseError::Termination, m_reader->GetPosition());
 			return false;
 		}
 	}
 	else
 	{
 		// Error: "null" ではなかった
-		m_error.SetError(ParseError_ValueInvalid, m_reader->GetPosition());
+		m_error.SetError(JsonParseError::ValueInvalid, m_reader->GetPosition());
 		return false;
 	}
 	return true;
@@ -142,14 +142,14 @@ bool JsonReader::ParseTrue()
 		if (!m_handler->OnBool(true))
 		{
 			// 中断
-			m_error.SetError(ParseError_Termination, m_reader->GetPosition());
+			m_error.SetError(JsonParseError::Termination, m_reader->GetPosition());
 			return false;
 		}
 	}
 	else
 	{
 		// Error: "true" ではなかった
-		m_error.SetError(ParseError_ValueInvalid, m_reader->GetPosition());
+		m_error.SetError(JsonParseError::ValueInvalid, m_reader->GetPosition());
 		return false;
 	}
 	return true;
@@ -169,14 +169,14 @@ bool JsonReader::ParseFalse()
 		if (!m_handler->OnBool(false))
 		{
 			// 中断
-			m_error.SetError(ParseError_Termination, m_reader->GetPosition());
+			m_error.SetError(JsonParseError::Termination, m_reader->GetPosition());
 			return false;
 		}
 	}
 	else
 	{
 		// Error: "false" ではなかった
-		m_error.SetError(ParseError_ValueInvalid, m_reader->GetPosition());
+		m_error.SetError(JsonParseError::ValueInvalid, m_reader->GetPosition());
 		return false;
 	}
 	return true;
@@ -210,7 +210,7 @@ bool JsonReader::ParseNumber()
 	if (len == 0)
 	{
 		// Error: 数値っぽい文字が見つからなかった
-		m_error.SetError(ParseError_NumberInvalid, m_reader->GetPosition());
+		m_error.SetError(JsonParseError::NumberInvalid, m_reader->GetPosition());
 		return false;
 	}
 	ch = '\0';
@@ -224,12 +224,12 @@ bool JsonReader::ParseNumber()
 	if ((endptr - str) != len)	// 正常に変換できていれば、読み取った文字数が全て消費されるはず
 	{
 		// Error: 構文が正しくない
-		m_error.SetError(ParseError_NumberInvalid, m_reader->GetPosition());
+		m_error.SetError(JsonParseError::NumberInvalid, m_reader->GetPosition());
 		return false;
 	}
 	if (result == NumberConversionResult_Overflow) {
 		// Error: オーバーフローが発生した
-		m_error.SetError(ParseError_NumberOverflow, m_reader->GetPosition());
+		m_error.SetError(JsonParseError::NumberOverflow, m_reader->GetPosition());
 		return false;
 	}
 
@@ -237,7 +237,7 @@ bool JsonReader::ParseNumber()
 	if (!m_handler->OnDouble(value))
 	{
 		// 中断
-		m_error.SetError(ParseError_Termination, m_reader->GetPosition());
+		m_error.SetError(JsonParseError::Termination, m_reader->GetPosition());
 		return false;
 	}
 	return true;
@@ -292,13 +292,13 @@ bool JsonReader::ParseString(bool isKey)
 			else if (esc == 'u')
 			{
 				// 未実装
-				m_error.SetError(ParseError_StringEscapeInvalid, m_reader->GetPosition());
+				m_error.SetError(JsonParseError::StringEscapeInvalid, m_reader->GetPosition());
 				return false;
 			}
 			else
 			{
 				// Error: 無効なエスケープ
-				m_error.SetError(ParseError_StringEscapeInvalid, m_reader->GetPosition());
+				m_error.SetError(JsonParseError::StringEscapeInvalid, m_reader->GetPosition());
 				return false;
 			}
 		}
@@ -312,13 +312,13 @@ bool JsonReader::ParseString(bool isKey)
 		else if (m_reader->IsEOF() || c == '\0')
 		{
 			// Error: " が一致しなかった
-			m_error.SetError(ParseError_StringMissQuotationMark, m_reader->GetPosition());
+			m_error.SetError(JsonParseError::StringMissQuotationMark, m_reader->GetPosition());
 			return false;
 		}
 		// 0x20 未満の制御文字は使えない
 		else if ((unsigned)c < 0x20) {
 			// RFC 4627: unescaped = %x20-21 / %x23-5B / %x5D-10FFFF
-			m_error.SetError(ParseError_StringEscapeInvalid, m_reader->GetPosition());
+			m_error.SetError(JsonParseError::StringEscapeInvalid, m_reader->GetPosition());
 			return false;
 		}
 		// 普通の文字
@@ -340,7 +340,7 @@ bool JsonReader::ParseString(bool isKey)
 	if (!cont)
 	{
 		// 中断
-		m_error.SetError(ParseError_Termination, m_reader->GetPosition());
+		m_error.SetError(JsonParseError::Termination, m_reader->GetPosition());
 		return false;
 	}
 	return true;
@@ -357,7 +357,7 @@ bool JsonReader::ParseArray()
 	if (!m_handler->OnStartArray())
 	{
 		// 中断
-		m_error.SetError(ParseError_Termination, m_reader->GetPosition());
+		m_error.SetError(JsonParseError::Termination, m_reader->GetPosition());
 		return false;
 	}
 
@@ -369,7 +369,7 @@ bool JsonReader::ParseArray()
 		if (!m_handler->OnEndArray(0))
 		{
 			// 中断
-			m_error.SetError(ParseError_Termination, m_reader->GetPosition());
+			m_error.SetError(JsonParseError::Termination, m_reader->GetPosition());
 			return false;
 		}
 		return true;
@@ -396,13 +396,13 @@ bool JsonReader::ParseArray()
 			if (!m_handler->OnEndArray(elementCount))
 			{
 				// 中断
-				m_error.SetError(ParseError_Termination, m_reader->GetPosition());
+				m_error.SetError(JsonParseError::Termination, m_reader->GetPosition());
 				return false;
 			}
 			SkipWhitespace();
 			return true;
 		default:
-			m_error.SetError(ParseError_ArrayMissCommaOrSquareBracket, m_reader->GetPosition());
+			m_error.SetError(JsonParseError::ArrayMissCommaOrSquareBracket, m_reader->GetPosition());
 			return false;
 		}
 	}
@@ -421,7 +421,7 @@ bool JsonReader::ParseObject()
 	if (!m_handler->OnStartObject())
 	{
 		// 中断
-		m_error.SetError(ParseError_Termination, m_reader->GetPosition());
+		m_error.SetError(JsonParseError::Termination, m_reader->GetPosition());
 		return false;
 	}
 
@@ -433,7 +433,7 @@ bool JsonReader::ParseObject()
 		if (!m_handler->OnEndObject(0))
 		{
 			// 中断
-			m_error.SetError(ParseError_Termination, m_reader->GetPosition());
+			m_error.SetError(JsonParseError::Termination, m_reader->GetPosition());
 			return false;
 		}
 		return true;
@@ -446,7 +446,7 @@ bool JsonReader::ParseObject()
 		if (m_reader->Peek() != '"')
 		{
 			// Error: メンバ名の開始が見つからなかった
-			m_error.SetError(ParseError_ObjectMissKeyStart, m_reader->GetPosition());
+			m_error.SetError(JsonParseError::ObjectMissKeyStart, m_reader->GetPosition());
 			return false;
 		}
 		if (!ParseString(true)) return false;
@@ -456,7 +456,7 @@ bool JsonReader::ParseObject()
 		if (m_reader->Read() != ':')
 		{
 			// Error: ':' が見つからなかった
-			m_error.SetError(ParseError_ObjectMissColon, m_reader->GetPosition());
+			m_error.SetError(JsonParseError::ObjectMissColon, m_reader->GetPosition());
 			return false;
 		}
 		SkipWhitespace();
@@ -477,13 +477,13 @@ bool JsonReader::ParseObject()
 			if (!m_handler->OnEndObject(memberCount))
 			{
 				// 中断
-				m_error.SetError(ParseError_Termination, m_reader->GetPosition());
+				m_error.SetError(JsonParseError::Termination, m_reader->GetPosition());
 				return false;
 			}
 			SkipWhitespace();
 			return true;
 		default:
-			m_error.SetError(ParseError_ObjectMissCommaOrCurlyBracket, m_reader->GetPosition());
+			m_error.SetError(JsonParseError::ObjectMissCommaOrCurlyBracket, m_reader->GetPosition());
 			return false;
 		}
 	}

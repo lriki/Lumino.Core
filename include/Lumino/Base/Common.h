@@ -87,6 +87,12 @@
 	#define LN_CDECL	
 #endif
 
+#ifdef _MSC_VER
+	#define LN_NOEXCEPT
+#else
+	#define LN_NOEXCEPT noexcept
+#endif
+
 //----------------------------------------------------------------------
 // include
 #include <stdio.h>

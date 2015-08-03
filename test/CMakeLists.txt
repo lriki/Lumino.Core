@@ -30,6 +30,7 @@ set(LN_TEST_SOURCES
 	UnitTest/IO/Test_IO_TextWriter.cpp
 	UnitTest/Json/Test_Json_JsonDocument.cpp
 	UnitTest/Json/Test_Json_JsonReader.cpp
+	UnitTest/Json/Test_Json_JsonValue.cpp
 	UnitTest/Json/Test_Json_JsonWriter.cpp
 	UnitTest/Text/Test_Text_DBCSEncoding.cpp
 	UnitTest/Text/Test_Text_EncodingDetector.cpp
