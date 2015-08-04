@@ -313,6 +313,7 @@ void ByteBuffer::Dispose()
 //-----------------------------------------------------------------------------
 void ByteBuffer::CheckDetachShared()
 {
+	// TODO ↓これおかしい気がする・・・
 	if (m_core == &SharedCoreEmpty) { return; }	// 空バッファなら処理する必要は無い
 
 	if (m_core->IsShared())

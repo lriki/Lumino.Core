@@ -113,11 +113,10 @@
 #define LN_VERIFY_ARGS_RETURNV(exp)	if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::Lumino::ArgumentException)) { return returnValue; }
 
 // 試験運用中。Release でも例外を throw する。中身は TODO
-#define LN_CHECK_ARGS(exp)			_LN_VERIFY_ASSERT_INTERNAL(exp, Lumino::ArgumentException)
-#define LN_CHECK_ARGS_RETURN(exp)	if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::Lumino::ArgumentException)) { return; }
-#define LN_CHECK_ARGS_RETURNV(exp)	if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::Lumino::ArgumentException)) { return returnValue; }
-
-#define LN_CHECK_STATE(exp)			_LN_VERIFY_ASSERT_INTERNAL(exp, Lumino::InvalidOperationException)
+#define LN_CHECK_ARGS(exp)							_LN_VERIFY_ASSERT_INTERNAL(exp, Lumino::ArgumentException)
+#define LN_CHECK_ARGS_RETURN(exp)					if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::Lumino::ArgumentException)) { return; }
+#define LN_CHECK_ARGS_RETURNV(exp, returnValue)		if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::Lumino::ArgumentException)) { return returnValue; }
+#define LN_CHECK_STATE(exp)							_LN_VERIFY_ASSERT_INTERNAL(exp, Lumino::InvalidOperationException)
 #define LN_CHECK_STATE_RETURN(exp)					if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::Lumino::InvalidOperationException)) { return; }
 #define LN_CHECK_STATE_RETURNV(exp, returnValue)	if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::Lumino::InvalidOperationException)) { return returnValue; }
 
@@ -227,6 +226,22 @@ public:
 public:
 	// override Exception
 	virtual Exception* Copy() const { return LN_NEW OutOfMemoryException( *this ); }
+};
+
+/**
+	@brief	許容範囲外の値が指定された場合にスローされる例外です。
+*/
+class OutOfRangeException
+	: public Exception
+{
+public:
+	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(OutOfRangeException);
+	OutOfRangeException() {}
+	virtual ~OutOfRangeException() throw() {}
+
+public:
+	// override Exception
+	virtual Exception* Copy() const { return LN_NEW OutOfRangeException(*this); }
 };
 
 /**
