@@ -1,4 +1,6 @@
-﻿
+﻿/**
+	@file	Point.h
+*/
 #pragma once
 
 namespace Lumino

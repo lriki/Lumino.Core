@@ -8,7 +8,7 @@ namespace Lumino
 {
 
 /**
-	@brief		ロケールを表します。
+	@brief	ロケールを表します。
 */
 class Locale
 {

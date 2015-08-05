@@ -1,4 +1,6 @@
-﻿
+﻿/**
+	@file	Array.h
+*/
 #pragma once
 #include <vector>
 #include <algorithm>

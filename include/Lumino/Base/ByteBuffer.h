@@ -1,5 +1,5 @@
 ﻿/**
-	@file	FileManager.h
+	@file	ByteBuffer.h
 */
 #pragma once
 #include "Common.h"
