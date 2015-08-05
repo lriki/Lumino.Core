@@ -5,6 +5,7 @@ project (LuminoCore)
 
 set(LN_LINK_LIBS "")
 set(LN_UNIT_TEST_LINK_LIBS "")
+set(LN_LIB_POSTFIX "")
 
 #------------------------------------------------------------------------------
 # Options
@@ -57,6 +58,7 @@ set(LN_SOURCES_Base
 	include/Lumino/Base/Rect.h
 	include/Lumino/Base/RefObject.h
 	include/Lumino/Base/Size.h
+	include/Lumino/Base/SortedArray.h
 	include/Lumino/Base/Stack.h
 	include/Lumino/Base/STLUtils.h
 	include/Lumino/Base/String.h

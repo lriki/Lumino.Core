@@ -32,6 +32,19 @@ COW		: 200ms
 			cout << ary3[0];	// const の operator[] が呼ばれます。複製はされません。
 		}
 	
+■SortedArray vs std::map(VS2013)
+	要素数 100000 個の検索
+	std::map	: 6,126 us
+	SortedArray	: 4,965 us
+
+	要素数 100000 個のイテレート
+	std::map	: 7,836 us
+	SortedArray	: 6,123 us
+
+	http://srad.jp/~Yak!/journal/503087/
+
+	ソート済み std::vector と同じような結果。
+	要素数が増えるほど差が開いていく。
 */
 
 

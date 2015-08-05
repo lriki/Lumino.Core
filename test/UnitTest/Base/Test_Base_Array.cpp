@@ -1,4 +1,5 @@
 ﻿#include <TestConfig.h>
+#include <map>
 
 class Test_Base_Array : public ::testing::Test
 {

@@ -39,11 +39,11 @@ GTEST_API_ int main(int argc, char **argv) {
 #endif
 	setlocale(LC_ALL, "");
 
-#if 1	// 部分的にテストを実行したりする
+#if 0	// 部分的にテストを実行したりする
 	char* testArgs[] = {
 		argv[0],
 		//"--gtest_filter=Test_Text_EncodingDetector.*"
-		"--gtest_filter=Test_Base_Array.*"
+		"--gtest_filter=Test_Base_SortedArray.*"
 	};
 	argc = sizeof(testArgs) / sizeof(char*);
 	testing::InitGoogleTest(&argc, (char**)testArgs);
