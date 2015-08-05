@@ -41,7 +41,9 @@ class GenericStringBuilder
 public:
 	GenericString<TChar> ToString() const
 	{
-		return GenericString<TChar>((const TChar*)m_buffer.GetConstData(), m_bufferUsed / sizeof(TChar));
+		return GenericString<TChar>(
+			(const TChar*)GenericStringBuilderCore<TChar>::m_buffer.GetConstData(),
+			GenericStringBuilderCore<TChar>::m_bufferUsed / sizeof(TChar));
 	}
 };
 

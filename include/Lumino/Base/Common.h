@@ -105,6 +105,7 @@
 	#include <process.h>
 #else
 	#include <limits.h>		// for _PC_PATH_MAX (on Ubuntu)
+	#include <pthread.h>
 #endif
 
 //----------------------------------------------------------------------

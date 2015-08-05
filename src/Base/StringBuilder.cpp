@@ -104,6 +104,8 @@ void GenericStringBuilderCore<TChar>::WriteInternal(const TChar* str, int length
 // テンプレートのインスタンス化
 template class GenericStringBuilderCore<char>;
 template class GenericStringBuilderCore<wchar_t>;
+#ifdef LN_WCHAR_16	// GCC で↑の wchar_t のと多重定義になる対策
 template class GenericStringBuilderCore<UTF32>;
+#endif
 
 } // namespace Lumino

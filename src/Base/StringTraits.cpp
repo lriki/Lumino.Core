@@ -51,7 +51,7 @@ int StringTraits::tvscprintf_l(const char* format, NativeLocale_t locale, va_lis
 	ScopedLocaleRAII _loc(locale);
 	FILE *stdnul = fopen("/dev/null", "wb");   
 	if (!stdnul) { return EOF; } 
-	int retvalue = vfwprintf(stdnul, format, args);   
+	int retvalue = vfprintf(stdnul, format, args);   
 	fclose(stdnul);
 	return retvalue;
 }
