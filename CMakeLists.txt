@@ -310,6 +310,7 @@ elseif (APPLE)
 	
 elseif (UNIX)
 	set(LN_UNIT_TEST_LINK_LIBS "pthread")
+	add_definitions("-std=c++11")
 	
 	# link librarys.
 	list(APPEND LN_LINK_LIBS "dl")
