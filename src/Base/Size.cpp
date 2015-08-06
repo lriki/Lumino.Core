@@ -1,5 +1,6 @@
 
 #include "../Internal.h"
+#include <math.h>
 #include <Lumino/Base/Size.h>
 
 namespace Lumino
@@ -16,6 +17,7 @@ const Size	Size::Zero(0, 0);
 //=============================================================================
 
 const SizeF	SizeF::Zero(0, 0);
+const SizeF	SizeF::NaN(NAN, NAN);
 
 
 } // namespace Lumino

@@ -56,7 +56,8 @@ public:
 class SizeF
 {
 public:
-	static const SizeF	Zero;	///< SizeF(0, 0)	
+	static const SizeF	Zero;	///< SizeF(0, 0)
+	static const SizeF	NaN;	///< SizeF(NaN, NaN)
 
 public:
 	float	Width;				///< X 方向の大きさ
