@@ -797,44 +797,6 @@ bool GenericString<TChar>::TryToUInt64(uint64_t* outValue, int base) const { TRY
 
 #undef TRY_TO_INT_DEF
 
-#if 0
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-static bool StrToInt(const char* str, int* value)
-{
-	// TODO:str はコピーされ、内部では std::string として保持される。
-	//		独自の stream を作ってコピーしないようにすれば高速化の余地がある。
-	std::istringstream iss(str);
-	iss >> *value;
-
-	__int64 f;
-	iss >> f;
-	return iss.eof();
-}
-static bool StrToInt(const wchar_t* str, int* value)
-{
-	std::wistringstream iss(str);
-	iss >> *value;
-	return iss.eof();
-}
-
-template<typename TChar>
-int GenericString<TChar>::ToInt() const
-{
-	int tmp;
-	bool r = StrToInt(Trim().GetCStr(), &tmp);
-	LN_THROW(r, InvalidFormatException);
-	return tmp;
-}
-
-template<typename TChar>
-bool GenericString<TChar>::ToInt(int* value) const
-{
-	return StrToInt(Trim().GetCStr(), value);
-}
-#endif
-
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
@@ -870,24 +832,28 @@ const GenericString<TChar>& GenericString<TChar>::GetEmpty()
 template<typename TChar>
 GenericString<TChar> GenericString<TChar>::Format(const GenericString<TChar>& format, ...)
 {
-	va_list args;
-	va_start(args, format);
-	int len = StringTraits::tvscprintf_l(format.GetCStr(), Locale::GetC().GetNativeLocale(), args);	// 文字数を求める
+	// http://jumble-note.blogspot.jp/2012/09/c-vacopy.html
+	va_list args1, args2;
+	va_start(args1, format);
+	va_copy(args2, args1);
+	int len = StringTraits::tvscprintf_l(format.GetCStr(), Locale::GetC().GetNativeLocale(), args1);	// 文字数を求める
 
 	// 文字数が一定以内ならメモリ確保せずにスタックを使い、速度向上を図る
 	if (len < MaxFormatLength)
 	{
 		TChar buf[MaxFormatLength + 1];
 		memset(buf, 0, sizeof(buf));
-		StringTraits::VSPrintf(buf, MaxFormatLength + 1, format, args);
-		va_end(args);
+		StringTraits::VSPrintf(buf, MaxFormatLength + 1, format, args2);
+		va_end(args1);
+		va_end(args2);
 		return GenericString<TChar>(buf);
 	}
 	else
 	{
 		ByteBuffer buf(len + 1);
-		StringTraits::VSPrintf((TChar*)buf.GetData(), buf.GetSize(), format, args);
-		va_end(args);
+		StringTraits::VSPrintf((TChar*)buf.GetData(), buf.GetSize(), format, args2);
+		va_end(args1);
+		va_end(args2);
 		return GenericString<TChar>((TChar*)buf.GetData());
 	}
 }
