@@ -74,7 +74,7 @@ static void GetNativeDefaultLocale(NativeLocale_t* outLocale, StringW* outName)
 	if (LCIDToLocaleName(lcid, strNameBuffer, LOCALE_NAME_MAX_LENGTH, 0) == 0)
 	{
 		// ƒGƒ‰[‚ª”­¶‚µ‚½‚ç•Ï‚í‚è‚É "C" ‚ğg‚¤
-		*outLocale = _wcreate_locale(LC_ALL, _T("C"));
+		*outLocale = _wcreate_locale(LC_ALL, L"C");
 		*outName = _T("C");
 		return;
 	}

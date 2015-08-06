@@ -5,6 +5,7 @@
 #include "../Base/Locale.h"
 #include "../Base/String.h"
 #include "../Text/Encoding.h"
+#include "../Text/EncodingConverter.h"
 
 namespace Lumino
 {
@@ -141,14 +142,16 @@ private:
 private:
 	static const int BufferSize = 2048;
 
-	RefPtr<Text::Encoding>	m_encoding;
-	RefPtr<Text::Decoder>	m_decoder;		///< String を中間文字コード (UTF16) に変換するためのデコーダ
-	RefPtr<Text::Encoder>	m_encoder;		///< 中間文字コード (UTF16) を出力文字コード (m_encoding) に変換するためのエンコーダ
+	Text::EncodingConverter	m_converter;
+
+	//RefPtr<Text::Encoding>	m_encoding;
+	//RefPtr<Text::Decoder>	m_decoder;		///< String を中間文字コード (UTF16) に変換するためのデコーダ
+	//RefPtr<Text::Encoder>	m_encoder;		///< 中間文字コード (UTF16) を出力文字コード (m_encoding) に変換するためのエンコーダ
 	String					m_newLine;
 	Locale					m_locale;
-	ByteBuffer				m_utf16Buffer;		///< 中間文字コードバッファ
-	ByteBuffer				m_outputBuffer;		///< 変換先バッファ
-	int						m_safeTCharCount;	///< TCHAR → 中間バッファ (UTF16) 時、中間バッファに納められる TCHAR 文字数
+	//ByteBuffer				m_utf16Buffer;		///< 中間文字コードバッファ
+	//ByteBuffer				m_outputBuffer;		///< 変換先バッファ
+	//int						m_safeTCharCount;	///< TCHAR → 中間バッファ (UTF16) 時、中間バッファに納められる TCHAR 文字数
 	bool					m_writtenPreamble;	///< BOM を書き込んだか (BOM の無いエンコーディングであれば最初から true)
 };
 

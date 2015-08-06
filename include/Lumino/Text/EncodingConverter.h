@@ -1,4 +1,5 @@
 
+#pragma once
 #include "../Base/ByteBuffer.h"
 #include "Encoding.h"
 
@@ -58,6 +59,7 @@ private:
 	RefPtr<Encoder>		m_dstEncoder;
 	RefPtr<Decoder>		m_srcDecoder;
 	ByteBuffer			m_outputBuffer;
+	ByteBuffer			m_tmpBuffer;			///< 状態を保持できないデコーダを使っている場合に使用する一時バッファ
 	bool				m_encodingModified;
 };
 

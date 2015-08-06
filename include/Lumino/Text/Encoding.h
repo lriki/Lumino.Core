@@ -303,7 +303,7 @@ public:
 	/**
 		@brief	一連の ConvertToUTF16() の呼び出しの中で、変換できない文字を規定文字に変換した文字数を取得する
 	*/
-	virtual int UsedDefaultCharCount() = 0;
+	virtual int UsedDefaultCharCount() = 0;	// TODO: Get～
 
 	/**
 		@brief	最後の ConvertToUTF16() で、バッファ末尾でマルチバイト文字が途切れていなければ true を返す

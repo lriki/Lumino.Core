@@ -16,14 +16,14 @@ namespace Lumino
 TextWriter::TextWriter()
 	: m_newLine(String::GetNewLine())
 	, m_locale()
-	, m_utf16Buffer(BufferSize, false)
+	//, m_utf16Buffer(BufferSize, false)
 	, m_writtenPreamble(true)
 {
 	// String を中間文字コード (UTF16) に変換するためのデコーダ
-	m_decoder.Attach(Text::Encoding::GetTCharEncoding()->CreateDecoder());
+	//m_decoder.Attach(Text::Encoding::GetTCharEncoding()->CreateDecoder());
 
-
-
+	// 変換元は TCHAR
+	m_converter.SetSourceEncoding(Text::Encoding::GetTCharEncoding());
 }
 
 //-----------------------------------------------------------------------------
@@ -38,6 +38,8 @@ TextWriter::~TextWriter()
 //-----------------------------------------------------------------------------
 void TextWriter::SetEncoding(Text::Encoding* encoding)
 {
+	m_converter.SetDestinationEncoding(encoding);
+#if 0
 	m_encoding = encoding;
 
 	if (m_encoding != NULL)
@@ -60,6 +62,7 @@ void TextWriter::SetEncoding(Text::Encoding* encoding)
 		}
 		
 	}
+#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -241,9 +244,11 @@ void TextWriter::Flash()
 void TextWriter::WriteInternal(const TCHAR* str, int len)
 {
 	// BOM の書き込みが必要であればここで書き込む
-	if (!m_writtenPreamble) {
-		size_t len = strlen((char*)m_encoding->GetPreamble());
-		WriteOverride(m_encoding->GetPreamble(), len);
+	if (!m_writtenPreamble)
+	{
+		const byte_t* bom = m_converter.GetDestinationEncoding()->GetPreamble();
+		size_t len = strlen((char*)bom);
+		WriteOverride(bom, len);
 		m_writtenPreamble = true;
 	}
 
@@ -252,6 +257,12 @@ void TextWriter::WriteInternal(const TCHAR* str, int len)
 		return;
 	}
 
+	const ByteBuffer buf = m_converter.Convert(str, len * sizeof(TCHAR));
+
+	WriteOverride(buf.GetConstData(), buf.GetSize());
+
+#if 0
+
 	if (m_decoder != NULL && m_encoder != NULL)
 	{
 		// 変換状態を保持できる Encoding であれば余分にメモリを確保しないで変換できる。
@@ -259,7 +270,7 @@ void TextWriter::WriteInternal(const TCHAR* str, int len)
 		{
 			// 後のコードがキャストだらけにならないように
 			Text::UTF16* utf16Buf = (Text::UTF16*)m_utf16Buffer.GetData();
-			int utf16CharCount = m_utf16Buffer.GetSize() / sizeof(Text::UTF16);
+			int utf16ElementCount = m_utf16Buffer.GetSize() / sizeof(Text::UTF16);
 
 			int convCount = 0;
 			while (convCount < len)
@@ -268,7 +279,7 @@ void TextWriter::WriteInternal(const TCHAR* str, int len)
 
 				// TCHAR を中間コードへ
 				size_t outBytesUsed, outCharsUsed;
-				m_decoder->ConvertToUTF16((byte_t*)&str[convCount], charCount * sizeof(TCHAR), utf16Buf, utf16CharCount, &outBytesUsed, &outCharsUsed);
+				m_decoder->ConvertToUTF16((byte_t*)&str[convCount], charCount * sizeof(TCHAR), utf16Buf, utf16ElementCount, &outBytesUsed, &outCharsUsed);
 
 				// 中間コードを出力コードへ
 				m_encoder->ConvertFromUTF16(utf16Buf, outCharsUsed, m_outputBuffer.GetData(), m_outputBuffer.GetSize(), &outBytesUsed, &outCharsUsed);
@@ -279,8 +290,11 @@ void TextWriter::WriteInternal(const TCHAR* str, int len)
 				convCount += charCount;
 			}
 		}
-		else {
-			LN_THROW(0, NotImplementedException);
+		// デコーダが変換状態を保持できない場合はやむを得ないので一時メモリを確保し、ソースバッファ全体を一度に変換する。
+		else
+		{
+			// 出力
+			WriteOverride(m_outputBuffer.GetData(), outBytesUsed);
 		}
 	}
 	// エンコーダが無い (SetEncoding() されていない) 場合は、文字コード変換を行わず TCHAR をそのまま出力する
@@ -291,7 +305,7 @@ void TextWriter::WriteInternal(const TCHAR* str, int len)
 	else {
 		LN_THROW(0, NotImplementedException);
 	}
-	
+#endif
 }
 
 

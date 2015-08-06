@@ -10,6 +10,11 @@ protected:
 //-----------------------------------------------------------------------------
 TEST_F(Test_IO_TextWriter, Basic)
 {
-	StreamWriter writer(LOCALFILE("Test1.txt"), Text::Encoding::GetUTF8Encoding());
-	writer.WriteInt32(32);
+	{
+		StreamWriter writer(LOCALFILE("Test1.txt"), Text::Encoding::GetUTF8Encoding());
+		writer.WriteInt32(32);
+	}
+
+	String str = FileSystem::ReadAllText(LOCALFILE("Test1.txt"));
+	ASSERT_STREQ(_T("32"), str);
 }
