@@ -102,21 +102,21 @@ uint32_t FileSystem::GetAttribute(const char* filePath)
 	uint32_t attrs = 0;
 	if (S_ISDIR(st.st_mode))
 	{
-		attrs |= FileAttribute_Directory;
+		attrs |= FileAttribute::Directory;
 		if (!is_stat_writable(&st, filePath)) {
-			attrs |= FileAttribute_ReadOnly;
+			attrs |= FileAttribute::ReadOnly;
 		}
 		if (fileName[0] == '.') {
-			attrs |= FileAttribute_Hidden;
+			attrs |= FileAttribute::Hidden;
 		}
 	}
 	else
 	{
 		if (!is_stat_writable(&st, filePath)) {
-			attrs |= FileAttribute_ReadOnly;
+			attrs |= FileAttribute::ReadOnly;
 		}
 		if (fileName[0] == '.') {
-			attrs |= FileAttribute_Hidden;
+			attrs |= FileAttribute::Hidden;
 		}
 	}
 	return attrs;
@@ -139,7 +139,7 @@ void FileSystem::SetAttribute(const char* filePath, uint32_t attrs)
 	
 	// 変更できるのは読み取り属性だけ。
 	// 隠し属性は Unix ではファイル名で表現する。
-	if (attrs & FileAttribute_ReadOnly) {
+	if (attrs & FileAttribute::ReadOnly) {
 		ret = ::chmod(filePath, st.st_mode & ~(S_IWUSR | S_IWOTH | S_IWGRP));
 	} else {
 		ret = ::chmod(filePath, st.st_mode | S_IWUSR);

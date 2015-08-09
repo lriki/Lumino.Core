@@ -99,4 +99,13 @@ const wchar_t* Environment::GetNewLine<wchar_t>()
 #endif
 }
 
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+//template<typename TChar>
+//static void Environment::GetSpecialFolderPath(SpecialFolder specialFolder, TChar* outPath)
+//{
+//
+//}
+
 } // namespace Lumino

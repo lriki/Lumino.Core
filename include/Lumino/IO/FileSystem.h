@@ -5,19 +5,21 @@
 #include <stdio.h>
 #include "../Base/RefObject.h"
 #include "../Base/String.h"
+#include "../Base/EnumExtension.h"
 
 namespace Lumino
 {
 namespace Text { class Encoding; }
 
-/// ファイルとディレクトリの属性
-enum FileAttribute
+/** ファイルとディレクトリの属性 */
+LN_ENUM_FLAGS(FileAttribute)
 {
-	FileAttribute_Normal		= 0x0000,	///< 特に属性を持たない通常のファイル
-	FileAttribute_Directory		= 0x0001,	///< ディレクトリ
-	FileAttribute_ReadOnly		= 0x0002,	///< 読み取り専用
-	FileAttribute_Hidden		= 0x0004,	///< 隠しファイル
+	Normal		= 0x0000,	/**< 特に属性を持たない通常のファイル */
+	Directory	= 0x0001,	/**< ディレクトリ */
+	ReadOnly	= 0x0002,	/**< 読み取り専用 */
+	Hidden		= 0x0004,	/**< 隠しファイル */
 };
+LN_ENUM_FLAGS_DECLARE(FileAttribute)
 
 /**
 	@brief	ファイルユーティリティ

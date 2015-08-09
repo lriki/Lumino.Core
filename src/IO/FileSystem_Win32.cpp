@@ -73,10 +73,10 @@ uint32_t FileSystem::GetAttribute(const char* filePath)
 		Win32IOErrorToExceptionThrow(::GetLastError(), filePath);
 	}
 
-	uint32_t flags = FileAttribute_Normal;
-	if (attr & FILE_ATTRIBUTE_DIRECTORY) flags |= FileAttribute_Directory;
-	if (attr & FILE_ATTRIBUTE_READONLY)  flags |= FileAttribute_ReadOnly;
-	if (attr & FILE_ATTRIBUTE_HIDDEN)    flags |= FileAttribute_Hidden;
+	uint32_t flags = FileAttribute::Normal;
+	if (attr & FILE_ATTRIBUTE_DIRECTORY) flags |= FileAttribute::Directory;
+	if (attr & FILE_ATTRIBUTE_READONLY)  flags |= FileAttribute::ReadOnly;
+	if (attr & FILE_ATTRIBUTE_HIDDEN)    flags |= FileAttribute::Hidden;
 	return flags;
 }
 
@@ -87,10 +87,10 @@ uint32_t FileSystem::GetAttribute(const wchar_t* filePath)
 		Win32IOErrorToExceptionThrow(::GetLastError(), filePath);
 	}
 
-	uint32_t flags = FileAttribute_Normal;
-	if (attr & FILE_ATTRIBUTE_DIRECTORY) flags |= FileAttribute_Directory;
-	if (attr & FILE_ATTRIBUTE_READONLY)  flags |= FileAttribute_ReadOnly;
-	if (attr & FILE_ATTRIBUTE_HIDDEN)    flags |= FileAttribute_Hidden;
+	uint32_t flags = FileAttribute::Normal;
+	if (attr & FILE_ATTRIBUTE_DIRECTORY) flags |= FileAttribute::Directory;
+	if (attr & FILE_ATTRIBUTE_READONLY)  flags |= FileAttribute::ReadOnly;
+	if (attr & FILE_ATTRIBUTE_HIDDEN)    flags |= FileAttribute::Hidden;
 	return flags;
 }
 
@@ -100,9 +100,9 @@ uint32_t FileSystem::GetAttribute(const wchar_t* filePath)
 void FileSystem::SetAttribute(const char* filePath, uint32_t attr)
 {
 	DWORD dwAttr = 0;
-	if (attr & FileAttribute_Directory) dwAttr |= FILE_ATTRIBUTE_DIRECTORY;
-	if (attr & FileAttribute_ReadOnly)  dwAttr |= FILE_ATTRIBUTE_READONLY;
-	if (attr & FileAttribute_Hidden)    dwAttr |= FILE_ATTRIBUTE_HIDDEN;
+	if (attr & FileAttribute::Directory) dwAttr |= FILE_ATTRIBUTE_DIRECTORY;
+	if (attr & FileAttribute::ReadOnly)  dwAttr |= FILE_ATTRIBUTE_READONLY;
+	if (attr & FileAttribute::Hidden)    dwAttr |= FILE_ATTRIBUTE_HIDDEN;
 	BOOL r = ::SetFileAttributesA(filePath, dwAttr);
 	if (r == FALSE) { Win32IOErrorToExceptionThrow(::GetLastError(), filePath); }
 }
@@ -110,9 +110,9 @@ void FileSystem::SetAttribute(const char* filePath, uint32_t attr)
 void FileSystem::SetAttribute(const wchar_t* filePath, uint32_t attr)
 {
 	DWORD dwAttr = 0;
-	if (attr & FileAttribute_Directory) dwAttr |= FILE_ATTRIBUTE_DIRECTORY;
-	if (attr & FileAttribute_ReadOnly)  dwAttr |= FILE_ATTRIBUTE_READONLY;
-	if (attr & FileAttribute_Hidden)    dwAttr |= FILE_ATTRIBUTE_HIDDEN;
+	if (attr & FileAttribute::Directory) dwAttr |= FILE_ATTRIBUTE_DIRECTORY;
+	if (attr & FileAttribute::ReadOnly)  dwAttr |= FILE_ATTRIBUTE_READONLY;
+	if (attr & FileAttribute::Hidden)    dwAttr |= FILE_ATTRIBUTE_HIDDEN;
 	BOOL r = ::SetFileAttributesW(filePath, dwAttr);
 	if (r == FALSE) { Win32IOErrorToExceptionThrow(::GetLastError(), filePath); }
 }

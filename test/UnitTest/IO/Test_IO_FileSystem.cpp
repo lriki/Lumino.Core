@@ -31,24 +31,42 @@ TEST_F(Test_IO_FileSystem, GetAttribute)
 {
 	uint32_t attr;
 
-	// 
-	attr = FileSystem::GetAttribute(LOCALFILE("TestData/readonly.txt"));
-	attr |= FileAttribute_ReadOnly;
-	FileSystem::SetAttribute(LOCALFILE("TestData/readonly.txt"), attr);
+	// <Test> ファイルを読み取り専用にする
+	// <Test> ファイルの読み取り専用を確認する
+	{
+		attr = FileSystem::GetAttribute(LOCALFILE("TestData/readonly.txt"));
+		attr |= FileAttribute::ReadOnly;
+		FileSystem::SetAttribute(LOCALFILE("TestData/readonly.txt"), attr);
+	}
 
-	// ディレクトリ
-	attr = FileSystem::GetAttribute(LOCALFILE("TestData"));
-	ASSERT_EQ(FileAttribute_Directory, attr);
+	// <Test> ファイルの読み取り専用を確認する
+	{
+		attr = FileSystem::GetAttribute(LOCALFILE("TestData/readonly.txt"));
+		ASSERT_EQ(FileAttribute::ReadOnly, attr);
+	}
 
-	// 読み取り専用
-	attr = FileSystem::GetAttribute(LOCALFILE("TestData/readonly.txt"));
-	ASSERT_EQ(FileAttribute_ReadOnly, attr);
+	// <Test> ファイルの読み取り専用を解除する
+	{
+		attr = FileSystem::GetAttribute(LOCALFILE("TestData/readonly.txt"));
+		attr &=~ FileAttribute::ReadOnly;
+		FileSystem::SetAttribute(LOCALFILE("TestData/readonly.txt"), attr);
+
+		// 確認
+		attr = FileSystem::GetAttribute(LOCALFILE("TestData/readonly.txt"));
+		ASSERT_EQ(FileAttribute::Normal, attr);
+	}
+
+	// <Test> ディレクトリ属性を確認する
+	{
+		attr = FileSystem::GetAttribute(LOCALFILE("TestData"));
+		ASSERT_EQ(FileAttribute::Directory, attr);
+	}
 
 #ifdef LN_WIN32
 #else
 	// 隠しファイル
 	attr = FileSystem::GetAttribute(LOCALFILE("TestData/.test"));
-	ASSERT_EQ(FileAttribute_Hidden, attr);
+	ASSERT_EQ(FileAttribute::Hidden, attr);
 #endif
 
 	//try

@@ -66,7 +66,7 @@ public:
 		Temporary       | <USER>/AppData/Local/Temp |         | /tmp
 	*/
 	template<typename TChar>
-	static void GetFolderPath(SpecialFolder specialFolder, TChar* outPath);
+	static void GetSpecialFolderPath(SpecialFolder specialFolder, TChar* outPath);
 };
 
 } // namespace Lumino
