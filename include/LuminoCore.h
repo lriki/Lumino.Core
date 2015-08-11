@@ -32,6 +32,7 @@
 #include "Lumino/Base/Nullable.h"
 #include "Lumino/Base/ElapsedTimer.h"
 #include "Lumino/Base/SortedArray.h"
+#include "Lumino/Base/Thickness.h"
 
 #include "Lumino/IO/PathName.h"
 #include "Lumino/IO/PathTraits.h"

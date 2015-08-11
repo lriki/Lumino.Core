@@ -16,7 +16,7 @@ const Rect	Rect::Empty(0, 0, -1, -1);
 // RectF
 //=============================================================================
 
-const RectF RectF::Zero(0, 0, 0, 0);
+const RectF	RectF::Zero(0, 0, 0, 0);
 const RectF	RectF::Empty(0, 0, -1, -1);
 
 
