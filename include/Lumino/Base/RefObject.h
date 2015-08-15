@@ -51,13 +51,18 @@ protected:
     Threading::Atomic	mReferenceCount;	///< 参照カウント
 };
 
+class RefPtrCore {};
+
 /**
 	@brief		RefObject 用 スマートポインタ
 	@attention	CArray や std::vector 等のコンテナへの格納は未チェック
 */
 template <class T>
-class RefPtr
+class RefPtr : public RefPtrCore
 {
+public:
+	typedef T* PtrType;
+
 public:
 
 	template<typename... TArgs>

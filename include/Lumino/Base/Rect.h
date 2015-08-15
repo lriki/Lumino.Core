@@ -297,12 +297,12 @@ public:
 	/**
 		@brief	左上隅の位置を設定します。
 	*/
-	void SetLocation(const PointF& pt) { X = pt.X; Y = pt.Y; }
+	void SetPosition(const PointF& pt) { X = pt.X; Y = pt.Y; }
 
 	/**
 		@brief	左上隅の位置を取得します。
 	*/
-	PointF GetLocation() const { return PointF(X, Y); }
+	const PointF& GetPosition() const { return *((PointF*)&X); }
 	
 	/**
 		@brief	幅と高さを設定します。
@@ -312,7 +312,7 @@ public:
 	/**
 		@brief	幅と高さを取得します。
 	*/
-	SizeF GetSize() const { return SizeF(Width, Height); }
+	const SizeF& GetSize() const { return *((SizeF*)&Width); }
 
 	/**
 		@brief	幅または高さを持たないかを判定します。

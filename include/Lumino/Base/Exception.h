@@ -108,9 +108,9 @@
 
 
 // 試験運用中
-#define LN_VERIFY_ARGS(exp)			_LN_VERIFY_ASSERT_INTERNAL(exp, Lumino::ArgumentException)
-#define LN_VERIFY_ARGS_RETURN(exp)	if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::Lumino::ArgumentException)) { return; }
-#define LN_VERIFY_ARGS_RETURNV(exp)	if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::Lumino::ArgumentException)) { return returnValue; }
+#define LN_VERIFY_ARGS(exp)							_LN_VERIFY_ASSERT_INTERNAL(exp, Lumino::ArgumentException)
+#define LN_VERIFY_ARGS_RETURN(exp)					if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::Lumino::ArgumentException)) { return; }
+#define LN_VERIFY_ARGS_RETURNV(exp, returnValue)	if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::Lumino::ArgumentException)) { return returnValue; }
 
 // 試験運用中。Release でも例外を throw する。中身は TODO
 #define LN_CHECK_ARGS(exp)							_LN_VERIFY_ASSERT_INTERNAL(exp, Lumino::ArgumentException)
