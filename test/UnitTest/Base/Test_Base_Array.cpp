@@ -1,5 +1,8 @@
 ﻿#include <TestConfig.h>
 #include <map>
+#include <set>
+#include <list>
+#include <vector>
 
 class Test_Base_Array : public ::testing::Test
 {
@@ -8,9 +11,239 @@ protected:
 	virtual void TearDown() {}
 };
 
+template<typename T>
+class StackArray
+{
+public:
+
+	int Add(const T& value)
+	{
+#if 0
+
+		// 管理配列がすべて埋まっている場合は領域を足す
+		if (m_indexStack.IsEmpty())
+		{
+			int count = (int)m_array.size() + 1;
+			for (int i = 0; i < count; ++i)
+			{
+				m_indexStack.Push((count - 1) + i);
+				//m_array.push_back(T());
+			}
+			m_array.resize(m_array.size() + count);
+		}
+
+		// 空いている場所を取ってきてそこに格納
+		int newIndex = m_indexStack.GetTop();
+		m_indexStack.Pop();
+		m_array.at(newIndex) = value;//[newIndex] = value;
+		return newIndex;
+#endif
+		// 管理配列がすべて埋まっている場合は末尾に追加する
+		if (m_indexStack.IsEmpty())
+		{
+			int index = m_indexStack.GetCount();
+			m_array.push_back(value);//.Add(value);
+			return index;
+		}
+		// 空き場所があればそこに格納する
+		else
+		{
+			int newIndex = m_indexStack.GetTop();
+			m_indexStack.Pop();	// TODO: これが重い気がする
+			m_array.at(newIndex) = value;//[newIndex] = value;
+			return newIndex;
+		}
+	}
+
+	void RemoveAt(int index)
+	{
+		m_array.at(index) = T();//[index] = T();
+		m_indexStack.Push(index);
+	}
+
+	const T& GetAt(int index) const
+	{
+		return m_array.at(index);//[index];
+	}
+
+	void Clear()
+	{
+		m_indexStack.Clear();
+		int size = (int)m_array.size();
+		for (int i = 0; i < size; ++i) {
+			m_indexStack.Push(i);
+		}
+	}
+
+private:
+	std::vector<T>	m_array;
+	Stack<int>	m_indexStack;
+};
+
+
 //-----------------------------------------------------------------------------
 TEST_F(Test_Base_Array, IsEmpty)
 {
+	StackArray<int> stackArray;
+	std::vector<int> vec1;
+	std::list<int> list1;
+	std::set<int> set1;
+	const int testCount = 1000000;
+
+#if 0
+	// 要素の追加
+	printf("要素の追加 ----\n");
+	for (int j = 0; j < 10; j++)
+	{
+		ElapsedTimer timer;
+		timer.Start();
+		for (int i = 0; i < testCount; ++i) { stackArray.Add(i); }
+		printf("%7llu", timer.GetElapsedTime());
+	}
+	printf("\n");
+	for (int j = 0; j < 10; j++)
+	{
+		ElapsedTimer timer;
+		timer.Start();
+		for (int i = 0; i < testCount; ++i) { vec1.push_back(i); }
+		printf("%7llu", timer.GetElapsedTime());
+	}
+	printf("\n");
+	for (int j = 0; j < 10; j++)
+	{
+		ElapsedTimer timer;
+		timer.Start();
+		for (int i = 0; i < testCount; ++i) { list1.push_back(i); }
+		printf("%7llu", timer.GetElapsedTime());
+	}
+	printf("\n");
+	for (int j = 0; j < 10; j++)
+	{
+		ElapsedTimer timer;
+		timer.Start();
+		for (int i = 0; i < testCount; ++i) { set1.insert(i); }
+		printf("%7llu", timer.GetElapsedTime());
+	}
+	printf("\n");
+
+
+	stackArray.Clear();
+	vec1.clear();
+	list1.clear();
+	set1.clear();
+
+	// Reserve からの要素の追加
+	printf("Reserve からの要素の追加 ----\n");
+	for (int j = 0; j < 10; j++)
+	{
+		ElapsedTimer timer;
+		timer.Start();
+		for (int i = 0; i < testCount; ++i) { stackArray.Add(i); }
+		printf("%7llu", timer.GetElapsedTime());
+	}
+	printf("\n");
+	for (int j = 0; j < 10; j++)
+	{
+		ElapsedTimer timer;
+		timer.Start();
+		for (int i = 0; i < testCount; ++i) { vec1.push_back(i); }
+		printf("%7llu", timer.GetElapsedTime());
+	}
+	printf("\n");
+	for (int j = 0; j < 10; j++)
+	{
+		ElapsedTimer timer;
+		timer.Start();
+		for (int i = 0; i < testCount; ++i) { list1.push_back(i); }
+		printf("%7llu", timer.GetElapsedTime());
+	}
+	printf("\n");
+	for (int j = 0; j < 10; j++)
+	{
+		ElapsedTimer timer;
+		timer.Start();
+		for (int i = 0; i < testCount; ++i) { set1.insert(i); }
+		printf("%7llu", timer.GetElapsedTime());
+	}
+	printf("\n");
+
+	// 指定要素へのアクセス
+	printf("指定要素へのアクセス ----\n");
+	for (int j = 0; j < 10; j++)
+	{
+		ElapsedTimer timer;
+		timer.Start();
+		int sum = 0;
+		for (int i = 0; i < testCount; ++i) { sum += stackArray.GetAt(i); }
+		printf("%7llu", timer.GetElapsedTime(), sum);
+	}
+	printf("\n");
+	for (int j = 0; j < 10; j++)
+	{
+		ElapsedTimer timer;
+		timer.Start();
+		int sum = 0;
+		for (int i = 0; i < testCount; ++i) { sum += vec1.at(i); }
+		printf("%7llu", timer.GetElapsedTime(), sum);
+	}
+	printf("\n");
+	//for (int j = 0; j < 10; j++)	// list は論外
+	//{
+	//	ElapsedTimer timer;
+	//	timer.Start();
+	//	for (int i = 0; i < testCount; ++i) { list1.push_back(i); }
+	//	printf("%7llu", timer.GetElapsedTime());
+	//}
+	//printf("\n");
+	for (int j = 0; j < 10; j++)
+	{
+		ElapsedTimer timer;
+		timer.Start();
+		int sum = 0;
+		for (int i = 0; i < testCount; ++i) { sum += *(set1.find(i)); }
+		printf("%7llu", timer.GetElapsedTime(), sum);
+	}
+	printf("\n");
+
+	// 要素の部分削除
+	printf("要素の部分削除 ----\n");
+	for (int j = 0; j < 10; j++)
+	{
+		ElapsedTimer timer;
+		timer.Start();
+		for (int i = 0; i < testCount / 2; ++i) { stackArray.RemoveAt(i * 2); }
+		printf("%7llu", timer.GetElapsedTime());
+	}
+	printf("\n");
+	for (int j = 0; j < 2; j++)
+	{
+		ElapsedTimer timer;
+		timer.Start();
+		for (int i = 0; i < testCount / 2; ++i) { vec1.erase(vec1.begin() + 1); }
+		printf("%7llu", timer.GetElapsedTime());
+	}
+	printf("\n");
+	for (int j = 0; j < 10; j++)
+	{
+		ElapsedTimer timer;
+		timer.Start();
+		for (int i = 0; i < testCount / 2; ++i) { list1.erase(list1.begin()++); }
+		printf("%7llu", timer.GetElapsedTime());
+	}
+	printf("\n");
+	for (int j = 0; j < 10; j++)
+	{
+		ElapsedTimer timer;
+		timer.Start();
+		for (int i = 0; i < testCount / 2; ++i) { set1.erase(i); }
+		printf("%7llu", timer.GetElapsedTime());
+	}
+	printf("\n");
+
+	return;
+#endif
+
+
 	// <Test> 配列が空かを確認する。
 	{
 		Array<int> a1;
@@ -142,6 +375,14 @@ TEST_F(Test_Base_Array, Remove)
 	{
 		Array<int> a1 = ary;
 		a1.RemoveAll(2);
+		ASSERT_EQ(2, a1.GetCount());
+		ASSERT_EQ(1, a1[0]);
+		ASSERT_EQ(3, a1[1]);
+	}
+	// <Test> RemoveAll (ラムダ式)
+	{
+		Array<int> a1 = ary;
+		a1.RemoveAll([](int v) { return v == 2; });
 		ASSERT_EQ(2, a1.GetCount());
 		ASSERT_EQ(1, a1[0]);
 		ASSERT_EQ(3, a1[1]);

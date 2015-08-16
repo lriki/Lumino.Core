@@ -39,6 +39,15 @@ public:
         return n != vec.size();
     }
 
+	/// vector から等しい要素をすべて削除する
+	template <class T, typename TAllocator, typename TPred>
+	static bool RemoveAll(std::vector<T, TAllocator>& vec, TPred pred)
+	{
+		size_t n = vec.size();
+		vec.erase(std::remove_if(vec.begin(), vec.end(), pred), vec.end());
+		return n != vec.size();
+	}
+
 	/// std::vector に要素が含まれているかチェックする
 	template <class T>
 	static bool Contains(const std::vector<T>& vec, const T& value)

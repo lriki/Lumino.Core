@@ -107,6 +107,14 @@ public:
 		m_data->m_vector.erase(m_data->m_vector.begin() + index);
 	}
 
+	/** 指定した条件に一致する全ての要素を削除します。*/
+	template<typename TPred>
+	void RemoveAll(TPred pred)
+	{
+		CheckDetachShared();
+		STLUtils::RemoveAll(m_data->m_vector, pred);
+	}
+
 	/** item に一致する全ての要素を削除します。*/
 	void RemoveAll(const T& item)
 	{

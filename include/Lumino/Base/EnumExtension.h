@@ -52,7 +52,7 @@ private: \
 	struct LocalEnumParser : public EnumParser <_##enumName> { LocalEnumParser() { _##enumName values[] = { __VA_ARGS__ };  Init(values, LN_ARRAY_SIZE_OF(values), #__VA_ARGS__); } }; \
 	static LocalEnumParser& GetEnumParser() { static LocalEnumParser parser; return parser; } \
 public: \
-	int GetMemberCount() const { return GetEnumParser().GetMemberList().GetCount(); } \
+	static int GetMemberCount() { return GetEnumParser().GetMemberList().GetCount(); } \
 	String ToString() const { return GetEnumParser().ToString(m_value); } \
 	static enumName Parse(const TCHAR* str) { return GetEnumParser().Parse(str); }; \
 	static bool TryParse(const TCHAR* str, enumName* outValue) { return GetEnumParser().TryParse(str, (outValue) ? &outValue->m_value : NULL); }
