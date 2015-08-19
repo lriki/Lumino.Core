@@ -73,11 +73,13 @@ const ByteBuffer& EncodingConverter::Convert(const void* data, size_t byteCount,
 
 	if (m_srcDecoder->CanRemain())
 	{
-		EncodingConversionResult localResult;
-		if (outResult == NULL) { outResult = &localResult; }	// outResult が NULL でも結果を受け取りたい
+		//EncodingConversionResult localResult;
+		//if (outResult == NULL) { outResult = &localResult; }	// outResult が NULL でも結果を受け取りたい
 
-		ConvertDecoderRemain(data, byteCount, m_srcDecoder, m_outputBuffer.GetData(), size, m_dstEncoder, outResult);
-		m_outputBuffer.Resize(outResult->BytesUsed);	// 余分に確保されているので、見かけ上のサイズを実際に文字のあるサイズにする
+		ConvertDecoderRemain(data, byteCount, m_srcDecoder, m_outputBuffer.GetData(), size, m_dstEncoder, &m_lastResult);
+		m_outputBuffer.Resize(m_lastResult.BytesUsed);	// 余分に確保されているので、見かけ上のサイズを実際に文字のあるサイズにする
+
+		if (outResult != NULL) { *outResult = m_lastResult; }
 	}
 	// デコーダが変換状態を保持できない場合はやむを得ないので一時メモリを確保し、ソースバッファ全体を一度に変換する。
 	else
@@ -100,14 +102,33 @@ const ByteBuffer& EncodingConverter::Convert(const void* data, size_t byteCount,
 		// 余分に確保されているので、見かけ上のサイズを実際に文字のあるサイズにする
 		m_outputBuffer.Resize(outBytesUsed);
 
+		m_lastResult.BytesUsed = outBytesUsed;
+		m_lastResult.CharsUsed = outCharsUsed;
+		m_lastResult.UsedDefaultChar = (m_srcDecoder->UsedDefaultCharCount() > 0 || m_dstEncoder->UsedDefaultCharCount() > 0);
 		if (outResult != NULL) 
 		{
-			outResult->BytesUsed = outBytesUsed;
-			outResult->CharsUsed = outCharsUsed;
-			outResult->UsedDefaultChar = (m_srcDecoder->UsedDefaultCharCount() > 0 || m_dstEncoder->UsedDefaultCharCount() > 0);
+			outResult->BytesUsed = m_lastResult.BytesUsed;
+			outResult->CharsUsed = m_lastResult.CharsUsed;
+			outResult->UsedDefaultChar = m_lastResult.UsedDefaultChar;
 		}
 	}
 	return m_outputBuffer;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+const ByteBuffer& EncodingConverter::GetLastBuffer() const
+{
+	return m_outputBuffer;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+const EncodingConversionResult& EncodingConverter::GetLastResult() const
+{
+	return m_lastResult;
 }
 
 //-----------------------------------------------------------------------------

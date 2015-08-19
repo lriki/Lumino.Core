@@ -43,6 +43,7 @@ private:
 	JsonHandler*	m_handler;
 	TextReader*		m_reader;
 	MemoryStream	m_tmpStream;
+	int				m_currentCharCount;	// エラー表示用
 };
 
 } // namespace Json

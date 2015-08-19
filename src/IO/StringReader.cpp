@@ -39,7 +39,7 @@ StringReader::~StringReader()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-int StringReader::Peek() const
+int StringReader::Peek()
 {
 	if (m_pos >= m_src.GetLength()) {
 		return -1;
@@ -112,15 +112,15 @@ String StringReader::ReadToEnd()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-int StringReader::GetPosition() const
-{
-	return m_pos;
-}
+//int StringReader::GetPosition() const
+//{
+//	return m_pos;
+//}
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-bool StringReader::IsEOF() const
+bool StringReader::IsEOF()
 {
 	return (m_pos >= m_src.GetLength());
 }

@@ -24,12 +24,12 @@ public:
 	virtual ~StringReader();
 
 public:
-	virtual int Peek() const;
+	virtual int Peek();
 	virtual int Read();
 	virtual bool ReadLine(String* line);
 	virtual String ReadToEnd();
-	virtual int GetPosition() const;
-	virtual bool IsEOF() const;
+	//virtual int GetPosition() const;
+	virtual bool IsEOF();
 
 private:
 	String	m_src;

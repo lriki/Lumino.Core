@@ -45,6 +45,16 @@ public:
 	*/
 	const ByteBuffer& Convert(const void* data, size_t byteCount, EncodingConversionResult* outResult = NULL);
 
+	/**
+		@brief		最後に呼び出した Convert() で変換されたバッファを取得します。これは Convert() の戻り値と同一です。
+	*/
+	const ByteBuffer& GetLastBuffer() const;
+
+	/**
+		@brief		最後に呼び出した Convert() の EncodingConversionResult を取得します。
+	*/
+	const EncodingConversionResult& GetLastResult() const;
+
 private:
 	void CheckUpdateEncoderDecoder();
 
@@ -54,13 +64,14 @@ private:
 		EncodingConversionResult* outResult);
 
 private:
-	RefPtr<Encoding>	m_dstEncoding;
-	RefPtr<Encoding>	m_srcEncoding;
-	RefPtr<Encoder>		m_dstEncoder;
-	RefPtr<Decoder>		m_srcDecoder;
-	ByteBuffer			m_outputBuffer;
-	ByteBuffer			m_tmpBuffer;			///< 状態を保持できないデコーダを使っている場合に使用する一時バッファ
-	bool				m_encodingModified;
+	RefPtr<Encoding>			m_dstEncoding;
+	RefPtr<Encoding>			m_srcEncoding;
+	RefPtr<Encoder>				m_dstEncoder;
+	RefPtr<Decoder>				m_srcDecoder;
+	ByteBuffer					m_outputBuffer;
+	EncodingConversionResult	m_lastResult;
+	ByteBuffer					m_tmpBuffer;			///< 状態を保持できないデコーダを使っている場合に使用する一時バッファ
+	bool						m_encodingModified;
 };
 
 } // namespace Text

@@ -1,6 +1,6 @@
 
 #pragma once
-
+#include "../Base/String.h"
 #include "../Base/RefObject.h"
 
 namespace Lumino
@@ -22,7 +22,7 @@ public:
 		@return		EOF に到達しているかエラーが発生した場合は -1 を返します。
 					戻り値が -1 かをチェックした後、TCHAR にキャストすることで文字として使用できます。
 	*/
-	virtual int Peek() const = 0;
+	virtual int Peek() = 0;
 
 	/**
 		@brief		現在位置の文字を取得し、現在位置を次の文字に移動します。
@@ -46,15 +46,9 @@ public:
 	virtual String ReadToEnd() = 0;
 
 	/**
-		@brief		Rader の現在位置を取得します。
-		@details	現在位置は文字単位 (TCHAR) です。ストリームのシーク位置とは異なる点に注意してください。
-	*/
-	virtual int GetPosition() const = 0;
-
-	/**
 		@brief		現在位置が EOF に到達しているかを確認します。
 	*/
-	virtual bool IsEOF() const = 0;
+	virtual bool IsEOF() = 0;
 
 };
 
