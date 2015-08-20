@@ -1,5 +1,6 @@
 ﻿#include "../Internal.h"
 #include <Lumino/Base/StringBuilder.h>
+#include <Lumino/IO/FileStream.h>
 #include <Lumino/IO/StreamReader.h>
 
 namespace Lumino
@@ -12,9 +13,17 @@ namespace Lumino
 //
 //-----------------------------------------------------------------------------
 StreamReader::StreamReader(Stream* stream, Text::Encoding* encoding)
-	: m_byteBuffer(BufferSize, false)
-	, m_byteLen(0)
 {
+	InitReader(stream, encoding);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+StreamReader::StreamReader(const TCHAR* filePath, Text::Encoding* encoding)
+{
+	RefPtr<FileStream> stream(LN_NEW FileStream(filePath, FileOpenMode::Read));
+	InitReader(stream, encoding);
 }
 
 //-----------------------------------------------------------------------------
@@ -23,7 +32,6 @@ StreamReader::StreamReader(Stream* stream, Text::Encoding* encoding)
 StreamReader::~StreamReader()
 {
 }
-
 
 //-----------------------------------------------------------------------------
 //
@@ -130,11 +138,28 @@ bool StreamReader::IsEOF()
 }
 
 //-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void StreamReader::InitReader(Stream* stream, Text::Encoding* encoding)
+{
+	m_stream = stream;
+	m_converter.SetSourceEncoding(encoding);
+	m_converter.SetDestinationEncoding(Text::Encoding::GetTCharEncoding());
+	m_byteBuffer.Resize(DefaultBufferSize, false);
+	m_byteLen = 0;
+	m_charElementLen = 0;
+	m_charPos = 0;
+}
+
+//-----------------------------------------------------------------------------
 // ストリームからバイト列を読み取って変換し、現在バッファリングされている文字要素数(THCAR)を返す。
 //-----------------------------------------------------------------------------
 int StreamReader::ReadBuffer()
 {
 	// TODO: BOM チェックするならここで。
+
+	m_charPos = 0;
+	m_charElementLen = 0;
 
 	m_byteLen = m_stream->Read(m_byteBuffer.GetData(), m_byteBuffer.GetSize());
 	if (m_byteLen == 0) { return m_charElementLen; }

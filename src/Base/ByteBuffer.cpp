@@ -275,6 +275,17 @@ void ByteBuffer::Release()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+int ByteBuffer::Compare(const ByteBuffer& buf1, const void* buf2, size_t buf2Size)
+{
+	if (buf1.GetSize() < buf2Size) { return -1; }
+	if (buf1.GetSize() > buf2Size) { return 1; }
+	if (buf1.GetSize() == 0) { return 0; }			// 両方 0
+	return memcmp(buf1.GetConstData(), buf2, buf1.GetSize());
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 ByteBuffer& ByteBuffer::operator = (const ByteBuffer& right)
 {
 	LN_REFOBJ_SET(m_core, right.m_core);

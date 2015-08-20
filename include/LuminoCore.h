@@ -43,6 +43,7 @@
 #include "Lumino/IO/FileSystem.h"
 #include "Lumino/IO/File.h"
 #include "Lumino/IO/BinaryReader.h"
+#include "Lumino/IO/StreamReader.h"
 #include "Lumino/IO/StreamWriter.h"
 #include "Lumino/IO/StringReader.h"
 #include "Lumino/IO/StringWriter.h"

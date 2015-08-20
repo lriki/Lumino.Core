@@ -17,15 +17,26 @@ class StreamReader
 	: public TextReader
 {
 public:
+	static const int DefaultBufferSize = 1024;
+
+public:
 
 	/**
 		@brief		指定したストリーム用の StreamReader を初期化します。
-		@param[in]	stream		: 書込み先ストリーム
-		@param[in]	encoding	: 書き込むテキストのエンコーディング
+		@param[in]	stream		: 読み込み元ストリーム
+		@param[in]	encoding	: 読み込むテキストのエンコーディング
 		@details	encoding が NULL の場合は文字列の書き込み時に文字コードのデコードを行いません。
 	*/
 	StreamReader(Stream* stream, Text::Encoding* encoding = NULL);
 	// TODO: UTF BOM 自動判別
+
+	/**
+		@brief		指定したパスのファイル用の StreamReader を初期化します。
+		@param[in]	filePath	: 読み込み元ファイルのパス
+		@param[in]	encoding	: 読み込むテキストのエンコーディング
+		@details	encoding が NULL の場合は文字列の書き込み時に文字コードのデコードを行いません。
+	*/
+	StreamReader(const TCHAR* filePath, Text::Encoding* encoding = NULL);
 
 	~StreamReader();
 	
@@ -37,10 +48,10 @@ public:
 	virtual bool IsEOF();
 
 private:
+	void InitReader(Stream* stream, Text::Encoding* encoding);
 	int ReadBuffer();
 
-	static const int BufferSize = 1024;
-	Stream*					m_stream;
+	RefPtr<Stream>			m_stream;
 	Text::EncodingConverter	m_converter;
 	ByteBuffer				m_byteBuffer;
 	int						m_byteLen;

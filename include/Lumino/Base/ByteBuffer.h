@@ -159,10 +159,19 @@ public:
 	
 	/**
 		@brief		メモリを解放します。
-		@details	コピーオンライト用にメモリを共有している場合は参照を外すだけです。
+		@details	コピーオンライト用にメモリを共有している場合は参照を外します。
 					Clear() とは異なり、メモリそのものを解放します。
 	*/
 	void Release();
+
+public:
+
+	/**
+		@brief		ByteBuffer と指定したサイズのバイト列を比較します。
+		@return		負の値: buf1<buf2  0:buf1==buf2  正の値:buf1>buf2
+		@details	部分比較はできません。buf1.GetSize() と buf2Size が一致しなければ不一致となります。
+	*/
+	static int Compare(const ByteBuffer& buf1, const void* buf2, size_t buf2Size);
 
 public:
 	ByteBuffer& operator=(const ByteBuffer& right);

@@ -1,5 +1,6 @@
-﻿#pragma once
-
+﻿
+#pragma once
+#include "../Base/EnumExtension.h"
 #include "../Base/Common.h"
 
 namespace Lumino
@@ -176,6 +177,15 @@ enum ASyncIOState
 
 	ASyncIOState_Max,
 };
+
+/** プロセスの状態 */
+LN_ENUM(ProcessStatus)
+{
+	Running = 0,			/**< 実行中 */
+	Finished,				/**< 正常終了した */
+	Crashed,				/**< 異常終了した */
+};
+LN_ENUM_DECLARE(ProcessStatus);
 
 #pragma pack(1)
 struct ArchiveHeader

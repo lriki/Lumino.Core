@@ -16,22 +16,24 @@ class Stream
 public:
 
 	/**
-		@brief	読み取りをサポートするかどうか
+		@brief		読み取りをサポートするかどうか
 	*/
 	virtual bool CanRead() const = 0;
 
 	/**
-		@brief	書き込みをサポートするかどうか
+		@brief		書き込みをサポートするかどうか
 	*/
 	virtual bool CanWrite() const = 0;
 
 	/**
-		@brief	ストリームの長さ (バイト単位) を取得します。
+		@brief		ストリームの長さ (バイト単位) を取得します。
+		@attention	パイプストリームでは、この機能はサポートされません。
 	*/
 	virtual int64_t GetLength() const = 0;
 
 	/**
-		@brief	ストリーム内の現在位置 (ファイルポインタの位置) を取得します。
+		@brief		ストリーム内の現在位置 (ファイルポインタの位置) を取得します。
+		@attention	パイプストリームでは、この機能はサポートされません。
 	*/
 	virtual int64_t GetPosition() const = 0;
 	
@@ -52,9 +54,9 @@ public:
 	*/
 	virtual void Write(const void* data, size_t byteCount) = 0;
 
-
 	/**
 		@brief		ストリームの現在位置を指定した位置に設定します。
+		@attention	パイプストリームでは、この機能はサポートされません。
 	*/
 	virtual void Seek(int64_t offset, SeekOrigin origin) = 0;
 

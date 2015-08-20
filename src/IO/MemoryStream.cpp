@@ -22,6 +22,18 @@ MemoryStream::MemoryStream()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+MemoryStream::MemoryStream(void* buffer, size_t size)
+	: m_seekPos(0)
+	, m_fixedBuffer(NULL)
+	, m_constfixedBuffer(NULL)
+	, m_fixedBufferSize(0)
+{
+	Create(buffer, size);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 MemoryStream::~MemoryStream()
 {
 }
@@ -119,7 +131,7 @@ size_t MemoryStream::Read(void* buffer, size_t byteCount)
 	// const 固定長のバッファを使用している場合
 	if (m_constfixedBuffer != NULL)
 	{
-		size_t readSize = std::min(byteCount, m_fixedBufferSize);
+		size_t readSize = std::min(byteCount, m_fixedBufferSize - m_seekPos);
 		memcpy_s(buffer, byteCount, &(((byte_t*)m_constfixedBuffer)[m_seekPos]), readSize);
 		m_seekPos += readSize;
 		return readSize;
@@ -127,8 +139,10 @@ size_t MemoryStream::Read(void* buffer, size_t byteCount)
 	// 固定長のバッファを使用している場合
 	else  if (m_fixedBuffer != NULL)
 	{
-		LN_THROW(0, NotImplementedException);
-		return 0;
+		size_t readSize = std::min(byteCount, m_fixedBufferSize - m_seekPos);
+		memcpy_s(buffer, byteCount, &(((byte_t*)m_fixedBuffer)[m_seekPos]), readSize);
+		m_seekPos += readSize;
+		return readSize;
 	}
 	// 可変長のバッファを使用している場合
 	else
@@ -148,8 +162,13 @@ void MemoryStream::Write(const void* data, size_t byteCount)
 {
 	size_t newPos = m_seekPos + byteCount;
 
+	// const 固定長のバッファを使用している場合
+	if (m_constfixedBuffer != NULL)
+	{
+		LN_THROW(0, InvalidOperationException);
+	}
 	// 固定長のバッファを使用している場合
-	if (m_fixedBuffer != NULL)
+	else if (m_fixedBuffer != NULL)
 	{
 		if (newPos > m_fixedBufferSize) {
 			LN_THROW(0, ArgumentException);

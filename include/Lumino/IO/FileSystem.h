@@ -104,6 +104,7 @@ public:
 		@brief		現在の環境のファイルシステムが、パス文字列の大文字と小文字を区別するかを確認します。
 	*/
 	static CaseSensitivity GetFileSystemCaseSensitivity();
+
 };
 
 } // namespace Lumino
