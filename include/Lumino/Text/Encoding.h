@@ -114,6 +114,14 @@ public:
 	template<typename TChar>
 	static Encoding* GetEncodingTemplate();
 
+#ifdef LN_WIN32
+	/**
+		@brief		現在のスレッドロケールに基づくデフォルトコードページの Encoding を取得します。
+		@details	返されるポインタはグローバルなインスタンスです。このポインタは解放しないでください。
+	*/
+	static Encoding* GetWin32DefaultCodePageEncoding();
+#endif
+
 	/**
 		@brief		文字コードを from から to へ fromByteCount バイト分だけ変換する際に必要な、変換先バッファの最大バイト数を取得します。
 	*/

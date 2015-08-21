@@ -10,6 +10,9 @@
 #include "UTF8Encoding.h"
 #include "UTF16Encoding.h"
 #include "UTF32Encoding.h"
+#ifdef LN_WIN32
+#include "Win32CodePageEncoding.h"
+#endif
 
 namespace Lumino
 {
@@ -139,6 +142,15 @@ template<>
 Encoding* Encoding::GetEncodingTemplate<wchar_t>()
 {
 	return GetWideCharEncoding();
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+Encoding* Encoding::GetWin32DefaultCodePageEncoding()
+{
+	static Win32CodePageEncoding encoding(CP_THREAD_ACP);
+	return &encoding;
 }
 
 //-----------------------------------------------------------------------------

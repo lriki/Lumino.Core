@@ -67,6 +67,22 @@ private:
 //
 //-----------------------------------------------------------------------------
 Process::Process()
+	: m_workingDirectory()
+	, m_redirectStandardInput(false)
+	, m_redirectStandardOutput(false)
+	, m_redirectStandardError(false)
+	, m_standardInputWriter()
+	, m_standardOutputReader()
+	, m_standardErrorReader()
+	, m_exitCode(0)
+	, m_crashed(false)
+	, m_disposed(false)
+	, m_hInputRead(NULL)
+	, m_hInputWrite(NULL)
+	, m_hOutputRead(NULL)
+	, m_hOutputWrite(NULL)
+	, m_hErrorRead(NULL)
+	, m_hErrorWrite(NULL)
 {
 }
 
@@ -75,6 +91,7 @@ Process::Process()
 //-----------------------------------------------------------------------------
 Process::~Process()
 {
+	Dispose();
 }
 
 //-----------------------------------------------------------------------------
@@ -141,40 +158,242 @@ StreamReader* Process::GetStandardError() const
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-//void Process::Start(const PathName& filePath, const String& args)
-//{
-//	enum { R = 0, W = 1 };
-//	BOOL bResult;
-//	HANDLE hProcess = ::GetCurrentProcess();
-//
-//	SECURITY_ATTRIBUTES sa;
-//	sa.nLength = sizeof(SECURITY_ATTRIBUTES);
-//	sa.lpSecurityDescriptor = NULL;
-//	sa.bInheritHandle = TRUE;
-//
-//	// 標準出力のパイプを作る
-//	{
-//		HANDLE hPipe[2] = { 0, 0 };
-//		bResult = ::CreatePipe(&hPipe[R], &hPipe[W], &sa, 0);
-//		LN_THROW(bResult != FALSE, Win32Exception, ::GetLastError());
-//
-//		// パイプのこのプロセス側を非継承で複製する
-//		if (!::DuplicateHandle(hProcess, hPipe[R], hProcess, &m_hOutputRead, 0, FALSE, DUPLICATE_SAME_ACCESS))
-//		{
-//			DWORD dwErr = ::GetLastError();
-//			::CloseHandle(hPipe[R]);
-//			::CloseHandle(hPipe[W]);
-//			LN_THROW(0, Win32Exception, dwErr);
-//		}
-//		::CloseHandle(hPipe[R]);
-//		m_hOutputWrite = hPipe[W];
-//
-//		// 標準出力の Reader を作る
-//		RefPtr<InternalPipeStream> stream(LN_NEW InternalPipeStream(InternalPipeStream::ReadSide, m_hOutputRead));
-//		m_standardOutputReader.Attach(LN_NEW StreamReader(stream, WindowsCodePageEncoding::GetSystemCodePageEncoding()));
-//	}
-//}
+void Process::Start(const PathName& filePath, const String& args)
+{
+	enum { R = 0, W = 1 };
+	BOOL bResult;
+	HANDLE hProcess = ::GetCurrentProcess();
 
+	SECURITY_ATTRIBUTES sa;
+	sa.nLength = sizeof(SECURITY_ATTRIBUTES);
+	sa.lpSecurityDescriptor = NULL;
+	sa.bInheritHandle = TRUE;
+
+	// 標準入力のパイプを作る
+	if (m_redirectStandardInput)
+	{
+		HANDLE hPipe[2] = { 0, 0 };
+		bResult = ::CreatePipe(&hPipe[R], &hPipe[W], &sa, 0);
+		LN_THROW(bResult != FALSE, Win32Exception, ::GetLastError());
+
+		// パイプのこのプロセス側を非継承で複製する
+		if (!::DuplicateHandle(hProcess, hPipe[W], hProcess, &m_hInputWrite, 0, FALSE, DUPLICATE_SAME_ACCESS))
+		{
+			DWORD dwErr = ::GetLastError();
+			::CloseHandle(hPipe[R]);
+			::CloseHandle(hPipe[W]);
+			LN_THROW(0, Win32Exception, dwErr);
+		}
+		::CloseHandle(hPipe[W]);
+		m_hInputRead = hPipe[R];
+
+		// 標準出力の Writer を作る
+		RefPtr<InternalPipeStream> stream(LN_NEW InternalPipeStream(InternalPipeStream::WriteSide, m_hInputWrite));
+		m_standardInputWriter.Attach(LN_NEW StreamWriter(stream, Text::Encoding::GetWin32DefaultCodePageEncoding()));
+	}
+
+	// 標準出力のパイプを作る
+	if (m_redirectStandardOutput)
+	{
+		HANDLE hPipe[2] = { 0, 0 };
+		bResult = ::CreatePipe(&hPipe[R], &hPipe[W], &sa, 0);
+		LN_THROW(bResult != FALSE, Win32Exception, ::GetLastError());
+
+		// パイプのこのプロセス側を非継承で複製する
+		if (!::DuplicateHandle(hProcess, hPipe[R], hProcess, &m_hOutputRead, 0, FALSE, DUPLICATE_SAME_ACCESS))
+		{
+			DWORD dwErr = ::GetLastError();
+			::CloseHandle(hPipe[R]);
+			::CloseHandle(hPipe[W]);
+			LN_THROW(0, Win32Exception, dwErr);
+		}
+		::CloseHandle(hPipe[R]);
+		m_hOutputWrite = hPipe[W];
+
+		// 標準出力の Reader を作る
+		RefPtr<InternalPipeStream> stream(LN_NEW InternalPipeStream(InternalPipeStream::ReadSide, m_hOutputRead));
+		m_standardOutputReader.Attach(LN_NEW StreamReader(stream, Text::Encoding::GetWin32DefaultCodePageEncoding()));
+	}
+
+	// 標準エラー出力のパイプを作る
+	if (m_redirectStandardError)
+	{
+		HANDLE hPipe[2] = { 0, 0 };
+		bResult = ::CreatePipe(&hPipe[R], &hPipe[W], &sa, 0);
+		LN_THROW(bResult != FALSE, Win32Exception, ::GetLastError());
+
+		// パイプのこのプロセス側を非継承で複製する
+		if (!::DuplicateHandle(hProcess, hPipe[R], hProcess, &m_hErrorRead, 0, FALSE, DUPLICATE_SAME_ACCESS))
+		{
+			DWORD dwErr = ::GetLastError();
+			::CloseHandle(hPipe[R]);
+			::CloseHandle(hPipe[W]);
+			LN_THROW(0, Win32Exception, dwErr);
+		}
+		::CloseHandle(hPipe[R]);
+		m_hErrorWrite = hPipe[W];
+
+		// 標準出力の Reader を作る
+		RefPtr<InternalPipeStream> stream(LN_NEW InternalPipeStream(InternalPipeStream::ReadSide, m_hErrorRead));
+		m_standardErrorReader.Attach(LN_NEW StreamReader(stream, Text::Encoding::GetWin32DefaultCodePageEncoding()));
+	}
+
+	// 子プロセスの標準出力の出力先を↑で作ったパイプにする
+	STARTUPINFO si;
+	ZeroMemory(&si, sizeof(si));
+	si.cb = sizeof(si);
+	si.dwFlags = STARTF_USESTDHANDLES;
+	si.hStdInput = m_hInputRead;			// 子プロセスの標準入力はここから読み取る
+	si.hStdOutput = m_hOutputWrite;		// 子プロセスの標準出力はここへ
+	si.hStdError = m_hErrorWrite;		// 子プロセスの標準エラーはここへ
+	si.wShowWindow = SW_HIDE;
+
+	// exe 名と引数を連結してコマンドライン文字列を作る
+	String cmdArgs = filePath;
+	if (!args.IsEmpty()) {
+		cmdArgs += _T(" ");
+		cmdArgs += args;
+	}
+
+	// カレントディレクトリ
+	LPCTSTR pCurrentDirectory = NULL;
+	if (!m_workingDirectory.IsEmpty()) {
+		pCurrentDirectory = m_workingDirectory.GetCStr();
+	}
+
+	// 子プロセス開始
+	memset(&m_processInfo, 0, sizeof(m_processInfo));
+	bResult = ::CreateProcess(
+		NULL, (LPTSTR)(LPCTSTR)cmdArgs.GetCStr(), NULL, NULL, TRUE,
+		CREATE_NO_WINDOW, NULL, pCurrentDirectory, &si, &m_processInfo);
+	LN_THROW(bResult != FALSE, Win32Exception, ::GetLastError());
+
+	// 子プロセスのスレッドハンドルは不必要なのでクローズしてしまう
+	::CloseHandle(m_processInfo.hThread);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+bool Process::WaitForExit(int timeoutMSec)
+{
+	if (m_processInfo.hProcess != NULL)
+	{
+		// 終了した場合は制御を返し、WAIT_OBJECT_0 が返ってくる
+		DWORD r = ::WaitForSingleObject(m_processInfo.hProcess, (timeoutMSec < 0) ? INFINITE : timeoutMSec);
+		if (r == WAIT_TIMEOUT) {
+			return false;	// タイムアウト
+		}
+	}
+
+	// いろいろ閉じる
+	Dispose();
+	return true;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+ProcessStatus Process::GetState()
+{
+	if (::WaitForSingleObject(m_processInfo.hProcess, 0) == WAIT_OBJECT_0) {
+		return ProcessStatus::Running;
+	}
+	TryGetExitCode();
+	return (m_crashed) ? ProcessStatus::Crashed : ProcessStatus::Finished;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+int Process::GetExitCode()
+{
+	TryGetExitCode();
+	return m_exitCode;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void Process::TryGetExitCode()
+{
+	if (m_processInfo.hProcess != NULL)
+	{
+		DWORD exitCode;
+		if (!::GetExitCodeProcess(m_processInfo.hProcess, &exitCode)) {
+			return;
+		}
+		m_exitCode = (int)exitCode;
+
+		// クラッシュを確実に検出するのは難しい。
+		// 現実的な方法としては、GetExitCodeProcess() は未処理例外の例外コードを返すのでそれをチェックすること。
+		// https://social.msdn.microsoft.com/Forums/en-US/7e0746ab-d285-4061-9032-81400875243a/detecting-if-a-child-process-crashed
+		m_crashed = (m_exitCode >= 0x80000000 && m_exitCode < 0xD0000000);
+	}
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void Process::Dispose()
+{
+	if (!m_disposed)
+	{
+		// 終了コードを覚えておく (閉じた後は取得できない)
+		TryGetExitCode();
+
+		// 子プロセス強制停止
+		if (m_processInfo.hProcess != NULL)
+		{
+			::TerminateProcess(m_processInfo.hProcess, 0);
+			::CloseHandle(m_processInfo.hProcess);
+			m_processInfo.hProcess = NULL;
+		}
+
+		// 書き込み側ハンドルは、WaitForSingleObject() の前でクローズしておく。
+		// こうしておかないと、子プロセスの ReadFile() がブロックし続けてしまい、
+		// スレッドが終了できなくなる。
+		//if (m_hInputWrite != NULL) {
+		//	::CloseHandle(m_hInputWrite);
+		//	m_hInputWrite = NULL;
+		//}
+
+		// 読み取りスレッドの終了を待つ
+		//if (m_bRunReadThread)
+		//{
+		//	m_bRunReadThread = false;
+		//	m_ReadStdOutputThread.Wait();
+		//}
+
+		// パイプを閉じる
+		if (m_hInputRead != NULL) {
+			::CloseHandle(m_hInputRead);
+			m_hInputRead = NULL;
+		}
+		if (m_hInputWrite != NULL) {
+			::CloseHandle(m_hInputWrite);
+			m_hInputWrite = NULL;
+		}
+		if (m_hOutputRead != NULL) {
+			::CloseHandle(m_hOutputRead);
+			m_hOutputRead = NULL;
+		}
+		if (m_hOutputWrite != NULL) {
+			::CloseHandle(m_hOutputWrite);
+			m_hOutputWrite = NULL;
+		}
+		if (m_hErrorRead != NULL) {
+			::CloseHandle(m_hErrorRead);
+			m_hErrorRead = NULL;
+		}
+		if (m_hErrorWrite != NULL) {
+			::CloseHandle(m_hErrorWrite);
+			m_hErrorWrite = NULL;
+		}
+
+		m_disposed = true;
+	}
+}
 #endif
 
 } // namespace Lumino

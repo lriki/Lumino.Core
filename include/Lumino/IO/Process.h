@@ -61,13 +61,13 @@ public:
 		@attention	リダイレクトを非同期で行っている場合、ProcessStatus::Finished を返してもまだリダイレクトスレッドは終了していないことがあります。
 					完了させるには WaitForExit() を呼び出してください。
 	*/
-	ProcessStatus GetState() const;
+	ProcessStatus GetState();
 
 	/**
 		@brief		プロセスの終了コードを取得します。
 		@details	GetState() が ProcessStatus::Finished を返さない限り、戻り値は有効ではありません。
 	*/
-	int GetExitCode() const;
+	int GetExitCode();
 
 	/**
 		@brief		標準入力の書き込みに使用されるストリームを取得します。
@@ -89,6 +89,10 @@ public:
 	StreamReader* GetStandardError() const;
 
 private:
+	void TryGetExitCode();
+	void Dispose();
+
+private:
 	PathName				m_workingDirectory;
 	bool					m_redirectStandardInput;
 	bool					m_redirectStandardOutput;
@@ -96,14 +100,17 @@ private:
 	RefPtr<StreamWriter>	m_standardInputWriter;
 	RefPtr<StreamReader>	m_standardOutputReader;
 	RefPtr<StreamReader>	m_standardErrorReader;
+	int						m_exitCode;
+	bool					m_crashed;
+	bool					m_disposed;
 
 #ifdef _WIN32
 	HANDLE					m_hInputRead;			// 標準出力の読み取り側 (子プロセス側)
 	HANDLE					m_hInputWrite;			// 標準出力の書き込み側 (このプロセス側)
 	HANDLE					m_hOutputRead;			// 標準出力の読み取り側 (このプロセス側)
 	HANDLE					m_hOutputWrite;			// 標準出力の書き込み側 (子プロセス側)
-	HANDLE					m_hErrorRead;			// 標準出力の読み取り側 (このプロセス側)
-	HANDLE					m_hErrorWrite;			// 標準出力の書き込み側 (子プロセス側)
+	HANDLE					m_hErrorRead;			// 標準エラー出力の読み取り側 (このプロセス側)
+	HANDLE					m_hErrorWrite;			// 標準エラー出力の書き込み側 (子プロセス側)
 	PROCESS_INFORMATION		m_processInfo;
 #endif
 };

@@ -13,6 +13,14 @@ namespace Lumino
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+StreamWriter::StreamWriter(Stream* stream, Text::Encoding* encoding)
+{
+	Init(stream, encoding);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 StreamWriter::StreamWriter(const PathName& filePath, Text::Encoding* encoding, FileWriteMode mode)
 {
 	// モード選択
@@ -23,12 +31,9 @@ StreamWriter::StreamWriter(const PathName& filePath, Text::Encoding* encoding, F
 	else {
 		openMode = FileOpenMode::Write | FileOpenMode::Append;
 	}
-	
-	// ファイルを開く
-	m_stream.Attach(LN_NEW FileStream(filePath, openMode));
 
-	// エンコーディング指定
-	SetEncoding(encoding);
+	RefPtr<FileStream> stream(LN_NEW FileStream(filePath, openMode));
+	Init(stream, encoding);
 }
 
 //-----------------------------------------------------------------------------
@@ -36,6 +41,15 @@ StreamWriter::StreamWriter(const PathName& filePath, Text::Encoding* encoding, F
 //-----------------------------------------------------------------------------
 StreamWriter::~StreamWriter()
 {
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void StreamWriter::Init(Stream* stream, Text::Encoding* encoding)
+{
+	m_stream = stream;
+	SetEncoding(encoding);
 }
 
 //-----------------------------------------------------------------------------

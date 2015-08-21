@@ -110,6 +110,8 @@ set(LN_SOURCES_Text
 	src/Text/UTF16Encoding.h
 	src/Text/UTF32Encoding.cpp
 	src/Text/UTF32Encoding.h
+	src/Text/Win32CodePageEncoding.cpp
+	src/Text/Win32CodePageEncoding.h
 )
 
 set(LN_SOURCES_IO

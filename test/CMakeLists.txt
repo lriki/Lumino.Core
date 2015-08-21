@@ -28,6 +28,7 @@ set(LN_TEST_SOURCES
 	UnitTest/IO/Test_IO_MemoryStream.cpp
 	UnitTest/IO/Test_IO_PathName.cpp
 	UnitTest/IO/Test_IO_PathTraits.cpp
+	UnitTest/IO/Test_IO_Process.cpp
 	UnitTest/IO/Test_IO_StreamReader.cpp
 	UnitTest/IO/Test_IO_TextWriter.cpp
 	UnitTest/Json/Test_Json_JsonDocument.cpp
