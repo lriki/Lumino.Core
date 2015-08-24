@@ -528,6 +528,23 @@ void PathTraits::CanonicalizePath(const TChar* srcPath, TChar* outPath)
 }
 template void PathTraits::CanonicalizePath<char>(const char* srcPath, char* outPath);
 template void PathTraits::CanonicalizePath<wchar_t>(const wchar_t* srcPath, wchar_t* outPath);
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+void PathTraits::CanonicalizePath(GenericString<TChar>* path)
+{
+	if (path == NULL) { return; }
+
+	TChar tmpPath[LN_MAX_PATH + 1];
+	memset(tmpPath, 0, sizeof(tmpPath));
+	PathTraits::CanonicalizePath(path->GetCStr(), tmpPath);
+	*path = tmpPath;
+}
+template void PathTraits::CanonicalizePath<char>(GenericString<char>* path);
+template void PathTraits::CanonicalizePath<wchar_t>(GenericString<wchar_t>* path);
+
 #if 0
 //-----------------------------------------------------------------------------
 //

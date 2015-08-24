@@ -97,6 +97,13 @@ public:
 	static void CanonicalizePath(const TChar* srcPath, TChar* outPath);
 
 	/**
+		@brief			パスを単純化する
+		@param[in,out]	path	: 単純化するファイルパスが格納されている変数
+	*/
+	template<typename TChar>
+	static void CanonicalizePath(GenericString<TChar>* path);
+
+	/**
 		@brief		パスを単純化する
 		@return		-1 を返した場合は失敗。
 		@details	このオーバーロードは現在内部処理用です。

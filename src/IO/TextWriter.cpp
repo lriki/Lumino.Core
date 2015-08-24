@@ -86,7 +86,7 @@ void TextWriter::SetFormatLocale(const Locale& locale)
 //-----------------------------------------------------------------------------
 void TextWriter::Write(const TCHAR* str, int len)
 {
-	WriteInternal(str, len);
+	WriteInternal(str, (len < 0) ? StringTraits::StrLen(str) : len);
 }
 
 void TextWriter::WriteFormat(const TCHAR* format, ...)

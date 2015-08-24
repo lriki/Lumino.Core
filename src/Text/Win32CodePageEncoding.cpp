@@ -172,7 +172,7 @@ void Win32CodePageEncoding::Win32CodePageEncoder::ConvertFromUTF16(const UTF16* 
 		pDefault = &chDefault;
 	}
 
-	int convertedWideCount;
+	int convertedByteCount = 0;
 	if (m_canRemain)
 	{
 		LN_THROW(0, NotImplementedException);
@@ -180,7 +180,7 @@ void Win32CodePageEncoding::Win32CodePageEncoder::ConvertFromUTF16(const UTF16* 
 	else
 	{
 		// 変換
-		convertedWideCount = ::WideCharToMultiByte(
+		convertedByteCount = ::WideCharToMultiByte(
 			m_codePage,
 			dwFlags,
 			(const wchar_t*)inBuffer,
@@ -190,7 +190,7 @@ void Win32CodePageEncoding::Win32CodePageEncoder::ConvertFromUTF16(const UTF16* 
 			pDefault,
 			&bUsedDefaultChar);
 
-		LN_THROW(convertedWideCount > 0, EncodingFallbackException);
+		LN_THROW(convertedByteCount > 0, EncodingFallbackException);
 	}
 
 	// WideCharToMultiByte じゃ文字数カウントはできないので UnicodeUtils を使う
@@ -198,7 +198,7 @@ void Win32CodePageEncoding::Win32CodePageEncoder::ConvertFromUTF16(const UTF16* 
 	UTFConversionResult r = UnicodeUtils::GetUTF16CharCount((UnicodeUtils::UTF16*)inBuffer, inBufferCharCount, true, &count);
 	LN_THROW(r == UTFConversionResult_Success, EncodingFallbackException);
 
-	*outBytesUsed = inBufferCharCount * sizeof(wchar_t);
+	*outBytesUsed = convertedByteCount;
 	*outCharsUsed = count;
 }
 

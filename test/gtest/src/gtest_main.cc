@@ -31,7 +31,30 @@
 
 #include "gtest/gtest.h"
 
-GTEST_API_ int main(int argc, char **argv) {
+GTEST_API_ int main(int argc, char **argv)
+{
+	// Process クラスのテストスタブ
+	if (strcmp(argv[argc - 1], "--proctest1") == 0)
+	{
+		printf("stdout");
+		return 5;
+	}
+	else if (strcmp(argv[argc - 1], "--proctest2") == 0)
+	{
+		char str[256];
+		scanf("%s", &str);
+		return strlen(str);		// 文字数を返す
+	}
+	else if (strcmp(argv[argc - 1], "--proctest3") == 0)
+	{
+		char str[256];
+		scanf("%s", &str);
+		printf("[%s]", str);	// [ ] をつけて出力
+		return 0;
+	}
+
+
+
 	printf("Running main() from gtest_main.cc\n");
 	
 #ifdef _WIN32
@@ -43,7 +66,7 @@ GTEST_API_ int main(int argc, char **argv) {
 	char* testArgs[] = {
 		argv[0],
 		//"--gtest_filter=Test_Text_EncodingDetector.*"
-		"--gtest_filter=Test_IO_StreamReader.*"
+		"--gtest_filter=Test_IO_Process.*"
 	};
 	argc = sizeof(testArgs) / sizeof(char*);
 	testing::InitGoogleTest(&argc, (char**)testArgs);

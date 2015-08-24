@@ -153,12 +153,26 @@ StreamReader* Process::GetStandardError() const
 	return m_standardErrorReader;
 }
 
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+int Process::Execute(const PathName& program, const String& args, String* stdOutput)
+{
+	Process proc;
+	proc.SetRedirectStandardOutput(stdOutput != NULL);
+	proc.Start(program, args);
+	if (stdOutput != NULL) {
+		*stdOutput = proc.GetStandardOutput()->ReadToEnd();
+	}
+	proc.WaitForExit();
+	return proc.GetExitCode();
+}
 
 #ifdef _WIN32
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void Process::Start(const PathName& filePath, const String& args)
+void Process::Start(const PathName& program, const String& args)
 {
 	enum { R = 0, W = 1 };
 	BOOL bResult;
@@ -249,7 +263,7 @@ void Process::Start(const PathName& filePath, const String& args)
 	si.wShowWindow = SW_HIDE;
 
 	// exe 名と引数を連結してコマンドライン文字列を作る
-	String cmdArgs = filePath;
+	String cmdArgs = program;
 	if (!args.IsEmpty()) {
 		cmdArgs += _T(" ");
 		cmdArgs += args;
@@ -266,10 +280,35 @@ void Process::Start(const PathName& filePath, const String& args)
 	bResult = ::CreateProcess(
 		NULL, (LPTSTR)(LPCTSTR)cmdArgs.GetCStr(), NULL, NULL, TRUE,
 		CREATE_NO_WINDOW, NULL, pCurrentDirectory, &si, &m_processInfo);
-	LN_THROW(bResult != FALSE, Win32Exception, ::GetLastError());
+	if (bResult == FALSE)
+	{
+		DWORD dwErr = ::GetLastError();
+		if (dwErr == ERROR_FILE_NOT_FOUND) {
+			LN_THROW(0, FileNotFoundException, program);
+		}
+		LN_THROW(0, Win32Exception, dwErr);
+	}
 
 	// 子プロセスのスレッドハンドルは不必要なのでクローズしてしまう
 	::CloseHandle(m_processInfo.hThread);
+
+	// 子プロセス側は全てクローズしてしまう。
+	// ※実際に行われるのは参照カウントのデクリメント。
+	//   子側は終了したときに自動的に参照が外れるが、
+	//   親側は自分で Close しておかないとリソースリークになる。
+	//   また、例えば stdout の親側は ReadFile() で永遠にブロックしてしまう。
+	if (m_hInputRead != NULL) {
+		::CloseHandle(m_hInputRead);
+		m_hInputRead = NULL;
+	}
+	if (m_hOutputWrite != NULL) {
+		::CloseHandle(m_hOutputWrite);
+		m_hOutputWrite = NULL;
+	}
+	if (m_hErrorWrite != NULL) {
+		::CloseHandle(m_hErrorWrite);
+		m_hErrorWrite = NULL;
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -366,10 +405,6 @@ void Process::Dispose()
 		//}
 
 		// パイプを閉じる
-		if (m_hInputRead != NULL) {
-			::CloseHandle(m_hInputRead);
-			m_hInputRead = NULL;
-		}
 		if (m_hInputWrite != NULL) {
 			::CloseHandle(m_hInputWrite);
 			m_hInputWrite = NULL;
@@ -378,13 +413,18 @@ void Process::Dispose()
 			::CloseHandle(m_hOutputRead);
 			m_hOutputRead = NULL;
 		}
-		if (m_hOutputWrite != NULL) {
-			::CloseHandle(m_hOutputWrite);
-			m_hOutputWrite = NULL;
-		}
 		if (m_hErrorRead != NULL) {
 			::CloseHandle(m_hErrorRead);
 			m_hErrorRead = NULL;
+		}
+
+		if (m_hInputRead != NULL) {
+			::CloseHandle(m_hInputRead);
+			m_hInputRead = NULL;
+		}
+		if (m_hOutputWrite != NULL) {
+			::CloseHandle(m_hOutputWrite);
+			m_hOutputWrite = NULL;
 		}
 		if (m_hErrorWrite != NULL) {
 			::CloseHandle(m_hErrorWrite);

@@ -7,7 +7,20 @@ protected:
 	virtual void TearDown() {}
 };
 
-
+//-----------------------------------------------------------------------------
+TEST_F(Test_IO_PathName, Constructor)
+{
+	// <Test> コンストラクタでベースパスと結合した場合は単純化される。
+	{
+		PathName base = _T("C:/dir1/dir2");
+		PathName path(base, _T("../file1.txt"));
+#ifdef LN_WIN32
+		ASSERT_STREQ(_T("C:\\dir1\\file1.txt"), path.GetCStr());
+#else
+		ASSERT_STREQ(_T("C:/dir1/file1.txt"), path.GetCStr());
+#endif
+	}
+}
 
 //-----------------------------------------------------------------------------
 TEST_F(Test_IO_PathName, GetFileName)

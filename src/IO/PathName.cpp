@@ -65,6 +65,9 @@ void GenericPathName<TChar>::AssignUnderBasePath(const PathNameT& basePath, cons
 		rel.AssignCStr(relativePath);
 		m_path += rel;
 	}
+
+	// 単純化する (.NET の Uri の動作に合わせる)
+	PathTraits::CanonicalizePath(&m_path);
 }
 
 //-----------------------------------------------------------------------------
@@ -93,6 +96,9 @@ void GenericPathName<TChar>::AssignUnderBasePath(const PathNameT& basePath, cons
 		rel.AssignCStr(relativePath);
 		m_path += rel;
 	}
+
+	// 単純化する (.NET の Uri の動作に合わせる)
+	PathTraits::CanonicalizePath(&m_path);
 }
 
 //-----------------------------------------------------------------------------

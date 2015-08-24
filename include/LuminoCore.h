@@ -48,6 +48,7 @@
 #include "Lumino/IO/StringReader.h"
 #include "Lumino/IO/StringWriter.h"
 #include "Lumino/IO/TextWriter.h"
+#include "Lumino/IO/Process.h"
 
 #include "Lumino/Json/JsonValue.h"
 #include "Lumino/Json/JsonHandler.h"
