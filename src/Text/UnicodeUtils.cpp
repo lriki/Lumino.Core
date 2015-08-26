@@ -347,6 +347,33 @@ UTFConversionResult UnicodeUtils::ConvertUTF32toUTF16(
 //---------------------------------------------------------------------
 //
 //---------------------------------------------------------------------
+UTFConversionResult UnicodeUtils::GetUTF8CharCount(
+	const UTF8*				sourceStart,
+	size_t					sourceLength,
+	bool					isStrict,
+	int*					outCount)
+{
+	UTFConversionResult result;
+	const UTF8*			source = sourceStart;
+	const UTF8*			sourceEnd = source + sourceLength;
+	int count = 0;
+
+	while (source < sourceEnd)
+	{
+		int extra;
+		result = CheckUTF8TrailingBytes(source, sourceEnd, isStrict, &extra);
+		if (result != UTFConversionResult_Success) { return result; }
+
+		source += (count + 1);
+		count++;
+	}
+	
+	if (outCount != NULL) { *outCount = count; }
+}
+
+//---------------------------------------------------------------------
+//
+//---------------------------------------------------------------------
 UTFConversionResult UnicodeUtils::GetUTF16CharCount(
 	const UTF16*			sourceStart,
 	size_t					sourceLength,

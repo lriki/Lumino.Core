@@ -150,6 +150,17 @@ public:
 		UTFConversionOptions*	options);
 
 	/**
+		@brief			UTF8 先行バイトを考慮した文字数を取得する
+		@param[in]		sourceStart		: カウント元のバッファの先頭アドレス
+		@param[in]		sourceLength	: カウント元のバッファの長さ (文字単位(sourceStartの要素数)。終端 \0 は含まないようにすること)
+	*/
+	static UTFConversionResult GetUTF8CharCount(
+		const UTF8*				sourceStart,
+		size_t					sourceLength,
+		bool					isStrict,
+		int*					count);
+
+	/**
 		@brief			UTF16 のサロゲートペアを考慮した文字数を取得する
 		@param[in]		sourceStart		: カウント元のバッファの先頭アドレス
 		@param[in]		sourceLength	: カウント元のバッファの長さ (文字単位(sourceStartの要素数)。終端 \0 は含まないようにすること)

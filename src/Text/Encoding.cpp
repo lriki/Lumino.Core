@@ -30,8 +30,13 @@ namespace Text
 //-----------------------------------------------------------------------------
 Encoding* Encoding::GetSystemMultiByteEncoding()
 {
-	static SystemMultiByteEncoding systemEncoding;
+#ifdef LN_WIN32
+	static Win32CodePageEncoding systemEncoding(CP_THREAD_ACP);
 	return &systemEncoding;
+#else
+	static UTF8Encoding systemEncoding;
+	return &systemEncoding;
+#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -350,6 +355,7 @@ size_t Encoding::CheckPreamble(const byte_t* buffer, size_t bufferSize) const
 	return 0;
 }
 
+#if 0
 //=============================================================================
 // SystemMultiByteEncoding
 //=============================================================================
@@ -385,6 +391,14 @@ int SystemMultiByteEncoding::GetMaxByteCount() const
 	return 6;	// UTF-8
 #endif
 #endif
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+int SystemMultiByteEncoding::GetCharacterCount(const byte_t* buffer, size_t bufferSize) const
+{
+
 }
 
 //-----------------------------------------------------------------------------
@@ -653,6 +667,7 @@ void SystemMultiByteEncoding::SystemMultiByteEncoder::ConvertFromUTF16(const UTF
 #endif
 	*/
 }
+#endif
 
 } // namespace Text
 } // namespace Lumino

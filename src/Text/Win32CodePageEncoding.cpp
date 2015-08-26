@@ -22,6 +22,25 @@ Win32CodePageEncoding::Win32CodePageEncoding(UINT codePage)
 	LN_THROW(r, Win32Exception, ::GetLastError());
 }
 
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+int Win32CodePageEncoding::GetCharacterCount(const byte_t* buffer, size_t bufferSize) const
+{
+	int count = 0;
+	const byte_t* pos = buffer;
+	const byte_t* end = buffer + bufferSize;
+	while (pos < end)
+	{
+		if (::IsDBCSLeadByteEx(m_cpInfo.CodePage, *pos)) {
+			pos++;
+		}
+		pos++;
+		count++;
+	}
+	return count;
+}
+
 //=============================================================================
 // Win32CodePageEncoding::Win32CodePageDecoder
 //=============================================================================

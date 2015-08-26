@@ -85,6 +85,26 @@ DBCSEncoding::DBCSEncoding(EncodingType type)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+int DBCSEncoding::GetCharacterCount(const byte_t* buffer, size_t bufferSize) const
+{
+	int count = 0;
+	const byte_t* pos = buffer;
+	const byte_t* end = buffer + bufferSize;
+	const TableInfo* tableInfo = &Tables[m_encodingType];
+	while (pos < end)
+	{
+		if (CheckDBCSLeadByte(tableInfo, *pos)) {
+			pos++;
+		}
+		pos++;
+		count++;
+	}
+	return count;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 void DBCSEncoding::DBCSDecoder::ConvertToUTF16(const byte_t* inBuffer, size_t inBufferByteCount, UTF16* outBuffer, size_t outBufferCharCount, size_t* outBytesUsed, size_t* outCharsUsed)
 {
 	if (outBufferCharCount > 0) { outBuffer[0] = '\0'; }

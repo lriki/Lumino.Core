@@ -659,6 +659,29 @@ template int StringTraits::CheckNewLineSequence<wchar_t>(const wchar_t* start, c
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
+static bool StringTraits::IndexOfNewLineSequence(const TChar* start, const TChar* end, int* outIndex, int* outNewLineCodeCount)
+{
+	while (start < end)
+	{
+		int count = CheckNewLineSequence(start, end);
+		if (count != 0)
+		{
+			if (outIndex != NULL) { *outIndex = (end - start) - 1; }
+			if (outNewLineCodeCount != NULL) { *outNewLineCodeCount = count; }
+			return true;
+		}
+
+		start++;
+	}
+	return false;
+}
+template bool StringTraits::IndexOfNewLineSequence<char>(const char* start, const char* end, int* outIndex, int* outNewLineCodeCount);
+template bool StringTraits::IndexOfNewLineSequence<wchar_t>(const wchar_t* start, const wchar_t* end, int* outIndex, int* outNewLineCodeCount);
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
 bool StringTraits::Match(const TChar* pattern, const TChar* str)
 {
 	switch (*pattern)

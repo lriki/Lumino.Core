@@ -32,6 +32,17 @@ byte_t* UTF8Encoding::GetPreamble() const
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+int UTF8Encoding::GetCharacterCount(const byte_t* buffer, size_t bufferSize) const
+{
+	int count;
+	UTFConversionResult result = UnicodeUtils::GetUTF8CharCount(buffer, bufferSize, true, &count);
+	LN_THROW(result == UTFConversionResult_Success, EncodingFallbackException);
+	return count;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 void UTF8Encoding::UTF8Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t inBufferByteCount, UTF16* outBuffer, size_t outBufferCharCount, size_t* outBytesUsed, size_t* outCharsUsed)
 {
 	// 変換設定

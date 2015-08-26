@@ -237,6 +237,12 @@ public:
 	*/
 	size_t CheckPreamble(const byte_t* buffer, size_t bufferSize) const;
 
+	/**
+		@brief		指定されたバッファをこのエンコーディングで表現した際の文字数を取得します。
+		@return		文字数。マルチバイトコードやサロゲートペアを考慮した文字数です。
+	*/
+	virtual int GetCharacterCount(const byte_t* buffer, size_t bufferSize) const = 0;
+
 protected:
 	uint32_t	mFallbackReplacementChar;
 };
@@ -394,7 +400,7 @@ protected:
 	uint32_t	mFallbackReplacementChar;
 };
 
-
+#if 0
 /**
 	@brief		プログラムのロケールに合わせたマルチバイトコードエンコーディング
 	@details	setlocale() にて指定されたロケールの規定文字コードを表します。
@@ -416,6 +422,7 @@ public:
 	virtual Decoder* CreateDecoder() const { return LN_NEW SystemMultiByteDecoder(); }
 	virtual Encoder* CreateEncoder() const { return LN_NEW SystemMultiByteEncoder(); }
 	virtual byte_t* GetPreamble() const { return 0; }
+	virtual int GetCharacterCount(const byte_t* buffer, size_t bufferSize) const;
 
 private:
 	// Decoder
@@ -454,6 +461,7 @@ private:
 		bool		mCompleted;
 	};
 };
+#endif
 
 } // namespace Text
 } // namespace Lumino

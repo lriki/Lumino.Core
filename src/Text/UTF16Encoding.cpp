@@ -32,6 +32,17 @@ byte_t* UTF16Encoding::GetPreamble() const
 	static byte_t bom[] = { 0x00 };
 	LN_THROW(0, NotImplementedException);
 	return bom;
+};
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+int UTF16Encoding::GetCharacterCount(const byte_t* buffer, size_t bufferSize) const
+{
+	int count;
+	UTFConversionResult result = UnicodeUtils::GetUTF16CharCount((const UTF16*)buffer, bufferSize / sizeof(UTF16), true, &count);
+	LN_THROW(result == UTFConversionResult_Success, EncodingFallbackException);
+	return count;
 }
 
 //-----------------------------------------------------------------------------

@@ -216,6 +216,15 @@ public:
 	*/
 	template<typename TChar>
 	static int CheckNewLineSequence(const TChar* start, const TChar* end);
+
+	/**
+		@brief		[start] ～ [end - 1] の範囲の中で最初の改行文字の位置を検索する
+		@param[out]	outIndex	: 改行文字のインデックス。 \r\n の場合は \r の位置を指す。
+		@param[out]	outNewLineCodeCount	: 改行文字の数。\r\n なら2。
+		@return		見つかれば true
+	*/
+	template<typename TChar>
+	static bool IndexOfNewLineSequence(const TChar* start, const TChar* end, int* outIndex, int* outNewLineCodeCount);
 	
 	/**
 		@brief		ワイルドカード('*', '?')を考慮して文字列を比較する

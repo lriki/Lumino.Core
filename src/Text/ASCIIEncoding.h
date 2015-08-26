@@ -22,6 +22,7 @@ public:
 	virtual Decoder* CreateDecoder() const { return LN_NEW ASCIIDecoder(); }
 	virtual Encoder* CreateEncoder() const { return LN_NEW ASCIIEncoder(); }
 	virtual byte_t* GetPreamble() const { return NULL; }
+	virtual int GetCharacterCount(const byte_t* buffer, size_t bufferSize) const { return bufferSize; }
 
 private:
 	// Decoder

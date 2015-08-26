@@ -37,6 +37,14 @@ byte_t* UTF32Encoding::GetPreamble() const
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+int UTF32Encoding::GetCharacterCount(const byte_t* buffer, size_t bufferSize) const
+{
+	return bufferSize / sizeof(UTF32);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 void UTF32Encoding::UTF32Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t inBufferByteCount, UTF16* outBuffer, size_t outBufferCharCount, size_t* outBytesUsed, size_t* outCharsUsed)
 {
 	*outBytesUsed = 0;
