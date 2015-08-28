@@ -22,8 +22,9 @@ TextWriter::TextWriter()
 	// String を中間文字コード (UTF16) に変換するためのデコーダ
 	//m_decoder.Attach(Text::Encoding::GetTCharEncoding()->CreateDecoder());
 
-	// 変換元は TCHAR
+	// デフォルト Encoding
 	m_converter.SetSourceEncoding(Text::Encoding::GetTCharEncoding());
+	m_converter.SetDestinationEncoding(Text::Encoding::GetTCharEncoding());
 }
 
 //-----------------------------------------------------------------------------
@@ -87,6 +88,14 @@ void TextWriter::SetFormatLocale(const Locale& locale)
 void TextWriter::Write(const TCHAR* str, int len)
 {
 	WriteInternal(str, (len < 0) ? StringTraits::StrLen(str) : len);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void TextWriter::Write(const String& str)
+{
+	WriteInternal(str, str.GetLength());
 }
 
 void TextWriter::WriteFormat(const TCHAR* format, ...)

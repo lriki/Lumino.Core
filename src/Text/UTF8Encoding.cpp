@@ -43,6 +43,17 @@ int UTF8Encoding::GetCharacterCount(const byte_t* buffer, size_t bufferSize) con
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+int UTF8Encoding::GetLeadExtraLength(const void* buffer, size_t bufferSize) const
+{
+	int len;
+	UTFConversionResult result = UnicodeUtils::CheckUTF8TrailingBytes(((const byte_t*)buffer), ((const byte_t*)buffer) + bufferSize, true, &len);
+	LN_THROW(result == UTFConversionResult_Success, EncodingFallbackException);
+	return len;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 void UTF8Encoding::UTF8Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t inBufferByteCount, UTF16* outBuffer, size_t outBufferCharCount, size_t* outBytesUsed, size_t* outCharsUsed)
 {
 	// 変換設定

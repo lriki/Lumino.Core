@@ -45,6 +45,7 @@ public:
 		@param[in]	len		: ‘‚«‚Ş•¶š” (-1 ‚Ìê‡‚Í \0 ‚Ü‚Å)
 	*/
 	void Write(const TCHAR* str, int len = -1);
+	void Write(const String& str);
 
 	/**
 		@brief		‘®‚ğw’è‚µ‚Ä•¶š—ñ‚ğ‘‚«‚İ‚Ü‚·B

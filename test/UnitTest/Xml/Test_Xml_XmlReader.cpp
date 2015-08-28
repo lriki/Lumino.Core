@@ -8,6 +8,8 @@ protected:
 	virtual void TearDown() {}
 };
 
+// TODO: ' 文字列に対応して無いかも
+
 //---------------------------------------------------------------------
 // Element ノードのテスト
 TEST_F(Test_Xml_XmlReader, Element)

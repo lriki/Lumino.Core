@@ -105,6 +105,14 @@ int DBCSEncoding::GetCharacterCount(const byte_t* buffer, size_t bufferSize) con
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+int DBCSEncoding::GetLeadExtraLength(const void* buffer, size_t bufferSize) const
+{
+	return (CheckDBCSLeadByte(&Tables[m_encodingType], *((const byte*)buffer))) ? 1 : 0;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 void DBCSEncoding::DBCSDecoder::ConvertToUTF16(const byte_t* inBuffer, size_t inBufferByteCount, UTF16* outBuffer, size_t outBufferCharCount, size_t* outBytesUsed, size_t* outCharsUsed)
 {
 	if (outBufferCharCount > 0) { outBuffer[0] = '\0'; }

@@ -57,7 +57,7 @@ enum XmlNodeType
 /**
 	@brief		SAX スタイルの XML パーサです。
 	@details	「Extensible Markup Language (XML) 1.1 (第二版)」をベースに実装されています。
-				http://www.eplusx.net/translation/W3C/REC-xml11-20060816/#NT-elementdecl <br>
+				http://www.eplusx.net/translation/W3C/REC-xml11-20060816/ <br>
 				ただし、現在全ての仕様には対応されていません。
 				対応している仕様は、上記リンク先の目次「2 文書」、「4.3.1 テキスト宣言」および「4.6 定義済み実体」の内容です。
 				それ以外はノードの種別のみ認識します。<br>

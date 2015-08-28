@@ -23,6 +23,7 @@ public:
 	virtual Encoder* CreateEncoder() const { return LN_NEW Win32CodePageEncoder(m_cpInfo); }
 	virtual byte_t* GetPreamble() const { return NULL; }
 	virtual int GetCharacterCount(const byte_t* buffer, size_t bufferSize) const;
+	virtual int GetLeadExtraLength(const void* buffer, size_t bufferSize) const;
 
 private:
 	CPINFOEX m_cpInfo;

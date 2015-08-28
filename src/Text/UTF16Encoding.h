@@ -23,6 +23,7 @@ public:
 	virtual Encoder* CreateEncoder() const { return LN_NEW UTF16Encoder(); }
 	virtual byte_t* GetPreamble() const;
 	virtual int GetCharacterCount(const byte_t* buffer, size_t bufferSize) const;
+	virtual int GetLeadExtraLength(const void* buffer, size_t bufferSize) const;
 
 private:
 	bool m_bigEndian;

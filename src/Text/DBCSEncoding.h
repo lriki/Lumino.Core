@@ -36,6 +36,7 @@ public:
 	virtual Encoder* CreateEncoder() const { return LN_NEW DBCSEncoder(&Tables[m_encodingType]); }
 	virtual byte_t* GetPreamble() const { return NULL; }
 	virtual int GetCharacterCount(const byte_t* buffer, size_t bufferSize) const;
+	virtual int GetLeadExtraLength(const void* buffer, size_t bufferSize) const;
 
 private:
 	EncodingType	m_encodingType;

@@ -43,7 +43,8 @@ set(LN_TEST_SOURCES
 	UnitTest/Threading/Test_Threading_Atomic.cpp
 	UnitTest/Threading/Test_Threading_EventFlag.cpp
 	UnitTest/Threading/Test_Threading_Thread.cpp
-	UnitTest/Xml/Test_Xml_XmlReader.cpp)
+	UnitTest/Xml/Test_Xml_XmlReader.cpp
+	UnitTest/Xml/Test_Xml_XmlWriter.cpp)
 
 include_directories(
 	"${PROJECT_SOURCE_DIR}/include"

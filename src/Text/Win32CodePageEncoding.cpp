@@ -41,6 +41,14 @@ int Win32CodePageEncoding::GetCharacterCount(const byte_t* buffer, size_t buffer
 	return count;
 }
 
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+int Win32CodePageEncoding::GetLeadExtraLength(const void* buffer, size_t bufferSize) const
+{
+	return (::IsDBCSLeadByteEx(m_cpInfo.CodePage, *((const byte_t*)buffer))) ? 1 : 0;
+}
+
 //=============================================================================
 // Win32CodePageEncoding::Win32CodePageDecoder
 //=============================================================================

@@ -63,5 +63,6 @@
 #include "Lumino/Threading/Thread.h"
 
 #include "Lumino/Xml/XmlReader.h"
+#include "Lumino/Xml/XmlWriter.h"
 
 #include "Lumino/DataModel/Event.h"

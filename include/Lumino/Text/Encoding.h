@@ -243,6 +243,12 @@ public:
 	*/
 	virtual int GetCharacterCount(const byte_t* buffer, size_t bufferSize) const = 0;
 
+	/**
+		@brief		指定されたバッファの先頭がマルチバイトコードやサロゲートペアの先行文字である場合、追加で読むべき文字列長さを返します。
+		@return		追加で読むべき文字列長さ。先行文字ではない場合は 0。
+	*/
+	virtual int GetLeadExtraLength(const void* buffer, size_t bufferSize) const = 0;
+
 protected:
 	uint32_t	mFallbackReplacementChar;
 };

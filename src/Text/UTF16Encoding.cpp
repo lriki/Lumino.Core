@@ -37,6 +37,17 @@ byte_t* UTF16Encoding::GetPreamble() const
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+int UTF16Encoding::GetLeadExtraLength(const void* buffer, size_t bufferSize) const
+{
+	bool s;
+	UTFConversionResult result = UnicodeUtils::CheckUTF16Surrogate((const UTF16*)buffer, ((const UTF16*)buffer) + bufferSize / sizeof(UTF16), true, &s);
+	LN_THROW(result == UTFConversionResult_Success, EncodingFallbackException);
+	return (s) ? 1 : 0;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 int UTF16Encoding::GetCharacterCount(const byte_t* buffer, size_t bufferSize) const
 {
 	int count;
