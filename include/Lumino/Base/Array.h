@@ -64,7 +64,7 @@ public:
 	}
 
 	/** 末尾に要素を追加します。*/
-	void Add(const T& item)
+	void Add(const value_type& item)
 	{
 		CheckDetachShared();
 		m_data->m_vector.push_back(item);
@@ -78,7 +78,7 @@ public:
 	}
 
 	/** 指定したインデックスの位置に要素を挿入します。*/
-	void Insert(int index, const T& item)
+	void Insert(int index, const value_type& item)
 	{
 		LN_THROW(0 <= index && index <= GetCount(), OutOfRangeException);	// Count と同じインデックスを指定できる
 		CheckDetachShared();
@@ -93,7 +93,7 @@ public:
 	}
 
 	/** item に一致する最初の要素を削除します。(正常に削除された場合は true を返す。要素が見つからなければ false を返す)*/
-	bool Remove(const T& item)
+	bool Remove(const value_type& item)
 	{
 		CheckDetachShared();
 		return STLUtils::Remove(m_data->m_vector, item);
@@ -116,7 +116,7 @@ public:
 	}
 
 	/** item に一致する全ての要素を削除します。*/
-	void RemoveAll(const T& item)
+	void RemoveAll(const value_type& item)
 	{
 		CheckDetachShared();
 		STLUtils::RemoveAll(m_data->m_vector, item);
@@ -147,7 +147,7 @@ public:
 	}
 
 	/** 指定した要素がこの配列内に存在するかどうかを判断します。*/
-	bool Contains(const T& item) const
+	bool Contains(const value_type& item) const
 	{
 		return std::find(m_data->m_vector.begin(), m_data->m_vector.end(), item) != m_data->m_vector.end();
 	}
@@ -158,7 +158,7 @@ public:
 		@param[in]	startIndex	: 検索を開始するインデックス (省略した場合は先頭から)
 		@return		検索した要素が最初に現れた位置。見つからなかった場合は -1。
 	*/
-	int IndexOf(const T& item, int startIndex = 0) const
+	int IndexOf(const value_type& item, int startIndex = 0) const
 	{
 		if (IsEmpty()) { return -1; }
 		CheckOutOfRange(startIndex);
@@ -191,7 +191,7 @@ public:
 	}
 
 	/** 先頭要素の参照を返します。*/
-	T& GetFront()
+	reference GetFront()
 	{
 		LN_CHECK_STATE(!IsEmpty());
 		CheckDetachShared();
@@ -199,14 +199,14 @@ public:
 	}
 
 	/** 先頭要素の参照を返します。*/
-	const T& GetFront() const
+	const_reference GetFront() const
 	{
 		LN_CHECK_STATE(!IsEmpty());
 		return m_data->m_vector.front();
 	}
 
 	/** 終端要素の参照を返します。*/
-	T& GetLast()
+	reference GetLast()
 	{
 		LN_CHECK_STATE(!IsEmpty());
 		CheckDetachShared();
@@ -214,7 +214,7 @@ public:
 	}
 
 	/** 終端要素の参照を返します。*/
-	const T& GetLast() const
+	const_reference GetLast() const
 	{
 		LN_CHECK_STATE(!IsEmpty());
 		return m_data->m_vector.back();

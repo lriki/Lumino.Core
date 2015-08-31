@@ -37,6 +37,7 @@ set(LN_SOURCES_Base
 	include/Lumino/Base/Array.inl
 	include/Lumino/Base/ByteBuffer.h
 	include/Lumino/Base/Cache.h
+	include/Lumino/Base/Collection.h
 	include/Lumino/Base/Common.h
 	include/Lumino/Base/CRT.h
 	include/Lumino/Base/Delegate.h
