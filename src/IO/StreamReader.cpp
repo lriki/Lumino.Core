@@ -38,8 +38,13 @@ StreamReader::~StreamReader()
 //-----------------------------------------------------------------------------
 int StreamReader::Peek()
 {
-	if (m_charPos >= m_charElementLen) {
-		return -1;
+	// バッファリングデータを最後まで読んでいた場合は追加読み込み。
+	// それでも1つも読み込めなかったら EOF。
+	if (m_charPos >= m_charElementLen)
+	{
+		if (ReadBuffer() == 0) {
+			return -1;
+		}
 	}
 	const TCHAR* buf = (const TCHAR*)m_converter.GetLastBuffer().GetConstData();
 	return buf[m_charPos];
@@ -50,8 +55,13 @@ int StreamReader::Peek()
 //-----------------------------------------------------------------------------
 int StreamReader::Read()
 {
-	if (m_charPos >= m_charElementLen) {
-		return -1;
+	// バッファリングデータを最後まで読んでいた場合は追加読み込み。
+	// それでも1つも読み込めなかったら EOF。
+	if (m_charPos >= m_charElementLen)
+	{
+		if (ReadBuffer() == 0) {
+			return -1;
+		}
 	}
 	const TCHAR* buf = (const TCHAR*)m_converter.GetLastBuffer().GetConstData();
 	return buf[m_charPos++];
@@ -142,6 +152,11 @@ bool StreamReader::IsEOF()
 //-----------------------------------------------------------------------------
 void StreamReader::InitReader(Stream* stream, Text::Encoding* encoding)
 {
+	// encoding 未指定であれば UTF8 とする
+	if (encoding == NULL) {
+		encoding = Text::Encoding::GetUTF8Encoding();
+	}
+
 	m_stream = stream;
 	m_converter.SetSourceEncoding(encoding);
 	m_converter.SetDestinationEncoding(Text::Encoding::GetTCharEncoding());

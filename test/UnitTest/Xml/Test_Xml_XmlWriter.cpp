@@ -9,6 +9,12 @@ protected:
 };
 
 //---------------------------------------------------------------------
+TEST_F(Test_Xml_XmlWriter, User)
+{
+	
+}
+
+//---------------------------------------------------------------------
 TEST_F(Test_Xml_XmlWriter, Unit)
 {
 	// <Unit> WriteStartDocument

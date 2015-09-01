@@ -138,6 +138,9 @@ void EncodingConverter::CheckUpdateEncoderDecoder()
 {
 	if (m_encodingModified)
 	{
+		LN_THROW(m_dstEncoding != NULL, InvalidOperationException, "DestinationEncoding is not set.");
+		LN_THROW(m_srcEncoding != NULL, InvalidOperationException, "SourceEncoding is not set.");
+
 		m_dstEncoder.Attach(m_dstEncoding->CreateEncoder());
 		m_srcDecoder.Attach(m_srcEncoding->CreateDecoder());
 		m_encodingModified = false;

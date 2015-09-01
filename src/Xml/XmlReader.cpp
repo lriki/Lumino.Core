@@ -2,11 +2,11 @@
 /*
 
 ドキュメントメモ：
-	・エンティティ参照は認識しますが解決はしません。XmlNodeType_EntityReference
+	・エンティティ参照は認識しますが解決はしません。XmlNodeType::EntityReference
 
 
 
-XmlNodeType_EntityReference のサンプル
+XmlNodeType::EntityReference のサンプル
 http://www.atmarkit.co.jp/fxml/tecs/007entity/07.html
 
 
@@ -175,7 +175,7 @@ bool XmlReader::Read()
 XmlNodeType XmlReader::GetNodeType()  const
 {
 	if (m_nodes.IsEmpty()) {
-		return XmlNodeType_None;
+		return XmlNodeType::None;
 	}
 	return m_currentNode->Type;
 }
@@ -208,23 +208,23 @@ const String& XmlReader::GetName()
 const String& XmlReader::GetValue()
 {
 	if (m_nodes.IsEmpty()) {
-		m_tmpName.SetEmpty();
+		m_tmpValue.SetEmpty();
 	}
 	else
 	{
 		if (m_currentNode->ValueStartPos == -1 || m_currentNode->ValueLen == 0) {
-			m_tmpName.SetEmpty();	// Node はあるけど値が無かった
+			m_tmpValue.SetEmpty();	// Node はあるけど値が無かった
 		}
 		else
 		{
 			const TCHAR* name = &m_textCache[m_currentNode->ValueStartPos];
-			m_tmpName.AssignCStr(name, m_currentNode->ValueLen);
+			m_tmpValue.AssignCStr(name, m_currentNode->ValueLen);
 
 			// 定義済み Entity を展開する
-			ExpandReservedEntities(&m_tmpName[0], m_tmpName.GetLength());
+			ExpandReservedEntities(&m_tmpValue[0], m_tmpValue.GetLength());
 		}
 	}
-	return m_tmpName;
+	return m_tmpValue;
 }
 
 //-----------------------------------------------------------------------------
@@ -279,7 +279,7 @@ bool XmlReader::MoveToNextAttribute()
 //-----------------------------------------------------------------------------
 bool XmlReader::MoveToElement()
 {
-	if (m_currentNode == NULL || m_currentNode->Type != XmlNodeType_Attribute) {
+	if (m_currentNode == NULL || m_currentNode->Type != XmlNodeType::Attribute) {
 		return false;
 	}
 
@@ -419,14 +419,14 @@ bool XmlReader::ParseElementOuter()
 			if (ch == ';')
 			{
 				if (IsReservedEntity(&m_textCache[entityRefStart], m_textCache.GetCount() - entityRefStart)) {
-					// &amp; 等、予約済み Entity は XmlNodeType_EntityReference にしない。Text として結合するため、ここではなにもしない。
+					// &amp; 等、予約済み Entity は XmlNodeType::EntityReference にしない。Text として結合するため、ここではなにもしない。
 					tokenIsSpaceOnly = false;
 				}
 				else
 				{
 					// & の前までを1つの NodeData としてストックしておく
 					NodeData data1;
-					data1.Type = (tokenIsSpaceOnly) ? XmlNodeType_Whitespace : XmlNodeType_Text;
+					data1.Type = (tokenIsSpaceOnly) ? XmlNodeType::Whitespace : XmlNodeType::Text;
 					data1.ValueStartPos = tokenStart;
 					data1.ValueLen = entityRefStart - tokenStart;
 					m_nodes.Add(data1);
@@ -434,7 +434,7 @@ bool XmlReader::ParseElementOuter()
 
 					// &～; の内部を1つの NodeData としてストックしておく
 					NodeData data2;
-					data2.Type = XmlNodeType_EntityReference;
+					data2.Type = XmlNodeType::EntityReference;
 					data2.NameStartPos = entityRefStart + 1;
 					data2.NameLen = (m_textCache.GetCount() - entityRefStart) - 2;
 					m_nodes.Add(data2);
@@ -459,7 +459,7 @@ bool XmlReader::ParseElementOuter()
 	{
 		// テキストを NodeData としてストックしておく
 		NodeData data1;
-		data1.Type = (tokenIsSpaceOnly) ? XmlNodeType_Whitespace : XmlNodeType_Text;
+		data1.Type = (tokenIsSpaceOnly) ? XmlNodeType::Whitespace : XmlNodeType::Text;
 		data1.ValueStartPos = tokenStart;
 		data1.ValueLen = m_textCache.GetCount() - tokenStart;
 		m_nodes.Add(data1);
@@ -519,7 +519,7 @@ bool XmlReader::ParseComment()
 
 	// コメントを NodeData としてストックしておく
 	NodeData data1;
-	data1.Type = XmlNodeType_Comment;
+	data1.Type = XmlNodeType::Comment;
 	data1.ValueStartPos = start;
 	data1.ValueLen = m_textCache.GetCount() - start;
 	m_nodes.Add(data1);
@@ -572,7 +572,7 @@ bool XmlReader::ParseElement(int nameStart, int nameLength, bool isEnd)
 
 	// NodeData 化してストック
 	NodeData data;
-	data.Type = (isEnd) ? XmlNodeType_EndElement : XmlNodeType_Element;
+	data.Type = (isEnd) ? XmlNodeType::EndElement : XmlNodeType::Element;
 	data.NameStartPos = nameStart;
 	data.NameLen = nameLength;
 	m_nodes.Add(data);
@@ -664,7 +664,7 @@ bool XmlReader::ParseAttribute()
 
 	// NodeData 化してストック
 	NodeData data;
-	data.Type = XmlNodeType_Attribute;
+	data.Type = XmlNodeType::Attribute;
 	data.NameStartPos = nameStart;
 	data.NameLen = nameLength;
 	data.ValueStartPos = valueStart;
@@ -738,7 +738,7 @@ bool XmlReader::ParseDocumentType()
 
 	// NodeData 化してストックしておく
 	NodeData data1;
-	data1.Type = XmlNodeType_Comment;
+	data1.Type = XmlNodeType::Comment;
 	data1.ValueStartPos = start;
 	data1.ValueLen = m_textCache.GetCount() - start;
 	m_nodes.Add(data1);

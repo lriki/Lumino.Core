@@ -860,6 +860,29 @@ GenericString<TChar> GenericString<TChar>::Format(const GenericString<TChar>& fo
 template<typename TChar>
 GenericString<TChar> GenericString<TChar>::Format(const TChar* format, ...)
 {
+//#ifdef LN_MSVC
+//	va_list args1;
+//	va_start(args1, format);
+//	int len = StringTraits::tvscprintf_l(format, Locale::GetC().GetNativeLocale(), args1);	// 文字数を求める
+//
+//	// 文字数が一定以内ならメモリ確保せずにスタックを使い、速度向上を図る
+//	if (len < MaxFormatLength)
+//	{
+//		TChar buf[MaxFormatLength + 1];
+//		memset(buf, 0, sizeof(buf));
+//		//StringTraits::VSPrintf(buf, MaxFormatLength + 1, format, args1);
+//		StringTraits::tvsnprintf_l(buf, MaxFormatLength + 1, format, Locale::GetC().GetNativeLocale(), args1);
+//		va_end(args1);
+//		return GenericString<TChar>(buf);
+//	}
+//	else
+//	{
+//		ByteBuffer buf((len + 1) * sizeof(TChar));
+//		//StringTraits::VSPrintf((TChar*)buf.GetData(), buf.GetSize(), format, args1);
+//		va_end(args1);
+//		return GenericString<TChar>((TChar*)buf.GetData());
+//	}
+//#else
 	va_list args1, args2;
 	va_start(args1, format);
 	va_copy(args2, args1);
@@ -870,7 +893,7 @@ GenericString<TChar> GenericString<TChar>::Format(const TChar* format, ...)
 	{
 		TChar buf[MaxFormatLength + 1];
 		memset(buf, 0, sizeof(buf));
-		StringTraits::VSPrintf(buf, MaxFormatLength + 1, format, args2);
+		StringTraits::VSPrintf(buf, MaxFormatLength + 1, format, args2);	// TODO: tvsnprintf_l にする
 		va_end(args1);
 		va_end(args2);
 		return GenericString<TChar>(buf);
@@ -883,6 +906,7 @@ GenericString<TChar> GenericString<TChar>::Format(const TChar* format, ...)
 		va_end(args2);
 		return GenericString<TChar>((TChar*)buf.GetData());
 	}
+//#endif
 }
 
 //template<typename TChar>

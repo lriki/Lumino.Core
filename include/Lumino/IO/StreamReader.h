@@ -25,7 +25,7 @@ public:
 		@brief		指定したストリーム用の StreamReader を初期化します。
 		@param[in]	stream		: 読み込み元ストリーム
 		@param[in]	encoding	: 読み込むテキストのエンコーディング
-		@details	encoding が NULL の場合は文字列の書き込み時に文字コードのデコードを行いません。
+		@details	encoding が NULL の場合は UTF8Encoding を使用します。
 	*/
 	StreamReader(Stream* stream, Text::Encoding* encoding = NULL);
 	// TODO: UTF BOM 自動判別
@@ -34,7 +34,7 @@ public:
 		@brief		指定したパスのファイル用の StreamReader を初期化します。
 		@param[in]	filePath	: 読み込み元ファイルのパス
 		@param[in]	encoding	: 読み込むテキストのエンコーディング
-		@details	encoding が NULL の場合は文字列の書き込み時に文字コードのデコードを行いません。
+		@details	encoding が NULL の場合は UTF8Encoding を使用します。
 	*/
 	StreamReader(const TCHAR* filePath, Text::Encoding* encoding = NULL);
 

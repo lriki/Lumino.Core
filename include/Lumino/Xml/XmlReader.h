@@ -7,52 +7,54 @@
 namespace Lumino
 {
 
-/// ノードの種類
-enum XmlNodeType
+/** ノードの種類 */
+LN_ENUM(XmlNodeType)
 {
-	/// Read メソッドが呼び出されなかった場合に、XmlReader によって返されます。
-	XmlNodeType_None = 0,
+	/** Read メソッドが呼び出されなかった場合に、XmlReader によって返されます。*/
+	None = 0,
 
-	/// 要素
-	XmlNodeType_Element,
+	/** 要素 */
+	Element,
 
-	/// 要素の終了タグ
-	XmlNodeType_EndElement,
+	/** 要素の終了タグ */
+	EndElement,
 
-	/// 属性
-	XmlNodeType_Attribute,
+	/** 属性 */
+	Attribute,
 
-	/// コメント (例 : <!-- comment -->)
-	XmlNodeType_Comment,
+	/** コメント (例 : <!-- comment -->) */
+	Comment,
 
-	/// マークアップ間の空白
-	XmlNodeType_Whitespace,
+	/** マークアップ間の空白 */
+	Whitespace,
 
-	/// ノードのテキストの内容。
-	XmlNodeType_Text,
+	/** ノードのテキストの内容。*/
+	Text,
 
-	/// CDATA セクション (例 : <![CDATA[テキスト]]>)。
-	XmlNodeType_CDATA,
+	/** CDATA セクション (例 : <![CDATA[テキスト]]>)。*/
+	CDATA,
 
-	/// エンティティへの参照 (例 : &book;)
-	XmlNodeType_EntityReference,
+	/** エンティティへの参照 (例 : &book;) */
+	EntityReference,
 
-	/// ドキュメント型宣言 (例 : <!DOCTYPE...>)
-	XmlNodeType_DocumentType,
+	/** ドキュメント型宣言 (例 : <!DOCTYPE...>) */
+	DocumentType,
 
-	/// エンティティ宣言 (例 : <!ENTITY...>)
-	XmlNodeType_Entity,
+	/** エンティティ宣言 (例 : <!ENTITY...>) */
+	Entity,
 
-	/// 記法宣言 (例 : <!NOTATION...>)
-	XmlNodeType_Notation,
+	/** 記法宣言 (例 : <!NOTATION...>) */
+	Notation,
 
-	/// 処理命令 (例 : <?pi test?>)
-	XmlNodeType_ProcessingInstruction,
+	/** 処理命令 (例 : <?pi test?>) */
+	ProcessingInstruction,
 
-	/// XML 宣言 (例 : <?xml version='1.0'?>)
-	XmlNodeType_XmlDeclaration,
-
+	/** XML 宣言 (例 : <?xml version='1.0'?>) */
+	XmlDeclaration,
 };
+LN_ENUM_REFLECTION(XmlNodeType, None, Element, EndElement, Attribute, Comment, Whitespace, Text, CDATA, EntityReference, DocumentType, Entity, Notation, ProcessingInstruction, XmlDeclaration);
+LN_ENUM_DECLARE(XmlNodeType);
+
 
 /**
 	@brief		SAX スタイルの XML パーサです。
@@ -61,7 +63,7 @@ enum XmlNodeType
 				ただし、現在全ての仕様には対応されていません。
 				対応している仕様は、上記リンク先の目次「2 文書」、「4.3.1 テキスト宣言」および「4.6 定義済み実体」の内容です。
 				それ以外はノードの種別のみ認識します。<br>
-				例えば <!DOCTYPE...> はノード種別として認識しますが、内容の読み取りはスキップします。
+				例えば <!DOCTYPE...> はノード種別 DocumentType として認識しますが、内容の読み取りはスキップします。
 */
 class XmlReader
 {
@@ -166,7 +168,7 @@ private:
 		bool		IsEmptyElement;	///< <a />　のような空要素であるか 
 
 		NodeData()
-			: Type(XmlNodeType_None)
+			: Type(XmlNodeType::None)
 			, NameStartPos(-1)
 			, NameLen(0)
 			, ValueStartPos(-1)
@@ -188,6 +190,7 @@ private:
 	XmlError				m_errorInfo;
 	int						m_stockElementCount;
 	String					m_tmpName;
+	String					m_tmpValue;
 	int						m_currentAttrCount;		///< 現在のノードの属性数
 };
 
