@@ -5,6 +5,7 @@
 
 #include <map>
 #include "String.h"
+#include "RefObject.h"
 #include "../IO/PathName.h"
 #include "../Threading/Mutex.h"
 

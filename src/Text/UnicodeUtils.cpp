@@ -353,7 +353,7 @@ UTFConversionResult UnicodeUtils::GetUTF8CharCount(
 	bool					isStrict,
 	int*					outCount)
 {
-	UTFConversionResult result;
+	UTFConversionResult result = UTFConversionResult_Success;
 	const UTF8*			source = sourceStart;
 	const UTF8*			sourceEnd = source + sourceLength;
 	int count = 0;
@@ -369,6 +369,7 @@ UTFConversionResult UnicodeUtils::GetUTF8CharCount(
 	}
 	
 	if (outCount != NULL) { *outCount = count; }
+	return result;
 }
 
 //---------------------------------------------------------------------
