@@ -3,6 +3,7 @@
 #include "../Base/Stack.h"
 #include "../IO/TextWriter.h"
 #include "XmlError.h"
+#include "XmlReader.h"	//TODO
 
 namespace Lumino
 {
@@ -37,14 +38,16 @@ public:
 	/** 指定した名前と文字列値の属性を書き込みます。*/
 	void WriteAttribute(const String& name, const String& value);
 
-	/** */
-	void WriteString(const String& value);
+	/** 指定したテキストを書き込みます。*/
+	void WriteString(const String& text);
 
 private:
 	void WriteStartAttribute(const String& name);
 	void WriteEndAttribute();
 	void WriteStringInternal(const TCHAR* str, int len, bool inAttribute);
-	void Indent();
+	void PreWrite(XmlNodeType type);
+	void WriteStartTagEnd(bool empty);
+	void Indent(bool beforeEndElement);
 
 private:
 	enum State
@@ -52,13 +55,14 @@ private:
 		State_Start = 0,
 		State_Prolog,
 		State_StartElement,
-		State_StartAttribute,
-		State_EndAttribute,
+		State_Attribute,
+		State_Text,
 	};
 
 	struct ElementInfo
 	{
 		String	Name;
+		bool	IndentSkip;
 	};
 
 	RefPtr<TextWriter>		m_textWriter;

@@ -97,6 +97,25 @@ public:
 	/// 文字列をテキストファイルとして書き出す
 	static void WriteAllText(const TCHAR* filePath, const String& str, const Text::Encoding* encoding = NULL);
 
+	
+	/**
+		@brief		指定したディレクトリが存在するかを確認します。
+		@param[in]	path	: ディレクトリのパス
+		@return		ディレクトリが存在すれば true。それ以外の場合は false。
+	*/
+	static bool DirectoryExists(const char* path);
+	static bool DirectoryExists(const wchar_t* path);
+
+	/**
+		@brief		ディレクトリを作成します。
+		@param[in]	path	: 作成するディレクトリのパス
+		@details	指定したパスへの全てのディレクトリを作成します。
+					既に存在する場合は作成しません。
+	*/
+	static void CreateDirectory(const char* path);
+	static void CreateDirectory(const wchar_t* path);
+
+
 	/// 現在の位置とデータ(ファイル)サイズ、オフセット、基準(SEEK_xxxx)を受け取って、新しいシーク位置を返す
 	static int64_t CalcSeekPoint(int64_t curPoint, int64_t maxSize, int64_t offset, int origin);
 	

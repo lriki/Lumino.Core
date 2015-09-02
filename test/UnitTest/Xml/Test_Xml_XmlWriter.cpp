@@ -11,7 +11,48 @@ protected:
 //---------------------------------------------------------------------
 TEST_F(Test_Xml_XmlWriter, User)
 {
-	
+	StreamWriter file(TEMPFILE("xml/Test.xml"));
+	XmlWriter writer(&file);
+
+	writer.WriteStartElement(_T("ToolSettings"));
+	{
+		writer.WriteStartElement(_T("WorkingDirectory"));
+		writer.WriteString(_T("C:\\workspace"));
+		writer.WriteEndElement();
+
+		writer.WriteStartElement(_T("ProjectList"));
+		{
+			writer.WriteStartElement(_T("Project"));
+			writer.WriteAttribute(_T("Repository"), _T("server1"));
+			{
+				writer.WriteStartElement(_T("Branch"));
+				writer.WriteAttribute(_T("Name"), _T("master"));
+				writer.WriteAttribute(_T("LastCommit"), _T("d0c5d2fd1e3c7a457776e1ca1290942374b8e0fc"));
+				writer.WriteEndElement();
+			}
+			writer.WriteEndElement();
+
+			writer.WriteStartElement(_T("Project"));
+			writer.WriteAttribute(_T("Repository"), _T("server2"));
+			writer.WriteAttribute(_T("FilterExt"), _T(".c;.cpp;.h"));
+			{
+				writer.WriteStartElement(_T("Branch"));
+				writer.WriteAttribute(_T("Name"), _T("master"));
+				writer.WriteAttribute(_T("LastCommit"), _T("0c9fa5c4509bb5d1043c2d906d88b8507d6b7546"));
+				writer.WriteEndElement();
+
+				writer.WriteStartElement(_T("Branch"));
+				writer.WriteAttribute(_T("Name"), _T("Custom"));
+				writer.WriteAttribute(_T("LastCommit"), _T("662a470c700fc6fa6bc95d0cab8b8ec39bc1cc23"));
+				writer.WriteEndElement();
+			}
+			writer.WriteEndElement();
+		}
+		writer.WriteEndElement();
+	}
+	writer.WriteEndElement();
+
+	// TODO: ƒtƒ@ƒCƒ‹”äŠr
 }
 
 //---------------------------------------------------------------------

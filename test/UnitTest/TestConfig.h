@@ -18,6 +18,7 @@ inline PathName Test_GetTempFilePath(const TCHAR* fileName)
 	PathName tempDir(base.GetParent(), _T("../../"));
 	tempDir.Append(_T("tmp"));
 	PathName path(tempDir, fileName);
+	FileSystem::CreateDirectory(path.GetParent());
 	return PathName(path.GetCStr());
 }
 

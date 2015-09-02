@@ -59,12 +59,13 @@ void XmlWriter::WriteEndDocument()
 //-----------------------------------------------------------------------------
 void XmlWriter::WriteStartElement(const String& name)
 {
-	Indent();
+	PreWrite(XmlNodeType::Element);
 	m_textWriter->WriteChar(_T('<'));
 	m_textWriter->Write(name);
 
 	ElementInfo info;
 	info.Name = name;
+	info.IndentSkip = false;
 	m_elementStack.Push(info);
 	m_state = State_StartElement;
 }
@@ -75,10 +76,11 @@ void XmlWriter::WriteStartElement(const String& name)
 void XmlWriter::WriteEndElement()
 {
 	LN_CHECK_STATE(!m_elementStack.IsEmpty());
-	LN_CHECK_STATE(m_state == State_StartElement || m_state == State_EndAttribute);
+	LN_CHECK_STATE(m_state == State_Prolog || m_state == State_StartElement || m_state == State_Attribute || m_state == State_Text);
 
-	if (m_state == State_StartElement || m_state == State_EndAttribute) {
-		m_textWriter->Write(_T(" />"));
+	PreWrite(XmlNodeType::EndElement);
+	if (m_state == State_StartElement || m_state == State_Attribute) {
+		//m_textWriter->Write(_T(" />"));
 	}
 	else
 	{
@@ -104,14 +106,24 @@ void XmlWriter::WriteAttribute(const String& name, const String& value)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+void XmlWriter::WriteString(const String& text)
+{
+	PreWrite(XmlNodeType::Text);
+	WriteStringInternal(text.GetCStr(), text.GetLength(), false);
+	m_state = State_Text;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 void XmlWriter::WriteStartAttribute(const String& name)
 {
-	LN_CHECK_STATE(m_state == State_StartElement || m_state == State_EndAttribute);
+	LN_CHECK_STATE(m_state == State_StartElement || m_state == State_Attribute);
 
 	m_textWriter->WriteChar(_T(' '));
 	m_textWriter->Write(name);
 	m_textWriter->Write(_T("=\""));
-	m_state = State_StartAttribute;
+	m_state = State_Attribute;
 }
 
 //-----------------------------------------------------------------------------
@@ -120,7 +132,7 @@ void XmlWriter::WriteStartAttribute(const String& name)
 void XmlWriter::WriteEndAttribute()
 {
 	m_textWriter->Write(_T("\""));
-	m_state = State_EndAttribute;
+	m_state = State_StartElement;
 }
 
 //-----------------------------------------------------------------------------
@@ -216,17 +228,70 @@ void XmlWriter::WriteStringInternal(const TCHAR* str, int len, bool inAttribute)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void XmlWriter::Indent()
+void XmlWriter::PreWrite(XmlNodeType type)
+{
+	switch (type)
+	{
+	case XmlNodeType::Element:
+		if (m_state == XmlNodeType::Attribute) {	// 要素のネスト
+			WriteEndAttribute();
+			WriteStartTagEnd(false);
+		}
+		else if (m_state == State_StartElement) {
+			WriteStartTagEnd(false);
+		}
+		if (m_state != State_Start) {
+			Indent(false);	
+		}
+		break;
+	case XmlNodeType::EndElement:
+		if (m_state == State_StartElement) {
+			WriteStartTagEnd(true);		// まだ開始タグ中なのに End が来たら空タグ
+		}
+		else {
+			Indent(true);
+		}
+		break;
+	case XmlNodeType::Text:
+		if (m_state == State_StartElement) {
+			WriteStartTagEnd(false);
+		}
+		// Text は前のタグとの間に改行やインデントをしない。
+		// また、次の終了タグを書き込むときも改行やインデントしない。
+		m_elementStack.GetTop().IndentSkip = true;
+		break;
+	}
+}
+
+//-----------------------------------------------------------------------------
+// 要素の開始タグを閉じる
+//-----------------------------------------------------------------------------
+void XmlWriter::WriteStartTagEnd(bool empty)
+{
+	if (empty) {
+		m_textWriter->Write(_T(" />"));
+	}
+	else {
+		m_textWriter->Write(_T(">"));
+	}
+}
+
+//-----------------------------------------------------------------------------
+//	beforeEndElement : true の場合、この後に終了タグを入れようとしている。
+//-----------------------------------------------------------------------------
+void XmlWriter::Indent(bool beforeEndElement)
 {
 	if (m_elementStack.IsEmpty()) {
 	}
-	else if (m_elementStack.GetCount() == 1) {
-		m_textWriter->WriteLine();
-	}
-	else
+	//else if (m_elementStack.GetCount() == 1) {
+	//	m_textWriter->WriteLine();
+	//}
+	else if (!m_elementStack.GetTop().IndentSkip)
 	{
 		m_textWriter->WriteLine();
-		for (int i = 0; i < m_elementStack.GetCount(); ++i) {
+		int level = m_elementStack.GetCount();
+		if (beforeEndElement) { --level; }
+		for (int i = 0; i < level; ++i) {
 			m_textWriter->Write(m_indentString);
 		}
 	}
