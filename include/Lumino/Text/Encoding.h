@@ -196,6 +196,13 @@ public:
 public:
 
 	/**
+		@brief		このエンコーディングの名前を取得します。
+		@details	名前は IANA 文字セット名です。(http://www.iana.org/assignments/character-sets/character-sets.xhtml)
+					Windows コードページによるエンコーディングを使用している場合、"cp437" のようなエイリアス名になることがあります。
+	*/
+	virtual const TCHAR* GetName() const = 0;
+
+	/**
 		@brief		1 文字の最小バイト数を取得する
 	*/
 	virtual int GetMinByteCount() const = 0;

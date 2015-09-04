@@ -41,6 +41,12 @@ public:
 	/** 指定したテキストを書き込みます。*/
 	void WriteString(const String& text);
 
+	/** コメントブロックを書き込みます。*/
+	void WriteComment(const String& text);
+
+	/** <![CDATA[...]]> ブロックを書き込みます。*/
+	void WriteCData(const String& text);
+
 private:
 	void WriteStartAttribute(const String& name);
 	void WriteEndAttribute();

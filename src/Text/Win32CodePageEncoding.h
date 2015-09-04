@@ -1,4 +1,5 @@
 ﻿
+#include "../../include/Lumino/Base/String.h"
 #include "../../include/Lumino/Text/Encoding.h"
 
 namespace Lumino
@@ -17,6 +18,7 @@ public:
 
 public:
 	// override Encoding
+	virtual const TCHAR* GetName() const { return m_name; }
 	virtual int GetMinByteCount() const { return 1; }
 	virtual int GetMaxByteCount() const { return m_cpInfo.MaxCharSize; }
 	virtual Decoder* CreateDecoder() const { return LN_NEW Win32CodePageDecoder(m_cpInfo); }
@@ -26,7 +28,8 @@ public:
 	virtual int GetLeadExtraLength(const void* buffer, size_t bufferSize) const;
 
 private:
-	CPINFOEX m_cpInfo;
+	CPINFOEX	m_cpInfo;
+	String		m_name;
 
 private:
 	// Decoder

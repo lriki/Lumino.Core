@@ -69,6 +69,14 @@ void TextWriter::SetEncoding(Text::Encoding* encoding)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+Text::Encoding* TextWriter::GetEncoding() const
+{
+	return m_converter.GetDestinationEncoding();
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 void TextWriter::SetNewLine(const String& newLine)
 {
 	m_newLine = newLine;

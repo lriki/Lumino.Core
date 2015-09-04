@@ -55,16 +55,34 @@ TEST_F(Test_Xml_XmlWriter, User)
 	// TODO: ƒtƒ@ƒCƒ‹”äŠr
 }
 
+uint16_t jis_to_sjis(uint8_t c1, uint8_t c2)
+{
+	if (c1 % 2) {
+		c1 = ((c1 + 1) / 2) + 0x70;
+		c2 = c2 + 0x1f;
+	}
+	else {
+		c1 = (c1 / 2) + 0x70;
+		c2 = c2 + 0x7d;
+	}
+	if (c1 >= 0xa0) { c1 = c1 + 0x40; }
+	if (c2 >= 0x7f) { c2 = c2 + 1; }
+
+	return (c1 << 8) | c2;
+}
+
 //---------------------------------------------------------------------
 TEST_F(Test_Xml_XmlWriter, Unit)
 {
+	uint16_t r = jis_to_sjis(0x74, 0x26);
+
 	// <Unit> WriteStartDocument
 	{
 		StringWriter strWriter;
 		XmlWriter xmlWriter(&strWriter);
 		xmlWriter.WriteStartDocument();
 		xmlWriter.WriteEndDocument();
-		ASSERT_STREQ(_T("<?xml version=\"1.0\"?>"), strWriter.ToString());
+		ASSERT_STREQ(_T("<?xml version=\"1.0\" encoding=\"UTF-16LE\"?>"), strWriter.ToString());
 
 		xmlWriter.WriteStartDocument();
 		ASSERT_THROW(xmlWriter.WriteStartDocument(), InvalidOperationException);
@@ -100,5 +118,30 @@ TEST_F(Test_Xml_XmlWriter, Unit)
 		xmlWriter.WriteAttribute(_T("a6"), _T("v<<"));
 		xmlWriter.WriteEndElement();
 		ASSERT_STREQ(_T("<test a1=\"v1\" a2=\"&amp;&quot;\" a3=\"v&lt;v\" a4=\"&gt;v&gt;\" a5=\"&gt;&gt;v\" a6=\"v&lt;&lt;\" />"), strWriter.ToString());
+	}
+
+	// <Unit> WriteComment
+	{
+		StringWriter strWriter;
+		strWriter.SetNewLine(_T("\n"));
+		XmlWriter xmlWriter(&strWriter);
+		xmlWriter.WriteStartElement(_T("test"));
+		xmlWriter.WriteComment(_T("comment1"));
+		ASSERT_THROW(xmlWriter.WriteComment(_T("comment2--")), ArgumentException);
+		xmlWriter.WriteComment(_T("comment3"));
+		xmlWriter.WriteEndElement();
+		ASSERT_STREQ(_T("<test>\n  <!--comment1-->\n  <!--comment3-->\n</test>"), strWriter.ToString());
+	}
+
+	// <Unit> WriteCData
+	{
+		StringWriter strWriter;
+		XmlWriter xmlWriter(&strWriter);
+		xmlWriter.WriteStartElement(_T("test"));
+		xmlWriter.WriteCData(_T("AAA && BBB"));
+		ASSERT_THROW(xmlWriter.WriteCData(_T("XX]]>")), ArgumentException);
+		xmlWriter.WriteCData(_T("CCC\nDDD"));
+		xmlWriter.WriteEndElement();
+		ASSERT_STREQ(_T("<test><![CDATA[AAA && BBB]]><![CDATA[CCC\nDDD]]></test>"), strWriter.ToString());
 	}
 }

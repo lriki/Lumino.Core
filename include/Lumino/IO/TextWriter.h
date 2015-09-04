@@ -29,6 +29,11 @@ public:
 	void SetEncoding(Text::Encoding* encoding);
 
 	/**
+		@brief		この TextWriter が出力する文字列のエンコーディングを取得します。
+	*/
+	Text::Encoding* GetEncoding() const;
+
+	/**
 		@brief		この TextWriter で使用する改行文字列を設定します。
 		@details	規定値は String::GetNewLine() で取得できる値です。
 	*/

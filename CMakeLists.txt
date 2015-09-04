@@ -96,6 +96,7 @@ set(LN_SOURCES_Text
 	src/Text/ASCIIEncoding.cpp
 	src/Text/ASCIIEncoding.h
 	src/Text/ConvertTable_Big5.c
+	src/Text/ConvertTable_EUCJP_EXT.c
 	src/Text/ConvertTable_EUCKR.c
 	src/Text/ConvertTable_GB2312.c
 	src/Text/ConvertTable_SJIS.c
@@ -104,6 +105,8 @@ set(LN_SOURCES_Text
 	src/Text/Encoding.cpp
 	src/Text/EncodingConverter.cpp
 	src/Text/EncodingDetector.cpp
+	src/Text/EUCJPEncoding.cpp
+	src/Text/EUCJPEncoding.h
 	src/Text/UnicodeUtils.cpp
 	src/Text/UTF8Encoding.cpp
 	src/Text/UTF8Encoding.h

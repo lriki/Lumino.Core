@@ -17,6 +17,7 @@ public:
 
 public:
 	// override Encoding
+	virtual const TCHAR* GetName() const { return (m_bigEndian) ? _T("UTF-32BE") : _T("UTF-32LE"); }
 	virtual int GetMinByteCount() const { return 4; }
 	virtual int GetMaxByteCount() const { return 4; }
 	virtual Decoder* CreateDecoder() const { return LN_NEW UTF32Decoder(); }

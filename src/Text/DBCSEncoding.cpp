@@ -34,23 +34,23 @@ extern "C" const unsigned short g_UTF16ToBig5Table[];
 
 const DBCSEncoding::TableInfo DBCSEncoding::Tables[EncodingType_Max] =
 {
-	{ NULL, NULL, NULL },	// EncodingType_Unknown
-	{ NULL, NULL, NULL },	// EncodingType_ASCII
-	{ NULL, NULL, NULL },	// EncodingType_UTF8,
-	{ NULL, NULL, NULL },	// EncodingType_UTF8N,
-	{ NULL, NULL, NULL },	// EncodingType_UTF16L,
-	{ NULL, NULL, NULL },	// EncodingType_UTF16B,
-	//{ NULL, NULL, NULL },	// EncodingType_UTF16LN,
-	//{ NULL, NULL, NULL },	// EncodingType_UTF16BN,
-	{ NULL, NULL, NULL },	// EncodingType_UTF32L,
-	{ NULL, NULL, NULL },	// EncodingType_UTF32B,
+	{ NULL, NULL, NULL, NULL },	// EncodingType_Unknown
+	{ NULL, NULL, NULL, NULL },	// EncodingType_ASCII
+	{ NULL, NULL, NULL, NULL },	// EncodingType_UTF8,
+	{ NULL, NULL, NULL, NULL },	// EncodingType_UTF8N,
+	{ NULL, NULL, NULL, NULL },	// EncodingType_UTF16L,
+	{ NULL, NULL, NULL, NULL },	// EncodingType_UTF16B,
+	//{ NULL, NULL, NULL, NULL },	// EncodingType_UTF16LN,
+	//{ NULL, NULL, NULL, NULL },	// EncodingType_UTF16BN,
+	{ NULL, NULL, NULL, NULL },	// EncodingType_UTF32L,
+	{ NULL, NULL, NULL, NULL },	// EncodingType_UTF32B,
 	//{ NULL, NULL, NULL }	// EncodingType_UTF32LN,
 	//{ NULL, NULL, NULL }	// EncodingType_UTF32BN,
 
-	{ g_SJISLeadBytePairs, g_SJISToUTF16Table, g_UTF16ToSJISTable },		// EncodingType_SJIS,
-	{ g_GB2312LeadBytePairs, g_GB2312ToUTF16Table, g_UTF16ToGB2312Table },	// EncodingType_GB2312
-	{ g_EUCKRLeadBytePairs, g_EUCKRToUTF16Table, g_UTF16ToEUCKRTable },		// EncodingType_EUCKR
-	{ g_Big5LeadBytePairs, g_Big5ToUTF16Table, g_UTF16ToBig5Table },		// EncodingType_BIG5
+	{ _T("Shift_JIS"), g_SJISLeadBytePairs, g_SJISToUTF16Table, g_UTF16ToSJISTable },		// EncodingType_SJIS,
+	{ _T("GB_2312-80"), g_GB2312LeadBytePairs, g_GB2312ToUTF16Table, g_UTF16ToGB2312Table },	// EncodingType_GB2312
+	{ _T("EUC-KR"), g_EUCKRLeadBytePairs, g_EUCKRToUTF16Table, g_UTF16ToEUCKRTable },		// EncodingType_EUCKR
+	{ _T("Big5"), g_Big5LeadBytePairs, g_Big5ToUTF16Table, g_UTF16ToBig5Table },		// EncodingType_BIG5
 };
 
 //-----------------------------------------------------------------------------

@@ -38,10 +38,11 @@ void XmlWriter::WriteStartDocument()
 {
 	LN_CHECK_STATE(m_state == State_Start);
 
-	// TODO: encoding 名
-	// http://www.iana.org/assignments/character-sets/character-sets.xhtml
 	m_textWriter->Write(_T("<?xml "));
 	m_textWriter->Write(_T("version=\"1.0\""));
+	m_textWriter->Write(_T(" encoding=\""));
+	m_textWriter->Write(m_textWriter->GetEncoding()->GetName());
+	m_textWriter->Write(_T("\""));
 	m_textWriter->Write(_T("?>"));
 	m_state = State_Prolog;
 }
@@ -111,6 +112,37 @@ void XmlWriter::WriteString(const String& text)
 	PreWrite(XmlNodeType::Text);
 	WriteStringInternal(text.GetCStr(), text.GetLength(), false);
 	m_state = State_Text;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void XmlWriter::WriteComment(const String& text)
+{
+	if (text.IndexOf(_T("--")) >= 0 ||
+		(!text.IsEmpty() && text[text.GetLength() - 1] == '-')){
+		LN_THROW(0, ArgumentException, _T("Invalidate Comment chars."))
+	}
+
+	PreWrite(XmlNodeType::Comment);
+	m_textWriter->Write(_T("<!--"), 4);
+	m_textWriter->Write(text);
+	m_textWriter->Write(_T("-->"), 3);
+	m_state = State_Prolog;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void XmlWriter::WriteCData(const String& text)
+{
+	if (text.IndexOf(_T("]]>")) >= 0) { LN_THROW(0, ArgumentException, _T("Invalidate CDATA chars.")) }
+
+	PreWrite(XmlNodeType::CDATA);
+	m_textWriter->Write(_T("<![CDATA["), 9);
+	m_textWriter->Write(text);
+	m_textWriter->Write(_T("]]>"), 3);
+	m_state = State_Prolog;
 }
 
 //-----------------------------------------------------------------------------
@@ -233,12 +265,18 @@ void XmlWriter::PreWrite(XmlNodeType type)
 	switch (type)
 	{
 	case XmlNodeType::Element:
+	case XmlNodeType::CDATA:
+	case XmlNodeType::Comment:
 		if (m_state == XmlNodeType::Attribute) {	// 要素のネスト
 			WriteEndAttribute();
 			WriteStartTagEnd(false);
 		}
 		else if (m_state == State_StartElement) {
 			WriteStartTagEnd(false);
+		}
+		if (type == XmlNodeType::CDATA) {
+			// CDATA は改行しない
+			m_elementStack.GetTop().IndentSkip = true;
 		}
 		if (m_state != State_Start) {
 			Indent(false);	
