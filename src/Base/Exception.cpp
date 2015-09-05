@@ -162,7 +162,7 @@
 #include "../../include/Lumino/Base/StringTraits.h"
 
 #ifdef LN_EXCEPTION_BACKTRACE
-	#ifdef LN_WIN32	// Cygwin もこっち
+	#ifdef LN_OS_WIN32	// Cygwin もこっち
 		#include "Win32/BackTrace.h"
 	#else
 		#include "Unix/BackTrace.h"
@@ -347,7 +347,7 @@ void Exception::SetMessage(const wchar_t* format, ...)
 }
 
 
-#ifdef LN_WIN32
+#ifdef LN_OS_WIN32
 //=============================================================================
 // Win32Exception
 //=============================================================================

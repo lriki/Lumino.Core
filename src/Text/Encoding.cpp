@@ -10,7 +10,7 @@
 #include "UTF8Encoding.h"
 #include "UTF16Encoding.h"
 #include "UTF32Encoding.h"
-#ifdef LN_WIN32
+#ifdef LN_OS_WIN32
 #include "Win32CodePageEncoding.h"
 #endif
 
@@ -30,7 +30,7 @@ namespace Text
 //-----------------------------------------------------------------------------
 Encoding* Encoding::GetSystemMultiByteEncoding()
 {
-#ifdef LN_WIN32
+#ifdef LN_OS_WIN32
 	static Win32CodePageEncoding systemEncoding(CP_THREAD_ACP);
 	return &systemEncoding;
 #else
@@ -381,7 +381,7 @@ int SystemMultiByteEncoding::GetMaxByteCount() const
 	// 代わりに、最悪のサイズとして UTF-8 の最大サイズを想定する。
 	return 6;
 #else
-#ifdef LN_WIN32
+#ifdef LN_OS_WIN32
 	CPINFOEX info;
 	if (!::GetCPInfoEx(CP_THREAD_ACP, 0, &info)) {
 		LN_THROW(0, Win32Exception, ::GetLastError());
@@ -406,7 +406,7 @@ int SystemMultiByteEncoding::GetCharacterCount(const byte_t* buffer, size_t buff
 //-----------------------------------------------------------------------------
 void SystemMultiByteEncoding::SystemMultiByteDecoder::ConvertToUTF16(const byte_t* inBuffer, size_t inBufferByteCount, UTF16* outBuffer, size_t outBufferCharCount, size_t* outBytesUsed, size_t* outCharsUsed)
 {
-#ifdef LN_WIN32	/* Windows 環境で setlocale しなくても使えるようにする */
+#ifdef LN_OS_WIN32	/* Windows 環境で setlocale しなくても使えるようにする */
 	// 入力が 0 文字の場合は何もしない
 	// (MultiByteToWideChar の戻り値がエラーなのか成功なのかわからなくなる)
 	if (inBufferByteCount == 0) {
@@ -541,7 +541,7 @@ void SystemMultiByteEncoding::SystemMultiByteDecoder::ConvertToUTF16(const byte_
 //-----------------------------------------------------------------------------
 void SystemMultiByteEncoding::SystemMultiByteEncoder::ConvertFromUTF16(const UTF16* inBuffer, size_t inBufferCharCount, byte_t* outBuffer, size_t outBufferByteCount, size_t* outBytesUsed, size_t* outCharsUsed)
 {
-#ifdef LN_WIN32	/* Windows 環境で setlocale しなくても使えるようにする */
+#ifdef LN_OS_WIN32	/* Windows 環境で setlocale しなくても使えるようにする */
 	// 入力が 0 文字の場合は何もしない
 	// (MultiByteToWideChar の戻り値がエラーなのか成功なのかわからなくなる)
 	if (inBufferCharCount == 0) {

@@ -83,7 +83,7 @@ uint64_t Environment::GetTickCountNS()
 template<>
 const char* Environment::GetNewLine<char>()
 {
-#ifdef LN_WIN32
+#ifdef LN_OS_WIN32
 	return "\r\n";
 #else
 	return "\n";
@@ -92,7 +92,7 @@ const char* Environment::GetNewLine<char>()
 template<>
 const wchar_t* Environment::GetNewLine<wchar_t>()
 {
-#ifdef LN_WIN32
+#ifdef LN_OS_WIN32
 	return L"\r\n";
 #else
 	return L"\n";

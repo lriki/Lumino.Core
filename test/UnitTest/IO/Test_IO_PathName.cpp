@@ -14,7 +14,7 @@ TEST_F(Test_IO_PathName, Constructor)
 	{
 		PathName base = _T("C:/dir1/dir2");
 		PathName path(base, _T("../file1.txt"));
-#ifdef LN_WIN32
+#ifdef LN_OS_WIN32
 		ASSERT_STREQ(_T("C:\\dir1\\file1.txt"), path.GetCStr());
 #else
 		ASSERT_STREQ(_T("C:/dir1/file1.txt"), path.GetCStr());
@@ -62,7 +62,7 @@ TEST_F(Test_IO_PathName, GetWithoutExtension)
 //-----------------------------------------------------------------------------
 TEST_F(Test_IO_PathName, Compare)
 {
-#ifdef LN_WIN32
+#ifdef LN_OS_WIN32
 	PathName path1(_T("C:/dir/file.txt"));
 	PathName path2(_T("C:\\dir\\file.txt"));
 	ASSERT_TRUE(path1.Equals(path2));
@@ -102,7 +102,7 @@ TEST_F(Test_IO_PathName, CanonicalizePath)
 	TEST_CASE("A", "./A");
 	TEST_CASE("A", "././A");
 
-#ifdef LN_WIN32
+#ifdef LN_OS_WIN32
 	TEST_CASE("C:/Projects/bin/Debug/", "C:/Projects/bin/Debug/");
 	TEST_CASE("C:/Projects/Debug", "C:/../Projects/Debug");
 	TEST_CASE("C:/Debug", "C:/Projects/../Debug");
@@ -116,7 +116,7 @@ TEST_F(Test_IO_PathName, CanonicalizePath)
 	//bool r = CanonicalizePath(path, &len);
 
 
-#ifdef LN_WIN32
+#ifdef LN_OS_WIN32
 	PathName path1(PathName::GetCurrentDirectory(), _T("dir\\Dir"));
 	PathName path12 = _T("dir/bin/../Dir");
 	path12 = path12.CanonicalizePath();

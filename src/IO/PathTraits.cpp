@@ -17,7 +17,7 @@ namespace Lumino
 template<typename TChar>
 bool PathTraits::IsSeparatorChar(TChar ch)
 {
-#ifdef LN_WIN32
+#ifdef LN_OS_WIN32
 	return (ch == '\\' || ch == '/');
 #else
 	return (ch == '/');
@@ -30,7 +30,7 @@ bool PathTraits::IsSeparatorChar(TChar ch)
 template<typename TChar>
 bool PathTraits::IsVolumeSeparatorChar(TChar ch)
 {
-#ifdef LN_WIN32
+#ifdef LN_OS_WIN32
 	return (ch == ':');
 #else
 	return false;
@@ -43,7 +43,7 @@ bool PathTraits::IsVolumeSeparatorChar(TChar ch)
 template<typename TChar>
 bool PathTraits::IsRootPath(const TChar* path)
 {
-#ifdef LN_WIN32
+#ifdef LN_OS_WIN32
 	// windows の場合
 	size_t len = StringTraits::StrLen(path);
 	if (IsAbsolutePath(path) && len >= 2)
@@ -331,7 +331,7 @@ int PathTraits::CanonicalizePath(const TChar* srcPath, size_t srcLen, TChar* out
 			// パスの先頭トークンである場合、ルート要素であるかチェック
 			if (tokenBegin == srcPath)
 			{
-#ifdef LN_WIN32
+#ifdef LN_OS_WIN32
 				for (size_t i = 0; i < tokenLen; ++i) {
 					if (IsVolumeSeparatorChar(tokenBegin[i])) {
 						isFullPath = true;	// "C:" のように、トークン内に : が含まれていた
@@ -449,7 +449,7 @@ int PathTraits::CanonicalizePath(const TChar* srcPath, size_t srcLen, TChar* out
 			bool isRoot = false;
 			if (tokenBegin == srcPath)
 			{
-#ifdef LN_WIN32
+#ifdef LN_OS_WIN32
 				for (size_t i = 0; i < tokenLen; ++i) {
 					if (IsVolumeSeparatorChar(tokenBegin[i])) {
 						isRoot = true;	// "C:" のように、トークン内に : が含まれていた
@@ -557,7 +557,7 @@ void PathTraits::CanonicalizePath(const char* srcPath, char* outPath)
 		str
 	}
 #if 0
-#ifdef LN_WIN32
+#ifdef LN_OS_WIN32
 	char* canonPath = _fullpath(outPath, srcPath, LN_MAX_PATH);
 	LN_THROW(canonPath != NULL, ArgumentException);
 #else
@@ -579,7 +579,7 @@ template<>
 void PathTraits::CanonicalizePath(const wchar_t* srcPath, wchar_t* outPath)
 {
 #if 0
-#ifdef LN_WIN32
+#ifdef LN_OS_WIN32
 	wchar_t* canonPath = _wfullpath(outPath, srcPath, LN_MAX_PATH);
 #else
 	char mbcsSrc[LN_MAX_PATH];
@@ -609,7 +609,7 @@ void PathTraits::CanonicalizePath(const wchar_t* srcPath, wchar_t* outPath)
 template<typename TChar>
 void PathTraits::NormalizeSeparator(TChar* srcPath)
 {
-#ifdef LN_WIN32
+#ifdef LN_OS_WIN32
 	for (; *srcPath; ++srcPath)
 	{
 		if (*srcPath == AltDirectorySeparatorChar) {
@@ -646,7 +646,7 @@ int PathTraits::Compare(const TChar* path1, const TChar* path2)
 	TChar* s1 = absPath1;
 	TChar* s2 = absPath2;
 
-#ifdef LN_WIN32
+#ifdef LN_OS_WIN32
 	// 大文字小文字区別せず、文字が等しい間繰り返す
 	while (*s1 && *s2)
 	{

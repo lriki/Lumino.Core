@@ -80,7 +80,7 @@ TEST_F(Test_Base_Exception, Basic)
 	// wchar_t 可変長 message
 	try
 	{
-#ifdef LN_WIN32
+#ifdef LN_OS_WIN32
 		LN_THROW(0, IOException, L"test%s", L"test");
 #else	// 現在 Unix 系の vswprintf は動作保証していないので別の例外になる。
 		try {

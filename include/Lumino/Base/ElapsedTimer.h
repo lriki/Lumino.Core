@@ -25,7 +25,7 @@ public:
 	uint64_t GetElapsedTimeNS() const;
 
 private:
-#ifdef LN_WIN32
+#ifdef LN_OS_WIN32
     LARGE_INTEGER   mFreq;
     LARGE_INTEGER   mBefore;
 #else

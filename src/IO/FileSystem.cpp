@@ -247,7 +247,7 @@ size_t FileSystem::GetFileSize(const TCHAR* filePath)
 //-----------------------------------------------------------------------------
 size_t FileSystem::GetFileSize( FILE* stream )
 {
-#if defined(LN_WIN32)
+#if defined(LN_OS_WIN32)
 	struct _stat stbuf;
 	int handle = _fileno( stream );
 	if ( handle == 0 ) {
@@ -369,7 +369,7 @@ int64_t FileSystem::CalcSeekPoint(int64_t curPoint, int64_t maxSize, int64_t off
 //-----------------------------------------------------------------------------
 CaseSensitivity FileSystem::GetFileSystemCaseSensitivity()
 {
-#ifdef LN_WIN32
+#ifdef LN_OS_WIN32
 	return CaseSensitivity_CaseInsensitive;
 #else
 	return CaseSensitivity_CaseSensitive;

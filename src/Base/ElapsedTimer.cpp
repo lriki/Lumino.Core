@@ -1,5 +1,5 @@
 ﻿#include "../Internal.h"
-#ifdef LN_WIN32
+#ifdef LN_OS_WIN32
 #else
 	#include <sys/time.h>
 #endif
@@ -8,7 +8,7 @@
 namespace Lumino
 {
 
-#ifdef LN_WIN32
+#ifdef LN_OS_WIN32
 //=============================================================================
 // ElapsedTimer
 //=============================================================================

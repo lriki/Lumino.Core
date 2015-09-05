@@ -121,7 +121,7 @@ void FileStream::Seek(int64_t offset, SeekOrigin origin)
 {
 	CheckOpen();
 
-#ifdef LN_WIN32
+#ifdef LN_OS_WIN32
 	_fseeki64(m_stream, offset, origin);
 #else
 	// TODO:

@@ -19,7 +19,7 @@
 namespace Lumino
 {
 
-#ifdef LN_WIN32
+#ifdef LN_OS_WIN32
 int StringTraits::tvscprintf_l(const char* format, NativeLocale_t locale, va_list args)
 {
 	return _vscprintf_l(format, locale, args);

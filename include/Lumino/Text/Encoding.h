@@ -114,7 +114,7 @@ public:
 	template<typename TChar>
 	static Encoding* GetEncodingTemplate();
 
-#ifdef LN_WIN32
+#ifdef LN_OS_WIN32
 	/**
 		@brief		現在のスレッドロケールに基づくデフォルトコードページの Encoding を取得します。
 		@details	返されるポインタはグローバルなインスタンスです。このポインタは解放しないでください。

@@ -455,7 +455,7 @@ public:
 };
 
 
-#ifdef LN_WIN32
+#ifdef LN_OS_WIN32
 /**
 	@brief	WindowsAPI のエラーを示す例外クラス (GetLastError())
 */

@@ -47,7 +47,7 @@ private:
 
 private:
 	NativeLocale_t	m_nativeLocale;
-#ifdef LN_WIN32
+#ifdef LN_OS_WIN32
 	StringW			m_nativeName;
 #else
 	StringA			m_nativeName;

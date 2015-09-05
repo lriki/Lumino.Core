@@ -62,7 +62,7 @@ TEST_F(Test_IO_FileSystem, GetAttribute)
 		ASSERT_EQ(FileAttribute::Directory, attr);
 	}
 
-#ifdef LN_WIN32
+#ifdef LN_OS_WIN32
 #else
 	// 隠しファイル
 	attr = FileSystem::GetAttribute(LOCALFILE("TestData/.test"));

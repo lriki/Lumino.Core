@@ -156,7 +156,7 @@ inline const wchar_t LN_T_ChooseCW<wchar_t>(const char /*c*/, const wchar_t w)
 	#endif
 #endif
 
-#if defined(LN_WIN32) && !defined(__CYGWIN__)
+#if defined(LN_OS_WIN32) && !defined(__CYGWIN__)
 	#include <tchar.h>
 #else
 

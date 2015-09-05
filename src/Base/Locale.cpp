@@ -48,7 +48,7 @@ namespace Lumino
 //=============================================================================
 
 
-#ifdef LN_WIN32
+#ifdef LN_OS_WIN32
 //---------------------------------------------
 class ScopedLocaleRAII
 {
@@ -118,7 +118,7 @@ static void GetNativeDefaultLocale(NativeLocale_t* outLocale, StringA* outName)
 
 static void FreeNativeLocale(NativeLocale_t locale)
 {
-#ifdef LN_WIN32
+#ifdef LN_OS_WIN32
 	_free_locale(locale);
 #else
 	freelocale(locale);
@@ -197,7 +197,7 @@ const Locale& Locale::GetC()
 	static bool init = false;
 	if (!init)
 	{
-#ifdef LN_WIN32
+#ifdef LN_OS_WIN32
 		locale.m_nativeLocale = CreateNativeLocale(L"C");
 		locale.m_nativeName = L"C";
 #else

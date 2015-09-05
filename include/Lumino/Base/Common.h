@@ -10,14 +10,14 @@
 #endif
 
 #if (defined(_WIN32) || defined(__WIN32__) || defined(WIN32) || defined(__CYGWIN__) || defined(Q_OS_WIN))
-	#define LN_WIN32
+	#define LN_OS_WIN32
 #endif
 
 // プラットフォーム
 #if defined(__WIN32__) || defined(_WIN32) || defined(__CYGWIN__)
-	#define LN_WIN32
+	#define LN_OS_WIN32
 #else	// とりあえず
-	#define LN_LINUX
+	#define LN_OS_LINUX
 	#define LN_X11
 #endif
 
@@ -36,7 +36,7 @@
 #endif
 
 // スレッドライブラリ
-#if defined(__CYGWIN__) || !defined(LN_WIN32)
+#if defined(__CYGWIN__) || !defined(LN_OS_WIN32)
 	#define LN_THREAD_POSIX
 #else
 	#define LN_THREAD_WIN32
@@ -99,7 +99,7 @@
 #include <stdarg.h>
 #include <assert.h>
 
-#if defined(LN_WIN32)
+#if defined(LN_OS_WIN32)
 	#define NOMINMAX
 	#include <windows.h>
 	#include <process.h>
@@ -112,7 +112,7 @@
 // const
 
 // ファイルパスの最大文字数
-#if defined(LN_WIN32)
+#if defined(LN_OS_WIN32)
 	#define LN_MAX_PATH		260//MAX_PATH
 #elif defined(PATH_MAX)
 	#define LN_MAX_PATH		PATH_MAX
