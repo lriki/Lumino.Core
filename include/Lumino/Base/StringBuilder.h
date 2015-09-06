@@ -22,6 +22,8 @@ public:
 	void Append(const byte_t* buffer, int byteCount);
 	void Append(const ByteBuffer& buffer);
 
+	void Replace(int start, int length, const TChar* str, int strLength);
+
 	const TChar* GetCStr() const { return (const TChar*)m_buffer.GetConstData(); }
 	int GetLength() const { return m_bufferUsed / sizeof(TChar); }
 

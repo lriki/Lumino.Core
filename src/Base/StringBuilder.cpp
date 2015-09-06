@@ -70,6 +70,40 @@ void GenericStringBuilderCore<TChar>::Append(const ByteBuffer& buffer)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+template<typename TChar>
+void GenericStringBuilderCore<TChar>::Replace(int start, int length, const TChar* str, int strLength)
+{
+	// 置換したら何 byte 増える？減る？
+	size_t diff = sizeof(TChar) * (strLength - length);
+
+	// バッファが足りなければ拡張する
+	if (diff > 0 && m_bufferUsed + diff > m_buffer.GetSize())
+	{
+		size_t newSize = m_buffer.GetSize() + std::max(m_buffer.GetSize(), diff);
+		m_buffer.Resize(newSize, false);
+	}
+
+	int diffChars = (strLength - length);
+	TChar* beforeBegin = (TChar*)m_buffer.GetData();
+	TChar* beforeEnd = beforeBegin + start;				// この1つ前までが before の文字。全て置換する場合は beforeBegin と同じ。
+	TChar* oldAfterBegin = beforeBegin + start;
+	TChar* oldAfterEnd = beforeBegin + GetLength();		// この1つ前までが after の文字
+	TChar* newAfterBegin = oldAfterBegin + diffChars;
+	TChar* newAfterEnd = oldAfterEnd + diffChars;		// この1つ前までが after の文字
+
+	int moveCharCount = oldAfterEnd - oldAfterBegin;
+	if (moveCharCount > 0) {
+		memmove(newAfterBegin, oldAfterBegin, sizeof(TChar) * moveCharCount);
+	}
+
+	memcpy(beforeEnd, str, sizeof(TChar) * strLength);
+
+	m_bufferUsed += diff;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 //template<typename TChar>
 //GenericString<TChar> GenericStringBuilderCore<TChar>::ToString() const
 //{
