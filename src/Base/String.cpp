@@ -477,6 +477,7 @@ void GenericString<TChar>::ConvertFrom(const void* buffer, int byteCount, const 
 	// 全く同じエンコーディングなら変換の必要は無い
 	if (thisTypeEncoding == encoding) 
 	{
+		byteCount = (byteCount < 0) ? strlen((const char*)buffer) : byteCount;
 		AssignTString((const TChar*)buffer, byteCount / sizeof(TChar));
 	}
 	else

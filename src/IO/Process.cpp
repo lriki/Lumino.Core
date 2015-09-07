@@ -77,6 +77,7 @@ Process::Process()
 	, m_exitCode(0)
 	, m_crashed(false)
 	, m_disposed(false)
+	, m_runningReadThread(false)
 	, m_hInputRead(NULL)
 	, m_hInputWrite(NULL)
 	, m_hOutputRead(NULL)
@@ -124,6 +125,14 @@ void Process::SetRedirectStandardOutput(bool enabled)
 void Process::SetRedirectStandardError(bool enabled)
 {
 	m_redirectStandardError = enabled;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void Process::SetOutputDataReceivedCallback(const Delegate01<String>& callback)
+{
+	m_outputDataReceivedCallback = callback;
 }
 
 //-----------------------------------------------------------------------------
@@ -354,6 +363,18 @@ int Process::GetExitCode()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+void Process::BeginOutputReadLine()
+{
+	LN_CHECK_STATE(m_standardOutputReader != NULL);
+
+	// 読み取りスレッドを立てる
+	m_readStdOutputThread.Start(LN_CreateDelegate(this, &Process::Thread_ReadStdOutput));
+	m_runningReadThread = true;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 void Process::TryGetExitCode()
 {
 	if (m_processInfo.hProcess != NULL)
@@ -398,11 +419,11 @@ void Process::Dispose()
 		//}
 
 		// 読み取りスレッドの終了を待つ
-		//if (m_bRunReadThread)
-		//{
-		//	m_bRunReadThread = false;
-		//	m_ReadStdOutputThread.Wait();
-		//}
+		if (m_runningReadThread)
+		{
+			m_runningReadThread = false;
+			m_readStdOutputThread.Wait();
+		}
 
 		// パイプを閉じる
 		if (m_hInputWrite != NULL) {
@@ -435,5 +456,19 @@ void Process::Dispose()
 	}
 }
 #endif
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void Process::Thread_ReadStdOutput()
+{
+	String strLine;
+	while (m_standardOutputReader->ReadLine(&strLine))
+	{
+		if (!m_outputDataReceivedCallback.IsEmpty()) {
+			m_outputDataReceivedCallback.Call(strLine);
+		}
+	}
+}
 
 } // namespace Lumino

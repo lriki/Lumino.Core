@@ -2,6 +2,8 @@
 	@file	Process.h
 */
 #pragma once
+#include "../Base/Delegate.h"
+#include "../Threading/Thread.h"
 #include "Common.h"
 #include "StreamReader.h"
 #include "StreamWriter.h"
@@ -45,6 +47,13 @@ public:
 	void SetRedirectStandardError(bool enabled);
 
 	/**
+		@brief		標準出力に行が書き込まれたときに呼び出されるコールバック関数を設定します。
+		@details	非同期読み取りは Start() の後、BeginOutputReadLine() を呼び出すことで開始します。
+					コールバックは Start() を実行したスレッドとは別のスレッドから非同期的に呼び出されます。
+	*/
+	void SetOutputDataReceivedCallback(const Delegate01<String>& callback);
+
+	/**
 		@brief		プログラムのファイルパスとコマンドライン引数を指定してプロセスを起動します。
 		@param[in]	program	: プログラム名または実行ファイルパス
 		@param[in]	args	: コマンドライン引数
@@ -71,6 +80,11 @@ public:
 		@details	GetState() が ProcessStatus::Finished を返さない限り、戻り値は有効ではありません。
 	*/
 	int GetExitCode();
+
+	/**
+		@brief		標準出力の非同期読み取り操作を開始します。
+	*/
+	void BeginOutputReadLine();
 
 	/**
 		@brief		標準入力の書き込みに使用されるストリームを取得します。
@@ -106,18 +120,22 @@ public:
 private:
 	void TryGetExitCode();
 	void Dispose();
+	void Thread_ReadStdOutput();
 
 private:
-	PathName				m_workingDirectory;
-	bool					m_redirectStandardInput;
-	bool					m_redirectStandardOutput;
-	bool					m_redirectStandardError;
-	RefPtr<StreamWriter>	m_standardInputWriter;
-	RefPtr<StreamReader>	m_standardOutputReader;
-	RefPtr<StreamReader>	m_standardErrorReader;
-	int						m_exitCode;
-	bool					m_crashed;
-	bool					m_disposed;
+	PathName					m_workingDirectory;
+	bool						m_redirectStandardInput;
+	bool						m_redirectStandardOutput;
+	bool						m_redirectStandardError;
+	RefPtr<StreamWriter>		m_standardInputWriter;
+	RefPtr<StreamReader>		m_standardOutputReader;
+	RefPtr<StreamReader>		m_standardErrorReader;
+	Delegate01<String>			m_outputDataReceivedCallback;
+	Threading::DelegateThread	m_readStdOutputThread;
+	int							m_exitCode;
+	bool						m_crashed;
+	bool						m_disposed;
+	bool						m_runningReadThread;
 
 #ifdef _WIN32
 	HANDLE					m_hInputRead;			// 標準出力の読み取り側 (子プロセス側)

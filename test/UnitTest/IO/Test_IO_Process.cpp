@@ -10,7 +10,7 @@ protected:
 //-----------------------------------------------------------------------------
 TEST_F(Test_IO_Process, Example)
 {
-	// <Test> リダイレクト無しで起動。
+	// <Example> リダイレクト無しで起動。
 	{
 		Process proc;
 		proc.Start(_T("LuminoCore_UnitTest"), _T("--proctest1"));
@@ -18,7 +18,7 @@ TEST_F(Test_IO_Process, Example)
 		ASSERT_EQ(5, proc.GetExitCode());
 	}
 
-	// <Test> 標準出力をリダイレクトする。
+	// <Example> 標準出力をリダイレクトする。
 	{
 		Process proc;
 		proc.SetRedirectStandardOutput(true);
@@ -26,7 +26,7 @@ TEST_F(Test_IO_Process, Example)
 		ASSERT_STREQ(_T("stdout"), proc.GetStandardOutput()->ReadToEnd());
 	}
 
-	// <Test> 標準入力をリダイレクトする。
+	// <Example> 標準入力をリダイレクトする。
 	{
 		Process proc;
 		proc.SetRedirectStandardInput(true);
@@ -36,7 +36,7 @@ TEST_F(Test_IO_Process, Example)
 		ASSERT_EQ(4, proc.GetExitCode());				// 文字数が返ってくる
 	}
 
-	// <Test> 標準入力と標準出力をリダイレクトする。
+	// <Example> 標準入力と標準出力をリダイレクトする。
 	{
 		Process proc;
 		proc.SetRedirectStandardInput(true);
@@ -46,14 +46,14 @@ TEST_F(Test_IO_Process, Example)
 		ASSERT_STREQ(_T("[test]"), proc.GetStandardOutput()->ReadToEnd());
 	}
 
-	// <Test> プロセスをシンプルに実行する。
+	// <Example> プロセスをシンプルに実行する。
 	{
-		if (Process::Execute(_T("LuminoCore_UnitTest")) != 5) {
+		if (Process::Execute(_T("LuminoCore_UnitTest"), _T("--proctest1")) != 5) {
 			FAIL();
 		}
 	}
 
-	// <Test> プロセスをシンプルに実行し、標準出力をリダイレクトする。
+	// <Example> プロセスをシンプルに実行し、標準出力をリダイレクトする。
 	{
 		String stdOutput;
 		if (Process::Execute(_T("LuminoCore_UnitTest"), _T("--proctest1"), &stdOutput) == 5) {
@@ -62,6 +62,27 @@ TEST_F(Test_IO_Process, Example)
 		else {
 			FAIL();
 		}
+	}
+
+	// <Example> 標準出力をリダイレクトし、非同期で読み取る。
+	{
+		String output;
+
+		struct Test {
+			String* output;
+			void Callback(String str) {
+				(*output) += str;
+			}
+		} t;
+		t.output = &output;
+
+		Process proc;
+		proc.SetRedirectStandardOutput(true);
+		proc.SetOutputDataReceivedCallback(LN_CreateDelegate(&t, &Test::Callback));
+		proc.Start(_T("LuminoCore_UnitTest"), _T("--proctest1"));
+		proc.BeginOutputReadLine();
+		proc.WaitForExit();
+		ASSERT_STREQ(_T("stdout"), output);
 	}
 }
 
