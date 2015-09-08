@@ -71,8 +71,7 @@ TEST_F(Test_Xml_XmlReader, User)
 		_T("type:Whitespace\n")
 		_T("type:EndElement name:ProjectList\n")
 		_T("type:Whitespace\n")
-		_T("type:EndElement name:ToolSettings\n")
-		_T("type:Whitespace\n");
+		_T("type:EndElement name:ToolSettings\n");
 	ASSERT_STREQ(result, output);
 }
 

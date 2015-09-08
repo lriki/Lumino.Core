@@ -310,7 +310,7 @@ String FileSystem::ReadAllText(const TCHAR* filePath, const Text::Encoding* enco
 		str.ConvertFrom(buffer.GetData(), buffer.GetSize(), encoding);
 	}
 	else {
-		str.ConvertFrom(buffer.GetData(), buffer.GetSize(), Text::Encoding::GetTCharEncoding());
+		str.ConvertFrom(buffer.GetData(), buffer.GetSize(), Text::Encoding::GetUTF8Encoding());
 	}
 	return str;
 }
@@ -330,6 +330,7 @@ void FileSystem::WriteAllBytes(const TCHAR* filePath, const void* buffer, size_t
 //-----------------------------------------------------------------------------
 void FileSystem::WriteAllText(const TCHAR* filePath, const String& str, const Text::Encoding* encoding)
 {
+	encoding = (encoding == NULL) ? Text::Encoding::GetUTF8Encoding() : encoding;
 	const ByteBuffer buffer(str.ConvertTo(encoding));
 	WriteAllBytes(filePath, buffer.GetData(), buffer.GetSize());
 }

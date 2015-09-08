@@ -210,7 +210,8 @@ if (WIN32)
 
 	set(LN_SOURCES_IO
 		${LN_SOURCES_IO}
-		src/IO/FileSystem_Win32.cpp)
+		src/IO/FileSystem_Win32.cpp
+		src/IO/Process_Win32.cpp)
 
 elseif (APPLE)
 	
@@ -218,7 +219,8 @@ elseif (UNIX)
 
 	set(LN_SOURCES_IO
 		${LN_SOURCES_IO}
-		src/IO/FileSystem_Unix.cpp)
+		src/IO/FileSystem_Unix.cpp
+		src/IO/Process_Unix.cpp)
 		
 endif()
 
