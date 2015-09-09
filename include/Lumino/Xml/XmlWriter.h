@@ -20,7 +20,7 @@ public:
 
 public:
 	XmlWriter(TextWriter* textWriter);
-	~XmlWriter();
+	virtual ~XmlWriter();
 
 public:
 	/** XML 宣言を書き込みます。*/
@@ -46,6 +46,20 @@ public:
 
 	/** <![CDATA[...]]> ブロックを書き込みます。*/
 	void WriteCData(const String& text);
+
+	/** 
+		@brief		テキスト子要素を持つ要素を書き込みます。
+		@details	この関数は以下の操作と同じ結果になるユーティリティです。
+		@code
+					WriteStartElement(elementName);
+					WriteString(text);
+					WriteEndElement();
+		@endcode
+	*/
+	void WriteTextElement(const String& elementName, const String& text);
+
+protected:
+	void Initialize(TextWriter* textWriter);
 
 private:
 	void WriteStartAttribute(const String& name);
@@ -76,6 +90,25 @@ private:
 	Stack<ElementInfo>		m_elementStack;
 	String					m_indentString;
 	TCHAR					m_quoteChar;
+};
+
+
+/**
+	@brief		指定したファイルへ書き込みを行う XML ライターです。
+*/
+class XmlFileWriter
+	: public XmlWriter
+{
+public:
+
+	/** 
+		@brief		書き込み先ファイルのパスを指定してインスタンスを初期化します。ファイルが存在しない場合は新しく作成します。
+		@param[in]	filePath	: 書き込み先ファイルのパス
+		@param[in]	encoding	: 書き込み時のエンコーディング (省略時は UTF-8)
+	*/
+	XmlFileWriter(const PathName& filePath, Text::Encoding* encoding = NULL);
+
+	virtual ~XmlFileWriter();
 };
 
 } // namespace Lumino

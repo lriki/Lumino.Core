@@ -202,12 +202,12 @@ uint64_t FileSystem::GetFileSize(FILE* stream)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-bool FileSystem::DirectoryExists(const char* path)
+bool FileSystem::ExistsDirectory(const char* path)
 {
 	DWORD attr = ::GetFileAttributesA(path);
 	return (attr != -1 && (attr & FILE_ATTRIBUTE_DIRECTORY) != 0);
 }
-bool FileSystem::DirectoryExists(const wchar_t* path)
+bool FileSystem::ExistsDirectory(const wchar_t* path)
 {
 	DWORD attr = ::GetFileAttributesW(path);
 	return (attr != -1 && (attr & FILE_ATTRIBUTE_DIRECTORY) != 0);
@@ -230,7 +230,7 @@ static void CreateDirectoryInternal(const TChar* path)
 	while (i >= 0)
 	{
 		dir.AssignCStr(path, 0, i + 1);
-		if (FileSystem::DirectoryExists(dir)) {
+		if (FileSystem::ExistsDirectory(dir)) {
 			break;
 		}
 		pathList.Add(dir);

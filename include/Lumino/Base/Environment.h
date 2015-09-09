@@ -15,7 +15,16 @@ enum ByteOrder
 	ByteOrder_Big,			///< ビッグエンディアン
 };
 
-/// システムの特別なフォルダパスを示す値
+/*
+	@brief	システムの特別なフォルダパスを示す値です。
+	@details
+		SpecialFolder   | Windows                   | OS X    | Linux
+		----------------|---------------------------|---------|---------
+		ApplicationData | <USER>/AppData/Roaming    |         | ~/.local/share
+		                |                           |         | /usr/local/share
+		                |                           |         | /usr/share/
+		Temporary       | <USER>/AppData/Local/Temp |         | /tmp
+*/
 LN_ENUM(SpecialFolder)
 {
 	ApplicationData = 0,
@@ -57,13 +66,8 @@ public:
 	static const TChar* GetNewLine();
 
 	/**
-		@details	
-		SpecialFolder   | Windows                   | OS X    | Linux
-		----------------|---------------------------|---------|---------
-		ApplicationData | <USER>/AppData/Roaming    |         | ~/.local/share
-		                |                           |         | /usr/local/share
-		                |                           |         | /usr/share/
-		Temporary       | <USER>/AppData/Local/Temp |         | /tmp
+		@brief		システムの特別なフォルダのパスを取得します。
+		@see	PathName.GetSpecialFolderPath
 	*/
 	template<typename TChar>
 	static void GetSpecialFolderPath(SpecialFolder specialFolder, TChar* outPath);

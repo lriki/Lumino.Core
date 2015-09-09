@@ -231,6 +231,24 @@ std::string GenericPathName<TChar>::ToLocalChar() const
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
+bool GenericPathName<TChar>::ExistsFile() const
+{
+	return FileSystem::Exists(m_path);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+bool GenericPathName<TChar>::ExistsDirectory() const
+{
+	return FileSystem::ExistsDirectory(m_path);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
 GenericPathName<TChar> GenericPathName<TChar>::GetCurrentDirectory()
 {
 	static GenericPathName<TChar> path;
@@ -243,6 +261,36 @@ GenericPathName<TChar> GenericPathName<TChar>::GetCurrentDirectory()
 		path = curDir;
 	}
 	return path;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+GenericPathName<TChar> GenericPathName<TChar>::GetSpecialFolderPath(SpecialFolder specialFolder, const TChar* childDir, SpecialFolderOption option)
+{
+	LN_CHECK_ARGS(!PathTraits::IsAbsolutePath(childDir));
+
+	TChar path[LN_MAX_PATH];
+	Environment::GetSpecialFolderPath(specialFolder, path);
+
+	GenericPathName<TChar> path2(path, childDir);
+
+	if (option == SpecialFolderOption::None)
+	{
+		// フォルダが無かったら空文字列にして返す
+		if (!FileSystem::ExistsDirectory(path2)) {
+			path2.SetEmpty();
+		}
+		return path2;
+	}
+	else {
+		// フォルダが無かったら作成して返す
+		if (!FileSystem::ExistsDirectory(path2)) {
+			FileSystem::CreateDirectory(path2);
+		}
+		return path2;
+	}
 }
 
 //-----------------------------------------------------------------------------

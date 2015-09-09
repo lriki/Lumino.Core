@@ -105,8 +105,8 @@ public:
 		@param[in]	path	: ディレクトリのパス
 		@return		ディレクトリが存在すれば true。それ以外の場合は false。
 	*/
-	static bool DirectoryExists(const char* path);
-	static bool DirectoryExists(const wchar_t* path);
+	static bool ExistsDirectory(const char* path);
+	static bool ExistsDirectory(const wchar_t* path);
 
 	/**
 		@brief		ディレクトリを作成します。

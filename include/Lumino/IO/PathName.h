@@ -1,6 +1,7 @@
 ﻿#pragma once
-
+#include "../Base/Environment.h"
 #include "../Base/String.h"
+#include "Common.h"
 #include "PathTraits.h"
 
 namespace Lumino
@@ -179,6 +180,18 @@ public:
 	/// ローカルの char 文字列表現として返す
 	std::string ToLocalChar() const;
 
+	
+	/** 
+		@brief		このパスの指す先がファイルとして存在しているかを確認します。
+	*/
+	bool ExistsFile() const;
+
+	/** 
+		@brief		このパスの指す先がディレクトリとして存在しているかを確認します。
+	*/
+	bool ExistsDirectory() const;
+
+
 	/**
 		@brief		このパスと、別のパス文字列が等しいかをチェックする
 		@param[in]	path	: 比較対象のパス文字列
@@ -206,6 +219,15 @@ public:
 		@brief		カレントディレクトリのパスを取得します。
 	*/
 	static PathNameT GetCurrentDirectory();
+
+	/**
+		@brief		システムの特別なフォルダのパスを取得します。
+		@param[in]	specialFolder	: フォルダの種類
+		@param[in]	childDir		: specialFolder が示すパスの子フォルダとして結合するパス
+		@param[in]	option			: 取得オプション
+		@exception	ArgumentException	childDir が絶対パスです。
+	*/
+	static PathNameT GetSpecialFolderPath(SpecialFolder specialFolder, const TChar* childDir = NULL, SpecialFolderOption option = SpecialFolderOption::Create);
 
 	/**	
 		@brief		あるフォルダ内でユニークなファイルパス(絶対パス)を生成して返す

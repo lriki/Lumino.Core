@@ -1,5 +1,7 @@
 
 #include "../Internal.h"
+#include <Lumino/IO/PathName.h>
+#include <Lumino/IO/StreamWriter.h>
 #include <Lumino/Xml/XmlWriter.h>
 
 namespace Lumino
@@ -20,7 +22,7 @@ XmlWriter::XmlWriter(TextWriter* textWriter)
 	, m_indentString(DefaultIndentString)
 	, m_quoteChar(_T('"'))
 {
-	m_textWriter = textWriter;
+	Initialize(textWriter);
 }
 
 //-----------------------------------------------------------------------------
@@ -29,6 +31,14 @@ XmlWriter::XmlWriter(TextWriter* textWriter)
 XmlWriter::~XmlWriter()
 {
 
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void XmlWriter::Initialize(TextWriter* textWriter)
+{
+	m_textWriter = textWriter;
 }
 
 //-----------------------------------------------------------------------------
@@ -143,6 +153,16 @@ void XmlWriter::WriteCData(const String& text)
 	m_textWriter->Write(text);
 	m_textWriter->Write(_T("]]>"), 3);
 	m_state = State_Prolog;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void XmlWriter::WriteTextElement(const String& elementName, const String& text)
+{
+	WriteStartElement(elementName);
+	WriteString(text);
+	WriteEndElement();
 }
 
 //-----------------------------------------------------------------------------
@@ -333,6 +353,29 @@ void XmlWriter::Indent(bool beforeEndElement)
 			m_textWriter->Write(m_indentString);
 		}
 	}
+}
+
+
+//=============================================================================
+// XmlFileWriter
+//=============================================================================
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+XmlFileWriter::XmlFileWriter(const PathName& filePath, Text::Encoding* encoding)
+	: XmlWriter(NULL)
+{
+	RefPtr<StreamWriter> file(LN_NEW StreamWriter(filePath, encoding, FileWriteMode_Truncate));
+	Initialize(file);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+XmlFileWriter::~XmlFileWriter()
+{
+
 }
 
 } // namespace Lumino

@@ -1,6 +1,9 @@
 ﻿
 #include <time.h>
 #include "../Internal.h"
+#ifdef LN_OS_WIN32
+#include <Shlobj.h>
+#endif
 #include <Lumino/Base/Environment.h>
 
 namespace Lumino
@@ -102,10 +105,33 @@ const wchar_t* Environment::GetNewLine<wchar_t>()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-//template<typename TChar>
-//static void Environment::GetSpecialFolderPath(SpecialFolder specialFolder, TChar* outPath)
-//{
-//
-//}
+template<>
+void Environment::GetSpecialFolderPath(SpecialFolder specialFolder, char* outPath)
+{
+	if (outPath == NULL) { return; }
+	switch (specialFolder)
+	{
+	case SpecialFolder::ApplicationData:
+		::SHGetSpecialFolderPathA(NULL, outPath, CSIDL_APPDATA, FALSE);
+		break;
+	case SpecialFolder::Temporary:
+		::GetTempPathA(LN_MAX_PATH, outPath);
+		break;
+	}
+}
+template<>
+void Environment::GetSpecialFolderPath(SpecialFolder specialFolder, wchar_t* outPath)
+{
+	if (outPath == NULL) { return; }
+	switch (specialFolder)
+	{
+	case SpecialFolder::ApplicationData:
+		::SHGetSpecialFolderPathW(NULL, outPath, CSIDL_APPDATA, FALSE);
+		break;
+	case SpecialFolder::Temporary:
+		::GetTempPathW(LN_MAX_PATH, outPath);
+		break;
+	}
+}
 
 } // namespace Lumino

@@ -187,6 +187,14 @@ LN_ENUM(ProcessStatus)
 };
 LN_ENUM_DECLARE(ProcessStatus);
 
+/** 特別なフォルダのパスを取得を取得する際のオプションです。*/
+LN_ENUM(SpecialFolderOption)
+{
+	None = 0,				/**< フォルダが存在しない場合空の文字列を返します。*/
+	Create,					/**< フォルダが存在しない場合は作成します。*/
+};
+LN_ENUM_DECLARE(SpecialFolderOption);
+
 #pragma pack(1)
 struct ArchiveHeader
 {
