@@ -269,12 +269,17 @@ GenericPathName<TChar> GenericPathName<TChar>::GetCurrentDirectory()
 template<typename TChar>
 GenericPathName<TChar> GenericPathName<TChar>::GetSpecialFolderPath(SpecialFolder specialFolder, const TChar* childDir, SpecialFolderOption option)
 {
-	LN_CHECK_ARGS(!PathTraits::IsAbsolutePath(childDir));
+	if (childDir != NULL) {
+		LN_CHECK_ARGS(!PathTraits::IsAbsolutePath(childDir));
+	}
 
 	TChar path[LN_MAX_PATH];
 	Environment::GetSpecialFolderPath(specialFolder, path);
 
-	GenericPathName<TChar> path2(path, childDir);
+	GenericPathName<TChar> path2(path);
+	if (childDir != NULL) {
+		path2.Append(childDir);
+	}
 
 	if (option == SpecialFolderOption::None)
 	{

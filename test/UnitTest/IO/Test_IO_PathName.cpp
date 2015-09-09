@@ -139,4 +139,20 @@ TEST_F(Test_IO_PathName, CanonicalizePath)
 #endif
 }
 
+//-----------------------------------------------------------------------------
+TEST_F(Test_IO_PathName, GetSpecialFolderPath)
+{
+	// 何が取れるかはすごく環境依存なので、取ったパスの先がフォルダであるかだけを確認しておく。
+
+	// <Test> アプリケーションデータフォルダ
+	{
+		PathName path1 = PathName::GetSpecialFolderPath(SpecialFolder::ApplicationData);
+		ASSERT_TRUE(path1.ExistsDirectory());
+	}
+	// <Test> 一時ファイルフォルダ
+	{
+		PathName path1 = PathName::GetSpecialFolderPath(SpecialFolder::Temporary);
+		ASSERT_TRUE(path1.ExistsDirectory());
+	}
+}
 
