@@ -26,7 +26,7 @@ public:
 	/** XML 宣言を書き込みます。*/
 	void WriteStartDocument();
 
-	/** XML 宣言を閉じ、終端要素を書き込みます。*/
+	/** XML ドキュメントを閉じます。*/
 	void WriteEndDocument();
 
 	/** 要素の開始タグを書き込みます。*/
