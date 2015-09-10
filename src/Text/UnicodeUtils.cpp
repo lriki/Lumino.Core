@@ -4,8 +4,6 @@
 
 namespace Lumino
 {
-namespace Text
-{
 
 // UTF-8 のある先頭バイトに対する1文字分の後続バイト数
 // (現在本ソースでは 4 バイトまでしか扱えないが、覚書として残しておく)
@@ -743,5 +741,4 @@ bool UnicodeUtils::IsLegalUTF8(const UTF8 *source, size_t length)
     return true;
 }
 
-} // namespace Text
 } // namespace Lumino

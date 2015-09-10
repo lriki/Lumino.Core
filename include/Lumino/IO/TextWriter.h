@@ -26,12 +26,12 @@ public:
 		@brief		この TextWriter が出力する文字列のエンコーディングを指定します。
 		@details	設定する場合、初回の書き込みの前に設定する必要があります。途中から変更はできません。
 	*/
-	void SetEncoding(Text::Encoding* encoding);
+	void SetEncoding(Encoding* encoding);
 
 	/**
 		@brief		この TextWriter が出力する文字列のエンコーディングを取得します。
 	*/
-	Text::Encoding* GetEncoding() const;
+	Encoding* GetEncoding() const;
 
 	/**
 		@brief		この TextWriter で使用する改行文字列を設定します。
@@ -148,11 +148,11 @@ private:
 private:
 	static const int BufferSize = 2048;
 
-	Text::EncodingConverter	m_converter;
+	EncodingConverter	m_converter;
 
-	//RefPtr<Text::Encoding>	m_encoding;
-	//RefPtr<Text::Decoder>	m_decoder;		///< String を中間文字コード (UTF16) に変換するためのデコーダ
-	//RefPtr<Text::Encoder>	m_encoder;		///< 中間文字コード (UTF16) を出力文字コード (m_encoding) に変換するためのエンコーダ
+	//RefPtr<Encoding>	m_encoding;
+	//RefPtr<Decoder>	m_decoder;		///< String を中間文字コード (UTF16) に変換するためのデコーダ
+	//RefPtr<Encoder>	m_encoder;		///< 中間文字コード (UTF16) を出力文字コード (m_encoding) に変換するためのエンコーダ
 	String					m_newLine;
 	Locale					m_locale;
 	//ByteBuffer				m_utf16Buffer;		///< 中間文字コードバッファ

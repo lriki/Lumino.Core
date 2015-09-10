@@ -5,8 +5,6 @@
 
 namespace Lumino
 {
-namespace Text
-{
 
 //=============================================================================
 // UTF32Encoding
@@ -151,5 +149,4 @@ void UTF32Encoding::UTF32Encoder::ConvertFromUTF16(const UTF16* inBuffer, size_t
 	(*outCharsUsed) += options.CharCount;
 }
 
-} // namespace Text
 } // namespace Lumino

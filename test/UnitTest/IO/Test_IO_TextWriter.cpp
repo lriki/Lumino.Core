@@ -11,7 +11,7 @@ protected:
 TEST_F(Test_IO_TextWriter, Basic)
 {
 	{
-		StreamWriter writer(TEMPFILE("Test1.txt"), Text::Encoding::GetUTF8Encoding());
+		StreamWriter writer(TEMPFILE("Test1.txt"), Encoding::GetUTF8Encoding());
 		writer.WriteInt32(32);
 	}
 

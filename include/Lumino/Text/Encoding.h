@@ -6,13 +6,8 @@
 namespace Lumino
 {
 class ByteBuffer;
-
-namespace Text
-{
 class Decoder;
 class Encoder;
-
-typedef unsigned short UTF16;
 
 enum EncodingType
 {
@@ -476,5 +471,4 @@ private:
 };
 #endif
 
-} // namespace Text
 } // namespace Lumino

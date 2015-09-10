@@ -4,8 +4,6 @@
 
 namespace Lumino
 {
-namespace Text
-{
 
 //=============================================================================
 // ASCIIEncoding
@@ -72,5 +70,4 @@ void ASCIIEncoding::ASCIIEncoder::ConvertFromUTF16(const UTF16* inBuffer, size_t
 	(*outCharsUsed) = inBufferCharCount;
 }
 
-} // namespace Text
 } // namespace Lumino

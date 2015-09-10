@@ -3,8 +3,6 @@
 
 namespace Lumino
 {
-namespace Text
-{
 
 /**
 	@brief		UTF32 エンコーディング
@@ -69,5 +67,4 @@ private:
 	};
 };
 
-} // namespace Text
 } // namespace Lumino

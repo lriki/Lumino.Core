@@ -2,6 +2,7 @@
 #include "../Internal.h"
 #include <Lumino/IO/PathName.h>
 #include <Lumino/IO/StreamWriter.h>
+#include <Lumino/IO/StringWriter.h>
 #include <Lumino/Xml/XmlWriter.h>
 
 namespace Lumino
@@ -158,7 +159,7 @@ void XmlWriter::WriteCData(const String& text)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void XmlWriter::WriteTextElement(const String& elementName, const String& text)
+void XmlWriter::WriteElementString(const String& elementName, const String& text)
 {
 	WriteStartElement(elementName);
 	WriteString(text);
@@ -194,7 +195,7 @@ void XmlWriter::WriteStringInternal(const TCHAR* str, int len, bool inAttribute)
 {
 	if (str == NULL || len == 0) { return; }
 
-	Text::Encoding* enc = Text::Encoding::GetTCharEncoding();
+	Encoding* enc = Encoding::GetTCharEncoding();
 	const TCHAR* begin = str;
 	const TCHAR* end = begin + len;
 	const TCHAR* pos = begin;
@@ -339,7 +340,12 @@ void XmlWriter::WriteStartTagEnd(bool empty)
 //-----------------------------------------------------------------------------
 void XmlWriter::Indent(bool beforeEndElement)
 {
+	//if (m_state = State_Prolog) {
+	//	m_textWriter->WriteLine();
+	//}
+
 	if (m_elementStack.IsEmpty()) {
+		m_textWriter->WriteLine();
 	}
 	//else if (m_elementStack.GetCount() == 1) {
 	//	m_textWriter->WriteLine();
@@ -363,7 +369,7 @@ void XmlWriter::Indent(bool beforeEndElement)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-XmlFileWriter::XmlFileWriter(const PathName& filePath, Text::Encoding* encoding)
+XmlFileWriter::XmlFileWriter(const PathName& filePath, Encoding* encoding)
 	: XmlWriter(NULL)
 {
 	RefPtr<StreamWriter> file(LN_NEW StreamWriter(filePath, encoding, FileWriteMode_Truncate));
@@ -376,6 +382,46 @@ XmlFileWriter::XmlFileWriter(const PathName& filePath, Text::Encoding* encoding)
 XmlFileWriter::~XmlFileWriter()
 {
 
+}
+
+
+//=============================================================================
+// XmlFileWriter
+//=============================================================================
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+XmlStringWriter::XmlStringWriter()
+	: XmlWriter(NULL)
+	, m_stringWriter(NULL)
+{
+	m_stringWriter = LN_NEW StringWriter();
+	Initialize(m_stringWriter);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+XmlStringWriter::~XmlStringWriter()
+{
+	LN_SAFE_RELEASE(m_stringWriter);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void XmlStringWriter::SetNewLine(const String& newLine)
+{
+	m_stringWriter->SetNewLine(newLine);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+String XmlStringWriter::ToString()
+{
+	return m_stringWriter->ToString();
 }
 
 } // namespace Lumino

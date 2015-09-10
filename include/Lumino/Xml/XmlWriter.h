@@ -7,6 +7,7 @@
 
 namespace Lumino
 {
+class StringWriter;
 
 /**
 	@brief		SAX スタイルの XML ライターです。
@@ -56,7 +57,7 @@ public:
 					WriteEndElement();
 		@endcode
 	*/
-	void WriteTextElement(const String& elementName, const String& text);
+	void WriteElementString(const String& elementName, const String& text);
 
 protected:
 	void Initialize(TextWriter* textWriter);
@@ -95,6 +96,12 @@ private:
 
 /**
 	@brief		指定したファイルへ書き込みを行う XML ライターです。
+	@code
+				XmlFileWriter writer("test.xml");
+				writer.WriteStartElement(_T("EnvData"));
+				writer.WriteTextElement(_T("ToolPath"), _T("dir/app.exe"));
+				writer.WriteEndElement();
+	@endcode
 */
 class XmlFileWriter
 	: public XmlWriter
@@ -106,9 +113,40 @@ public:
 		@param[in]	filePath	: 書き込み先ファイルのパス
 		@param[in]	encoding	: 書き込み時のエンコーディング (省略時は UTF-8)
 	*/
-	XmlFileWriter(const PathName& filePath, Text::Encoding* encoding = NULL);
+	XmlFileWriter(const PathName& filePath, Encoding* encoding = NULL);
 
 	virtual ~XmlFileWriter();
+};
+
+
+/**
+	@brief		XML 文字列を作成するための XML ライターです。
+	@code
+				XmlStringWriter writer;
+				writer.WriteStartElement(_T("EnvData"));
+				writer.WriteTextElement(_T("ToolPath"), _T("dir/app.exe"));
+				writer.WriteEndElement();
+				String xmlText = writer.ToString();		// String として取り出す
+	@endcode
+*/
+class XmlStringWriter
+	: public XmlWriter
+{
+public:
+	XmlStringWriter();
+	virtual ~XmlStringWriter();
+	
+	/**
+		@brief		この TextWriter で使用する改行文字列を設定します。
+		@details	規定値は String::GetNewLine() で取得できる値です。
+	*/
+	void SetNewLine(const String& newLine);
+
+	/** XML 文字列を取得します。*/
+	String ToString();
+
+private:
+	StringWriter* m_stringWriter;
 };
 
 } // namespace Lumino

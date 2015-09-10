@@ -100,6 +100,12 @@ public:
 	bool IsEmptyElement() const;
 
 	/**
+		@brief		現在のノードが指定された名前の開始タグまたは空の要素タグかどうかを確認します。
+		@details	この関数は種類を確認する前に MoveToContent() を呼び出します。
+	*/
+	bool IsStartElement(const String& name);
+
+	/**
 		@brief		現在のノードの属性数を取得します。
 	*/
 	int GetAttributeCount() const;
@@ -124,6 +130,25 @@ public:
 		@details	現在位置が属性でない場合、現在位置は変更されません。
 	*/
 	bool MoveToElement();
+
+	/**
+		@brief		次のコンテンツノードまで移動します。
+		@return		移動後の現在のノード種類。末尾まで移動した場合は XmlNodeType.None。
+		@details	コンテンツは Text、CDATA、Element、EndElement、EntityReference です。
+					現在位置がコンテンツであれば移動しません。
+					現在位置が属性であれば MoveToElement() により要素まで移動します。
+	*/
+	XmlNodeType MoveToContent();
+
+	/**
+		@brief		現在位置の次のノードがテキストである場合、その内容を読み取ります。
+		@details	読み取った後、現在位置はテキストノードの次のノードになります。
+	*/
+	String ReadString();
+
+protected:
+	XmlReader();
+	void InitializeReader(TextReader* reader);
 
 private:
 	bool ParseElementInner();	// '<' から始まる
@@ -192,6 +217,25 @@ private:
 	String					m_tmpName;
 	String					m_tmpValue;
 	int						m_currentAttrCount;		///< 現在のノードの属性数
+};
+
+
+/**
+	@brief		XML ファイルを読み取る XmlReader です。
+*/
+class XmlFileReader
+	: public XmlReader
+{
+public:
+
+	/** 
+		@brief		読み取り元ファイルのパスを指定してインスタンスを初期化します。
+		@param[in]	filePath	: 読み取り元ファイルのパス
+		@param[in]	encoding	: 読み取り時のエンコーディング (省略時は UTF-8)
+	*/
+	XmlFileReader(const PathName& filePath, Encoding* encoding = NULL);
+
+	virtual ~XmlFileReader();
 };
 
 } // namespace Lumino

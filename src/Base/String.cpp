@@ -414,7 +414,7 @@ void GenericString<TChar>::AssignCStr(const char* str, int begin, int length, bo
 		SetEmpty();
 	}
 	else {
-		ConvertFrom(str + begin, len, Text::Encoding::GetSystemMultiByteEncoding());
+		ConvertFrom(str + begin, len, Encoding::GetSystemMultiByteEncoding());
 	}
 }
 template<typename TChar>
@@ -450,7 +450,7 @@ void GenericString<TChar>::AssignCStr(const wchar_t* str, int begin, int length,
 		SetEmpty();
 	}
 	else {
-		ConvertFrom(str + begin, len, Text::Encoding::GetWideCharEncoding());
+		ConvertFrom(str + begin, len, Encoding::GetWideCharEncoding());
 	}
 }
 template<typename TChar>
@@ -468,11 +468,11 @@ void GenericString<TChar>::AssignCStr(const wchar_t* str, bool* usedDefaultChar)
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-void GenericString<TChar>::ConvertFrom(const void* buffer, int byteCount, const Text::Encoding* encoding, bool* outUsedDefaultChar)
+void GenericString<TChar>::ConvertFrom(const void* buffer, int byteCount, const Encoding* encoding, bool* outUsedDefaultChar)
 {
 	LN_THROW(encoding, ArgumentException);
 
-	Text::Encoding* thisTypeEncoding = GetThisTypeEncoding();
+	Encoding* thisTypeEncoding = GetThisTypeEncoding();
 
 	// 全く同じエンコーディングなら変換の必要は無い
 	if (thisTypeEncoding == encoding) 
@@ -482,11 +482,11 @@ void GenericString<TChar>::ConvertFrom(const void* buffer, int byteCount, const 
 	}
 	else
 	{
-		Text::EncodingConversionOptions options;
+		EncodingConversionOptions options;
 		options.NullTerminated = false;
 
-		Text::EncodingConversionResult result;
-		const ByteBuffer tmpBuffer = Text::Encoding::Convert(buffer, byteCount, encoding, thisTypeEncoding, options, &result);
+		EncodingConversionResult result;
+		const ByteBuffer tmpBuffer = Encoding::Convert(buffer, byteCount, encoding, thisTypeEncoding, options, &result);
 		if (outUsedDefaultChar != NULL) {
 			*outUsedDefaultChar = result.UsedDefaultChar;
 		}
@@ -499,13 +499,13 @@ void GenericString<TChar>::ConvertFrom(const void* buffer, int byteCount, const 
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-ByteBuffer GenericString<TChar>::ConvertTo(const Text::Encoding* encoding, bool* outUsedDefaultChar) const
+ByteBuffer GenericString<TChar>::ConvertTo(const Encoding* encoding, bool* outUsedDefaultChar) const
 {
-	Text::EncodingConversionOptions options;
+	EncodingConversionOptions options;
 	options.NullTerminated = true;
 
-	Text::EncodingConversionResult result;
-	const ByteBuffer buf = Text::Encoding::Convert(GetCStr(), GetByteCount(), GetThisTypeEncoding(), encoding, options, &result);
+	EncodingConversionResult result;
+	const ByteBuffer buf = Encoding::Convert(GetCStr(), GetByteCount(), GetThisTypeEncoding(), encoding, options, &result);
 	if (outUsedDefaultChar != NULL) {
 		*outUsedDefaultChar = result.UsedDefaultChar;
 	}
@@ -986,17 +986,17 @@ const TChar& GenericString<TChar>::InternalGetAt(int index) const
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-Text::Encoding* GenericString<TChar>::GetThisTypeEncoding() const
+Encoding* GenericString<TChar>::GetThisTypeEncoding() const
 {
 	if (sizeof(TChar) == sizeof(char))
 	{
 		// this のエンコーディングはシステム依存である
-		return Text::Encoding::GetSystemMultiByteEncoding();
+		return Encoding::GetSystemMultiByteEncoding();
 	}
 	else if (sizeof(TChar) == sizeof(wchar_t))
 	{
 		// this のエンコーディングは wchar_t である
-		return Text::Encoding::GetWideCharEncoding();
+		return Encoding::GetWideCharEncoding();
 	}
 	else
 	{

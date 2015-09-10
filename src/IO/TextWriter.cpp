@@ -20,11 +20,11 @@ TextWriter::TextWriter()
 	, m_writtenPreamble(true)
 {
 	// String を中間文字コード (UTF16) に変換するためのデコーダ
-	//m_decoder.Attach(Text::Encoding::GetTCharEncoding()->CreateDecoder());
+	//m_decoder.Attach(Encoding::GetTCharEncoding()->CreateDecoder());
 
 	// デフォルト Encoding
-	m_converter.SetSourceEncoding(Text::Encoding::GetTCharEncoding());
-	m_converter.SetDestinationEncoding(Text::Encoding::GetTCharEncoding());
+	m_converter.SetSourceEncoding(Encoding::GetTCharEncoding());
+	m_converter.SetDestinationEncoding(Encoding::GetTCharEncoding());
 }
 
 //-----------------------------------------------------------------------------
@@ -37,7 +37,7 @@ TextWriter::~TextWriter()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void TextWriter::SetEncoding(Text::Encoding* encoding)
+void TextWriter::SetEncoding(Encoding* encoding)
 {
 	m_converter.SetDestinationEncoding(encoding);
 #if 0
@@ -48,11 +48,11 @@ void TextWriter::SetEncoding(Text::Encoding* encoding)
 		m_encoder.Attach(m_encoding->CreateEncoder());
 
 		// 中間バッファを指定エンコーディングに全て変換したときに必要になる最大バッファサイズを計算し、メモリ確保
-		size_t maxSize = Text::Encoding::GetConversionRequiredByteCount(Text::Encoding::GetUTF16Encoding(), m_encoding, m_utf16Buffer.GetSize());
+		size_t maxSize = Encoding::GetConversionRequiredByteCount(Text::Encoding::GetUTF16Encoding(), m_encoding, m_utf16Buffer.GetSize());
 		m_outputBuffer.Resize(maxSize, false);
 
 		// TCHAR → 中間バッファ (UTF16) 時、中間バッファに納められる TCHAR 文字数
-		m_safeTCharCount = m_utf16Buffer.GetSize() / Text::Encoding::GetTCharEncoding()->GetMaxByteCount();
+		m_safeTCharCount = m_utf16Buffer.GetSize() / Encoding::GetTCharEncoding()->GetMaxByteCount();
 
 		// BOM が必要か
 		if (m_encoding->GetPreamble() != NULL) {
@@ -69,7 +69,7 @@ void TextWriter::SetEncoding(Text::Encoding* encoding)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-Text::Encoding* TextWriter::GetEncoding() const
+Encoding* TextWriter::GetEncoding() const
 {
 	return m_converter.GetDestinationEncoding();
 }
@@ -286,8 +286,8 @@ void TextWriter::WriteInternal(const TCHAR* str, int len)
 		if (m_decoder->CanRemain()/* && m_encoder->CanRemain()*/)	// encoder 側は状態保存できなくても良い
 		{
 			// 後のコードがキャストだらけにならないように
-			Text::UTF16* utf16Buf = (Text::UTF16*)m_utf16Buffer.GetData();
-			int utf16ElementCount = m_utf16Buffer.GetSize() / sizeof(Text::UTF16);
+			UTF16* utf16Buf = (Text::UTF16*)m_utf16Buffer.GetData();
+			int utf16ElementCount = m_utf16Buffer.GetSize() / sizeof(UTF16);
 
 			int convCount = 0;
 			while (convCount < len)

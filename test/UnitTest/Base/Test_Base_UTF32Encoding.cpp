@@ -1,6 +1,5 @@
 ﻿#include <TestConfig.h>
 #include "../../../src/Text/UTF32Encoding.h"
-using namespace Text;
 
 class Test_Base_UTF32Encoding : public ::testing::Test
 {
@@ -15,7 +14,7 @@ protected:
 //---------------------------------------------------------------------
 TEST_F(Test_Base_UTF32Encoding, Basic)
 {
-	Text::EncodingConversionOptions options;
+	EncodingConversionOptions options;
 	options.NullTerminated = false;
 
 	// UTF-32 → UTF-16
@@ -23,7 +22,7 @@ TEST_F(Test_Base_UTF32Encoding, Basic)
 		// 'あ' little
 		byte_t buf1[] = { 0x42, 0x30, 0x00, 0x00 };
 
-		Text::UTF32Encoding utf32Enc(false, false);
+		UTF32Encoding utf32Enc(false, false);
 		RefPtr<Decoder> decoder(utf32Enc.CreateDecoder());
 		RefPtr<Encoder> encoder(Encoding::GetUTF16Encoding()->CreateEncoder());
 		EncodingConversionResult info;
@@ -41,7 +40,7 @@ TEST_F(Test_Base_UTF32Encoding, Basic)
 		// 'あ' little
 		byte_t buf1[] = { 0x42, 0x30, 0x00, 0x00 };
 
-		Text::UTF32Encoding utf32Enc(false, false);
+		UTF32Encoding utf32Enc(false, false);
 		RefPtr<Decoder> decoder(utf32Enc.CreateDecoder());
 		RefPtr<Encoder> encoder(Encoding::GetUTF16Encoding()->CreateEncoder());
 		EncodingConversionResult info;
@@ -67,7 +66,7 @@ TEST_F(Test_Base_UTF32Encoding, Basic)
 		// 'あ' little
 		byte_t uttf16buf[] = { 0x42, 0x30 };
 
-		Text::UTF32Encoding utf32Enc(false, false);
+		UTF32Encoding utf32Enc(false, false);
 		RefPtr<Decoder> decoder(Encoding::GetUTF16Encoding()->CreateDecoder());
 		RefPtr<Encoder> encoder(utf32Enc.CreateEncoder());
 		EncodingConversionResult info;
@@ -88,7 +87,7 @@ TEST_F(Test_Base_UTF32Encoding, Basic)
 		// 'ほっけ' little
 		byte_t uttf16buf[] = { 0x67, 0xD8, 0x3D, 0xDE };
 		
-		Text::UTF32Encoding utf32Enc(false, false);
+		UTF32Encoding utf32Enc(false, false);
 		RefPtr<Decoder> decoder(Encoding::GetUTF16Encoding()->CreateDecoder());
 		RefPtr<Encoder> encoder(utf32Enc.CreateEncoder());
 		EncodingConversionResult info;
@@ -117,7 +116,7 @@ TEST_F(Test_Base_UTF32Encoding, Basic)
 		// 'ほっけ' little
 		byte_t uttf16buf[] = { 0x67, 0xD8, 0x3D, 0xDE };
 
-		Text::UTF32Encoding utf32Enc(false, false);
+		UTF32Encoding utf32Enc(false, false);
 		RefPtr<Decoder> decoder(Encoding::GetUTF16Encoding()->CreateDecoder());
 		RefPtr<Encoder> encoder(utf32Enc.CreateEncoder());
 		EncodingConversionResult info;

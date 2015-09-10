@@ -21,7 +21,7 @@ public:
 		@param[in]	encoding	: 書き込み時に使用するエンコーディング
 		@details	encoding が NULL の場合は文字列の書き込み時に文字コードのデコードを行いません。
 	*/
-	StreamWriter(Stream* stream, Text::Encoding* encoding = NULL);
+	StreamWriter(Stream* stream, Encoding* encoding = NULL);
 
 	/**
 		@brief		パス名で指定したファイル用の StreamWriter を初期化します。
@@ -30,12 +30,12 @@ public:
 		@param[in]	mode		: ファイルのオープンモード
 		@details	encoding が NULL の場合は文字列の書き込み時に文字コードのデコードを行いません。
 	*/
-	StreamWriter(const PathName& filePath, Text::Encoding* encoding = NULL, FileWriteMode mode = FileWriteMode_Truncate);
+	StreamWriter(const PathName& filePath, Encoding* encoding = NULL, FileWriteMode mode = FileWriteMode_Truncate);
 
 	virtual ~StreamWriter();
 	
 private:
-	void Init(Stream* stream, Text::Encoding* encoding);
+	void Init(Stream* stream, Encoding* encoding);
 	virtual void Flash();
 	virtual void WriteOverride(const void* data, size_t byteCount);
 

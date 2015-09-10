@@ -1,5 +1,4 @@
 #include <TestConfig.h>
-using namespace Text;
 
 class Test_Json_JsonWriter : public ::testing::Test
 {

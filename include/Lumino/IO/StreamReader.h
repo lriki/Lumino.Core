@@ -27,7 +27,7 @@ public:
 		@param[in]	encoding	: 読み込むテキストのエンコーディング
 		@details	encoding が NULL の場合は UTF8Encoding を使用します。
 	*/
-	StreamReader(Stream* stream, Text::Encoding* encoding = NULL);
+	StreamReader(Stream* stream, Encoding* encoding = NULL);
 	// TODO: UTF BOM 自動判別
 
 	/**
@@ -36,7 +36,7 @@ public:
 		@param[in]	encoding	: 読み込むテキストのエンコーディング
 		@details	encoding が NULL の場合は UTF8Encoding を使用します。
 	*/
-	StreamReader(const TCHAR* filePath, Text::Encoding* encoding = NULL);
+	StreamReader(const TCHAR* filePath, Encoding* encoding = NULL);
 
 	~StreamReader();
 	
@@ -48,11 +48,11 @@ public:
 	virtual bool IsEOF();
 
 private:
-	void InitReader(Stream* stream, Text::Encoding* encoding);
+	void InitReader(Stream* stream, Encoding* encoding);
 	int ReadBuffer();
 
 	RefPtr<Stream>			m_stream;
-	Text::EncodingConverter	m_converter;
+	EncodingConverter		m_converter;
 	ByteBuffer				m_byteBuffer;
 	int						m_byteLen;
 	int						m_charElementLen;

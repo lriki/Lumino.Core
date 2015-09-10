@@ -1,5 +1,4 @@
 ﻿#include <TestConfig.h>
-using namespace Text;
 
 class Test_Text_UTF16Encoding : public ::testing::Test
 {

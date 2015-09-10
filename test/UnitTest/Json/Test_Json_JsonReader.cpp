@@ -1,5 +1,4 @@
 #include <TestConfig.h>
-using namespace Text;
 
 class Test_Json_JsonReader : public ::testing::Test
 {
@@ -28,7 +27,7 @@ public:
 //---------------------------------------------------------------------
 TEST_F(Test_Json_JsonReader, Basic)
 {
-	String str = FileSystem::ReadAllText(LOCALFILE("TestData/ReaderTest1.txt"), Text::Encoding::GetSystemMultiByteEncoding());
+	String str = FileSystem::ReadAllText(LOCALFILE("TestData/ReaderTest1.txt"), Encoding::GetSystemMultiByteEncoding());
 	TestJsonHandler handler;
 	Json::JsonReader reader(&handler);
 	reader.Parse(str);

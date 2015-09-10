@@ -382,7 +382,7 @@ TEST_F(Test_Base_String, ConvertTo)
 {
 	{
 		StringA str1("test");
-		ByteBuffer buf = str1.ConvertTo(Text::Encoding::GetWideCharEncoding());
+		ByteBuffer buf = str1.ConvertTo(Encoding::GetWideCharEncoding());
 		wchar_t* wstr = (wchar_t*)buf.GetData();
 		ASSERT_EQ(sizeof(wchar_t) * 5, buf.GetSize());
 		ASSERT_EQ(L't', wstr[0]);
@@ -394,7 +394,7 @@ TEST_F(Test_Base_String, ConvertTo)
 
 	{
 		StringW str1(L"test");
-		ByteBuffer buf = str1.ConvertTo(Text::Encoding::GetSystemMultiByteEncoding());
+		ByteBuffer buf = str1.ConvertTo(Encoding::GetSystemMultiByteEncoding());
 		char* astr = (char*)buf.GetData();
 		ASSERT_EQ(5, buf.GetSize());
 		ASSERT_EQ('t', astr[0]);

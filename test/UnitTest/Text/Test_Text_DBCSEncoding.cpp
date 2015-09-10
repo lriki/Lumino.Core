@@ -1,5 +1,4 @@
 ﻿#include <TestConfig.h>
-using namespace Text;
 
 class Test_Text_DBCSEncoding : public ::testing::Test
 {
@@ -11,7 +10,7 @@ protected:
 //---------------------------------------------------------------------
 TEST_F(Test_Text_DBCSEncoding, SJIS)
 {
-	Text::EncodingConversionOptions options;
+	EncodingConversionOptions options;
 	options.NullTerminated = false;
 
 	Encoding* sjisEnc = Encoding::GetEncoding(EncodingType_SJIS);

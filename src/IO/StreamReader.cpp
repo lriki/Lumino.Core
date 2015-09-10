@@ -12,7 +12,7 @@ namespace Lumino
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-StreamReader::StreamReader(Stream* stream, Text::Encoding* encoding)
+StreamReader::StreamReader(Stream* stream, Encoding* encoding)
 {
 	InitReader(stream, encoding);
 }
@@ -20,7 +20,7 @@ StreamReader::StreamReader(Stream* stream, Text::Encoding* encoding)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-StreamReader::StreamReader(const TCHAR* filePath, Text::Encoding* encoding)
+StreamReader::StreamReader(const TCHAR* filePath, Encoding* encoding)
 {
 	RefPtr<FileStream> stream(LN_NEW FileStream(filePath, FileOpenMode::Read));
 	InitReader(stream, encoding);
@@ -150,16 +150,16 @@ bool StreamReader::IsEOF()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void StreamReader::InitReader(Stream* stream, Text::Encoding* encoding)
+void StreamReader::InitReader(Stream* stream, Encoding* encoding)
 {
 	// encoding 未指定であれば UTF8 とする
 	if (encoding == NULL) {
-		encoding = Text::Encoding::GetUTF8Encoding();
+		encoding = Encoding::GetUTF8Encoding();
 	}
 
 	m_stream = stream;
 	m_converter.SetSourceEncoding(encoding);
-	m_converter.SetDestinationEncoding(Text::Encoding::GetTCharEncoding());
+	m_converter.SetDestinationEncoding(Encoding::GetTCharEncoding());
 	m_byteBuffer.Resize(DefaultBufferSize, false);
 	m_byteLen = 0;
 	m_charElementLen = 0;

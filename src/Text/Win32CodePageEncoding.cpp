@@ -6,8 +6,6 @@
 
 namespace Lumino
 {
-namespace Text
-{
 
 //=============================================================================
 // Win32CodePageEncoding
@@ -231,5 +229,4 @@ void Win32CodePageEncoding::Win32CodePageEncoder::ConvertFromUTF16(const UTF16* 
 	*outCharsUsed = count;
 }
 
-} // namespace Text
 } // namespace Lumino

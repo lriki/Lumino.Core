@@ -65,7 +65,9 @@ StringRef égÇ§Ç±Ç∆ÇÕñ≥Ç¢Ç©Ç‡ÅB
 
 #include "../Internal.h"
 #include <Lumino/Base/StringTraits.h>
+#include <Lumino/IO/PathName.h>
 #include <Lumino/IO/StringReader.h>
+#include <Lumino/IO/StreamReader.h>
 #include <Lumino/Xml/XmlReader.h>
 
 namespace Lumino
@@ -91,6 +93,18 @@ static const Entity ReservedEntities[ReservedEntitiesCount] =
 	{ _T("apos"),	4, '\'' },
 	{ _T("quot"),	4, '\"' },
 };
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+XmlReader::XmlReader()
+	: m_reader()
+	, m_currentElementNodePos(0)
+	, m_line(1)
+	, m_col(1)
+	, m_stockElementCount(0)
+{
+}
 
 //-----------------------------------------------------------------------------
 //
@@ -125,6 +139,15 @@ XmlReader::XmlReader(TextReader* textReader)
 //-----------------------------------------------------------------------------
 XmlReader::~XmlReader()
 {
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void XmlReader::InitializeReader(TextReader* reader)
+{
+	LN_CHECK_STATE(m_reader == NULL);
+	m_reader = reader;
 }
 
 //-----------------------------------------------------------------------------
@@ -241,6 +264,16 @@ bool XmlReader::IsEmptyElement() const
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+bool XmlReader::IsStartElement(const String& name)
+{
+	return
+		(MoveToContent() == XmlNodeType::Element) &&
+		(GetName() == name);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 int XmlReader::GetAttributeCount() const
 {
 	return m_currentAttrCount;
@@ -286,6 +319,57 @@ bool XmlReader::MoveToElement()
 	m_currentAttrIndex = -1;
 	m_currentNode = &m_nodes[m_currentElementNodePos];
 	return true;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+XmlNodeType XmlReader::MoveToContent()
+{
+	do {
+		switch (GetNodeType())
+		{
+		case XmlNodeType::Attribute:
+			MoveToElement();
+			return GetNodeType();
+		case XmlNodeType::Element:
+		case XmlNodeType::EndElement:
+		case XmlNodeType::CDATA:
+		case XmlNodeType::Text:
+		case XmlNodeType::EntityReference:
+			return GetNodeType();
+		}
+	} while (Read());
+
+	return GetNodeType();
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+String XmlReader::ReadString()
+{
+	MoveToElement();
+	if (GetNodeType() == XmlNodeType::Element)
+	{
+		if (IsEmptyElement()) {
+			return String::GetEmpty();
+		}
+		else if (!Read()) {
+			LN_THROW(0, InvalidOperationException);
+		}
+		if (GetNodeType() == XmlNodeType::EndElement) {
+			return String::GetEmpty();
+		}
+	}
+	String result;
+	while (GetNodeType() == XmlNodeType::Text) {
+		result += GetValue();
+		if (!Read()) {
+			break;
+		}
+	}
+	return result;
 }
 
 //-----------------------------------------------------------------------------
@@ -861,5 +945,28 @@ void XmlReader::ExpandReservedEntities(TCHAR* text, int len)
 	}
 	*wp = '\0';
 }
+
+//=============================================================================
+// XmlFileReader
+//=============================================================================
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+XmlFileReader::XmlFileReader(const PathName& filePath, Encoding* encoding )
+	: XmlReader()
+{
+	RefPtr<StreamReader> file(LN_NEW StreamReader(filePath, encoding));
+	InitializeReader(file);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+XmlFileReader::~XmlFileReader()
+{
+
+}
+
 
 } // namespace Lumino

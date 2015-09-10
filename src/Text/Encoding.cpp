@@ -16,8 +16,6 @@
 
 namespace Lumino
 {
-namespace Text
-{
 
 //=============================================================================
 // Encoding
@@ -669,5 +667,4 @@ void SystemMultiByteEncoding::SystemMultiByteEncoder::ConvertFromUTF16(const UTF
 }
 #endif
 
-} // namespace Text
 } // namespace Lumino

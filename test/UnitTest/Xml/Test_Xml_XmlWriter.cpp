@@ -1,5 +1,4 @@
 #include <TestConfig.h>
-using namespace Text;
 
 class Test_Xml_XmlWriter : public ::testing::Test
 {
@@ -72,7 +71,7 @@ uint16_t jis_to_sjis(uint8_t c1, uint8_t c2)
 }
 
 //---------------------------------------------------------------------
-TEST_F(Test_Xml_XmlWriter, Unit)
+TEST_F(Test_Xml_XmlWriter, UnitTest)
 {
 	uint16_t r = jis_to_sjis(0x74, 0x26);
 
@@ -143,5 +142,30 @@ TEST_F(Test_Xml_XmlWriter, Unit)
 		xmlWriter.WriteCData(_T("CCC\nDDD"));
 		xmlWriter.WriteEndElement();
 		ASSERT_STREQ(_T("<test><![CDATA[AAA && BBB]]><![CDATA[CCC\nDDD]]></test>"), strWriter.ToString());
+	}
+}
+
+//---------------------------------------------------------------------
+TEST_F(Test_Xml_XmlWriter, SystemTest)
+{
+	// <Test> XML êÈåæÇ∆óvëf
+	{
+		XmlStringWriter writer;
+		writer.SetNewLine(_T("\n"));
+		writer.WriteStartDocument();
+		writer.WriteStartElement(_T("EnvData"));
+		writer.WriteElementString(_T("ToolPath"), _T("path"));
+		writer.WriteEndElement();
+		writer.WriteEndDocument();
+
+		String str = writer.ToString();
+		String exp =
+			_T("<?xml version=\"1.0\" encoding=\"_ENC_\"?>\n")
+			_T("<EnvData>\n")
+			_T("  <ToolPath>path</ToolPath>\n")
+			_T("</EnvData>");
+		exp = exp.Replace(_T("_ENC_"), Encoding::GetTCharEncoding()->GetName());
+		ASSERT_STREQ(exp, str);
+
 	}
 }

@@ -4,8 +4,6 @@
 
 namespace Lumino
 {
-namespace Text
-{
 
 /**
 	@brief		Win32 コードページ エンコーディング
@@ -74,5 +72,4 @@ private:
 	};
 };
 
-} // namespace Text
 } // namespace Lumino

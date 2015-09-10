@@ -1,5 +1,4 @@
 #include <TestConfig.h>
-using namespace Text;
 
 class Test_Xml_XmlReader : public ::testing::Test
 {
@@ -374,5 +373,37 @@ TEST_F(Test_Xml_XmlReader, EntityReference)
 		ASSERT_TRUE(reader.Read());		// </a>
 
 		ASSERT_FALSE(reader.Read());	// EOF
+	}
+}
+
+//---------------------------------------------------------------------
+TEST_F(Test_Xml_XmlReader, SystemTest)
+{
+	// <> ReadString
+	{
+		String xml =
+			_T("<root>\n")
+			_T("  <test>  AAA  </test>\n")
+			_T("</root>");
+		XmlReader reader(xml);
+
+		Array<XmlNodeType> types;
+		while (reader.Read())
+		{
+			types.Add(reader.GetNodeType());
+			if (reader.IsStartElement("test"))
+			{
+				types.Add(reader.GetNodeType());
+				ASSERT_STREQ(_T("  AAA  "), reader.ReadString());
+				types.Add(reader.GetNodeType());	// EndElement
+			}
+		}
+		ASSERT_EQ(5, types.GetCount());
+		ASSERT_EQ(XmlNodeType::Element, types[0]);
+		ASSERT_EQ(XmlNodeType::Whitespace, types[1]);
+		ASSERT_EQ(XmlNodeType::Element, types[2]);
+		ASSERT_EQ(XmlNodeType::EndElement, types[3]);
+		ASSERT_EQ(XmlNodeType::Whitespace, types[4]);
+		//ASSERT_EQ(XmlNodeType::EndElement, types[5]);	ç≈å„ÇÃÇÕ IsStartElement Ç≈è¡îÔÇ≥ÇÍÇÈÇÃÇ≈èoÇƒÇ±Ç»Ç¢
 	}
 }

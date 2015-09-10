@@ -95,7 +95,7 @@ void Process::Start(const PathName& program, const String& args)
 
 		// 標準出力の Writer を作る
 		RefPtr<InternalPipeStream> stream(LN_NEW InternalPipeStream(InternalPipeStream::WriteSide, m_hInputWrite));
-		m_standardInputWriter.Attach(LN_NEW StreamWriter(stream, Text::Encoding::GetWin32DefaultCodePageEncoding()));
+		m_standardInputWriter.Attach(LN_NEW StreamWriter(stream, Encoding::GetWin32DefaultCodePageEncoding()));
 	}
 
 	// 標準出力のパイプを作る
@@ -118,7 +118,7 @@ void Process::Start(const PathName& program, const String& args)
 
 		// 標準出力の Reader を作る
 		RefPtr<InternalPipeStream> stream(LN_NEW InternalPipeStream(InternalPipeStream::ReadSide, m_hOutputRead));
-		m_standardOutputReader.Attach(LN_NEW StreamReader(stream, Text::Encoding::GetWin32DefaultCodePageEncoding()));
+		m_standardOutputReader.Attach(LN_NEW StreamReader(stream, Encoding::GetWin32DefaultCodePageEncoding()));
 	}
 
 	// 標準エラー出力のパイプを作る
@@ -141,7 +141,7 @@ void Process::Start(const PathName& program, const String& args)
 
 		// 標準出力の Reader を作る
 		RefPtr<InternalPipeStream> stream(LN_NEW InternalPipeStream(InternalPipeStream::ReadSide, m_hErrorRead));
-		m_standardErrorReader.Attach(LN_NEW StreamReader(stream, Text::Encoding::GetWin32DefaultCodePageEncoding()));
+		m_standardErrorReader.Attach(LN_NEW StreamReader(stream, Encoding::GetWin32DefaultCodePageEncoding()));
 	}
 
 	// 子プロセスの標準出力の出力先を↑で作ったパイプにする

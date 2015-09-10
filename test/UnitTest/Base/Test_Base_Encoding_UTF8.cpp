@@ -1,5 +1,4 @@
 ﻿#include <TestConfig.h>
-using namespace Text;
 
 class Test_Base_Encoding_UTF8 : public ::testing::Test
 {
@@ -14,7 +13,7 @@ protected:
 //---------------------------------------------------------------------
 TEST_F(Test_Base_Encoding_UTF8, Basic)
 {
-	Text::EncodingConversionOptions options;
+	EncodingConversionOptions options;
 	options.NullTerminated = false;
 
 	// 最小バイト数

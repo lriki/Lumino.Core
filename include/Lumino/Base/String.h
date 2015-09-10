@@ -14,7 +14,7 @@
 
 namespace Lumino
 {
-namespace Text { class Encoding; }
+class Encoding;
 
 /// 大文字と小文字の区別指定
 enum CaseSensitivity
@@ -201,7 +201,7 @@ public:
 		@param[in]	encoding			: 変換元文字エンコーディング
 		@param[out]	usedDefaultChar		: 変換不可文字をデフォルト文字 ('?') に変換したかどうか
 	*/
-	void ConvertFrom(const void* buffer, int byteCount, const Text::Encoding* encoding, bool* usedDefaultChar = NULL);
+	void ConvertFrom(const void* buffer, int byteCount, const Encoding* encoding, bool* usedDefaultChar = NULL);
 
 	/**
 		@brief		指定したエンコーディングを使用し、変換した文字列バッファを取得する
@@ -209,7 +209,7 @@ public:
 		@param[out]	usedDefaultChar		: 変換不可文字をデフォルト文字 ('?') に変換したかどうか
 		@return		バッファ終端には encoding に合わせた \0 終端文字が付加されます。
 	*/
-	ByteBuffer ConvertTo(const Text::Encoding* encoding, bool* usedDefaultChar = NULL) const;
+	ByteBuffer ConvertTo(const Encoding* encoding, bool* usedDefaultChar = NULL) const;
 
 	/**
 		@brief		空文字列を設定する
@@ -426,7 +426,7 @@ private:
 	TChar& InternalGetAt(int index);
 	const TChar& InternalGetAt(int index) const;
 
-	Text::Encoding* GetThisTypeEncoding() const;
+	Encoding* GetThisTypeEncoding() const;
 
 private:
 	class GenericStringCore

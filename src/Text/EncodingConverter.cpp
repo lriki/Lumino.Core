@@ -5,8 +5,6 @@
 
 namespace Lumino
 {
-namespace Text
-{
 
 //=============================================================================
 // EncodingConverter
@@ -68,7 +66,7 @@ const ByteBuffer& EncodingConverter::Convert(const void* data, size_t byteCount,
 	CheckUpdateEncoderDecoder();
 
 	// 変換するのに必要なバイト数で領域確保
-	size_t size = Text::Encoding::GetConversionRequiredByteCount(m_srcEncoding, m_dstEncoding, byteCount);
+	size_t size = Encoding::GetConversionRequiredByteCount(m_srcEncoding, m_dstEncoding, byteCount);
 	m_outputBuffer.Resize(size);
 
 	if (m_srcDecoder->CanRemain())
@@ -85,12 +83,12 @@ const ByteBuffer& EncodingConverter::Convert(const void* data, size_t byteCount,
 	else
 	{
 		// TCHAR を UTF16 へ全部変換するのに必要なバイト数で一時メモリ確保
-		size_t totalByteCount = Text::Encoding::GetConversionRequiredByteCount(m_srcEncoding, m_dstEncoding, byteCount);
+		size_t totalByteCount = Encoding::GetConversionRequiredByteCount(m_srcEncoding, m_dstEncoding, byteCount);
 		m_tmpBuffer.Resize(totalByteCount);
 
 		// 後のコードがキャストだらけにならないように
-		Text::UTF16* utf16Buf = (Text::UTF16*)m_tmpBuffer.GetData();
-		int utf16ElementCount = m_tmpBuffer.GetSize() / sizeof(Text::UTF16);
+		UTF16* utf16Buf = (UTF16*)m_tmpBuffer.GetData();
+		int utf16ElementCount = m_tmpBuffer.GetSize() / sizeof(UTF16);
 
 		// TCHAR を中間コード(UTF16) へ
 		size_t outBytesUsed, outCharsUsed;
@@ -209,5 +207,4 @@ void EncodingConverter::ConvertDecoderRemain(
 	}
 }
 
-} // namespace Text
 } // namespace Lumino

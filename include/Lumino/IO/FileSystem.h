@@ -9,7 +9,7 @@
 
 namespace Lumino
 {
-namespace Text { class Encoding; }
+class Encoding;
 
 /** ファイルとディレクトリの属性 */
 LN_ENUM_FLAGS(FileAttribute)
@@ -90,14 +90,14 @@ public:
 
 	/// ファイルの内容をすべて読み込み、文字列として返す
 	/// encoding 省略時は UTF8
-	static String ReadAllText(const TCHAR* filePath, const Text::Encoding* encoding = NULL);
+	static String ReadAllText(const TCHAR* filePath, const Encoding* encoding = NULL);
 
 	/// 配列の内容をバイナリファイルとして書き出す
 	static void WriteAllBytes(const TCHAR* filePath, const void* buffer, size_t size);
 
 	/// 文字列をテキストファイルとして書き出す
 	/// encoding 省略時は UTF8
-	static void WriteAllText(const TCHAR* filePath, const String& str, const Text::Encoding* encoding = NULL);
+	static void WriteAllText(const TCHAR* filePath, const String& str, const Encoding* encoding = NULL);
 
 	
 	/**

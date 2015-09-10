@@ -5,8 +5,6 @@
 
 namespace Lumino
 {
-namespace Text
-{
 
 //=============================================================================
 // DBCSEncoding
@@ -212,5 +210,4 @@ void DBCSEncoding::DBCSEncoder::ConvertFromUTF16(const UTF16* inBuffer, size_t i
 	*outCharsUsed = inBufPos;
 }
 
-} // namespace Text
 } // namespace Lumino

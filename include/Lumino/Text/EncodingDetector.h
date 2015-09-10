@@ -4,8 +4,6 @@
 
 namespace Lumino
 {
-namespace Text
-{
 
 class IMBSCodeDetector
 {
@@ -103,6 +101,4 @@ private:
 	EncodingType	m_type;
 };
 
-
-} // namespace Text
 } // namespace Lumino

@@ -1,7 +1,6 @@
 ﻿#include <TestConfig.h>
 #include "../../../src/Text/UTF16Encoding.h"
 #include "../../../src/Text/UTF32Encoding.h"
-using namespace Lumino::Text;
 
 class Test_Base_Encoding : public ::testing::Test
 {
@@ -37,7 +36,7 @@ TEST_F(Test_Base_Encoding, Basic)
 //---------------------------------------------------------------------
 TEST_F(Test_Base_Encoding, Convert)
 {
-	Text::EncodingConversionOptions options;
+	EncodingConversionOptions options;
 	options.NullTerminated = false;
 
 	const char* buf1 = "123";

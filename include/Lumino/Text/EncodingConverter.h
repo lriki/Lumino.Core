@@ -5,8 +5,6 @@
 
 namespace Lumino
 {
-namespace Text
-{
 
 /**
 	@brief		テキスト間のエンコーディングの変換を行うクラスです。
@@ -74,5 +72,4 @@ private:
 	bool						m_encodingModified;
 };
 
-} // namespace Text
 } // namespace Lumino

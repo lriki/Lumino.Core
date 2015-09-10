@@ -6,8 +6,6 @@
 
 namespace Lumino
 {
-namespace Text
-{
 
 /// 文字コード変換の処理結果
 enum UTFConversionResult
@@ -38,7 +36,7 @@ class UnicodeUtils
 public:
 #ifdef _WIN32
 	typedef unsigned long	UTF32;
-	typedef unsigned short	UTF16;
+	typedef	wchar_t			UTF16;	// デバッガで見ることができるので wchar_t にしておく
 	typedef unsigned char	UTF8;
 #else
 	typedef uint32_t		UTF32;
@@ -233,5 +231,4 @@ private:
 
 };
 
-} // namespace Text
 } // namespace Lumino
