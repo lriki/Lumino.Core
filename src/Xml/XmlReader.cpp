@@ -264,6 +264,14 @@ bool XmlReader::IsEmptyElement() const
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+bool XmlReader::IsStartElement()
+{
+	return (MoveToContent() == XmlNodeType::Element);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 bool XmlReader::IsStartElement(const String& name)
 {
 	return
@@ -440,10 +448,21 @@ bool XmlReader::ParseElementInner()
 	// includeSect	::=		'<![' S ? 'INCLUDE' S ? '[' extSubsetDecl ']]>'
 	// ignoreSect	::=   	'<![' S? 'IGNORE' S? '[' ignoreSectContents* ']]>'
 
-	//const TCHAR* name = &m_textCache[namePos];
 
-	// 要素の解析
-	if (!ParseElement(namePos, nameLen, isElementEnd)) { return false; }
+
+	// "<?xml..." 等
+	if (isProcInst)
+	{
+		const TCHAR* name = &m_textCache[namePos];
+		bool isXmlDecl = (nameLen == 3 && StringTraits::StrNICmp(name, _T("xml"), 3) == 0);
+		ParseXmlDeclOrPI(namePos, nameLen, isXmlDecl);
+	}
+	// その他の要素
+	else
+	{
+		if (!ParseElement(namePos, nameLen, isElementEnd)) { return false; }
+	}
+
 
 
 
@@ -644,6 +663,62 @@ bool XmlReader::ParseName(int* startPos, int* length)
 	}
 
 	*length = count;
+	return true;
+}
+
+//-----------------------------------------------------------------------------
+// XML 宣言または処理命令を解析する (<?xxxx ... ?>)
+//	<?xml version=...
+//	     ^ 開始時の読み取り位置はここ。
+//
+//	XMLDecl		::=   	'<?xml' VersionInfo EncodingDecl? SDDecl? S? '?>'
+//	PI			::=   	'<?' PITarget ( S ( Char* - ( Char* '?>' Char* ) ) )? '?>'
+//
+//	Value は "?XXX " の後ろの文字全て。
+//	<?xml version="1.0" encoding="UTF-8"  ?>	は "version="1.0" encoding="UTF-8"  " まで。終端は空白を含む。
+//-----------------------------------------------------------------------------
+bool XmlReader::ParseXmlDeclOrPI(int nameStart, int nameLength, bool isXmlDecl)
+{
+	// NodeData 化してストック
+	NodeData data;
+	data.Type = (isXmlDecl) ? XmlNodeType::XmlDeclaration : XmlNodeType::ProcessingInstruction;
+	data.NameStartPos = nameStart;	// m_textCache 上の名前のある位置
+	data.NameLen = nameLength;		// m_textCache 上の名前の長さ
+	m_nodes.Add(data);
+	int dataIdx = m_nodes.GetCount() - 1;
+	++m_stockElementCount;
+
+	// 空白*
+	SkipWhitespace();
+
+	int len = 0;
+	while (!m_reader->IsEOF())
+	{
+		// タグ終端確認
+		if (m_reader->Peek() == '?')
+		{
+			m_reader->Read();
+			if (m_reader->Read() == '>') {
+				break;
+			}
+			else {
+				// Error: 正常なタグ終端ではない
+				m_errorInfo.AddError(ParseError_ElementInvalidEmptyTagEnd, m_line, m_col);
+				return false;
+			}
+		}
+		else {
+			m_reader->Read();
+		}
+		++len;
+	}
+
+	// Value 部分を覚えておく
+	if (len > 0)
+	{
+		data.ValueStartPos = m_textCache.GetCount();
+		data.ValueLen = len;
+	}
 	return true;
 }
 

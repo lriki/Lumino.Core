@@ -118,7 +118,7 @@ public:
 	const TChar* GetCStr() const { return m_path.GetCStr(); }
 	
 	/// パス文字列を返す
-	const GenericStringT& GetString() const { return m_path; }
+	const GenericStringT& GetString() const { return m_path; }	// TODO: ToString()
 
 	/// パス文字列を返す (末尾に必ずセパレータをひとつ付加する)
 	const GenericString<TChar> GetStrEndSeparator() const;

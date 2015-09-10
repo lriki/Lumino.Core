@@ -54,6 +54,13 @@ public:
 	void SetOutputDataReceivedCallback(const Delegate01<String>& callback);
 
 	/**
+		@brief		標準エラー出力に行が書き込まれたときに呼び出されるコールバック関数を設定します。
+		@details	非同期読み取りは Start() の後、BeginErrorReadLine() を呼び出すことで開始します。
+					コールバックは Start() を実行したスレッドとは別のスレッドから非同期的に呼び出されます。
+	*/
+	void SetErrorDataReceivedCallback(const Delegate01<String>& callback);
+
+	/**
 		@brief		プログラムのファイルパスとコマンドライン引数を指定してプロセスを起動します。
 		@param[in]	program	: プログラム名または実行ファイルパス
 		@param[in]	args	: コマンドライン引数
@@ -85,6 +92,11 @@ public:
 		@brief		標準出力の非同期読み取り操作を開始します。
 	*/
 	void BeginOutputReadLine();
+
+	/**
+		@brief		標準出力の非同期読み取り操作を開始します。
+	*/
+	void BeginErrorReadLine();
 
 	/**
 		@brief		標準入力の書き込みに使用されるストリームを取得します。
@@ -121,6 +133,7 @@ private:
 	void TryGetExitCode();
 	void Dispose();
 	void Thread_ReadStdOutput();
+	void Thread_ReadStdError();
 
 private:
 	PathName					m_workingDirectory;
@@ -131,11 +144,14 @@ private:
 	RefPtr<StreamReader>		m_standardOutputReader;
 	RefPtr<StreamReader>		m_standardErrorReader;
 	Delegate01<String>			m_outputDataReceivedCallback;
+	Delegate01<String>			m_errorDataReceivedCallback;
 	Threading::DelegateThread	m_readStdOutputThread;
+	Threading::DelegateThread	m_readStdErrorThread;
 	int							m_exitCode;
 	bool						m_crashed;
 	bool						m_disposed;
 	bool						m_runningReadThread;
+	bool						m_runningErrorReadThread;
 
 #ifdef _WIN32
 	HANDLE					m_hInputRead;			// 標準出力の読み取り側 (子プロセス側)

@@ -100,6 +100,12 @@ public:
 	bool IsEmptyElement() const;
 
 	/**
+		@brief		現在のノードが開始タグまたは空の要素タグかどうかを確認します。
+		@details	この関数は種類を確認する前に MoveToContent() を呼び出します。
+	*/
+	bool IsStartElement();
+
+	/**
 		@brief		現在のノードが指定された名前の開始タグまたは空の要素タグかどうかを確認します。
 		@details	この関数は種類を確認する前に MoveToContent() を呼び出します。
 	*/
@@ -158,6 +164,7 @@ private:
 
 	bool ParseName(int* startPos, int* length);
 
+	bool ParseXmlDeclOrPI(int nameStart, int nameLength, bool isXmlDecl);
 	bool ParseElement(int nameStart, int nameLength, bool isEnd);
 	bool ParseAttribute();
 

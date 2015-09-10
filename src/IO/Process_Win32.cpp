@@ -286,6 +286,11 @@ void Process::Dispose()
 			m_runningReadThread = false;
 			m_readStdOutputThread.Wait();
 		}
+		if (m_runningErrorReadThread)
+		{
+			m_runningErrorReadThread = false;
+			m_readStdErrorThread.Wait();
+		}
 
 		// パイプを閉じる
 		if (m_hInputWrite != NULL) {
