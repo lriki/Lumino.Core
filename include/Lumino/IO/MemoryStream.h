@@ -14,6 +14,7 @@ class MemoryStream
 	: public Stream
 {
 public:
+
 	/**
 		@brief		拡張可能なメモリストリームを作成します。
 		@details	このコンストラクタの後、必要に応じて Create() を呼び出して再初期化することができます。
@@ -27,6 +28,14 @@ public:
 		@details	buffer に指定したバッファは、このクラスのインスタンスが存在する間は開放しないでください。
 	*/
 	MemoryStream(void* buffer, size_t size);
+
+	/**
+		@brief		既存のバッファを指定して、サイズ変更できない読み取り専用のメモリストリームを作成します。
+		@param		buffer	: バッファの先頭アドレス
+		@param		size	: サイズ(バイト数)
+		@details	buffer に指定したバッファは、このクラスのインスタンスが存在する間は開放しないでください。
+	*/
+	MemoryStream(const void* buffer, size_t size);
 
 	~MemoryStream();
 
@@ -51,7 +60,7 @@ public:
 		@param		buffer	: バッファの先頭アドレス
 		@param		size	: サイズ(バイト数)
 		@details	buffer に指定したバッファは、このクラスのインスタンスが存在する間は開放しないでください。
-		*/
+	*/
 	void Create(const void* buffer, size_t size);
 
 	/**

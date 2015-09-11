@@ -34,6 +34,18 @@ MemoryStream::MemoryStream(void* buffer, size_t size)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+MemoryStream::MemoryStream(const void* buffer, size_t size)
+	: m_seekPos(0)
+	, m_fixedBuffer(NULL)
+	, m_constfixedBuffer(NULL)
+	, m_fixedBufferSize(0)
+{
+	Create(buffer, size);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 MemoryStream::~MemoryStream()
 {
 }
