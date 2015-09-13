@@ -74,29 +74,35 @@ template<typename TChar>
 void GenericStringBuilderCore<TChar>::Replace(int start, int length, const TChar* str, int strLength)
 {
 	// 置換したら何 byte 増える？減る？
-	size_t diff = sizeof(TChar) * (strLength - length);
+	int diff = sizeof(TChar) * (strLength - length);
 
 	// バッファが足りなければ拡張する
 	if (diff > 0 && m_bufferUsed + diff > m_buffer.GetSize())
 	{
-		size_t newSize = m_buffer.GetSize() + std::max(m_buffer.GetSize(), diff);
+		size_t newSize = m_buffer.GetSize() + std::max(m_buffer.GetSize(), (size_t)diff);
 		m_buffer.Resize(newSize, false);
 	}
 
 	int diffChars = (strLength - length);
+	// before は置換しない部分
 	TChar* beforeBegin = (TChar*)m_buffer.GetData();
 	TChar* beforeEnd = beforeBegin + start;				// この1つ前までが before の文字。全て置換する場合は beforeBegin と同じ。
-	TChar* oldAfterBegin = beforeBegin + start;
+	
+	// oldAfter は残す部分
+	TChar* oldAfterBegin = beforeEnd + length;
 	TChar* oldAfterEnd = beforeBegin + GetLength();		// この1つ前までが after の文字
+	int afterCount = oldAfterEnd - oldAfterBegin;
+
+	// newAfter は oldAfter の移動先 (文字数は oldAfter と同じ)
 	TChar* newAfterBegin = oldAfterBegin + diffChars;
-	TChar* newAfterEnd = oldAfterEnd + diffChars;		// この1つ前までが after の文字
+	TChar* newAfterEnd = newAfterBegin + afterCount;	// この1つ前までが after の文字
 
-	int moveCharCount = oldAfterEnd - oldAfterBegin;
-	if (moveCharCount > 0) {
-		memmove(newAfterBegin, oldAfterBegin, sizeof(TChar) * moveCharCount);
+	if (afterCount > 0) {
+		memmove(newAfterBegin, oldAfterBegin, sizeof(TChar) * afterCount);
 	}
-
-	memcpy(beforeEnd, str, sizeof(TChar) * strLength);
+	if (strLength > 0) {
+		memcpy(beforeEnd, str, sizeof(TChar) * strLength);
+	}
 
 	m_bufferUsed += diff;
 }
