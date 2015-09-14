@@ -33,6 +33,8 @@ public:
 	/** @name ランタイム関数のオーバーロードユーティリティ */
 	/** @{ */
 
+	static void tstrcpy(char* dst, int dstLen, const char* src);
+	static void tstrcpy(wchar_t* dst, int dstLen, const wchar_t* src);
 	static int tvscprintf_l(const char* format, NativeLocale_t locale, va_list args);
 	static int tvscprintf_l(const wchar_t* format, NativeLocale_t locale, va_list args);
 	static int tvsnprintf_l(char* out, int charCount, const char* format, NativeLocale_t locale, va_list args);

@@ -6,6 +6,10 @@
 #endif
 #include <Lumino/Base/Environment.h>
 
+// linux
+#include <Lumino/Base/StringTraits.h>
+#include <Lumino/IO/FileSystem.h>
+
 namespace Lumino
 {
 
@@ -105,6 +109,7 @@ const wchar_t* Environment::GetNewLine<wchar_t>()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+#ifdef LN_OS_WIN32
 template<>
 void Environment::GetSpecialFolderPath(SpecialFolder specialFolder, char* outPath)
 {
@@ -133,5 +138,50 @@ void Environment::GetSpecialFolderPath(SpecialFolder specialFolder, wchar_t* out
 		break;
 	}
 }
+#elif defined(LN_OS_LINUX)
+template<typename TChar>
+void Environment::GetSpecialFolderPath(SpecialFolder specialFolder, TChar* outPath)
+{
+	if (outPath == NULL) { return; }
+
+	switch (specialFolder)
+	{
+	case SpecialFolder::ApplicationData:
+	{
+		const TChar* pathes[] =
+		{
+			LN_T(TChar, "~/.local/share"),
+			LN_T(TChar, "/usr/local/share"),
+			LN_T(TChar, "/usr/share"),
+		};
+		for (int i = 0; i < LN_ARRAY_SIZE_OF(pathes); ++i) {
+			if (FileSystem::ExistsDirectory(pathes[i])) {
+				StringTraits::tstrcpy(outPath, pathes[i]);
+				return;
+			}
+		}
+		break;
+	}
+	case SpecialFolder::Temporary:
+		const TChar* pathes[] =
+		{
+			LN_T(TChar, "/tmp"),
+		};
+		for (int i = 0; i < LN_ARRAY_SIZE_OF(pathes); ++i) {
+			if (FileSystem::ExistsDirectory(pathes[i])) {
+				StringTraits::tstrcpy(outPath, pathes[i]);
+				return;
+			}
+		}
+		break;
+	}
+	LN_THROW(0, InvalidOperationException);
+}
+template void Environment::GetSpecialFolderPath(SpecialFolder specialFolder, char* outPath)
+template void Environment::GetSpecialFolderPath(SpecialFolder specialFolder, wchar_t* outPath)
+
+#else
+#endif
+
 
 } // namespace Lumino

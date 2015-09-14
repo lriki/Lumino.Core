@@ -19,6 +19,15 @@
 namespace Lumino
 {
 
+void StringTraits::tstrcpy(char* dst, int dstLen, const char* src)
+{
+	strcpy_s(dst, dstLen, src);
+}
+void StringTraits::tstrcpy(wchar_t* dst, int dstLen, const wchar_t* src)
+{
+	wcscpy_s(dst, dstLen, src);
+}
+
 #ifdef LN_OS_WIN32
 int StringTraits::tvscprintf_l(const char* format, NativeLocale_t locale, va_list args)
 {
