@@ -8,6 +8,20 @@
 namespace Lumino
 {
 
+template<typename T>
+struct CollectionTraits
+{
+	typedef T& DirectReference;
+	typedef const T& ConstDirectReference;
+};
+
+template<typename T>
+struct CollectionTraits<T*>
+{
+	typedef T* DirectReference;
+	typedef const T* ConstDirectReference;
+};
+
 /**
 	@brief		コレクションの基本クラスです。
 	@details	Collection は、継承して独自のコレクションを定義することを想定した Array クラスのラッパーです。
@@ -23,8 +37,8 @@ public:
 	typedef typename internal_array::const_pointer		const_pointer;
 	//typedef typename internal_array::iterator			iterator;
 	//typedef typename internal_array::const_iterator		const_iterator;
-	typedef typename internal_array::reference			reference;
-	typedef typename internal_array::const_reference	const_reference;
+	typedef typename CollectionTraits<T>::DirectReference			reference;
+	typedef typename CollectionTraits<T>::ConstDirectReference	const_reference;
 	class iterator;
 	class const_iterator;
 
@@ -51,16 +65,28 @@ public:
 	}
 
 	/** 末尾に要素を追加します。*/
-	void Add(const T& item)
+	//void Add(value_type& item)
+	//{
+	//	InsertItem(GetCount(), item);
+	//}
+
+	/** 末尾に要素を追加します。*/
+	void Add(const value_type& item)
 	{
 		InsertItem(GetCount(), item);
 	}
 
 	/** 指定したインデックスの位置に要素を挿入します。*/
-	void Insert(int index, const T& item)
+	void Insert(int index, T& item)
 	{
 		InsertItem(index, item);
 	}
+
+	/** 指定したインデックスの位置に要素を挿入します。*/
+	//void Insert(int index, const T& item)
+	//{
+	//	InsertItemConst(index, item);
+	//}
 
 	/** item に一致する最初の要素を削除します。(正常に削除された場合は true を返す。要素が見つからなければ false を返す)*/
 	bool Remove(const T& item)
@@ -107,13 +133,19 @@ public:
 	}
 
 	/** 指定したインデックスに要素を設定します。*/
-	void SetAt(int index, const T& item)
+	void SetAt(int index, T& item)
 	{
 		SetItem(index, item);
 	}
 
+	/** 指定したインデックスに要素を設定します。*/
+	void SetAt(int index, const T& item)
+	{
+		SetItemConst(index, item);
+	}
+
 	/** 指定したインデックスにある要素への参照を取得します。*/
-	const_reference GetAt(int index) const
+	reference GetAt(int index)
 	{
 		return m_array.GetAt(index);
 	}
@@ -178,8 +210,8 @@ public:
 		bool operator!=(const iterator& right) const		{ return m_internalItr != right.m_internalItr; }
 		bool operator<(const iterator& right) const			{ return m_internalItr < right.m_internalItr; }
 
-		const_reference operator*() const	{ return *m_internalItr; }
-		pointer operator->() const			{ return m_internalItr.operator->(); }
+		reference operator*()	{ return *m_internalItr; }
+		pointer operator->()			{ return m_internalItr.operator->(); }
 
 		iterator& operator++()				{ ++m_internalItr; return (*this); }
 		iterator operator++(int)			{ iterator tmp = *this; ++(*this); return tmp; }
@@ -198,6 +230,12 @@ protected:
 		m_array.Insert(index, item);
 	}
 
+	/** 指定したインデックスの位置に要素を挿入します。*/
+	//virtual void InsertItemConst(int index, value_type& item)
+	//{
+	//	m_array.Insert(index, item);
+	//}
+
 	/** 全ての要素を削除します。*/
 	virtual void ClearItems()
 	{
@@ -215,6 +253,12 @@ protected:
 	{
 		m_array.SetAt(index, item);
 	}
+
+	/** 指定したインデックス位置にある要素を置き換えます。*/
+	//virtual void SetItemConst(int index, const value_type& item)
+	//{
+	//	m_array.SetAt(index, item);
+	//}
 
 private:
 	Array<T>	m_array;
