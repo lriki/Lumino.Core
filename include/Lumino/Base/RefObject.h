@@ -47,8 +47,11 @@ public:
 	/// 参照カウントをデクリメントする
 	virtual int32_t Release();
 
+	void TryGCAddRef();
+
 protected:
     Threading::Atomic	mReferenceCount;	///< 参照カウント
+	Threading::Atomic	m_refPtrReferenced;
 };
 
 class RefPtrCore {};
@@ -223,8 +226,179 @@ public:
 	operator T*			() const { return mPtr; }
     operator const T*	() const { return mPtr; }
 
-private:
+protected:
 	T* mPtr;
 };
+
+
+template <class T>
+class GCPtr : public RefPtrCore
+{
+public:
+	typedef T* PtrType;
+
+public:
+
+	/**
+		@brief		コンストラクタ
+	*/
+	GCPtr()
+		: mPtr(NULL)
+	{ }
+
+	/**
+		@brief		コンストラクタ
+		@param[in]	ptr		: 管理対象としてセットする ReferenceObject インスタンスのポインタ
+	*/
+	GCPtr(T* ptr)
+		: mPtr(ptr)
+	{
+		if (mPtr) {
+			mPtr->TryGCAddRef();
+		}
+	}
+
+	/**
+		@brief		コピーコンストラクタ
+		@param[in]	obj		:
+	*/
+	GCPtr(const GCPtr<T>& obj)
+		: mPtr(obj.mPtr)
+	{
+		LN_SAFE_ADDREF(mPtr);
+	}
+
+	/**
+		@brief		デストラクタ
+	*/
+	virtual ~GCPtr()
+	{
+		LN_SAFE_RELEASE(mPtr);
+	}
+
+public:
+
+	/**
+		@brief		ReferenceObject インスタンスのポインタを管理対象としてセットする
+		@param[in]	ptr		: 管理対象としてセットする ReferenceObject インスタンスのポインタ
+		@param[in]	addRef	: true の場合、セットされた ReferenceObject の参照カウントをインクリメントする
+	*/
+	void Attach(T* ptr, bool addRef = false)
+	{
+		SafeRelease();
+		mPtr = ptr;
+		if (addRef) {
+			SafeAddRef();
+		}
+	}
+
+	/**
+		@brief		管理対象オブジェクトの参照カウントをインクリメントする
+	*/
+	void SafeAddRef()
+	{
+		LN_SAFE_ADDREF(mPtr);
+	}
+
+	/**
+		@brief		管理対象オブジェクトの参照カウントをデクリメントし、管理対象から外す
+	*/
+	void SafeRelease()
+	{
+		LN_SAFE_RELEASE(mPtr);
+	}
+
+	/**
+		@brief		管理対象オブジェクトへのポインタが NULL であるかを確認する
+	*/
+	bool IsNull() const { return (mPtr == NULL); }
+
+	/**
+		@brief		管理対象オブジェクトへのポインタを取得する
+	*/
+	const T* GetObjectPtr() const	{ return mPtr; }
+
+	/**
+	@brief		管理対象オブジェクトへのポインタを取得する
+		*/
+	T* GetObjectPtr() { return mPtr; }
+
+public:
+
+	/// operator=
+	GCPtr<T>& operator =(const GCPtr<T>& ptr)
+	{
+		LN_REFOBJ_SET(mPtr, ptr.mPtr);
+		return *this;
+	}
+
+	/// operator=
+	GCPtr<T>& operator =(T* ptr)
+	{
+		if (mPtr) {
+			mPtr->Release();
+		}
+		mPtr = ptr;
+		if (mPtr) {
+			mPtr->TryGCAddRef();
+		}
+		return *this;
+	}
+
+	/// operator!
+	bool operator ! () const { return (mPtr == NULL); }
+
+	/// operator== 
+	bool operator == (const T* ptr) const { return (mPtr == ptr); }
+
+	/// operator!=
+	bool operator != (const T* ptr) const { return (mPtr != ptr); }
+
+	// operator< (for STL cmp)
+	bool operator < (const T* ptr) const { return mPtr < ptr; }
+
+	/// operator*
+	T& operator* ()
+	{
+		LN_ASSERT(mPtr != NULL);
+		return *mPtr;
+	}
+
+	/// operator*
+	const T& operator* () const
+	{
+		LN_ASSERT(mPtr != NULL);
+		return *mPtr;
+	}
+
+	/// (インスタンスが NULL 出なければ assert します)
+	T** operator&() throw()
+	{
+		LN_ASSERT(mPtr == NULL);
+		return &mPtr;
+	}
+
+	/// ->
+	T* operator -> ()
+	{
+		LN_ASSERT(mPtr != NULL);
+		return mPtr;
+	}
+
+	/// ->
+	const T* operator -> () const
+	{
+		LN_ASSERT(mPtr != NULL);
+		return mPtr;
+	}
+
+	/// convert
+	operator T*			() const { return mPtr; }
+	operator const T*	() const { return mPtr; }
+
+protected:
+	T* mPtr;
+};
+
 
 } // namespace Lumino

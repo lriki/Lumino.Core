@@ -14,6 +14,7 @@ namespace Lumino
 //-----------------------------------------------------------------------------
 RefObject::RefObject()
 	: mReferenceCount(1)
+	, m_refPtrReferenced(0)
 {}
 
 //-----------------------------------------------------------------------------
@@ -49,6 +50,22 @@ int32_t RefObject::Release()
 		 delete this;
 	}
     return count;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void RefObject::TryGCAddRef()
+{
+	if (m_refPtrReferenced.Get() == 0)
+	{
+		m_refPtrReferenced.Increment();
+		if (m_refPtrReferenced.Get() == 1)
+		{
+			return;
+		}
+	}
+	AddRef();
 }
 
 } // namespace Lumino
