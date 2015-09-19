@@ -93,6 +93,11 @@
 	#define LN_NOEXCEPT noexcept
 #endif
 
+#ifndef LN_INTERNAL_ACCESS
+	#define LN_INTERNAL_ACCESS	private
+#endif
+
+
 //----------------------------------------------------------------------
 // include
 #include <stdio.h>
