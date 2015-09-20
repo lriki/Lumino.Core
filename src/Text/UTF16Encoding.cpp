@@ -83,8 +83,10 @@ void UTF16Encoding::UTF16Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t 
 	}
 
 	// 変換 (もし前回のバッファ終端が上位サロゲートだったら、m_lastLeadWord に先行バイトが入っている)
+#ifndef SIZE_T_MAX
 	const size_t SIZE_T_MAX = (size_t)-1;
-	size_t inWordPos = (curLead != 0x0000) ? SIZE_T_MAX : 0;	// MBCS
+#endif
+    size_t inWordPos = (curLead != 0x0000) ? SIZE_T_MAX : 0;	// MBCS
 	size_t outWordPos = 0;									// UTF16
 	size_t inWordCount = inBufferByteCount / 2;
 	uint16_t* inWords = (uint16_t*)inBuffer;

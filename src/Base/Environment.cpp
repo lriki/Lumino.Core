@@ -2,7 +2,9 @@
 #include <time.h>
 #include "../Internal.h"
 #ifdef LN_OS_WIN32
-#include <Shlobj.h>
+    #include <Shlobj.h>
+#elif defined(LN_OS_MAC)
+    #include <mach/mach_time.h>
 #endif
 #include <Lumino/Base/Environment.h>
 
@@ -46,6 +48,9 @@ uint64_t Environment::GetTickCount()
 	// timeGetTime() は timeBeginPeriod() によって精度が変わるため、
 	// GetTickCount() の方が無難かもしれない
 	return ::GetTickCount();
+#elif defined(LN_OS_MAC)
+    return GetTickCountNS() / 1000000;
+    
 #else
 	struct timespec ts;
 	if (clock_gettime(CLOCK_MONOTONIC, &ts) != 0) {
@@ -77,7 +82,17 @@ uint64_t Environment::GetTickCountNS()
 	if (freq.QuadPart) {
 		return static_cast<long long>(((double)current.QuadPart) * 1000 * 1000 * 1000 / freq.QuadPart);		// ns 単位
 	}
-	return 0;
+    return 0;
+    
+#elif defined(LN_OS_MAC)
+    static mach_timebase_info_data_t info = { 0, 0 };
+    
+    uint64_t cpuTime = mach_absolute_time();
+    if (info.denom == 0) {
+        mach_timebase_info(&info);
+    }
+    return cpuTime * info.numer / info.denom;
+    
 #else
 	LN_THROW(0, NotImplementedException);
 	return 0;

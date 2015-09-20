@@ -1,4 +1,4 @@
-﻿
+
 #pragma once
 
 #include <execinfo.h>
@@ -7,6 +7,7 @@
 #include <string.h>
 #include <dlfcn.h>
 #include <cxxabi.h>
+#include <execinfo.h>
 #include <bfd.h>		// [$ sudo apt-get install binutils-dev] or [binutils-devel]
 
 namespace Lumino

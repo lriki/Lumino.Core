@@ -105,7 +105,7 @@ int DBCSEncoding::GetCharacterCount(const byte_t* buffer, size_t bufferSize) con
 //-----------------------------------------------------------------------------
 int DBCSEncoding::GetLeadExtraLength(const void* buffer, size_t bufferSize) const
 {
-	return (CheckDBCSLeadByte(&Tables[m_encodingType], *((const byte*)buffer))) ? 1 : 0;
+	return (CheckDBCSLeadByte(&Tables[m_encodingType], *((const byte_t*)buffer))) ? 1 : 0;
 }
 
 //-----------------------------------------------------------------------------

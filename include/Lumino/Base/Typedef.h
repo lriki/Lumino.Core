@@ -64,6 +64,7 @@
 // GCC
 #include <stdint.h>
 #include <locale.h>
+#include <xlocale.h>    // for mac
 
 #endif
 

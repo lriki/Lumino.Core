@@ -668,7 +668,7 @@ template int StringTraits::CheckNewLineSequence<wchar_t>(const wchar_t* start, c
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-static bool StringTraits::IndexOfNewLineSequence(const TChar* start, const TChar* end, int* outIndex, int* outNewLineCodeCount)
+bool StringTraits::IndexOfNewLineSequence(const TChar* start, const TChar* end, int* outIndex, int* outNewLineCodeCount)
 {
 	while (start < end)
 	{

@@ -32,7 +32,7 @@ Encoding* Encoding::GetSystemMultiByteEncoding()
 	static Win32CodePageEncoding systemEncoding(CP_THREAD_ACP);
 	return &systemEncoding;
 #else
-	static UTF8Encoding systemEncoding;
+	static UTF8Encoding systemEncoding(false);
 	return &systemEncoding;
 #endif
 }
@@ -150,11 +150,13 @@ Encoding* Encoding::GetEncodingTemplate<wchar_t>()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+#ifdef LN_OS_WIN32
 Encoding* Encoding::GetWin32DefaultCodePageEncoding()
 {
 	static Win32CodePageEncoding encoding(CP_THREAD_ACP);
 	return &encoding;
 }
+#endif
 
 //-----------------------------------------------------------------------------
 //

@@ -22,12 +22,14 @@ Process::Process()
 	, m_crashed(false)
 	, m_disposed(false)
 	, m_runningReadThread(false)
+#ifdef LN_OS_WIN32
 	, m_hInputRead(NULL)
 	, m_hInputWrite(NULL)
 	, m_hOutputRead(NULL)
 	, m_hOutputWrite(NULL)
 	, m_hErrorRead(NULL)
 	, m_hErrorWrite(NULL)
+#endif
 {
 }
 

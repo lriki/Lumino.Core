@@ -114,8 +114,6 @@ set(LN_SOURCES_Text
 	src/Text/UTF16Encoding.h
 	src/Text/UTF32Encoding.cpp
 	src/Text/UTF32Encoding.h
-	src/Text/Win32CodePageEncoding.cpp
-	src/Text/Win32CodePageEncoding.h
 )
 
 set(LN_SOURCES_IO
@@ -212,6 +210,12 @@ if (WIN32)
 		${LN_SOURCES_IO}
 		src/IO/FileSystem_Win32.cpp
 		src/IO/Process_Win32.cpp)
+
+	set(LN_SOURCES_Text
+		${LN_SOURCES_Text}
+		src/Text/Win32CodePageEncoding.cpp
+		src/Text/Win32CodePageEncoding.h
+	)	
 
 elseif (APPLE)
 	
