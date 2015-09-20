@@ -68,7 +68,7 @@ bool Logger::Initialize(const TCHAR* filePath) throw()
 	//char* ts = asctime(localtime(&timer));
 
 	fprintf(stream, "===============================================================\n");
-	fprintf(stream, " "LUMINO_NAME" Log    Version:"LUMINO_CORE_VERSION_STRING"\n");//    %s\n", LUMINO_CORE_VERSION_STRING, ts);
+	fprintf(stream, " %s Log    Version:%s\n", LUMINO_NAME, LUMINO_CORE_VERSION_STRING);//    %s\n", LUMINO_CORE_VERSION_STRING, ts);
 	fprintf(stream, "---------------------------------------------------------------\n");
 
 #ifdef LNOTE_DEBUG

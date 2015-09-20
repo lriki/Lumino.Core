@@ -382,7 +382,8 @@ TEST_F(Test_Base_Array, Remove)
 	// <Test> RemoveAll (ラムダ式)
 	{
 		Array<int> a1 = ary;
-		a1.RemoveAll([](int v) { return v == 2; });
+        auto exp = [](int v) { return v == 2; };
+		a1.RemoveAll(exp);
 		ASSERT_EQ(2, a1.GetCount());
 		ASSERT_EQ(1, a1[0]);
 		ASSERT_EQ(3, a1[1]);

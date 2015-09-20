@@ -6,13 +6,13 @@ protected:
 	virtual void SetUp() {}
 	virtual void TearDown() {}
 };
-// TODO: ' •¶š—ñ‚É‘Î‰‚µ‚Ä–³‚¢‚©‚à
+// TODO: ' Ã¯âˆ‚Ã©Ã¶Ã³Ã’Ã‡â€¦Ã«Å’Ã¢Ã»Ã‡ÂµÃ‡Æ’Ã±â‰¥Ã‡Â¢Ã‡Â©Ã‡â€¡
 
 //---------------------------------------------------------------------
 TEST_F(Test_Xml_XmlReader, User)
 {
 	StreamReader textReader(LOCALFILE("TestData/ReaderExample1.xml"));
-	XmlReader reader(&textReader);	// TODO: XmlFileReader ‚Æ‚©B
+	XmlReader reader(&textReader);	// TODO: XmlFileReader Ã‡âˆ†Ã‡Â©Ã…B
 
 	String output;
 	while (reader.Read())
@@ -21,7 +21,7 @@ TEST_F(Test_Xml_XmlReader, User)
 			output += String::Format(_T("type:%s value:%s\n"), reader.GetNodeType().ToString().GetCStr(), reader.GetValue().GetCStr());
 		}
 		else if (reader.GetNodeType() == XmlNodeType::Whitespace) {
-			output += String::Format(_T("type:%s\n"), reader.GetNodeType().ToString());
+			output += String::Format(_T("type:%s\n"), reader.GetNodeType().ToString().GetCStr());
 		}
 		else {
 			output += String::Format(_T("type:%s name:%s\n"), reader.GetNodeType().ToString().GetCStr(), reader.GetName().GetCStr());
@@ -76,10 +76,10 @@ TEST_F(Test_Xml_XmlReader, User)
 
 
 //---------------------------------------------------------------------
-// Element ƒm[ƒh‚ÌƒeƒXƒg
+// Element Ã‰mÃ…[Ã‰hÃ‡ÃƒÃ‰eÃ‰XÃ‰g
 TEST_F(Test_Xml_XmlReader, Element)
 {
-	// E‹ó—v‘f
+	// Ã…EÃ£Ã›Ã³vÃ«f
 	{
 		String xml = _T("<test />");
 		XmlReader reader(xml);
@@ -87,11 +87,11 @@ TEST_F(Test_Xml_XmlReader, Element)
 		ASSERT_TRUE(reader.Read());
 		ASSERT_EQ(XmlNodeType::Element, reader.GetNodeType());
 		ASSERT_STREQ(_T("test"), reader.GetName());
-		ASSERT_TRUE(reader.IsEmptyElement());			// ‹ó—v‘f‚Å‚ ‚é
+		ASSERT_TRUE(reader.IsEmptyElement());			// Ã£Ã›Ã³vÃ«fÃ‡â‰ˆÃ‡â€ Ã‡Ãˆ
 		ASSERT_FALSE(reader.Read());					// EOF
 	}
 
-	// EEnd Element
+	// Ã…EEnd Element
 	{
 		String xml = _T("<test></test>");
 		XmlReader reader(xml);
@@ -99,17 +99,17 @@ TEST_F(Test_Xml_XmlReader, Element)
 		ASSERT_TRUE(reader.Read());
 		ASSERT_EQ(XmlNodeType::Element, reader.GetNodeType());
 		ASSERT_STREQ(_T("test"), reader.GetName());
-		ASSERT_FALSE(reader.IsEmptyElement());			// ‹ó—v‘f‚Å‚Í‚È‚¢
+		ASSERT_FALSE(reader.IsEmptyElement());			// Ã£Ã›Ã³vÃ«fÃ‡â‰ˆÃ‡Ã•Ã‡Â»Ã‡Â¢
 
 		ASSERT_TRUE(reader.Read());
 		ASSERT_EQ(XmlNodeType::EndElement, reader.GetNodeType());
 		ASSERT_STREQ(_T("test"), reader.GetName());
-		ASSERT_FALSE(reader.IsEmptyElement());			// ‹ó—v‘f‚Å‚Í‚È‚¢
+		ASSERT_FALSE(reader.IsEmptyElement());			// Ã£Ã›Ã³vÃ«fÃ‡â‰ˆÃ‡Ã•Ã‡Â»Ã‡Â¢
 
 		ASSERT_FALSE(reader.Read());					// EOF
 	}
 
-	// EƒlƒXƒg
+	// Ã…EÃ‰lÃ‰XÃ‰g
 	{
 		String xml = _T("<n1><n2/></n1>");
 		XmlReader reader(xml);
@@ -127,12 +127,12 @@ TEST_F(Test_Xml_XmlReader, Element)
 		ASSERT_TRUE(reader.Read());
 		ASSERT_EQ(XmlNodeType::EndElement, reader.GetNodeType());
 		ASSERT_STREQ(_T("n1"), reader.GetName());
-		ASSERT_FALSE(reader.IsEmptyElement());			// EndElement ‚Í‹ó—v‘fˆµ‚¢‚Å‚Í‚È‚¢
+		ASSERT_FALSE(reader.IsEmptyElement());			// EndElement Ã‡Ã•Ã£Ã›Ã³vÃ«fÃ ÂµÃ‡Â¢Ã‡â‰ˆÃ‡Ã•Ã‡Â»Ã‡Â¢
 
 		ASSERT_FALSE(reader.Read());						// EOF
 	}
 
-	// E–¼‘O
+	// Ã…EÃ±ÂºÃ«O
 	{
 		String xml = _T("<v:test/><b.n1/>");
 		XmlReader reader(xml);
@@ -150,11 +150,11 @@ TEST_F(Test_Xml_XmlReader, Element)
 }
 
 //---------------------------------------------------------------------
-// Text ƒm[ƒh‚ÌƒeƒXƒg
+// Text Ã‰mÃ…[Ã‰hÃ‡ÃƒÃ‰eÃ‰XÃ‰g
 TEST_F(Test_Xml_XmlReader, Text)
 {
-	// EText ƒm[ƒh
-	// Eƒ^ƒO––”ö‚Ì‹ó”’
+	// Ã…EText Ã‰mÃ…[Ã‰h
+	// Ã…EÃ‰^Ã‰OÃ±Ã±Ã®Ë†Ã‡ÃƒÃ£Ã›Ã®Ã­
 	{
 		String xml = _T("<test >Text</test >");
 		XmlReader reader(xml);
@@ -162,23 +162,23 @@ TEST_F(Test_Xml_XmlReader, Text)
 		ASSERT_TRUE(reader.Read());
 		ASSERT_EQ(XmlNodeType::Element, reader.GetNodeType());
 		ASSERT_STREQ(_T("test"), reader.GetName());
-		ASSERT_FALSE(reader.IsEmptyElement());			// ‹ó—v‘f‚Å‚Í‚È‚¢
+		ASSERT_FALSE(reader.IsEmptyElement());			// Ã£Ã›Ã³vÃ«fÃ‡â‰ˆÃ‡Ã•Ã‡Â»Ã‡Â¢
 
 		ASSERT_TRUE(reader.Read());
 		ASSERT_EQ(XmlNodeType::Text, reader.GetNodeType());
-		ASSERT_TRUE(reader.GetName().IsEmpty());		// Text ƒm[ƒh‚Ì–¼‘O‚Í‹ó
-		ASSERT_STREQ(_T("Text"), reader.GetValue());	// ƒeƒLƒXƒg’l
-		ASSERT_FALSE(reader.IsEmptyElement());			// ‹ó—v‘f‚Å‚Í‚È‚¢ (‚Æ‚¢‚¤‚©—v‘f‚Å‚Í‚È‚¢)
+		ASSERT_TRUE(reader.GetName().IsEmpty());		// Text Ã‰mÃ…[Ã‰hÃ‡ÃƒÃ±ÂºÃ«OÃ‡Ã•Ã£Ã›
+		ASSERT_STREQ(_T("Text"), reader.GetValue());	// Ã‰eÃ‰LÃ‰XÃ‰gÃ­l
+		ASSERT_FALSE(reader.IsEmptyElement());			// Ã£Ã›Ã³vÃ«fÃ‡â‰ˆÃ‡Ã•Ã‡Â»Ã‡Â¢ (Ã‡âˆ†Ã‡Â¢Ã‡Â§Ã‡Â©Ã³vÃ«fÃ‡â‰ˆÃ‡Ã•Ã‡Â»Ã‡Â¢)
 
 		ASSERT_TRUE(reader.Read());
 		ASSERT_EQ(XmlNodeType::EndElement, reader.GetNodeType());
 		ASSERT_STREQ(_T("test"), reader.GetName());
-		ASSERT_FALSE(reader.IsEmptyElement());			// ‹ó—v‘f‚Å‚Í‚È‚¢
+		ASSERT_FALSE(reader.IsEmptyElement());			// Ã£Ã›Ã³vÃ«fÃ‡â‰ˆÃ‡Ã•Ã‡Â»Ã‡Â¢
 
 		ASSERT_FALSE(reader.Read());					// EOF
 	}
 
-	// EText ƒm[ƒh‘OŒã‚Ì‹ó”’
+	// Ã…EText Ã‰mÃ…[Ã‰hÃ«OÃ¥â€Ã‡ÃƒÃ£Ã›Ã®Ã­
 	{
 		String xml = _T("<test> \nText\r\t</test>");
 		XmlReader reader(xml);
@@ -186,7 +186,7 @@ TEST_F(Test_Xml_XmlReader, Text)
 
 		ASSERT_TRUE(reader.Read());
 		ASSERT_EQ(XmlNodeType::Text, reader.GetNodeType());
-		ASSERT_STREQ(_T(" \nText\r\t"), reader.GetValue());	// ƒeƒLƒXƒg’l
+		ASSERT_STREQ(_T(" \nText\r\t"), reader.GetValue());	// Ã‰eÃ‰LÃ‰XÃ‰gÃ­l
 
 		reader.Read();
 		ASSERT_FALSE(reader.Read());						// EOF
@@ -194,7 +194,7 @@ TEST_F(Test_Xml_XmlReader, Text)
 }
 
 //---------------------------------------------------------------------
-// Comment ƒm[ƒh‚ÌƒeƒXƒg
+// Comment Ã‰mÃ…[Ã‰hÃ‡ÃƒÃ‰eÃ‰XÃ‰g
 TEST_F(Test_Xml_XmlReader, Comment)
 {
 	{
@@ -203,7 +203,7 @@ TEST_F(Test_Xml_XmlReader, Comment)
 
 		ASSERT_TRUE(reader.Read());
 		ASSERT_EQ(XmlNodeType::Comment, reader.GetNodeType());
-		ASSERT_STREQ(_T(" Comment "), reader.GetValue());	// ƒRƒƒ“ƒg‚Ì’l
+		ASSERT_STREQ(_T(" Comment "), reader.GetValue());	// Ã‰RÃ‰Ã…Ã‰Ã¬Ã‰gÃ‡ÃƒÃ­l
 
 		ASSERT_FALSE(reader.Read());						// EOF
 	}
@@ -213,7 +213,7 @@ TEST_F(Test_Xml_XmlReader, Comment)
 // Attribute
 TEST_F(Test_Xml_XmlReader, Attribute)
 {
-	// ’Pˆê‘®«
+	// Ã­PÃ ÃÃ«Ã†ÃªÂ´
 	{
 		String xml = _T("<test a=\"10\" />");
 		XmlReader reader(xml);
@@ -222,32 +222,32 @@ TEST_F(Test_Xml_XmlReader, Attribute)
 		ASSERT_EQ(XmlNodeType::Element, reader.GetNodeType());
 		ASSERT_STREQ(_T("test"), reader.GetName());
 		ASSERT_TRUE(reader.IsEmptyElement());
-		ASSERT_EQ(1, reader.GetAttributeCount());		// ‘®«1ŒÂ
-		ASSERT_FALSE(reader.MoveToElement());			// ˆÓ–¡–³‚µ
+		ASSERT_EQ(1, reader.GetAttributeCount());		// Ã«Ã†ÃªÂ´1Ã¥Â¬
+		ASSERT_FALSE(reader.MoveToElement());			// Ã â€Ã±Â°Ã±â‰¥Ã‡Âµ
 
 		ASSERT_TRUE(reader.MoveToFirstAttribute());
 		ASSERT_EQ(XmlNodeType::Attribute, reader.GetNodeType());
 		ASSERT_STREQ(_T("a"), reader.GetName());
 		ASSERT_STREQ(_T("10"), reader.GetValue());
 
-		ASSERT_TRUE(reader.MoveToElement());	// Element ‚É–ß‚ç‚È‚¢‚ÆAIsEmptyElement ‚ª‹@”\‚µ‚È‚¢
+		ASSERT_TRUE(reader.MoveToElement());	// Element Ã‡â€¦Ã±ï¬‚Ã‡ÃÃ‡Â»Ã‡Â¢Ã‡âˆ†Ã…AIsEmptyElement Ã‡â„¢Ã£@Ã®\Ã‡ÂµÃ‡Â»Ã‡Â¢
 		ASSERT_EQ(XmlNodeType::Element, reader.GetNodeType());
 		ASSERT_STREQ(_T("test"), reader.GetName());
 		ASSERT_TRUE(reader.IsEmptyElement());
-		ASSERT_EQ(1, reader.GetAttributeCount());		// ‘®«1ŒÂ
+		ASSERT_EQ(1, reader.GetAttributeCount());		// Ã«Ã†ÃªÂ´1Ã¥Â¬
 
 		ASSERT_FALSE(reader.Read());					// EOF
 	}
 
-	//E•¡”‘®«
-	//E–¼‘O‚É . ‚Æ :
+	//Ã…EÃ¯Â°ÃªÃ®Ã«Ã†ÃªÂ´
+	//Ã…EÃ±ÂºÃ«OÃ‡â€¦ . Ã‡âˆ† :
 	{
 		String xml = _T("<test v.a=\"10\" v:b=\"ABC\" />");
 		XmlReader reader(xml);
 
 		ASSERT_TRUE(reader.Read());
 		ASSERT_TRUE(reader.IsEmptyElement());
-		ASSERT_EQ(2, reader.GetAttributeCount());		// ‘®«2ŒÂ
+		ASSERT_EQ(2, reader.GetAttributeCount());		// Ã«Ã†ÃªÂ´2Ã¥Â¬
 
 		// v.a="10"
 		ASSERT_TRUE(reader.MoveToFirstAttribute());
@@ -261,17 +261,17 @@ TEST_F(Test_Xml_XmlReader, Attribute)
 		ASSERT_STREQ(_T("v:b"), reader.GetName());
 		ASSERT_STREQ(_T("ABC"), reader.GetValue());
 
-		ASSERT_FALSE(reader.MoveToNextAttribute());		// Ÿ‚Í–³‚¢
+		ASSERT_FALSE(reader.MoveToNextAttribute());		// Ã©Ã¼Ã‡Ã•Ã±â‰¥Ã‡Â¢
 
 		ASSERT_FALSE(reader.Read());					// EOF
 	}
 }
 
 //---------------------------------------------------------------------
-// —\–ñÏ‚İ Entity
+// Ã³\Ã±Ã’Ã§Å“Ã‡â€º Entity
 TEST_F(Test_Xml_XmlReader, ReservedEntity)
 {
-	//E‘S‚Ä‚Ì—\–ñÏ‚İ Entity ‚Ì“WŠJ
+	//Ã…EÃ«SÃ‡Æ’Ã‡ÃƒÃ³\Ã±Ã’Ã§Å“Ã‡â€º Entity Ã‡ÃƒÃ¬WÃ¤J
 	{
 		String xml = _T("<root><ch>&lt;<ch/><ch>&gt;<ch/><ch>&amp;<ch/><ch>&apos;<ch/><ch>&quot;<ch/><root/>");
 		XmlReader reader(xml);
@@ -317,16 +317,16 @@ TEST_F(Test_Xml_XmlReader, ReservedEntity)
 		ASSERT_FALSE(reader.Read());// EOF
 	}
 
-	//E‘®«
-	//E–¢’è‹`Entity
-	//E‘OŒã‚Ì•¶š‚Æ‹ó”’
+	//Ã…EÃ«Ã†ÃªÂ´
+	//Ã…EÃ±Â¢Ã­Ã‹Ã£`Entity
+	//Ã…EÃ«OÃ¥â€Ã‡ÃƒÃ¯âˆ‚Ã©Ã¶Ã‡âˆ†Ã£Ã›Ã®Ã­
 	{
 		String xml = _T("<test a=\"&lt;\" b=\"&AAAA;\"  c=\"A&lt; \" />");
 		XmlReader reader(xml);
 		ASSERT_TRUE(reader.Read());
 		ASSERT_EQ(XmlNodeType::Element, reader.GetNodeType());
 		ASSERT_TRUE(reader.IsEmptyElement());
-		ASSERT_EQ(3, reader.GetAttributeCount());		// ‘®«1ŒÂ
+		ASSERT_EQ(3, reader.GetAttributeCount());		// Ã«Ã†ÃªÂ´1Ã¥Â¬
 
 		ASSERT_TRUE(reader.MoveToFirstAttribute());
 		ASSERT_EQ(XmlNodeType::Attribute, reader.GetNodeType());
@@ -336,7 +336,7 @@ TEST_F(Test_Xml_XmlReader, ReservedEntity)
 		ASSERT_TRUE(reader.MoveToNextAttribute());
 		ASSERT_EQ(XmlNodeType::Attribute, reader.GetNodeType());
 		ASSERT_STREQ(_T("b"), reader.GetName());
-		ASSERT_STREQ(_T("&AAAA;"), reader.GetValue());	// ”F¯‚Å‚«‚È‚¢ Entity ‚ÍƒGƒ‰[‚É‚¹‚¸AƒeƒLƒXƒg‚Æ‚µ‚Ä•Ô‚·
+		ASSERT_STREQ(_T("&AAAA;"), reader.GetValue());	// Ã®FÃ©Ã˜Ã‡â‰ˆÃ‡Â´Ã‡Â»Ã‡Â¢ Entity Ã‡Ã•Ã‰GÃ‰Ã¢Ã…[Ã‡â€¦Ã‡Ï€Ã‡âˆÃ…AÃ‰eÃ‰LÃ‰XÃ‰gÃ‡âˆ†Ã‡ÂµÃ‡Æ’Ã¯â€˜Ã‡âˆ‘
 
 		ASSERT_TRUE(reader.MoveToNextAttribute());
 		ASSERT_EQ(XmlNodeType::Attribute, reader.GetNodeType());
@@ -348,10 +348,10 @@ TEST_F(Test_Xml_XmlReader, ReservedEntity)
 }
 
 //---------------------------------------------------------------------
-// Entity QÆ
+// Entity Ã©QÃ¨âˆ†
 TEST_F(Test_Xml_XmlReader, EntityReference)
 {
-	// Eƒm[ƒh‘OŒã‚ÌƒeƒLƒXƒg‚Æ‹ó”’
+	// Ã…EÃ‰mÃ…[Ã‰hÃ«OÃ¥â€Ã‡ÃƒÃ‰eÃ‰LÃ‰XÃ‰gÃ‡âˆ†Ã£Ã›Ã®Ã­
 	{
 		String xml = _T("<a> A&book; </a>");
 		XmlReader reader(xml);
@@ -364,7 +364,7 @@ TEST_F(Test_Xml_XmlReader, EntityReference)
 		ASSERT_TRUE(reader.Read());		// "&book;"
 		ASSERT_EQ(XmlNodeType::EntityReference, reader.GetNodeType());
 		ASSERT_STREQ(_T("book"), reader.GetName());
-		ASSERT_TRUE(reader.GetValue().IsEmpty());	// ’l‚Í‹ó
+		ASSERT_TRUE(reader.GetValue().IsEmpty());	// Ã­lÃ‡Ã•Ã£Ã›
 
 		ASSERT_TRUE(reader.Read());		// " "
 		ASSERT_EQ(XmlNodeType::Whitespace, reader.GetNodeType());
@@ -404,6 +404,6 @@ TEST_F(Test_Xml_XmlReader, SystemTest)
 		ASSERT_EQ(XmlNodeType::Element, types[2]);
 		ASSERT_EQ(XmlNodeType::EndElement, types[3]);
 		ASSERT_EQ(XmlNodeType::Whitespace, types[4]);
-		//ASSERT_EQ(XmlNodeType::EndElement, types[5]);	ÅŒã‚Ì‚Í IsStartElement ‚ÅÁ”ï‚³‚ê‚é‚Ì‚Åo‚Ä‚±‚È‚¢
+		//ASSERT_EQ(XmlNodeType::EndElement, types[5]);	Ã§â‰ˆÃ¥â€Ã‡ÃƒÃ‡Ã• IsStartElement Ã‡â‰ˆÃ¨Â¡Ã®Ã”Ã‡â‰¥Ã‡ÃÃ‡ÃˆÃ‡ÃƒÃ‡â‰ˆÃ¨oÃ‡Æ’Ã‡Â±Ã‡Â»Ã‡Â¢
 	}
 }

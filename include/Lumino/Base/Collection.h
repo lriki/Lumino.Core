@@ -30,7 +30,7 @@ template<typename T, typename TAllocator = STLAllocator<T> >
 class Collection : private NonCopyable
 {
 public:
-	typedef typename Array<T>							internal_array;
+	typedef Array<T>							internal_array;
 	typedef typename internal_array::value_type			value_type;
 	typedef typename internal_array::difference_type	difference_type;
 	typedef typename internal_array::pointer			pointer;

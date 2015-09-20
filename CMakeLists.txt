@@ -205,7 +205,6 @@ set(LN_SOURCES_Testing
 #--------------------------------------
 # Platform source files.
 if (WIN32)
-
 	set(LN_SOURCES_IO
 		${LN_SOURCES_IO}
 		src/IO/FileSystem_Win32.cpp
@@ -218,9 +217,12 @@ if (WIN32)
 	)	
 
 elseif (APPLE)
+	set(LN_SOURCES_IO
+		${LN_SOURCES_IO}
+		src/IO/FileSystem_Unix.cpp
+		src/IO/Process_Unix.cpp)
 	
 elseif (UNIX)
-
 	set(LN_SOURCES_IO
 		${LN_SOURCES_IO}
 		src/IO/FileSystem_Unix.cpp

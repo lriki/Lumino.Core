@@ -1,4 +1,5 @@
 ﻿#include "../Internal.h"
+#include <Lumino/Base/ElapsedTimer.h>
 #include <Lumino/IO/Process.h>
 
 extern char **environ;
@@ -65,112 +66,7 @@ private:
 //=============================================================================
 // Process
 //=============================================================================
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-Process::Process()
-	: m_workingDirectory()
-	, m_redirectStandardInput(false)
-	, m_redirectStandardOutput(false)
-	, m_redirectStandardError(false)
-	, m_standardInputWriter()
-	, m_standardOutputReader()
-	, m_standardErrorReader()
-	, m_exitCode(0)
-	, m_crashed(false)
-	, m_disposed(false)
-	, m_hInputRead(NULL)
-	, m_hInputWrite(NULL)
-	, m_hOutputRead(NULL)
-	, m_hOutputWrite(NULL)
-	, m_hErrorRead(NULL)
-	, m_hErrorWrite(NULL)
-{
-}
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-Process::~Process()
-{
-	Dispose();
-}
-
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-void Process::SetWorkingDirectory(const PathName& directoryPath)
-{
-	m_workingDirectory = directoryPath;
-}
-
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-void Process::SetRedirectStandardInput(bool enabled)
-{
-	m_redirectStandardInput = enabled;
-}
-
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-void Process::SetRedirectStandardOutput(bool enabled)
-{
-	m_redirectStandardOutput = enabled;
-}
-
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-void Process::SetRedirectStandardError(bool enabled)
-{
-	m_redirectStandardError = enabled;
-}
-
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-StreamWriter* Process::GetStandardInput() const
-{
-	LN_CHECK_STATE(m_standardInputWriter != NULL, "Not redirected.");
-	return m_standardInputWriter;
-}
-
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-StreamReader* Process::GetStandardOutput() const
-{
-	LN_CHECK_STATE(m_standardOutputReader != NULL, "Not redirected.");
-	return m_standardOutputReader;
-}
-
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-StreamReader* Process::GetStandardError() const
-{
-	LN_CHECK_STATE(m_standardErrorReader != NULL, "Not redirected.");
-	return m_standardErrorReader;
-}
-
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-int Process::Execute(const PathName& program, const String& args, String* stdOutput)
-{
-	Process proc;
-	proc.SetRedirectStandardOutput(stdOutput != NULL);
-	proc.Start(program, args);
-	if (stdOutput != NULL) {
-		*stdOutput = proc.GetStandardOutput()->ReadToEnd();
-	}
-	proc.WaitForExit();
-	return proc.GetExitCode();
-}
-
-//#ifdef _WIN32
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
@@ -179,13 +75,17 @@ void Process::Start(const PathName& program, const String& args)
     pid_t pid = fork();
     if (pid == 0)
 	{
-		Array<String> argList = args.Split(" ");
+        StringA utf8Args(args);
+        Array<StringA> argList = utf8Args.Split(" ");
+        for (int i = 0; i < argList.GetCount(); ++i) {
+            
+        }
 		
 		// 子プロセス側
 		char** argv = new char *[args.GetSize() + 2];
 		for (int i = 0; i < arguments.size(); ++i)
 		{
-			argv[i + 1] = ::strdup(QFile::encodeName(arguments.at(i)).constData());
+			argv[i + 1] = ::strdup();
 		}
 		argv[arguments.size() + 1] = 0;
 		
@@ -275,15 +175,6 @@ ProcessStatus Process::GetState()
 		return ProcessStatus::Crashed;
 	}
 	//waitid
-}
-
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-int Process::GetExitCode()
-{
-	TryGetExitCode();
-	return m_exitCode;
 }
 
 //-----------------------------------------------------------------------------
