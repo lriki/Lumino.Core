@@ -134,6 +134,8 @@ public:
 	*/
 	template<typename TChar>
 	static int Compare(const TChar* str1, const TChar* str2, int count, CaseSensitivity cs = CaseSensitivity_CaseSensitive);
+	template<typename TChar>
+	static int Compare(TChar ch1, TChar ch2, CaseSensitivity cs = CaseSensitivity_CaseSensitive);
 
 	/**
 		@brief		文字列の前後にある空白を除いた文字列の範囲を調べる

@@ -701,4 +701,63 @@ bool PathTraits::Equals(const TChar* path1, const TChar* path2)
 template bool PathTraits::Equals<char>(const char* path1, const char* path2);
 template bool PathTraits::Equals<wchar_t>(const wchar_t* path1, const wchar_t* path2);
 
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+int PathTraits::Compare(TChar ch1, TChar ch2, CaseSensitivity cs)
+{
+	if (IsSeparatorChar(ch1) && IsSeparatorChar(ch2)) { return 0; }
+	return StringTraits::Compare(ch1, ch2, cs);
+}
+template int PathTraits::Compare<char>(char ch1, char ch2, CaseSensitivity cs);
+template int PathTraits::Compare<wchar_t>(wchar_t ch1, wchar_t ch2, CaseSensitivity cs);
+
+//-----------------------------------------------------------------------------
+// path1 から見たときの path2 の相対パス
+//-----------------------------------------------------------------------------
+template<typename TChar>
+static GenericString<TChar> PathTraits::DiffPath(const TChar* path1, int len1, const TChar* path2, int len2, CaseSensitivity cs)
+{
+	// 双方のパスの先頭から完全に一致する部分を探す。
+	int i = 0;	// 最初の不一致を指す
+	int si = 0;	// 一致部分の中の最後のセパレータ位置
+	for (; (i < len1) && (i < len2); ++i)
+	{
+		if (Compare(path1[i], path2[i], cs) != 0) {
+			break;
+		}
+		else if (IsSeparatorChar(path1[i])) {
+			si = i;
+		}
+	}
+
+	// 終端に / が無いことに備えて終端 \0 までを見る。path1 はディレクトリパスと仮定する。
+	if (i == len1 && IsSeparatorChar(path2[i])) {
+		si = i;
+	}
+
+	// 完全不一致
+	if (i == 0) {
+		return path2;
+	}
+	// 完全一致
+	if (i == len1 && i == len2) {
+		return GenericString<TChar>::GetEmpty();
+	}
+
+	// path1 の残りの部分からセパレータを探す。このセパレータの数が、戻る深さ(../) の数になる。
+	GenericString<TChar> relLead;
+	for (; i < len1; ++i)
+	{
+		if (IsSeparatorChar(path1[i])) {
+			relLead += LN_T(TChar, "../");
+		}
+	}
+
+	return relLead + GenericString<TChar>(path2, si + 1, len2 - (si + 1));
+}
+template GenericString<char> PathTraits::DiffPath(const char* path1, int len1, const char* path2, int len2, CaseSensitivity cs);
+template GenericString<wchar_t> PathTraits::DiffPath(const wchar_t* path1, int len1, const wchar_t* path2, int len2, CaseSensitivity cs);
+
 } // namespace Lumino

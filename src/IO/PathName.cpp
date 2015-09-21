@@ -163,6 +163,37 @@ GenericPathName<TChar> GenericPathName<TChar>::GetWithoutExtension() const
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
+GenericPathName<TChar> GenericPathName<TChar>::ChangeExtension(const TChar* ext) const
+{
+	GenericString<TChar> newPath;
+	for (int i = m_path.GetLength() - 1; i >= 0; --i)
+	{
+		TChar ch = m_path[i];
+		if (ch == '.') {
+			newPath = m_path.Mid(0, i);
+			break;
+		}
+		if (PathTraits::IsSeparatorChar(ch) || PathTraits::IsVolumeSeparatorChar(ch)) { break; }
+	}
+
+	// . が無かった場合
+	if (newPath.IsEmpty()) {
+		newPath = m_path;
+	}
+
+	if (ext != NULL) {
+		if (StringTraits::StrLen(ext) != 0 && ext[0] != '.') {
+			newPath += '.';
+		}
+		newPath += ext;
+	}
+	return GenericPathName<TChar>(newPath);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
 bool GenericPathName<TChar>::IsAbsolutePath() const
 {
 	return PathTraits::IsAbsolutePath(m_path.GetCStr());
@@ -175,6 +206,15 @@ template<typename TChar>
 bool GenericPathName<TChar>::IsRoot() const
 {
 	return PathTraits::IsRootPath(m_path.GetCStr());
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+bool GenericPathName<TChar>::IsDirectory() const
+{
+	return FileSystem::ExistsDirectory(m_path.GetCStr());
 }
 
 //-----------------------------------------------------------------------------
@@ -243,6 +283,17 @@ template<typename TChar>
 bool GenericPathName<TChar>::ExistsDirectory() const
 {
 	return FileSystem::ExistsDirectory(m_path);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+GenericPathName<TChar> GenericPathName<TChar>::MakeRelative(const GenericPathName<TChar>& target) const
+{
+	LN_CHECK_ARGS(IsAbsolutePath() && target.IsAbsolutePath());
+	GenericString<TChar> rel = PathTraits::DiffPath<TChar>(m_path.GetCStr(), m_path.GetLength(), target.m_path.GetCStr(), target.m_path.GetLength(), FileSystem::GetFileSystemCaseSensitivity());
+	return GenericPathName<TChar>(rel);
 }
 
 //-----------------------------------------------------------------------------

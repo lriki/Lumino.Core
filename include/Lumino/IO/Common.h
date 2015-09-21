@@ -35,6 +35,22 @@ public:
 
 #define LN_CONSTEXPR
 
+/** ファイルを開く際のアクセスモードを表します。*/
+LN_ENUM_FLAGS(FileOpenMode)
+{
+	None = 0x0000,
+	Read = 0x0001,				/**< 読み取りアクセス*/
+	Write = 0x0002,				/**< 書き込みアクセス*/
+	ReadWrite = Read | Write,	/**< 読み取り及び書き込みアクセス*/
+
+	Append = 0x0004,			/**< ファイルを開き、ファイルの末尾をシークする (追記モード)*/
+	Truncate = 0x0008,			/**< ファイルが存在する場合、サイズを 0 にする*/
+
+	Deferring = 0x0100,			/**< ファイルを遅延モードで開く*/
+};
+LN_ENUM_FLAGS_DECLARE(FileOpenMode);
+
+#if 0
 ///< ファイルを開く方法
 class FileOpenMode
 {
@@ -42,15 +58,6 @@ public:
 
 	enum _FileOpenMode	// この enum の型名は必ず必要。
 	{
-		None		= 0x0000,
-		Read		= 0x0001,									///< 読み取りアクセス
-		Write		= 0x0002,									///< 書き込みアクセス
-		ReadWrite = Read | Write,	///< 読み取り及び書き込みアクセス
-	
-		Append		= 0x0004,		///< ファイルを開き、ファイルの末尾をシークする (追記モード)
-		Truncate	= 0x0008,		///< ファイルが存在する場合、サイズを 0 にする
-	
-		Deferring	= 0x0100,		///< ファイルを遅延モードで開く
 	};
 	//LN_DECLARE_FLAGS(Flags, _FileOpenMode);
 
@@ -106,7 +113,7 @@ inline FileOpenMode operator|(FileOpenMode::enum_type f1, FileOpenMode::enum_typ
 //	FileOpenMode_Deferring	= 0x0100,		///< ファイルを遅延モードで開く
 //};
 
-
+#endif
 
 
 

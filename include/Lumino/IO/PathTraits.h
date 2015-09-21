@@ -138,6 +138,14 @@ public:
 	*/
 	template<typename TChar>
 	static bool Equals(const TChar* path1, const TChar* path2);
+
+
+
+	template<typename TChar>
+	static int Compare(TChar ch1, TChar ch2, CaseSensitivity cs);
+
+	template<typename TChar>
+	static GenericString<TChar> DiffPath(const TChar* path1, int len1, const TChar* path2, int len2, CaseSensitivity cs);
 };
 
 } // namespace Lumino

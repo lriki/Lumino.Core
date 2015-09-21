@@ -58,6 +58,7 @@ set(LN_SOURCES_Base
 	include/Lumino/Base/Queue.h
 	include/Lumino/Base/Rect.h
 	include/Lumino/Base/RefObject.h
+	include/Lumino/Base/Resource.h
 	include/Lumino/Base/Size.h
 	include/Lumino/Base/SortedArray.h
 	include/Lumino/Base/Stack.h
@@ -80,6 +81,7 @@ set(LN_SOURCES_Base
 	src/Base/Point.cpp
 	src/Base/Rect.cpp
 	src/Base/RefObject.cpp
+	src/Base/Resource.cpp
 	src/Base/Size.cpp
 	src/Base/String.cpp
 	src/Base/StringBuilder.cpp
@@ -120,6 +122,7 @@ set(LN_SOURCES_IO
 	include/Lumino/IO/BinaryReader.h
 	include/Lumino/IO/BinaryWriter.h
 	include/Lumino/IO/Common.h
+	include/Lumino/IO/Console.h
 	include/Lumino/IO/DirectoryUtils.h
 	include/Lumino/IO/File.h
 	include/Lumino/IO/FileStream.h
@@ -137,6 +140,7 @@ set(LN_SOURCES_IO
 	include/Lumino/IO/TextWriter.h
 	src/IO/BinaryReader.cpp
 	src/IO/BinaryWriter.cpp
+	src/IO/Console.cpp
 	src/IO/DirectoryUtils.cpp
 	src/IO/File.cpp
 	src/IO/FileStream.cpp

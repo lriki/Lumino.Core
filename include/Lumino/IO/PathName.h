@@ -139,6 +139,19 @@ public:
 	*/
 	GenericPathName<TChar> GetWithoutExtension() const;
 
+	/**
+		@brief		このパスの拡張子を変更した新しいパスを返します。
+		@param[in]	ext	: 新しい拡張子 (先頭の . は省略しても良い)
+		@code
+					PathName path1("C:/dir/file.txt");
+					PathName path2 = path1.GetWithoutExtension(_T(".dat"));	// => "C:/dir/file.dat"
+
+					PathName path1("file");
+					PathName path2 = path1.GetWithoutExtension(_T(".dat"));	// => "file.dat"
+		@endcode
+	*/
+	GenericPathName<TChar> ChangeExtension(const TChar* ext) const;
+
 	/// パスが空であるかを確認する
 	bool IsEmpty() const { return m_path.IsEmpty(); }
 
@@ -147,6 +160,9 @@ public:
 
 	/// ルートディレクトリであるかを確認する
 	bool IsRoot() const;
+
+	/** パスの示す先がディレクトリであるかを確認します。*/
+	bool IsDirectory() const;
 
 	/// 指定された拡張子を持っているかを確認する (pExt の . の有無は問わない)
 	bool CheckExt(const TChar* ext) const;
@@ -189,7 +205,14 @@ public:
 	/** 
 		@brief		このパスの指す先がディレクトリとして存在しているかを確認します。
 	*/
+	// TODO :↑に同じようなのがある…
 	bool ExistsDirectory() const;
+
+	/** 
+		@brief		このパスから指定したパスへの相対パスを取得します。
+		@details	target とこのパスは絶対パスである必要があります。
+	*/
+	GenericPathName<TChar> MakeRelative(const GenericPathName<TChar>& target) const;
 
 
 	/**

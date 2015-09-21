@@ -6,6 +6,10 @@
 namespace Lumino
 {
 
+//=============================================================================
+// FileStream
+//=============================================================================
+
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
@@ -44,8 +48,14 @@ void FileStream::Open(const TCHAR* filePath, FileOpenMode openMode)
 	m_filePath = filePath;
 	m_openModeFlags = openMode;
 
+	if (m_openModeFlags.TestFlag(FileOpenMode::Deferring))
+	{
+		if (!FileSystem::Exists(filePath)) {
+			LN_THROW(0, FileNotFoundException, filePath);
+		}
+	}
 	// 遅延オープンでなければここで開いてしまう
-	if (!m_openModeFlags.TestFlag(FileOpenMode::Deferring)) {
+	else {
 		Open();
 	}
 }

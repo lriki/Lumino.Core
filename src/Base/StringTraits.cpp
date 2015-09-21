@@ -399,6 +399,22 @@ template int StringTraits::Compare<wchar_t>(const wchar_t* str1, const wchar_t* 
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
+int StringTraits::Compare(TChar ch1, TChar ch2, CaseSensitivity cs)
+{
+	if (cs == CaseSensitivity_CaseSensitive) {
+		return ((unsigned int)(ch1)) - ((unsigned int)(ch2));
+	}
+	else {
+		return ((unsigned int)(ToUpper(ch1))) - ((unsigned int)(ToUpper(ch2)));
+	}
+}
+template int StringTraits::Compare<char>(char ch1, char ch2, CaseSensitivity cs);
+template int StringTraits::Compare<wchar_t>(wchar_t ch1, wchar_t ch2, CaseSensitivity cs);
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
 void StringTraits::Trim(const TChar* begin, int length, const TChar** outBegin, int* outLength)
 {
 	LN_THROW(begin && length >= 0 && outBegin && outLength, ArgumentException);

@@ -485,7 +485,7 @@ template<typename TChar>
 inline GenericString<TChar> operator+(const GenericString<TChar>& left, const GenericString<TChar>& right)
 {
 	GenericString<TChar> str;
-	str.reserve(left.size() + right.size());
+	//str.reserve(left.size() + right.size());
 	str += left;
 	str += right;
 	return str;
