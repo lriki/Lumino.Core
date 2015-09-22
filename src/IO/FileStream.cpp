@@ -121,7 +121,7 @@ void FileStream::Write( const void* data, size_t byteCount )
 {
 	CheckOpen();
 	size_t nWriteSize = fwrite( data, 1, byteCount, m_stream );
-	LN_THROW(nWriteSize == byteCount, NotSupportedException);
+	LN_THROW(nWriteSize == byteCount, InvalidOperationException);
 }
 
 //-----------------------------------------------------------------------------

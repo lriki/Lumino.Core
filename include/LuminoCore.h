@@ -34,6 +34,7 @@
 #include "Lumino/Base/SortedArray.h"
 #include "Lumino/Base/Thickness.h"
 #include "Lumino/Base/Collection.h"
+#include "Lumino/Base/Resource.h"
 
 #include "Lumino/IO/PathName.h"
 #include "Lumino/IO/PathTraits.h"
@@ -50,6 +51,7 @@
 #include "Lumino/IO/StringWriter.h"
 #include "Lumino/IO/TextWriter.h"
 #include "Lumino/IO/Process.h"
+#include "Lumino/IO/Console.h"
 
 #include "Lumino/Json/JsonValue.h"
 #include "Lumino/Json/JsonHandler.h"

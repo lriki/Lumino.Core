@@ -157,9 +157,11 @@
 #include <time.h>
 #include <algorithm>
 #include "../Internal.h"
-#include "../../include/Lumino/Base/CRT.h"
-#include "../../include/Lumino/Base/Exception.h"
-#include "../../include/Lumino/Base/StringTraits.h"
+#include <Lumino/Base/CRT.h>
+#include <Lumino/Base/Exception.h>
+#include <Lumino/Base/StringTraits.h>
+#include <Lumino/Base/Logger.h>
+#include <Lumino/Base/Resource.h>
 
 #ifdef LN_EXCEPTION_BACKTRACE
 	#ifdef LN_OS_WIN32	// Cygwin もこっち
@@ -182,22 +184,23 @@ static char gDumpFilePath[LN_MAX_PATH] = { 0 };
 //
 //-----------------------------------------------------------------------------
 Exception::Exception()
-	: mSourceFileLine(0)
-	, mStackBufferSize(0)
+	: m_sourceFileLine(0)
+	, m_stackBufferSize(0)
 {
-	memset(mStackBuffer, 0, sizeof(mStackBuffer));
-	memset(mSymbolBuffer, 0, sizeof(mSymbolBuffer));
+	memset(m_stackBuffer, 0, sizeof(m_stackBuffer));
+	memset(m_symbolBuffer, 0, sizeof(m_symbolBuffer));
+	memset(m_message, 0, sizeof(m_message));
 
 #ifdef LN_EXCEPTION_BACKTRACE
 	// バックトレース記録
-	mStackBufferSize = BackTrace::GetInstance()->Backtrace(mStackBuffer, LN_ARRAY_SIZE_OF(mStackBuffer));
+	m_stackBufferSize = BackTrace::GetInstance()->Backtrace(m_stackBuffer, LN_ARRAY_SIZE_OF(m_stackBuffer));
 
 	// バックトレース文字列取得
 	BackTrace::GetInstance()->AddressToFullSymbolString(
-		mStackBuffer, 
-		std::min(mStackBufferSize, 32),
-		mSymbolBuffer, 
-		LN_ARRAY_SIZE_OF(mSymbolBuffer));
+		m_stackBuffer, 
+		std::min(m_stackBufferSize, 32),
+		m_symbolBuffer, 
+		LN_ARRAY_SIZE_OF(m_symbolBuffer));
 #endif
 
 	// ファイルに保存
@@ -212,7 +215,7 @@ Exception::Exception()
 			char str[256];
 			ctime_s(str, 256, &timer);
 			
-			fprintf(fp, "%s\n%s\n\n", str, mSymbolBuffer);
+			fprintf(fp, "%s\n%s\n\n", str, m_symbolBuffer);
 			fclose(fp);
 		}
 	}
@@ -228,12 +231,21 @@ Exception::~Exception() throw()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+#pragma push_macro("GetMessage")
+#undef GetMessage
+const TCHAR* Exception::GetMessage() const { return LN_AFX_FUNCNAME(GetMessage)(); }
+const TCHAR* Exception::LN_AFX_FUNCNAME(GetMessage)() const { return m_message; }
+#pragma pop_macro("GetMessage")
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 Exception& Exception::SetSourceLocationInfo(const char* filePath, int fileLine)
 {
 	// もしバックトレースが取れていなかったらそれ用の文字列バッファに入れてしまう
-	if (mSymbolBuffer[0] == 0x00)
+	if (m_symbolBuffer[0] == 0x00)
 	{
-		sprintf_s(mSymbolBuffer, LN_ARRAY_SIZE_OF(mSymbolBuffer), "File:%s Line:%d", filePath, fileLine);
+		sprintf_s(m_symbolBuffer, LN_ARRAY_SIZE_OF(m_symbolBuffer), "File:%s Line:%d", filePath, fileLine);
 	}
 
 #ifdef LN_UNICODE
@@ -245,10 +257,10 @@ Exception& Exception::SetSourceLocationInfo(const char* filePath, int fileLine)
 		return *this;
 	}
 #else
-	strcpy(mSourceFilePath, filePath);
+	strcpy(m_sourceFilePath, filePath);
 #endif
 
-	mSourceFileLine = fileLine;
+	m_sourceFileLine = fileLine;
 	return *this;
 }
 
@@ -273,78 +285,227 @@ bool Exception::InitDumpFile(const char* filePath)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void Exception::SetMessage(const char* format, va_list args)
+void Exception::SetMessage(const TCHAR* caption)
 {
+	AppendMessage(caption, _tcslen(caption));
+	//int captionLen = _tcslen(caption);
+	//_tcscpy_s(m_message, MaxMessageBufferSize, caption);
+
+	//int pos = std::min(captionLen, MaxMessageBufferSize);
+	//m_message[pos] = '\n';
+	//m_message[pos + 1] = '\0';
+	//AppendMessage(m_symbolBuffer, strlen(m_symbolBuffer));
+
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void Exception::SetMessage(const TCHAR* caption, const char* format, va_list args)
+{
+	AppendMessage(caption, _tcslen(caption));
+
 	static const int BUFFER_SIZE = MaxMessageBufferSize;
 	char buf[BUFFER_SIZE];
+	//int captionLen = _tcslen(caption) + 1;	// +1 は'\n' の分
+	//int detailsLen = BUFFER_SIZE - captionLen;
 
 	int len = StringTraits::VSPrintf(buf, BUFFER_SIZE, format, args);
-	if (len >= BUFFER_SIZE)
-	{
-		// バッファに収まりきらない場合は終端を ... にして切る
-		buf[BUFFER_SIZE - 4] = '.';
-		buf[BUFFER_SIZE - 3] = '.';
-		buf[BUFFER_SIZE - 2] = '.';
-		buf[BUFFER_SIZE - 1] = '\0';
-	}
+	AppendMessage(buf, len);
+	//if (len >= detailsLen)
+	//{
+	//	// バッファに収まりきらない場合は終端を ... にして切る
+	//	buf[detailsLen - 4] = '.';
+	//	buf[detailsLen - 3] = '.';
+	//	buf[detailsLen - 2] = '.';
+	//	buf[detailsLen - 1] = '\0';
+	//}
 
-	// TCHAR に合わせてメンバに格納
-#ifdef LN_UNICODE
-	size_t wlen;
-	mbstowcs_s(&wlen, mMessage, BUFFER_SIZE, buf, _TRUNCATE);
-#else
-	strcpy_s(mMessage, BUFFER_SIZE, buf);
-#endif
+//	// キャプション
+//	_tcscpy_s(m_message, BUFFER_SIZE, caption);
+//	m_message[captionLen - 1] = '\n';
+//
+//	// TCHAR に合わせてメンバに格納
+//#ifdef LN_UNICODE
+//	size_t wlen;
+//	mbstowcs_s(&wlen, m_message + captionLen, detailsLen, buf, _TRUNCATE);
+//#else
+//	strcpy_s(m_message + captionLen, detailsLen, buf);
+//#endif
+	//AppendMessage(m_symbolBuffer, strlen(m_symbolBuffer));
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void Exception::SetMessage(const wchar_t* format, va_list args)
+void Exception::SetMessage(const TCHAR* caption, const wchar_t* format, va_list args)
 {
+	AppendMessage(caption, _tcslen(caption));
+
 	static const int BUFFER_SIZE = MaxMessageBufferSize;
 	wchar_t buf[BUFFER_SIZE];
+	//int captionLen = _tcslen(caption) + 1;	// +1 は'\n' の分
+	//int detailsLen = BUFFER_SIZE - captionLen;
 
 	int len = StringTraits::VSPrintf(buf, BUFFER_SIZE, format, args);
-	if (len >= BUFFER_SIZE)
-	{
-		// バッファに収まりきらない場合は終端を ... にして切る
-		buf[BUFFER_SIZE - 4] = L'.';
-		buf[BUFFER_SIZE - 3] = L'.';
-		buf[BUFFER_SIZE - 2] = L'.';
-		buf[BUFFER_SIZE - 1] = L'\0';
-	}
+	AppendMessage(buf, len);
+//	if (len >= detailsLen)
+//	{
+//		// バッファに収まりきらない場合は終端を ... にして切る
+//		buf[detailsLen - 4] = L'.';
+//		buf[detailsLen - 3] = L'.';
+//		buf[detailsLen - 2] = L'.';
+//		buf[detailsLen - 1] = L'\0';
+//	}
+//
+//	// キャプション
+//	_tcscpy_s(m_message, BUFFER_SIZE, caption);
+//	m_message[captionLen - 1] = '\n';
+//
+//	// TCHAR に合わせてメンバに格納
+//#ifdef LN_UNICODE
+//	wcscpy_s(m_message + captionLen, detailsLen, buf);
+//#else
+//	size_t mbcslen;
+//	wcstombs_s(&mbcslen, m_message + captionLen, detailsLen, buf, _TRUNCATE);
+//#endif
+	//AppendMessage(m_symbolBuffer, strlen(m_symbolBuffer));
+}
 
-	// TCHAR に合わせてメンバに格納
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void Exception::SetMessage(const TCHAR* caption, const char* format, ...)
+{
+	va_list args;
+	va_start(args, format);
+	SetMessage(caption, format, args);
+	va_end(args);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void Exception::SetMessage(const TCHAR* caption, const wchar_t* format, ...)
+{
+	va_list args;
+	va_start(args, format);
+	SetMessage(caption, format, args);
+	va_end(args);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void Exception::AppendMessage(const char* message, int len)
+{
+	int curLen = _tcslen(m_message);
+	int remainLen = (MaxMessageBufferSize - curLen) - 2;	// -2 は "\r\0"
+	len = std::min(len, remainLen);
+
+	TCHAR* head = m_message + curLen;
 #ifdef LN_UNICODE
-	wcscpy_s(mMessage, BUFFER_SIZE, buf);
+	size_t wlen;
+	mbstowcs_s(&wlen, head, remainLen + 2, message, _TRUNCATE);
+#else
+	strncpy_s(head, remainLen + 2, message, len);
+#endif
+
+	head[len] = '\n';
+	head[len + 1] = '\0';
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void Exception::AppendMessage(const wchar_t* message, int len)
+{
+	int curLen = _tcslen(m_message);
+	int remainLen = (MaxMessageBufferSize - curLen) - 2;	// -2 は "\r\0"
+	len = std::min(len, remainLen);
+
+	TCHAR* head = m_message + curLen;
+#ifdef LN_UNICODE
+	wcsncpy_s(head, remainLen + 2, message, len);
 #else
 	size_t mbcslen;
-	wcstombs_s(&mbcslen, mMessage, BUFFER_SIZE, buf, _TRUNCATE);
+	wcstombs_s(&mbcslen, head, remainLen + 2, message, _TRUNCATE);
 #endif
+
+	head[len] = '\n';
+	head[len + 1] = '\0';
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-void Exception::SetMessage(const char* format, ...)
-{
-	va_list args;
-	va_start(args, format);
-	SetMessage(format, args);
-	va_end(args);
-}
+//=============================================================================
+// VerifyException
+//=============================================================================
+LN_EXCEPTION_BASIC_CONSTRUCTOR_IMPLEMENT(VerifyException, InternalResource::VerifyError);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-void Exception::SetMessage(const wchar_t* format, ...)
-{
-	va_list args;
-	va_start(args, format);
-	SetMessage(format, args);
-	va_end(args);
-}
+//=============================================================================
+// ArgumentException
+//=============================================================================
+LN_EXCEPTION_BASIC_CONSTRUCTOR_IMPLEMENT(ArgumentException, InternalResource::ArgumentError);
+
+//=============================================================================
+// InvalidOperationException
+//=============================================================================
+LN_EXCEPTION_BASIC_CONSTRUCTOR_IMPLEMENT(InvalidOperationException, InternalResource::InvalidOperationError);
+
+//=============================================================================
+// NotImplementedException
+//=============================================================================
+LN_EXCEPTION_BASIC_CONSTRUCTOR_IMPLEMENT(NotImplementedException, InternalResource::NotImplementedError);
+
+//=============================================================================
+// OutOfMemoryException
+//=============================================================================
+LN_EXCEPTION_BASIC_CONSTRUCTOR_IMPLEMENT(OutOfMemoryException, InternalResource::OutOfMemoryError);
+
+//=============================================================================
+// OutOfRangeException
+//=============================================================================
+LN_EXCEPTION_BASIC_CONSTRUCTOR_IMPLEMENT(OutOfRangeException, InternalResource::OutOfRangeError);
+
+//=============================================================================
+// KeyNotFoundException
+//=============================================================================
+LN_EXCEPTION_BASIC_CONSTRUCTOR_IMPLEMENT(KeyNotFoundException, InternalResource::KeyNotFoundError);
+
+//=============================================================================
+// OverflowException
+//=============================================================================
+LN_EXCEPTION_BASIC_CONSTRUCTOR_IMPLEMENT(OverflowException, InternalResource::OverflowError);
+
+//=============================================================================
+// IOException
+//=============================================================================
+LN_EXCEPTION_BASIC_CONSTRUCTOR_IMPLEMENT(IOException, InternalResource::IOError);
+
+//=============================================================================
+// FileNotFoundException
+//=============================================================================
+LN_EXCEPTION_BASIC_CONSTRUCTOR_IMPLEMENT(FileNotFoundException, InternalResource::FileNotFoundError);
+
+//=============================================================================
+// DirectoryNotFoundException
+//=============================================================================
+LN_EXCEPTION_BASIC_CONSTRUCTOR_IMPLEMENT(DirectoryNotFoundException, InternalResource::DirectoryNotFoundError);
+
+//=============================================================================
+// InvalidFormatException
+//=============================================================================
+LN_EXCEPTION_BASIC_CONSTRUCTOR_IMPLEMENT(InvalidFormatException, InternalResource::InvalidFormatError);
+
+//=============================================================================
+// EndOfStreamException
+//=============================================================================
+LN_EXCEPTION_BASIC_CONSTRUCTOR_IMPLEMENT(EndOfStreamException, InternalResource::EndOfStreamError);
+
+//=============================================================================
+// EncodingException
+//=============================================================================
+LN_EXCEPTION_BASIC_CONSTRUCTOR_IMPLEMENT(EncodingException, InternalResource::EncodingError);
+
 
 
 #ifdef LN_OS_WIN32

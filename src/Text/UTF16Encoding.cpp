@@ -39,7 +39,7 @@ int UTF16Encoding::GetLeadExtraLength(const void* buffer, size_t bufferSize) con
 {
 	bool s;
 	UTFConversionResult result = UnicodeUtils::CheckUTF16Surrogate((const UTF16*)buffer, ((const UTF16*)buffer) + bufferSize / sizeof(UTF16), true, &s);
-	LN_THROW(result == UTFConversionResult_Success, EncodingFallbackException);
+	LN_THROW(result == UTFConversionResult_Success, EncodingException);
 	return (s) ? 1 : 0;
 }
 
@@ -50,7 +50,7 @@ int UTF16Encoding::GetCharacterCount(const byte_t* buffer, size_t bufferSize) co
 {
 	int count;
 	UTFConversionResult result = UnicodeUtils::GetUTF16CharCount((const UTF16*)buffer, bufferSize / sizeof(UTF16), true, &count);
-	LN_THROW(result == UTFConversionResult_Success, EncodingFallbackException);
+	LN_THROW(result == UTFConversionResult_Success, EncodingException);
 	return count;
 }
 
@@ -124,7 +124,7 @@ void UTF16Encoding::UTF16Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t 
 			else 
 			{
 				// 下位サロゲート以外の文字はNG
-				LN_THROW(0, EncodingFallbackException);
+				LN_THROW(0, EncodingException);
 			}
 		}
 
@@ -158,7 +158,7 @@ void UTF16Encoding::UTF16Encoder::ConvertFromUTF16(const UTF16* inBuffer, size_t
 	// 文字数はカウントする
 	int count;
 	UTFConversionResult r = UnicodeUtils::GetUTF16CharCount((UnicodeUtils::UTF16*)inBuffer, inBufferCharCount, true, &count);
-	LN_THROW(r == UTFConversionResult_Success, EncodingFallbackException);
+	LN_THROW(r == UTFConversionResult_Success, EncodingException);
 
 	*outBytesUsed = inBufferCharCount * sizeof(UTF16);
 	*outCharsUsed = count;

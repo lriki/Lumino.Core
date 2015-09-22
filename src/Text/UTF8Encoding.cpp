@@ -34,7 +34,7 @@ int UTF8Encoding::GetCharacterCount(const byte_t* buffer, size_t bufferSize) con
 {
 	int count;
 	UTFConversionResult result = UnicodeUtils::GetUTF8CharCount(buffer, bufferSize, true, &count);
-	LN_THROW(result == UTFConversionResult_Success, EncodingFallbackException);
+	LN_THROW(result == UTFConversionResult_Success, EncodingException);
 	return count;
 }
 
@@ -45,7 +45,7 @@ int UTF8Encoding::GetLeadExtraLength(const void* buffer, size_t bufferSize) cons
 {
 	int len;
 	UTFConversionResult result = UnicodeUtils::CheckUTF8TrailingBytes(((const byte_t*)buffer), ((const byte_t*)buffer) + bufferSize, true, &len);
-	LN_THROW(result == UTFConversionResult_Success, EncodingFallbackException);
+	LN_THROW(result == UTFConversionResult_Success, EncodingException);
 	return len;
 }
 
@@ -63,7 +63,7 @@ void UTF8Encoding::UTF8Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t in
 	if (m_byteOrderMark) {
 		static byte_t bom[] = { 0xEF, 0xBB, 0xBF };
 		int r = memcmp(inBuffer, bom, 3);
-		LN_THROW(r == 0, EncodingFallbackException);
+		LN_THROW(r == 0, EncodingException);
 		inBuffer += 3;
 		inBufferByteCount -= 3;
 	}
@@ -75,7 +75,7 @@ void UTF8Encoding::UTF8Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t in
 		(UnicodeUtils::UTF16*)outBuffer, 
 		outBufferCharCount,
 		&options);
-	LN_THROW(result == UTFConversionResult_Success, EncodingFallbackException);
+	LN_THROW(result == UTFConversionResult_Success, EncodingException);
 
 	// 出力
 	*outBytesUsed = options.ConvertedTargetLength * sizeof(UnicodeUtils::UTF16);
@@ -99,7 +99,7 @@ void UTF8Encoding::UTF8Encoder::ConvertFromUTF16(const UTF16* inBuffer, size_t i
 		(UnicodeUtils::UTF8*)outBuffer, 
 		outBufferByteCount,
 		&options);
-	LN_THROW(result == UTFConversionResult_Success, EncodingFallbackException);
+	LN_THROW(result == UTFConversionResult_Success, EncodingException);
 
 	// 出力
 	*outBytesUsed = options.ConvertedTargetLength;

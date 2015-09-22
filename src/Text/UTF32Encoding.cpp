@@ -63,7 +63,7 @@ void UTF32Encoding::UTF32Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t 
 
 		// 変換 (1文字だけ)
 		UTFConversionResult result = UnicodeUtils::ConvertUTF32toUTF16((UnicodeUtils::UTF32*)buf, 1, (UnicodeUtils::UTF16*)outBuffer, outBufferCharCount, &options);
-		LN_THROW(result == UTFConversionResult_Success, EncodingFallbackException);
+		LN_THROW(result == UTFConversionResult_Success, EncodingException);
 
 		// バッファ先頭は消費した分だけ進め、バッファサイズは消費した分だけ縮める
 		inBuffer += req;
@@ -89,7 +89,7 @@ void UTF32Encoding::UTF32Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t 
 		(UnicodeUtils::UTF16*)outBuffer, 
 		outBufferCharCount,
 		&options);
-	LN_THROW(result == UTFConversionResult_Success, EncodingFallbackException);
+	LN_THROW(result == UTFConversionResult_Success, EncodingException);
 
 	// 出力
 	(*outBytesUsed) += options.ConvertedTargetLength * sizeof(UnicodeUtils::UTF16);
@@ -116,7 +116,7 @@ void UTF32Encoding::UTF32Encoder::ConvertFromUTF16(const UTF16* inBuffer, size_t
 
 		// 変換 (サロゲートペアで1文字だけ)
 		UTFConversionResult result = UnicodeUtils::ConvertUTF16toUTF32((UnicodeUtils::UTF16*)buf, 2, (UnicodeUtils::UTF32*)outBuffer, outBufferByteCount, &options);
-		LN_THROW(result == UTFConversionResult_Success, EncodingFallbackException);
+		LN_THROW(result == UTFConversionResult_Success, EncodingException);
 
 		// バッファ先頭は消費した分だけ進め、バッファサイズは消費した分だけ縮める
 		size_t usedTargetBytes = options.ConvertedTargetLength * sizeof(UnicodeUtils::UTF32);
@@ -142,7 +142,7 @@ void UTF32Encoding::UTF32Encoder::ConvertFromUTF16(const UTF16* inBuffer, size_t
 		(UnicodeUtils::UTF32*)outBuffer, 
 		outBufferByteCount / sizeof(UnicodeUtils::UTF32),
 		&options);
-	LN_THROW(result == UTFConversionResult_Success, EncodingFallbackException);
+	LN_THROW(result == UTFConversionResult_Success, EncodingException);
 
 	// 出力
 	(*outBytesUsed) += options.ConvertedTargetLength * sizeof(UnicodeUtils::UTF32);

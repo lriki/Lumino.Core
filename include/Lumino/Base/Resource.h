@@ -1,4 +1,4 @@
-/**
+ï»¿/**
 	@file	Resource.h
 */
 #pragma once
@@ -16,13 +16,13 @@ class ResourceManager
 public:
 
 	/**
-		@brief		w’è‚µ‚½ƒŠƒ\[ƒX–¼‚É‘Î‰‚·‚é•¶š—ñƒŠƒ\[ƒX‚ğæ“¾‚µ‚Ü‚·B
-		@return		•¶š—ñƒŠƒ\[ƒXBŒ©‚Â‚©‚ç‚È‚¢ê‡‚Í‹ó•¶š—ñ‚ğ•Ô‚µ‚Ü‚·B
+		@brief		æŒ‡å®šã—ãŸãƒªã‚½ãƒ¼ã‚¹åã«å¯¾å¿œã™ã‚‹æ–‡å­—åˆ—ãƒªã‚½ãƒ¼ã‚¹ã‚’å–å¾—ã—ã¾ã™ã€‚
+		@return		æ–‡å­—åˆ—ãƒªã‚½ãƒ¼ã‚¹ã€‚è¦‹ã¤ã‹ã‚‰ãªã„å ´åˆã¯ç©ºæ–‡å­—åˆ—ã‚’è¿”ã—ã¾ã™ã€‚
 	*/
 	const String& GetString(const String& name);
 
 	/**
-		@brief	w’è‚µ‚½ƒŠƒ\[ƒX–¼‚É‘Î‰‚·‚é•¶š—ñƒŠƒ\[ƒX‚ğ’Ç‰Á‚µ‚Ü‚·B
+		@brief	æŒ‡å®šã—ãŸãƒªã‚½ãƒ¼ã‚¹åã«å¯¾å¿œã™ã‚‹æ–‡å­—åˆ—ãƒªã‚½ãƒ¼ã‚¹ã‚’è¿½åŠ ã—ã¾ã™ã€‚
 	*/
 	void AddString(const String& name, const String& value);
 
@@ -36,7 +36,25 @@ private:
 class InternalResource
 {
 public:
-	static const String OutOfMemory;
+	static const String UnknownError;
+	static const String VerifyError;
+	static const String ArgumentError;
+	static const String InvalidOperationError;
+	static const String NotImplementedError;
+	static const String OutOfMemoryError;
+	static const String OutOfRangeError;
+	static const String KeyNotFoundError;
+	static const String OverflowError;
+	static const String IOError;
+	static const String FileNotFoundError;
+	static const String DirectoryNotFoundError;
+	static const String InvalidFormatError;
+	static const String EndOfStreamError;
+	static const String EncodingError;
+	static const String Win32Error;
+	static const String ComError;
+
+	static const String OpenGLError;
 
 public:
 	static const String& GetString(const String& name);

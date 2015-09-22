@@ -137,18 +137,18 @@ void Win32CodePageEncoding::Win32CodePageDecoder::ConvertToUTF16(const byte_t* i
 
 		// 変換
 		convertedWideCount = ::MultiByteToWideChar(m_codePage, MB_ERR_INVALID_CHARS, (LPCSTR)tmpInBuffer.GetConstData(), tmpInBuffer.GetSize() - defectCount, (LPWSTR)outBuffer, outBufferCharCount);
-		LN_THROW(convertedWideCount > 0, EncodingFallbackException);
+		LN_THROW(convertedWideCount > 0, EncodingException);
 	}
 	else
 	{
 		convertedWideCount = ::MultiByteToWideChar(m_codePage, MB_ERR_INVALID_CHARS, (LPCSTR)inBuffer, inBufferByteCount, (LPWSTR)outBuffer, outBufferCharCount);
-		LN_THROW(convertedWideCount > 0, EncodingFallbackException);
+		LN_THROW(convertedWideCount > 0, EncodingException);
 	}
 
 	// MultiByteToWideChar じゃ文字数カウントはできないので UnicodeUtils を使う
 	int count;
 	UTFConversionResult r = UnicodeUtils::GetUTF16CharCount((UnicodeUtils::UTF16*)outBuffer, convertedWideCount, true, &count);
-	LN_THROW(r == UTFConversionResult_Success, EncodingFallbackException);
+	LN_THROW(r == UTFConversionResult_Success, EncodingException);
 
 	*outBytesUsed = convertedWideCount * sizeof(wchar_t);
 	*outCharsUsed = count;
@@ -217,13 +217,13 @@ void Win32CodePageEncoding::Win32CodePageEncoder::ConvertFromUTF16(const UTF16* 
 			pDefault,
 			&bUsedDefaultChar);
 
-		LN_THROW(convertedByteCount > 0, EncodingFallbackException);
+		LN_THROW(convertedByteCount > 0, EncodingException);
 	}
 
 	// WideCharToMultiByte じゃ文字数カウントはできないので UnicodeUtils を使う
 	int count;
 	UTFConversionResult r = UnicodeUtils::GetUTF16CharCount((UnicodeUtils::UTF16*)inBuffer, inBufferCharCount, true, &count);
-	LN_THROW(r == UTFConversionResult_Success, EncodingFallbackException);
+	LN_THROW(r == UTFConversionResult_Success, EncodingException);
 
 	*outBytesUsed = convertedByteCount;
 	*outCharsUsed = count;

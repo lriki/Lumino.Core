@@ -50,7 +50,7 @@ public:
 		@param		data		: 書き込むデータ
 		@param		byteCount	: バイト数
 		@details	固定長バッファへの書き込み等で、現在のシーク位置がストリームの末尾に向かって
-					count バイトよりも近い位置にあり容量を拡充できない場合は例外 (NotSupportedException) が発生します。
+					count バイトよりも近い位置にあり容量を拡充できない場合は例外が発生します。
 	*/
 	virtual void Write(const void* data, size_t byteCount) = 0;
 

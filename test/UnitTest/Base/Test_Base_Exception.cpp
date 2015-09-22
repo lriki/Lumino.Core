@@ -62,10 +62,39 @@ TEST_F(Test_Base_Exception, Assertion)
 	}
 }
 
+
 //---------------------------------------------------------------------
 TEST_F(Test_Base_Exception, Basic)
 {
+	// 
+	{
+		try
+		{
+			LN_THROW(0, ArgumentException);
+		}
+		catch (ArgumentException& e)
+		{
+			ASSERT_TRUE(_tcslen(e.GetMessage()) > 0);	// 何かメッセージが入っているはず
+		}
 
+		try
+		{
+			LN_THROW(0, ArgumentException, "test");
+		}
+		catch (ArgumentException& e)
+		{
+			ASSERT_TRUE(_tcsstr(e.GetMessage(), _T("test")) != NULL);
+		}
+
+		try
+		{
+			LN_THROW(0, ArgumentException, "param:%s", "p1");
+		}
+		catch (ArgumentException& e)
+		{
+			ASSERT_TRUE(_tcsstr(e.GetMessage(), _T("param:p1")) != NULL);
+		}
+	}
 
 
 	// char 可変長 message
@@ -75,7 +104,7 @@ TEST_F(Test_Base_Exception, Basic)
 	}
 	catch (IOException& e)
 	{
-		ASSERT_EQ(0, _tcscmp(_T("test1"), e.GetMessage()));
+		ASSERT_TRUE(_tcsstr(e.GetMessage(), _T("test1")) != NULL);
 	}
 	// wchar_t 可変長 message
 	try
@@ -92,6 +121,6 @@ TEST_F(Test_Base_Exception, Basic)
 	}
 	catch (IOException& e)
 	{
-		ASSERT_EQ(0, _tcscmp(_T("testtest"), e.GetMessage()));
+		ASSERT_TRUE(_tcsstr(e.GetMessage(), _T("testtest")) != NULL);
 	}
 }

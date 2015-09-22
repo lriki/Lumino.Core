@@ -13,20 +13,34 @@
 #define LN_COMCALL(exp)				{ HRESULT hr = (exp); if (FAILED(hr)) { LN_THROW(0, COMException, hr); } }
 
 /// 例外クラスの基本的なコンストラクタを宣言する
-#define LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(className) \
-	className(const char* message, ...) \
+#define LN_EXCEPTION_BASIC_CONSTRUCTOR_DECLARE(className) \
+	className(); \
+	className(const char* message, ...); \
+	className(const wchar_t* message, ...); \
+	virtual ~className() throw()
+
+/// 例外クラスの基本的なコンストラクタを定義する
+#define LN_EXCEPTION_BASIC_CONSTRUCTOR_IMPLEMENT(className, captionStringId) \
+	className::className() \
+	{ \
+		SetMessage(InternalResource::GetString(captionStringId)); \
+	} \
+	className::className(const char* message, ...) \
 	{ \
 		va_list args; \
 		va_start(args, message); \
-		SetMessage(message, args); \
+		SetMessage(InternalResource::GetString(captionStringId), message, args); \
 		va_end(args); \
 	} \
-	className(const wchar_t* message, ...) \
+	className::className(const wchar_t* message, ...) \
 	{ \
 		va_list args; \
 		va_start(args, message); \
-		SetMessage(message, args); \
+		SetMessage(InternalResource::GetString(captionStringId), message, args); \
 		va_end(args); \
+	} \
+	className::~className() throw() \
+	{ \
 	}
 
 
@@ -155,10 +169,14 @@ public:
 
 public:
 	
+#pragma push_macro("GetMessage")
+#undef GetMessage
 	/**
 		@brief	例外の詳細メッセージを取得します。
 	*/
-	virtual const TCHAR* GetMessage() const { return mMessage; }
+	const TCHAR* GetMessage() const;
+	virtual const TCHAR* LN_AFX_FUNCNAME(GetMessage)() const;
+#pragma pop_macro("GetMessage")
 
 	/**
 		@brief		例外発生時に詳細情報をダンプするファイルを初期化する
@@ -177,23 +195,28 @@ public:
 
 public:
 	// override std::exception
-	virtual const char* what() const  throw() { return mSymbolBuffer; }
+	virtual const char* what() const  throw() { return m_symbolBuffer; }
 
 protected:
-	void SetMessage(const char* format, va_list args);
-	void SetMessage(const wchar_t* format, va_list args);
-	void SetMessage(const char* format, ...);
-	void SetMessage(const wchar_t* format, ...);
+	void SetMessage(const TCHAR* caption);
+	void SetMessage(const TCHAR* caption, const char* format, va_list args);
+	void SetMessage(const TCHAR* caption, const wchar_t* format, va_list args);
+	void SetMessage(const TCHAR* caption, const char* format, ...);
+	void SetMessage(const TCHAR* caption, const wchar_t* format, ...);
+
+private:
+	void AppendMessage(const char* message, int len);
+	void AppendMessage(const wchar_t* message, int len);
 
 private:
 	static const int MaxMessageBufferSize = 1024;
 
-	TCHAR		mSourceFilePath[LN_MAX_PATH];
-	int			mSourceFileLine;
-	void*		mStackBuffer[32];
-	int			mStackBufferSize;
-	char		mSymbolBuffer[2048];
-	TCHAR		mMessage[MaxMessageBufferSize];
+	TCHAR		m_sourceFilePath[LN_MAX_PATH];
+	int			m_sourceFileLine;
+	void*		m_stackBuffer[32];
+	int			m_stackBufferSize;
+	char		m_symbolBuffer[2048];
+	TCHAR		m_message[MaxMessageBufferSize];
 };
 
 /**
@@ -203,78 +226,11 @@ class VerifyException
 	: public Exception
 {
 public:
-	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(VerifyException);
-	VerifyException() {}
-	virtual ~VerifyException() throw() {}
+	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECLARE(VerifyException);
 
 public:
 	// override Exception
 	virtual Exception* Copy() const { return LN_NEW VerifyException(*this); }
-};
-
-/**
-	@brief	メモリ不足例外
-*/
-class OutOfMemoryException 
-	: public Exception
-{
-public:
-	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(OutOfMemoryException);
-	OutOfMemoryException() {}
-	virtual ~OutOfMemoryException() throw() {}
-
-public:
-	// override Exception
-	virtual Exception* Copy() const { return LN_NEW OutOfMemoryException( *this ); }
-};
-
-/**
-	@brief	許容範囲外の値が指定された場合にスローされる例外です。
-*/
-class OutOfRangeException
-	: public Exception
-{
-public:
-	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(OutOfRangeException);
-	OutOfRangeException() {}
-	virtual ~OutOfRangeException() throw() {}
-
-public:
-	// override Exception
-	virtual Exception* Copy() const { return LN_NEW OutOfRangeException(*this); }
-};
-
-/**
-	@brief		その他のIO例外
-	@details	読み取り属性のファイルを書き込みモードでオープンしようとした時等。
-*/
-class IOException 
-	: public Exception
-{
-public:
-	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(IOException);
-	IOException() {}
-	virtual ~IOException() throw() {}
-
-public:
-	// override Exception
-	virtual Exception* Copy() const { return LN_NEW IOException( *this ); }
-};
-
-/**
-	@brief		ストリームの末尾を越えて読み込もうとしたときにスローされる例外です。
-*/
-class EndOfStreamException
-	: public IOException
-{
-public:
-	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(EndOfStreamException);
-	EndOfStreamException() {}
-	virtual ~EndOfStreamException() throw() {}
-
-public:
-	// override Exception
-	virtual Exception* Copy() const { return LN_NEW EndOfStreamException(*this); }
 };
 
 /**
@@ -284,9 +240,7 @@ class ArgumentException
 	: public Exception
 {
 public:
-	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(ArgumentException);
-	ArgumentException() {}
-	virtual ~ArgumentException() throw() {}
+	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECLARE(ArgumentException);
 
 public:
 	// override Exception
@@ -300,78 +254,11 @@ class InvalidOperationException
 	: public Exception
 {
 public:
-	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(InvalidOperationException);
-	InvalidOperationException() {}
-	virtual ~InvalidOperationException() throw() {}
+	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECLARE(InvalidOperationException);
 
 public:
 	// override Exception
 	virtual Exception* Copy() const { return LN_NEW InvalidOperationException(*this); }
-};
-
-/**
-	@brief		サポートされない機能を呼び出そうとした
-	@details	読み取り専用ストリームに対して書き込みを行った場合等。
-*/
-class NotSupportedException 
-	: public Exception
-{
-public:
-	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(NotSupportedException);
-	NotSupportedException() {}
-	virtual ~NotSupportedException() throw() {}
-
-public:
-	// override Exception
-	virtual Exception* Copy() const { return LN_NEW NotSupportedException( *this ); }
-};
-
-/**
-	@brief	ディスク上に存在しないファイルにアクセスしようとして失敗したときにスローされる例外
-*/
-class FileNotFoundException
-	: public Exception
-{
-public:
-	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(FileNotFoundException);
-	FileNotFoundException() {}
-	virtual ~FileNotFoundException() throw() {}
-
-public:
-	// override Exception
-	virtual Exception* Copy() const { return LN_NEW FileNotFoundException( *this ); }
-};
-
-/**
-	@brief	無効なディレクトリにアクセスしようとしたときにスローされる例外
-*/
-class DirectoryNotFoundException
-	: public Exception
-{
-public:
-	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(DirectoryNotFoundException);
-	DirectoryNotFoundException() {}
-	virtual ~DirectoryNotFoundException() throw() {}
-
-public:
-	// override Exception
-	virtual Exception* Copy() const { return LN_NEW DirectoryNotFoundException( *this ); }
-};
-
-/**
-	@brief	ファイルや文字列等の形式が不正
-*/
-class InvalidFormatException
-	: public Exception
-{
-public:
-	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(InvalidFormatException);
-	InvalidFormatException() {}
-	virtual ~InvalidFormatException() throw() {}
-
-public:
-	// override Exception
-	virtual Exception* Copy() const { return LN_NEW InvalidFormatException(*this); }
 };
 
 /**
@@ -381,13 +268,39 @@ class NotImplementedException
 	: public Exception
 {
 public:
-	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(NotImplementedException);
-	NotImplementedException() {}
-	virtual ~NotImplementedException() throw() {}
+	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECLARE(NotImplementedException);
 
 public:
 	// override Exception
 	virtual Exception* Copy() const { return LN_NEW NotImplementedException( *this ); }
+};
+
+/**
+	@brief	メモリ不足例外
+*/
+class OutOfMemoryException 
+	: public Exception
+{
+public:
+	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECLARE(OutOfMemoryException);
+
+public:
+	// override Exception
+	virtual Exception* Copy() const { return LN_NEW OutOfMemoryException( *this ); }
+};
+
+/**
+	@brief	許容範囲外の値が指定された場合にスローされる例外です。
+*/
+class OutOfRangeException
+	: public Exception
+{
+public:
+	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECLARE(OutOfRangeException);
+
+public:
+	// override Exception
+	virtual Exception* Copy() const { return LN_NEW OutOfRangeException(*this); }
 };
 
 /**
@@ -397,45 +310,11 @@ class KeyNotFoundException
 	: public Exception
 {
 public:
-	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(KeyNotFoundException);
-	KeyNotFoundException() {}
-	virtual ~KeyNotFoundException() throw() {}
+	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECLARE(KeyNotFoundException);
 
 public:
 	// override Exception
 	virtual Exception* Copy() const { return LN_NEW KeyNotFoundException(*this); }
-};
-
-/**
-	@brief	C/C++ランタイムAPI等でエラーが発生した
-*/
-class RuntimeException
-	: public Exception
-{
-public:
-	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(RuntimeException);
-	RuntimeException() {}
-	virtual ~RuntimeException() throw() {}
-
-public:
-	// override Exception
-	virtual Exception* Copy() const { return LN_NEW RuntimeException(*this); }
-};
-
-/**
-	@brief	文字コードの変換中、マッピングできない文字または不正シーケンスが見つかった
-*/
-class EncodingFallbackException
-	: public Exception
-{
-public:
-	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(EncodingFallbackException);
-	EncodingFallbackException() {}
-	virtual ~EncodingFallbackException() throw() {}
-
-public:
-	// override Exception
-	virtual Exception* Copy() const { return LN_NEW EncodingFallbackException(*this); }
 };
 
 /**
@@ -445,13 +324,96 @@ class OverflowException
 	: public Exception
 {
 public:
-	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECL(OverflowException);
-	OverflowException() {}
-	virtual ~OverflowException() throw() {}
+	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECLARE(OverflowException);
 
 public:
 	// override Exception
 	virtual Exception* Copy() const { return LN_NEW OverflowException(*this); }
+};
+
+/**
+	@brief		その他のIO例外
+	@details	読み取り属性のファイルを書き込みモードでオープンしようとした時等。
+*/
+class IOException 
+	: public Exception
+{
+public:
+	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECLARE(IOException);
+
+public:
+	// override Exception
+	virtual Exception* Copy() const { return LN_NEW IOException( *this ); }
+};
+
+/**
+	@brief	ディスク上に存在しないファイルにアクセスしようとして失敗したときにスローされる例外
+*/
+class FileNotFoundException
+	: public Exception
+{
+public:
+	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECLARE(FileNotFoundException);
+
+public:
+	// override Exception
+	virtual Exception* Copy() const { return LN_NEW FileNotFoundException(*this); }
+};
+
+/**
+	@brief	無効なディレクトリにアクセスしようとしたときにスローされる例外
+*/
+class DirectoryNotFoundException
+	: public Exception
+{
+public:
+	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECLARE(DirectoryNotFoundException);
+
+public:
+	// override Exception
+	virtual Exception* Copy() const { return LN_NEW DirectoryNotFoundException(*this); }
+};
+
+/**
+	@brief	ファイルや文字列等の形式が不正
+*/
+class InvalidFormatException
+	: public Exception
+{
+public:
+	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECLARE(InvalidFormatException);
+
+public:
+	// override Exception
+	virtual Exception* Copy() const { return LN_NEW InvalidFormatException(*this); }
+};
+
+/**
+	@brief		ストリームの末尾を越えて読み込もうとしたときにスローされる例外です。
+*/
+class EndOfStreamException
+	: public IOException
+{
+public:
+	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECLARE(EndOfStreamException);
+
+public:
+	// override Exception
+	virtual Exception* Copy() const { return LN_NEW EndOfStreamException(*this); }
+};
+
+/**
+	@brief	文字コードの変換中、マッピングできない文字または不正シーケンスが見つかった
+*/
+class EncodingException
+	: public Exception
+{
+public:
+	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECLARE(EncodingException);
+
+public:
+	// override Exception
+	virtual Exception* Copy() const { return LN_NEW EncodingException(*this); }
 };
 
 

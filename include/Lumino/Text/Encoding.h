@@ -78,7 +78,7 @@ public:
 	static Encoding* GetTCharEncoding();
 
 	/**
-		@brief		UTF-8 エンコーディングを取得する。
+		@brief		UTF-8 (BOM 無し)エンコーディングを取得する。
 		@details	返されるポインタはグローバルなインスタンスです。このポインタは解放しないでください。
 	*/
 	static Encoding* GetUTF8Encoding();

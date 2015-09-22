@@ -139,7 +139,7 @@ void DBCSEncoding::DBCSDecoder::ConvertToUTF16(const byte_t* inBuffer, size_t in
 			else {
 				// シングルバイト文字。普通に変換する。
 				outBuffer[outBufPos] = m_tableInfo->DBCSToUTF16Table[b];
-				LN_THROW(outBuffer[outBufPos] != 0x0000, EncodingFallbackException);	// 不正文字
+				LN_THROW(outBuffer[outBufPos] != 0x0000, EncodingException);	// 不正文字
 				++outBufPos;
 			}
 		}
@@ -153,7 +153,7 @@ void DBCSEncoding::DBCSDecoder::ConvertToUTF16(const byte_t* inBuffer, size_t in
 
 			// マルチバイト文字。先行バイトを上位バイトにして変換する。
 			outBuffer[outBufPos] = m_tableInfo->DBCSToUTF16Table[(m_lastLeadByte << 8) | (b & 0xFF)];
-			LN_THROW(outBuffer[outBufPos] != 0x0000, EncodingFallbackException);	// 不正文字
+			LN_THROW(outBuffer[outBufPos] != 0x0000, EncodingException);	// 不正文字
 			++outBufPos;
 			m_lastLeadByte = 0x00;
 		}
@@ -187,7 +187,7 @@ void DBCSEncoding::DBCSEncoder::ConvertFromUTF16(const UTF16* inBuffer, size_t i
 
 		// サロゲートはエラー
 		if (UnicodeUtils::CheckUTF16HighSurrogate(ch) || UnicodeUtils::CheckUTF16LowSurrogate(ch)) {
-			LN_THROW(0, EncodingFallbackException);
+			LN_THROW(0, EncodingException);
 		}
 
 		uint16_t dbBytes = m_tableInfo->UTF16ToDBCSTable[ch];

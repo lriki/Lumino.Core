@@ -99,6 +99,12 @@
 	#define LN_INTERNAL_ACCESS	private
 #endif
 
+#ifdef LN_UNICODE
+	#define LN_AFX_FUNCNAME(name) name##W
+#else
+	#define LN_AFX_FUNCNAME(name) name##A
+#endif
+
 
 //----------------------------------------------------------------------
 // include
