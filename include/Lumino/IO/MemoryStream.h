@@ -35,7 +35,7 @@ public:
 		@param		size	: サイズ(バイト数)
 		@details	buffer に指定したバッファは、このクラスのインスタンスが存在する間は開放しないでください。
 	*/
-	MemoryStream(const void* buffer, size_t size);
+	MemoryStream(const void* buffer, size_t size, bool copy = false);
 
 	~MemoryStream();
 
@@ -61,7 +61,7 @@ public:
 		@param		size	: サイズ(バイト数)
 		@details	buffer に指定したバッファは、このクラスのインスタンスが存在する間は開放しないでください。
 	*/
-	void Create(const void* buffer, size_t size);
+	void Create(const void* buffer, size_t size, bool copy = false);
 
 	/**
 		@brief		データの読み書き先バイト配列の先頭アドレスを取得します。
@@ -86,6 +86,7 @@ private:
 	void*				m_fixedBuffer;		///< 固定長の場合はこのバッファを使う
 	const void*			m_constfixedBuffer;	///< 固定長の場合はこのバッファを使う
 	size_t				m_fixedBufferSize;
+	bool				m_autoDelete;
 };
 
 } // namespace Lumino

@@ -14,6 +14,7 @@ MemoryStream::MemoryStream()
 	, m_fixedBuffer(NULL)
 	, m_constfixedBuffer(NULL)
 	, m_fixedBufferSize(0)
+	, m_autoDelete(false)
 {
 	// 要素が1つ以上無いと [0] にもアクセスできない (assert が発生する)
 	m_buffer.resize(1);
@@ -27,6 +28,7 @@ MemoryStream::MemoryStream(void* buffer, size_t size)
 	, m_fixedBuffer(NULL)
 	, m_constfixedBuffer(NULL)
 	, m_fixedBufferSize(0)
+	, m_autoDelete(false)
 {
 	Create(buffer, size);
 }
@@ -34,13 +36,14 @@ MemoryStream::MemoryStream(void* buffer, size_t size)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-MemoryStream::MemoryStream(const void* buffer, size_t size)
+MemoryStream::MemoryStream(const void* buffer, size_t size, bool copy)
 	: m_seekPos(0)
 	, m_fixedBuffer(NULL)
 	, m_constfixedBuffer(NULL)
 	, m_fixedBufferSize(0)
+	, m_autoDelete(false)
 {
-	Create(buffer, size);
+	Create(buffer, size, copy);
 }
 
 //-----------------------------------------------------------------------------
@@ -48,6 +51,9 @@ MemoryStream::MemoryStream(const void* buffer, size_t size)
 //-----------------------------------------------------------------------------
 MemoryStream::~MemoryStream()
 {
+	if (m_autoDelete) {
+		LN_SAFE_DELETE_ARRAY(m_fixedBuffer);
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -71,10 +77,20 @@ void MemoryStream::Create(void* buffer, size_t size)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void MemoryStream::Create(const void* buffer, size_t size)
+void MemoryStream::Create(const void* buffer, size_t size, bool copy)
 {
-	m_constfixedBuffer = buffer;
-	m_fixedBufferSize = size;
+	if (copy)
+	{
+		m_fixedBuffer = LN_NEW byte_t[size];
+		memcpy(m_fixedBuffer, buffer, size);
+		m_fixedBufferSize = size;
+		m_autoDelete = true;
+	}
+	else
+	{
+		m_constfixedBuffer = buffer;
+		m_fixedBufferSize = size;
+	}
 }
 
 //-----------------------------------------------------------------------------
