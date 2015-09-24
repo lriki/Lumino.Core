@@ -1,7 +1,7 @@
 
 #include "../Internal.h"
 #include <time.h>
-#include <Lumino/Version.h>
+#include <Lumino/Base/Version.h>
 #include <Lumino/Base/StringTraits.h>
 #include <Lumino/Base/Environment.h>
 #include <Lumino/Base/Logger.h>

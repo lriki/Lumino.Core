@@ -68,6 +68,7 @@ set(LN_SOURCES_Base
 	include/Lumino/Base/StringTraits.h
 	include/Lumino/Base/Thickness.h
 	include/Lumino/Base/Typedef.h
+	include/Lumino/Base/Version.h
 	src/Base/ByteBuffer.cpp
 	src/Base/Cache.cpp
 	src/Base/DllLoader.cpp
