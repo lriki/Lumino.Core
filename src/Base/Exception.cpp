@@ -250,9 +250,9 @@ Exception& Exception::SetSourceLocationInfo(const char* filePath, int fileLine)
 
 #ifdef LN_UNICODE
 	// ワイド文字列へ変換 (文字コードは考慮しない)
-	memset(mSourceFilePath, 0, sizeof(mSourceFilePath));
+	memset(m_sourceFilePath, 0, sizeof(m_sourceFilePath));
 	size_t size;
-	errno_t err = mbstowcs_s(&size, mSourceFilePath, LN_MAX_PATH, filePath, LN_MAX_PATH - 1);
+	errno_t err = mbstowcs_s(&size, m_sourceFilePath, LN_MAX_PATH, filePath, LN_MAX_PATH - 1);
 	if (err != 0) {
 		return *this;
 	}

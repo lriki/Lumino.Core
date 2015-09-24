@@ -6,6 +6,7 @@
 
 #include <vector>
 #include <string>
+#include <atomic>
 #include "Common.h"
 #include "Array.h"
 #include "ByteBuffer.h"
@@ -438,13 +439,15 @@ private:
 
 		static GenericStringCore* GetSharedEmpty() { return &m_sharedEmpty; }
 
-#if 0
-		inline bool IsShared() const { return (m_refCount.Get() > 1); }
-		inline void AddRef() { m_refCount.Increment(); }
+#if 1
+		inline bool IsShared() const { return (m_refCount.load() > 1); }
+		inline void AddRef() { m_refCount.fetch_add(1, std::memory_order_relaxed);/*m_refCount.Increment();*/ }
 		inline void Release()
 		{
-			m_refCount.Decrement();
-			if (m_refCount.Get() <= 0)
+			int before = m_refCount.fetch_sub(1, std::memory_order_relaxed);
+			/*m_refCount.Decrement();*/
+			//if (m_refCount.Get() <= 0)
+			if (before <= 1)
 			{
 				if (this != GetSharedEmpty()) {		// グローバル変数として定義された String からの解放済み delete 対策
 					delete this;
@@ -452,7 +455,8 @@ private:
 			}
 		}
 	public:
-		Threading::Atomic		m_refCount;
+		std::atomic<int>	m_refCount;
+		//Threading::Atomic		m_refCount;
 #else
 		inline bool IsShared() const { return (m_refCount > 1); }
 		inline void AddRef() { ++m_refCount; }

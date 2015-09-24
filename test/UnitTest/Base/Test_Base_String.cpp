@@ -7,9 +7,69 @@ protected:
 	virtual void TearDown() {}
 };
 
+#if 0
+String g_str1;
+std::string g_str2;
+
+static String GetTest1()
+{
+	static const int i = 0;
+	char buf[] = "01111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111";
+	buf[0] = +(i % 10);
+	//return String(buf);
+	g_str1 = buf;
+	return g_str1;
+}
+static std::string GetTest2()
+{
+	static const int i = 0;
+	char buf[] = "01111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111";
+	buf[0] = +(i % 10);
+	//return std::string(buf);
+	g_str2 = buf;
+	return g_str2;
+}
+#endif
+
 //---------------------------------------------------------------------
 TEST_F(Test_Base_String, Constructor)
 {
+#if 0 // COW パフォーマンステスト
+	String str1 = "";
+	String str12 = "";
+	std::string str2 = "";
+	std::string str22 = "";
+	Array<String> ary1;
+	Array<String> ary2;
+
+
+	printf("----\n");
+	for (int j = 0; j < 10; j++)
+	{
+		ElapsedTimer timer;
+		timer.Start();
+		for (int i = 0; i < 1000000; ++i)
+		{
+			str1 = GetTest1();
+			str12 = str1;
+		}
+		printf("t:%llu\n", timer.GetElapsedTime());
+	}
+	printf("----\n");
+	for (int j = 0; j < 10; j++)
+	{
+		ElapsedTimer timer;
+		timer.Start();
+		for (int i = 0; i < 1000000; ++i)
+		{
+			str2 = GetTest2();
+			str22 = str2;
+		}
+		printf("t:%llu\n", timer.GetElapsedTime());
+	}
+	printf("----\n");
+#endif
+
 	{
 		std::string str1("test", 0, 4);
 		StringA str2("test", 0, 4);
