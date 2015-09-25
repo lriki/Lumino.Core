@@ -439,7 +439,7 @@ private:
 
 		static GenericStringCore* GetSharedEmpty() { return &m_sharedEmpty; }
 
-#if 1
+#ifdef LN_INTERNAL_COW_THREAD_SAFE
 		inline bool IsShared() const { return (m_refCount.load() > 1); }
 		inline void AddRef() { m_refCount.fetch_add(1, std::memory_order_relaxed);/*m_refCount.Increment();*/ }
 		inline void Release()
