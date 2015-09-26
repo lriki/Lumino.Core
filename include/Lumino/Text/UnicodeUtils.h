@@ -171,8 +171,8 @@ public:
 
 	/**
 		@brief			UTF8 文字の後続バイト数を取得する
-		@param[in]		sourceStart			: チェック対象の先頭文字のアドレス
-		@param[in]		sourceEnd			: バッファの終端文字のアドレス (有効な領域の次のアドレスを指す (\0 終端文字列なら \0 を指す))
+		@param[in]		sourceStart			: チェック対象の先頭文字のポインタ
+		@param[in]		sourceEnd			: バッファの終端文字のポインタ (有効な領域の次のアドレスを指す (\0 終端文字列なら \0 を指す))
 		@param[in]		strict				: true の場合、不正文字のチェックを行う (不正文字が見つかった場合は UTFConversionResult_SourceIllegal を返す)
 		@param[out]		outExtraByteCount	: 後続バイト数 (ASCII 文字等、後続が無い場合は 0 が格納される)
 	*/
@@ -180,8 +180,8 @@ public:
 
 	/**
 		@brief			UTF16 のサロゲートペアであるかを確認する
-		@param[in]		sourceStart		: チェック対象の先頭文字のアドレス
-		@param[in]		sourceEnd		: バッファの終端文字のアドレス (有効な領域の次のアドレスを指す (\0 終端文字列なら \0 を指す))
+		@param[in]		sourceStart		: チェック対象の先頭文字のポインタ
+		@param[in]		sourceEnd		: バッファの終端文字のポインタ (有効な領域の次のアドレスを指す (\0 終端文字列なら \0 を指す))
 		@param[in]		strict			: true の場合、不正文字のチェックを行う (不正文字が見つかった場合は UTFConversionResult_SourceIllegal を返す)
 		@param[out]		outSurrogate	: true が格納された場合、sourceStart と その次の文字はサロゲートペアである
 	*/

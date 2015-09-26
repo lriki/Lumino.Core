@@ -243,8 +243,8 @@ public:
 		@param[in]	str			: 変換元の文字列
 		@param[in]	len			: str の文字数 (-1 を指定すると \0 まで変換する)
 		@param[in]	base		: 基数 (0、2、8、10、16 のいずれかであること)
-		@param[in]	outEndPtr	: スキャンの終了位置を格納する変数のアドレス
-		@param[in]	outResult	: エラーコードを格納する変数のアドレス
+		@param[in]	outEndPtr	: スキャンの終了位置を格納する変数のポインタ
+		@param[in]	outResult	: エラーコードを格納する変数のポインタ
 		@return		変換結果の数値
 		@details	次の書式に従い、文字列を数値に変換します。<br>
 					[whitespace] [{+ | – }] [0 [{ x | X }]] [digits | letters]		<br>

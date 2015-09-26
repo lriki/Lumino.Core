@@ -55,7 +55,7 @@ public:
 	void Unload();
 
 	/**
-		@brief		ライブラリに含まれる関数のアドレスを取得します。
+		@brief		ライブラリに含まれる関数のポインタを取得します。
 	*/
 	void* GetProcAddress(const char* procName);
 
