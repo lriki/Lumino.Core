@@ -163,6 +163,8 @@ enum FileAccessPriority
 	FileAccessPriority_ArchiveFirst = 0,	///< アーカイブ優先
 	FileAccessPriority_DirectoryFirst,		///< ディレクトリ優先
 	FileAccessPriority_ArchiveOnly,			///< アーカイブのみ   
+
+	FileAccessPriority_TERMINATOR,
 };
 
 /// シーク位置の指定の基準
