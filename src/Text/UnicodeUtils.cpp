@@ -432,6 +432,7 @@ UTFConversionResult UnicodeUtils::CheckUTF8TrailingBytes(const UTF8* sourceStart
 {
 	*outExtraByteCount = 0;
 	int extra = TrailingBytesForUTF8[*sourceStart];
+	*outExtraByteCount = extra;
 
 	// 範囲チェック
 	if (sourceStart + extra >= sourceEnd) {
@@ -443,7 +444,6 @@ UTFConversionResult UnicodeUtils::CheckUTF8TrailingBytes(const UTF8* sourceStart
 		return UTFConversionResult_SourceIllegal;
 	}
 
-	*outExtraByteCount = extra;
 	return UTFConversionResult_Success;
 }
 

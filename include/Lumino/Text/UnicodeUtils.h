@@ -175,6 +175,7 @@ public:
 		@param[in]		sourceEnd			: バッファの終端文字のポインタ (有効な領域の次のアドレスを指す (\0 終端文字列なら \0 を指す))
 		@param[in]		strict				: true の場合、不正文字のチェックを行う (不正文字が見つかった場合は UTFConversionResult_SourceIllegal を返す)
 		@param[out]		outExtraByteCount	: 後続バイト数 (ASCII 文字等、後続が無い場合は 0 が格納される)
+		@details		戻り値がエラーでも、outExtraByteCount には後続バイト数が格納されます。
 	*/
 	static UTFConversionResult CheckUTF8TrailingBytes(const UTF8* sourceStart, const UTF8* sourceEnd, bool strict, int* outExtraByteCount);
 
@@ -193,7 +194,6 @@ public:
 	/// ワードが、UTF16 の下位サロゲートであるかを確認する
 	static bool CheckUTF16LowSurrogate(UTF16 ch) { return (SurrogateLowStart <= ch && ch <= SurrogateLowEnd); }
 
-private:
 
 	/// 1文字分の変換 (UTF8 → UTF32)
 	static UTFConversionResult ConvertCharUTF8toUTF32(
@@ -222,6 +222,8 @@ private:
 		UTF16**					targetStart, 
 		UTF16*					targetEnd, 
 		UTFConversionOptions*	options);
+
+private:
 
 	/// 正規の UTF8 バイト列かをチェックする
 	static bool IsLegalUTF8(const UTF8 *source, size_t length);
