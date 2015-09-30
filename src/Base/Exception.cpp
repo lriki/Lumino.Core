@@ -173,7 +173,7 @@
 	#if defined(LN_OS_WIN32)	// Cygwin もこっち
 		#include "Win32/BackTrace.h"
 	#elif defined(LN_OS_MAC)
-		#include "Unix/SimpeBackTrace.h"
+		#include "Unix/SimpleBackTrace.h"
 	#else
 		#include "Unix/BackTrace.h"
 	#endif

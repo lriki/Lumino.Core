@@ -23,6 +23,8 @@ bool PathTraits::IsSeparatorChar(TChar ch)
 	return (ch == '/');
 #endif
 }
+template bool PathTraits::IsSeparatorChar<char>(char ch);
+template bool PathTraits::IsSeparatorChar<wchar_t>(wchar_t ch);
 
 //-----------------------------------------------------------------------------
 //
@@ -36,6 +38,8 @@ bool PathTraits::IsVolumeSeparatorChar(TChar ch)
 	return false;
 #endif
 }
+template bool PathTraits::IsVolumeSeparatorChar<char>(char ch);
+template bool PathTraits::IsVolumeSeparatorChar<wchar_t>(wchar_t ch);
 
 //-----------------------------------------------------------------------------
 //
@@ -115,7 +119,7 @@ GenericString<TChar> PathTraits::GetDirectoryPath(const TChar* path)
 	*/
 
 	// 後ろから前に調べて、最初に \\ か / が見つかるところを探す
-	size_t pos = StringTraits::StrLen(path);
+	int pos = StringTraits::StrLen(path);
 	TChar lastSep = 0;
 	for ( ; pos >= 0; --pos ) {
 		if ( path[pos] == '\\' || path[pos] == '/' ) {

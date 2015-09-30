@@ -365,6 +365,18 @@ int64_t FileSystem::CalcSeekPoint(int64_t curPoint, int64_t maxSize, int64_t off
 	}
 	return newPoint;
 }
+    
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+bool FileSystem::ExistsDirectory(const char* path)
+{
+    return GetAttribute(path) & FileAttribute::Directory;
+}
+bool FileSystem::ExistsDirectory(const wchar_t* path)
+{
+    return GetAttribute(path) & FileAttribute::Directory;
+}
 
 //-----------------------------------------------------------------------------
 //

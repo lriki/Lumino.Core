@@ -348,6 +348,7 @@ if (WIN32)
 
 elseif (APPLE)
 	set(LN_UNIT_TEST_LINK_LIBS "pthread")
+	set(CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++")
 	
 elseif (UNIX)
 	set(LN_UNIT_TEST_LINK_LIBS "pthread")

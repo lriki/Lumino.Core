@@ -29,6 +29,8 @@ Process::Process()
 	, m_hOutputWrite(NULL)
 	, m_hErrorRead(NULL)
 	, m_hErrorWrite(NULL)
+#else
+    , m_pid(NULL)
 #endif
 {
 }

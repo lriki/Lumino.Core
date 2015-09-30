@@ -95,7 +95,7 @@ void GenericStringBuilderCore<TChar>::Replace(int start, int length, const TChar
 
 	// newAfter ‚Í oldAfter ‚ÌˆÚ“®æ (•¶Žš”‚Í oldAfter ‚Æ“¯‚¶)
 	TChar* newAfterBegin = oldAfterBegin + diffChars;
-	TChar* newAfterEnd = newAfterBegin + afterCount;	// ‚±‚Ì1‚Â‘O‚Ü‚Å‚ª after ‚Ì•¶Žš
+	//TChar* newAfterEnd = newAfterBegin + afterCount;	// ‚±‚Ì1‚Â‘O‚Ü‚Å‚ª after ‚Ì•¶Žš
 
 	if (afterCount > 0) {
 		memmove(newAfterBegin, oldAfterBegin, sizeof(TChar) * afterCount);

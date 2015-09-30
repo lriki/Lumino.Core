@@ -87,12 +87,12 @@ void Process::Start(const PathName& program, const String& args)
         StringA utf8Args(args);
         Array<StringA> argList = utf8Args.Split(" ");
 		
-		char** argv = new char *[utf8Args.GetSize() + 2];
-		argv[0] = utf8Path.GetCStr();
-		for (int i = 0; i < utf8Args.GetSize(); ++i) {
-			argv[i + 1] = utf8Args.GetCStr();
+		char** argv = new char *[argList.GetCount() + 2];
+        argv[0] = ::strdup(utf8Path.GetCStr());     // 書き込み可能なポインタを渡さなければならないので strdup
+		for (int i = 0; i < argList.GetCount(); ++i) {
+			argv[i + 1] = ::strdup(argList[i].GetCStr());
 		}
-		argv[utf8Args.GetSize() + 1] = NULL;
+		argv[argList.GetCount() + 1] = NULL;
 		
 		execve(argv[0], argv, environ);
 		

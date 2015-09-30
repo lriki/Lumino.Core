@@ -1062,7 +1062,6 @@ double StringTraits::ToDouble(const TChar* str, int len, const TChar** outEndPtr
 
 	if (outEndPtr != NULL) { *outEndPtr = str + (end - tmp); }
 
-	int aa = errno;
 	if (errno == ERANGE || v == HUGE_VAL || v == -HUGE_VAL) {
 		if (outResult != NULL) { *outResult = NumberConversionResult_Overflow; }
 		return v;

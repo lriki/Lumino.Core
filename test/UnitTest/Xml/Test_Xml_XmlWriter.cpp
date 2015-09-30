@@ -73,7 +73,7 @@ uint16_t jis_to_sjis(uint8_t c1, uint8_t c2)
 //---------------------------------------------------------------------
 TEST_F(Test_Xml_XmlWriter, UnitTest)
 {
-	uint16_t r = jis_to_sjis(0x74, 0x26);
+	//uint16_t r = jis_to_sjis(0x74, 0x26);
 
 	// <Unit> WriteStartDocument
 	{

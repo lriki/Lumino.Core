@@ -53,7 +53,7 @@ bool TestUtils::CheckArrays(const void* ary1, const void* ary2, size_t count)
 	for (size_t i = 0; i < count; ++i)
 	{
 		if (b1[i] != b2[i]) {
-			printf("not match arrays [%d]\n", i);
+			printf("not match arrays [%u]\n", i);
 			return false;
 		}
 	}

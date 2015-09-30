@@ -1,7 +1,5 @@
 ﻿#include <TestConfig.h>
 
-static int g_Value = 0;
-
 class Test_Base_Locale : public ::testing::Test
 {
 protected:

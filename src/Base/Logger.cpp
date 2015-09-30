@@ -123,7 +123,7 @@ void Logger::WriteLine(Level level, const char* format, ...) throw()
 		StringTraits::VSPrintf(buf, TEMP_BUFFER_SIZE, format, args);
 		va_end(args);
 
-		fprintf(stream, "%d %s: ", Environment::GetTickCount() - g_logStartTime, GetInfoString(level));
+		fprintf(stream, "%llu %s: ", Environment::GetTickCount() - g_logStartTime, GetInfoString(level));
 		fprintf(stream, "%s\n", buf);
 
 		fclose(stream);
@@ -148,7 +148,7 @@ void Logger::WriteLine(Level level, const wchar_t* format, ...) throw()
 		StringTraits::VSPrintf(buf, TEMP_BUFFER_SIZE, format, args);
 		va_end(args);
 
-		fprintf(stream, "%d %s: ", Environment::GetTickCount() - g_logStartTime, GetInfoString(level));
+		fprintf(stream, "%llu %s: ", Environment::GetTickCount() - g_logStartTime, GetInfoString(level));
 		fwprintf(stream, L"%s\n", buf);
 
 		fclose(stream);
@@ -173,7 +173,7 @@ void Logger::WriteLine(const char* format, ...) throw()
 		StringTraits::VSPrintf(buf, TEMP_BUFFER_SIZE, format, args);
 		va_end(args);
 
-		fprintf(stream, "%d %s: ", Environment::GetTickCount() - g_logStartTime, GetInfoString(Level_Info));
+		fprintf(stream, "%llu %s: ", Environment::GetTickCount() - g_logStartTime, GetInfoString(Level_Info));
 		fprintf(stream, "%s\n", buf);
 
 		fclose(stream);
@@ -198,7 +198,7 @@ void Logger::WriteLine(const wchar_t* format, ...) throw()
 		StringTraits::VSPrintf(buf, TEMP_BUFFER_SIZE, format, args);
 		va_end(args);
 
-		fprintf(stream, "%d %s: ", Environment::GetTickCount() - g_logStartTime, GetInfoString(Level_Info));
+		fprintf(stream, "%llu %s: ", Environment::GetTickCount() - g_logStartTime, GetInfoString(Level_Info));
 		fwprintf(stream, L"%s\n", buf);
 
 		fclose(stream);

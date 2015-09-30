@@ -161,6 +161,8 @@ private:
 	HANDLE					m_hErrorRead;			// 標準エラー出力の読み取り側 (このプロセス側)
 	HANDLE					m_hErrorWrite;			// 標準エラー出力の書き込み側 (子プロセス側)
 	PROCESS_INFORMATION		m_processInfo;
+#else
+    pid_t   m_pid;
 #endif
 };
 

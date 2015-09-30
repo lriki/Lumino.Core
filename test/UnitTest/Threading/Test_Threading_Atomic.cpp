@@ -12,7 +12,7 @@ protected:
 //-----------------------------------------------------------------------------
 TEST_F(Test_Threading_Atomic, Basic)
 {
-	std::atomic<int> a;
+	//std::atomic<int> a;
 
 	class IncrThread : public Thread
 	{

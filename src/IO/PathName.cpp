@@ -305,7 +305,7 @@ GenericPathName<TChar> GenericPathName<TChar>::GetCurrentDirectory()
 	static GenericPathName<TChar> path;
 
 	TChar curDir[LN_MAX_PATH];
-	size_t len = DirectoryUtils::GetCurrentDirectory(curDir);
+	DirectoryUtils::GetCurrentDirectory(curDir);
 
 	// メモリ確保を抑える。
 	if (path.m_path != curDir) {

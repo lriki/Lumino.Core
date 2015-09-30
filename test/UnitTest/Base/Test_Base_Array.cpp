@@ -88,7 +88,7 @@ TEST_F(Test_Base_Array, IsEmpty)
 	std::vector<int> vec1;
 	std::list<int> list1;
 	std::set<int> set1;
-	const int testCount = 1000000;
+	//const int testCount = 1000000;
 
 #if 0
 	// 要素の追加

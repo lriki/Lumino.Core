@@ -10,7 +10,7 @@ public:
 	
 	static int BackTrace(void** outCallStack, int count)
 	{
-		return ::backtrace(buffer, count);
+		return ::backtrace(outCallStack, count);
 	}
 	
 	// count は BackTrace の戻り値。

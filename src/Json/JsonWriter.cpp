@@ -1,5 +1,4 @@
 
-#pragma once
 #include "../Internal.h"
 #include <Lumino/Base/StringTraits.h>
 #include <Lumino/Json/JsonWriter.h>

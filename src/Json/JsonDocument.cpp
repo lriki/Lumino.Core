@@ -1,6 +1,4 @@
 
-#pragma once
-
 #include "../Internal.h"
 #include <Lumino/Base/StringTraits.h>
 #include <Lumino/IO/StringReader.h>
