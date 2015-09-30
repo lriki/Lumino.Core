@@ -126,6 +126,10 @@ public:
 	*/
 	static CaseSensitivity GetFileSystemCaseSensitivity();
 
+private:
+	static bool mkdir(const char* path);
+	static bool mkdir(const wchar_t* path);
+	template<typename TChar> static void CreateDirectoryInternal(const TChar* path);
 };
 
 } // namespace Lumino

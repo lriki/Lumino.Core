@@ -255,5 +255,18 @@ uint64_t FileSystem::GetFileSize( FILE* stream )
 	}
 	return stbuf.st_size;
 }
-
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+bool FileSystem::mkdir(const char* path)
+{
+	int ret = ::mkdir(path, 0755);
+	return ret != -1;
+}
+bool FileSystem::mkdir(const wchar_t* path)
+{
+	MBCS_FILEPATH(mbcsFilePath, path);
+	return mkdir(mbcsFilePath);
+}
+	
 } // namespace Lumino

@@ -22,7 +22,7 @@ namespace Json
 //-----------------------------------------------------------------------------
 void JsonDocument::Parse(const TCHAR* text, int len)
 {
-	if (LN_VERIFY_ASSERT(text != NULL)) { return; }
+	LN_CHECK_ARGS_RETURN(text != NULL);
 
 	StringReader textReader(String(text, (len < 0) ? StringTraits::StrLen(text) : len));
 	Parse(&textReader);

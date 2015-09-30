@@ -2,7 +2,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include "../Internal.h"
-#include "../../include/Lumino/Base/StringTraits.h"
 #include "../../include/Lumino/Text/Encoding.h"
 #include "../../include/Lumino/IO/FileStream.h"
 #include "../../include/Lumino/IO/FileSystem.h"
@@ -216,47 +215,13 @@ bool FileSystem::ExistsDirectory(const wchar_t* path)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-static BOOL CreateDirectoryT(const char* path) { return ::CreateDirectoryA(path, NULL); }
-static BOOL CreateDirectoryT(const wchar_t* path) { return ::CreateDirectoryW(path, NULL); }
-
-
-template<typename TChar>
-static void CreateDirectoryInternal(const TChar* path)
+bool FileSystem::mkdir(const char* path)
 {
-	Array< GenericString<wchar_t> >	pathList;
-	GenericString<wchar_t> dir;
-
-	int i = StringTraits::StrLen(path) - 1;	// 一番後ろの文字の位置
-	while (i >= 0)
-	{
-		dir.AssignCStr(path, 0, i + 1);
-		if (FileSystem::ExistsDirectory(dir)) {
-			break;
-		}
-		pathList.Add(dir);
-
-		// セパレータが見つかるまで探す
-		while (i > 0 && path[i] != PathTraits::DirectorySeparatorChar && path[i] != PathTraits::AltDirectorySeparatorChar) {
-			--i;
-		}
-		--i;
-	}
-
-	if (pathList.IsEmpty()) { return; }	// path が存在している
-
-	for (int i = pathList.GetCount() - 1; i >= 0; --i)
-	{
-		BOOL r = CreateDirectoryT(pathList[i]);
-		LN_THROW(r != FALSE, Win32Exception, ::GetLastError());
-	}
+	return ::CreateDirectoryA(path, NULL) != FALSE;
 }
-void FileSystem::CreateDirectory(const char* path)
+bool FileSystem::mkdir(const wchar_t* path)
 {
-	CreateDirectoryInternal(path);
-}
-void FileSystem::CreateDirectory(const wchar_t* path)
-{
-	CreateDirectoryInternal(path);
+	return ::CreateDirectoryW(path, NULL) != FALSE;
 }
 
 } // namespace Lumino

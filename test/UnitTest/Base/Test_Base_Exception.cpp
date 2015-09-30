@@ -10,6 +10,7 @@ protected:
 //---------------------------------------------------------------------
 TEST_F(Test_Base_Exception, Assertion)
 {
+#if 0
 	// LN_VERIFY OK
 	{
 		int* p = (int*)1;
@@ -60,6 +61,7 @@ TEST_F(Test_Base_Exception, Assertion)
 			// ここを通る
 		}
 	}
+#endif
 }
 
 

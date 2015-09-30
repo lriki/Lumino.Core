@@ -63,30 +63,30 @@
 	#define _LN_ENSURE_ASSERT_INTERNAL(exp, exception)	(AssertInternal(exp))
 #endif
 
-/*
-	LN_VERIFY	… assert と似た動作をするが、Release モードでも表現式は実行される。
-	LN_ENSURE	… Release モードでもエラーが生成される。現在は例外を throw する。
-*/
-
-/**
-	@brief	LN_DO_CHECK が有効の場合、表現式を実行し結果が false であればアサートします。LN_DO_CHECK が無効でも表現式は実行されます。
-	@code
-			if (LN_VERIFY(stream != NULL))
-			{
-				stream->Read(...);
-			}
-	@endcode
-*/
-#define LN_VERIFY(exp)	_LN_VERIFY_ASSERT_INTERNAL(exp, Exception)
-
-/**
-	@brief	LN_DO_CHECK が有効の場合、表現式を実行し結果が true であればアサートします。LN_DO_CHECK が無効でも表現式は実行されます。
-	@code
-			if (LN_VERIFY_ASSERT(stream != NULL)) { return; }
-			stream->Read(...);
-	@endcode
-*/
-#define LN_VERIFY_ASSERT(exp)	(!(_LN_VERIFY_ASSERT_INTERNAL(exp, Exception)))
+///*
+//	LN_VERIFY	… assert と似た動作をするが、Release モードでも表現式は実行される。
+//	LN_ENSURE	… Release モードでもエラーが生成される。現在は例外を throw する。
+//*/
+//
+///**
+//	@brief	LN_DO_CHECK が有効の場合、表現式を実行し結果が false であればアサートします。LN_DO_CHECK が無効でも表現式は実行されます。
+//	@code
+//			if (LN_VERIFY(stream != NULL))
+//			{
+//				stream->Read(...);
+//			}
+//	@endcode
+//*/
+//#define LN_VERIFY(exp)	_LN_VERIFY_ASSERT_INTERNAL(exp, Exception)
+//
+///**
+//	@brief	LN_DO_CHECK が有効の場合、表現式を実行し結果が true であればアサートします。LN_DO_CHECK が無効でも表現式は実行されます。
+//	@code
+//			if (LN_VERIFY_ASSERT(stream != NULL)) { return; }
+//			stream->Read(...);
+//	@endcode
+//*/
+//#define LN_VERIFY_ASSERT(exp)	(!(_LN_VERIFY_ASSERT_INTERNAL(exp, Exception)))
 
 /**
 	@brief		式の結果が false であれば return により処理を中断します。

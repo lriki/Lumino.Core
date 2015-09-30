@@ -151,7 +151,13 @@
 	Release では表現式を残すことにより「とにかくアプリを落とさない」FailSafe 的な役目になる。(その際、エラーがあったことは通知しないが・・・)
 	とにかく、明確なエラーを表すために使うべきではない。しいて言うならワーニング。
 
-
+■ver3.2b
+	やりたいこと整理。
+	・public API のエラーは例外。private API のエラーは assert。
+	・assert はカバレッジの対象にしたくないので if (LN_VERIFY_ASSERT(stream != NULL)) { return; } のように return 文は外に出したくない。
+	・一方、throw はカバレッジを取ることも多い。
+		→ 仕様として投げるものは LN_THROW。チェック系は LN_CHECK～で OK。
+	・後々 throw と assert を選択式にしたい。
 	
 */
 #include <time.h>
@@ -164,8 +170,10 @@
 #include <Lumino/Base/Resource.h>
 
 #ifdef LN_EXCEPTION_BACKTRACE
-	#ifdef LN_OS_WIN32	// Cygwin もこっち
+	#if defined(LN_OS_WIN32)	// Cygwin もこっち
 		#include "Win32/BackTrace.h"
+	#elif defined(LN_OS_MAC)
+		#include "Unix/SimpeBackTrace.h"
 	#else
 		#include "Unix/BackTrace.h"
 	#endif
@@ -192,6 +200,10 @@ Exception::Exception()
 	memset(m_message, 0, sizeof(m_message));
 
 #ifdef LN_EXCEPTION_BACKTRACE
+#ifdef LN_OS_MAC
+	m_stackBufferSize = SimleBackTrace::BackTrace(m_stackBuffer, LN_ARRAY_SIZE_OF(m_stackBuffer));
+	SimleBackTrace::MakeSymbolString(m_stackBuffer, m_stackBufferSize, m_symbolBuffer, LN_ARRAY_SIZE_OF(m_symbolBuffer));
+#else
 	// バックトレース記録
 	m_stackBufferSize = BackTrace::GetInstance()->Backtrace(m_stackBuffer, LN_ARRAY_SIZE_OF(m_stackBuffer));
 
@@ -201,6 +213,7 @@ Exception::Exception()
 		std::min(m_stackBufferSize, 32),
 		m_symbolBuffer, 
 		LN_ARRAY_SIZE_OF(m_symbolBuffer));
+#endif
 #endif
 
 	// ファイルに保存

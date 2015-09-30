@@ -171,7 +171,7 @@ void Environment::GetSpecialFolderPath(SpecialFolder specialFolder, TChar* outPa
 		};
 		for (int i = 0; i < LN_ARRAY_SIZE_OF(pathes); ++i) {
 			if (FileSystem::ExistsDirectory(pathes[i])) {
-				StringTraits::tstrcpy(outPath, pathes[i]);
+				StringTraits::tstrcpy(outPath, LN_MAX_PATH, pathes[i]);
 				return;
 			}
 		}
@@ -184,7 +184,7 @@ void Environment::GetSpecialFolderPath(SpecialFolder specialFolder, TChar* outPa
 		};
 		for (int i = 0; i < LN_ARRAY_SIZE_OF(pathes); ++i) {
 			if (FileSystem::ExistsDirectory(pathes[i])) {
-				StringTraits::tstrcpy(outPath, pathes[i]);
+				StringTraits::tstrcpy(outPath, LN_MAX_PATH, pathes[i]);
 				return;
 			}
 		}

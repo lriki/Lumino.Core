@@ -717,7 +717,7 @@ template int PathTraits::Compare<wchar_t>(wchar_t ch1, wchar_t ch2, CaseSensitiv
 // path1 から見たときの path2 の相対パス
 //-----------------------------------------------------------------------------
 template<typename TChar>
-static GenericString<TChar> PathTraits::DiffPath(const TChar* path1, int len1, const TChar* path2, int len2, CaseSensitivity cs)
+GenericString<TChar> PathTraits::DiffPath(const TChar* path1, int len1, const TChar* path2, int len2, CaseSensitivity cs)
 {
 	// 双方のパスの先頭から完全に一致する部分を探す。
 	int i = 0;	// 最初の不一致を指す

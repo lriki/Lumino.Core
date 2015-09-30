@@ -23,7 +23,7 @@ UTF8Encoding::UTF8Encoding(bool byteOrderMark)
 //-----------------------------------------------------------------------------
 byte_t* UTF8Encoding::GetPreamble() const
 {
-	static byte_t bom[] = { 0xEF, 0xBB, 0xBF, NULL };
+	static byte_t bom[] = { 0xEF, 0xBB, 0xBF, 0x00 };
 	return bom;
 }
 
