@@ -371,7 +371,7 @@ int64_t FileSystem::CalcSeekPoint(int64_t curPoint, int64_t maxSize, int64_t off
 //-----------------------------------------------------------------------------
 bool FileSystem::ExistsDirectory(const char* path)
 {
-    return GetAttribute(path) & FileAttribute::Directory;
+    return GetAttribute(path) & FileAttribute::Directory;	// TODO: GetAttribute は無ければ例外になってしまうのでこれではダメ
 }
 bool FileSystem::ExistsDirectory(const wchar_t* path)
 {

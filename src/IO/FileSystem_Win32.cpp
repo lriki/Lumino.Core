@@ -201,16 +201,16 @@ uint64_t FileSystem::GetFileSize(FILE* stream)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-bool FileSystem::ExistsDirectory(const char* path)
-{
-	DWORD attr = ::GetFileAttributesA(path);
-	return (attr != -1 && (attr & FILE_ATTRIBUTE_DIRECTORY) != 0);
-}
-bool FileSystem::ExistsDirectory(const wchar_t* path)
-{
-	DWORD attr = ::GetFileAttributesW(path);
-	return (attr != -1 && (attr & FILE_ATTRIBUTE_DIRECTORY) != 0);
-}
+//bool FileSystem::ExistsDirectory(const char* path)
+//{
+//	DWORD attr = ::GetFileAttributesA(path);
+//	return (attr != -1 && (attr & FILE_ATTRIBUTE_DIRECTORY) != 0);
+//}
+//bool FileSystem::ExistsDirectory(const wchar_t* path)
+//{
+//	DWORD attr = ::GetFileAttributesW(path);
+//	return (attr != -1 && (attr & FILE_ATTRIBUTE_DIRECTORY) != 0);
+//}
 
 //-----------------------------------------------------------------------------
 //
