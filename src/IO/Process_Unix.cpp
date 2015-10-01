@@ -1,7 +1,15 @@
 ﻿#include "../Internal.h"
+#include <sys/types.h> 
+#include <sys/wait.h>
 #include <Lumino/Base/ElapsedTimer.h>
 #include <Lumino/IO/Process.h>
 
+#if defined(LN_OS_MAC)
+#include <crt_externs.h>
+#define environ (*_NSGetEnviron())
+#else
+extern char **environ;
+#endif
 
 namespace Lumino
 {
@@ -65,13 +73,6 @@ namespace Lumino
 //=============================================================================
 // Process
 //=============================================================================
-
-#if defined(LN_OS_MAC)
-#include <crt_externs.h>
-#define environ (*_NSGetEnviron())
-#else
-extern char **environ;
-#endif
 
 //-----------------------------------------------------------------------------
 //

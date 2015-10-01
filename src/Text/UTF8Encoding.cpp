@@ -74,8 +74,7 @@ void UTF8Encoding::UTF8Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t in
 				m_bomPhase = 1;
 				++inBuffer;
 				--inBufferByteCount;
-				++bytesUsed;
-				if (inBufferByteCount == 0) { *outBytesUsed = bytesUsed; return; }
+				if (inBufferByteCount == 0) { return; }
 			}
 		}
 		if (m_bomPhase == 1)
@@ -85,8 +84,7 @@ void UTF8Encoding::UTF8Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t in
 				m_bomPhase = 2;
 				++inBuffer;
 				--inBufferByteCount;
-				++bytesUsed;
-				if (inBufferByteCount == 0) { *outBytesUsed = bytesUsed; return; }
+				if (inBufferByteCount == 0) { return; }
 			}
 			else {
 				LN_THROW(0, EncodingException, _T("bom is required."));
@@ -99,8 +97,7 @@ void UTF8Encoding::UTF8Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t in
 				m_bomPhase = 0;
 				++inBuffer;
 				--inBufferByteCount;
-				++bytesUsed;
-				if (inBufferByteCount == 0) { *outBytesUsed = bytesUsed; return; }
+				if (inBufferByteCount == 0) { return; }
 			}
 			else {
 				LN_THROW(0, EncodingException, _T("bom is required."));
@@ -144,14 +141,15 @@ void UTF8Encoding::UTF8Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t in
 			LN_THROW(result == UTFConversionResult_Success, EncodingException);
 
 			// UTF32 から UTF16 へ 
+			UTF16* prev = dstPos;
 			result = UnicodeUtils::ConvertCharUTF32toUTF16(ch, &dstPos, dstEnd, &options);
 			LN_THROW(result == UTFConversionResult_Success, EncodingException);
 
+			bytesUsed += (dstPos - prev)* sizeof(UTF16);
 			++charsUsed;
 			m_lastLeadBytesCount = 0;
 		}
 
-		++bytesUsed;
 		++srcPos;
 	}
 
@@ -246,14 +244,15 @@ void UTF8Encoding::UTF8Encoder::ConvertFromUTF16(const UTF16* inBuffer, size_t i
 			LN_THROW(result == UTFConversionResult_Success, EncodingException);
 
 			// UTF-8 文字へ
+			UTF8* prev = dstPos;
 			result = UnicodeUtils::ConvertCharUTF32toUTF8(ch, &dstPos, dstEnd, &options);
 			LN_THROW(result == UTFConversionResult_Success, EncodingException);
 
 			m_lastBufferCount = 0;
+			(*outBytesUsed) += (dstPos - prev);
 			(*outCharsUsed) += 1;
 		}
 
-		(*outBytesUsed) += sizeof(UTF16);
 		++srcPos;
 	}
 

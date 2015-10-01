@@ -67,32 +67,19 @@ bool FileSystem::Exists(const wchar_t* filePath)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-uint32_t FileSystem::GetAttribute(const char* filePath)
+FileAttribute FileSystem::GetAttribute(const char* filePath)
 {
-	DWORD attr = ::GetFileAttributesA(filePath);
-	if (attr == -1) {
-		Win32IOErrorToExceptionThrow(::GetLastError(), filePath);
-	}
-
-	uint32_t flags = FileAttribute::Normal;
-	if (attr & FILE_ATTRIBUTE_DIRECTORY) flags |= FileAttribute::Directory;
-	if (attr & FILE_ATTRIBUTE_READONLY)  flags |= FileAttribute::ReadOnly;
-	if (attr & FILE_ATTRIBUTE_HIDDEN)    flags |= FileAttribute::Hidden;
-	return flags;
+	FileAttribute attr;
+	bool r = GetAttributeInternal(filePath, &attr);
+	LN_THROW(r, FileNotFoundException, filePath);
+	return attr;
 }
-
-uint32_t FileSystem::GetAttribute(const wchar_t* filePath)
+FileAttribute FileSystem::GetAttribute(const wchar_t* filePath)
 {
-	DWORD attr = ::GetFileAttributesW(filePath);
-	if (attr == -1) {
-		Win32IOErrorToExceptionThrow(::GetLastError(), filePath);
-	}
-
-	uint32_t flags = FileAttribute::Normal;
-	if (attr & FILE_ATTRIBUTE_DIRECTORY) flags |= FileAttribute::Directory;
-	if (attr & FILE_ATTRIBUTE_READONLY)  flags |= FileAttribute::ReadOnly;
-	if (attr & FILE_ATTRIBUTE_HIDDEN)    flags |= FileAttribute::Hidden;
-	return flags;
+	FileAttribute attr;
+	bool r = GetAttributeInternal(filePath, &attr);
+	LN_THROW(r, FileNotFoundException, filePath);
+	return attr;
 }
 
 //-----------------------------------------------------------------------------
@@ -222,6 +209,33 @@ bool FileSystem::mkdir(const char* path)
 bool FileSystem::mkdir(const wchar_t* path)
 {
 	return ::CreateDirectoryW(path, NULL) != FALSE;
+}
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+bool FileSystem::GetAttributeInternal(const char* path, FileAttribute* outAttr)
+{
+	DWORD attr = ::GetFileAttributesA(path);
+	if (attr == -1) { return false; }
+
+	FileAttribute flags = FileAttribute::Normal;
+	if (attr & FILE_ATTRIBUTE_DIRECTORY) flags |= FileAttribute::Directory;
+	if (attr & FILE_ATTRIBUTE_READONLY)  flags |= FileAttribute::ReadOnly;
+	if (attr & FILE_ATTRIBUTE_HIDDEN)    flags |= FileAttribute::Hidden;
+	*outAttr = flags;
+	return true;
+}
+bool FileSystem::GetAttributeInternal(const wchar_t* path, FileAttribute* outAttr)
+{
+	DWORD attr = ::GetFileAttributesW(path);
+	if (attr == -1) { return false; }
+
+	FileAttribute flags = FileAttribute::Normal;
+	if (attr & FILE_ATTRIBUTE_DIRECTORY) flags |= FileAttribute::Directory;
+	if (attr & FILE_ATTRIBUTE_READONLY)  flags |= FileAttribute::ReadOnly;
+	if (attr & FILE_ATTRIBUTE_HIDDEN)    flags |= FileAttribute::Hidden;
+	*outAttr = flags;
+	return true;
 }
 
 } // namespace Lumino

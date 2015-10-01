@@ -34,6 +34,7 @@
 #include "Lumino/Base/SortedArray.h"
 #include "Lumino/Base/Thickness.h"
 #include "Lumino/Base/Collection.h"
+#include "Lumino/Base/Event.h"
 #include "Lumino/Base/Resource.h"
 
 #include "Lumino/IO/PathName.h"
@@ -68,4 +69,3 @@
 #include "Lumino/Xml/XmlReader.h"
 #include "Lumino/Xml/XmlWriter.h"
 
-#include "Lumino/DataModel/Event.h"

@@ -78,7 +78,7 @@ TEST_F(Test_IO_Process, Example)
 
 		Process proc;
 		proc.SetRedirectStandardOutput(true);
-		proc.SetOutputDataReceivedCallback(LN_CreateDelegate(&t, &Test::Callback));
+		proc.SetOutputDataReceivedCallback(Delegate<void(String)>(&t, &Test::Callback));
 		proc.Start(_T("LuminoCore_UnitTest"), _T("--proctest1"));
 		proc.BeginOutputReadLine();
 		proc.WaitForExit();

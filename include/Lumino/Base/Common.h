@@ -81,6 +81,9 @@
 // 内部的な Copy on write 操作をスレッドセーフにするか
 #define LN_INTERNAL_COW_THREAD_SAFE
 
+// C++11 有効
+#define LN_CPP11
+
 //------------------------------------------------------------------------------
 // defines
 

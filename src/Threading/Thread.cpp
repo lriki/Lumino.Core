@@ -312,11 +312,19 @@ void Thread::Sleep(int msTime)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+#ifdef LN_CPP11
+void DelegateThread::Start(Delegate<void()> func)
+{
+	m_ThreadFunc = func;
+	Thread::Start();
+}
+#else
 void DelegateThread::Start(Delegate00 func)
 {
 	m_ThreadFunc = func;
 	Thread::Start();
 }
+#endif
 
 //-----------------------------------------------------------------------------
 //

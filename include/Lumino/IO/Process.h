@@ -46,6 +46,21 @@ public:
 	*/
 	void SetRedirectStandardError(bool enabled);
 
+#ifdef LN_CPP11
+	/**
+		@brief		標準出力に行が書き込まれたときに呼び出されるコールバック関数を設定します。
+		@details	非同期読み取りは Start() の後、BeginOutputReadLine() を呼び出すことで開始します。
+					コールバックは Start() を実行したスレッドとは別のスレッドから非同期的に呼び出されます。
+	*/
+	void SetOutputDataReceivedCallback(const Delegate<void(String)>& callback);
+
+	/**
+		@brief		標準エラー出力に行が書き込まれたときに呼び出されるコールバック関数を設定します。
+		@details	非同期読み取りは Start() の後、BeginErrorReadLine() を呼び出すことで開始します。
+					コールバックは Start() を実行したスレッドとは別のスレッドから非同期的に呼び出されます。
+	*/
+	void SetErrorDataReceivedCallback(const Delegate<void(String)>& callback);
+#else
 	/**
 		@brief		標準出力に行が書き込まれたときに呼び出されるコールバック関数を設定します。
 		@details	非同期読み取りは Start() の後、BeginOutputReadLine() を呼び出すことで開始します。
@@ -59,6 +74,7 @@ public:
 					コールバックは Start() を実行したスレッドとは別のスレッドから非同期的に呼び出されます。
 	*/
 	void SetErrorDataReceivedCallback(const Delegate01<String>& callback);
+#endif
 
 	/**
 		@brief		プログラムのファイルパスとコマンドライン引数を指定してプロセスを起動します。
@@ -143,8 +159,13 @@ private:
 	RefPtr<StreamWriter>		m_standardInputWriter;
 	RefPtr<StreamReader>		m_standardOutputReader;
 	RefPtr<StreamReader>		m_standardErrorReader;
+#ifdef LN_CPP11
+	Delegate<void(String)>		m_outputDataReceivedCallback;
+	Delegate<void(String)>		m_errorDataReceivedCallback;
+#else
 	Delegate01<String>			m_outputDataReceivedCallback;
 	Delegate01<String>			m_errorDataReceivedCallback;
+#endif
 	Threading::DelegateThread	m_readStdOutputThread;
 	Threading::DelegateThread	m_readStdErrorThread;
 	int							m_exitCode;

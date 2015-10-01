@@ -3,6 +3,72 @@
 #include "../Base/Array.h"
 #include "../Base/Delegate.h"
 
+#ifdef LN_CPP11
+
+namespace Lumino
+{
+
+template<typename>
+class Event {};
+template<typename TRet, typename... TArgs>
+class Event<TRet(TArgs...)>
+{
+public:
+	typedef Delegate<TRet(TArgs...)> DelegateType;
+
+public:
+	void AddHandler(const DelegateType& handler)
+	{
+		m_handlerList.Add(handler);
+	}
+
+	void RemoveHandler(const DelegateType& handler)
+	{
+		m_handlerList.Remove(handler);
+	}
+
+	void Clear()
+	{
+		m_handlerList.Clear();
+	}
+
+	void Raise(TArgs... args)
+	{
+		int count = m_handlerList.GetCount();
+		for (int i = 0; i < count - 1; ++i)
+		{
+			m_handlerList[i].Call(args...);
+		}
+		return m_handlerList[count - 1].Call(args...);	// –ß‚è’l‚ð–ß‚·‚Ì‚ÍÅŒã‚Ì1‚ÂB
+	}
+
+	bool IsEmpty() const
+	{
+		return m_handlerList.IsEmpty();
+	}
+
+	void operator += (const DelegateType& handler)
+	{
+		AddHandler(handler);
+	}
+
+	void operator -= (const DelegateType& handler)
+	{
+		RemoveHandler(handler);
+	}
+
+	void operator () (TArgs... args)
+	{
+		Raise(args...);
+	}
+
+private:
+	Array<DelegateType> m_handlerList;
+};
+
+} // namespace Lumino
+
+#else
 namespace Lumino
 {
 
@@ -39,3 +105,4 @@ namespace Lumino
 #include "Event.inl"
 
 } // namespace Lumino
+#endif

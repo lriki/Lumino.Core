@@ -115,6 +115,16 @@ private:
 class LUMINO_EXPORT DelegateThread
     : public Thread
 {
+#ifdef LN_CPP11
+public:
+	void Start(Delegate<void()> func);
+
+protected:
+	virtual void Execute();
+
+private:
+	Delegate<void()>	m_ThreadFunc;
+#else
 public:
 	void Start(Delegate00 func);
 
@@ -123,6 +133,7 @@ protected:
 	
 private:
 	Delegate00	m_ThreadFunc;
+#endif
 };
 
 } // namespace Threading

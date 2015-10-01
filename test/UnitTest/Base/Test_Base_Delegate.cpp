@@ -1,4 +1,119 @@
 ﻿#include <TestConfig.h>
+#include <functional>
+
+#ifdef LN_CPP11
+
+
+
+static int g_Value = 0;
+
+class Test_Base_Delegate_Unit : public ::testing::Test
+{
+protected:
+	virtual void SetUp()
+	{
+	}
+	virtual void TearDown() {}
+
+	// テスト用クラス
+	class Class1
+	{
+	public:
+		int	m_value = 0;
+
+		static void Func1() { g_Value += 1; }
+		void Func2() { m_value += 10; }
+		void Func3() { m_value += 100; }
+	};
+};
+
+TEST_F(Test_Base_Delegate_Unit, Constructor)
+{
+	g_Value = 0;
+	Class1 t;
+
+	// static 関数
+	Delegate<void()> d1(&Class1::Func1);
+	d1();
+	ASSERT_EQ(1, g_Value);
+
+	// メンバ関数
+	Delegate<void()> d2(&t, &Class1::Func2);
+	d2();
+	ASSERT_EQ(10, t.m_value);
+
+	// ラムダ式
+	Delegate<void()> d3([&t]() { t.Func2(); });
+	d3();
+	ASSERT_EQ(20, t.m_value);
+
+	// コピー
+	Delegate<void()> d4 = d1;
+	d4();
+	ASSERT_EQ(2, g_Value);
+}
+
+TEST_F(Test_Base_Delegate_Unit, IsEmpty)
+{
+	Delegate<void()> d1;
+	ASSERT_TRUE(d1.IsEmpty());
+
+	Delegate<void()> d2(&Class1::Func1);
+	ASSERT_FALSE(d2.IsEmpty());
+}
+
+TEST_F(Test_Base_Delegate_Unit, Operator_Assign)
+{
+	g_Value = 0;
+	Class1 t;
+
+	// static 関数
+	Delegate<void()> d1;
+	d1 = Class1::Func1;
+	d1();
+	ASSERT_EQ(1, g_Value);
+
+	// ラムダ式
+	Delegate<void()> d3;
+	d3 = [&t]() { t.Func2(); };
+	d3();
+	ASSERT_EQ(10, t.m_value);
+
+	// コピー
+	Delegate<void()> d4;
+	d4 = d1;
+	d4();
+	ASSERT_EQ(2, g_Value);
+}
+
+TEST_F(Test_Base_Delegate_Unit, Operator_Eq)
+{
+	Class1 class1, class2;
+	Delegate<void()> d1(&class1, &Class1::Func2);
+	Delegate<void()> d2(&class1, &Class1::Func2);
+	Delegate<void()> d3(&class2, &Class1::Func2);
+	Delegate<void()> d4(&class1, &Class1::Func3);
+	Delegate<void()> d5, d6;
+	ASSERT_TRUE(d1 == d2);		// 同一
+	ASSERT_FALSE(d1 == d3);		// インスタンスが違う
+	ASSERT_FALSE(d1 == d4);		// メンバ関数が違う
+	ASSERT_FALSE(d1 == d5);		// 片方が空
+	ASSERT_TRUE(d5 == d6);		// 空で同一
+	ASSERT_TRUE(d5 == nullptr);	// nullptr
+}
+
+
+TEST_F(Test_Base_Delegate_Unit, CreateDelegate)
+{
+	g_Value = 0;
+	Class1 t;
+	Delegate<void()> d1 = CreateDelegate(&Class1::Func1);
+	Delegate<void()> d2 = CreateDelegate(&t, &Class1::Func2);
+	//Delegate<void()> d3 = CreateDelegate([&t](){ t.m_value = 100; });
+	//Delegate<void()> d4 = CreateDelegate([](){ g_Value = 100; });
+}
+
+#else
 
 static int g_Value = 0;
 
@@ -31,6 +146,7 @@ protected:
 
 
 
+
 //---------------------------------------------------------------------
 
 class Test1		// GCC (Cygwin?) では関数内ローカルクラスのメンバ関数ポインタを取ろうとするとコンパイルエラーになるので、外に置いておく
@@ -51,15 +167,30 @@ public:
 	{
 		g_Value = 40;
 	}
+	static void Callback5()
+	{
+		printf("5\n");
+	}
 } ;
 	
 TEST_F(Test_Base_Delegate, Delegate00)
 {
+
 	int value = 0;
 
 	Test1 t1;
 
 	t1.mValue = &value;
+
+
+	Delegate<void()> dd1(&Test1::Callback5);
+	Delegate<void()> dd2(&t1, &Test1::Callback1);
+	Delegate<void()> dd3([&t1]() { g_Value = 500; });
+	dd1();
+	dd2();
+	dd3();
+
+
 
 	// IsEmpty
 	Delegate00 delegate0;
@@ -161,3 +292,4 @@ TEST_F(Test_Base_Delegate, Equals)
 	ASSERT_FALSE(d1 == d4);	// false
 }
 
+#endif

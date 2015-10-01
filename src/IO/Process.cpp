@@ -75,6 +75,23 @@ void Process::SetRedirectStandardError(bool enabled)
 	m_redirectStandardError = enabled;
 }
 
+#ifdef LN_CPP11
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void Process::SetOutputDataReceivedCallback(const Delegate<void(String)>& callback)
+{
+	m_outputDataReceivedCallback = callback;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void Process::SetErrorDataReceivedCallback(const Delegate<void(String)>& callback)
+{
+	m_errorDataReceivedCallback = callback;
+}
+#else
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
@@ -90,6 +107,7 @@ void Process::SetErrorDataReceivedCallback(const Delegate01<String>& callback)
 {
 	m_errorDataReceivedCallback = callback;
 }
+#endif
 
 //-----------------------------------------------------------------------------
 //
@@ -150,7 +168,11 @@ void Process::BeginOutputReadLine()
 	LN_CHECK_STATE(m_standardOutputReader != NULL);
 
 	// 読み取りスレッドを立てる
+#ifdef LN_CPP11
+	m_readStdOutputThread.Start(Delegate<void()>(this, &Process::Thread_ReadStdOutput));
+#else
 	m_readStdOutputThread.Start(LN_CreateDelegate(this, &Process::Thread_ReadStdOutput));
+#endif
 	m_runningReadThread = true;
 }
 
@@ -162,7 +184,11 @@ void Process::BeginErrorReadLine()
 	LN_CHECK_STATE(m_standardErrorReader != NULL);
 
 	// 読み取りスレッドを立てる
+#ifdef LN_CPP11
+	m_readStdErrorThread.Start(Delegate<void()>(this, &Process::Thread_ReadStdError));
+#else
 	m_readStdErrorThread.Start(LN_CreateDelegate(this, &Process::Thread_ReadStdError));
+#endif
 	m_runningErrorReadThread = true;
 }
 

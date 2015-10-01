@@ -46,6 +46,8 @@ set(LN_SOURCES_Base
 	include/Lumino/Base/ElapsedTimer.h
 	include/Lumino/Base/EnumExtension.h
 	include/Lumino/Base/Environment.h
+	include/Lumino/Base/Event.h
+	include/Lumino/Base/Event.inl
 	include/Lumino/Base/Exception.h
 	include/Lumino/Base/Hash.h
 	include/Lumino/Base/List.h

@@ -46,9 +46,10 @@ public:
 		@brief		ファイルの属性を取得します。
 		@param[in]	filePath		: ファイル名
 		@return		ファイルの属性 (FileAttribute のビットの組み合わせ)
+		@exception	FileNotFoundException	対象にアクセスできなかった。
 	*/
-	static uint32_t GetAttribute(const char* filePath);
-	static uint32_t GetAttribute(const wchar_t* filePath);
+	static FileAttribute GetAttribute(const char* filePath);
+	static FileAttribute GetAttribute(const wchar_t* filePath);
 
 	/**
 		@brief		ファイルの属性を設定します。
@@ -129,6 +130,8 @@ public:
 private:
 	static bool mkdir(const char* path);
 	static bool mkdir(const wchar_t* path);
+	static bool GetAttributeInternal(const char* path, FileAttribute* outAttr);
+	static bool GetAttributeInternal(const wchar_t* path, FileAttribute* outAttr);
 	template<typename TChar> static void CreateDirectoryInternal(const TChar* path);
 };
 

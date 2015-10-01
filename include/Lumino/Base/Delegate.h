@@ -2,6 +2,295 @@
 	@file	Delegate.h
 */
 #pragma once
+#include "Common.h"
+
+#ifdef LN_CPP11
+
+#include <functional>
+
+namespace Lumino
+{
+
+template<typename>
+class Delegate {};
+template<typename TRet, typename... TArgs>
+class Delegate<TRet(TArgs...)>
+{
+private:
+	enum class HolderType
+	{
+		Static = 0,
+		Member,
+		FuncObj,
+	};
+
+	class HolderBase
+	{
+	public:
+		virtual TRet Call(TArgs... args) const = 0;
+		virtual bool Equals(const HolderBase* p) const = 0;
+		virtual HolderBase* Copy() const = 0;
+	};
+
+	class StaticHolder
+		: public HolderBase
+	{
+	private:
+		typedef TRet(*StaticFunction)(TArgs...);
+		StaticFunction	m_func;
+
+	public:
+		StaticHolder(StaticFunction func)
+			: m_func(func)
+		{}
+		virtual TRet Call(TArgs... args) const
+		{
+			return m_func(args...);
+		}
+		virtual bool Equals(const HolderBase* p) const
+		{
+			return (m_func == static_cast<const StaticHolder*>(p)->m_func);
+		}
+		virtual HolderBase* Copy() const
+		{
+			return LN_NEW StaticHolder(m_func);
+		}
+	};
+
+	template<class T>
+	class MemberHolder
+		: public HolderBase
+	{
+	private:
+		typedef void (T::*MemberFunction)(TArgs...);
+		T* m_obj;
+		MemberFunction	m_func;
+
+	public:
+		MemberHolder(T* obj, MemberFunction func)
+			: m_obj(obj)
+			, m_func(func)
+		{}
+		virtual TRet Call(TArgs... args) const
+		{
+			return (m_obj->*m_func)(args...);
+		}
+		virtual bool Equals(const HolderBase* p) const
+		{
+			return	m_obj == static_cast<const MemberHolder*>(p)->m_obj &&
+				m_func == static_cast<const MemberHolder*>(p)->m_func;
+		}
+		virtual HolderBase* Copy() const
+		{
+			return LN_NEW MemberHolder(m_obj, m_func);
+		}
+	};
+
+	class FuncObjHolder
+		: public HolderBase
+	{
+	private:
+		typedef std::function<TRet(TArgs...)> FuncObj;
+		FuncObj	m_func;
+
+	public:
+		FuncObjHolder(const FuncObj& func)
+			: m_func(func)
+		{}
+		virtual TRet Call(TArgs... args) const
+		{
+			return m_func(args...);
+		}
+		virtual bool Equals(const HolderBase* p) const
+		{
+			return false;	// std::function を比較することは出来ない
+		}
+		virtual HolderBase* Copy() const
+		{
+			return LN_NEW FuncObjHolder(m_func);
+		}
+	};
+
+public:
+
+	/** デフォルトコンストラクタ */
+	Delegate()
+		: m_holder(nullptr)
+		, m_type(HolderType::Static)
+	{}
+
+	/** static 関数用のコンストラクタ */
+	Delegate(TRet(*func)(TArgs...))
+		: m_holder(LN_NEW StaticHolder(func))
+		, m_type(HolderType::Static)
+	{}
+
+	/** メンバ関数用のコンストラクタ */
+	template < typename T >
+	Delegate(T* objPtr, TRet(T::*func)(TArgs...))
+		: m_holder(LN_NEW MemberHolder<T>(objPtr, func))
+		, m_type(HolderType::Member)
+	{}
+
+	/** ラムダ式・関数オブジェクト用のコンストラクタ */
+	Delegate(const std::function<TRet(TArgs...)>& func)
+		: m_holder(LN_NEW FuncObjHolder(func))
+		, m_type(HolderType::FuncObj)
+	{}
+
+	/** コピーコンストラクタ */
+	Delegate(const Delegate& d)
+		: Delegate()
+	{
+		if (d.m_holder != nullptr) {
+			m_holder = d.m_holder->Copy();
+			m_type = d.m_type;
+		}
+	}
+
+	/** ムーブコンストラクタ */
+	Delegate(Delegate&& d)
+		: Delegate()
+	{
+		if (d.m_holder != nullptr) {
+			m_holder = d.m_holder;
+			d.m_holder = nullptr;
+			m_type = d.m_type;
+		}
+	}
+
+	/** デストラクタ */
+	~Delegate()
+	{
+		delete m_holder;
+	}
+
+public:
+
+	/** 空の Delegate であるかを確認します。*/
+	bool IsEmpty() const
+	{
+		return m_holder == nullptr;
+	}
+
+	/** 関数を呼び出します。operator() と同じ動作です。*/
+	TRet Call(TArgs... args) const
+	{
+		m_holder->Call(args...);
+	}
+
+	/** 関数を呼び出します。*/
+	void operator ()(TArgs... args) const
+	{
+		m_holder->Call(args...);
+	}
+
+	/** コピー */
+	Delegate& operator = (const Delegate& d)
+	{
+		Detach();
+		if (d.m_holder != nullptr) {
+			m_holder = d.m_holder->Copy();
+			m_type = d.m_type;
+		}
+		return *this;
+	}
+
+	/** static 関数を割り当てます。*/
+	Delegate& operator = (TRet(*func)(TArgs...))
+	{
+		Detach();
+		m_holder = LN_NEW StaticHolder(func);
+		m_type = HolderType::Static;
+		return *this;
+	}
+
+	/** ラムダ式・関数オブジェクトを割り当てます。*/
+	Delegate& operator = (const std::function<TRet(TArgs...)>& func)
+	{
+		Detach();
+		m_holder = LN_NEW FuncObjHolder(func);
+		m_type = HolderType::FuncObj;
+		return *this;
+	}
+
+	/** 比較 */
+	bool operator==(std::nullptr_t left) const
+	{
+		return m_holder == left;
+	}
+
+	/** 比較 */
+	bool operator==(const Delegate& left) const
+	{
+		return Equals(left);
+	}
+
+	/** 比較 */
+	bool operator!=(std::nullptr_t left) const
+	{
+		return m_holder != left;
+	}
+
+	/** 比較 */
+	bool operator!=(const Delegate& left) const
+	{
+		return !Equals(left);
+	}
+
+private:
+	void Detach()
+	{
+		delete m_holder;
+		m_holder = nullptr;
+	}
+	bool Equals(const Delegate& left) const
+	{
+		if (m_type != left.m_type) { return false; }
+		if (m_holder == NULL &&  left.m_holder == NULL) { return true; }
+		if (m_holder != NULL && left.m_holder != NULL) {
+			return m_holder->Equals(left.m_holder);
+		}
+		else {
+			return false;	// this か obj 一方が NULL で、もう一方が 非NULL であればここに来る。
+		}
+	}
+
+	HolderBase*	m_holder;
+	HolderType	m_type;
+};
+
+/**	
+	@brief		Delegate を作成します。(static 関数用)
+	@details	Delegate のコンストラクタと同じですが、冗長な記述を避けるために使用します。
+*/
+template<class TRet, class... TArgs>
+Delegate<TRet(TArgs...)> CreateDelegate(TRet(*func)(TArgs...))
+{
+	return Delegate<TRet(TArgs...)>(func);
+}
+
+/**	
+	@brief		Delegate を作成します。(メンバ関数用)
+	@details	Delegate のコンストラクタと同じですが、冗長な記述を避けるために使用します。
+*/
+template<class T, class TRet, class... TArgs>
+Delegate<TRet(TArgs...)> CreateDelegate(T* objPtr, TRet(T::*func)(TArgs...))
+{
+	return Delegate<TRet(TArgs...)>(objPtr, func);
+}
+
+//template<class TRet, class... TArgs>
+//Delegate<TRet(TArgs...)> CreateDelegate(const std::function<TRet(TArgs...)>& func)
+//{
+//	return Delegate<TRet(TArgs...)>(func);
+//}
+
+} // namespace Lumino
+
+#else
+
+
 #include "RefObject.h"
 
 namespace Lumino
@@ -209,3 +498,5 @@ Delegate00 LN_CreateDelegate( T* objPtr, void (T::*method)() )
 #include "Delegate.inl"
 
 } // namespace Lumino
+
+#endif // #ifdef LN_CPP11
