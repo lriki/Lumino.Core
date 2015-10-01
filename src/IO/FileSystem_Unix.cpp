@@ -88,49 +88,6 @@ bool FileSystem::Exists(const wchar_t* filePath)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-uint32_t FileSystem::GetAttribute(const char* filePath)
-{
-	// Unix 系の場合、ファイルの先頭が . であれば隠しファイルである。
-	// mono-master/mono/io-layer/io.c の、_wapi_stat_to_file_attributes が参考になる。
-	struct stat st;
-	int ret = ::stat(filePath, &st);
-	if (ret == -1) {
-		LN_THROW(0, IOException);
-	}
-	
-	const char* fileName = PathTraits::GetFileNameSub(filePath);
-	uint32_t attrs = 0;
-	if (S_ISDIR(st.st_mode))
-	{
-		attrs |= FileAttribute::Directory;
-		if (!is_stat_writable(&st, filePath)) {
-			attrs |= FileAttribute::ReadOnly;
-		}
-		if (fileName[0] == '.') {
-			attrs |= FileAttribute::Hidden;
-		}
-	}
-	else
-	{
-		if (!is_stat_writable(&st, filePath)) {
-			attrs |= FileAttribute::ReadOnly;
-		}
-		if (fileName[0] == '.') {
-			attrs |= FileAttribute::Hidden;
-		}
-	}
-	return attrs;
-}
-
-uint32_t FileSystem::GetAttribute(const wchar_t* filePath)
-{
-	MBCS_FILEPATH(mbcsFilePath, filePath);
-	return GetAttribute(mbcsFilePath);
-}
-
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 void FileSystem::SetAttribute(const char* filePath, uint32_t attrs)
 {
 	struct stat st;
@@ -268,5 +225,49 @@ bool FileSystem::mkdir(const wchar_t* path)
 	MBCS_FILEPATH(mbcsFilePath, path);
 	return mkdir(mbcsFilePath);
 }
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+bool FileSystem::GetAttributeInternal(const char* path, FileAttribute* outAttr)
+{
+	// Unix 系の場合、ファイルの先頭が . であれば隠しファイルである。
+	// mono-master/mono/io-layer/io.c の、_wapi_stat_to_file_attributes が参考になる。
+	struct stat st;
+	int ret = ::stat(path, &st);
+	if (ret == -1) {
+		return false;
+	}
+	
+	const char* fileName = PathTraits::GetFileNameSub(path);
+	FileAttribute attrs;
+	if (S_ISDIR(st.st_mode))
+	{
+		attrs |= FileAttribute::Directory;
+		if (!is_stat_writable(&st, path)) {
+			attrs |= FileAttribute::ReadOnly;
+		}
+		if (fileName[0] == '.') {
+			attrs |= FileAttribute::Hidden;
+		}
+	}
+	else
+	{
+		if (!is_stat_writable(&st, path)) {
+			attrs |= FileAttribute::ReadOnly;
+		}
+		if (fileName[0] == '.') {
+			attrs |= FileAttribute::Hidden;
+		}
+	}
+	*outAttr = attrs;
+	return true;
+}
+bool FileSystem::GetAttributeInternal(const wchar_t* path, FileAttribute* outAttr)
+{
+	MBCS_FILEPATH(mbcsFilePath, path);
+	return GetAttributeInternal(mbcsFilePath, outAttr);
+}
+	
 	
 } // namespace Lumino

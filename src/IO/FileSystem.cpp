@@ -276,6 +276,24 @@ size_t FileSystem::GetFileSize( FILE* stream )
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+FileAttribute FileSystem::GetAttribute(const char* filePath)
+{
+	FileAttribute attr;
+	bool r = GetAttributeInternal(filePath, &attr);
+	LN_THROW(r, FileNotFoundException, filePath);
+	return attr;
+}
+FileAttribute FileSystem::GetAttribute(const wchar_t* filePath)
+{
+	FileAttribute attr;
+	bool r = GetAttributeInternal(filePath, &attr);
+	LN_THROW(r, FileNotFoundException, filePath);
+	return attr;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 ByteBuffer FileSystem::ReadAllBytes(const char* filePath)
 {
 	FILE* fp;

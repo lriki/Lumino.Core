@@ -67,24 +67,6 @@ bool FileSystem::Exists(const wchar_t* filePath)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-FileAttribute FileSystem::GetAttribute(const char* filePath)
-{
-	FileAttribute attr;
-	bool r = GetAttributeInternal(filePath, &attr);
-	LN_THROW(r, FileNotFoundException, filePath);
-	return attr;
-}
-FileAttribute FileSystem::GetAttribute(const wchar_t* filePath)
-{
-	FileAttribute attr;
-	bool r = GetAttributeInternal(filePath, &attr);
-	LN_THROW(r, FileNotFoundException, filePath);
-	return attr;
-}
-
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 void FileSystem::SetAttribute(const char* filePath, uint32_t attr)
 {
 	DWORD dwAttr = 0;

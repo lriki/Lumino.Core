@@ -192,8 +192,8 @@ void Environment::GetSpecialFolderPath(SpecialFolder specialFolder, TChar* outPa
 	}
 	LN_THROW(0, InvalidOperationException);
 }
-template void Environment::GetSpecialFolderPath(SpecialFolder specialFolder, char* outPath)
-template void Environment::GetSpecialFolderPath(SpecialFolder specialFolder, wchar_t* outPath)
+template void Environment::GetSpecialFolderPath(SpecialFolder specialFolder, char* outPath);
+template void Environment::GetSpecialFolderPath(SpecialFolder specialFolder, wchar_t* outPath);
 
 #else
 #endif
