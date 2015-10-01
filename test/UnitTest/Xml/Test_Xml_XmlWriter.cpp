@@ -81,8 +81,11 @@ TEST_F(Test_Xml_XmlWriter, UnitTest)
 		XmlWriter xmlWriter(&strWriter);
 		xmlWriter.WriteStartDocument();
 		xmlWriter.WriteEndDocument();
+#ifdef _WIN32
 		ASSERT_STREQ(_T("<?xml version=\"1.0\" encoding=\"UTF-16LE\"?>"), strWriter.ToString());
-
+#else
+		ASSERT_STREQ(_T("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"), strWriter.ToString());
+#endif
 		xmlWriter.WriteStartDocument();
 		ASSERT_THROW(xmlWriter.WriteStartDocument(), InvalidOperationException);
 	}

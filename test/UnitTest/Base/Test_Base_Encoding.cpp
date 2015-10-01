@@ -116,7 +116,11 @@ TEST_F(Test_Base_Encoding, SystemEncodingTest)
 	// Multi → Wide
 	{
 		StringW str2;
+#ifdef _WIN32
 		str2.ConvertFrom(str1, 6, Encoding::GetSystemMultiByteEncoding());
+#else
+		str2.ConvertFrom(str1, 9, Encoding::GetSystemMultiByteEncoding());
+#endif
 
 		ASSERT_EQ(3, str2.GetLength());
 		ASSERT_EQ(0x65E5, str2[0]);	// L'日'
