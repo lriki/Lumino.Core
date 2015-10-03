@@ -15,7 +15,7 @@ enum ByteOrder
 	ByteOrder_Big,			///< ビッグエンディアン
 };
 
-/*
+/**
 	@brief	システムの特別なフォルダパスを示す値です。
 	@details
 		SpecialFolder   | Windows                   | OS X    | Linux

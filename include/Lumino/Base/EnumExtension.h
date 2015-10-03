@@ -13,6 +13,8 @@
 #include "Array.h"
 #include "String.h"
 
+#ifndef LN_DOXYGEN
+
 /**
 	@brief	ägí£ enum å^ÇíËã`ÇµÇ‹Ç∑ÅB
 	@see	Doc_EnumExtension_1
@@ -334,5 +336,14 @@ public:
 
 	};
 };
+	
+#else	// LN_DOXYGEN
+#define LN_ENUM(enumName)		enum class enumName
+#define LN_ENUM_DECLARE(enumName)
+#define LN_ENUM_REFLECTION(enumName, ...)
+#define LN_ENUM_FLAGS(enumName)	enum class enumName
+#define LN_ENUM_FLAGS_DECLARE(enumName)
+#define LN_ENUM_FLAGS_REFLECTION(enumName, ...)
+#endif	// LN_DOXYGEN
 
 } // namespace Lumino

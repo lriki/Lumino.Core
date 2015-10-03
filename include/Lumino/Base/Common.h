@@ -173,6 +173,7 @@
 #include "Memory.h"
 #include "CRT.h"
 
+/** Root namespace. */
 namespace Lumino
 {
 	class ImplAccessor;
