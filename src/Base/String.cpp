@@ -834,8 +834,9 @@ template<typename TChar>
 GenericString<TChar> GenericString<TChar>::Format(const GenericString<TChar>& format, ...)
 {
 	// http://jumble-note.blogspot.jp/2012/09/c-vacopy.html
+	const TChar* fmt = format.GetCStr();	// VS2015 エラー回避。一度変数に入れる。
 	va_list args1, args2;
-	va_start(args1, format);
+	va_start(args1, fmt);
 	va_copy(args2, args1);
 	int len = StringTraits::tvscprintf_l(format.GetCStr(), Locale::GetC().GetNativeLocale(), args1);	// 文字数を求める
 

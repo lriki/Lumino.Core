@@ -1,4 +1,4 @@
-# e.g.) $ cmake -DLN_EXCEPTION_BACKTRACE=OFF ..
+﻿# e.g.) $ cmake -DLN_EXCEPTION_BACKTRACE=OFF ..
 
 cmake_minimum_required (VERSION 2.8.7)
 project (LuminoCore)
@@ -279,6 +279,8 @@ function(ln_make_postfix outPostfix)
 			set(postfix "${postfix}_msvc110")
 		elseif (MSVC_VERSION EQUAL 1800)
 			set(postfix "${postfix}_msvc120")
+		elseif (MSVC_VERSION EQUAL 1900)
+			set(postfix "${postfix}_msvc140")
 		endif()
 		
 		# Architecture.
@@ -389,6 +391,9 @@ ln_make_postfix(LN_LIB_POSTFIX)
 if (LN_EXCEPTION_BACKTRACE)
 	add_definitions(-DLN_EXCEPTION_BACKTRACE)
 endif()
+
+
+add_definitions("/EHsc")	# VS2015, cmake で生成すると何故か消えてしまうので明示的に指定する
 
 #--------------------------------------
 # Static library.
