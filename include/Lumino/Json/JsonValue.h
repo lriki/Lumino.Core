@@ -6,8 +6,6 @@
 
 namespace Lumino
 {
-namespace Json
-{
 class JsonMember;
 
 /** Json ‚Ì’l‚ÌŒ^‚ğ¦‚µ‚Ü‚·B*/
@@ -157,5 +155,4 @@ public:
 	JsonValue	Value;
 };
 
-} // namespace Json
 } // namespace Lumino

@@ -6,8 +6,6 @@
 
 namespace Lumino
 {
-namespace Json
-{
 
 //=============================================================================
 // JsonHandler
@@ -237,5 +235,4 @@ void JsonDOMHandler::BuildMember(BinaryReader* reader, JsonMember* m)
 	BuildValue(reader, &m->Value);
 }
 
-} // namespace Json
 } // namespace Lumino

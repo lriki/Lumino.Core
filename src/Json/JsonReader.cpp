@@ -6,8 +6,6 @@
 
 namespace Lumino
 {
-namespace Json
-{
 
 //=============================================================================
 // JsonReader
@@ -492,5 +490,4 @@ bool JsonReader::ParseObject()
 	// ‚±‚±‚É‚Í—ˆ‚È‚¢‚Í‚¸
 }
 
-} // namespace Json
 } // namespace Lumino

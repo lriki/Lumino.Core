@@ -9,7 +9,7 @@ protected:
 
 // 構造が正しく読めているかをチェックするための Handler
 class TestJsonHandler
-	: public Json::JsonHandler
+	: public JsonHandler
 {
 public:
 	String Text;
@@ -29,7 +29,7 @@ TEST_F(Test_Json_JsonReader, Basic)
 {
 	String str = FileSystem::ReadAllText(LOCALFILE("TestData/ReaderTest1.txt"), Encoding::GetSystemMultiByteEncoding());
 	TestJsonHandler handler;
-	Json::JsonReader reader(&handler);
+	JsonReader reader(&handler);
 	reader.Parse(str);
 	ASSERT_STREQ(handler.Text, _T("<obj><key><null><key><true><key><false><key><double><key><str><key><ary><double><double></ary><key><obj><key><double></obj></obj>"));
 }

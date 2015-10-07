@@ -7,8 +7,6 @@
 
 namespace Lumino
 {
-namespace Json
-{
 class JsonDocument;
 class JsonValue;
 class JsonMember;
@@ -67,5 +65,4 @@ private:
 	Stack<size_t>	m_startIndexStack;
 };
 
-} // namespace Json
 } // namespace Lumino

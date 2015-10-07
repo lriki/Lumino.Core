@@ -11,7 +11,7 @@ protected:
 TEST_F(Test_Json_JsonWriter, Example)
 {
 	StringWriter s;
-	Json::JsonWriter writer(&s);
+	JsonWriter writer(&s);
 
 	writer.StartObject();
 	writer.WriteKey(_T("hello"));

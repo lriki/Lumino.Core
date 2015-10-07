@@ -7,10 +7,8 @@
 
 namespace Lumino
 {
-namespace Json
-{
 
-/*
+/**
 	@brief	SAX スタイルの JSON パーサです。
 	@note	RFC 4627
 			https://www.ietf.org/rfc/rfc4627.txt
@@ -46,5 +44,4 @@ private:
 	int				m_currentCharCount;	// エラー表示用
 };
 
-} // namespace Json
 } // namespace Lumino

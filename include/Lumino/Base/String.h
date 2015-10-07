@@ -86,14 +86,7 @@ enum StringSplitOptions
 	このクラスに限らず、COW で実装される各種コンテナ (ByteBufferなど) も同様にスレッドセーフではありません。
 	
 
-	@note
-	[2015/8/3] VS2013 では InterlockedIncrement() を使った参照カウント操作は std::string のコピーよりも高いスコアを出した。
-	他の環境でもよいスコアが出ればスレッドセーフ化も検討するかもしれない。
-
-	1000文字の代入を 100000 回行った平均時間は以下のとおり。
-	- String (Atomic無し)	: 2ms
-	- String (Atomic有り)	: 3ms
-	- wstring (VS2013)		: 10ms
+	
 
 */
 template<typename TChar>

@@ -6,10 +6,8 @@
 
 namespace Lumino
 {
-namespace Json
-{
 
-/*
+/**
 	@brief	JSON データのルート要素です。
 */
 class JsonDocument
@@ -32,5 +30,4 @@ public:
 private:
 };
 
-} // namespace Json
 } // namespace Lumino

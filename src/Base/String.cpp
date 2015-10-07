@@ -25,7 +25,15 @@ http://murank.github.io/wxwidgetsjp/2.9.4/overview_unicode.html#overview_unicode
 Tchar.h における汎用テキストのマッピング
 https://msdn.microsoft.com/ja-jp/library/c426s321.aspx
 
-■[2015/6/8] 共有空文字列
+[2015/8/3] VS2013 では InterlockedIncrement() を使った参照カウント操作は std::string のコピーよりも高いスコアを出した。
+	他の環境でもよいスコアが出ればスレッドセーフ化も検討するかもしれない。
+
+	1000文字の代入を 100000 回行った平均時間は以下のとおり。
+	- String (Atomic無し)	: 2ms
+	- String (Atomic有り)	: 3ms
+	- wstring (VS2013)		: 10ms
+
+[2015/6/8] 共有空文字列
 	
 	空文字列を表すのに、いちいち char[1] を new したりしない。
 	空文字列は共通の GenericStringCore::m_sharedEmpty を参照する。
@@ -42,7 +50,7 @@ https://msdn.microsoft.com/ja-jp/library/c426s321.aspx
 	空文字列もそれ以外も全て GenericStringCore として扱うことで、余計なエラーチェックが必要なくなる。
 
 
-■[2015/2/21] 内部文字コードは固定しない
+[2015/2/21] 内部文字コードは固定しない
 
 	QString や NSString は内部文字コードを固定しているが、このライブラリの String は固定しない。
 	これは、このライブラリが何かの大規模なフレームワークを作るわけではく、
@@ -98,9 +106,6 @@ https://msdn.microsoft.com/ja-jp/library/c426s321.aspx
 
 namespace Lumino
 {
-
-//template<typename TChar>
-//const TChar GenericString<TChar>::EmptyString[1] = { 0x00 };
 
 template<typename TChar>
 typename GenericString<TChar>::GenericStringCore/*<TChar>*/ GenericString<TChar>::GenericStringCore/*<TChar>*/::m_sharedEmpty;

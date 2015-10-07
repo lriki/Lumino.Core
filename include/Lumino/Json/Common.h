@@ -5,8 +5,5 @@
 
 namespace Lumino
 {
-namespace Json
-{
 
-} // namespace Json
 } // namespace Lumino

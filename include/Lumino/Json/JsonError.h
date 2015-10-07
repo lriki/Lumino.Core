@@ -5,8 +5,6 @@
 
 namespace Lumino
 {
-namespace Json
-{
 
 /** JSON 解析のエラーコード */
 LN_ENUM(JsonParseError)
@@ -51,5 +49,4 @@ public:
 	String			Message;
 };
 
-} // namespace Json
 } // namespace Lumino

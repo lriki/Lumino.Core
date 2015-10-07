@@ -11,7 +11,7 @@ protected:
 TEST_F(Test_Json_JsonDocument, Basic)
 {
 	String str = FileSystem::ReadAllText(LOCALFILE("TestData/ReaderTest1.txt"), Encoding::GetSystemMultiByteEncoding());
-	Json::JsonDocument doc;
+	JsonDocument doc;
 
 	ElapsedTimer t;
 	t.Start();

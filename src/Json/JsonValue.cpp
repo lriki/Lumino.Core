@@ -4,8 +4,6 @@
 
 namespace Lumino
 {
-namespace Json
-{
 
 //=============================================================================
 // JsonReader
@@ -271,6 +269,4 @@ void JsonValue::Detach()
 	m_type = JsonType::Null;
 }
 
-
-} // namespace Json
 } // namespace Lumino

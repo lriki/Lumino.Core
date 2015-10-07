@@ -8,8 +8,6 @@
 
 namespace Lumino
 {
-namespace Json
-{
 
 //=============================================================================
 // JsonDocument
@@ -37,5 +35,4 @@ void JsonDocument::Parse(TextReader* textReader)
 	handler.Build();
 }
 
-} // namespace Json
 } // namespace Lumino

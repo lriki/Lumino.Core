@@ -5,8 +5,6 @@
 
 namespace Lumino
 {
-namespace Json
-{
 
 //=============================================================================
 // JsonWriter
@@ -265,5 +263,4 @@ void JsonWriter::OnString(const TCHAR* str, int length)
 	m_textWriter->Write(_T("\""), 1);
 }
 
-} // namespace Json
 } // namespace Lumino

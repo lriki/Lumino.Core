@@ -5,8 +5,6 @@
 
 namespace Lumino
 {
-namespace Json
-{
 
 /**
 	@brief	
@@ -64,5 +62,4 @@ private:
 	bool			m_isComplete;
 };
 
-} // namespace Json
 } // namespace Lumino
