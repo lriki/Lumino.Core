@@ -11,7 +11,7 @@ namespace Lumino
 {
 
 /**
-	@brief	各種データを文字列として書き込みを行うクラスです。
+	@brief	各種データを文字列として書き込みを行う機能のベースクラスです。機能を使用するには StreamWriter や StringWriter を使用します。
 */
 class TextWriter
 	: public RefObject
@@ -140,25 +140,21 @@ public:
 	virtual void Flash();
 
 protected:
+
+	/**
+		@brief		データの書き込み先を実装します。
+	*/
 	virtual void WriteOverride(const void* data, size_t byteCount) = 0;
 
 private:
 	void WriteInternal(const TCHAR* str, int len);
 
 private:
-	static const int BufferSize = 2048;
-
+	static const int	BufferSize = 2048;
 	EncodingConverter	m_converter;
-
-	//RefPtr<Encoding>	m_encoding;
-	//RefPtr<Decoder>	m_decoder;		///< String を中間文字コード (UTF16) に変換するためのデコーダ
-	//RefPtr<Encoder>	m_encoder;		///< 中間文字コード (UTF16) を出力文字コード (m_encoding) に変換するためのエンコーダ
-	String					m_newLine;
-	Locale					m_locale;
-	//ByteBuffer				m_utf16Buffer;		///< 中間文字コードバッファ
-	//ByteBuffer				m_outputBuffer;		///< 変換先バッファ
-	//int						m_safeTCharCount;	///< TCHAR → 中間バッファ (UTF16) 時、中間バッファに納められる TCHAR 文字数
-	bool					m_writtenPreamble;	///< BOM を書き込んだか (BOM の無いエンコーディングであれば最初から true)
+	String				m_newLine;
+	Locale				m_locale;
+	bool				m_writtenPreamble;
 };
 
 } // namespace Lumino

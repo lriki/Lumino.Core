@@ -1,4 +1,4 @@
-
+Ôªø
 #pragma once
 
 namespace Lumino
@@ -6,17 +6,17 @@ namespace Lumino
 
 enum XmlErrorCode
 {
-	ParseError_NoError = 0,						///< ÉGÉâÅ[ÇÕî≠ê∂ÇµÇƒÇ¢Ç»Ç¢
+	ParseError_NoError = 0,						///< „Ç®„É©„Éº„ÅØÁô∫Áîü„Åó„Å¶„ÅÑ„Å™„ÅÑ
 
-	ParseError_CommentDoubleHyphen,		///< ÉRÉÅÉìÉgì‡Ç…ó◊ê⁄Ç∑ÇÈ -- Ç™å©Ç¬Ç©Ç¡ÇΩ
+	ParseError_CommentDoubleHyphen,		///< „Ç≥„É°„É≥„ÉàÂÜÖ„Å´Èö£Êé•„Åô„Çã -- „ÅåË¶ã„Å§„Åã„Å£„Åü
 
-	ParseError_ElementNameNotFount,			///< óvëfñºÇ™å©Ç¬Ç©ÇÁÇ»Ç©Ç¡ÇΩ
-	ParseError_ElementInvalidEmptyTagEnd,		///< íPàÍóvëfÇÃèIí[Ç™ /> Ç≈ÇÕÇ»Ç¢
+	ParseError_ElementNameNotFount,			///< Ë¶ÅÁ¥†Âêç„ÅåË¶ã„Å§„Åã„Çâ„Å™„Åã„Å£„Åü
+	ParseError_ElementInvalidEmptyTagEnd,		///< Âçò‰∏ÄË¶ÅÁ¥†„ÅÆÁµÇÁ´Ø„Åå /> „Åß„ÅØ„Å™„ÅÑ
 
-	ParseError_AttributeEqualNotFount,	///< ëÆê´ÇÃ = Ç™å©Ç¬Ç©ÇÁÇ»Ç©Ç¡ÇΩ
-	ParseError_AttributeQuoteNotFount,	///< ëÆê´ÇÃílÇ™à¯ópïÑÇ≈àÕÇ‹ÇÍÇƒÇ¢Ç»Ç¢
+	ParseError_AttributeEqualNotFount,	///< Â±ûÊÄß„ÅÆ = „ÅåË¶ã„Å§„Åã„Çâ„Å™„Åã„Å£„Åü
+	ParseError_AttributeQuoteNotFount,	///< Â±ûÊÄß„ÅÆÂÄ§„ÅåÂºïÁî®Á¨¶„ÅßÂõ≤„Åæ„Çå„Å¶„ÅÑ„Å™„ÅÑ
 
-	ParseError_InvalidEOF,		///< ó\ä˙ÇπÇ  EOF
+	ParseError_InvalidEOF,		///< ‰∫àÊúü„Åõ„Å¨ EOF
 };
 
 class XmlError

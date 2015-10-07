@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 #include "../Base/Stack.h"
 #include "../IO/TextWriter.h"
@@ -10,8 +10,8 @@ namespace Lumino
 class StringWriter;
 
 /**
-	@brief		SAX ƒXƒ^ƒCƒ‹‚Ì XML ƒ‰ƒCƒ^[‚Å‚·B
-	@details	uExtensible Markup Language (XML) 1.1 (‘æ“ñ”Å)v‚ğƒx[ƒX‚ÉÀ‘•‚³‚ê‚Ä‚¢‚Ü‚·B
+	@brief		SAX ã‚¹ã‚¿ã‚¤ãƒ«ã® XML ãƒ©ã‚¤ã‚¿ãƒ¼ã§ã™ã€‚
+	@details	ã€ŒExtensible Markup Language (XML) 1.1 (ç¬¬äºŒç‰ˆ)ã€ã‚’ãƒ™ãƒ¼ã‚¹ã«å®Ÿè£…ã•ã‚Œã¦ã„ã¾ã™ã€‚
 				http://www.eplusx.net/translation/W3C/REC-xml11-20060816/
 */
 class XmlWriter
@@ -24,33 +24,33 @@ public:
 	virtual ~XmlWriter();
 
 public:
-	/** XML éŒ¾‚ğ‘‚«‚İ‚Ü‚·B*/
+	/** XML å®£è¨€ã‚’æ›¸ãè¾¼ã¿ã¾ã™ã€‚*/
 	void WriteStartDocument();
 
-	/** XML ƒhƒLƒ…ƒƒ“ƒg‚ğ•Â‚¶‚Ü‚·B*/
+	/** XML ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’é–‰ã˜ã¾ã™ã€‚*/
 	void WriteEndDocument();
 
-	/** —v‘f‚ÌŠJnƒ^ƒO‚ğ‘‚«‚İ‚Ü‚·B*/
+	/** è¦ç´ ã®é–‹å§‹ã‚¿ã‚°ã‚’æ›¸ãè¾¼ã¿ã¾ã™ã€‚*/
 	void WriteStartElement(const String& name);
 
-	/** —v‘f‚ÌI—¹ƒ^ƒO‚ğ‘‚«‚İ‚Ü‚·B‘®«‚ª‚Ğ‚Æ‚Â‚à–³‚¢ê‡‚Í‹ó—v‘fƒ^ƒO ("/>") ‚Æ‚È‚è‚Ü‚·B*/
+	/** è¦ç´ ã®çµ‚äº†ã‚¿ã‚°ã‚’æ›¸ãè¾¼ã¿ã¾ã™ã€‚å±æ€§ãŒã²ã¨ã¤ã‚‚ç„¡ã„å ´åˆã¯ç©ºè¦ç´ ã‚¿ã‚° ("/>") ã¨ãªã‚Šã¾ã™ã€‚*/
 	void WriteEndElement();
 
-	/** w’è‚µ‚½–¼‘O‚Æ•¶š—ñ’l‚Ì‘®«‚ğ‘‚«‚İ‚Ü‚·B*/
+	/** æŒ‡å®šã—ãŸåå‰ã¨æ–‡å­—åˆ—å€¤ã®å±æ€§ã‚’æ›¸ãè¾¼ã¿ã¾ã™ã€‚*/
 	void WriteAttribute(const String& name, const String& value);
 
-	/** w’è‚µ‚½ƒeƒLƒXƒg‚ğ‘‚«‚İ‚Ü‚·B*/
+	/** æŒ‡å®šã—ãŸãƒ†ã‚­ã‚¹ãƒˆã‚’æ›¸ãè¾¼ã¿ã¾ã™ã€‚*/
 	void WriteString(const String& text);
 
-	/** ƒRƒƒ“ƒgƒuƒƒbƒN‚ğ‘‚«‚İ‚Ü‚·B*/
+	/** ã‚³ãƒ¡ãƒ³ãƒˆãƒ–ãƒ­ãƒƒã‚¯ã‚’æ›¸ãè¾¼ã¿ã¾ã™ã€‚*/
 	void WriteComment(const String& text);
 
-	/** <![CDATA[...]]> ƒuƒƒbƒN‚ğ‘‚«‚İ‚Ü‚·B*/
+	/** <![CDATA[...]]> ãƒ–ãƒ­ãƒƒã‚¯ã‚’æ›¸ãè¾¼ã¿ã¾ã™ã€‚*/
 	void WriteCData(const String& text);
 
 	/** 
-		@brief		ƒeƒLƒXƒgq—v‘f‚ğ‚Â—v‘f‚ğ‘‚«‚İ‚Ü‚·B
-		@details	‚±‚ÌŠÖ”‚ÍˆÈ‰º‚Ì‘€ì‚Æ“¯‚¶Œ‹‰Ê‚É‚È‚éƒ†[ƒeƒBƒŠƒeƒB‚Å‚·B
+		@brief		ãƒ†ã‚­ã‚¹ãƒˆå­è¦ç´ ã‚’æŒã¤è¦ç´ ã‚’æ›¸ãè¾¼ã¿ã¾ã™ã€‚
+		@details	ã“ã®é–¢æ•°ã¯ä»¥ä¸‹ã®æ“ä½œã¨åŒã˜çµæœã«ãªã‚‹ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£ã§ã™ã€‚
 		@code
 					WriteStartElement(elementName);
 					WriteString(text);
@@ -95,7 +95,7 @@ private:
 
 
 /**
-	@brief		w’è‚µ‚½ƒtƒ@ƒCƒ‹‚Ö‘‚«‚İ‚ğs‚¤ XML ƒ‰ƒCƒ^[‚Å‚·B
+	@brief		æŒ‡å®šã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ã¸æ›¸ãè¾¼ã¿ã‚’è¡Œã† XML ãƒ©ã‚¤ã‚¿ãƒ¼ã§ã™ã€‚
 	@code
 				XmlFileWriter writer("test.xml");
 				writer.WriteStartElement(_T("EnvData"));
@@ -109,9 +109,9 @@ class XmlFileWriter
 public:
 
 	/** 
-		@brief		‘‚«‚İæƒtƒ@ƒCƒ‹‚ÌƒpƒX‚ğw’è‚µ‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‚ğ‰Šú‰»‚µ‚Ü‚·Bƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚È‚¢ê‡‚ÍV‚µ‚­ì¬‚µ‚Ü‚·B
-		@param[in]	filePath	: ‘‚«‚İæƒtƒ@ƒCƒ‹‚ÌƒpƒX
-		@param[in]	encoding	: ‘‚«‚İ‚ÌƒGƒ“ƒR[ƒfƒBƒ“ƒO (È—ª‚Í UTF-8)
+		@brief		æ›¸ãè¾¼ã¿å…ˆãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹ã‚’æŒ‡å®šã—ã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’åˆæœŸåŒ–ã—ã¾ã™ã€‚ãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã—ãªã„å ´åˆã¯æ–°ã—ãä½œæˆã—ã¾ã™ã€‚
+		@param[in]	filePath	: æ›¸ãè¾¼ã¿å…ˆãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹
+		@param[in]	encoding	: æ›¸ãè¾¼ã¿æ™‚ã®ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚° (çœç•¥æ™‚ã¯ UTF-8)
 	*/
 	XmlFileWriter(const PathName& filePath, Encoding* encoding = NULL);
 
@@ -120,13 +120,13 @@ public:
 
 
 /**
-	@brief		XML •¶š—ñ‚ğì¬‚·‚é‚½‚ß‚Ì XML ƒ‰ƒCƒ^[‚Å‚·B
+	@brief		XML æ–‡å­—åˆ—ã‚’ä½œæˆã™ã‚‹ãŸã‚ã® XML ãƒ©ã‚¤ã‚¿ãƒ¼ã§ã™ã€‚
 	@code
 				XmlStringWriter writer;
 				writer.WriteStartElement(_T("EnvData"));
 				writer.WriteTextElement(_T("ToolPath"), _T("dir/app.exe"));
 				writer.WriteEndElement();
-				String xmlText = writer.ToString();		// String ‚Æ‚µ‚Äæ‚èo‚·
+				String xmlText = writer.ToString();		// String ã¨ã—ã¦å–ã‚Šå‡ºã™
 	@endcode
 */
 class XmlStringWriter
@@ -137,12 +137,12 @@ public:
 	virtual ~XmlStringWriter();
 	
 	/**
-		@brief		‚±‚Ì TextWriter ‚Åg—p‚·‚é‰üs•¶š—ñ‚ğİ’è‚µ‚Ü‚·B
-		@details	‹K’è’l‚Í String::GetNewLine() ‚Åæ“¾‚Å‚«‚é’l‚Å‚·B
+		@brief		ã“ã® TextWriter ã§ä½¿ç”¨ã™ã‚‹æ”¹è¡Œæ–‡å­—åˆ—ã‚’è¨­å®šã—ã¾ã™ã€‚
+		@details	è¦å®šå€¤ã¯ String::GetNewLine() ã§å–å¾—ã§ãã‚‹å€¤ã§ã™ã€‚
 	*/
 	void SetNewLine(const String& newLine);
 
-	/** XML •¶š—ñ‚ğæ“¾‚µ‚Ü‚·B*/
+	/** XML æ–‡å­—åˆ—ã‚’å–å¾—ã—ã¾ã™ã€‚*/
 	String ToString();
 
 private:

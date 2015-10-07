@@ -264,10 +264,9 @@ void Process::Dispose()
 		// 終了コードを覚えておく (閉じた後は取得できない)
 		TryGetExitCode();
 
-		// 子プロセス強制停止
+		// 子プロセスのハンドルを閉じる (子プロセスが終了するわけではないので注意)
 		if (m_processInfo.hProcess != NULL)
 		{
-			::TerminateProcess(m_processInfo.hProcess, 0);
 			::CloseHandle(m_processInfo.hProcess);
 			m_processInfo.hProcess = NULL;
 		}

@@ -71,13 +71,13 @@ bool Logger::Initialize(const TCHAR* filePath) throw()
 	fprintf(stream, " %s Log    Version:%s\n", LUMINO_NAME, LUMINO_CORE_VERSION_STRING);//    %s\n", LUMINO_CORE_VERSION_STRING, ts);
 	fprintf(stream, "---------------------------------------------------------------\n");
 
-#ifdef LNOTE_DEBUG
+#ifdef LN_DEBUG
 	fprintf(stream, "BuildConfig : Debug\n");
 #else
 	fprintf(stream, "BuildConfig : Release\n");
 #endif
 
-#ifdef LNOTE_UNICODE
+#ifdef LN_DEBUG
 	fprintf(stream, "CharSet     : Unicode\n");
 #else
 	fprintf(stream, "CharSet     : MultiByte\n");

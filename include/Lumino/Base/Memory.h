@@ -24,6 +24,8 @@ void* LN_CDECL operator new[](size_t size, ::Lumino::MemoryFlag flag);
 void  LN_CDECL operator delete (void* ptr, ::Lumino::MemoryFlag flag);
 void  LN_CDECL operator delete[](void* ptr, ::Lumino::MemoryFlag flag);
 
-#define LN_NEW						new(::Lumino::LN_MM_NORMAL_BLOCK)
+#include <crtdbg.h>
+#define LN_NEW new(_NORMAL_BLOCK,__FILE__,__LINE__)
+//#define LN_NEW						new(::Lumino::LN_MM_NORMAL_BLOCK)
 #define LN_OPERATOR_NEW(size)		::operator new(size,::Lumino:: LN_MM_NORMAL_BLOCK)
 #define LN_OPERATOR_DELETE(ptr) {	::operator delete(ptr); (ptr) = 0; }

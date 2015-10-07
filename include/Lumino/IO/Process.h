@@ -12,7 +12,14 @@ namespace Lumino
 {
 
 /**
-	@brief	外部プロセスを起動し、通信を行うクラスです。
+	@brief		外部プロセスを起動し、通信を行うクラスです。
+
+	@section	プロセスを起動し、終了を待つ
+	~~~~~~~~~~~~~~~{.cpp}
+	Process proc;
+	proc.Start("Merge", "file1.c", "file2.c");
+	proc.WaitForExit();
+	~~~~~~~~~~~~~~~
 */
 class Process
 {
