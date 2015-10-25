@@ -110,7 +110,7 @@ XmlReader::XmlReader()
 //
 //-----------------------------------------------------------------------------
 XmlReader::XmlReader(const String& str)
-	: m_reader(LN_NEW StringReader(str))
+	: m_reader(LN_NEW StringReader(str), false)
 	, m_currentElementNodePos(0)
 	, m_line(1)
 	, m_col(1)
@@ -1031,7 +1031,7 @@ void XmlReader::ExpandReservedEntities(TCHAR* text, int len)
 XmlFileReader::XmlFileReader(const PathName& filePath, Encoding* encoding )
 	: XmlReader()
 {
-	RefPtr<StreamReader> file(LN_NEW StreamReader(filePath, encoding));
+	RefPtr<StreamReader> file(LN_NEW StreamReader(filePath, encoding), false);
 	InitializeReader(file);
 }
 

@@ -183,8 +183,8 @@ ByteBuffer Encoding::Convert(
 	const EncodingConversionOptions& options,
 	EncodingConversionResult* result)
 {
-	RefPtr<Decoder> decoder(srcEncoding->CreateDecoder());
-	RefPtr<Encoder> encoder(targetEncoding->CreateEncoder());
+	RefPtr<Decoder> decoder(srcEncoding->CreateDecoder(), false);
+	RefPtr<Encoder> encoder(targetEncoding->CreateEncoder(), false);
 	return Convert(src, srcByteCount, decoder.GetObjectPtr(), encoder.GetObjectPtr(), options, result);
 }
 
@@ -268,8 +268,8 @@ void Encoding::Convert(
 	EncodingConversionResult* result)
 {
 	// TODO: できればメモリ確保はしたくないが…
-	RefPtr<Decoder> decoder(srcEncoding->CreateDecoder());
-	RefPtr<Encoder> encoder(destEncoding->CreateEncoder());
+	RefPtr<Decoder> decoder(srcEncoding->CreateDecoder(), false);
+	RefPtr<Encoder> encoder(destEncoding->CreateEncoder(), false);
 	return Convert(src, srcByteCount, decoder.GetObjectPtr(), dest, destByteCount, encoder.GetObjectPtr(), result);
 }
 

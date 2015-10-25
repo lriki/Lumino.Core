@@ -94,7 +94,7 @@ void Process::Start(const PathName& program, const String& args)
 		m_hInputRead = hPipe[R];
 
 		// 標準出力の Writer を作る
-		RefPtr<InternalPipeStream> stream(LN_NEW InternalPipeStream(InternalPipeStream::WriteSide, m_hInputWrite));
+		RefPtr<InternalPipeStream> stream(LN_NEW InternalPipeStream(InternalPipeStream::WriteSide, m_hInputWrite), false);
 		m_standardInputWriter.Attach(LN_NEW StreamWriter(stream, Encoding::GetWin32DefaultCodePageEncoding()));
 	}
 
@@ -117,7 +117,7 @@ void Process::Start(const PathName& program, const String& args)
 		m_hOutputWrite = hPipe[W];
 
 		// 標準出力の Reader を作る
-		RefPtr<InternalPipeStream> stream(LN_NEW InternalPipeStream(InternalPipeStream::ReadSide, m_hOutputRead));
+		RefPtr<InternalPipeStream> stream(LN_NEW InternalPipeStream(InternalPipeStream::ReadSide, m_hOutputRead), false);
 		m_standardOutputReader.Attach(LN_NEW StreamReader(stream, Encoding::GetWin32DefaultCodePageEncoding()));
 	}
 
@@ -140,7 +140,7 @@ void Process::Start(const PathName& program, const String& args)
 		m_hErrorWrite = hPipe[W];
 
 		// 標準出力の Reader を作る
-		RefPtr<InternalPipeStream> stream(LN_NEW InternalPipeStream(InternalPipeStream::ReadSide, m_hErrorRead));
+		RefPtr<InternalPipeStream> stream(LN_NEW InternalPipeStream(InternalPipeStream::ReadSide, m_hErrorRead), false);
 		m_standardErrorReader.Attach(LN_NEW StreamReader(stream, Encoding::GetWin32DefaultCodePageEncoding()));
 	}
 

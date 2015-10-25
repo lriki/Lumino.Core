@@ -48,6 +48,7 @@ public:
 	virtual int32_t Release();
 
 	void TryGCAddRef();
+	void GCRelease();
 
 protected:
     Threading::Atomic	mReferenceCount;	///< 参照カウント
@@ -71,7 +72,7 @@ public:
 	template<typename... TArgs>
 	static RefPtr<T> Create(TArgs... args)
 	{
-		return RefPtr<T>(LN_NEW T(args...));
+		return RefPtr<T>(LN_NEW T(args...), false);
 	}
 
 	/**
@@ -86,7 +87,7 @@ public:
 		@param[in]	ptr		: 管理対象としてセットする ReferenceObject インスタンスのポインタ
 		@param[in]	addRef	: true の場合、セットされた ReferenceObject の参照カウントをインクリメントする
 	*/
-	RefPtr( T* ptr, bool addRef = false)
+	RefPtr( T* ptr, bool addRef/* = false*/)
 		: mPtr( ptr )
 	{
 		if ( addRef ) {
@@ -265,7 +266,10 @@ public:
 	GCPtr(const GCPtr<T>& obj)
 		: mPtr(obj.mPtr)
 	{
-		LN_SAFE_ADDREF(mPtr);
+		if (mPtr) {
+			mPtr->TryGCAddRef();
+		}
+		//LN_SAFE_ADDREF(mPtr);
 	}
 
 	/**
@@ -273,7 +277,11 @@ public:
 	*/
 	virtual ~GCPtr()
 	{
-		LN_SAFE_RELEASE(mPtr);
+		if (mPtr) {
+			mPtr->GCRelease();
+			mPtr = NULL;
+		}
+		//LN_SAFE_RELEASE(mPtr);
 	}
 
 public:
@@ -305,7 +313,11 @@ public:
 	*/
 	void SafeRelease()
 	{
-		LN_SAFE_RELEASE(mPtr);
+		if (mPtr) {
+			mPtr->GCRelease();
+			mPtr = NULL;
+		}
+		//LN_SAFE_RELEASE(mPtr);
 	}
 
 	/**
@@ -328,7 +340,13 @@ public:
 	/// operator=
 	GCPtr<T>& operator =(const GCPtr<T>& ptr)
 	{
-		LN_REFOBJ_SET(mPtr, ptr.mPtr);
+		if (ptr.mPtr) {
+			ptr.mPtr->TryGCAddRef();
+		}
+		if (mPtr) {
+			mPtr->GCRelease();
+		}
+		mPtr = ptr.mPtr;
 		return *this;
 	}
 

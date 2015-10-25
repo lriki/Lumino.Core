@@ -57,7 +57,7 @@ int32_t RefObject::Release()
 //-----------------------------------------------------------------------------
 void RefObject::TryGCAddRef()
 {
-	if (m_refPtrReferenced.Get() == 0)
+	//if (m_refPtrReferenced.Get() == 0)
 	{
 		m_refPtrReferenced.Increment();
 		if (m_refPtrReferenced.Get() == 1)
@@ -66,6 +66,15 @@ void RefObject::TryGCAddRef()
 		}
 	}
 	AddRef();
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void RefObject::GCRelease()
+{
+	m_refPtrReferenced.Decrement();
+	Release();
 }
 
 } // namespace Lumino

@@ -41,8 +41,8 @@ TEST_F(Test_Base_Encoding, Convert)
 	options.NullTerminated = false;
 
 	const char* buf1 = "123";
-	RefPtr<Decoder> decoder(Encoding::GetSystemMultiByteEncoding()->CreateDecoder());
-	RefPtr<Encoder> encoder(Encoding::GetWideCharEncoding()->CreateEncoder());
+	RefPtr<Decoder> decoder(Encoding::GetSystemMultiByteEncoding()->CreateDecoder(), false);
+	RefPtr<Encoder> encoder(Encoding::GetWideCharEncoding()->CreateEncoder(), false);
 
 	// src が無い
 	ASSERT_THROW(

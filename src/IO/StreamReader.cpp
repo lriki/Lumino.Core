@@ -22,7 +22,7 @@ StreamReader::StreamReader(Stream* stream, Encoding* encoding)
 //-----------------------------------------------------------------------------
 StreamReader::StreamReader(const TCHAR* filePath, Encoding* encoding)
 {
-	RefPtr<FileStream> stream(LN_NEW FileStream(filePath, FileOpenMode::Read));
+	RefPtr<FileStream> stream(LN_NEW FileStream(filePath, FileOpenMode::Read), false);
 	InitReader(stream, encoding);
 }
 

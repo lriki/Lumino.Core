@@ -23,8 +23,8 @@ TEST_F(Test_Base_UTF32Encoding, Basic)
 		byte_t buf1[] = { 0x42, 0x30, 0x00, 0x00 };
 
 		UTF32Encoding utf32Enc(false, false);
-		RefPtr<Decoder> decoder(utf32Enc.CreateDecoder());
-		RefPtr<Encoder> encoder(Encoding::GetUTF16Encoding()->CreateEncoder());
+		RefPtr<Decoder> decoder(utf32Enc.CreateDecoder(), false);
+		RefPtr<Encoder> encoder(Encoding::GetUTF16Encoding()->CreateEncoder(), false);
 		EncodingConversionResult info;
 		ByteBuffer result1 = Encoding::Convert(buf1, 4, decoder, encoder, options, &info);
 
@@ -41,8 +41,8 @@ TEST_F(Test_Base_UTF32Encoding, Basic)
 		byte_t buf1[] = { 0x42, 0x30, 0x00, 0x00 };
 
 		UTF32Encoding utf32Enc(false, false);
-		RefPtr<Decoder> decoder(utf32Enc.CreateDecoder());
-		RefPtr<Encoder> encoder(Encoding::GetUTF16Encoding()->CreateEncoder());
+		RefPtr<Decoder> decoder(utf32Enc.CreateDecoder(), false);
+		RefPtr<Encoder> encoder(Encoding::GetUTF16Encoding()->CreateEncoder(), false);
 		EncodingConversionResult info;
 
 		// 1回目の変換。2byte分。出てくるのは何もない。decoder に状態記憶される。
@@ -67,8 +67,8 @@ TEST_F(Test_Base_UTF32Encoding, Basic)
 		byte_t uttf16buf[] = { 0x42, 0x30 };
 
 		UTF32Encoding utf32Enc(false, false);
-		RefPtr<Decoder> decoder(Encoding::GetUTF16Encoding()->CreateDecoder());
-		RefPtr<Encoder> encoder(utf32Enc.CreateEncoder());
+		RefPtr<Decoder> decoder(Encoding::GetUTF16Encoding()->CreateDecoder(), false);
+		RefPtr<Encoder> encoder(utf32Enc.CreateEncoder(), false);
 		EncodingConversionResult info;
 		ByteBuffer result1 = Encoding::Convert(uttf16buf, 2, decoder, encoder, options, &info);
 
@@ -88,8 +88,8 @@ TEST_F(Test_Base_UTF32Encoding, Basic)
 		byte_t uttf16buf[] = { 0x67, 0xD8, 0x3D, 0xDE };
 		
 		UTF32Encoding utf32Enc(false, false);
-		RefPtr<Decoder> decoder(Encoding::GetUTF16Encoding()->CreateDecoder());
-		RefPtr<Encoder> encoder(utf32Enc.CreateEncoder());
+		RefPtr<Decoder> decoder(Encoding::GetUTF16Encoding()->CreateDecoder(), false);
+		RefPtr<Encoder> encoder(utf32Enc.CreateEncoder(), false);
 		EncodingConversionResult info;
 
 		// 1回目の変換。2byte分。出てくるのは何もない。状態記憶される。
@@ -117,8 +117,8 @@ TEST_F(Test_Base_UTF32Encoding, Basic)
 		byte_t uttf16buf[] = { 0x67, 0xD8, 0x3D, 0xDE };
 
 		UTF32Encoding utf32Enc(false, false);
-		RefPtr<Decoder> decoder(Encoding::GetUTF16Encoding()->CreateDecoder());
-		RefPtr<Encoder> encoder(utf32Enc.CreateEncoder());
+		RefPtr<Decoder> decoder(Encoding::GetUTF16Encoding()->CreateDecoder(), false);
+		RefPtr<Encoder> encoder(utf32Enc.CreateEncoder(), false);
 		EncodingConversionResult info;
 
 		// 1回目の変換。1byte分。出てくるのは何もない。状態記憶される。
