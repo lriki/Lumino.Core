@@ -3,8 +3,7 @@
 #include "../Base/EnumExtension.h"
 #include "../Base/String.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /** JSON 解析のエラーコード */
 LN_ENUM(JsonParseError)
@@ -49,4 +48,4 @@ public:
 	String			Message;
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

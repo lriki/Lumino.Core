@@ -5,8 +5,7 @@
 #include <map>
 #include "String.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 	
 /**
 	@brief	
@@ -60,4 +59,4 @@ public:
 	static const String& GetString(const String& name);
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

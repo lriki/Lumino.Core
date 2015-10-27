@@ -4,8 +4,7 @@
 #include <deque>
 #include "STLUtils.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief	参照カウントを持つキューのクラスです。
@@ -55,4 +54,4 @@ private:
 	std_deque	m_queue;
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

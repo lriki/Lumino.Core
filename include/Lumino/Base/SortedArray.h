@@ -7,8 +7,7 @@
 #include "Exception.h"
 #include "STLUtils.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief		キーの "operator<" の実装により値を並べ替えられた、キーと値のペアの配列です。
@@ -203,4 +202,4 @@ private:
 };
 
 
-} // namespace Lumino
+LN_NAMESPACE_END

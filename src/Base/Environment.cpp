@@ -12,8 +12,7 @@
 #include <Lumino/Base/StringTraits.h>
 #include <Lumino/IO/FileSystem.h>
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // Environment
@@ -199,4 +198,4 @@ template void Environment::GetSpecialFolderPath(SpecialFolder specialFolder, wch
 #endif
 
 
-} // namespace Lumino
+LN_NAMESPACE_END

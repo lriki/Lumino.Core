@@ -6,9 +6,7 @@
 #include "STLUtils.h"
 #include "RefObject.h"
 
-namespace Lumino
-{
-
+LN_NAMESPACE_BEGIN
 
 template<class T>
 class List
@@ -162,7 +160,7 @@ private:
 
 
 
-} // namespace Lumino
+LN_NAMESPACE_END
 
 #endif
 

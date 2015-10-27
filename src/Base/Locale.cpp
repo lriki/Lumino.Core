@@ -40,8 +40,7 @@
 #include <locale.h>
 #include <Lumino/Base/Locale.h>
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // Locale
@@ -230,4 +229,4 @@ int GenericLocalizer<TChar>::Format(TChar* outBuf, int outBufLength, const TChar
 
 }
 
-} // namespace Lumino
+LN_NAMESPACE_END

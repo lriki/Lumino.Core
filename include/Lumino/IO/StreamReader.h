@@ -7,8 +7,7 @@
 #include "Stream.h"
 #include "TextReader.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief	特定のエンコーディングのストリームを文字列として読み込む TextReader です。
@@ -59,4 +58,4 @@ private:
 	int						m_charPos;			///< 次に読むべき文字がある文字列バッファの位置。有効最大は m_charElementLen - 1
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

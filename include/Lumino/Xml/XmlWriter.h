@@ -5,8 +5,7 @@
 #include "XmlError.h"
 #include "XmlReader.h"	//TODO
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 class StringWriter;
 
 /**
@@ -149,4 +148,4 @@ private:
 	StringWriter* m_stringWriter;
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

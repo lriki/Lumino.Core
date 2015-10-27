@@ -9,8 +9,7 @@
 #include "../IO/PathName.h"
 #include "../Threading/Mutex.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 class CacheManager;
 
 /**
@@ -160,4 +159,4 @@ private:
 	Threading::Mutex	m_mutex;
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

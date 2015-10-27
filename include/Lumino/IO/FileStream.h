@@ -4,8 +4,7 @@
 #include "Stream.h"
 #include "PathName.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief	ファイル用ストリーム
@@ -60,4 +59,4 @@ private:
 	FileOpenMode	m_openModeFlags;
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

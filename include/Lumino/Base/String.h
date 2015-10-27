@@ -13,8 +13,7 @@
 
 #include "../Threading/Atomic.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 class Encoding;
 
 /// 大文字と小文字の区別指定
@@ -509,4 +508,4 @@ typedef GenericString<char>		StringA;
 typedef GenericString<wchar_t>	StringW;
 #endif
 
-} // namespace Lumino
+LN_NAMESPACE_END

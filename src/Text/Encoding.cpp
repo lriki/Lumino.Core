@@ -14,8 +14,7 @@
 #include "Win32CodePageEncoding.h"
 #endif
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // Encoding
@@ -669,4 +668,4 @@ void SystemMultiByteEncoding::SystemMultiByteEncoder::ConvertFromUTF16(const UTF
 }
 #endif
 
-} // namespace Lumino
+LN_NAMESPACE_END

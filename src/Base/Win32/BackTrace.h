@@ -11,8 +11,8 @@
 #define LN_BACKTRACE_LOG_HIDE	1
 #endif
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
+
 class BackTrace
 {
 private:
@@ -306,5 +306,6 @@ public:
 	//}
 
 };
-	
-} // namespace Lumino
+
+LN_NAMESPACE_END
+

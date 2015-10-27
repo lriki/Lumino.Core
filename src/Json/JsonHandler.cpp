@@ -4,8 +4,7 @@
 #include <Lumino/Json/JsonDocument.h>
 #include <Lumino/Json/JsonHandler.h>
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // JsonHandler
@@ -235,4 +234,4 @@ void JsonDOMHandler::BuildMember(BinaryReader* reader, JsonMember* m)
 	BuildValue(reader, &m->Value);
 }
 
-} // namespace Lumino
+LN_NAMESPACE_END

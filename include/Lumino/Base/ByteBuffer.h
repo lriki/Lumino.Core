@@ -4,8 +4,7 @@
 #pragma once
 #include "Common.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief		バイト配列を表すクラスです。
@@ -207,4 +206,4 @@ private:
 	// TODO: capacity と size も共有しても良いかも。
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

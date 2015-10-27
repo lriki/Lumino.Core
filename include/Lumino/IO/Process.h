@@ -8,8 +8,7 @@
 #include "StreamReader.h"
 #include "StreamWriter.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief		外部プロセスを起動し、通信を行うクラスです。
@@ -194,4 +193,4 @@ private:
 #endif
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

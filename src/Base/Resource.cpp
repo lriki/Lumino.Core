@@ -2,8 +2,7 @@
 #include "../Internal.h"
 #include <Lumino/Base/Resource.h>
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 	
 //=============================================================================
 // ResourceManager
@@ -93,4 +92,4 @@ const String& InternalResource::GetString(const String& name)
 
 
 
-} // namespace Lumino
+LN_NAMESPACE_END

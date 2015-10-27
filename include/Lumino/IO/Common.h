@@ -3,8 +3,7 @@
 #include "../Base/EnumExtension.h"
 #include "../Base/Common.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 class IArchive;
 
 
@@ -213,4 +212,4 @@ struct ArchiveHeader
 };
 #pragma pack()
 
-} // namespace Lumino
+LN_NAMESPACE_END

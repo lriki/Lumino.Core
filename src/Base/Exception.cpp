@@ -179,8 +179,7 @@
 	#endif
 #endif
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // Exception
@@ -567,4 +566,4 @@ Exception* COMException::Copy() const
 }
 #endif
 
-} // namespace Lumino
+LN_NAMESPACE_END

@@ -7,8 +7,7 @@
 #include "../Base/String.h"
 #include "../Base/EnumExtension.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 class Encoding;
 
 /** ファイルとディレクトリの属性 */
@@ -135,4 +134,4 @@ private:
 	template<typename TChar> static void CreateDirectoryInternal(const TChar* path);
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

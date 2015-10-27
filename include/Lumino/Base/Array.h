@@ -7,8 +7,7 @@
 #include "Exception.h"
 #include "STLUtils.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief		動的配列のテンプレートクラスです。
@@ -275,6 +274,6 @@ private:
 	ArrayData*	m_data;
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END
 
 #include "Array.inl"

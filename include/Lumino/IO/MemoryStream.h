@@ -5,8 +5,8 @@
 #include "../Base/Exception.h"
 #include "Stream.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
+
 /**
 	@brief	データの読み書き先としてメモリを使用するストリームです。
 */
@@ -89,4 +89,4 @@ private:
 	bool				m_autoDelete;
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

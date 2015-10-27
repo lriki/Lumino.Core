@@ -3,8 +3,8 @@
 #include "../Base/NonCopyable.h"
 #include "../Base/RefObject.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
+
 class ByteBuffer;
 class Decoder;
 class Encoder;
@@ -471,4 +471,4 @@ private:
 };
 #endif
 
-} // namespace Lumino
+LN_NAMESPACE_END

@@ -2,8 +2,7 @@
 #include "../Internal.h"
 #include <Lumino/Base/StringBuilder.h>
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // GenericStringBuilderCore
@@ -148,4 +147,4 @@ template class GenericStringBuilderCore<wchar_t>;
 template class GenericStringBuilderCore<UTF32>;
 #endif
 
-} // namespace Lumino
+LN_NAMESPACE_END

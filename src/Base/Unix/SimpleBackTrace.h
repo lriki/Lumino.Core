@@ -1,8 +1,7 @@
 #pragma once
 #include <execinfo.h>
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 class SimleBackTrace
 {
@@ -28,4 +27,5 @@ public:
 	}
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END
+

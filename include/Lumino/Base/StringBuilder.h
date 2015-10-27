@@ -3,8 +3,7 @@
 #include "ByteBuffer.h"
 #include "String.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief
@@ -51,4 +50,4 @@ public:
 
 typedef GenericStringBuilder<TCHAR>	StringBuilder;
 
-} // namespace Lumino
+LN_NAMESPACE_END

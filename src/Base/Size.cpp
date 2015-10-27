@@ -3,8 +3,7 @@
 #include <math.h>
 #include <Lumino/Base/Size.h>
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // Size
@@ -20,4 +19,4 @@ const SizeF	SizeF::Zero(0, 0);
 const SizeF	SizeF::NaN(NAN, NAN);
 
 
-} // namespace Lumino
+LN_NAMESPACE_END

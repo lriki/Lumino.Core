@@ -1,8 +1,7 @@
 
 #pragma once 
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 template<typename T> 
 class Nullable
@@ -48,4 +47,4 @@ private:
     bool m_isSet;
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

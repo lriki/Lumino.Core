@@ -8,8 +8,7 @@
 #include "STLUtils.h"
 #include "Array.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 enum NumberConversionResult
 {
@@ -296,4 +295,4 @@ public:
 
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

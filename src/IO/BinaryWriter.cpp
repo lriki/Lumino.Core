@@ -3,8 +3,7 @@
 #include <Lumino/IO/Stream.h>
 #include <Lumino/IO/BinaryWriter.h>
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // BinaryWriter
@@ -214,4 +213,4 @@ int64_t BinaryWriter::GetPosition() const
 	return m_stream->GetPosition();
 }
 
-} // namespace Lumino
+LN_NAMESPACE_END

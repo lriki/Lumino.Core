@@ -4,8 +4,7 @@
 #include "../Base/String.h"
 #include "TextReader.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief		•¶š—ñ‚©‚ç“Ç‚İæ‚é TextReader ‚ğÀ‘•‚µ‚Ü‚·B
@@ -36,4 +35,4 @@ private:
 	int		m_pos;
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

@@ -1,8 +1,7 @@
 
 #pragma once
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief		四角形の枠の太さを表すクラスです。(浮動小数点形式)
@@ -48,4 +47,4 @@ public:
 };
 
 
-} // namespace Lumino
+LN_NAMESPACE_END

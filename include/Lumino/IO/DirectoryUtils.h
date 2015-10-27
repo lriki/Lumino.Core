@@ -2,8 +2,7 @@
 
 #include "../Base/Array.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief	
@@ -30,4 +29,4 @@ public:
 
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

@@ -4,8 +4,7 @@
 #include "Common.h"
 #include "PathTraits.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief		パス文字列を表すクラス
@@ -278,4 +277,4 @@ typedef GenericPathName<TCHAR>		PathName;
 typedef GenericPathName<char>		PathNameA;
 typedef GenericPathName<wchar_t>	PathNameW;
 
-} // namespace Lumino
+LN_NAMESPACE_END

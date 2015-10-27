@@ -2,8 +2,7 @@
 
 #include "Encoding.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 class IMBSCodeDetector
 {
@@ -101,4 +100,4 @@ private:
 	EncodingType	m_type;
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

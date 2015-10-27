@@ -3,8 +3,7 @@
 #include "../../include/Lumino/IO/File.h"
 #include "../../include/Lumino/IO/FileSystem.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // File
@@ -142,4 +141,4 @@ void File::Flush()
 	m_fileStream->Flush();
 }
 
-} // namespace Lumino
+LN_NAMESPACE_END

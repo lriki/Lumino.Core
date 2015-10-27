@@ -8,8 +8,7 @@
 #include "PathName.h"
 #include "FileStream.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief		ファイル操作を行うクラスです。
@@ -88,4 +87,4 @@ private:
 
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

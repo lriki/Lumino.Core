@@ -12,8 +12,7 @@
 #include <errno.h>
 #include <time.h>
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 #define EINVAL          22
 #define ERANGE          34
@@ -371,6 +370,6 @@ inline errno_t _wfopen_s(
 //	return retvalue;
 //}
 
-} // namespace Lumino
+LN_NAMESPACE_END
 
 #endif

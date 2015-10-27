@@ -3,8 +3,7 @@
 #include "../Internal.h"
 #include "../../include/Lumino/Text/EncodingConverter.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // EncodingConverter
@@ -207,4 +206,4 @@ void EncodingConverter::ConvertDecoderRemain(
 	}
 }
 
-} // namespace Lumino
+LN_NAMESPACE_END

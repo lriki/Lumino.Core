@@ -3,8 +3,7 @@
 */
 #pragma once
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief		ログファイルのユーティリティです。
@@ -42,4 +41,4 @@ public:
 
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

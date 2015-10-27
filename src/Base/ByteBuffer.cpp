@@ -4,8 +4,7 @@
 #include <Lumino/Base/RefObject.h>
 #include <Lumino/Base/ByteBuffer.h>
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // ByteBufferCore
@@ -336,4 +335,4 @@ void ByteBuffer::CheckDetachShared()
 	}
 }
 
-} // namespace Lumino
+LN_NAMESPACE_END

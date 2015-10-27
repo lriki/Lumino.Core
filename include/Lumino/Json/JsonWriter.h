@@ -3,8 +3,7 @@
 #include "../Base/Stack.h"
 #include "../IO/TextWriter.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief	
@@ -62,4 +61,4 @@ private:
 	bool			m_isComplete;
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

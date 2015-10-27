@@ -15,8 +15,7 @@
 #include "../../include/Lumino/Threading/Thread.h"
 #include "../../include/Lumino/Threading/ThreadingExceptions.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 namespace Threading
 {
 
@@ -337,4 +336,4 @@ void DelegateThread::Execute()
 }
 
 } // namespace Threading
-} // namespace Lumino
+LN_NAMESPACE_END

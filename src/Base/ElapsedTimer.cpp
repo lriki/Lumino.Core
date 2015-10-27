@@ -5,8 +5,7 @@
 #endif
 #include <Lumino/Base/ElapsedTimer.h>
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 #ifdef LN_OS_WIN32
 //=============================================================================
@@ -100,4 +99,4 @@ uint64_t ElapsedTimer::GetElapsedTime() const
 
 #endif
 
-} // namespace Lumino
+LN_NAMESPACE_END

@@ -5,8 +5,7 @@
 
 #ifdef LN_CPP11
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 template<typename>
 class Event {};
@@ -66,11 +65,10 @@ private:
 	Array<DelegateType> m_handlerList;
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END
 
 #else
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 #define LN_EVENT_CLASS_NAME				Event01
 #define LN_EVENT_DELEGATE_CLASS_NAME	Delegate01
@@ -104,5 +102,5 @@ namespace Lumino
 #define LN_EVENT_TEMPLATE_TYPES			A1, A2, A3, A4
 #include "Event.inl"
 
-} // namespace Lumino
+LN_NAMESPACE_END
 #endif

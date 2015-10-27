@@ -3,8 +3,7 @@
 */
 #pragma once
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief	2次元上の点を表すクラスです。
@@ -88,4 +87,4 @@ public:
 	bool operator != (const PointF& obj) const { return !operator==(obj); }
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

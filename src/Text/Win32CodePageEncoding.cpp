@@ -4,8 +4,7 @@
 #include "../../include/Lumino/Text/UnicodeUtils.h"
 #include "Win32CodePageEncoding.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // Win32CodePageEncoding
@@ -229,4 +228,4 @@ void Win32CodePageEncoding::Win32CodePageEncoder::ConvertFromUTF16(const UTF16* 
 	*outCharsUsed = count;
 }
 
-} // namespace Lumino
+LN_NAMESPACE_END

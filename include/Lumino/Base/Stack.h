@@ -5,8 +5,7 @@
 #include "RefObject.h"
 #include "STLUtils.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief	参照カウントを持つスタックのクラスです。
@@ -49,4 +48,4 @@ private:
 	std::vector<T, TAllocator>	m_stack;
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

@@ -1,8 +1,7 @@
 ﻿
 #include "../../include/Lumino/Testing/TestUtils.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //---------------------------------------------------------------------
 //
@@ -60,4 +59,4 @@ bool TestUtils::CheckArrays(const void* ary1, const void* ary2, size_t count)
 	return true;
 }
 
-} // namespace Lumino
+LN_NAMESPACE_END

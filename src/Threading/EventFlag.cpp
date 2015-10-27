@@ -2,8 +2,7 @@
 #include "../Internal.h"
 #include "../../include/Lumino/Threading/EventFlag.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 namespace Threading
 {
 
@@ -227,4 +226,4 @@ void EventFlag::Wait()
 #endif
 
 } // namespace Threading
-} // namespace Lumino
+LN_NAMESPACE_END

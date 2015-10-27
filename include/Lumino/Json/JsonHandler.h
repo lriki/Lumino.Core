@@ -5,8 +5,7 @@
 #include "../IO/BinaryWriter.h"
 #include "../IO/MemoryStream.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 class JsonDocument;
 class JsonValue;
 class JsonMember;
@@ -65,4 +64,4 @@ private:
 	Stack<size_t>	m_startIndexStack;
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

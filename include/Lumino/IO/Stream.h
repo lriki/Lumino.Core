@@ -4,8 +4,7 @@
 #include "../Base/RefObject.h"
 #include "Common.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief		ストリームのベースクラス
@@ -67,4 +66,4 @@ public:
 
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

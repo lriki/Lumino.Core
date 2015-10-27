@@ -5,8 +5,7 @@
 #include "Array.h"
 #include "NonCopyable.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 template<typename T>
 struct CollectionTraits
@@ -264,4 +263,4 @@ private:
 	Array<T>	m_array;
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

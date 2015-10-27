@@ -3,10 +3,10 @@
 
 #include "../Base/NonCopyable.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 namespace Threading
 {
+
 /**
 	@page	Doc_Threading
 		- @ref Doc_ReadWriteMutex_1
@@ -87,4 +87,4 @@ private:
 };
 
 } // namespace Threading
-} // namespace Lumino
+LN_NAMESPACE_END

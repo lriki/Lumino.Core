@@ -69,16 +69,17 @@
 #endif
 
 // lib types
-namespace Lumino
-{
-	typedef	uint8_t		byte_t;
+LN_NAMESPACE_BEGIN
+
+typedef	uint8_t		byte_t;
 
 #if defined(_MSC_VER)
-	typedef _locale_t	NativeLocale_t;
+typedef _locale_t	NativeLocale_t;
 #else
-	typedef locale_t	NativeLocale_t;
+typedef locale_t	NativeLocale_t;
 #endif
-}
+
+LN_NAMESPACE_END
 
 
 
@@ -96,18 +97,19 @@ namespace Lumino
 #endif
 
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
+
 #ifdef LN_WCHAR_16
-	typedef uint8_t		UTF8;
-	typedef	wchar_t		UTF16;	// デバッガで見ることができるので wchar_t にしておく
-	typedef uint32_t	UTF32;
+typedef uint8_t		UTF8;
+typedef	wchar_t		UTF16;	// デバッガで見ることができるので wchar_t にしておく
+typedef uint32_t	UTF32;
 #else
-	typedef uint8_t		UTF8;
-	typedef	uint16_t	UTF16;
-	typedef wchar_t		UTF32;
+typedef uint8_t		UTF8;
+typedef	uint16_t	UTF16;
+typedef wchar_t		UTF32;
 #endif
-}
+
+LN_NAMESPACE_END
 
 //----------------------------------------------------------------------
 // LN_T … テンプレート引数による _T マクロ

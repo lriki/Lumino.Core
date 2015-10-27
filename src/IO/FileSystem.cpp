@@ -8,8 +8,7 @@
 #include "../../include/Lumino/IO/FileStream.h"
 #include "../../include/Lumino/IO/FileSystem.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 #if 0
 
 
@@ -455,4 +454,4 @@ void FileSystem::CreateDirectory(const wchar_t* path)
 }
 
 
-} // namespace Lumino
+LN_NAMESPACE_END

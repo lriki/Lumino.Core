@@ -6,8 +6,7 @@
 #include "../../include/Lumino/Text/UnicodeUtils.h"
 #include "../../include/Lumino/Text/EncodingDetector.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // Encoding
@@ -265,5 +264,5 @@ void SJISDetector::Detect(bool untilUnmatch)
 	}
 }
 
-} // namespace Lumino
+LN_NAMESPACE_END
 

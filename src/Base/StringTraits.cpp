@@ -16,8 +16,7 @@
 #endif
 
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 void StringTraits::tstrcpy(char* dst, int dstLen, const char* src)
 {
@@ -1072,4 +1071,4 @@ double StringTraits::ToDouble(const TChar* str, int len, const TChar** outEndPtr
 template double StringTraits::ToDouble<char>(const char* str, int len, const char** outEndPtr, NumberConversionResult* outResult);
 template double StringTraits::ToDouble<wchar_t>(const wchar_t* str, int len, const wchar_t** outEndPtr, NumberConversionResult* outResult);
 
-} // namespace Lumino
+LN_NAMESPACE_END

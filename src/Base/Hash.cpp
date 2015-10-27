@@ -2,8 +2,7 @@
 #include "../Internal.h"
 #include <Lumino/Base/Hash.h>
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // Hash
@@ -90,4 +89,4 @@ uint32_t Hash::CalcHash(const wchar_t* str, int len)
 	return CalcCRCHash((const char*)str, len);
 }
 
-} // namespace Lumino
+LN_NAMESPACE_END

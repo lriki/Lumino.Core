@@ -3,8 +3,7 @@
 #include "../Base/ByteBuffer.h"
 #include "Encoding.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief		テキスト間のエンコーディングの変換を行うクラスです。
@@ -72,4 +71,4 @@ private:
 	bool						m_encodingModified;
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

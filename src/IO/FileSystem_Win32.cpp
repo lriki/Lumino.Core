@@ -7,8 +7,7 @@
 #include "../../include/Lumino/IO/FileSystem.h"
 #include "../../include/Lumino/IO/PathTraits.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //-----------------------------------------------------------------------------
 //
@@ -220,4 +219,4 @@ bool FileSystem::GetAttributeInternal(const wchar_t* path, FileAttribute* outAtt
 	return true;
 }
 
-} // namespace Lumino
+LN_NAMESPACE_END

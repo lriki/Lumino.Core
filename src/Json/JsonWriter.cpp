@@ -3,8 +3,7 @@
 #include <Lumino/Base/StringTraits.h>
 #include <Lumino/Json/JsonWriter.h>
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // JsonWriter
@@ -263,4 +262,4 @@ void JsonWriter::OnString(const TCHAR* str, int length)
 	m_textWriter->Write(_T("\""), 1);
 }
 
-} // namespace Lumino
+LN_NAMESPACE_END

@@ -3,8 +3,7 @@
 #include "../Base/String.h"
 #include "../Base/RefObject.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief	一連の文字を読み取ることができるリーダーを表します。
@@ -52,4 +51,4 @@ public:
 
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

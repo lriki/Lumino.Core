@@ -7,8 +7,7 @@
 #include "../Base/Environment.h"
 #include "Common.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 class Stream;
 
 /**
@@ -107,4 +106,4 @@ private:
 	Stream*   m_stream;
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

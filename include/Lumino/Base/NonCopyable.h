@@ -3,8 +3,7 @@
 
 #include "Common.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief	コピーを禁止するクラスに private 継承させる
@@ -20,4 +19,4 @@ private:
 	NonCopyable& operator=(const NonCopyable &);
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

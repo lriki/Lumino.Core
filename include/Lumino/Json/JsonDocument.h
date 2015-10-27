@@ -4,8 +4,7 @@
 #include "../IO/TextReader.h"
 #include "JsonValue.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief	JSON データのルート要素です。
@@ -30,4 +29,4 @@ public:
 private:
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

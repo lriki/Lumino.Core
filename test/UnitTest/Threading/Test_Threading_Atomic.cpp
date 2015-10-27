@@ -1,6 +1,6 @@
 ﻿#include <TestConfig.h>
 #include <atomic>
-using namespace Lumino::Threading;
+using namespace ln::Threading;
 
 class Test_Threading_Atomic : public ::testing::Test
 {

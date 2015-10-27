@@ -104,8 +104,7 @@ https://msdn.microsoft.com/ja-jp/library/c426s321.aspx
 	参考：http://www.nubaria.com/en/blog/?p=289
 */
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 template<typename TChar>
 typename GenericString<TChar>::GenericStringCore/*<TChar>*/ GenericString<TChar>::GenericStringCore/*<TChar>*/::m_sharedEmpty;
@@ -997,4 +996,4 @@ Encoding* GenericString<TChar>::GetThisTypeEncoding() const
 template class GenericString<char>;
 template class GenericString<wchar_t>;
 
-} // namespace Lumino
+LN_NAMESPACE_END

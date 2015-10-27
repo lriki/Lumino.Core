@@ -126,8 +126,7 @@ public: \
 	static bool TryParse(const TCHAR* str, enumName* outValue, TCHAR separator = '|') { return GetEnumParser().TryParse(str, (outValue) ? &outValue->m_value : NULL, separator); }
 
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 	
 /**
 	@brief	拡張 enum 型のベースクラスです。
@@ -149,8 +148,8 @@ public:
 	// LN_ENUM_DECLARE マクロが非常に長くなるのを避けるため、部分的にクラス化した
 
 		struct Pair { String Name; TEnum Value; };
-		typedef typename ::Lumino::Array<Pair> PairList;
-		typedef typename ::Lumino::Array<Pair>& PairListReference;
+		typedef typename ::ln::Array<Pair> PairList;
+		typedef typename ::ln::Array<Pair>& PairListReference;
 
 		static PairListReference GetMemberList()
 		{
@@ -346,4 +345,4 @@ public:
 #define LN_ENUM_FLAGS_REFLECTION(enumName, ...)
 #endif	// LN_DOXYGEN
 
-} // namespace Lumino
+LN_NAMESPACE_END

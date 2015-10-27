@@ -6,8 +6,7 @@
 #include <Lumino/Base/Environment.h>
 #include <Lumino/Base/Logger.h>
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // Logger
@@ -206,4 +205,4 @@ void Logger::WriteLine(const wchar_t* format, ...) throw()
 
 }
 
-} // namespace Lumino
+LN_NAMESPACE_END

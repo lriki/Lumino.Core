@@ -4,8 +4,7 @@
 #include "Point.h"
 #include "Size.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief		2次元の矩形を表すクラスです。
@@ -374,4 +373,4 @@ public:
 };
 
 
-} // namespace Lumino
+LN_NAMESPACE_END

@@ -2,8 +2,7 @@
 #include "../../include/Lumino/Base/String.h"
 #include "../../include/Lumino/Text/Encoding.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief		Win32 コードページ エンコーディング
@@ -72,4 +71,4 @@ private:
 	};
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

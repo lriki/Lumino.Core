@@ -2,8 +2,7 @@
 #include "../Internal.h"
 #include <Lumino/Base/Rect.h>
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // Rect
@@ -20,4 +19,4 @@ const RectF	RectF::Zero(0, 0, 0, 0);
 const RectF	RectF::Empty(0, 0, -1, -1);
 
 
-} // namespace Lumino
+LN_NAMESPACE_END

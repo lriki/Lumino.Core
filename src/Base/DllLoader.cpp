@@ -6,8 +6,7 @@
 #endif
 #include <Lumino/Base/DllLoader.h>
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // DllLoader
@@ -118,4 +117,4 @@ void* DllLoader::GetProcAddress(const char* procName)
 	return proc;
 }
 
-} // namespace Lumino
+LN_NAMESPACE_END

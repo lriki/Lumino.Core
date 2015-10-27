@@ -7,8 +7,7 @@
 #include "../Text/Encoding.h"
 #include "../Text/EncodingConverter.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief	各種データを文字列として書き込みを行う機能のベースクラスです。機能を使用するには StreamWriter や StringWriter を使用します。
@@ -157,4 +156,4 @@ private:
 	bool				m_writtenPreamble;
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

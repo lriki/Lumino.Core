@@ -5,8 +5,7 @@
 #include "../Base/Exception.h"
 #include "../Base/NonCopyable.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 namespace Threading
 {
 
@@ -26,4 +25,4 @@ public:
 };
 
 } // namespace Threading
-} // namespace Lumino
+LN_NAMESPACE_END

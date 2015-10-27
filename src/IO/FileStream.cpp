@@ -3,8 +3,7 @@
 #include "../../include/Lumino/IO/FileSystem.h"
 #include "../../include/Lumino/IO/FileStream.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // FileStream
@@ -217,4 +216,4 @@ void FileStream::Open() const
 	LN_THROW(err == 0, FileNotFoundException);
 }
 
-} // namespace Lumino
+LN_NAMESPACE_END

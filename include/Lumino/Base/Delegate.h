@@ -8,8 +8,7 @@
 
 #include <functional>
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 template<typename>
 class Delegate {};
@@ -286,15 +285,14 @@ Delegate<TRet(TArgs...)> CreateDelegate(T* objPtr, TRet(T::*func)(TArgs...))
 //	return Delegate<TRet(TArgs...)>(func);
 //}
 
-} // namespace Lumino
+LN_NAMESPACE_END
 
 #else
 
 
 #include "RefObject.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief		関数ポインタのラッパークラス
@@ -497,6 +495,6 @@ Delegate00 LN_CreateDelegate( T* objPtr, void (T::*method)() )
 #define LN_DELEGATE_TEMPLATE_TYPES  A1, A2, A3, A4, A5, A6, A7, A8
 #include "Delegate.inl"
 
-} // namespace Lumino
+LN_NAMESPACE_END
 
 #endif // #ifdef LN_CPP11

@@ -8,24 +8,25 @@
 
 #pragma once
 
-namespace Lumino
+LN_NAMESPACE_BEGIN
+
+enum MemoryFlag
 {
-	enum MemoryFlag
-	{
-		LN_MM_NORMAL_BLOCK = 1,
-	};
-}
+	LN_MM_NORMAL_BLOCK = 1,
+};
+
+LN_NAMESPACE_END
 
 //void* LN_CDECL operator new ( size_t size );
 //void  LN_CDECL operator delete ( void* ptr );
 
-void* LN_CDECL operator new (size_t size, ::Lumino::MemoryFlag flag);
-void* LN_CDECL operator new[](size_t size, ::Lumino::MemoryFlag flag);
-void  LN_CDECL operator delete (void* ptr, ::Lumino::MemoryFlag flag);
-void  LN_CDECL operator delete[](void* ptr, ::Lumino::MemoryFlag flag);
+void* LN_CDECL operator new (size_t size, ::ln::MemoryFlag flag);
+void* LN_CDECL operator new[](size_t size, ::ln::MemoryFlag flag);
+void  LN_CDECL operator delete (void* ptr, ::ln::MemoryFlag flag);
+void  LN_CDECL operator delete[](void* ptr, ::ln::MemoryFlag flag);
 
 #include <crtdbg.h>
 #define LN_NEW new(_NORMAL_BLOCK,__FILE__,__LINE__)
-//#define LN_NEW						new(::Lumino::LN_MM_NORMAL_BLOCK)
-#define LN_OPERATOR_NEW(size)		::operator new(size,::Lumino:: LN_MM_NORMAL_BLOCK)
+//#define LN_NEW						new(::ln::LN_MM_NORMAL_BLOCK)
+#define LN_OPERATOR_NEW(size)		::operator new(size,::ln:: LN_MM_NORMAL_BLOCK)
 #define LN_OPERATOR_DELETE(ptr) {	::operator delete(ptr); (ptr) = 0; }

@@ -2,8 +2,7 @@
 #include "../Internal.h"
 #include "../../include/Lumino/Threading/Atomic.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 namespace Threading
 {
 
@@ -130,4 +129,4 @@ int32_t Atomic::Decrement()
 #endif
 
 } // namespace Threading
-} // namespace Lumino
+LN_NAMESPACE_END

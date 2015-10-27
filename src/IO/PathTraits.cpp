@@ -4,8 +4,7 @@
 #include "../../include/Lumino/IO/PathTraits.h"
 #include "../../include/Lumino/IO/DirectoryUtils.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // PathTraits
@@ -764,4 +763,4 @@ GenericString<TChar> PathTraits::DiffPath(const TChar* path1, int len1, const TC
 template GenericString<char> PathTraits::DiffPath(const char* path1, int len1, const char* path2, int len2, CaseSensitivity cs);
 template GenericString<wchar_t> PathTraits::DiffPath(const wchar_t* path1, int len1, const wchar_t* path2, int len2, CaseSensitivity cs);
 
-} // namespace Lumino
+LN_NAMESPACE_END

@@ -4,10 +4,10 @@
 #include "../Base/Common.h"
 #include "../Base/NonCopyable.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 namespace Threading
 {
+
 /**
 	@brief		待ち合わせ機能を持つスレッドセーフな bool 型変数のクラス
 */
@@ -52,4 +52,4 @@ private:
 };
 
 } // namespace Threading
-} // namespace Lumino
+LN_NAMESPACE_END

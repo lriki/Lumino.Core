@@ -6,8 +6,7 @@
 #include <Lumino/IO/PathName.h>
 #include <Lumino/IO/DirectoryUtils.h>
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // GenericPathName
@@ -395,4 +394,4 @@ GenericString<TChar> GenericPathName<TChar>::GetUniqueFileNameInDirectory(const 
 template class GenericPathName<char>;
 template class GenericPathName<wchar_t>;
 
-} // namespace Lumino
+LN_NAMESPACE_END

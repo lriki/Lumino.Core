@@ -5,9 +5,7 @@
 #include <Lumino/IO/StringWriter.h>
 #include <Lumino/Xml/XmlWriter.h>
 
-namespace Lumino
-{
-
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // XmlWriter
@@ -424,4 +422,4 @@ String XmlStringWriter::ToString()
 	return m_stringWriter->ToString();
 }
 
-} // namespace Lumino
+LN_NAMESPACE_END

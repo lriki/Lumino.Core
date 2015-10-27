@@ -70,8 +70,7 @@ StringRef égÇ§Ç±Ç∆ÇÕñ≥Ç¢Ç©Ç‡ÅB
 #include <Lumino/IO/StreamReader.h>
 #include <Lumino/Xml/XmlReader.h>
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // XmlReader
@@ -1044,4 +1043,4 @@ XmlFileReader::~XmlFileReader()
 }
 
 
-} // namespace Lumino
+LN_NAMESPACE_END

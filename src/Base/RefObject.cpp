@@ -2,8 +2,7 @@
 #include "../Internal.h"
 #include "../../include/Lumino/Base/RefObject.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // RefObject
@@ -77,4 +76,4 @@ void RefObject::GCRelease()
 	Release();
 }
 
-} // namespace Lumino
+LN_NAMESPACE_END

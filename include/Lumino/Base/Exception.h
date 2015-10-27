@@ -102,7 +102,7 @@
 				}
 	@endcode
 */
-#define LN_VERIFY_RETURN(exp, ...)					if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::Lumino::VerifyException)) { return; }
+#define LN_VERIFY_RETURN(exp, ...)					if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::ln::VerifyException)) { return; }
 
 /**
 	@brief		式の結果が false であれば return により処理を中断します。return で使用する戻り値を指定します。
@@ -118,25 +118,25 @@
 				}
 	@endcode
 */
-#define LN_VERIFY_RETURNV(exp, returnValue, ...)	if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::Lumino::VerifyException)) { return returnValue; }
+#define LN_VERIFY_RETURNV(exp, returnValue, ...)	if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::ln::VerifyException)) { return returnValue; }
 
 
 // 試験運用中
-#define LN_VERIFY_ARGS(exp)							_LN_VERIFY_ASSERT_INTERNAL(exp, Lumino::ArgumentException)
-#define LN_VERIFY_ARGS_RETURN(exp)					if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::Lumino::ArgumentException)) { return; }
-#define LN_VERIFY_ARGS_RETURNV(exp, returnValue)	if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::Lumino::ArgumentException)) { return returnValue; }
+#define LN_VERIFY_ARGS(exp)							_LN_VERIFY_ASSERT_INTERNAL(exp, ::ln::ArgumentException)
+#define LN_VERIFY_ARGS_RETURN(exp)					if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::ln::ArgumentException)) { return; }
+#define LN_VERIFY_ARGS_RETURNV(exp, returnValue)	if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::ln::ArgumentException)) { return returnValue; }
 
 // 試験運用中。Release でも例外を throw する。中身は TODO。必ず throw なら RETURN はいらない気がする・・・
-#define LN_CHECK_ARGS(exp)							_LN_VERIFY_ASSERT_INTERNAL(exp, Lumino::ArgumentException)
-#define LN_CHECK_ARGS_RETURN(exp)					if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::Lumino::ArgumentException)) { return; }
-#define LN_CHECK_ARGS_RETURNV(exp, returnValue)		if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::Lumino::ArgumentException)) { return returnValue; }
-#define LN_CHECK_STATE(exp, ...)						_LN_VERIFY_ASSERT_INTERNAL(exp, Lumino::InvalidOperationException)
-#define LN_CHECK_STATE_RETURN(exp, ...)					if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::Lumino::InvalidOperationException)) { return; }
-#define LN_CHECK_STATE_RETURNV(exp, returnValue, ...)	if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::Lumino::InvalidOperationException)) { return returnValue; }
+#define LN_CHECK_ARGS(exp)							_LN_VERIFY_ASSERT_INTERNAL(exp, ln::ArgumentException)
+#define LN_CHECK_ARGS_RETURN(exp)					if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::ln::ArgumentException)) { return; }
+#define LN_CHECK_ARGS_RETURNV(exp, returnValue)		if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::ln::ArgumentException)) { return returnValue; }
+#define LN_CHECK_STATE(exp, ...)						_LN_VERIFY_ASSERT_INTERNAL(exp, ln::InvalidOperationException)
+#define LN_CHECK_STATE_RETURN(exp, ...)					if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::ln::InvalidOperationException)) { return; }
+#define LN_CHECK_STATE_RETURNV(exp, returnValue, ...)	if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::ln::InvalidOperationException)) { return returnValue; }
 
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
+
 	inline bool AssertInternal(bool result) 	// result が false であれば assert
 	{ 
 		assert(result);
@@ -462,4 +462,4 @@ private:
 };
 #endif
 
-} // namespace Lumino
+LN_NAMESPACE_END

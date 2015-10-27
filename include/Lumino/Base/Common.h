@@ -111,6 +111,8 @@
 	#define LN_AFX_FUNCNAME(name) name##A
 #endif
 
+#define LN_NAMESPACE_BEGIN	namespace ln {
+#define LN_NAMESPACE_END	}
 
 //----------------------------------------------------------------------
 // include
@@ -174,8 +176,8 @@
 #include "CRT.h"
 
 /** Root namespace. */
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
+
 	class ImplAccessor;
 
 	template<typename BaseType = char>	// GCC では GenericString 内部に定義できないので外に出している
@@ -193,4 +195,4 @@ namespace Lumino
 		typedef char	YCHAR;
 	};
 
-} // namespace Lumino
+LN_NAMESPACE_END

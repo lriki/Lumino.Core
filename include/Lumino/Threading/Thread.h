@@ -6,8 +6,7 @@
 #include "../Base/Delegate.h"
 #include "EventFlag.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 class Exception;
 
 namespace Threading
@@ -137,4 +136,4 @@ private:
 };
 
 } // namespace Threading
-} // namespace Lumino
+LN_NAMESPACE_END

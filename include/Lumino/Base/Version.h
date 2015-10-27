@@ -4,14 +4,15 @@
 #ifndef LUMINO_CORE_VERSION_H
 #define LUMINO_CORE_VERSION_H
 
+#include "Common.h"
+
 #define LUMINO_NAME					"Lumino"	///< ライブラリ名
 #define LUMINO_CORE_VERSION_MAJOR	0			///< メジャーバージョン
 #define LUMINO_CORE_VERSION_MINOR	0			///< マイナーバージョン
 #define LUMINO_CORE_VERSION_PATCH	0			///< パッチ番号
 #define LUMINO_CORE_VERSION_STRING	"0.0.0"		///< バージョン文字列
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 namespace Version
 {
 
@@ -53,6 +54,6 @@ public:
 };
 
 } // namespace Version
-} // namespace Lumino
+LN_NAMESPACE_END
 
 #endif // LUMINO_CORE_VERSION_H

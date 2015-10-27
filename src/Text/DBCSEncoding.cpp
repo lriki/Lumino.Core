@@ -3,8 +3,7 @@
 #include "../../include/Lumino/Text/UnicodeUtils.h"
 #include "DBCSEncoding.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // DBCSEncoding
@@ -210,4 +209,4 @@ void DBCSEncoding::DBCSEncoder::ConvertFromUTF16(const UTF16* inBuffer, size_t i
 	*outCharsUsed = inBufPos;
 }
 
-} // namespace Lumino
+LN_NAMESPACE_END

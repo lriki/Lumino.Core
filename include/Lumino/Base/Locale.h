@@ -4,8 +4,7 @@
 #pragma once
 #include "String.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief	ロケールを表します。
@@ -70,4 +69,4 @@ private:
 	Locale	m_locale;
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

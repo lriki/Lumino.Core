@@ -4,8 +4,7 @@
 #include "PathName.h"
 #include "TextWriter.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief	文字列を特定のエンコーディングでストリームに書き込むための TextWriter の実装です。
@@ -43,4 +42,4 @@ private:
 	RefPtr<Stream>	m_stream;
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

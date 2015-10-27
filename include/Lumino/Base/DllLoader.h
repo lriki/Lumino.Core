@@ -6,8 +6,7 @@
 #include "Common.h"
 #include "NonCopyable.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@file	DLL または 共有ライブラリをロードし、アクセスするためのクラスです。
@@ -63,4 +62,4 @@ private:
 	void*	m_module;
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

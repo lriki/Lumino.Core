@@ -4,8 +4,7 @@
 #include <Lumino/IO/StringReader.h>
 #include <Lumino/Json/JsonReader.h>
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // JsonReader
@@ -490,4 +489,4 @@ bool JsonReader::ParseObject()
 	// ‚±‚±‚É‚Í—ˆ‚È‚¢‚Í‚¸
 }
 
-} // namespace Lumino
+LN_NAMESPACE_END

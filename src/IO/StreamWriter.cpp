@@ -3,8 +3,7 @@
 #include <Lumino/IO/FileStream.h>
 #include <Lumino/IO/StreamWriter.h>
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // StreamWriter
@@ -73,4 +72,4 @@ void StreamWriter::WriteOverride(const void* data, size_t byteCount)
 	m_stream->Write(data, byteCount);
 }
 
-} // namespace Lumino
+LN_NAMESPACE_END

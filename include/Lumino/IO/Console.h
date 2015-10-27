@@ -3,8 +3,7 @@
 */
 #pragma once
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief		コンソールウィンドウの操作を行います。
@@ -24,4 +23,4 @@ public:
 	static void Free();
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

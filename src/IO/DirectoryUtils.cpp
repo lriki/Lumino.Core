@@ -3,8 +3,7 @@
 #include "../../include/Lumino/IO/PathName.h"
 #include "../../include/Lumino/IO/DirectoryUtils.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 	
 //=============================================================================
 // DirectoryUtils
@@ -92,4 +91,4 @@ Array<String> DirectoryUtils::GetFiles(const TCHAR* drPath, const TCHAR* pattern
 }
 #endif
 
-} // namespace Lumino
+LN_NAMESPACE_END

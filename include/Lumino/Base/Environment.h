@@ -5,8 +5,7 @@
 #pragma once
 #include "EnumExtension.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /// エンディアンを示す値
 enum ByteOrder
@@ -73,4 +72,4 @@ public:
 	static void GetSpecialFolderPath(SpecialFolder specialFolder, TChar* outPath);
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

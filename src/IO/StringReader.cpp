@@ -2,8 +2,7 @@
 #include "../Internal.h"
 #include <Lumino/IO/StringReader.h>
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // TextReader
@@ -125,4 +124,4 @@ bool StringReader::IsEOF()
 	return (m_pos >= m_src.GetLength());
 }
 
-} // namespace Lumino
+LN_NAMESPACE_END

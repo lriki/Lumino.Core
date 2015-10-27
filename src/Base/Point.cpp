@@ -2,8 +2,7 @@
 #include "../Internal.h"
 #include <Lumino/Base/Point.h>
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // Point
@@ -18,4 +17,4 @@ const Point	Point::Zero(0, 0);
 const PointF PointF::Zero(0, 0);
 
 
-} // namespace Lumino
+LN_NAMESPACE_END

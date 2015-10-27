@@ -47,9 +47,7 @@ COW		: 200ms
 	要素数が増えるほど差が開いていく。
 */
 
-
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // Array
@@ -279,5 +277,5 @@ private:
 
 #endif
 
-} // namespace Lumino
+LN_NAMESPACE_END
 

@@ -1,8 +1,7 @@
 ﻿#include "../Internal.h"
 #include <Lumino/IO/Process.h>
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // Process
@@ -220,4 +219,4 @@ void Process::Thread_ReadStdError()
 	}
 }
 
-} // namespace Lumino
+LN_NAMESPACE_END

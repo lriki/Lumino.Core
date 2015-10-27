@@ -1,8 +1,7 @@
 ﻿
 #include "../../include/Lumino/Text/Encoding.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief		UTF32 エンコーディング
@@ -67,4 +66,4 @@ private:
 	};
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

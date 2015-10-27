@@ -1,11 +1,11 @@
 ﻿#pragma once
+#include "../Base/Common.h"
 
 #ifndef _WIN32
 #include <stdint.h>
 #endif
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /// 文字コード変換の処理結果
 enum UTFConversionResult
@@ -233,4 +233,4 @@ private:
 
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

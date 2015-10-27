@@ -2,8 +2,7 @@
 #include "../Internal.h"
 #include "../../include/Lumino/Threading/Mutex.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 namespace Threading
 {
 
@@ -81,4 +80,4 @@ void Mutex::Unlock()
 #endif
 
 } // namespace Threading
-} // namespace Lumino
+LN_NAMESPACE_END

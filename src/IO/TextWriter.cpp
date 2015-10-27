@@ -3,8 +3,7 @@
 #include <Lumino/Base/StringTraits.h>
 #include <Lumino/IO/TextWriter.h>
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // TextWriter
@@ -326,4 +325,4 @@ void TextWriter::WriteInternal(const TCHAR* str, int len)
 }
 
 
-} // namespace Lumino
+LN_NAMESPACE_END

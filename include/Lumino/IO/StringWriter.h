@@ -3,8 +3,7 @@
 #include "../Base/StringBuilder.h"
 #include "TextWriter.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief	
@@ -26,4 +25,4 @@ private:
 	StringBuilder	m_builder;
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

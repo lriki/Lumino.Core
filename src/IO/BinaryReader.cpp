@@ -3,8 +3,7 @@
 #include <Lumino/IO/Stream.h>
 #include <Lumino/IO/BinaryReader.h>
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // BinaryReader
@@ -290,4 +289,4 @@ bool BinaryReader::IsEOF() const
 	return (m_stream->GetPosition() >= m_stream->GetLength());
 }
 
-} // namespace Lumino
+LN_NAMESPACE_END

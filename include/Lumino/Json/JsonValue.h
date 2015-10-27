@@ -4,8 +4,7 @@
 #include "../Base/Array.h"
 #include "../Base/String.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 class JsonMember;
 
 /** Json ÇÃílÇÃå^Çé¶ÇµÇ‹Ç∑ÅB*/
@@ -155,4 +154,4 @@ public:
 	JsonValue	Value;
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

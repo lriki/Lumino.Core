@@ -3,8 +3,7 @@
 #include "../Base/String.h"
 #include "../IO/PathName.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 class TestUtils
 {
@@ -36,4 +35,4 @@ public:
 // __FILE__ と同じフォルダのファイルパス (wchar_t) を取得する
 #define LN_TEST_GET_FILE_PATH_W(fileName) TestUtils::GetFilePathW(__FILE__, fileName).GetCStr()
 
-} // namespace Lumino
+LN_NAMESPACE_END

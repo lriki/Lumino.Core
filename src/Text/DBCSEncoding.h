@@ -2,8 +2,7 @@
 #pragma once
 #include "../../include/Lumino/Text/Encoding.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief	最大 2byte(DoubleByte) のマルチバイト文字コードのエンコーディング
@@ -81,4 +80,4 @@ private:
 	};
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

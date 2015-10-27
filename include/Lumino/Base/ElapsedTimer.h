@@ -1,8 +1,7 @@
 
 #pragma once
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 	
 /**
 	@brief	経過時間を測定するためのクラスです。
@@ -33,4 +32,4 @@ private:
 #endif
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

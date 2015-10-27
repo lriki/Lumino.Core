@@ -1,7 +1,6 @@
 ﻿#pragma once
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief	ネイティブ文字列に対するパス文字列操作をまとめたクラス
@@ -148,4 +147,4 @@ public:
 	static GenericString<TChar> DiffPath(const TChar* path1, int len1, const TChar* path2, int len2, CaseSensitivity cs);
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

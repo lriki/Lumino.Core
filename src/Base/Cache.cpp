@@ -3,8 +3,7 @@
 #include <Lumino/Base/Stack.h>
 #include <Lumino/Base/Cache.h>
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // CacheKey
@@ -541,4 +540,4 @@ void CacheManager::DeleteCachedObject(ICacheObject* obj)
 	delete obj;
 }
 
-} // namespace Lumino
+LN_NAMESPACE_END

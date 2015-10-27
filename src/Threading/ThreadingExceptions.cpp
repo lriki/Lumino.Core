@@ -1,8 +1,7 @@
 ﻿
 #include "../../include/Lumino/Threading/ThreadingExceptions.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 namespace Threading
 {
 
@@ -21,4 +20,4 @@ ThreadException::~ThreadException() throw()
 }
 
 } // namespace Threading
-} // namespace Lumino
+LN_NAMESPACE_END

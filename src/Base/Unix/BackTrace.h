@@ -10,8 +10,7 @@
 #include <execinfo.h>
 #include <bfd.h>		// [$ sudo apt-get install binutils-dev] or [binutils-devel]
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 class BackTrace
 {
@@ -178,4 +177,5 @@ public:
 	}
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END
+

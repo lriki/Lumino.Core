@@ -1,8 +1,7 @@
 ﻿#include "../Internal.h"
 #include <Lumino/IO/Process.h>
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 class InternalPipeStream
 	: public Stream
@@ -322,4 +321,4 @@ void Process::Dispose()
 	}
 }
 
-} // namespace Lumino
+LN_NAMESPACE_END

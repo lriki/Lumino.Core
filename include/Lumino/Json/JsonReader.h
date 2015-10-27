@@ -5,8 +5,7 @@
 #include "JsonError.h"
 #include "JsonHandler.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief	SAX スタイルの JSON パーサです。
@@ -44,4 +43,4 @@ private:
 	int				m_currentCharCount;	// エラー表示用
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

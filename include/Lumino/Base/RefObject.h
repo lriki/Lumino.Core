@@ -4,8 +4,7 @@
 #include "NonCopyable.h"
 #include "../Threading/Atomic.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /// 参照カウントのインクリメント
 #ifndef LN_SAFE_ADDREF
@@ -419,4 +418,4 @@ protected:
 };
 
 
-} // namespace Lumino
+LN_NAMESPACE_END

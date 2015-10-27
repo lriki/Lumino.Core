@@ -1,8 +1,8 @@
 
 #include <Lumino/Base/Version.h>
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
+
 namespace Version
 {
 
@@ -52,4 +52,4 @@ bool Core::IsAtLeast(int major, int minor, int patch)
 }
 
 } // namespace Version
-} // namespace Lumino
+LN_NAMESPACE_END

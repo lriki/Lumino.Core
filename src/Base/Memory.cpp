@@ -2,11 +2,12 @@
 #include <new>
 #include "../Internal.h"
 #include "../../include/Lumino/Base/Memory.h"
+using namespace ln;
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void* LN_CDECL operator new ( size_t size, ::Lumino::MemoryFlag flag )
+void* LN_CDECL operator new ( size_t size, MemoryFlag flag )
 {
 	void* ptr = NULL;
 	try
@@ -17,7 +18,7 @@ void* LN_CDECL operator new ( size_t size, ::Lumino::MemoryFlag flag )
 	{
 	}
 	if (ptr == NULL) {
-		LN_THROW(0, Lumino::OutOfMemoryException);
+		LN_THROW(0, OutOfMemoryException);
 	}
 	return ptr;
 }
@@ -25,7 +26,7 @@ void* LN_CDECL operator new ( size_t size, ::Lumino::MemoryFlag flag )
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void* LN_CDECL operator new[] ( size_t size, ::Lumino::MemoryFlag flag )
+void* LN_CDECL operator new[] ( size_t size, MemoryFlag flag )
 {
 	void* ptr = NULL;
 	try
@@ -36,7 +37,7 @@ void* LN_CDECL operator new[] ( size_t size, ::Lumino::MemoryFlag flag )
 	{
 	}
 	if (ptr == NULL) {
-		LN_THROW(0, Lumino::OutOfMemoryException);
+		LN_THROW(0, OutOfMemoryException);
 	}
 	return ptr;
 }
@@ -44,7 +45,7 @@ void* LN_CDECL operator new[] ( size_t size, ::Lumino::MemoryFlag flag )
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void  LN_CDECL operator delete ( void* ptr, ::Lumino::MemoryFlag flag )
+void  LN_CDECL operator delete ( void* ptr, MemoryFlag flag )
 {
 	return ::operator delete(ptr);
 }
@@ -52,7 +53,7 @@ void  LN_CDECL operator delete ( void* ptr, ::Lumino::MemoryFlag flag )
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void  LN_CDECL operator delete[] ( void* ptr, ::Lumino::MemoryFlag flag )
+void  LN_CDECL operator delete[] ( void* ptr, MemoryFlag flag )
 {
 	return ::operator delete[](ptr);
 }

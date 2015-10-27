@@ -3,8 +3,7 @@
 #include <Lumino/IO/FileStream.h>
 #include <Lumino/IO/StreamReader.h>
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // StreamReader
@@ -185,4 +184,4 @@ int StreamReader::ReadBuffer()
 	return m_charElementLen;
 }
 
-} // namespace Lumino
+LN_NAMESPACE_END

@@ -3,8 +3,7 @@
 #include <vector>
 #include <algorithm>
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /**
 	@brief	STL ユーティリティ
@@ -128,14 +127,14 @@ public:
 
  */
 #define LN_FOREACH( var_, col_ ) \
-    if ( ::Lumino::ForeachCore::any_itr_t _ln_foreach_cur_ = ::Lumino::ForeachCore::begin( col_ ) ) \
-    if ( ::Lumino::ForeachCore::any_itr_t _ln_foreach_end_ = ::Lumino::ForeachCore::end( col_ ) ) \
+    if ( ::ln::ForeachCore::any_itr_t _ln_foreach_cur_ = ::ln::ForeachCore::begin( col_ ) ) \
+    if ( ::ln::ForeachCore::any_itr_t _ln_foreach_end_ = ::ln::ForeachCore::end( col_ ) ) \
     for ( \
         bool _ln_foreach_continue_ = true; \
-		_ln_foreach_continue_ && ::Lumino::ForeachCore::get_itr(_ln_foreach_cur_, col_) != ::Lumino::ForeachCore::get_itr(_ln_foreach_end_, col_); \
-        ++::Lumino::ForeachCore::get_itr( _ln_foreach_cur_, col_ )) \
-		if (::Lumino::ForeachCore::set_false(_ln_foreach_continue_)) \
-			for ( var_ = *::Lumino::ForeachCore::get_itr( _ln_foreach_cur_, col_ ); !_ln_foreach_continue_; _ln_foreach_continue_ = true )
+		_ln_foreach_continue_ && ::ln::ForeachCore::get_itr(_ln_foreach_cur_, col_) != ::ln::ForeachCore::get_itr(_ln_foreach_end_, col_); \
+        ++::ln::ForeachCore::get_itr( _ln_foreach_cur_, col_ )) \
+		if (::ln::ForeachCore::set_false(_ln_foreach_continue_)) \
+			for ( var_ = *::ln::ForeachCore::get_itr( _ln_foreach_cur_, col_ ); !_ln_foreach_continue_; _ln_foreach_continue_ = true )
 
 namespace ForeachCore
 {
@@ -207,4 +206,4 @@ inline typename COL_T::iterator& get_itr( any_itr_t any_itr_, COL_T& )
 } // namespace ForeachCore
 #endif
 
-} // namespace Lumino
+LN_NAMESPACE_END

@@ -1,8 +1,7 @@
 ﻿
 #pragma once
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 enum XmlErrorCode
 {
@@ -30,4 +29,4 @@ public:
 	
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END

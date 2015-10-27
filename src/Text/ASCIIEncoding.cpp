@@ -2,8 +2,7 @@
 #include "../Internal.h"
 #include "ASCIIEncoding.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // ASCIIEncoding
@@ -70,4 +69,4 @@ void ASCIIEncoding::ASCIIEncoder::ConvertFromUTF16(const UTF16* inBuffer, size_t
 	(*outCharsUsed) = inBufferCharCount;
 }
 
-} // namespace Lumino
+LN_NAMESPACE_END

@@ -2,8 +2,7 @@
 #include <stdio.h>
 #include "../../include/Lumino/Text/UnicodeUtils.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 // UTF-8 のある先頭バイトに対する1文字分の後続バイト数
 // (現在本ソースでは 4 バイトまでしか扱えないが、覚書として残しておく)
@@ -741,4 +740,4 @@ bool UnicodeUtils::IsLegalUTF8(const UTF8 *source, size_t length)
     return true;
 }
 
-} // namespace Lumino
+LN_NAMESPACE_END

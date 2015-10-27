@@ -3,8 +3,7 @@
 #include "../../include/Lumino/IO/MemoryStream.h"
 #include "../../include/Lumino/IO/FileSystem.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //-----------------------------------------------------------------------------
 //
@@ -224,4 +223,4 @@ void MemoryStream::Seek(int64_t offset, SeekOrigin origin)
 	m_seekPos = (size_t)FileSystem::CalcSeekPoint(m_seekPos, m_buffer.size(), offset, origin);
 }
 
-} // namespace Lumino
+LN_NAMESPACE_END

@@ -2,8 +2,7 @@
 #include "../Internal.h"
 #include "../../include/Lumino/Threading/ReadWriteMutex.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 namespace Threading
 {
 
@@ -195,4 +194,4 @@ void ReadWriteMutex::UnlockWrite()
 #endif
 
 } // namespace Threading
-} // namespace Lumino
+LN_NAMESPACE_END

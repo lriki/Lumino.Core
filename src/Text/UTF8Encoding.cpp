@@ -3,8 +3,7 @@
 #include "../../include/Lumino/Text/UnicodeUtils.h"
 #include "UTF8Encoding.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 	
 //=============================================================================
 // UTF8Encoding
@@ -276,4 +275,4 @@ void UTF8Encoding::UTF8Encoder::ConvertFromUTF16(const UTF16* inBuffer, size_t i
 	//*outCharsUsed = options.CharCount;
 }
 
-} // namespace Lumino
+LN_NAMESPACE_END

@@ -2,8 +2,7 @@
 #include "../Internal.h"
 #include <Lumino/Base/Thickness.h>
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // ThicknessF
@@ -11,4 +10,4 @@ namespace Lumino
 
 const ThicknessF	ThicknessF::Zero(0, 0, 0, 0);
 
-} // namespace Lumino
+LN_NAMESPACE_END

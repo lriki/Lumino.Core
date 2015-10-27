@@ -1,8 +1,7 @@
 #include "../Internal.h"
 #include <Lumino/IO/Console.h>
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 //=============================================================================
 // Console
@@ -83,4 +82,4 @@ void Console::Free()
 
 #endif
 
-} // namespace Lumino
+LN_NAMESPACE_END

@@ -4,8 +4,7 @@
 #include "../IO/MemoryStream.h"
 #include "XmlError.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 /** ノードの種類 */
 LN_ENUM(XmlNodeType)
@@ -245,4 +244,4 @@ public:
 	virtual ~XmlFileReader();
 };
 
-} // namespace Lumino
+LN_NAMESPACE_END
