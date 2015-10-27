@@ -60,11 +60,10 @@ protected:
 	friend class CacheManager;
 	struct CacheObjectInfo
 	{
-		CacheManager*	Manager;
-		CacheKey		Key;
-		size_t			CacheMemorySize;
-		bool			InCacheList;
-		//bool			mIsStockObject;
+		CacheManager*	manager;
+		CacheKey		key;
+		size_t			cacheMemorySize;
+		bool			inCacheList;
 
 		CacheObjectInfo();
 		~CacheObjectInfo();
@@ -91,7 +90,7 @@ public: \
 	virtual int32_t AddRef() { return RefObject::AddRef(); } \
 	virtual int32_t Release() \
 	{ \
-		if (m_cacheObjectInfo.Manager == NULL/* || m_cacheObjectInfo.mIsStockObject*/) \
+		if (m_cacheObjectInfo.manager == NULL/* || m_cacheObjectInfo.mIsStockObject*/) \
 		{ \
 			return RefObject::Release(); \
 		} \
@@ -99,7 +98,7 @@ public: \
 		LN_ASSERT(count >= 0); \
 		if (count == 0) \
 		{ \
-			m_cacheObjectInfo.Manager->AddCacheUnusedList(this); \
+			m_cacheObjectInfo.manager->AddCacheUnusedList(this); \
 		} \
 		return count; \
 	}

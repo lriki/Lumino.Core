@@ -41,13 +41,13 @@ void JsonWriter::StartObject()
 void JsonWriter::EndObject()
 {
 	LN_VERIFY_RETURN(m_levelStack.GetCount() >= 1);
-	LN_VERIFY_RETURN(!m_levelStack.GetTop().InArray);
+	LN_VERIFY_RETURN(!m_levelStack.GetTop().inArray);
 
 	m_levelStack.Pop();
 	OnEndObject();
 
 	if (!m_levelStack.IsEmpty()) {	// ルート要素のクローズに備える
-		m_levelStack.GetTop().ValueCount++;
+		m_levelStack.GetTop().valueCount++;
 	}
 }
 
@@ -67,11 +67,11 @@ void JsonWriter::StartArray()
 void JsonWriter::EndArray()
 {
 	LN_VERIFY_RETURN(m_levelStack.GetCount() >= 2);
-	LN_VERIFY_RETURN(m_levelStack.GetTop().InArray);
+	LN_VERIFY_RETURN(m_levelStack.GetTop().inArray);
 
 	m_levelStack.Pop();
 	OnEndArray();
-	m_levelStack.GetTop().ValueCount++;
+	m_levelStack.GetTop().valueCount++;
 }
 
 //-----------------------------------------------------------------------------
@@ -96,7 +96,7 @@ void JsonWriter::WriteNull()
 
 	WritePrefix();
 	OnNull();
-	m_levelStack.GetTop().ValueCount++;
+	m_levelStack.GetTop().valueCount++;
 }
 
 //-----------------------------------------------------------------------------
@@ -108,7 +108,7 @@ void JsonWriter::WriteBool(bool value)
 
 	WritePrefix();
 	OnBool(value);
-	m_levelStack.GetTop().ValueCount++;
+	m_levelStack.GetTop().valueCount++;
 }
 
 //-----------------------------------------------------------------------------
@@ -120,7 +120,7 @@ void JsonWriter::WriteDouble(double value)
 
 	WritePrefix();
 	OnDouble(value);
-	m_levelStack.GetTop().ValueCount++;
+	m_levelStack.GetTop().valueCount++;
 }
 
 //-----------------------------------------------------------------------------
@@ -133,7 +133,7 @@ void JsonWriter::WriteString(const TCHAR* str, int length)
 
 	WritePrefix();
 	OnString(str, length);
-	m_levelStack.GetTop().ValueCount++;
+	m_levelStack.GetTop().valueCount++;
 }
 
 //-----------------------------------------------------------------------------
@@ -153,15 +153,15 @@ void JsonWriter::WritePrefix()
 	{
 		Level& level = m_levelStack.GetTop();
 		if (level.justSawKey) {
-			OnPrefix(PrefixType_Key, level.ValueCount);
+			OnPrefix(PrefixType_Key, level.valueCount);
 		}
-		else if (level.ValueCount > 0)
+		else if (level.valueCount > 0)
 		{
-			if (level.InArray) {
-				OnPrefix(PrefixType_Array, level.ValueCount);
+			if (level.inArray) {
+				OnPrefix(PrefixType_Array, level.valueCount);
 			}
 			else {
-				OnPrefix(PrefixType_Object, level.ValueCount);
+				OnPrefix(PrefixType_Object, level.valueCount);
 			}
 		}
 		level.justSawKey = false;

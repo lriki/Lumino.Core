@@ -18,7 +18,7 @@ class CacheTest
 public:
 	CacheTest(size_t objSize)
 	{
-		m_cacheObjectInfo.CacheMemorySize = objSize;
+		m_cacheObjectInfo.cacheMemorySize = objSize;
 		g_count++;
 	}
 	virtual ~CacheTest()

@@ -15,10 +15,10 @@ public:
 
 	struct TableInfo
 	{
-		const TCHAR*			Name;
-		const unsigned char*	LeadBytePairs;		// size = LeadBytePairsSize (NULL の場合、この文字コードは DB ではない)
-		const unsigned short*	DBCSToUTF16Table;	// size = TableSize
-		const unsigned short*	UTF16ToDBCSTable;	// size = TableSize
+		const TCHAR*			name;
+		const unsigned char*	leadBytePairs;		// size = LeadBytePairsSize (NULL の場合、この文字コードは DB ではない)
+		const unsigned short*	dbcsToUTF16Table;	// size = TableSize
+		const unsigned short*	utf16ToDBCSTable;	// size = TableSize
 	};
 
 	static const TableInfo Tables[EncodingType_Max];
@@ -29,7 +29,7 @@ public:
 
 public:
 	// override Encoding
-	virtual const TCHAR* GetName() const { return Tables[m_encodingType].Name; }
+	virtual const TCHAR* GetName() const { return Tables[m_encodingType].name; }
 	virtual int GetMinByteCount() const { return 1; }
 	virtual int GetMaxByteCount() const { return 2; }
 	virtual Decoder* CreateDecoder() const { return LN_NEW DBCSDecoder(&Tables[m_encodingType]); }

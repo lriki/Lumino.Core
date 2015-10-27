@@ -147,7 +147,7 @@ public:
 	{
 	// LN_ENUM_DECLARE マクロが非常に長くなるのを避けるため、部分的にクラス化した
 
-		struct Pair { String Name; TEnum Value; };
+		struct Pair { String name; TEnum value; };
 		typedef typename ::ln::Array<Pair> PairList;
 		typedef typename ::ln::Array<Pair>& PairListReference;
 
@@ -163,8 +163,8 @@ public:
 			for (int i = 0; i < valuesCount; ++i)
 			{
 				Pair p;
-				p.Name = tokens[i].Trim();
-				p.Value = values[i];
+				p.name = tokens[i].Trim();
+				p.value = values[i];
 				members.Add(p);
 			}
 		}
@@ -173,8 +173,8 @@ public:
 			PairList& members = GetMemberList();
 			for (int i = 0; i < members.GetCount(); ++i)
 			{
-				if (members[i].Value == value) {
-					return members[i].Name;
+				if (members[i].value == value) {
+					return members[i].name;
 				}
 			}
 			LN_ASSERT(0);
@@ -194,9 +194,9 @@ public:
 			PairList& members = GetMemberList();
 			for (int i = 0; i < members.GetCount(); ++i)
 			{
-				if (members[i].Name == str)
+				if (members[i].name == str)
 				{
-					*outValue = members[i].Value;
+					*outValue = members[i].value;
 					return true;
 				}
 			}
@@ -217,19 +217,19 @@ public:
 			// 先に完全一致を探す (White=Red|Green|Blue のようなパターン用)
 			for (int i = 0; i < members.GetCount(); ++i)
 			{
-				if (members[i].Value == value) {
-					return members[i].Name;
+				if (members[i].value == value) {
+					return members[i].name;
 				}
 			}
 			// 完全一致が無ければ複数のフラグを結合する
 			String out;
 			for (int i = 0; i < members.GetCount(); ++i)
 			{
-				TEnum f = members[i].Value;
+				TEnum f = members[i].value;
 				if ((value & f) == f && (f != 0 || value == f))
 				{
 					if (!out.IsEmpty()) { out += separator; }
-					out += members[i].Name;
+					out += members[i].name;
 				}
 			}
 			LN_THROW(!out.IsEmpty(), ArgumentException);
@@ -324,9 +324,9 @@ public:
 			for (int i = 0; i < members.GetCount(); ++i)
 			{
 				//if (_tcsncmp(members[i].Name.GetCStr(), str, len) == 0)
-				if (members[i].Name.Compare(str, len) == 0)
+				if (members[i].name.Compare(str, len) == 0)
 				{
-					*outValue = members[i].Value;
+					*outValue = members[i].value;
 					return true;
 				}
 			}

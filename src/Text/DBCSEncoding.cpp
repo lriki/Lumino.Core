@@ -58,11 +58,11 @@ static bool CheckDBCSLeadByte(const DBCSEncoding::TableInfo* info, byte_t byte)
 	for (int i = 0; i < DBCSEncoding::LeadBytePairsSize / 2; ++i)
 	{
 		int pair = i * 2;
-		if (info->LeadBytePairs[pair] == 0x00) {
+		if (info->leadBytePairs[pair] == 0x00) {
 			return false;
 		}
 		// 先行バイトの範囲内であるか
-		if (info->LeadBytePairs[pair] <= byte && byte <= info->LeadBytePairs[pair + 1]) {
+		if (info->leadBytePairs[pair] <= byte && byte <= info->leadBytePairs[pair + 1]) {
 			return true;
 		}
 	}
@@ -75,7 +75,7 @@ static bool CheckDBCSLeadByte(const DBCSEncoding::TableInfo* info, byte_t byte)
 DBCSEncoding::DBCSEncoding(EncodingType type)
 	: m_encodingType(EncodingType_Unknown)
 {
-	LN_THROW(Tables[type].LeadBytePairs != NULL, ArgumentException);	// DBEncoding としては使えない
+	LN_THROW(Tables[type].leadBytePairs != NULL, ArgumentException);	// DBEncoding としては使えない
 	m_encodingType = type;
 }
 
@@ -137,7 +137,7 @@ void DBCSEncoding::DBCSDecoder::ConvertToUTF16(const byte_t* inBuffer, size_t in
 			}
 			else {
 				// シングルバイト文字。普通に変換する。
-				outBuffer[outBufPos] = m_tableInfo->DBCSToUTF16Table[b];
+				outBuffer[outBufPos] = m_tableInfo->dbcsToUTF16Table[b];
 				LN_THROW(outBuffer[outBufPos] != 0x0000, EncodingException);	// 不正文字
 				++outBufPos;
 			}
@@ -151,7 +151,7 @@ void DBCSEncoding::DBCSDecoder::ConvertToUTF16(const byte_t* inBuffer, size_t in
 			//}
 
 			// マルチバイト文字。先行バイトを上位バイトにして変換する。
-			outBuffer[outBufPos] = m_tableInfo->DBCSToUTF16Table[(m_lastLeadByte << 8) | (b & 0xFF)];
+			outBuffer[outBufPos] = m_tableInfo->dbcsToUTF16Table[(m_lastLeadByte << 8) | (b & 0xFF)];
 			LN_THROW(outBuffer[outBufPos] != 0x0000, EncodingException);	// 不正文字
 			++outBufPos;
 			m_lastLeadByte = 0x00;
@@ -189,7 +189,7 @@ void DBCSEncoding::DBCSEncoder::ConvertFromUTF16(const UTF16* inBuffer, size_t i
 			LN_THROW(0, EncodingException);
 		}
 
-		uint16_t dbBytes = m_tableInfo->UTF16ToDBCSTable[ch];
+		uint16_t dbBytes = m_tableInfo->utf16ToDBCSTable[ch];
 
 		// シングルバイト文字
 		if ((dbBytes & 0xFF00) == 0x0000) {

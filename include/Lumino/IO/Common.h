@@ -203,13 +203,4 @@ LN_ENUM(SpecialFolderOption)
 };
 LN_ENUM_DECLARE(SpecialFolderOption);
 
-#pragma pack(1)
-struct ArchiveHeader
-{
-	char	ID[4];			///< 'l' 'n' 'a' ' '
-	uint8_t	Version;		///< ファイルバージョン
-	byte_t	Padding[11];	///< 構造体サイズが 16 の倍数になるようにするためのパディング
-};
-#pragma pack()
-
 LN_NAMESPACE_END
