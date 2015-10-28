@@ -22,7 +22,7 @@ TEST_F(Test_IO_StreamReader, ReadLine)
 	}
 
 	ByteBuffer buf = FileSystem::ReadAllBytes(LOCALFILE("TestData/Text_UTF16LE_CRLF.txt"));
-	ASSERT_EQ(0, ByteBuffer::Compare(buf, str.GetCStr(), str.GetByteCount()));
+	ASSERT_EQ(0, ByteBuffer::Compare(buf, str.c_str(), str.GetByteCount()));
 #endif
 
 	// <Test> バッファリングバッファの境界で CRLF 改行文字が途切れていてもデコードできる。

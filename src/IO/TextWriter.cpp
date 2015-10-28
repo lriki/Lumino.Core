@@ -177,7 +177,7 @@ void TextWriter::WriteDouble(double value)
 //-----------------------------------------------------------------------------
 void TextWriter::WriteLine()
 {
-	WriteInternal(m_newLine.GetCStr(), m_newLine.GetLength());
+	WriteInternal(m_newLine.c_str(), m_newLine.GetLength());
 }
 void TextWriter::WriteLine(const TCHAR* str, int len)
 {

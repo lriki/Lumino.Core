@@ -49,7 +49,7 @@ Array<String> DirectoryUtils::GetFiles(const TCHAR* drPath, const TCHAR* pattern
 
     // 検索開始
 	WIN32_FIND_DATA fd;
-	HANDLE h = ::FindFirstFile(dirPathKey.GetCStr(), &fd);
+	HANDLE h = ::FindFirstFile(dirPathKey.c_str(), &fd);
 	if (h == INVALID_HANDLE_VALUE)
 	{
 		DWORD dwError = ::GetLastError();

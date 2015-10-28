@@ -132,7 +132,7 @@ GenericString<TChar> PathTraits::GetDirectoryPath(const TChar* path)
 		str = GenericString<TChar>(path, pos);
 
 		// ルートパスの末尾は必ずセパレータにする
-		if (IsRootPath(str.GetCStr()))
+		if (IsRootPath(str.c_str()))
 		{
 			// 末尾がセパレータでなければセパレータを追加する
 			//if ((*str.rbegin() != DirectorySeparatorChar) && (*str.rbegin() != AltDirectorySeparatorChar)) {
@@ -542,7 +542,7 @@ void PathTraits::CanonicalizePath(GenericString<TChar>* path)
 
 	TChar tmpPath[LN_MAX_PATH + 1];
 	memset(tmpPath, 0, sizeof(tmpPath));
-	PathTraits::CanonicalizePath(path->GetCStr(), tmpPath);
+	PathTraits::CanonicalizePath(path->c_str(), tmpPath);
 	*path = tmpPath;
 }
 template void PathTraits::CanonicalizePath<char>(GenericString<char>* path);

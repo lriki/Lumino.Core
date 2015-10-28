@@ -149,7 +149,7 @@ TEST_F(Test_Base_Encoding, SystemEncodingTest)
 		//ASSERT_EQ(0x7B, (byte_t)str2.at(3));	// '本'
 		//ASSERT_EQ(0x8C, (byte_t)str2.at(4));	// '語'
 		//ASSERT_EQ(0xEA, (byte_t)str2.at(5));	// '語'
-		ASSERT_TRUE(TestUtils::CheckArrays(str2.GetCStr(), str1, strlen((char*)str1)));
+		ASSERT_TRUE(TestUtils::CheckArrays(str2.c_str(), str1, strlen((char*)str1)));
 
 		// 1文字だけ
 		StringA str3;

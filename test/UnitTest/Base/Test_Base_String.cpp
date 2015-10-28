@@ -73,7 +73,7 @@ TEST_F(Test_Base_String, Constructor)
 	{
 		std::string str1("test", 0, 4);
 		StringA str2("test", 0, 4);
-		EXPECT_EQ(str1, str2.GetCStr());
+		EXPECT_EQ(str1, str2.c_str());
 	}
 
 	{
@@ -311,16 +311,16 @@ TEST_F(Test_Base_String, Operators)
 TEST_F(Test_Base_String, XYChar)
 {
 	String str1("multi");
-	ASSERT_STREQ(_T("multi"), str1.GetCStr());
+	ASSERT_STREQ(_T("multi"), str1.c_str());
 
 	String str2(L"wide");
-	ASSERT_STREQ(_T("wide"), str2.GetCStr());
+	ASSERT_STREQ(_T("wide"), str2.c_str());
 
 	str1 = "multi";
-	ASSERT_STREQ(_T("multi"), str1.GetCStr());
+	ASSERT_STREQ(_T("multi"), str1.c_str());
 
 	str2 = L"wide";
-	ASSERT_STREQ(_T("wide"), str2.GetCStr());
+	ASSERT_STREQ(_T("wide"), str2.c_str());
 }
 
 //---------------------------------------------------------------------
@@ -337,10 +337,10 @@ TEST_F(Test_Base_String, AssignCStr)
 		StringW wstr2;
 		wstr2.AssignCStr(L"test");
 
-		ASSERT_STREQ("test", str1.GetCStr());
-		ASSERT_STREQ("test", str2.GetCStr());
-		ASSERT_STREQ(L"test", wstr1.GetCStr());
-		ASSERT_STREQ(L"test", wstr2.GetCStr());
+		ASSERT_STREQ("test", str1.c_str());
+		ASSERT_STREQ("test", str2.c_str());
+		ASSERT_STREQ(L"test", wstr1.c_str());
+		ASSERT_STREQ(L"test", wstr2.c_str());
 
 		StringW tstr3;
 		tstr3.AssignCStr("f");
@@ -770,30 +770,30 @@ TEST_F(Test_Base_String, Split)
 TEST_F(Test_Base_String, NewLine)
 {
 #ifdef _WIN32
-	const char* nl = StringA::GetNewLine().GetCStr();
+	const char* nl = StringA::GetNewLine().c_str();
 	ASSERT_EQ('\r', nl[0]);
 	ASSERT_EQ('\n', nl[1]);
 	ASSERT_EQ('\0', nl[2]);
 
-	const wchar_t* wnl = StringW::GetNewLine().GetCStr();
+	const wchar_t* wnl = StringW::GetNewLine().c_str();
 	ASSERT_EQ(L'\r', wnl[0]);
 	ASSERT_EQ(L'\n', wnl[1]);
 	ASSERT_EQ(L'\0', wnl[2]);
 
-	const TCHAR* tnl = String::GetNewLine().GetCStr();
+	const TCHAR* tnl = String::GetNewLine().c_str();
 	ASSERT_EQ(_T('\r'), tnl[0]);
 	ASSERT_EQ(_T('\n'), tnl[1]);
 	ASSERT_EQ(_T('\0'), tnl[2]);
 #else
-	const char* nl = StringA::GetNewLine().GetCStr();
+	const char* nl = StringA::GetNewLine().c_str();
 	ASSERT_EQ('\n', nl[0]);
 	ASSERT_EQ('\0', nl[1]);
 
-	const wchar_t* wnl = StringW::GetNewLine().GetCStr();
+	const wchar_t* wnl = StringW::GetNewLine().c_str();
 	ASSERT_EQ(L'\n', wnl[0]);
 	ASSERT_EQ(L'\0', wnl[1]);
 
-	const TCHAR* tnl = String::GetNewLine().GetCStr();
+	const TCHAR* tnl = String::GetNewLine().c_str();
 	ASSERT_EQ(_T('\n'), tnl[0]);
 	ASSERT_EQ(_T('\0'), tnl[1]);
 #endif

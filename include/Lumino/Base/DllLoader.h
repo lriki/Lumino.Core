@@ -9,7 +9,7 @@
 LN_NAMESPACE_BEGIN
 
 /**
-	@file	DLL または 共有ライブラリをロードし、アクセスするためのクラスです。
+	@brief	DLL または 共有ライブラリをロードし、アクセスするためのクラスです。
 */
 class DllLoader
 	: public NonCopyable

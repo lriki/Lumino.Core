@@ -66,6 +66,7 @@ set(LN_SOURCES_Base
 	include/Lumino/Base/Stack.h
 	include/Lumino/Base/STLUtils.h
 	include/Lumino/Base/String.h
+	include/Lumino/Base/StringArray.h
 	include/Lumino/Base/StringBuilder.h
 	include/Lumino/Base/StringTraits.h
 	include/Lumino/Base/Thickness.h

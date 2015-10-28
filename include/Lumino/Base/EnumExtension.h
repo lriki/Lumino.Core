@@ -323,7 +323,6 @@ public:
 			PairListReference members = EnumParser<TEnum>::GetMemberList();
 			for (int i = 0; i < members.GetCount(); ++i)
 			{
-				//if (_tcsncmp(members[i].Name.GetCStr(), str, len) == 0)
 				if (members[i].name.Compare(str, len) == 0)
 				{
 					*outValue = members[i].value;

@@ -81,7 +81,7 @@ enum class StringSplitOptions
 	これは COW の共有で使用している参照カウントの操作がスレッドセーフではないためです。
 	この参照カウントは頻繁に操作されるため、ロックしてしまうとそのコストが COW のメリットをつぶしてしまう可能性があり、現在はスレッドセーフとしていません。
 	もし別のスレッドに渡したい場合は次のようにして文字列本体をコピーするように強制します。
-	m_thread2Str = m_thread1Str.GetCStr();
+	m_thread2Str = m_thread1Str.c_str();
 	このクラスに限らず、COW で実装される各種コンテナ (ByteBufferなど) も同様にスレッドセーフではありません。
 	
 
@@ -96,6 +96,7 @@ public:
 	typedef typename GenericStringTraits<TChar>::YCHAR YCHAR;
 
 	typedef GenericString<TChar>	StringT;
+	typedef typename TChar					CharType;
     typedef std::size_t size_type;	// for GCC
 
 public:
@@ -154,7 +155,7 @@ public:
 public:
 
 	/// C言語形式の文字列ポインタを返す
-	const TChar* GetCStr() const;
+	const TChar* c_str() const;
 	
 	/// 文字列が空の時にtrueを返す
 	bool IsEmpty() const;

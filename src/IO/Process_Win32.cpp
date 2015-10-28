@@ -163,13 +163,13 @@ void Process::Start(const PathName& program, const String& args)
 	// カレントディレクトリ
 	LPCTSTR pCurrentDirectory = NULL;
 	if (!m_workingDirectory.IsEmpty()) {
-		pCurrentDirectory = m_workingDirectory.GetCStr();
+		pCurrentDirectory = m_workingDirectory.c_str();
 	}
 
 	// 子プロセス開始
 	memset(&m_processInfo, 0, sizeof(m_processInfo));
 	bResult = ::CreateProcess(
-		NULL, (LPTSTR)(LPCTSTR)cmdArgs.GetCStr(), NULL, NULL, TRUE,
+		NULL, (LPTSTR)(LPCTSTR)cmdArgs.c_str(), NULL, NULL, TRUE,
 		CREATE_NO_WINDOW, NULL, pCurrentDirectory, &si, &m_processInfo);
 	if (bResult == FALSE)
 	{

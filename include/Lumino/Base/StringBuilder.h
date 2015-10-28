@@ -23,7 +23,7 @@ public:
 
 	void Replace(int start, int length, const TChar* str, int strLength);
 
-	const TChar* GetCStr() const { return (const TChar*)m_buffer.GetConstData(); }
+	const TChar* c_str() const { return (const TChar*)m_buffer.GetConstData(); }
 	int GetLength() const { return m_bufferUsed / sizeof(TChar); }
 
 private:

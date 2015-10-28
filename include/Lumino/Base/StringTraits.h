@@ -152,7 +152,7 @@ public:
 					これは、_vsnwprintf に相当する関数がWindows以外では使用できず、あらかじめ生成後の必要バッファサイズを測ることができないためです。<br>
 					Format() は基本的に数値からの変換等、短い文字列にのみ使用し、文字列の連結は += 演算子等を使用してください。
 					また、可変長引数リストに文字列クラスのインスタンスを直接指定することはできません。
-					GetCStr() 等で取得した文字列ポインタ型を指定してください。
+					c_str() 等で取得した文字列ポインタ型を指定してください。
 	*/
 	//template<typename TChar>
 	//static GenericString<TChar> Format(const TChar* format, ...);

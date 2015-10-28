@@ -10,7 +10,7 @@ String TestUtils::GetFilePath(const char* baseSourceFilePath, const char* fileNa
 {
 	PathName base(baseSourceFilePath);
 	PathName path(base.GetParent(), fileName);
-	return String(path.GetCStr());
+	return String(path.c_str());
 }
 
 //---------------------------------------------------------------------

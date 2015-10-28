@@ -109,7 +109,7 @@ void XmlWriter::WriteEndElement()
 void XmlWriter::WriteAttribute(const String& name, const String& value)
 {
 	WriteStartAttribute(name);
-	WriteStringInternal(value.GetCStr(), value.GetLength(), true);
+	WriteStringInternal(value.c_str(), value.GetLength(), true);
 	WriteEndAttribute();
 }
 
@@ -119,7 +119,7 @@ void XmlWriter::WriteAttribute(const String& name, const String& value)
 void XmlWriter::WriteString(const String& text)
 {
 	PreWrite(XmlNodeType::Text);
-	WriteStringInternal(text.GetCStr(), text.GetLength(), false);
+	WriteStringInternal(text.c_str(), text.GetLength(), false);
 	m_state = State_Text;
 }
 

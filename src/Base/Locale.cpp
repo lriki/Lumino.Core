@@ -108,7 +108,7 @@ static void GetNativeDefaultLocale(NativeLocale_t* outLocale, StringA* outName)
 	//// http://www.gnu.org/software/libc/manual/html_node/Setting-the-Locale.html
 	//StringA oldLocale = setlocale(LC_ALL, NULL);
 	//char* newLocale = setlocale(LC_ALL, "");
-	//setlocale(LC_ALL, oldLocale.GetCStr());
+	//setlocale(LC_ALL, oldLocale.c_str());
 
 	*outLocale = newlocale(LC_ALL_MASK, "", NULL);
 	*outName = "";

@@ -15,9 +15,9 @@ TEST_F(Test_IO_PathName, Constructor)
 		PathName base = _T("C:/dir1/dir2");
 		PathName path(base, _T("../file1.txt"));
 #ifdef LN_OS_WIN32
-		ASSERT_STREQ(_T("C:\\dir1\\file1.txt"), path.GetCStr());
+		ASSERT_STREQ(_T("C:\\dir1\\file1.txt"), path.c_str());
 #else
-		ASSERT_STREQ(_T("C:/dir1/file1.txt"), path.GetCStr());
+		ASSERT_STREQ(_T("C:/dir1/file1.txt"), path.c_str());
 #endif
 	}
 }
@@ -38,25 +38,25 @@ TEST_F(Test_IO_PathName, GetWithoutExtension)
 	PathName path;
 
 	path = _T("C:/dir/file.txt");
-	ASSERT_STREQ(_T("C:/dir/file"), path.GetWithoutExtension().GetCStr());
+	ASSERT_STREQ(_T("C:/dir/file"), path.GetWithoutExtension().c_str());
 
 	path = _T("file.txt");
-	ASSERT_STREQ(_T("file"), path.GetWithoutExtension().GetCStr());
+	ASSERT_STREQ(_T("file"), path.GetWithoutExtension().c_str());
 
 	path = _T("file");
-	ASSERT_STREQ(_T("file"), path.GetWithoutExtension().GetCStr());
+	ASSERT_STREQ(_T("file"), path.GetWithoutExtension().c_str());
 
 	path = _T("");
-	ASSERT_STREQ(_T(""), path.GetWithoutExtension().GetCStr());
+	ASSERT_STREQ(_T(""), path.GetWithoutExtension().c_str());
 
 	path = _T("C:/dir.sub/file");
-	ASSERT_STREQ(_T("C:/dir.sub/file"), path.GetWithoutExtension().GetCStr());
+	ASSERT_STREQ(_T("C:/dir.sub/file"), path.GetWithoutExtension().c_str());
 
 	path = _T("dir/.git");
-	ASSERT_STREQ(_T("dir/"), path.GetWithoutExtension().GetCStr());
+	ASSERT_STREQ(_T("dir/"), path.GetWithoutExtension().c_str());
 
 	path = _T(".git");
-	ASSERT_STREQ(_T(""), path.GetWithoutExtension().GetCStr());
+	ASSERT_STREQ(_T(""), path.GetWithoutExtension().c_str());
 }
 
 //-----------------------------------------------------------------------------

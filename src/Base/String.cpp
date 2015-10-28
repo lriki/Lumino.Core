@@ -190,21 +190,21 @@ GenericString<TChar>::GenericString(const GenericString<YCHAR>& str)
 	: m_ref(NULL)
 	, m_string(NULL)
 {
-	AssignCStr(str.GetCStr());
+	AssignCStr(str.c_str());
 }
 template<typename TChar>
 GenericString<TChar>::GenericString(const GenericString<YCHAR>& str, int length)
 	: m_ref(NULL)
 	, m_string(NULL)
 {
-	AssignCStr(str.GetCStr(), length);
+	AssignCStr(str.c_str(), length);
 }
 template<typename TChar>
 GenericString<TChar>::GenericString(const GenericString<YCHAR>& str, int begin, int length)
 	: m_ref(NULL)
 	, m_string(NULL)
 {
-	AssignCStr(str.GetCStr(), begin, length);
+	AssignCStr(str.c_str(), begin, length);
 }
 template<typename TChar>
 GenericString<TChar>::GenericString(const YCHAR* str)
@@ -254,7 +254,7 @@ GenericString<TChar>& GenericString<TChar>::operator=(const TChar* right)
 template<typename TChar>
 GenericString<TChar>& GenericString<TChar>::operator=(const GenericString<YCHAR>& right)
 {
-	AssignCStr(right.GetCStr()); return (*this);
+	AssignCStr(right.c_str()); return (*this);
 	return (*this);
 }
 template<typename TChar>
@@ -304,7 +304,7 @@ GenericString<TChar>& GenericString<TChar>::operator+=(TChar ch)
 template<typename TChar>
 bool GenericString<TChar>::operator < (const GenericString& right) const
 {
-	return Compare(right.GetCStr(), -1, CaseSensitivity::CaseSensitive) < 0;
+	return Compare(right.c_str(), -1, CaseSensitivity::CaseSensitive) < 0;
 }
 template<typename TChar>
 bool GenericString<TChar>::operator < (const TChar* right) const
@@ -318,7 +318,7 @@ bool GenericString<TChar>::operator < (const TChar* right) const
 template<typename TChar>
 bool GenericString<TChar>::operator > (const GenericString& right) const
 {
-	return Compare(right.GetCStr(), -1, CaseSensitivity::CaseSensitive) > 0;
+	return Compare(right.c_str(), -1, CaseSensitivity::CaseSensitive) > 0;
 }
 template<typename TChar>
 bool GenericString<TChar>::operator > (const TChar* right) const
@@ -346,14 +346,14 @@ const TChar& GenericString<TChar>::operator[](int index) const
 template<typename TChar>
 GenericString<TChar>::operator const TChar*() const
 {
-	return GetCStr();
+	return c_str();
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-const TChar* GenericString<TChar>::GetCStr() const
+const TChar* GenericString<TChar>::c_str() const
 {
 	return m_string->c_str();
 }
@@ -509,7 +509,7 @@ ByteBuffer GenericString<TChar>::ConvertTo(const Encoding* encoding, bool* outUs
 	options.NullTerminated = true;
 
 	EncodingConversionResult result;
-	const ByteBuffer buf = Encoding::Convert(GetCStr(), GetByteCount(), GetThisTypeEncoding(), encoding, options, &result);
+	const ByteBuffer buf = Encoding::Convert(c_str(), GetByteCount(), GetThisTypeEncoding(), encoding, options, &result);
 	if (outUsedDefaultChar != NULL) {
 		*outUsedDefaultChar = result.UsedDefaultChar;
 	}
@@ -543,7 +543,7 @@ GenericString<TChar> GenericString<TChar>::Trim() const
 {
 	const TChar* begin;
 	int length;
-	StringTraits::Trim(GetCStr(), GetLength(), &begin, &length);
+	StringTraits::Trim(c_str(), GetLength(), &begin, &length);
 	return GenericString<TChar>(begin, length);
 }
 
@@ -649,12 +649,12 @@ int GenericString<TChar>::IndexOf(TChar ch, int startIndex) const
 template<typename TChar>
 int GenericString<TChar>::LastIndexOf(const TChar* str, int startIndex, int count, CaseSensitivity cs) const
 {
-	return StringTraits::LastIndexOf(GetCStr(), GetLength(), str, StringTraits::StrLen(str), startIndex, count, cs);
+	return StringTraits::LastIndexOf(c_str(), GetLength(), str, StringTraits::StrLen(str), startIndex, count, cs);
 }
 template<typename TChar>
 int GenericString<TChar>::LastIndexOf(TChar ch, int startIndex, int count, CaseSensitivity cs) const
 {
-	return StringTraits::LastIndexOf(GetCStr(), GetLength(), &ch, 1, startIndex, count, cs);
+	return StringTraits::LastIndexOf(c_str(), GetLength(), &ch, 1, startIndex, count, cs);
 }
 
 //-----------------------------------------------------------------------------
@@ -663,12 +663,12 @@ int GenericString<TChar>::LastIndexOf(TChar ch, int startIndex, int count, CaseS
 template<typename TChar>
 bool GenericString<TChar>::EndsWith(const TChar* str, CaseSensitivity cs) const
 {
-	return StringTraits::EndsWith(GetCStr(), GetLength(), str, StringTraits::StrLen(str), cs);
+	return StringTraits::EndsWith(c_str(), GetLength(), str, StringTraits::StrLen(str), cs);
 }
 template<typename TChar>
 bool GenericString<TChar>::EndsWith(TChar ch, CaseSensitivity cs) const
 {
-	return StringTraits::EndsWith(GetCStr(), GetLength(), &ch, 1, cs);
+	return StringTraits::EndsWith(c_str(), GetLength(), &ch, 1, cs);
 }
 
 //-----------------------------------------------------------------------------
@@ -680,12 +680,12 @@ bool GenericString<TChar>::Equals(const GenericString& str) const
 	if (GetLength() != str.GetLength()) {
 		return false;
 	}
-	return Compare(str.GetCStr(), str.GetLength(), CaseSensitivity::CaseSensitive) == 0;
+	return Compare(str.c_str(), str.GetLength(), CaseSensitivity::CaseSensitive) == 0;
 }
 template<typename TChar>
 bool GenericString<TChar>::Equals(const TChar* str) const
 {
-	return Compare((str) ? str : GetEmpty().GetCStr(), -1, CaseSensitivity::CaseSensitive) == 0;
+	return Compare((str) ? str : GetEmpty().c_str(), -1, CaseSensitivity::CaseSensitive) == 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -694,7 +694,7 @@ bool GenericString<TChar>::Equals(const TChar* str) const
 template<typename TChar>
 int GenericString<TChar>::Compare(const TChar* str, int count, CaseSensitivity cs) const
 {
-	return StringTraits::Compare(GetCStr(), str, count/*(count < 0) ? GetLength() : count*/, cs);
+	return StringTraits::Compare(c_str(), str, count/*(count < 0) ? GetLength() : count*/, cs);
 }
 
 //-----------------------------------------------------------------------------
@@ -703,7 +703,7 @@ int GenericString<TChar>::Compare(const TChar* str, int count, CaseSensitivity c
 template<typename TChar>
 GenericString<TChar> GenericString<TChar>::Left(int count) const
 {
-	return StringTraits::Left(GetCStr(), count);
+	return StringTraits::Left(c_str(), count);
 }
 
 //-----------------------------------------------------------------------------
@@ -712,7 +712,7 @@ GenericString<TChar> GenericString<TChar>::Left(int count) const
 template<typename TChar>
 GenericString<TChar> GenericString<TChar>::Right(int count) const
 {
-	return StringTraits::Right(GetCStr(), count);
+	return StringTraits::Right(c_str(), count);
 }
 
 //-----------------------------------------------------------------------------
@@ -721,7 +721,7 @@ GenericString<TChar> GenericString<TChar>::Right(int count) const
 template<typename TChar>
 GenericString<TChar> GenericString<TChar>::Mid(int start, int count) const
 {
-	return StringTraits::Mid(GetCStr(), start, count);
+	return StringTraits::Mid(c_str(), start, count);
 }
 
 //-----------------------------------------------------------------------------
@@ -741,7 +741,7 @@ Array< GenericString<TChar> > GenericString<TChar>::Split(const TChar* delim, St
 	const TChar* end; \
 	int len; \
 	NumberConversionResult res; \
-	StringTraits::Trim(GetCStr(), GetLength(), &str, &len); \
+	StringTraits::Trim(c_str(), GetLength(), &str, &len); \
 	type num = StringTraits::func(str, len, base, &end, &res); \
 	if (res == NumberConversionResult::ArgsError)	{ LN_THROW(0, ArgumentException); } \
 	if (res == NumberConversionResult::FormatError)	{ LN_THROW(0, InvalidFormatException); } \
@@ -776,7 +776,7 @@ uint64_t GenericString<TChar>::ToUInt64(int base) const { TO_INT_DEF(uint64_t, T
 	const TChar* end; \
 	int len; \
 	NumberConversionResult res; \
-	StringTraits::Trim(GetCStr(), GetLength(), &str, &len); \
+	StringTraits::Trim(c_str(), GetLength(), &str, &len); \
 	type num = StringTraits::func(str, len, base, &end, &res); \
 	if (end != str + len) { return false; } \
 	if (res != NumberConversionResult::Success) { return false; } \
@@ -838,11 +838,11 @@ template<typename TChar>
 GenericString<TChar> GenericString<TChar>::Format(const GenericString<TChar>& format, ...)
 {
 	// http://jumble-note.blogspot.jp/2012/09/c-vacopy.html
-	const TChar* fmt = format.GetCStr();	// VS2015 エラー回避。一度変数に入れる。
+	const TChar* fmt = format.c_str();	// VS2015 エラー回避。一度変数に入れる。
 	va_list args1, args2;
 	va_start(args1, fmt);
 	va_copy(args2, args1);
-	int len = StringTraits::tvscprintf_l(format.GetCStr(), Locale::GetC().GetNativeLocale(), args1);	// 文字数を求める
+	int len = StringTraits::tvscprintf_l(format.c_str(), Locale::GetC().GetNativeLocale(), args1);	// 文字数を求める
 
 	// 文字数が一定以内ならメモリ確保せずにスタックを使い、速度向上を図る
 	if (len < MaxFormatLength)
