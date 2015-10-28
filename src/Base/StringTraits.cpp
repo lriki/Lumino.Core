@@ -309,7 +309,7 @@ int StringTraits::LastIndexOf(const TChar* str1, int str1Len, const TChar* str2,
 	pos -= (str2Len - 1);
 
 	// 大文字小文字を区別する
-	if (cs == CaseSensitivity_CaseSensitive)
+	if (cs == CaseSensitivity::CaseSensitive)
 	{
 		// 後ろから前へ見ていく
 		while (pos >= end)
@@ -358,7 +358,7 @@ int StringTraits::Compare(const TChar* str1, const TChar* str2, int count, CaseS
 
 	count = (count < 0) ? INT_MAX : count;
 	
-	if (cs == CaseSensitivity_CaseSensitive)
+	if (cs == CaseSensitivity::CaseSensitive)
 	{
 		while (count > 0)
 		{
@@ -400,7 +400,7 @@ template int StringTraits::Compare<wchar_t>(const wchar_t* str1, const wchar_t* 
 template<typename TChar>
 int StringTraits::Compare(TChar ch1, TChar ch2, CaseSensitivity cs)
 {
-	if (cs == CaseSensitivity_CaseSensitive) {
+	if (cs == CaseSensitivity::CaseSensitive) {
 		return ((unsigned int)(ch1)) - ((unsigned int)(ch2));
 	}
 	else {
@@ -504,7 +504,7 @@ bool StringTraits::EndsWith(const TChar* str1, int len1, const TChar* str2, int 
 	const TChar* p2 = str2 + len2;
 	
 	// 大文字小文字を区別しない場合
-	if (cs == CaseSensitivity_CaseInsensitive)
+	if (cs == CaseSensitivity::CaseInsensitive)
 	{
 		while (str2 <= p2)
 		{
@@ -617,12 +617,12 @@ Array< GenericString<TChar> > StringTraits::Split(const GenericString<TChar>& st
 	int delimIndex = str.IndexOf(delim, 0);
 
 	if (delimIndex >= 0) {
-		if (option == StringSplitOptions_None || delimIndex > tokenStart) {
+		if (option == StringSplitOptions::None || delimIndex > tokenStart) {
 			result.Add(str.SubString(tokenStart, delimIndex - tokenStart));
 		}
 	}
 	else {
-		if (option == StringSplitOptions_None || tokenStart != str.GetLength()) {
+		if (option == StringSplitOptions::None || tokenStart != str.GetLength()) {
 			result.Add(str.SubString(tokenStart));	// 残り全て
 		}
 		return result;
@@ -634,12 +634,12 @@ Array< GenericString<TChar> > StringTraits::Split(const GenericString<TChar>& st
 	{
 		delimIndex = str.IndexOf(delim, tokenStart);
 		if (delimIndex >= 0) {
-			if (option == StringSplitOptions_None || delimIndex > tokenStart) {
+			if (option == StringSplitOptions::None || delimIndex > tokenStart) {
 				result.Add(str.SubString(tokenStart, delimIndex - tokenStart));
 			}
 		}
 		else {
-			if (option == StringSplitOptions_None || tokenStart != str.GetLength()) {
+			if (option == StringSplitOptions::None || tokenStart != str.GetLength()) {
 				result.Add(str.SubString(tokenStart));	// 残り全て
 			}
 			break;
@@ -741,8 +741,8 @@ static NumberConversionResult StrToNumInternal(
 {
 	if (outNumber != NULL) { *outNumber = 0; }
 
-	if (str == NULL) { return NumberConversionResult_ArgsError; }
-	if (!(base == 0 || base == 2 || base == 8 || base == 10 || base == 16)) { return NumberConversionResult_ArgsError; }
+	if (str == NULL) { return NumberConversionResult::ArgsError; }
+	if (!(base == 0 || base == 2 || base == 8 || base == 10 || base == 16)) { return NumberConversionResult::ArgsError; }
 
 	const TChar* p = str;
 	const TChar* end = str + (len < 0 ? StringTraits::StrLen(str) : len);
@@ -759,7 +759,7 @@ static NumberConversionResult StrToNumInternal(
 	else if (*p == '+') {
 		++p;			// プラス符号はスキップするだけ
 	}
-	if (p >= end) { return NumberConversionResult_FormatError; }	// 符号しかなかった
+	if (p >= end) { return NumberConversionResult::FormatError; }	// 符号しかなかった
 
 	// 基数が 0 の場合は自動判別する
 	if (base == 0)
@@ -787,7 +787,7 @@ static NumberConversionResult StrToNumInternal(
 		if (p[0] == '0' && (p[1] == 'x' || p[1] == 'X')) {
 			++p;
 			++p;
-			if (p >= end) { return NumberConversionResult_FormatError; }	// 0x しかなかった
+			if (p >= end) { return NumberConversionResult::FormatError; }	// 0x しかなかった
 		}
 	}
 
@@ -814,7 +814,7 @@ static NumberConversionResult StrToNumInternal(
 		}
 		if (d >= (TUnigned)base) {
 			// 基数より大きい桁が見つかった (10進数なのに A があったなど)
-			return NumberConversionResult_FormatError;
+			return NumberConversionResult::FormatError;
 		}
 		++count;
 
@@ -837,23 +837,23 @@ static NumberConversionResult StrToNumInternal(
 	}
 
 	// オーバーフローしていたら最大値に丸めておく
-	NumberConversionResult result = NumberConversionResult_Success;
+	NumberConversionResult result = NumberConversionResult::Success;
 	if (isOverflow)
 	{
 		num = unsignedMax;
-		result = NumberConversionResult_Overflow;
+		result = NumberConversionResult::Overflow;
 	}
 	else if (!reqUnsigned)	// signed のオーバフローチェック
 	{
 		if (isNeg && num > (TUnigned)(-signedMin))
 		{
 			num = (TUnigned)(-signedMin);
-			result = NumberConversionResult_Overflow;
+			result = NumberConversionResult::Overflow;
 		}
 		else if (!isNeg && num > (TUnigned)signedMax)
 		{
 			num = signedMax;
-			result = NumberConversionResult_Overflow;
+			result = NumberConversionResult::Overflow;
 		}
 	}
 
@@ -1033,16 +1033,16 @@ static double StrToD_L(const wchar_t* str, wchar_t** endptr, locale_t locale) { 
 template<typename TChar>
 double StringTraits::ToDouble(const TChar* str, int len, const TChar** outEndPtr, NumberConversionResult* outResult)
 {
-	if (outResult != NULL) { *outResult = NumberConversionResult_Success; }
+	if (outResult != NULL) { *outResult = NumberConversionResult::Success; }
 
 	if (str == NULL) {
-		if (outResult != NULL) { *outResult = NumberConversionResult_ArgsError; }
+		if (outResult != NULL) { *outResult = NumberConversionResult::ArgsError; }
 		return 0.0;
 	}
 
 	len = static_cast<int>((len < 0 ? StringTraits::StrLen(str) : len));
 	if (len >= 512) {
-		if (outResult != NULL) { *outResult = NumberConversionResult_ArgsError; }
+		if (outResult != NULL) { *outResult = NumberConversionResult::ArgsError; }
 		return 0.0;
 	}
 
@@ -1062,7 +1062,7 @@ double StringTraits::ToDouble(const TChar* str, int len, const TChar** outEndPtr
 	if (outEndPtr != NULL) { *outEndPtr = str + (end - tmp); }
 
 	if (errno == ERANGE || v == HUGE_VAL || v == -HUGE_VAL) {
-		if (outResult != NULL) { *outResult = NumberConversionResult_Overflow; }
+		if (outResult != NULL) { *outResult = NumberConversionResult::Overflow; }
 		return v;
 	}
 	return v;

@@ -223,7 +223,7 @@ template<typename TChar>
 bool GenericPathName<TChar>::CheckExt(const TChar* ext) const
 {
 	// TODO: 大文字小文字の区別をする
-	return StringTraits::EndsWith(m_path.GetCStr(), m_path.GetLength(), ext, -1, CaseSensitivity_CaseInsensitive);
+	return StringTraits::EndsWith(m_path.GetCStr(), m_path.GetLength(), ext, -1, CaseSensitivity::CaseInsensitive);
 }
 
 //-----------------------------------------------------------------------------

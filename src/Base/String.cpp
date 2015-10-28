@@ -304,12 +304,12 @@ GenericString<TChar>& GenericString<TChar>::operator+=(TChar ch)
 template<typename TChar>
 bool GenericString<TChar>::operator < (const GenericString& right) const
 {
-	return Compare(right.GetCStr(), -1, CaseSensitivity_CaseSensitive) < 0;
+	return Compare(right.GetCStr(), -1, CaseSensitivity::CaseSensitive) < 0;
 }
 template<typename TChar>
 bool GenericString<TChar>::operator < (const TChar* right) const
 {
-	return Compare(right, -1, CaseSensitivity_CaseSensitive) < 0;
+	return Compare(right, -1, CaseSensitivity::CaseSensitive) < 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -318,12 +318,12 @@ bool GenericString<TChar>::operator < (const TChar* right) const
 template<typename TChar>
 bool GenericString<TChar>::operator > (const GenericString& right) const
 {
-	return Compare(right.GetCStr(), -1, CaseSensitivity_CaseSensitive) > 0;
+	return Compare(right.GetCStr(), -1, CaseSensitivity::CaseSensitive) > 0;
 }
 template<typename TChar>
 bool GenericString<TChar>::operator > (const TChar* right) const
 {
-	return Compare(right, -1, CaseSensitivity_CaseSensitive) > 0;
+	return Compare(right, -1, CaseSensitivity::CaseSensitive) > 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -575,14 +575,14 @@ GenericString<TChar> GenericString<TChar>::Remove(TChar ch, CaseSensitivity cs) 
 
 	// 大文字と小文字を区別する
 	GenericStringCore& ss = *newStr.m_string;
-	if (cs == CaseSensitivity_CaseSensitive)
+	if (cs == CaseSensitivity::CaseSensitive)
 	{
 		CmpCaseSensitive<TChar> cmp;
 		cmp.ch = ch;
 		ss.erase(std::remove_if(ss.begin(), ss.end(), cmp), ss.end());
 	}
 	// 大文字と小文字を区別しない
-	else //if (cs == CaseSensitivity_CaseSensitive)
+	else //if (cs == CaseSensitivity::CaseSensitive)
 	{
 		CmpCaseInsensitive<TChar> cmp;
 		cmp.ch = ch;
@@ -680,12 +680,12 @@ bool GenericString<TChar>::Equals(const GenericString& str) const
 	if (GetLength() != str.GetLength()) {
 		return false;
 	}
-	return Compare(str.GetCStr(), str.GetLength(), CaseSensitivity_CaseSensitive) == 0;
+	return Compare(str.GetCStr(), str.GetLength(), CaseSensitivity::CaseSensitive) == 0;
 }
 template<typename TChar>
 bool GenericString<TChar>::Equals(const TChar* str) const
 {
-	return Compare((str) ? str : GetEmpty().GetCStr(), -1, CaseSensitivity_CaseSensitive) == 0;
+	return Compare((str) ? str : GetEmpty().GetCStr(), -1, CaseSensitivity::CaseSensitive) == 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -743,9 +743,9 @@ Array< GenericString<TChar> > GenericString<TChar>::Split(const TChar* delim, St
 	NumberConversionResult res; \
 	StringTraits::Trim(GetCStr(), GetLength(), &str, &len); \
 	type num = StringTraits::func(str, len, base, &end, &res); \
-	if (res == NumberConversionResult_ArgsError)	{ LN_THROW(0, ArgumentException); } \
-	if (res == NumberConversionResult_FormatError)	{ LN_THROW(0, InvalidFormatException); } \
-	if (res == NumberConversionResult_Overflow)		{ LN_THROW(0, OverflowException); } \
+	if (res == NumberConversionResult::ArgsError)	{ LN_THROW(0, ArgumentException); } \
+	if (res == NumberConversionResult::FormatError)	{ LN_THROW(0, InvalidFormatException); } \
+	if (res == NumberConversionResult::Overflow)		{ LN_THROW(0, OverflowException); } \
 	LN_THROW(end == str + len, InvalidFormatException); \
 	return num;
 
@@ -779,7 +779,7 @@ uint64_t GenericString<TChar>::ToUInt64(int base) const { TO_INT_DEF(uint64_t, T
 	StringTraits::Trim(GetCStr(), GetLength(), &str, &len); \
 	type num = StringTraits::func(str, len, base, &end, &res); \
 	if (end != str + len) { return false; } \
-	if (res != NumberConversionResult_Success) { return false; } \
+	if (res != NumberConversionResult::Success) { return false; } \
 	if (outValue != NULL) { *outValue = num; } \
 	return true;
 

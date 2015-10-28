@@ -16,18 +16,18 @@
 LN_NAMESPACE_BEGIN
 class Encoding;
 
-/// 大文字と小文字の区別指定
-enum CaseSensitivity
+/** 大文字と小文字の区別指定 */
+enum class CaseSensitivity
 {
-	CaseSensitivity_CaseSensitive = 0,	///< 大文字と小文字を区別する
-	CaseSensitivity_CaseInsensitive,	///< 大文字と小文字を区別しない
+	CaseSensitive = 0,	/**< 大文字と小文字を区別する */
+	CaseInsensitive,	/**< 大文字と小文字を区別しない */
 };
 
-/// String::Split() の出力方法
-enum StringSplitOptions
+/** String::Split() の出力方法 */
+enum class StringSplitOptions
 {
-	StringSplitOptions_None = 0,			///< 出力は空の文字列を含む
-	StringSplitOptions_RemoveEmptyEntries,	///< 出力は空の文字列を含まない
+	None = 0,			/**< 出力は空の文字列を含む */
+	RemoveEmptyEntries,	/**< 出力は空の文字列を含まない */
 };
 
 /**
@@ -227,7 +227,7 @@ public:
 		@param[in]	ch		: 削除する文字
 		@param[in]	cs		: 大文字と小文字の区別設定
 	*/
-	StringT Remove(TChar ch, CaseSensitivity cs = CaseSensitivity_CaseSensitive) const;
+	StringT Remove(TChar ch, CaseSensitivity cs = CaseSensitivity::CaseSensitive) const;
 
 	/**
 		@brief		文字列の置換を行う
@@ -264,8 +264,8 @@ public:
 					str.LastIndexOf("bc", 4, 3);	// => -1	(検索範囲 "cde" の中に "bc" は存在しない)
 		@endcode
 	*/
-	int LastIndexOf(const TChar* str, int startIndex = -1, int count = -1, CaseSensitivity cs = CaseSensitivity_CaseSensitive) const;
-	int LastIndexOf(TChar ch,         int startIndex = -1, int count = -1, CaseSensitivity cs = CaseSensitivity_CaseSensitive) const;	///< @overload LastIndexOf
+	int LastIndexOf(const TChar* str, int startIndex = -1, int count = -1, CaseSensitivity cs = CaseSensitivity::CaseSensitive) const;
+	int LastIndexOf(TChar ch,         int startIndex = -1, int count = -1, CaseSensitivity cs = CaseSensitivity::CaseSensitive) const;	///< @overload LastIndexOf
 
 	/**
 		@brief		この文字列の末尾が、指定した文字列と一致するかを判断します。
@@ -278,8 +278,8 @@ public:
 					}
 		@endcode
 	*/
-	bool EndsWith(const TChar* str, CaseSensitivity cs = CaseSensitivity_CaseSensitive) const;
-	bool EndsWith(TChar ch,         CaseSensitivity cs = CaseSensitivity_CaseSensitive) const;	///< @overload EndsWith
+	bool EndsWith(const TChar* str, CaseSensitivity cs = CaseSensitivity::CaseSensitive) const;
+	bool EndsWith(TChar ch,         CaseSensitivity cs = CaseSensitivity::CaseSensitive) const;	///< @overload EndsWith
 	
 	/**
 		@brief		文字列が同一かを判断します。
@@ -299,7 +299,7 @@ public:
 					str1 と str2 が等しい   → 0
 					str1 が str2 より大きい → 0 より大きい値
 	*/
-	int Compare(const TChar* str, int count = -1, CaseSensitivity cs = CaseSensitivity_CaseSensitive) const;
+	int Compare(const TChar* str, int count = -1, CaseSensitivity cs = CaseSensitivity::CaseSensitive) const;
 
 	/**
 		@brief		文字列の左側(先頭)から指定した文字数を抽出します。
@@ -344,7 +344,7 @@ public:
 		@param[in]	option	: 分割方法
 		@return		分割結果の文字列配列
 	*/
-	Array< GenericString<TChar> > Split(const TChar* delim, StringSplitOptions option = StringSplitOptions_None) const;
+	Array< GenericString<TChar> > Split(const TChar* delim, StringSplitOptions option = StringSplitOptions::None) const;
 
 	/**
 		@brief		文字列を構成するバイト数を取得する

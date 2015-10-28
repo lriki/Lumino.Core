@@ -32,21 +32,21 @@ public:
 		@param[in]	value		: 書き込む値
 		@param[in]	byteOrder	: 書き込み先のバイトオーダー
 	*/
-	void WriteInt16(int16_t value, ByteOrder byteOrder = ByteOrder_Little);
+	void WriteInt16(int16_t value, ByteOrder byteOrder = ByteOrder::Little);
 
 	/**
 		@brief		符号付き 4 バイト整数を書き込み、ストリームの現在位置を 4 バイト進めます。
 		@param[in]	value		: 書き込む値
 		@param[in]	byteOrder	: 書き込み先のバイトオーダー
 	*/
-	void WriteInt32(int32_t value, ByteOrder byteOrder = ByteOrder_Little);
+	void WriteInt32(int32_t value, ByteOrder byteOrder = ByteOrder::Little);
 
 	/**
 		@brief		符号付き 8 バイト整数を書き込み、ストリームの現在位置を 8 バイト進めます。
 		@param[in]	value		: 書き込む値
 		@param[in]	byteOrder	: 書き込み先のバイトオーダー
 	*/
-	void WriteInt64(int64_t value, ByteOrder byteOrder = ByteOrder_Little);
+	void WriteInt64(int64_t value, ByteOrder byteOrder = ByteOrder::Little);
 
 	/**
 		@brief		符号無し 1 バイト整数を書き込み、ストリームの現在位置を 1 バイト進めます。
@@ -59,21 +59,21 @@ public:
 		@param[in]	value		: 書き込む値
 		@param[in]	byteOrder	: 書き込み先のバイトオーダー
 	*/
-	void WriteUInt16(uint16_t value, ByteOrder byteOrder = ByteOrder_Little);
+	void WriteUInt16(uint16_t value, ByteOrder byteOrder = ByteOrder::Little);
 
 	/**
 		@brief		符号無し 4 バイト整数を書き込み、ストリームの現在位置を 4 バイト進めます。
 		@param[in]	value		: 書き込む値
 		@param[in]	byteOrder	: 書き込み先のバイトオーダー
 	*/
-	void WriteUInt32(uint32_t value, ByteOrder byteOrder = ByteOrder_Little);
+	void WriteUInt32(uint32_t value, ByteOrder byteOrder = ByteOrder::Little);
 
 	/**
 		@brief		符号無し 8 バイト整数を書き込み、ストリームの現在位置を 8 バイト進めます。
 		@param[in]	value		: 書き込む値
 		@param[in]	byteOrder	: 書き込み先のバイトオーダー
 	*/
-	void WriteUInt64(uint64_t value, ByteOrder byteOrder = ByteOrder_Little);
+	void WriteUInt64(uint64_t value, ByteOrder byteOrder = ByteOrder::Little);
 
 	/**
 		@brief		4 バイト浮動小数点値を書き込み、ストリームの現在位置を 4 バイト進めます。

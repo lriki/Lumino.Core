@@ -7,11 +7,11 @@
 
 LN_NAMESPACE_BEGIN
 
-/// エンディアンを示す値
-enum ByteOrder
+/** エンディアンを示す値 */
+enum class ByteOrder
 {
-	ByteOrder_Little = 0,	///< リトルエンディアン
-	ByteOrder_Big,			///< ビッグエンディアン
+	Little = 0,		/**< リトルエンディアン */
+	Big,			/**< ビッグエンディアン */
 };
 
 /**

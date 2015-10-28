@@ -12,12 +12,12 @@ class Logger
 {
 public:
 
-	/// 通知レベル
-	enum Level
+	/** 通知レベル */
+	enum class Level
 	{
-		Level_Info = 0,		///< 補足情報
-		Level_Warning ,		///< 警告
-		Level_Error,		///< エラー
+		Info = 0,		/**< 情報 */
+		Warning ,		/**< 警告 */
+		Error,			/**< エラー */
 	};
 
 public:

@@ -213,7 +213,7 @@ void PathTraits::GetFileNameWithoutExtension(const TChar* path, TChar* outExt)
 
 	const TChar* fileName = GetFileNameSub(path);
 	int len = StringTraits::StrLen(fileName);
-	int i = StringTraits::LastIndexOf(fileName, len, LN_T(TChar, "."), 1, (len-1), len, CaseSensitivity_CaseSensitive);
+	int i = StringTraits::LastIndexOf(fileName, len, LN_T(TChar, "."), 1, (len-1), len, CaseSensitivity::CaseSensitive);
 	if (i >= 0) {
 		StringTraits::StrNCpy(outExt, LN_MAX_PATH, fileName, i);
 		outExt[i] = '\0';

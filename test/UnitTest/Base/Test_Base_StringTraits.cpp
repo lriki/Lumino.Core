@@ -76,98 +76,98 @@ TEST_F(Test_Base_StringUtils, EndsWith)
 	{
 		const TCHAR* str1 = _T("abc def");
 		const TCHAR* str2 = _T("def");
-		ASSERT_EQ(true, StringTraits::EndsWith(str1, -1, str2, -1, CaseSensitivity_CaseSensitive));
+		ASSERT_EQ(true, StringTraits::EndsWith(str1, -1, str2, -1, CaseSensitivity::CaseSensitive));
 	}
 	// 完全一致
 	{
 		const TCHAR* str1 = _T("def");
 		const TCHAR* str2 = _T("def");
-		ASSERT_EQ(true, StringTraits::EndsWith(str1, -1, str2, -1, CaseSensitivity_CaseSensitive));
+		ASSERT_EQ(true, StringTraits::EndsWith(str1, -1, str2, -1, CaseSensitivity::CaseSensitive));
 	}
 	// 不一致 (後ろ方向)
 	{
 		const TCHAR* str1 = _T("def");
 		const TCHAR* str2 = _T("de");
-		ASSERT_EQ(false, StringTraits::EndsWith(str1, -1, str2, -1, CaseSensitivity_CaseSensitive));
+		ASSERT_EQ(false, StringTraits::EndsWith(str1, -1, str2, -1, CaseSensitivity::CaseSensitive));
 	}
 	// 一致 (前方向方向)
 	{
 		const TCHAR* str1 = _T("def");
 		const TCHAR* str2 = _T("ef");
-		ASSERT_EQ(true, StringTraits::EndsWith(str1, -1, str2, -1, CaseSensitivity_CaseSensitive));
+		ASSERT_EQ(true, StringTraits::EndsWith(str1, -1, str2, -1, CaseSensitivity::CaseSensitive));
 	}
 	// 不一致 (str2が長い)
 	{
 		const TCHAR* str1 = _T("def");
 		const TCHAR* str2 = _T("defghi");
-		ASSERT_EQ(false, StringTraits::EndsWith(str1, -1, str2, -1, CaseSensitivity_CaseSensitive));
+		ASSERT_EQ(false, StringTraits::EndsWith(str1, -1, str2, -1, CaseSensitivity::CaseSensitive));
 	}
 	// 空文字どうし
 	{
 		const TCHAR* str1 = _T("");
 		const TCHAR* str2 = _T("");
-		ASSERT_EQ(true, StringTraits::EndsWith(str1, -1, str2, -1, CaseSensitivity_CaseSensitive));
+		ASSERT_EQ(true, StringTraits::EndsWith(str1, -1, str2, -1, CaseSensitivity::CaseSensitive));
 	}
 	// 空文字
 	{
 		const TCHAR* str1 = _T("a");
 		const TCHAR* str2 = _T("");
-		ASSERT_EQ(true, StringTraits::EndsWith(str1, -1, str2, -1, CaseSensitivity_CaseSensitive));
+		ASSERT_EQ(true, StringTraits::EndsWith(str1, -1, str2, -1, CaseSensitivity::CaseSensitive));
 	}
 	// 空文字
 	{
 		const TCHAR* str1 = _T("");
 		const TCHAR* str2 = _T("a");
-		ASSERT_EQ(false, StringTraits::EndsWith(str1, -1, str2, -1, CaseSensitivity_CaseSensitive));
+		ASSERT_EQ(false, StringTraits::EndsWith(str1, -1, str2, -1, CaseSensitivity::CaseSensitive));
 	}
 
 	// 普通に比較 (IgnoreCase)
 	{
 		const TCHAR* str1 = _T("abc def");
 		const TCHAR* str2 = _T("DeF");
-		ASSERT_EQ(true, StringTraits::EndsWith(str1, -1, str2, -1, CaseSensitivity_CaseInsensitive));
+		ASSERT_EQ(true, StringTraits::EndsWith(str1, -1, str2, -1, CaseSensitivity::CaseInsensitive));
 	}
 	// 完全一致 (IgnoreCase)
 	{
 		const TCHAR* str1 = _T("DEF");
 		const TCHAR* str2 = _T("def");
-		ASSERT_EQ(true, StringTraits::EndsWith(str1, -1, str2, -1, CaseSensitivity_CaseInsensitive));
+		ASSERT_EQ(true, StringTraits::EndsWith(str1, -1, str2, -1, CaseSensitivity::CaseInsensitive));
 	}
 	// 不一致 (後ろ方向) (IgnoreCase)
 	{
 		const TCHAR* str1 = _T("def");
 		const TCHAR* str2 = _T("DE");
-		ASSERT_EQ(false, StringTraits::EndsWith(str1, -1, str2, -1, CaseSensitivity_CaseInsensitive));
+		ASSERT_EQ(false, StringTraits::EndsWith(str1, -1, str2, -1, CaseSensitivity::CaseInsensitive));
 	}
 	// 一致 (前方向方向) (IgnoreCase)
 	{
 		const TCHAR* str1 = _T("DEF");
 		const TCHAR* str2 = _T("ef");
-		ASSERT_EQ(true, StringTraits::EndsWith(str1, -1, str2, -1, CaseSensitivity_CaseInsensitive));
+		ASSERT_EQ(true, StringTraits::EndsWith(str1, -1, str2, -1, CaseSensitivity::CaseInsensitive));
 	}
 	// 不一致 (str2が長い) (IgnoreCase)
 	{
 		const TCHAR* str1 = _T("def");
 		const TCHAR* str2 = _T("defGHI");
-		ASSERT_EQ(false, StringTraits::EndsWith(str1, -1, str2, -1, CaseSensitivity_CaseInsensitive));
+		ASSERT_EQ(false, StringTraits::EndsWith(str1, -1, str2, -1, CaseSensitivity::CaseInsensitive));
 	}
 	// 空文字どうし (IgnoreCase)
 	{
 		const TCHAR* str1 = _T("");
 		const TCHAR* str2 = _T("");
-		ASSERT_EQ(true, StringTraits::EndsWith(str1, -1, str2, -1, CaseSensitivity_CaseInsensitive));
+		ASSERT_EQ(true, StringTraits::EndsWith(str1, -1, str2, -1, CaseSensitivity::CaseInsensitive));
 	}
 	// 空文字 (IgnoreCase)
 	{
 		const TCHAR* str1 = _T("A");
 		const TCHAR* str2 = _T("");
-		ASSERT_EQ(true, StringTraits::EndsWith(str1, -1, str2, -1, CaseSensitivity_CaseInsensitive));
+		ASSERT_EQ(true, StringTraits::EndsWith(str1, -1, str2, -1, CaseSensitivity::CaseInsensitive));
 	}
 	// 空文字 (IgnoreCase)
 	{
 		const TCHAR* str1 = _T("");
 		const TCHAR* str2 = _T("A");
-		ASSERT_EQ(false, StringTraits::EndsWith(str1, -1, str2, -1, CaseSensitivity_CaseInsensitive));
+		ASSERT_EQ(false, StringTraits::EndsWith(str1, -1, str2, -1, CaseSensitivity::CaseInsensitive));
 	}
 }
 
@@ -181,22 +181,22 @@ TEST_F(Test_Base_StringUtils, ToInt8)
 	// Min Overflow
 	n = StringTraits::ToInt8(_T("-129"), -1, 0, &end, &r);
 	ASSERT_EQ(-128, n);
-	ASSERT_EQ(NumberConversionResult_Overflow, r);
+	ASSERT_EQ(NumberConversionResult::Overflow, r);
 
 	// Min Success
 	n = StringTraits::ToInt8(_T("-128"), -1, 0, &end, &r);
 	ASSERT_EQ(-128, n);
-	ASSERT_EQ(NumberConversionResult_Success, r);
+	ASSERT_EQ(NumberConversionResult::Success, r);
 
 	// Max Success
 	n = StringTraits::ToInt8(_T("127"), -1, 0, &end, &r);
 	ASSERT_EQ(127, n);
-	ASSERT_EQ(NumberConversionResult_Success, r);
+	ASSERT_EQ(NumberConversionResult::Success, r);
 
 	// Max Overflow
 	n = StringTraits::ToInt8(_T("128"), -1, 0, &end, &r);
 	ASSERT_EQ(127, n);
-	ASSERT_EQ(NumberConversionResult_Overflow, r);
+	ASSERT_EQ(NumberConversionResult::Overflow, r);
 }
 
 //-----------------------------------------------------------------------------
@@ -209,22 +209,22 @@ TEST_F(Test_Base_StringUtils, ToUInt8)
 	// Neg Success
 	n = StringTraits::ToUInt8(_T("-1"), -1, 0, &end, &r);
 	ASSERT_EQ(0xFF, n);
-	ASSERT_EQ(NumberConversionResult_Success, r);
+	ASSERT_EQ(NumberConversionResult::Success, r);
 
 	// Min Success
 	n = StringTraits::ToUInt8(_T("0"), -1, 0, &end, &r);
 	ASSERT_EQ(0, n);
-	ASSERT_EQ(NumberConversionResult_Success, r);
+	ASSERT_EQ(NumberConversionResult::Success, r);
 
 	// Max Success
 	n = StringTraits::ToUInt8(_T("255"), -1, 0, &end, &r);
 	ASSERT_EQ(255, n);
-	ASSERT_EQ(NumberConversionResult_Success, r);
+	ASSERT_EQ(NumberConversionResult::Success, r);
 
 	// Max Overflow
 	n = StringTraits::ToUInt8(_T("256"), -1, 0, &end, &r);
 	ASSERT_EQ(255, n);
-	ASSERT_EQ(NumberConversionResult_Overflow, r);
+	ASSERT_EQ(NumberConversionResult::Overflow, r);
 }
 
 //-----------------------------------------------------------------------------
@@ -237,22 +237,22 @@ TEST_F(Test_Base_StringUtils, ToInt16)
 	// Min Overflow
 	n = StringTraits::ToInt16(_T("-32769"), -1, 0, &end, &r);
 	ASSERT_EQ(-32768, n);
-	ASSERT_EQ(NumberConversionResult_Overflow, r);
+	ASSERT_EQ(NumberConversionResult::Overflow, r);
 
 	// Min Success
 	n = StringTraits::ToInt16(_T("-32768"), -1, 0, &end, &r);
 	ASSERT_EQ(-32768, n);
-	ASSERT_EQ(NumberConversionResult_Success, r);
+	ASSERT_EQ(NumberConversionResult::Success, r);
 
 	// Max Success
 	n = StringTraits::ToInt16(_T("32767"), -1, 0, &end, &r);
 	ASSERT_EQ(32767, n);
-	ASSERT_EQ(NumberConversionResult_Success, r);
+	ASSERT_EQ(NumberConversionResult::Success, r);
 
 	// Max Overflow
 	n = StringTraits::ToInt16(_T("32768"), -1, 0, &end, &r);
 	ASSERT_EQ(32767, n);
-	ASSERT_EQ(NumberConversionResult_Overflow, r);
+	ASSERT_EQ(NumberConversionResult::Overflow, r);
 }
 
 //-----------------------------------------------------------------------------
@@ -265,22 +265,22 @@ TEST_F(Test_Base_StringUtils, ToUInt16)
 	// Neg Success
 	n = StringTraits::ToUInt16(_T("-1"), -1, 0, &end, &r);
 	ASSERT_EQ(0xFFFF, n);
-	ASSERT_EQ(NumberConversionResult_Success, r);
+	ASSERT_EQ(NumberConversionResult::Success, r);
 
 	// Min Success
 	n = StringTraits::ToUInt16(_T("0"), -1, 0, &end, &r);
 	ASSERT_EQ(0, n);
-	ASSERT_EQ(NumberConversionResult_Success, r);
+	ASSERT_EQ(NumberConversionResult::Success, r);
 
 	// Max Success
 	n = StringTraits::ToUInt16(_T("65535"), -1, 0, &end, &r);
 	ASSERT_EQ(65535, n);
-	ASSERT_EQ(NumberConversionResult_Success, r);
+	ASSERT_EQ(NumberConversionResult::Success, r);
 
 	// Max Overflow
 	n = StringTraits::ToUInt16(_T("65536"), -1, 0, &end, &r);
 	ASSERT_EQ(65535, n);
-	ASSERT_EQ(NumberConversionResult_Overflow, r);
+	ASSERT_EQ(NumberConversionResult::Overflow, r);
 }
 
 //-----------------------------------------------------------------------------
@@ -293,22 +293,22 @@ TEST_F(Test_Base_StringUtils, ToInt32)
 	// Min Overflow
 	n = StringTraits::ToInt32(_T("-2147483649"), -1, 0, &end, &r);
 	ASSERT_EQ(INT32_MIN, n);
-	ASSERT_EQ(NumberConversionResult_Overflow, r);
+	ASSERT_EQ(NumberConversionResult::Overflow, r);
 
 	// Min Success
 	n = StringTraits::ToInt32(_T("-2147483648"), -1, 0, &end, &r);
 	ASSERT_EQ(INT32_MIN, n);
-	ASSERT_EQ(NumberConversionResult_Success, r);
+	ASSERT_EQ(NumberConversionResult::Success, r);
 
 	// Max Success
 	n = StringTraits::ToInt32(_T("2147483647"), -1, 0, &end, &r);
 	ASSERT_EQ(INT32_MAX, n);
-	ASSERT_EQ(NumberConversionResult_Success, r);
+	ASSERT_EQ(NumberConversionResult::Success, r);
 
 	// Max Overflow
 	n = StringTraits::ToInt32(_T("2147483648"), -1, 0, &end, &r);
 	ASSERT_EQ(INT32_MAX, n);
-	ASSERT_EQ(NumberConversionResult_Overflow, r);
+	ASSERT_EQ(NumberConversionResult::Overflow, r);
 }
 
 //-----------------------------------------------------------------------------
@@ -321,22 +321,22 @@ TEST_F(Test_Base_StringUtils, ToUInt32)
 	// Neg Success
 	n = StringTraits::ToUInt32(_T("-1"), -1, 0, &end, &r);
 	ASSERT_EQ(UINT32_MAX, n);
-	ASSERT_EQ(NumberConversionResult_Success, r);
+	ASSERT_EQ(NumberConversionResult::Success, r);
 
 	// Min Success
 	n = StringTraits::ToUInt32(_T("0"), -1, 0, &end, &r);
 	ASSERT_EQ(0, n);
-	ASSERT_EQ(NumberConversionResult_Success, r);
+	ASSERT_EQ(NumberConversionResult::Success, r);
 
 	// Max Success
 	n = StringTraits::ToUInt32(_T("4294967295"), -1, 0, &end, &r);
 	ASSERT_EQ(UINT32_MAX, n);
-	ASSERT_EQ(NumberConversionResult_Success, r);
+	ASSERT_EQ(NumberConversionResult::Success, r);
 
 	// Max Overflow
 	n = StringTraits::ToUInt32(_T("4294967296"), -1, 0, &end, &r);
 	ASSERT_EQ(UINT32_MAX, n);
-	ASSERT_EQ(NumberConversionResult_Overflow, r);
+	ASSERT_EQ(NumberConversionResult::Overflow, r);
 }
 
 //-----------------------------------------------------------------------------
@@ -349,22 +349,22 @@ TEST_F(Test_Base_StringUtils, ToInt64)
 	// Min Overflow
 	n = StringTraits::ToInt64(_T("-9223372036854775809"), -1, 0, &end, &r);
 	ASSERT_EQ(INT64_MIN, n);
-	ASSERT_EQ(NumberConversionResult_Overflow, r);
+	ASSERT_EQ(NumberConversionResult::Overflow, r);
 
 	// Min Success
 	n = StringTraits::ToInt64(_T("-9223372036854775808"), -1, 0, &end, &r);
 	ASSERT_EQ(INT64_MIN, n);
-	ASSERT_EQ(NumberConversionResult_Success, r);
+	ASSERT_EQ(NumberConversionResult::Success, r);
 
 	// Max Success
 	n = StringTraits::ToInt64(_T("9223372036854775807"), -1, 0, &end, &r);
 	ASSERT_EQ(INT64_MAX, n);
-	ASSERT_EQ(NumberConversionResult_Success, r);
+	ASSERT_EQ(NumberConversionResult::Success, r);
 
 	// Max Overflow
 	n = StringTraits::ToInt64(_T("9223372036854775808"), -1, 0, &end, &r);
 	ASSERT_EQ(INT64_MAX, n);
-	ASSERT_EQ(NumberConversionResult_Overflow, r);
+	ASSERT_EQ(NumberConversionResult::Overflow, r);
 }
 
 //-----------------------------------------------------------------------------
@@ -377,22 +377,22 @@ TEST_F(Test_Base_StringUtils, ToUInt64)
 	// Neg Success
 	n = StringTraits::ToUInt64(_T("-1"), -1, 0, &end, &r);
 	ASSERT_EQ(UINT64_MAX, n);
-	ASSERT_EQ(NumberConversionResult_Success, r);
+	ASSERT_EQ(NumberConversionResult::Success, r);
 
 	// Min Success
 	n = StringTraits::ToUInt64(_T("0"), -1, 0, &end, &r);
 	ASSERT_EQ(0, n);
-	ASSERT_EQ(NumberConversionResult_Success, r);
+	ASSERT_EQ(NumberConversionResult::Success, r);
 
 	// Max Success
 	n = StringTraits::ToUInt64(_T("0xffffffffffffffff"), -1, 0, &end, &r);
 	ASSERT_EQ(UINT64_MAX, n);
-	ASSERT_EQ(NumberConversionResult_Success, r);
+	ASSERT_EQ(NumberConversionResult::Success, r);
 
 	// Max Overflow
 	n = StringTraits::ToUInt64(_T("0xfffffffffffffffff"), -1, 0, &end, &r);
 	ASSERT_EQ(UINT64_MAX, n);
-	ASSERT_EQ(NumberConversionResult_Overflow, r);
+	ASSERT_EQ(NumberConversionResult::Overflow, r);
 }
 
 //-----------------------------------------------------------------------------
@@ -433,13 +433,13 @@ TEST_F(Test_Base_StringUtils, ToUInt)
 	// 前方に変な文字
 	str = _T("R1");
 	StringTraits::ToInt32(str, -1, 0, &end, &r);
-	ASSERT_EQ(NumberConversionResult_Success, r);
+	ASSERT_EQ(NumberConversionResult::Success, r);
 	ASSERT_TRUE(str == end);
 
 	// 後方に変な文字
 	str = _T("1R");
 	StringTraits::ToInt32(str, -1, 0, &end, &r);
-	ASSERT_EQ(NumberConversionResult_Success, r);
+	ASSERT_EQ(NumberConversionResult::Success, r);
 	ASSERT_TRUE(str+1 == end);
 
 	// 文字数指定
@@ -481,22 +481,22 @@ TEST_F(Test_Base_StringUtils, ToDouble)
 	// 普通に
 	str = _T("1.52");
 	ASSERT_DOUBLE_EQ(1.52, StringTraits::ToDouble(str, -1, &end, &r));
-	ASSERT_EQ(NumberConversionResult_Success, r);
+	ASSERT_EQ(NumberConversionResult::Success, r);
 	ASSERT_TRUE(str + 4 == end);
 
 	// 文字数指定
 	str = _T("1.52");
 	ASSERT_DOUBLE_EQ(1.5, StringTraits::ToDouble(str, 3, &end, &r));
-	ASSERT_EQ(NumberConversionResult_Success, r);
+	ASSERT_EQ(NumberConversionResult::Success, r);
 	ASSERT_TRUE(str + 3 == end);
 
 	// オーバーフロー
 	str = _T("1.52E+999");
 	StringTraits::ToDouble(str, -1, &end, &r);
-	ASSERT_EQ(NumberConversionResult_Overflow, r);
+	ASSERT_EQ(NumberConversionResult::Overflow, r);
 
 	// オーバーフロー
 	str = _T("1.52E-999");
 	StringTraits::ToDouble(str, -1, &end, &r);
-	ASSERT_EQ(NumberConversionResult_Overflow, r);
+	ASSERT_EQ(NumberConversionResult::Overflow, r);
 }

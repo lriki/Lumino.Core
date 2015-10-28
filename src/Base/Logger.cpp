@@ -98,9 +98,9 @@ static const char* GetInfoString(Logger::Level level)
 	switch (level)
 	{
 	default:
-	case Logger::Level_Info:    return "Info    ";
-	case Logger::Level_Warning: return "Warning ";
-	case Logger::Level_Error:   return "Error   ";
+	case Logger::Level::Info:    return "Info    ";
+	case Logger::Level::Warning: return "Warning ";
+	case Logger::Level::Error:   return "Error   ";
 	}
 }
 
@@ -172,7 +172,7 @@ void Logger::WriteLine(const char* format, ...) throw()
 		StringTraits::VSPrintf(buf, TEMP_BUFFER_SIZE, format, args);
 		va_end(args);
 
-		fprintf(stream, "%llu %s: ", Environment::GetTickCount() - g_logStartTime, GetInfoString(Level_Info));
+		fprintf(stream, "%llu %s: ", Environment::GetTickCount() - g_logStartTime, GetInfoString(Level::Info));
 		fprintf(stream, "%s\n", buf);
 
 		fclose(stream);
@@ -197,7 +197,7 @@ void Logger::WriteLine(const wchar_t* format, ...) throw()
 		StringTraits::VSPrintf(buf, TEMP_BUFFER_SIZE, format, args);
 		va_end(args);
 
-		fprintf(stream, "%llu %s: ", Environment::GetTickCount() - g_logStartTime, GetInfoString(Level_Info));
+		fprintf(stream, "%llu %s: ", Environment::GetTickCount() - g_logStartTime, GetInfoString(Level::Info));
 		fwprintf(stream, L"%s\n", buf);
 
 		fclose(stream);

@@ -225,7 +225,7 @@ bool JsonReader::ParseNumber()
 		m_error.SetError(JsonParseError::NumberInvalid, m_currentCharCount);
 		return false;
 	}
-	if (result == NumberConversionResult_Overflow) {
+	if (result == NumberConversionResult::Overflow) {
 		// Error: オーバーフローが発生した
 		m_error.SetError(JsonParseError::NumberOverflow, m_currentCharCount);
 		return false;

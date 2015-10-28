@@ -10,12 +10,12 @@
 
 LN_NAMESPACE_BEGIN
 
-enum NumberConversionResult
+enum class NumberConversionResult
 {
-	NumberConversionResult_Success = 0,
-	NumberConversionResult_ArgsError,
-	NumberConversionResult_FormatError,
-	NumberConversionResult_Overflow,
+	Success = 0,
+	ArgsError,
+	FormatError,
+	Overflow,
 };
 
 /**

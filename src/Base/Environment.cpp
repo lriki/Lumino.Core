@@ -24,9 +24,9 @@ LN_NAMESPACE_BEGIN
 ByteOrder Environment::GetByteOrder()
 {
 	if (IsLittleEndian()) {
-		return ByteOrder_Little;
+		return ByteOrder::Little;
 	}
-	return ByteOrder_Big;
+	return ByteOrder::Big;
 }
 
 //-----------------------------------------------------------------------------

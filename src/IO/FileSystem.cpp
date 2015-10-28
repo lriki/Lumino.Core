@@ -405,9 +405,9 @@ bool FileSystem::ExistsDirectory(const wchar_t* path)
 CaseSensitivity FileSystem::GetFileSystemCaseSensitivity()
 {
 #ifdef LN_OS_WIN32
-	return CaseSensitivity_CaseInsensitive;
+	return CaseSensitivity::CaseInsensitive;
 #else
-	return CaseSensitivity_CaseSensitive;
+	return CaseSensitivity::CaseSensitive;
 #endif
 }
 
