@@ -5,6 +5,7 @@
 #include "../../include/Lumino/Base/RefObject.h"
 #include "../../include/Lumino/Base/String.h"
 #include "../../include/Lumino/Base/StringTraits.h"
+#include <Lumino/Base/StringArray.h>
 
 // for ToDouble()
 #ifdef _WIN32
@@ -608,9 +609,9 @@ template GenericString<wchar_t> StringTraits::Mid<wchar_t>(const wchar_t* str, i
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-Array< GenericString<TChar> > StringTraits::Split(const GenericString<TChar>& str, const TChar* delim, StringSplitOptions option)
+GenericStringArray<TChar> StringTraits::Split(const GenericString<TChar>& str, const TChar* delim, StringSplitOptions option)
 {
-	Array< GenericString<TChar> > result;
+	GenericStringArray<TChar> result;
 
 	// 最初の区切り文字を探す
 	int tokenStart = 0;
@@ -650,8 +651,8 @@ Array< GenericString<TChar> > StringTraits::Split(const GenericString<TChar>& st
 
 	return result;
 }
-template Array< GenericString<char> > StringTraits::Split(const GenericString<char>& str, const char* delim, StringSplitOptions option);
-template Array< GenericString<wchar_t> > StringTraits::Split(const GenericString<wchar_t>& str, const wchar_t* delim, StringSplitOptions option);
+template GenericStringArray<char> StringTraits::Split(const GenericString<char>& str, const char* delim, StringSplitOptions option);
+template GenericStringArray<wchar_t> StringTraits::Split(const GenericString<wchar_t>& str, const wchar_t* delim, StringSplitOptions option);
 
 //-----------------------------------------------------------------------------
 //

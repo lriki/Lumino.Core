@@ -39,6 +39,9 @@ public:
 	/** 別の配列からムーブして作成します。*/
 	Array(Array&& ary);
 
+	/** 初期化子リストから作成します。*/
+	Array(std::initializer_list<T> list);
+
 	/** デストラクタ */
 	~Array();
 
@@ -151,6 +154,13 @@ public:
 		return std::find(m_data->m_vector.begin(), m_data->m_vector.end(), item) != m_data->m_vector.end();
 	}
 
+	/** 指定した条件と一致する要素がこの配列内に存在するかどうかを判断します。*/
+	template<typename TPred>
+	bool Contains(TPred pred) const
+	{
+		return std::find_if(m_data->m_vector.begin(), m_data->m_vector.end(), pred) != m_data->m_vector.end();
+	}
+
 	/**
 		@brief		要素を指定した位置から検索し、最初に見つかったインデックスを返します。
 		@param[in]	item		: 検索する要素
@@ -164,6 +174,27 @@ public:
 		const_iterator itr = std::find(m_data->m_vector.begin() + startIndex, m_data->m_vector.end(), item);
 		if (itr != m_data->m_vector.end()) { return itr - m_data->m_vector.begin(); }
 		return -1;
+	}
+
+	/** 指定した要素と一致する最初の要素を検索し、その要素を指すポインタを返します。見つからなければ NULL を返します。*/
+	value_type* Find(const value_type& item) const
+	{
+		auto itr = std::find(m_data->m_vector.begin(), m_data->m_vector.end(), item);
+		if (itr != end()) {
+			return &(*itr);
+		}
+		return nullptr;
+	}
+
+	/** 指定した条件と一致する最初の要素を検索し、その要素を指すポインタを返します。見つからなければ NULL を返します。*/
+	template<typename TPred>
+	value_type* Find(TPred pred) const
+	{
+		auto itr = std::find_if(m_data->m_vector.begin(), m_data->m_vector.end(), pred);
+		if (itr != end()) {
+			return &(*itr);
+		}
+		return nullptr;
 	}
 
 	/** 指定したインデックスに要素を設定します。*/

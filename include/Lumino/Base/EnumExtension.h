@@ -12,6 +12,7 @@
 #pragma once
 #include "Array.h"
 #include "String.h"
+#include "StringArray.h"
 
 #ifndef LN_DOXYGEN
 

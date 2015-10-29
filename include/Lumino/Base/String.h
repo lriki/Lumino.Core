@@ -15,6 +15,8 @@
 
 LN_NAMESPACE_BEGIN
 class Encoding;
+template<typename TChar>
+class GenericStringArray;
 
 /** 大文字と小文字の区別指定 */
 enum class CaseSensitivity
@@ -345,7 +347,7 @@ public:
 		@param[in]	option	: 分割方法
 		@return		分割結果の文字列配列
 	*/
-	Array< GenericString<TChar> > Split(const TChar* delim, StringSplitOptions option = StringSplitOptions::None) const;
+	GenericStringArray<TChar> Split(const TChar* delim, StringSplitOptions option = StringSplitOptions::None) const;
 
 	/**
 		@brief		文字列を構成するバイト数を取得する

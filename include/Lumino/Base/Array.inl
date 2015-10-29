@@ -74,6 +74,12 @@ Array<T, TAllocator>::Array(Array&& ary)
 {
 	ary.m_data = NULL;
 }
+template<typename T, typename TAllocator>
+Array<T, TAllocator>::Array(std::initializer_list<T> list)
+{
+	m_data = LN_NEW ArrayData(1);
+	m_data->m_vector.assign(list.begin(), list.end());
+}
 
 //-----------------------------------------------------------------------------
 //

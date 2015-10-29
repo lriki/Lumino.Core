@@ -445,6 +445,21 @@ TEST_F(Test_Base_Array, Contains)
 		ASSERT_TRUE(pathes.Contains(p2));
 		ASSERT_FALSE(pathes.Contains(p3));
 	}
+
+	// <Test> Contains
+	{
+		struct St
+		{
+			int a;
+			int b;
+		};
+		St s1 = { 10, 20 };
+		St s2 = { 30, 40 };
+		Array<St> ary = { s1, s2, { 50, 60 } };
+		ASSERT_TRUE(ary.Contains([](const St& s) { return s.a == 30; }));
+		ASSERT_TRUE(ary.Contains([](const St& s) { return s.b == 60; }));
+		ASSERT_FALSE(ary.Contains([](const St& s) { return s.a == 0; }));
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -458,6 +473,25 @@ TEST_F(Test_Base_Array, IndexOf)
 		ASSERT_EQ(1, ary.IndexOf(2, 1));
 		ASSERT_EQ(3, ary.IndexOf(2, 2));
 		ASSERT_EQ(-1, ary.IndexOf(10));
+	}
+}
+
+//-----------------------------------------------------------------------------
+TEST_F(Test_Base_Array, Find)
+{
+	{
+		Array<int> ary1 = { 1, 2, 3 };
+		ASSERT_TRUE(ary1.Find(1) != nullptr);
+		ASSERT_TRUE(ary1.Find(1) != NULL);
+		ASSERT_EQ(2, *ary1.Find(2));
+		ASSERT_EQ(NULL, ary1.Find(4));
+	}
+	{
+		struct St { int a; int b; };
+		Array<St> ary1 = { { 1, 2 }, { 3, 4 } };
+		ASSERT_TRUE(ary1.Find([](const St& st) { return st.a == 1; }) != nullptr);
+		ASSERT_EQ(4, ary1.Find([](const St& st) { return st.a == 3; })->b);
+		ASSERT_EQ(nullptr, ary1.Find([](const St& st) { return st.a == 5; }));
 	}
 }
 

@@ -7,7 +7,7 @@
 #include <Lumino/Base/String.h>
 #include <Lumino/Base/Locale.h>
 #include <Lumino/Base/Environment.h>
-
+#include <Lumino/Base/StringArray.h>
 
 /*
 basic_string クラス
@@ -728,7 +728,7 @@ GenericString<TChar> GenericString<TChar>::Mid(int start, int count) const
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-Array< GenericString<TChar> > GenericString<TChar>::Split(const TChar* delim, StringSplitOptions option) const
+GenericStringArray<TChar> GenericString<TChar>::Split(const TChar* delim, StringSplitOptions option) const
 {
 	return StringTraits::Split(*this, delim, option);
 }
