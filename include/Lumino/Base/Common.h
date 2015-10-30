@@ -114,6 +114,12 @@
 #define LN_NAMESPACE_BEGIN	namespace ln {
 #define LN_NAMESPACE_END	}
 
+// コピーコンストラクタと=演算子関数を無効にするマクロ。
+// これはクラスのprivate:宣言内で使うべき。
+#define LN_DISALLOW_COPY_AND_ASSIGN(typeName) \
+	typeName(const typeName&); \
+	void operator=(const typeName&)
+
 //----------------------------------------------------------------------
 // include
 #include <stdio.h>
