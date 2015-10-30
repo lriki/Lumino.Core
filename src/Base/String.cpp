@@ -621,26 +621,38 @@ GenericString<TChar> GenericString<TChar>::Replace(const TChar* from, const TCha
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-int GenericString<TChar>::IndexOf(const TChar* str, int startIndex) const
+bool GenericString<TChar>::Contains(const TChar* str, CaseSensitivity cs) const
 {
-	size_type pos = m_string->find(str, startIndex);
-	if (pos == std::basic_string<TChar>::npos) {
-		return -1;
-	}
-	return (int)pos;
+	return IndexOf(str, 0, cs) >= 0;
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-int GenericString<TChar>::IndexOf(TChar ch, int startIndex) const
+bool GenericString<TChar>::Contains(TChar ch, CaseSensitivity cs) const
 {
-	size_type pos = m_string->find(ch, startIndex);
-	if (pos == std::basic_string<TChar>::npos) {
-		return -1;
-	}
-	return (int)pos;
+	TChar str[2] = { ch, 0x00 };
+	return IndexOf(str, 0, cs) >= 0;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+int GenericString<TChar>::IndexOf(const TChar* str, int startIndex, CaseSensitivity cs) const
+{
+	return StringTraits::IndexOf(c_str(), str, startIndex, cs);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+int GenericString<TChar>::IndexOf(TChar ch, int startIndex, CaseSensitivity cs) const
+{
+	TChar str[2] = { ch, 0x00 };
+	return StringTraits::IndexOf(c_str(), str, startIndex, cs);
 }
 
 //-----------------------------------------------------------------------------

@@ -242,13 +242,23 @@ public:
 	StringT Replace(const TChar* from, const TChar* to) const;
 
 	/**
+		@brief		指定した文字列がこの文字列内に存在するかを判断します。
+		@param[in]	str		: 検索文字列
+		@param[in]	cs		: 大文字と小文字の区別設定
+		@return		文字列が存在すれば true。str が空文字列である場合は必ず true となります。
+	*/
+	bool Contains(const TChar* str, CaseSensitivity cs = CaseSensitivity::CaseSensitive) const;
+	bool Contains(TChar ch,         CaseSensitivity cs = CaseSensitivity::CaseSensitive) const;			/**< @overload Contains */
+
+	/**
 		@brief		文字列を検索し、見つかった最初の文字のインデックスを返す
 		@param[in]	str			: 検索文字列
 		@param[in]	startIndex	: 検索を開始するインデックス (省略した場合は先頭から)
-		@return		見つからなかった場合は -1
+		@param[in]	cs		: 大文字と小文字の区別設定
+		@return		見つからなかった場合は -1。str が殻文字列である場合は 0。
 	*/
-	int IndexOf(const TChar* str, int startIndex = 0) const;
-	int IndexOf(TChar ch,         int startIndex = 0) const;	///< @overload IndexOf
+	int IndexOf(const TChar* str, int startIndex = 0, CaseSensitivity cs = CaseSensitivity::CaseSensitive) const;
+	int IndexOf(TChar ch,         int startIndex = 0, CaseSensitivity cs = CaseSensitivity::CaseSensitive) const;	/**< @overload IndexOf */
 
 	/**
 		@brief		文字列を検索し、最後に見つかったインデックスを返します。
@@ -484,13 +494,21 @@ template<typename TChar>
 inline GenericString<TChar> operator+(const GenericString<TChar>& left, const GenericString<TChar>& right)
 {
 	GenericString<TChar> str;
-	//str.reserve(left.size() + right.size());
+	//str.reserve(left.size() + right.size());	// TODO
 	str += left;
 	str += right;
 	return str;
 }
 template<typename TChar>
 inline GenericString<TChar> operator+(const GenericString<TChar>& left, const TChar* right)
+{
+	GenericString<TChar> str;
+	str += left;
+	str += right;
+	return str;
+}
+template<typename TChar>
+inline GenericString<TChar> operator+(const TChar* left, const GenericString<TChar>& right)
 {
 	GenericString<TChar> str;
 	str += left;

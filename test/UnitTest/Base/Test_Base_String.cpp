@@ -102,7 +102,6 @@ TEST_F(Test_Base_String, Operators)
 	StringA strA;
 	StringW strW;
 
-
 	// <Test> operator= (文字列ポインタ)
 	{
 		strA = "a";
@@ -304,6 +303,22 @@ TEST_F(Test_Base_String, Operators)
 	{
 		ASSERT_FALSE(strA >= "b");
 		ASSERT_FALSE(strW >= L"x");
+	}
+
+	// <Test> operator +
+	{
+		String str = String(_T("a")) + String(_T("b"));
+		ASSERT_STREQ(_T("ab"), str);
+	}
+	// <Test> operator +
+	{
+		String str = String(_T("a")) + _T("b");
+		ASSERT_STREQ(_T("ab"), str);
+	}
+	// <Test> operator +
+	{
+		String str = _T("a") + String(_T("b"));
+		ASSERT_STREQ(_T("ab"), str);
 	}
 }
 
@@ -871,3 +886,4 @@ TEST_F(Test_Base_String, TryToInt)
 	ASSERT_FALSE(String(_T("qwer")).TryToInt8(&v));
 	ASSERT_FALSE(String(_T("0xfffffffffffffffff")).TryToInt8(&v));
 }
+

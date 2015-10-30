@@ -105,10 +105,12 @@ public:
 		@param[in]	str1		: 検索対象文字列
 		@param[in]	str2		: 検索文字列
 		@param[in]	startIndex	: 検索を開始するインデックス (省略した場合は先頭から)
+		@param[in]	cs			: 大文字と小文字の区別設定
 		@return		見つかった文字列の開始インデックス。見つからなかった場合は -1。
+		@details	str2 が空文字列である場合は 0 を返します。
 	*/
 	template<typename TChar>
-	static int IndexOf(const TChar* str1, const TChar* str2, int startIndex = 0);
+	static int IndexOf(const TChar* str1, const TChar* str2, int startIndex, CaseSensitivity cs);
 
 	/**
 		@brief		文字列を検索し、最後に見つかったインデックスを返します。
@@ -116,6 +118,7 @@ public:
 		@param[in]	str2		: 検索文字列
 		@param[in]	startIndex	: 検索を開始するインデックス
 		@param[in]	count		: 検索する文字数
+		@param[in]	cs			: 大文字と小文字の区別設定
 		@return		見つかった文字列の開始インデックス。見つからなかった場合は -1。
 	*/
 	template<typename TChar>

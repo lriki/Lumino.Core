@@ -91,6 +91,15 @@ public:
 	void Start(const PathName& program, const String& args = String());
 
 	/**
+		@brief		プログラムのファイルパスとコマンドライン引数を指定してプロセスを起動します。
+		@param[in]	program	: プログラム名または実行ファイルパス
+		@param[in]	args	: コマンドライン引数
+		@exception	FileNotFoundException	program が見つからなかった。
+		@details	指定されたコマンドライン引数の各要素は、要素に空白が含まれる場合その前後に " を付加した状態でプロセスの起動に使用します。
+	*/
+	void Start(const PathName& program, const StringArray& args);
+
+	/**
 		@brief		プロセスの終了を待機します。
 		@param[in]	timeoutMSec	: タイムアウト時間 (ミリ秒)
 		@return		true:正常終了  false:タイムアウトした

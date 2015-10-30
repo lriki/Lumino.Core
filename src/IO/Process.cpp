@@ -111,6 +111,19 @@ void Process::SetErrorDataReceivedCallback(const Delegate01<String>& callback)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+//void Process::Start(const PathName& program, const StringArray& argsList)
+//{
+//	String args;
+//	for (int i = 0; i < argsList.GetCount(); ++i)
+//	{
+//		String tmp = argsList[i];
+//		if (tmp.conta)
+//	}
+//}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 StreamWriter* Process::GetStandardInput() const
 {
 	LN_CHECK_STATE(m_standardInputWriter != NULL, "Not redirected.");

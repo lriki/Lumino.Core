@@ -256,22 +256,51 @@ void StringTraits::ConvertMultiToWide(std::wstring* out, const char* input, int 
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-int StringTraits::IndexOf(const TChar* str1, const TChar* str2, int startIndex)
+int StringTraits::IndexOf(const TChar* str1, const TChar* str2, int startIndex, CaseSensitivity cs)
 {
 	LN_THROW(str1 && str2, ArgumentException);
 
-	int nLen = (int)StrLen(str1);
-	if (startIndex > nLen)
+	if (*str1 == 0) {
 		return -1;
+	}
 
-	const TChar* pPos = StrStr(str1 + startIndex, str2);
-	if (pPos == NULL)
-		return -1;
+	int str1Len = (int)StrLen(str1);
+	if (str1Len <= startIndex) { return -1; }
 
-	return (int)(pPos - str1);
+	int str2Len = (int)StrLen(str2);
+	if (str2Len <= 0) { return -1; }
+
+	const TChar* pos = str1 + startIndex;
+
+	// 大文字小文字を区別する
+	if (cs == CaseSensitivity::CaseSensitive)
+	{
+		for (; *pos; ++pos)
+		{
+			if (*pos == *str2) {
+				if (StrNCmp(pos, str2, str2Len) == 0) {
+					return (int)(pos - str1);
+				}
+			}
+		}
+	}
+	// 大文字小文字を区別しない
+	else
+	{
+		for (; *pos; ++pos)
+		{
+			if (*pos == *str2) {
+				if (StrNICmp(pos, str2, str2Len) == 0) {
+					return (int)(pos - str1);
+				}
+			}
+		}
+	}
+
+	return -1;
 }
-template int StringTraits::IndexOf<char>(const char* str1, const char* str2, int startIndex);
-template int StringTraits::IndexOf<wchar_t>(const wchar_t* str1, const wchar_t* str2, int startIndex);
+template int StringTraits::IndexOf<char>(const char* str1, const char* str2, int startIndex, CaseSensitivity cs);
+template int StringTraits::IndexOf<wchar_t>(const wchar_t* str1, const wchar_t* str2, int startIndex, CaseSensitivity cs);
 
 
 //-----------------------------------------------------------------------------

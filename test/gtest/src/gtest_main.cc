@@ -66,7 +66,7 @@ GTEST_API_ int main(int argc, char **argv)
 	char* testArgs[] = {
 		argv[0],
 		//"--gtest_filter=Test_Text_EncodingDetector.*"
-		"--gtest_filter=Test_Base_Array.Find"
+		"--gtest_filter=Test_Base_String.IndexOf"
 	};
 	argc = sizeof(testArgs) / sizeof(char*);
 	testing::InitGoogleTest(&argc, (char**)testArgs);
