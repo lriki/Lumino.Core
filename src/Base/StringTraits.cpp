@@ -524,6 +524,17 @@ template void StringTraits::Trim<wchar_t>(const wchar_t* begin, int length, cons
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
+bool StringTraits::StartsWith(const TChar* str1, int len1, const TChar* str2, int len2, CaseSensitivity cs)
+{
+	return Compare(str1, str2, len2, cs) == 0;
+}
+template bool StringTraits::StartsWith<char>(const char* str1, int len1, const char* str2, int len2, CaseSensitivity cs);
+template bool StringTraits::StartsWith<wchar_t>(const wchar_t* str1, int len1, const wchar_t* str2, int len2, CaseSensitivity cs);
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
 bool StringTraits::EndsWith(const TChar* str1, int len1, const TChar* str2, int len2, CaseSensitivity cs)
 {
 	// 長さが -1 の場合は \0 までカウント

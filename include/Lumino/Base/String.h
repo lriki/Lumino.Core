@@ -76,17 +76,6 @@ enum class StringSplitOptions
 	また、比較時にロケールは考慮しません。ロケールを考慮した比較を行う場合、Locale クラスの関数を使用してください。<br>
 
 	なお、NULL を代入したり NULL で初期化した場合、インスタンスは空文字列として初期化されます。
-
-
-	@attention
-	このクラスは読み取りと書き込み共にスレッドセーフではありません。
-	これは COW の共有で使用している参照カウントの操作がスレッドセーフではないためです。
-	この参照カウントは頻繁に操作されるため、ロックしてしまうとそのコストが COW のメリットをつぶしてしまう可能性があり、現在はスレッドセーフとしていません。
-	もし別のスレッドに渡したい場合は次のようにして文字列本体をコピーするように強制します。
-	m_thread2Str = m_thread1Str.c_str();
-	このクラスに限らず、COW で実装される各種コンテナ (ByteBufferなど) も同様にスレッドセーフではありません。
-	
-
 	
 
 */
@@ -278,12 +267,20 @@ public:
 		@endcode
 	*/
 	int LastIndexOf(const TChar* str, int startIndex = -1, int count = -1, CaseSensitivity cs = CaseSensitivity::CaseSensitive) const;
-	int LastIndexOf(TChar ch,         int startIndex = -1, int count = -1, CaseSensitivity cs = CaseSensitivity::CaseSensitive) const;	///< @overload LastIndexOf
+	int LastIndexOf(TChar ch,         int startIndex = -1, int count = -1, CaseSensitivity cs = CaseSensitivity::CaseSensitive) const;	/**< @overload LastIndexOf */
+	
+	/**
+		@brief		この文字列の先頭が、指定した文字列と一致するかを判断します。
+		@param[in]	str			: 検索文字列
+		@details	str が空文字の場合は必ず true が返ります。
+	*/
+	bool StartsWith(const TChar* str, CaseSensitivity cs = CaseSensitivity::CaseSensitive) const;
+	bool StartsWith(TChar ch,         CaseSensitivity cs = CaseSensitivity::CaseSensitive) const;	/**< @overload StartsWith */
 
 	/**
 		@brief		この文字列の末尾が、指定した文字列と一致するかを判断します。
 		@param[in]	str			: 検索文字列
-		@details	str2 が空文字の場合は必ず true が返ります。
+		@details	str が空文字の場合は必ず true が返ります。
 		@code
 					str = "file.txt";
 					if (str.EndsWith(".txt")) {
@@ -292,7 +289,7 @@ public:
 		@endcode
 	*/
 	bool EndsWith(const TChar* str, CaseSensitivity cs = CaseSensitivity::CaseSensitive) const;
-	bool EndsWith(TChar ch,         CaseSensitivity cs = CaseSensitivity::CaseSensitive) const;	///< @overload EndsWith
+	bool EndsWith(TChar ch,         CaseSensitivity cs = CaseSensitivity::CaseSensitive) const;	/**< @overload EndsWith */
 	
 	/**
 		@brief		文字列が同一かを判断します。

@@ -111,15 +111,24 @@ void Process::SetErrorDataReceivedCallback(const Delegate01<String>& callback)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-//void Process::Start(const PathName& program, const StringArray& argsList)
-//{
-//	String args;
-//	for (int i = 0; i < argsList.GetCount(); ++i)
-//	{
-//		String tmp = argsList[i];
-//		if (tmp.conta)
-//	}
-//}
+void Process::Start(const PathName& program, const StringArray& argsList)
+{
+	String args;
+	for (int i = 0; i < argsList.GetCount(); ++i)
+	{
+		String tmp = argsList[i];
+		if (tmp.Contains(_T(' ')) || tmp.Contains(_T('\t')))
+		{
+			if (!tmp.StartsWith(_T('\"')) && !tmp.EndsWith(_T('\"')))
+			{
+				tmp = _T('\"') + tmp + _T('\"');
+			}
+			args += _T(' ') + tmp;
+		}
+	}
+
+	Start(program, args);
+}
 
 //-----------------------------------------------------------------------------
 //

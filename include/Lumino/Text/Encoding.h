@@ -219,11 +219,13 @@ public:
 
 	/**
 		@brief		バイトシーケンスを内部文字列へ変換するデコーダを作成する
+		@details	作成したオブジェクトは使い終えたら Release() を呼び出して参照を解放してください。
 	*/
 	virtual Decoder* CreateDecoder() const = 0;
 
 	/**
 		@brief		内部文字列をバイトシーケンスへ変換するエンコーダを作成する
+		@details	作成したオブジェクトは使い終えたら Release() を呼び出して参照を解放してください。
 	*/
 	virtual Encoder* CreateEncoder() const = 0;
 

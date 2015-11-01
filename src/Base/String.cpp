@@ -673,6 +673,20 @@ int GenericString<TChar>::LastIndexOf(TChar ch, int startIndex, int count, CaseS
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
+bool GenericString<TChar>::StartsWith(const TChar* str, CaseSensitivity cs) const
+{
+	return StringTraits::StartsWith(c_str(), GetLength(), str, StringTraits::StrLen(str), cs);
+}
+template<typename TChar>
+bool GenericString<TChar>::StartsWith(TChar ch, CaseSensitivity cs ) const
+{
+	return StringTraits::EndsWith(c_str(), GetLength(), &ch, 1, cs);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
 bool GenericString<TChar>::EndsWith(const TChar* str, CaseSensitivity cs) const
 {
 	return StringTraits::EndsWith(c_str(), GetLength(), str, StringTraits::StrLen(str), cs);

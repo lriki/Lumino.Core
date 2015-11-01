@@ -165,9 +165,16 @@ public:
 	*/
 	//template<typename TChar>
 	//static void FormatVAList(const TChar* format, va_list args, GenericString<TChar>* out);
+	
+	/**
+		@brief		文字列の先頭が、指定した文字列と一致するかどうかを判断します。
+		@details	str2 が空文字の場合は必ず true が返ります。
+	*/
+	template<typename TChar>
+	static bool StartsWith(const TChar* str1, int len1, const TChar* str2, int len2, CaseSensitivity cs);
 
 	/**
-		@brief		文字列の末尾が一致するかを調べる
+		@brief		文字列の末尾が、指定した文字列と一致するかどうかを判断します。
 		@details	str2 が空文字の場合は必ず true が返ります。
 		@code
 		str = "abc def";
