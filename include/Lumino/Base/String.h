@@ -140,7 +140,7 @@ public:
 	TChar& operator[](int index);
 	const TChar& operator[](int index) const;
 
-	operator const TChar*() const;
+	//operator const TChar*() const;
 	/// @}
 
 public:
@@ -511,6 +511,27 @@ inline GenericString<TChar> operator+(const TChar* left, const GenericString<TCh
 	str += left;
 	str += right;
 	return str;
+}
+template<typename TChar>
+inline GenericString<TChar> operator+(const GenericString<TChar>& left, TChar right)
+{
+	GenericString<TChar> str;
+	str += left;
+	str += right;
+	return str;
+}
+template<typename TChar>
+inline GenericString<TChar> operator+(TChar left, const GenericString<TChar>& right)
+{
+	GenericString<TChar> str;
+	str += left;
+	str += right;
+	return str;
+}
+template<typename TChar>
+inline bool operator==(const TChar* left, const GenericString<TChar>& right)
+{
+	return right.Equals(left);
 }
 
 #ifdef LN_DOXYGEN

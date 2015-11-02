@@ -19,6 +19,7 @@ public:
 	~JsonReader();
 
 public:
+	void Parse(const String& text);
 	void Parse(const TCHAR* text, int len = -1);
 	void Parse(TextReader* textReader);
 	bool HasError() const { return m_error.ErrorCode != JsonParseError::NoError; }

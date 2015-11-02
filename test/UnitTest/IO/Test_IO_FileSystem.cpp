@@ -88,33 +88,33 @@ TEST_F(Test_IO_FileSystem, Copy_Delete)
 	String src1 = LOCALFILE("TestData/test1.txt");
 	String src2 = LOCALFILE("TestData/test2.txt");
 	String dest = LOCALFILE("TestData/test_copy.txt");
-	uint64_t src1Size = FileSystem::GetFileSize(src1);
-	uint64_t src2Size = FileSystem::GetFileSize(src2);
+	uint64_t src1Size = FileSystem::GetFileSize(src1.c_str());
+	uint64_t src2Size = FileSystem::GetFileSize(src2.c_str());
 
 	// 最初はコピー先ファイルが無いこと。
-	ASSERT_FALSE(FileSystem::Exists(dest));
+	ASSERT_FALSE(FileSystem::Exists(dest.c_str()));
 
 	// コピー
-	FileSystem::Copy(src1, dest, false);
+	FileSystem::Copy(src1.c_str(), dest.c_str(), false);
 
 	// コピーしたファイル(サイズ)が同じ
-	ASSERT_EQ(src1Size, FileSystem::GetFileSize(dest));
+	ASSERT_EQ(src1Size, FileSystem::GetFileSize(dest.c_str()));
 
 	// 上書きしようとすると IOException
 	ASSERT_THROW(
-		FileSystem::Copy(src2, dest, false),
+		FileSystem::Copy(src2.c_str(), dest.c_str(), false),
 		IOException);
 
 	// 上書き許可でコピー
-	FileSystem::Copy(src2, dest, true);
+	FileSystem::Copy(src2.c_str(), dest.c_str(), true);
 
 	// コピーしたファイル(サイズ)が同じ
-	ASSERT_EQ(src2Size, FileSystem::GetFileSize(dest));
+	ASSERT_EQ(src2Size, FileSystem::GetFileSize(dest.c_str()));
 
 	// ファイル削除
-	FileSystem::Delete(dest);
+	FileSystem::Delete(dest.c_str());
 
 	// 消えている
-	ASSERT_FALSE(FileSystem::Exists(dest));
+	ASSERT_FALSE(FileSystem::Exists(dest.c_str()));
 }
 

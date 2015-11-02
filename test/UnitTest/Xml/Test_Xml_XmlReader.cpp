@@ -71,7 +71,7 @@ TEST_F(Test_Xml_XmlReader, User)
 		_T("type:EndElement name:ProjectList\n")
 		_T("type:Whitespace\n")
 		_T("type:EndElement name:ToolSettings\n");
-	ASSERT_STREQ(result, output);
+	ASSERT_EQ(result, output);
 }
 
 
@@ -86,7 +86,7 @@ TEST_F(Test_Xml_XmlReader, Element)
 
 		ASSERT_TRUE(reader.Read());
 		ASSERT_EQ(XmlNodeType::Element, reader.GetNodeType());
-		ASSERT_STREQ(_T("test"), reader.GetName());
+		ASSERT_EQ(_T("test"), reader.GetName());
 		ASSERT_TRUE(reader.IsEmptyElement());			// 空要素である
 		ASSERT_FALSE(reader.Read());					// EOF
 	}
@@ -98,12 +98,12 @@ TEST_F(Test_Xml_XmlReader, Element)
 
 		ASSERT_TRUE(reader.Read());
 		ASSERT_EQ(XmlNodeType::Element, reader.GetNodeType());
-		ASSERT_STREQ(_T("test"), reader.GetName());
+		ASSERT_EQ(_T("test"), reader.GetName());
 		ASSERT_FALSE(reader.IsEmptyElement());			// 空要素ではない
 
 		ASSERT_TRUE(reader.Read());
 		ASSERT_EQ(XmlNodeType::EndElement, reader.GetNodeType());
-		ASSERT_STREQ(_T("test"), reader.GetName());
+		ASSERT_EQ(_T("test"), reader.GetName());
 		ASSERT_FALSE(reader.IsEmptyElement());			// 空要素ではない
 
 		ASSERT_FALSE(reader.Read());					// EOF
@@ -116,17 +116,17 @@ TEST_F(Test_Xml_XmlReader, Element)
 
 		ASSERT_TRUE(reader.Read());
 		ASSERT_EQ(XmlNodeType::Element, reader.GetNodeType());
-		ASSERT_STREQ(_T("n1"), reader.GetName());
+		ASSERT_EQ(_T("n1"), reader.GetName());
 		ASSERT_FALSE(reader.IsEmptyElement());
 
 		ASSERT_TRUE(reader.Read());
 		ASSERT_EQ(XmlNodeType::Element, reader.GetNodeType());
-		ASSERT_STREQ(_T("n2"), reader.GetName());
+		ASSERT_EQ(_T("n2"), reader.GetName());
 		ASSERT_TRUE(reader.IsEmptyElement());
 
 		ASSERT_TRUE(reader.Read());
 		ASSERT_EQ(XmlNodeType::EndElement, reader.GetNodeType());
-		ASSERT_STREQ(_T("n1"), reader.GetName());
+		ASSERT_EQ(_T("n1"), reader.GetName());
 		ASSERT_FALSE(reader.IsEmptyElement());			// EndElement は空要素扱いではない
 
 		ASSERT_FALSE(reader.Read());						// EOF
@@ -139,11 +139,11 @@ TEST_F(Test_Xml_XmlReader, Element)
 
 		ASSERT_TRUE(reader.Read());
 		ASSERT_EQ(XmlNodeType::Element, reader.GetNodeType());
-		ASSERT_STREQ(_T("v:test"), reader.GetName());
+		ASSERT_EQ(_T("v:test"), reader.GetName());
 
 		ASSERT_TRUE(reader.Read());
 		ASSERT_EQ(XmlNodeType::Element, reader.GetNodeType());
-		ASSERT_STREQ(_T("b.n1"), reader.GetName());
+		ASSERT_EQ(_T("b.n1"), reader.GetName());
 
 		ASSERT_FALSE(reader.Read());					// EOF
 	}
@@ -161,18 +161,18 @@ TEST_F(Test_Xml_XmlReader, Text)
 
 		ASSERT_TRUE(reader.Read());
 		ASSERT_EQ(XmlNodeType::Element, reader.GetNodeType());
-		ASSERT_STREQ(_T("test"), reader.GetName());
+		ASSERT_EQ(_T("test"), reader.GetName());
 		ASSERT_FALSE(reader.IsEmptyElement());			// 空要素ではない
 
 		ASSERT_TRUE(reader.Read());
 		ASSERT_EQ(XmlNodeType::Text, reader.GetNodeType());
 		ASSERT_TRUE(reader.GetName().IsEmpty());		// Text ノードの名前は空
-		ASSERT_STREQ(_T("Text"), reader.GetValue());	// テキスト値
+		ASSERT_EQ(_T("Text"), reader.GetValue());	// テキスト値
 		ASSERT_FALSE(reader.IsEmptyElement());			// 空要素ではない (というか要素ではない)
 
 		ASSERT_TRUE(reader.Read());
 		ASSERT_EQ(XmlNodeType::EndElement, reader.GetNodeType());
-		ASSERT_STREQ(_T("test"), reader.GetName());
+		ASSERT_EQ(_T("test"), reader.GetName());
 		ASSERT_FALSE(reader.IsEmptyElement());			// 空要素ではない
 
 		ASSERT_FALSE(reader.Read());					// EOF
@@ -186,7 +186,7 @@ TEST_F(Test_Xml_XmlReader, Text)
 
 		ASSERT_TRUE(reader.Read());
 		ASSERT_EQ(XmlNodeType::Text, reader.GetNodeType());
-		ASSERT_STREQ(_T(" \nText\r\t"), reader.GetValue());	// テキスト値
+		ASSERT_EQ(_T(" \nText\r\t"), reader.GetValue());	// テキスト値
 
 		reader.Read();
 		ASSERT_FALSE(reader.Read());						// EOF
@@ -203,7 +203,7 @@ TEST_F(Test_Xml_XmlReader, Comment)
 
 		ASSERT_TRUE(reader.Read());
 		ASSERT_EQ(XmlNodeType::Comment, reader.GetNodeType());
-		ASSERT_STREQ(_T(" Comment "), reader.GetValue());	// コメントの値
+		ASSERT_EQ(_T(" Comment "), reader.GetValue());	// コメントの値
 
 		ASSERT_FALSE(reader.Read());						// EOF
 	}
@@ -220,19 +220,19 @@ TEST_F(Test_Xml_XmlReader, Attribute)
 
 		ASSERT_TRUE(reader.Read());
 		ASSERT_EQ(XmlNodeType::Element, reader.GetNodeType());
-		ASSERT_STREQ(_T("test"), reader.GetName());
+		ASSERT_EQ(_T("test"), reader.GetName());
 		ASSERT_TRUE(reader.IsEmptyElement());
 		ASSERT_EQ(1, reader.GetAttributeCount());		// 属性1個
 		ASSERT_FALSE(reader.MoveToElement());			// 意味無し
 
 		ASSERT_TRUE(reader.MoveToFirstAttribute());
 		ASSERT_EQ(XmlNodeType::Attribute, reader.GetNodeType());
-		ASSERT_STREQ(_T("a"), reader.GetName());
-		ASSERT_STREQ(_T("10"), reader.GetValue());
+		ASSERT_EQ(_T("a"), reader.GetName());
+		ASSERT_EQ(_T("10"), reader.GetValue());
 
 		ASSERT_TRUE(reader.MoveToElement());	// Element に戻らないと、IsEmptyElement が機能しない
 		ASSERT_EQ(XmlNodeType::Element, reader.GetNodeType());
-		ASSERT_STREQ(_T("test"), reader.GetName());
+		ASSERT_EQ(_T("test"), reader.GetName());
 		ASSERT_TRUE(reader.IsEmptyElement());
 		ASSERT_EQ(1, reader.GetAttributeCount());		// 属性1個
 
@@ -252,14 +252,14 @@ TEST_F(Test_Xml_XmlReader, Attribute)
 		// v.a="10"
 		ASSERT_TRUE(reader.MoveToFirstAttribute());
 		ASSERT_EQ(XmlNodeType::Attribute, reader.GetNodeType());
-		ASSERT_STREQ(_T("v.a"), reader.GetName());
-		ASSERT_STREQ(_T("10"), reader.GetValue());
+		ASSERT_EQ(_T("v.a"), reader.GetName());
+		ASSERT_EQ(_T("10"), reader.GetValue());
 
 		// v:b="ABC"
 		ASSERT_TRUE(reader.MoveToNextAttribute());
 		ASSERT_EQ(XmlNodeType::Attribute, reader.GetNodeType());
-		ASSERT_STREQ(_T("v:b"), reader.GetName());
-		ASSERT_STREQ(_T("ABC"), reader.GetValue());
+		ASSERT_EQ(_T("v:b"), reader.GetName());
+		ASSERT_EQ(_T("ABC"), reader.GetValue());
 
 		ASSERT_FALSE(reader.MoveToNextAttribute());		// 次は無い
 
@@ -281,35 +281,35 @@ TEST_F(Test_Xml_XmlReader, ReservedEntity)
 
 		ASSERT_TRUE(reader.Read());	// &lt;
 		ASSERT_EQ(XmlNodeType::Text, reader.GetNodeType());
-		ASSERT_STREQ(_T("<"), reader.GetValue());
+		ASSERT_EQ(_T("<"), reader.GetValue());
 
 		ASSERT_TRUE(reader.Read());	// <ch/>
 		ASSERT_TRUE(reader.Read());	// <ch>
 
 		ASSERT_TRUE(reader.Read());	// &gt;
 		ASSERT_EQ(XmlNodeType::Text, reader.GetNodeType());
-		ASSERT_STREQ(_T(">"), reader.GetValue());
+		ASSERT_EQ(_T(">"), reader.GetValue());
 
 		ASSERT_TRUE(reader.Read());	// <ch/>
 		ASSERT_TRUE(reader.Read());	// <ch>
 
 		ASSERT_TRUE(reader.Read());	// &amp;
 		ASSERT_EQ(XmlNodeType::Text, reader.GetNodeType());
-		ASSERT_STREQ(_T("&"), reader.GetValue());
+		ASSERT_EQ(_T("&"), reader.GetValue());
 
 		ASSERT_TRUE(reader.Read());	// <ch/>
 		ASSERT_TRUE(reader.Read());	// <ch>
 
 		ASSERT_TRUE(reader.Read());	// &apos;
 		ASSERT_EQ(XmlNodeType::Text, reader.GetNodeType());
-		ASSERT_STREQ(_T("'"), reader.GetValue());
+		ASSERT_EQ(_T("'"), reader.GetValue());
 
 		ASSERT_TRUE(reader.Read());	// <ch/>
 		ASSERT_TRUE(reader.Read());	// <ch>
 
 		ASSERT_TRUE(reader.Read());	// &quot;
 		ASSERT_EQ(XmlNodeType::Text, reader.GetNodeType());
-		ASSERT_STREQ(_T("\""), reader.GetValue());
+		ASSERT_EQ(_T("\""), reader.GetValue());
 
 		ASSERT_TRUE(reader.Read());	// <ch/>
 		ASSERT_TRUE(reader.Read());	// <root/>
@@ -330,18 +330,18 @@ TEST_F(Test_Xml_XmlReader, ReservedEntity)
 
 		ASSERT_TRUE(reader.MoveToFirstAttribute());
 		ASSERT_EQ(XmlNodeType::Attribute, reader.GetNodeType());
-		ASSERT_STREQ(_T("a"), reader.GetName());
-		ASSERT_STREQ(_T("<"), reader.GetValue());
+		ASSERT_EQ(_T("a"), reader.GetName());
+		ASSERT_EQ(_T("<"), reader.GetValue());
 
 		ASSERT_TRUE(reader.MoveToNextAttribute());
 		ASSERT_EQ(XmlNodeType::Attribute, reader.GetNodeType());
-		ASSERT_STREQ(_T("b"), reader.GetName());
-		ASSERT_STREQ(_T("&AAAA;"), reader.GetValue());	// 認識できない Entity はエラーにせず、テキストとして返す
+		ASSERT_EQ(_T("b"), reader.GetName());
+		ASSERT_EQ(_T("&AAAA;"), reader.GetValue());	// 認識できない Entity はエラーにせず、テキストとして返す
 
 		ASSERT_TRUE(reader.MoveToNextAttribute());
 		ASSERT_EQ(XmlNodeType::Attribute, reader.GetNodeType());
-		ASSERT_STREQ(_T("c"), reader.GetName());
-		ASSERT_STREQ(_T("A< "), reader.GetValue());
+		ASSERT_EQ(_T("c"), reader.GetName());
+		ASSERT_EQ(_T("A< "), reader.GetValue());
 
 		ASSERT_FALSE(reader.Read());					// EOF
 	}
@@ -359,16 +359,16 @@ TEST_F(Test_Xml_XmlReader, EntityReference)
 
 		ASSERT_TRUE(reader.Read());		// " A"
 		ASSERT_EQ(XmlNodeType::Text, reader.GetNodeType());
-		ASSERT_STREQ(_T(" A"), reader.GetValue());
+		ASSERT_EQ(_T(" A"), reader.GetValue());
 
 		ASSERT_TRUE(reader.Read());		// "&book;"
 		ASSERT_EQ(XmlNodeType::EntityReference, reader.GetNodeType());
-		ASSERT_STREQ(_T("book"), reader.GetName());
+		ASSERT_EQ(_T("book"), reader.GetName());
 		ASSERT_TRUE(reader.GetValue().IsEmpty());	// 値は空
 
 		ASSERT_TRUE(reader.Read());		// " "
 		ASSERT_EQ(XmlNodeType::Whitespace, reader.GetNodeType());
-		ASSERT_STREQ(_T(" "), reader.GetValue());
+		ASSERT_EQ(_T(" "), reader.GetValue());
 
 		ASSERT_TRUE(reader.Read());		// </a>
 
@@ -394,7 +394,7 @@ TEST_F(Test_Xml_XmlReader, SystemTest)
 			if (reader.IsStartElement("test"))
 			{
 				types.Add(reader.GetNodeType());
-				ASSERT_STREQ(_T("  AAA  "), reader.ReadString());
+				ASSERT_EQ(_T("  AAA  "), reader.ReadString());
 				types.Add(reader.GetNodeType());	// EndElement
 			}
 		}

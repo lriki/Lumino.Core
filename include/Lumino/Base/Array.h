@@ -65,6 +65,14 @@ public:
 		return m_data->m_vector.capacity();
 	}
 
+	/** 配列を初期化し、指定した範囲の要素をコピーします。*/
+	template<typename TItr>
+	void Assign(TItr first, TItr last)
+	{
+		CheckDetachShared();
+		m_data->m_vector.assign(first, last);
+	}
+
 	/** 末尾に要素を追加します。*/
 	void Add(const value_type& item)
 	{

@@ -16,5 +16,5 @@ TEST_F(Test_IO_TextWriter, Basic)
 	}
 
 	String str = FileSystem::ReadAllText(TEMPFILE("Test1.txt"));
-	ASSERT_STREQ(_T("32"), str);
+	ASSERT_EQ(_T("32"), str);
 }

@@ -141,7 +141,7 @@ Locale::Locale(const Locale& locale)
 	: m_nativeLocale(0)
 	, m_nativeName(locale.m_nativeName)
 {
-	m_nativeLocale = CreateNativeLocale(m_nativeName);
+	m_nativeLocale = CreateNativeLocale(m_nativeName.c_str());
 }
 
 //-----------------------------------------------------------------------------
@@ -150,7 +150,7 @@ Locale::Locale(const Locale& locale)
 Locale& Locale::operator=(const Locale& locale)
 {
 	m_nativeName = locale.m_nativeName;
-	m_nativeLocale = CreateNativeLocale(m_nativeName);
+	m_nativeLocale = CreateNativeLocale(m_nativeName.c_str());
 	return (*this);
 }
 

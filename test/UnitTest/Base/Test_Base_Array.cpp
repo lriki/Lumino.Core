@@ -302,6 +302,18 @@ TEST_F(Test_Base_Array, GetCount)
 }
 
 //-----------------------------------------------------------------------------
+TEST_F(Test_Base_Array, Assign)
+{
+	// <Test> 
+	{
+		std::vector<int> a = { 1, 2, 3 };
+		std::vector<int> b = { 4, 5 };
+		a.assign(b.begin(), b.end());
+		printf("");
+	}
+}
+
+//-----------------------------------------------------------------------------
 TEST_F(Test_Base_Array, Add)
 {
 	// <Test> 要素を追加する。
@@ -320,10 +332,10 @@ TEST_F(Test_Base_Array, Add)
 		a3.Add(_T("3")); a3.Add(_T("4"));
 		a1.Add(a2); a1.Add(a3);
 		ASSERT_EQ(4, a1.GetCount());
-		ASSERT_STREQ(_T("1"), a1[0]);
-		ASSERT_STREQ(_T("2"), a1[1]);
-		ASSERT_STREQ(_T("3"), a1[2]);
-		ASSERT_STREQ(_T("4"), a1[3]);
+		ASSERT_EQ(_T("1"), a1[0]);
+		ASSERT_EQ(_T("2"), a1[1]);
+		ASSERT_EQ(_T("3"), a1[2]);
+		ASSERT_EQ(_T("4"), a1[3]);
 	}
 }
 

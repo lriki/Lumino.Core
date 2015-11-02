@@ -272,7 +272,7 @@ std::string GenericPathName<TChar>::ToLocalChar() const
 template<typename TChar>
 bool GenericPathName<TChar>::ExistsFile() const
 {
-	return FileSystem::Exists(m_path);
+	return FileSystem::Exists(m_path.c_str());
 }
 
 //-----------------------------------------------------------------------------
@@ -281,7 +281,7 @@ bool GenericPathName<TChar>::ExistsFile() const
 template<typename TChar>
 bool GenericPathName<TChar>::ExistsDirectory() const
 {
-	return FileSystem::ExistsDirectory(m_path);
+	return FileSystem::ExistsDirectory(m_path.c_str());
 }
 
 //-----------------------------------------------------------------------------

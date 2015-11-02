@@ -15,7 +15,7 @@ public:
 
 public:
 	// override Encoding
-	virtual const TCHAR* GetName() const { return m_name; }
+	virtual const TCHAR* GetName() const { return m_name.c_str(); }
 	virtual int GetMinByteCount() const { return 1; }
 	virtual int GetMaxByteCount() const { return m_cpInfo.MaxCharSize; }
 	virtual Decoder* CreateDecoder() const { return LN_NEW Win32CodePageDecoder(m_cpInfo); }

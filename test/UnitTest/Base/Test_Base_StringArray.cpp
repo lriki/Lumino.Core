@@ -8,6 +8,18 @@ protected:
 };
 
 //-----------------------------------------------------------------------------
+TEST_F(Test_Base_StringArray, Constructor)
+{
+	// <Test> 初期化子リスト
+	{
+		StringArray ary = { _T("a"), _T("b") };
+		ASSERT_EQ(2, ary.GetCount());
+		ASSERT_EQ(_T("a"), ary[0]);
+		ASSERT_EQ(_T("b"), ary[1]);
+	}
+}
+
+//-----------------------------------------------------------------------------
 TEST_F(Test_Base_StringArray, Unit_Contains)
 {
 	StringArray ary;

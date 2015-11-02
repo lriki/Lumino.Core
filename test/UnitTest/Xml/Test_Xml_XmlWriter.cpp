@@ -82,9 +82,9 @@ TEST_F(Test_Xml_XmlWriter, UnitTest)
 		xmlWriter.WriteStartDocument();
 		xmlWriter.WriteEndDocument();
 #ifdef _WIN32
-		ASSERT_STREQ(_T("<?xml version=\"1.0\" encoding=\"UTF-16LE\"?>"), strWriter.ToString());
+		ASSERT_EQ(_T("<?xml version=\"1.0\" encoding=\"UTF-16LE\"?>"), strWriter.ToString());
 #else
-		ASSERT_STREQ(_T("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"), strWriter.ToString());
+		ASSERT_EQ(_T("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"), strWriter.ToString());
 #endif
 		xmlWriter.WriteStartDocument();
 		ASSERT_THROW(xmlWriter.WriteStartDocument(), InvalidOperationException);
@@ -95,7 +95,7 @@ TEST_F(Test_Xml_XmlWriter, UnitTest)
 		StringWriter strWriter;
 		XmlWriter xmlWriter(&strWriter);
 		xmlWriter.WriteStartElement(_T("test"));
-		ASSERT_STREQ(_T("<test"), strWriter.ToString());
+		ASSERT_EQ(_T("<test"), strWriter.ToString());
 	}
 
 	// <Unit> WriteEndElement
@@ -104,7 +104,7 @@ TEST_F(Test_Xml_XmlWriter, UnitTest)
 		XmlWriter xmlWriter(&strWriter);
 		xmlWriter.WriteStartElement(_T("test"));
 		xmlWriter.WriteEndElement();
-		ASSERT_STREQ(_T("<test />"), strWriter.ToString());
+		ASSERT_EQ(_T("<test />"), strWriter.ToString());
 	}
 
 	// <Unit> WriteAttribute
@@ -119,7 +119,7 @@ TEST_F(Test_Xml_XmlWriter, UnitTest)
 		xmlWriter.WriteAttribute(_T("a5"), _T(">>v"));
 		xmlWriter.WriteAttribute(_T("a6"), _T("v<<"));
 		xmlWriter.WriteEndElement();
-		ASSERT_STREQ(_T("<test a1=\"v1\" a2=\"&amp;&quot;\" a3=\"v&lt;v\" a4=\"&gt;v&gt;\" a5=\"&gt;&gt;v\" a6=\"v&lt;&lt;\" />"), strWriter.ToString());
+		ASSERT_EQ(_T("<test a1=\"v1\" a2=\"&amp;&quot;\" a3=\"v&lt;v\" a4=\"&gt;v&gt;\" a5=\"&gt;&gt;v\" a6=\"v&lt;&lt;\" />"), strWriter.ToString());
 	}
 
 	// <Unit> WriteComment
@@ -132,7 +132,7 @@ TEST_F(Test_Xml_XmlWriter, UnitTest)
 		ASSERT_THROW(xmlWriter.WriteComment(_T("comment2--")), ArgumentException);
 		xmlWriter.WriteComment(_T("comment3"));
 		xmlWriter.WriteEndElement();
-		ASSERT_STREQ(_T("<test>\n  <!--comment1-->\n  <!--comment3-->\n</test>"), strWriter.ToString());
+		ASSERT_EQ(_T("<test>\n  <!--comment1-->\n  <!--comment3-->\n</test>"), strWriter.ToString());
 	}
 
 	// <Unit> WriteCData
@@ -144,7 +144,7 @@ TEST_F(Test_Xml_XmlWriter, UnitTest)
 		ASSERT_THROW(xmlWriter.WriteCData(_T("XX]]>")), ArgumentException);
 		xmlWriter.WriteCData(_T("CCC\nDDD"));
 		xmlWriter.WriteEndElement();
-		ASSERT_STREQ(_T("<test><![CDATA[AAA && BBB]]><![CDATA[CCC\nDDD]]></test>"), strWriter.ToString());
+		ASSERT_EQ(_T("<test><![CDATA[AAA && BBB]]><![CDATA[CCC\nDDD]]></test>"), strWriter.ToString());
 	}
 }
 
@@ -168,7 +168,7 @@ TEST_F(Test_Xml_XmlWriter, SystemTest)
 			_T("  <ToolPath>path</ToolPath>\n")
 			_T("</EnvData>");
 		exp = exp.Replace(_T("_ENC_"), Encoding::GetTCharEncoding()->GetName());
-		ASSERT_STREQ(exp, str);
+		ASSERT_EQ(exp, str);
 
 	}
 }

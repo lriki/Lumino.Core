@@ -23,7 +23,7 @@ TEST_F(Test_IO_Process, Example)
 		Process proc;
 		proc.SetRedirectStandardOutput(true);
 		proc.Start(_T("LuminoCore_UnitTest"), _T("--proctest1"));
-		ASSERT_STREQ(_T("stdout"), proc.GetStandardOutput()->ReadToEnd());
+		ASSERT_EQ(_T("stdout"), proc.GetStandardOutput()->ReadToEnd());
 	}
 
 	// <Example> 標準入力をリダイレクトする。
@@ -43,7 +43,7 @@ TEST_F(Test_IO_Process, Example)
 		proc.SetRedirectStandardOutput(true);
 		proc.Start(_T("LuminoCore_UnitTest"), _T("--proctest3"));
 		proc.GetStandardInput()->Write(_T("test\n"));	// 改行が必要
-		ASSERT_STREQ(_T("[test]"), proc.GetStandardOutput()->ReadToEnd());
+		ASSERT_EQ(_T("[test]"), proc.GetStandardOutput()->ReadToEnd());
 	}
 
 	// <Example> プロセスをシンプルに実行する。
@@ -57,7 +57,7 @@ TEST_F(Test_IO_Process, Example)
 	{
 		String stdOutput;
 		if (Process::Execute(_T("LuminoCore_UnitTest"), _T("--proctest1"), &stdOutput) == 5) {
-			ASSERT_STREQ(_T("stdout"), stdOutput);
+			ASSERT_EQ(_T("stdout"), stdOutput);
 		}
 		else {
 			FAIL();
@@ -82,7 +82,7 @@ TEST_F(Test_IO_Process, Example)
 		proc.Start(_T("LuminoCore_UnitTest"), _T("--proctest1"));
 		proc.BeginOutputReadLine();
 		proc.WaitForExit();
-		ASSERT_STREQ(_T("stdout"), output);
+		ASSERT_EQ(_T("stdout"), output);
 	}
 }
 

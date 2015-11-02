@@ -95,10 +95,10 @@ TEST_F(Test_Json_JsonValue, String)
 		v2.SetString(String(_T("def")));
 		ASSERT_TRUE(v1.IsString());
 		ASSERT_EQ(JsonType::String, v1.GetType());
-		ASSERT_STREQ(_T("abc"), v1.GetString());
+		ASSERT_EQ(_T("abc"), v1.GetString());
 		ASSERT_TRUE(v2.IsString());
 		ASSERT_EQ(JsonType::String, v2.GetType());
-		ASSERT_STREQ(_T("def"), v2.GetString());
+		ASSERT_EQ(_T("def"), v2.GetString());
 	}
 }
 

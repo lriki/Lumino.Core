@@ -102,7 +102,7 @@ void TextWriter::Write(const TCHAR* str, int len)
 //-----------------------------------------------------------------------------
 void TextWriter::Write(const String& str)
 {
-	WriteInternal(str, str.GetLength());
+	WriteInternal(str.c_str(), str.GetLength());
 }
 
 void TextWriter::WriteFormat(const TCHAR* format, ...)

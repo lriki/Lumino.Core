@@ -40,6 +40,8 @@ public:
 	*/
 	static bool Exists(const char* filePath);
 	static bool Exists(const wchar_t* filePath);
+	//template<typename TChar> static bool Exists2(const TChar* filePath);		/**< a */
+	//template<typename TString> static bool Exists2(const TString& filePath);	/**< b */
 
 	/**
 		@brief		ファイルの属性を取得します。
@@ -107,6 +109,7 @@ public:
 	*/
 	static bool ExistsDirectory(const char* path);
 	static bool ExistsDirectory(const wchar_t* path);
+	template<typename TString> static inline bool ExistsDirectory(const TString& path) { return ExistsDirectory(path.c_str()); }
 
 	/**
 		@brief		ディレクトリを作成します。

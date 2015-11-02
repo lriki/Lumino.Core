@@ -18,6 +18,16 @@ public:
 
 public:
 	GenericStringArray() {}
+
+	/** 初期化子リストから作成します。*/
+	GenericStringArray(std::initializer_list<const TChar*> list)
+	{
+		Reserve(list.size());
+		for (const TChar* str : list) {
+			Add(String(str));
+		}
+	}
+
 	virtual ~GenericStringArray() {}
 
 public:

@@ -10,6 +10,10 @@ protected:
 //-----------------------------------------------------------------------------
 TEST_F(Test_IO_PathName, Constructor)
 {
+	// <Test> String から変換できること
+	{
+		PathName path = String("dir");
+	}
 	// <Test> コンストラクタでベースパスと結合した場合は単純化される。
 	{
 		PathName base = _T("C:/dir1/dir2");
@@ -26,10 +30,10 @@ TEST_F(Test_IO_PathName, Constructor)
 TEST_F(Test_IO_PathName, GetFileName)
 {
 	PathName path1(_T("dir/file.txt"));
-	ASSERT_STREQ(_T("file.txt"), path1.GetFileName());
+	ASSERT_EQ(_T("file.txt"), path1.GetFileName());
 
 	PathName path2(_T("file.txt"));
-	ASSERT_STREQ(_T("file.txt"), path2.GetFileName());
+	ASSERT_EQ(_T("file.txt"), path2.GetFileName());
 }
 
 //-----------------------------------------------------------------------------

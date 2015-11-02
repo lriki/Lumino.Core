@@ -106,43 +106,43 @@ TEST_F(Test_Base_String, Operators)
 	{
 		strA = "a";
 		strW = L"w";
-		ASSERT_STREQ("a", strA);
-		ASSERT_STREQ(L"w", strW);
+		ASSERT_EQ("a", strA);
+		ASSERT_EQ(L"w", strW);
 	}
 	// <Test> operator= (GenericString)
 	{
 		strA = strASample;
 		strW = strWSample;
-		ASSERT_STREQ("a", strA);
-		ASSERT_STREQ(L"w", strW);
+		ASSERT_EQ("a", strA);
+		ASSERT_EQ(L"w", strW);
 	}
 	// <Test> operator= (std::string)
 	{
 		strA = strAStd;
 		strW = strWStd;
-		ASSERT_STREQ("a", strA);
-		ASSERT_STREQ(L"w", strW);
+		ASSERT_EQ("a", strA);
+		ASSERT_EQ(L"w", strW);
 	}
 	// <Test> operator= (文字列ポインタ・ASCII/Wide逆の型)
 	{
 		strA = L"w";
 		strW = "a";
-		ASSERT_STREQ("w", strA);
-		ASSERT_STREQ(L"a", strW);
+		ASSERT_EQ("w", strA);
+		ASSERT_EQ(L"a", strW);
 	}
 	// <Test> operator= (GenericString・ASCII/Wide逆の型)
 	{
 		strA = strWSample;
 		strW = strASample;
-		ASSERT_STREQ("w", strA);
-		ASSERT_STREQ(L"a", strW);
+		ASSERT_EQ("w", strA);
+		ASSERT_EQ(L"a", strW);
 	}
 	// <Test> operator= (std::string・ASCII/Wide逆の型)
 	{
 		strA = strWStd;
 		strW = strAStd;
-		ASSERT_STREQ("w", strA);
-		ASSERT_STREQ(L"a", strW);
+		ASSERT_EQ("w", strA);
+		ASSERT_EQ(L"a", strW);
 	}
 	// <Test> operator= (NULL)
 	{
@@ -157,8 +157,8 @@ TEST_F(Test_Base_String, Operators)
 		strW = strWSample;
 		strA = strA;
 		strW = strW;
-		ASSERT_STREQ("a", strA);
-		ASSERT_STREQ(L"w", strW);
+		ASSERT_EQ("a", strA);
+		ASSERT_EQ(L"w", strW);
 	}
 
 	strA = "a";
@@ -209,29 +209,29 @@ TEST_F(Test_Base_String, Operators)
 	{
 		strA += strASample;
 		strW += strWSample;
-		ASSERT_STREQ("aa", strA);
-		ASSERT_STREQ(L"ww", strW);
+		ASSERT_EQ("aa", strA);
+		ASSERT_EQ(L"ww", strW);
 	}
 	// <Test> operator+= (文字列ポインタ)
 	{
 		strA += "a";
 		strW += L"w";
-		ASSERT_STREQ("aaa", strA);
-		ASSERT_STREQ(L"www", strW);
+		ASSERT_EQ("aaa", strA);
+		ASSERT_EQ(L"www", strW);
 	}
 	// <Test> operator+= (文字)
 	{
 		strA += 'a';
 		strW += L'w';
-		ASSERT_STREQ("aaaa", strA);
-		ASSERT_STREQ(L"wwww", strW);
+		ASSERT_EQ("aaaa", strA);
+		ASSERT_EQ(L"wwww", strW);
 	}
 	// <Test> operator+= (NULL)
 	{
 		strA += ((char*)NULL);
 		strW += ((wchar_t*)NULL);
-		ASSERT_STREQ("aaaa", strA);
-		ASSERT_STREQ(L"wwww", strW);
+		ASSERT_EQ("aaaa", strA);
+		ASSERT_EQ(L"wwww", strW);
 	}
 
 	strA = "a";
@@ -308,17 +308,17 @@ TEST_F(Test_Base_String, Operators)
 	// <Test> operator +
 	{
 		String str = String(_T("a")) + String(_T("b"));
-		ASSERT_STREQ(_T("ab"), str);
+		ASSERT_EQ(_T("ab"), str);
 	}
 	// <Test> operator +
 	{
 		String str = String(_T("a")) + _T("b");
-		ASSERT_STREQ(_T("ab"), str);
+		ASSERT_EQ(_T("ab"), str);
 	}
 	// <Test> operator +
 	{
 		String str = _T("a") + String(_T("b"));
-		ASSERT_STREQ(_T("ab"), str);
+		ASSERT_EQ(_T("ab"), str);
 	}
 }
 
@@ -359,26 +359,26 @@ TEST_F(Test_Base_String, AssignCStr)
 
 		StringW tstr3;
 		tstr3.AssignCStr("f");
-		ASSERT_STREQ(L"f", tstr3);
+		ASSERT_EQ(L"f", tstr3);
 	}
 
 	// 部分変換
 	{
 		StringA str1;
 		str1.AssignCStr("test", 0, 2);
-		ASSERT_STREQ("te", str1);
+		ASSERT_EQ("te", str1);
 
 		StringA str2;
 		str2.AssignCStr(L"test", 0, 2);
-		ASSERT_STREQ("te", str1);
+		ASSERT_EQ("te", str1);
 
 		StringW wstr1;
 		wstr1.AssignCStr("test", 0, 2);
-		ASSERT_STREQ(L"te", wstr1);
+		ASSERT_EQ(L"te", wstr1);
 
 		StringW wstr2;
 		wstr2.AssignCStr(L"test", 0, 2);
-		ASSERT_STREQ(L"te", wstr1);
+		ASSERT_EQ(L"te", wstr1);
 	}
 
 	// 同型の NULL ポインタを指定する => 空文字が設定される
@@ -416,7 +416,7 @@ TEST_F(Test_Base_String, Format)
 		}
 
 		StringA str1 = StringA::Format("%s", buf1);
-		ASSERT_STREQ(str1, buf1);	// 同じ文字ができていればOK
+		ASSERT_EQ(str1, buf1);	// 同じ文字ができていればOK
 		
 #if 0	// 制限撤廃
 		ASSERT_THROW(
@@ -430,7 +430,7 @@ TEST_F(Test_Base_String, Format)
 	{
 		String str1(_T("str1"));
 		String str2 = String::Format(_T("[%s]"), str1);
-		ASSERT_STREQ(_T("[str1]"), str2);
+		ASSERT_EQ(_T("[str1]"), str2);
 	}
 #endif
 
@@ -523,43 +523,43 @@ TEST_F(Test_Base_String, Trim)
 	{
 		String str1(_T(" abc def "));
 		String t = str1.Trim();
-		ASSERT_STREQ(_T("abc def"), t);
+		ASSERT_EQ(_T("abc def"), t);
 	}
 	// 前だけ
 	{
 		String str1(_T(" abc def"));
 		String t = str1.Trim();
-		ASSERT_STREQ(_T("abc def"), t);
+		ASSERT_EQ(_T("abc def"), t);
 	}
 	// 後ろだけ
 	{
 		String str1(_T("abc def "));
 		String t = str1.Trim();
-		ASSERT_STREQ(_T("abc def"), t);
+		ASSERT_EQ(_T("abc def"), t);
 	}
 	// 空文字
 	{
 		String str1(_T(""));
 		String t = str1.Trim();
-		ASSERT_STREQ(_T(""), t);
+		ASSERT_EQ(_T(""), t);
 	}
 	// 空白だけ
 	{
 		String str1(_T(" "));
 		String t = str1.Trim();
-		ASSERT_STREQ(_T(""), t);
+		ASSERT_EQ(_T(""), t);
 	}
 	// 空白だけ * 2
 	{
 		String str1(_T("  "));
 		String t = str1.Trim();
-		ASSERT_STREQ(_T(""), t);
+		ASSERT_EQ(_T(""), t);
 	}
 	// 空白だけ * 3
 	{
 		String str1(_T("   "));
 		String t = str1.Trim();
-		ASSERT_STREQ(_T(""), t);
+		ASSERT_EQ(_T(""), t);
 	}
 }
 
@@ -569,11 +569,11 @@ TEST_F(Test_Base_String, Remove)
 	String str1(_T("abcdef"));
 
 	String str2 = str1.Remove(_T('c'));
-	ASSERT_STREQ(_T("abdef"), str2);
+	ASSERT_EQ(_T("abdef"), str2);
 
 	// 大文字小文字を区別しない
 	String str3 = str2.Remove(_T('D'), CaseSensitivity::CaseInsensitive);
-	ASSERT_STREQ(_T("abef"), str3);
+	ASSERT_EQ(_T("abef"), str3);
 }
 
 //---------------------------------------------------------------------
@@ -619,21 +619,21 @@ TEST_F(Test_Base_String, Compare)
 TEST_F(Test_Base_String, Left)
 {
 	String str1(_T("abcdef"));
-	ASSERT_STREQ(_T("ab"), str1.Left(2));
+	ASSERT_EQ(_T("ab"), str1.Left(2));
 }
 
 //---------------------------------------------------------------------
 TEST_F(Test_Base_String, Right)
 {
 	String str1(_T("abcdef"));
-	ASSERT_STREQ(_T("ef"), str1.Right(2));
+	ASSERT_EQ(_T("ef"), str1.Right(2));
 }
 
 //---------------------------------------------------------------------
 TEST_F(Test_Base_String, Mid)
 {
 	String str1(_T("abcdef"));
-	ASSERT_STREQ(_T("cde"), str1.Mid(2, 3));
+	ASSERT_EQ(_T("cde"), str1.Mid(2, 3));
 }
 
 //---------------------------------------------------------------------
@@ -644,9 +644,9 @@ TEST_F(Test_Base_String, Split)
 		String str(_T("a,b,c"));
 		Array<String> lines = str.Split(_T(","), StringSplitOptions::None);
 		EXPECT_EQ(3, lines.GetCount());
-		ASSERT_STREQ(_T("a"), lines[0]);
-		ASSERT_STREQ(_T("b"), lines[1]);
-		ASSERT_STREQ(_T("c"), lines[2]);
+		ASSERT_EQ(_T("a"), lines[0]);
+		ASSERT_EQ(_T("b"), lines[1]);
+		ASSERT_EQ(_T("c"), lines[2]);
 	}
 
 	// 空文字
@@ -710,9 +710,9 @@ TEST_F(Test_Base_String, Split)
 		String str = _T("a,,c");
 		Array<String> lines = str.Split(_T(","), StringSplitOptions::None);
 		EXPECT_EQ(3, lines.GetCount());
-		ASSERT_STREQ(_T("a"), lines[0]);
-		ASSERT_STREQ(_T(""), lines[1]);
-		ASSERT_STREQ(_T("c"), lines[2]);
+		ASSERT_EQ(_T("a"), lines[0]);
+		ASSERT_EQ(_T(""), lines[1]);
+		ASSERT_EQ(_T("c"), lines[2]);
 	}
 
 	// 空要素付き RemoveEmptyEntries
@@ -720,8 +720,8 @@ TEST_F(Test_Base_String, Split)
 		String str = _T("a,,c");
 		Array<String> lines = str.Split(_T(","), StringSplitOptions::RemoveEmptyEntries);
 		EXPECT_EQ(2, lines.GetCount());
-		ASSERT_STREQ(_T("a"), lines[0]);
-		ASSERT_STREQ(_T("c"), lines[1]);
+		ASSERT_EQ(_T("a"), lines[0]);
+		ASSERT_EQ(_T("c"), lines[1]);
 	}
 
 	// 先頭空要素付き
@@ -729,9 +729,9 @@ TEST_F(Test_Base_String, Split)
 		String str = _T(",b,c");
 		Array<String> lines = str.Split(_T(","), StringSplitOptions::None);
 		EXPECT_EQ(3, lines.GetCount());
-		ASSERT_STREQ(_T(""), lines[0]);
-		ASSERT_STREQ(_T("b"), lines[1]);
-		ASSERT_STREQ(_T("c"), lines[2]);
+		ASSERT_EQ(_T(""), lines[0]);
+		ASSERT_EQ(_T("b"), lines[1]);
+		ASSERT_EQ(_T("c"), lines[2]);
 	}
 
 	// 先頭空要素付き RemoveEmptyEntries
@@ -739,8 +739,8 @@ TEST_F(Test_Base_String, Split)
 		String str = _T(",b,c");
 		Array<String> lines = str.Split(_T(","), StringSplitOptions::RemoveEmptyEntries);
 		EXPECT_EQ(2, lines.GetCount());
-		ASSERT_STREQ(_T("b"), lines[0]);
-		ASSERT_STREQ(_T("c"), lines[1]);
+		ASSERT_EQ(_T("b"), lines[0]);
+		ASSERT_EQ(_T("c"), lines[1]);
 	}
 
 	// 終端空要素付き
@@ -748,9 +748,9 @@ TEST_F(Test_Base_String, Split)
 		String str = _T("a,b,");
 		Array<String> lines = str.Split(_T(","), StringSplitOptions::None);
 		EXPECT_EQ(3, lines.GetCount());
-		ASSERT_STREQ(_T("a"), lines[0]);
-		ASSERT_STREQ(_T("b"), lines[1]);
-		ASSERT_STREQ(_T(""), lines[2]);
+		ASSERT_EQ(_T("a"), lines[0]);
+		ASSERT_EQ(_T("b"), lines[1]);
+		ASSERT_EQ(_T(""), lines[2]);
 	}
 
 	// 終端空要素付き RemoveEmptyEntries
@@ -758,8 +758,8 @@ TEST_F(Test_Base_String, Split)
 		String str = _T("a,b,");
 		Array<String> lines = str.Split(_T(","), StringSplitOptions::RemoveEmptyEntries);
 		EXPECT_EQ(2, lines.GetCount());
-		ASSERT_STREQ(_T("a"), lines[0]);
-		ASSERT_STREQ(_T("b"), lines[1]);
+		ASSERT_EQ(_T("a"), lines[0]);
+		ASSERT_EQ(_T("b"), lines[1]);
 	}
 
 	// 両端空要素付き
@@ -767,9 +767,9 @@ TEST_F(Test_Base_String, Split)
 		String str = _T(",b,");
 		Array<String> lines = str.Split(_T(","), StringSplitOptions::None);
 		EXPECT_EQ(3, lines.GetCount());
-		ASSERT_STREQ(_T(""), lines[0]);
-		ASSERT_STREQ(_T("b"), lines[1]);
-		ASSERT_STREQ(_T(""), lines[2]);
+		ASSERT_EQ(_T(""), lines[0]);
+		ASSERT_EQ(_T("b"), lines[1]);
+		ASSERT_EQ(_T(""), lines[2]);
 	}
 
 	// 両端空要素付き RemoveEmptyEntries
@@ -777,7 +777,7 @@ TEST_F(Test_Base_String, Split)
 		String str = _T(",b,");
 		Array<String> lines = str.Split(_T(","), StringSplitOptions::RemoveEmptyEntries);
 		EXPECT_EQ(1, lines.GetCount());
-		ASSERT_STREQ(_T("b"), lines[0]);
+		ASSERT_EQ(_T("b"), lines[0]);
 	}
 }
 

@@ -92,10 +92,10 @@ TEST_F(Test_Base_Enum, ToString)
 	// <Test> enum 値を文字列に変換できる。
 	{
 		TestValues v1 = TestValues::ID2;
-		ASSERT_STREQ(_T("ID2"), v1.ToString());
+		ASSERT_EQ(_T("ID2"), v1.ToString());
 
 		v1 = TestValues::ID1;
-		ASSERT_STREQ(_T("ID1"), v1.ToString());
+		ASSERT_EQ(_T("ID1"), v1.ToString());
 	}
 }
 
@@ -227,12 +227,12 @@ TEST_F(Test_Base_Enum, FlagsToString)
 	// <Test> フラグ enum は | で区切って文字列化できる。
 	{
 		TestFlags v1 = TestFlags::Option2 | TestFlags::Option3;
-		ASSERT_STREQ(_T("Option2|Option3"), v1.ToString());
+		ASSERT_EQ(_T("Option2|Option3"), v1.ToString());
 	}
 	// <Test> 0 もメンバとして存在すれば文字列化できる。
 	{
 		TestFlags v1 = TestFlags::Option0;
-		ASSERT_STREQ(_T("Option0"), v1.ToString());
+		ASSERT_EQ(_T("Option0"), v1.ToString());
 	}
 }
 

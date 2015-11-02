@@ -249,7 +249,7 @@ void StringTraits::ConvertMultiToWide(std::wstring* out, const char* input, int 
 {
 	StringW strWide;
 	strWide.AssignCStr(input, inputLength);
-	(*out) = strWide;
+	(*out) = strWide.c_str();
 }
 
 //-----------------------------------------------------------------------------

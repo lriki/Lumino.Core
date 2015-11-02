@@ -51,7 +51,7 @@ public:
 	/// @overload Assign
 	GenericPathName(const wchar_t* path) { Assign(path); }
 	/// @overload Assign
-	explicit GenericPathName(const GenericStringT& path) { Assign(path); }
+	GenericPathName(const GenericStringT& path) { Assign(path); }
 
 	/// @overload AssignUnderBasePath
 	GenericPathName(const PathNameT& basePath, const char* relativePath) { AssignUnderBasePath(basePath, relativePath); }

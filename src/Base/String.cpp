@@ -343,11 +343,11 @@ const TChar& GenericString<TChar>::operator[](int index) const
 //-----------------------------------------------------------------------------
 // operator  cast
 //-----------------------------------------------------------------------------
-template<typename TChar>
-GenericString<TChar>::operator const TChar*() const
-{
-	return c_str();
-}
+//template<typename TChar>
+//GenericString<TChar>::operator const TChar*() const
+//{
+//	return c_str();
+//}
 
 //-----------------------------------------------------------------------------
 //
@@ -875,7 +875,7 @@ GenericString<TChar> GenericString<TChar>::Format(const GenericString<TChar>& fo
 	{
 		TChar buf[MaxFormatLength + 1];
 		memset(buf, 0, sizeof(buf));
-		StringTraits::tvsnprintf_l(buf, MaxFormatLength + 1, format, Locale::GetDefault().GetNativeLocale(), args2);
+		StringTraits::tvsnprintf_l(buf, MaxFormatLength + 1, format.c_str(), Locale::GetDefault().GetNativeLocale(), args2);
 		//StringTraits::VSPrintf(buf, MaxFormatLength + 1, format, args2);
 		va_end(args1);
 		va_end(args2);
@@ -884,7 +884,7 @@ GenericString<TChar> GenericString<TChar>::Format(const GenericString<TChar>& fo
 	else
 	{
 		ByteBuffer buf(len + 1);
-		StringTraits::tvsnprintf_l((TChar*)buf.GetData(), len + 1, format, Locale::GetDefault().GetNativeLocale(), args2);
+		StringTraits::tvsnprintf_l((TChar*)buf.GetData(), len + 1, format.c_str(), Locale::GetDefault().GetNativeLocale(), args2);
 		//StringTraits::VSPrintf((TChar*)buf.GetData(), buf.GetSize(), format, args2);
 		va_end(args1);
 		va_end(args2);

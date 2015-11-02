@@ -272,6 +272,11 @@ size_t FileSystem::GetFileSize( FILE* stream )
 
 #endif
 
+
+
+template<typename TChar> static bool Exists2(const TChar* filePath);
+template<typename TString> static bool Exists2(const TString& filePath);
+
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
@@ -440,7 +445,7 @@ void FileSystem::CreateDirectoryInternal(const TChar* path)
 
 	for (int i = pathList.GetCount() - 1; i >= 0; --i)
 	{
-		bool r = FileSystem::mkdir(pathList[i]);
+		bool r = FileSystem::mkdir(pathList[i].c_str());
 		LN_THROW(r, IOException);
 	}
 }

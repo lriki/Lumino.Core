@@ -17,6 +17,11 @@ public:
 	/*
 		@brief	指定した JSON 形式文字列を解析し、ドキュメントを構築します。
 	*/
+	void Parse(const String& text);
+
+	/*
+		@brief	指定した JSON 形式文字列を解析し、ドキュメントを構築します。
+	*/
 	void Parse(const TCHAR* text, int len = -1);
 
 	/*

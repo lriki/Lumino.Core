@@ -23,20 +23,20 @@
 #define LN_EXCEPTION_BASIC_CONSTRUCTOR_IMPLEMENT(className, captionStringId) \
 	className::className() \
 	{ \
-		SetMessage(InternalResource::GetString(captionStringId)); \
+		SetMessage(InternalResource::GetString(captionStringId).c_str()); \
 	} \
 	className::className(const char* message, ...) \
 	{ \
 		va_list args; \
 		va_start(args, message); \
-		SetMessage(InternalResource::GetString(captionStringId), message, args); \
+		SetMessage(InternalResource::GetString(captionStringId).c_str(), message, args); \
 		va_end(args); \
 	} \
 	className::className(const wchar_t* message, ...) \
 	{ \
 		va_list args; \
 		va_start(args, message); \
-		SetMessage(InternalResource::GetString(captionStringId), message, args); \
+		SetMessage(InternalResource::GetString(captionStringId).c_str(), message, args); \
 		va_end(args); \
 	} \
 	className::~className() throw() \

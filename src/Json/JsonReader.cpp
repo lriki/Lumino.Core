@@ -31,10 +31,19 @@ JsonReader::~JsonReader()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+void JsonReader::Parse(const String& text)
+{
+	LN_VERIFY_RETURN(text != NULL);
+	StringReader textReader(text);
+	Parse(&textReader);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 void JsonReader::Parse(const TCHAR* text, int len)
 {
 	LN_VERIFY_RETURN(text != NULL);
-
 	StringReader textReader(String(text, len));
 	Parse(&textReader);
 }
