@@ -8,6 +8,16 @@ LN_NAMESPACE_BEGIN
 
 /**
 	@brief		文字列から読み取る TextReader を実装します。
+
+	@section	ファイルを開き、1行ずつ読み取る
+	~~~~~~~~~~~~~~~{.cpp}
+	StreamReader reader(argv[1]);
+	String line;
+	while (reader.ReadLine(&line))
+	{
+		Console.WriteLine(line);
+	}
+	~~~~~~~~~~~~~~~
 */
 class StringReader
 	: public TextReader
