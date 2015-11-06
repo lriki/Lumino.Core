@@ -79,7 +79,7 @@ uint64_t Environment::GetTickCountNS()
 	::QueryPerformanceCounter(&current);
 
 	if (freq.QuadPart) {
-		return static_cast<long long>(((double)current.QuadPart) * 1000 * 1000 * 1000 / freq.QuadPart);		// ns 単位
+		return (uint64_t)((current.QuadPart * 1000 * 1000 * 1000) / freq.QuadPart);
 	}
     return 0;
     
