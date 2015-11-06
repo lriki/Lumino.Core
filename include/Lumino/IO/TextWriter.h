@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 #include "../Base/RefObject.h"
 #include "../Base/ByteBuffer.h"
@@ -10,7 +10,7 @@
 LN_NAMESPACE_BEGIN
 
 /**
-	@brief	Šeíƒf[ƒ^‚ğ•¶š—ñ‚Æ‚µ‚Ä‘‚«‚İ‚ğs‚¤‹@”\‚Ìƒx[ƒXƒNƒ‰ƒX‚Å‚·B‹@”\‚ğg—p‚·‚é‚É‚Í StreamWriter ‚â StringWriter ‚ğg—p‚µ‚Ü‚·B
+	@brief		å„ç¨®ãƒ‡ãƒ¼ã‚¿ã‚’æ–‡å­—åˆ—ã¨ã—ã¦æ›¸ãè¾¼ã¿ã‚’è¡Œã†æ©Ÿèƒ½ã®ãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹ã§ã™ã€‚æ©Ÿèƒ½ã‚’ä½¿ç”¨ã™ã‚‹ã«ã¯ StreamWriter ã‚„ StringWriter ã‚’ä½¿ç”¨ã—ã¾ã™ã€‚
 */
 class TextWriter
 	: public RefObject
@@ -22,126 +22,109 @@ public:
 public:
 	
 	/**
-		@brief		‚±‚Ì TextWriter ‚ªo—Í‚·‚é•¶š—ñ‚ÌƒGƒ“ƒR[ƒfƒBƒ“ƒO‚ğw’è‚µ‚Ü‚·B
-		@details	İ’è‚·‚éê‡A‰‰ñ‚Ì‘‚«‚İ‚Ì‘O‚Éİ’è‚·‚é•K—v‚ª‚ ‚è‚Ü‚·B“r’†‚©‚ç•ÏX‚Í‚Å‚«‚Ü‚¹‚ñB
+		@brief		ã“ã® TextWriter ãŒå‡ºåŠ›ã™ã‚‹æ–‡å­—åˆ—ã®ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°ã‚’æŒ‡å®šã—ã¾ã™ã€‚
+		@details	è¨­å®šã™ã‚‹å ´åˆã€åˆå›ã®æ›¸ãè¾¼ã¿ã®å‰ã«è¨­å®šã™ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚é€”ä¸­ã‹ã‚‰å¤‰æ›´ã¯ã§ãã¾ã›ã‚“ã€‚
 	*/
 	void SetEncoding(Encoding* encoding);
 
 	/**
-		@brief		‚±‚Ì TextWriter ‚ªo—Í‚·‚é•¶š—ñ‚ÌƒGƒ“ƒR[ƒfƒBƒ“ƒO‚ğæ“¾‚µ‚Ü‚·B
+		@brief		ã“ã® TextWriter ãŒå‡ºåŠ›ã™ã‚‹æ–‡å­—åˆ—ã®ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°ã‚’å–å¾—ã—ã¾ã™ã€‚
 	*/
 	Encoding* GetEncoding() const;
 
 	/**
-		@brief		‚±‚Ì TextWriter ‚Åg—p‚·‚é‰üs•¶š—ñ‚ğİ’è‚µ‚Ü‚·B
-		@details	‹K’è’l‚Í String::GetNewLine() ‚Åæ“¾‚Å‚«‚é’l‚Å‚·B
+		@brief		ã“ã® TextWriter ã§ä½¿ç”¨ã™ã‚‹æ”¹è¡Œæ–‡å­—åˆ—ã‚’è¨­å®šã—ã¾ã™ã€‚
+		@details	è¦å®šå€¤ã¯ String::GetNewLine() ã§å–å¾—ã§ãã‚‹å€¤ã§ã™ã€‚
 	*/
 	void SetNewLine(const String& newLine);
 
 	/**
-		@brief		•¶š—ñ‚Ì‘‚«‚İ‚Ég—p‚·‚é‘®‚ğ•\‚·ƒƒP[ƒ‹‚ğw’è‚µ‚Ü‚·B
+		@brief		æ–‡å­—åˆ—ã®æ›¸ãè¾¼ã¿æ™‚ã«ä½¿ç”¨ã™ã‚‹æ›¸å¼ã‚’è¡¨ã™ãƒ­ã‚±ãƒ¼ãƒ«ã‚’æŒ‡å®šã—ã¾ã™ã€‚
 	*/
 	void SetFormatLocale(const Locale& locale);
 
 	/**
-		@brief		•¶š—ñ‚ğ‘‚«‚İ‚Ü‚·B
-		@param[in]	str		: ‘‚«‚Ş•¶š—ñ
-		@param[in]	len		: ‘‚«‚Ş•¶š” (-1 ‚Ìê‡‚Í \0 ‚Ü‚Å)
+		@brief		æ–‡å­—åˆ—ã‚’æ›¸ãè¾¼ã¿ã¾ã™ã€‚
+		@param[in]	str		: æ›¸ãè¾¼ã‚€æ–‡å­—åˆ—
+		@param[in]	len		: æ›¸ãè¾¼ã‚€æ–‡å­—æ•° (-1 ã®å ´åˆã¯ \0 ã¾ã§)
 	*/
 	void Write(const TCHAR* str, int len = -1);
 	void Write(const String& str);
 
 	/**
-		@brief		‘®‚ğw’è‚µ‚Ä•¶š—ñ‚ğ‘‚«‚İ‚Ü‚·B
-		@param[in]	str		: ‘®w’è•¶š—ñ
-		@param[in]	...		: ˆø”ƒŠƒXƒg
-		@details	’ˆÓ“_“™‚Í String::Format() ‚ğQÆ‚µ‚Ä‚­‚¾‚³‚¢B
+		@brief		æ–‡å­—ã‚’æ›¸ãè¾¼ã¿ã¾ã™ã€‚
+		@param[in]	ch		: æ›¸ãè¾¼ã‚€æ–‡å­—
 	*/
-	void WriteFormat(const TCHAR* format, ...);
+	void Write(TCHAR ch);
 
 	/**
-		@brief		•¶š‚ğ‘‚«‚İ‚Ü‚·B
-		@param[in]	ch		: ‘‚«‚Ş•¶š
+		@brief		æ•´æ•°å€¤ã‚’æ–‡å­—åˆ—ã«å¤‰æ›ã—ã¦æ›¸ãè¾¼ã¿ã¾ã™ã€‚
+		@param[in]	value	: æ›¸ãè¾¼ã‚€å€¤
 	*/
-	void WriteChar(TCHAR ch);
+	void Write(int16_t value);
+	void Write(int32_t value);			/**< @copydoc Write(int16_t) */
+	void Write(int64_t value);			/**< @copydoc Write(int16_t) */
+	void Write(uint16_t value);			/**< @copydoc Write(int16_t) */
+	void Write(uint32_t value);			/**< @copydoc Write(int16_t) */
+	void Write(uint64_t value);			/**< @copydoc Write(int16_t) */
 
 	/**
-		@brief		®”’l‚ğ•¶š—ñ‚É•ÏŠ·‚µ‚Ä‘‚«‚İ‚Ü‚·B
-		@param[in]	value	: ‘‚«‚Ş’l
+		@brief		å®Ÿæ•°å€¤ã‚’æ–‡å­—åˆ—ã«å¤‰æ›ã—ã¦æ›¸ãè¾¼ã¿ã¾ã™ã€‚
+		@param[in]	value	: æ›¸ãè¾¼ã‚€å€¤
+		@attention	å°æ•°ç‚¹æ–‡å­—ã¯ãƒ­ã‚±ãƒ¼ãƒ«ã«ä¾å­˜ã—ã¾ã™ã€‚(ä¾‹ãˆã°ãƒ•ãƒ©ãƒ³ã‚¹èªã§ã¯ ',' ã«ãªã‚Šã¾ã™)
+					å¿…ãš '.' ã§æ›¸ãè¾¼ã¾ã‚Œã‚‹ã‚ˆã†ã«ã™ã‚‹ã«ã¯ã€SetFormatLocale() ã§ ANSI ãƒ­ã‚±ãƒ¼ãƒ«ã‚’æŒ‡å®šã—ã¦ãã ã•ã„ã€‚
 	*/
-	void WriteInt16(int16_t value);			///< @copydoc WriteInt16
-	void WriteInt32(int32_t value);			///< @copydoc WriteInt16
-	void WriteInt64(int64_t value);			///< @copydoc WriteInt16
-	void WriteByte(byte_t value);			///< @copydoc WriteInt16
-	void WriteUInt16(uint16_t value);		///< @copydoc WriteInt16
-	void WriteUInt32(uint32_t value);		///< @copydoc WriteInt16
-	void WriteUInt64(uint64_t value);		///< @copydoc WriteInt16
-
-	/**
-		@brief		À”’l‚ğ•¶š—ñ‚É•ÏŠ·‚µ‚Ä‘‚«‚İ‚Ü‚·B
-		@param[in]	value	: ‘‚«‚Ş’l
-		@attention	¬”“_•¶š‚ÍƒƒP[ƒ‹‚ÉˆË‘¶‚µ‚Ü‚·B(—á‚¦‚Îƒtƒ‰ƒ“ƒXŒê‚Å‚Í ',' ‚É‚È‚è‚Ü‚·)
-					•K‚¸ '.' ‚Å‘‚«‚Ü‚ê‚é‚æ‚¤‚É‚·‚é‚É‚ÍASetFormatLocale() ‚Å ANSI ƒƒP[ƒ‹‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢B
-	*/
-	void WriteFloat(float value);
-	void WriteDouble(double value);			///< @copydoc WriteFloat
+	void Write(float value);
+	void Write(double value);			/**< @copydoc Write(float) */
 	
 	/**
-		@brief		‰üs‚ğ‘‚«‚İ‚Ü‚·B
+		@brief		æ”¹è¡Œã‚’æ›¸ãè¾¼ã¿ã¾ã™ã€‚
 	*/
 	void WriteLine();
 
 	/**
-		@brief		•¶š—ñ‚ğ‘‚«‚İA‘±‚¯‚Ä‰üs‚ğ‘‚«‚İ‚Ü‚·B
-		@param[in]	str		: ‘‚«‚Ş•¶š—ñ
-		@param[in]	len		: ‘‚«‚Ş•¶š” (-1 ‚Ìê‡‚Í \0 ‚Ü‚Å)
+		@brief		æ–‡å­—åˆ—ã‚’æ›¸ãè¾¼ã¿ã€ç¶šã‘ã¦æ”¹è¡Œã‚’æ›¸ãè¾¼ã¿ã¾ã™ã€‚
+		@param[in]	str		: æ›¸ãè¾¼ã‚€æ–‡å­—åˆ—
+		@param[in]	len		: æ›¸ãè¾¼ã‚€æ–‡å­—æ•° (-1 ã®å ´åˆã¯ \0 ã¾ã§)
 	*/
 	void WriteLine(const TCHAR* str, int len = -1);
-
-	/**
-		@brief		‘®‚ğw’è‚µ‚Ä•¶š—ñ‚ğ‘‚«‚İA‘±‚¯‚Ä‰üs‚ğ‘‚«‚İ‚Ü‚·B
-		@param[in]	str		: ‘®w’è•¶š—ñ
-		@param[in]	...		: ˆø”ƒŠƒXƒg
-		@details	’ˆÓ“_“™‚Í String::Format() ‚ğQÆ‚µ‚Ä‚­‚¾‚³‚¢B
-	*/
-	void WriteLineFormat(const TCHAR* format, ...);
+	void WriteLine(const String& str);
 	
 	/**
-		@brief		•¶š‚ğ‘‚«‚İ‚Ü‚·B
-		@param[in]	ch		: ‘‚«‚Ş•¶š
+		@brief		æ–‡å­—ã‚’æ›¸ãè¾¼ã¿ã¾ã™ã€‚
+		@param[in]	ch		: æ›¸ãè¾¼ã‚€æ–‡å­—
 	*/
-	void WriteLineChar(TCHAR ch);
+	void WriteLine(TCHAR ch);
 
 	/**
-		@brief		®”’l‚ğ•¶š—ñ‚É•ÏŠ·‚µ‚Ä‘‚«‚İA‘±‚¯‚Ä‰üs‚ğ‘‚«‚İ‚Ü‚·B
-		@param[in]	value	: ‘‚«‚Ş’l
+		@brief		æ•´æ•°å€¤ã‚’æ–‡å­—åˆ—ã«å¤‰æ›ã—ã¦æ›¸ãè¾¼ã¿ã€ç¶šã‘ã¦æ”¹è¡Œã‚’æ›¸ãè¾¼ã¿ã¾ã™ã€‚
+		@param[in]	value	: æ›¸ãè¾¼ã‚€å€¤
 	*/
-	void WriteLineInt16(int16_t value);		///< @copydoc WriteLineInt16
-	void WriteLineInt32(int32_t value);		///< @copydoc WriteLineInt16
-	void WriteLineInt64(int64_t value);		///< @copydoc WriteLineInt16
-	void WriteLineByte(byte_t value);		///< @copydoc WriteLineInt16
-	void WriteLineUInt16(uint16_t value);	///< @copydoc WriteLineInt16
-	void WriteLineUInt32(uint32_t value);	///< @copydoc WriteLineInt16
-	void WriteLineUInt64(uint64_t value);	///< @copydoc WriteLineInt16
+	void WriteLine(int16_t value);
+	void WriteLine(int32_t value);		/**< @overload WriteLine(int16_t) */
+	void WriteLine(int64_t value);		/**< @overload WriteLine(int16_t) */
+	void WriteLine(uint16_t value);		/**< @overload WriteLine(int16_t) */
+	void WriteLine(uint32_t value);		/**< @overload WriteLine(int16_t) */
+	void WriteLine(uint64_t value);		/**< @overload WriteLine(int16_t) */
 
 	/**
-		@brief		À”’l‚ğ•¶š—ñ‚É•ÏŠ·‚µ‚Ä‘‚«‚İA‘±‚¯‚Ä‰üs‚ğ‘‚«‚İ‚Ü‚·B
-		@param[in]	value		: ‘‚«‚Ş’l
-		@attention	¬”“_•¶š‚ÍƒƒP[ƒ‹‚ÉˆË‘¶‚µ‚Ü‚·B(—á‚¦‚Îƒtƒ‰ƒ“ƒXŒê‚Å‚Í ',' ‚É‚È‚è‚Ü‚·)
-					•K‚¸ '.' ‚Å‘‚«‚Ü‚ê‚é‚æ‚¤‚É‚·‚é‚É‚ÍASetFormatLocale() ‚Å ANSI ƒƒP[ƒ‹‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢B
+		@brief		å®Ÿæ•°å€¤ã‚’æ–‡å­—åˆ—ã«å¤‰æ›ã—ã¦æ›¸ãè¾¼ã¿ã€ç¶šã‘ã¦æ”¹è¡Œã‚’æ›¸ãè¾¼ã¿ã¾ã™ã€‚
+		@param[in]	value		: æ›¸ãè¾¼ã‚€å€¤
+		@attention	å°æ•°ç‚¹æ–‡å­—ã¯ãƒ­ã‚±ãƒ¼ãƒ«ã«ä¾å­˜ã—ã¾ã™ã€‚(ä¾‹ãˆã°ãƒ•ãƒ©ãƒ³ã‚¹èªã§ã¯ ',' ã«ãªã‚Šã¾ã™)
+					å¿…ãš '.' ã§æ›¸ãè¾¼ã¾ã‚Œã‚‹ã‚ˆã†ã«ã™ã‚‹ã«ã¯ã€SetFormatLocale() ã§ ANSI ãƒ­ã‚±ãƒ¼ãƒ«ã‚’æŒ‡å®šã—ã¦ãã ã•ã„ã€‚
 	*/
-	void WriteLineFloat(float value);
-	void WriteLineDouble(double value);		///< @copydoc WriteLineFloat
+	void WriteLine(float value);
+	void WriteLine(double value);		/**< @copydoc WriteLine(float) */
 
 	/**
-		@brief		ƒoƒbƒtƒ@ƒŠƒ“ƒOƒf[ƒ^‚ğ‘S‚ÄƒXƒgƒŠ[ƒ€‚É‘‚«o‚µ‚Ü‚·B
+		@brief		ãƒãƒƒãƒ•ã‚¡ãƒªãƒ³ã‚°ãƒ‡ãƒ¼ã‚¿ã‚’å…¨ã¦ã‚¹ãƒˆãƒªãƒ¼ãƒ ã«æ›¸ãå‡ºã—ã¾ã™ã€‚
 	*/
-	virtual void Flash();
+	virtual void Flash() = 0;
 
 protected:
 
 	/**
-		@brief		ƒf[ƒ^‚Ì‘‚«‚İæ‚ğÀ‘•‚µ‚Ü‚·B
+		@brief		ãƒ‡ãƒ¼ã‚¿ã®æ›¸ãè¾¼ã¿å…ˆã‚’å®Ÿè£…ã—ã¾ã™ã€‚
 	*/
 	virtual void WriteOverride(const void* data, size_t byteCount) = 0;
 

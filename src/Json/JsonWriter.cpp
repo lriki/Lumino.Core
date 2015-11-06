@@ -175,11 +175,11 @@ void JsonWriter::OnPrefix(PrefixType type, int valueCount)
 {
 	if (type == PrefixType_Array || type == PrefixType_Object) {
 		if (valueCount > 0) {
-			m_textWriter->WriteChar(_T(','));
+			m_textWriter->Write(_T(','));
 		}
 	}
 	else {
-		m_textWriter->WriteChar(_T(':'));
+		m_textWriter->Write(_T(':'));
 	}
 }
 
@@ -188,7 +188,7 @@ void JsonWriter::OnPrefix(PrefixType type, int valueCount)
 //-----------------------------------------------------------------------------
 void JsonWriter::OnStartObject()
 {
-	m_textWriter->WriteChar(_T('{'));
+	m_textWriter->Write(_T('{'));
 }
 
 //-----------------------------------------------------------------------------
@@ -196,7 +196,7 @@ void JsonWriter::OnStartObject()
 //-----------------------------------------------------------------------------
 void JsonWriter::OnEndObject()
 {
-	m_textWriter->WriteChar(_T('}'));
+	m_textWriter->Write(_T('}'));
 }
 
 //-----------------------------------------------------------------------------
@@ -204,7 +204,7 @@ void JsonWriter::OnEndObject()
 //-----------------------------------------------------------------------------
 void JsonWriter::OnStartArray()
 {
-	m_textWriter->WriteChar(_T('['));
+	m_textWriter->Write(_T('['));
 }
 
 //-----------------------------------------------------------------------------
@@ -212,7 +212,7 @@ void JsonWriter::OnStartArray()
 //-----------------------------------------------------------------------------
 void JsonWriter::OnEndArray()
 {
-	m_textWriter->WriteChar(_T(']'));
+	m_textWriter->Write(_T(']'));
 }
 
 //-----------------------------------------------------------------------------
@@ -249,7 +249,7 @@ void JsonWriter::OnBool(bool value)
 //-----------------------------------------------------------------------------
 void JsonWriter::OnDouble(double value)
 {
-	m_textWriter->WriteDouble(value);
+	m_textWriter->Write(value);
 }
 
 //-----------------------------------------------------------------------------

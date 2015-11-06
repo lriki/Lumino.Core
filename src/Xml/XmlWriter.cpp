@@ -1,4 +1,4 @@
-
+ï»¿
 #include "../Internal.h"
 #include <Lumino/IO/PathName.h>
 #include <Lumino/IO/StreamWriter.h>
@@ -70,7 +70,7 @@ void XmlWriter::WriteEndDocument()
 void XmlWriter::WriteStartElement(const String& name)
 {
 	PreWrite(XmlNodeType::Element);
-	m_textWriter->WriteChar(_T('<'));
+	m_textWriter->Write(_T('<'));
 	m_textWriter->Write(name);
 
 	ElementInfo info;
@@ -96,7 +96,7 @@ void XmlWriter::WriteEndElement()
 	{
 		m_textWriter->Write(_T("</"));
 		m_textWriter->Write(m_elementStack.GetTop().Name);
-		m_textWriter->WriteChar(_T('>'));
+		m_textWriter->Write(_T('>'));
 	}
 
 	m_elementStack.Pop();
@@ -171,7 +171,7 @@ void XmlWriter::WriteStartAttribute(const String& name)
 {
 	LN_CHECK_STATE(m_state == State_StartElement || m_state == State_Attribute);
 
-	m_textWriter->WriteChar(_T(' '));
+	m_textWriter->Write(_T(' '));
 	m_textWriter->Write(name);
 	m_textWriter->Write(_T("=\""));
 	m_state = State_Attribute;
@@ -202,7 +202,7 @@ void XmlWriter::WriteStringInternal(const TCHAR* str, int len, bool inAttribute)
 		int extra = enc->GetLeadExtraLength(pos, end - pos);
 		if (extra > 0) 
 		{
-			// æsƒoƒCƒg‚¾‚Á‚½B‚»‚Ì‚Ü‚Üi‚ß‚é
+			// å…ˆè¡Œãƒã‚¤ãƒˆã ã£ãŸã€‚ãã®ã¾ã¾é€²ã‚ã‚‹
 			pos += extra;
 		}
 		else
@@ -212,50 +212,50 @@ void XmlWriter::WriteStringInternal(const TCHAR* str, int len, bool inAttribute)
 			{
 			case (char)0xA:
 			case (char)0xD:
-				m_textWriter->Write(begin, pos - begin);	// pos ‚Ì‘O‚Ü‚Å‚ğo—Í
+				m_textWriter->Write(begin, pos - begin);	// pos ã®å‰ã¾ã§ã‚’å‡ºåŠ›
 				begin = pos + 1;
 
 				if (inAttribute) {
-					// 3.3.3 ‘®«’l³‹K‰»
-					m_textWriter->WriteChar(_T(' '));
+					// 3.3.3 å±æ€§å€¤æ­£è¦åŒ–
+					m_textWriter->Write(_T(' '));
 				}
 				else {
-					m_textWriter->WriteChar(ch);
+					m_textWriter->Write(ch);
 				}
 				break;
 			case '<':
-				m_textWriter->Write(begin, pos - begin);	// pos ‚Ì‘O‚Ü‚Å‚ğo—Í
+				m_textWriter->Write(begin, pos - begin);	// pos ã®å‰ã¾ã§ã‚’å‡ºåŠ›
 				begin = pos + 1;
 				m_textWriter->Write(_T("&lt;"), 4);
 				break;
 			case '>':
-				m_textWriter->Write(begin, pos - begin);	// pos ‚Ì‘O‚Ü‚Å‚ğo—Í
+				m_textWriter->Write(begin, pos - begin);	// pos ã®å‰ã¾ã§ã‚’å‡ºåŠ›
 				begin = pos + 1;
 				m_textWriter->Write(_T("&gt;"), 4);
 				break;
 			case '&':
-				m_textWriter->Write(begin, pos - begin);	// pos ‚Ì‘O‚Ü‚Å‚ğo—Í
+				m_textWriter->Write(begin, pos - begin);	// pos ã®å‰ã¾ã§ã‚’å‡ºåŠ›
 				begin = pos + 1;
 				m_textWriter->Write(_T("&amp;"), 5);
 				break;
 			case '\'':
-				m_textWriter->Write(begin, pos - begin);	// pos ‚Ì‘O‚Ü‚Å‚ğo—Í
+				m_textWriter->Write(begin, pos - begin);	// pos ã®å‰ã¾ã§ã‚’å‡ºåŠ›
 				begin = pos + 1;
 				if (inAttribute && m_quoteChar == ch) {
 					m_textWriter->Write(_T("&apos;"), 6);
 				}
 				else {
-					m_textWriter->WriteChar('\'');
+					m_textWriter->Write('\'');
 				}
 				break;
 			case '"':
-				m_textWriter->Write(begin, pos - begin);	// pos ‚Ì‘O‚Ü‚Å‚ğo—Í
+				m_textWriter->Write(begin, pos - begin);	// pos ã®å‰ã¾ã§ã‚’å‡ºåŠ›
 				begin = pos + 1;
 				if (inAttribute && m_quoteChar == ch) {
 					m_textWriter->Write(_T("&quot;"), 6);
 				}
 				else {
-					m_textWriter->WriteChar('"');
+					m_textWriter->Write('"');
 				}
 				break;
 			default:
@@ -286,7 +286,7 @@ void XmlWriter::PreWrite(XmlNodeType type)
 	case XmlNodeType::Element:
 	case XmlNodeType::CDATA:
 	case XmlNodeType::Comment:
-		if (m_state == XmlNodeType::Attribute) {	// —v‘f‚ÌƒlƒXƒg
+		if (m_state == XmlNodeType::Attribute) {	// è¦ç´ ã®ãƒã‚¹ãƒˆ
 			WriteEndAttribute();
 			WriteStartTagEnd(false);
 		}
@@ -294,7 +294,7 @@ void XmlWriter::PreWrite(XmlNodeType type)
 			WriteStartTagEnd(false);
 		}
 		if (type == XmlNodeType::CDATA) {
-			// CDATA ‚Í‰üs‚µ‚È‚¢
+			// CDATA ã¯æ”¹è¡Œã—ãªã„
 			m_elementStack.GetTop().IndentSkip = true;
 		}
 		if (m_state != State_Start) {
@@ -303,7 +303,7 @@ void XmlWriter::PreWrite(XmlNodeType type)
 		break;
 	case XmlNodeType::EndElement:
 		if (m_state == State_StartElement) {
-			WriteStartTagEnd(true);		// ‚Ü‚¾ŠJnƒ^ƒO’†‚È‚Ì‚É End ‚ª—ˆ‚½‚ç‹óƒ^ƒO
+			WriteStartTagEnd(true);		// ã¾ã é–‹å§‹ã‚¿ã‚°ä¸­ãªã®ã« End ãŒæ¥ãŸã‚‰ç©ºã‚¿ã‚°
 		}
 		else {
 			Indent(true);
@@ -313,15 +313,15 @@ void XmlWriter::PreWrite(XmlNodeType type)
 		if (m_state == State_StartElement) {
 			WriteStartTagEnd(false);
 		}
-		// Text ‚Í‘O‚Ìƒ^ƒO‚Æ‚ÌŠÔ‚É‰üs‚âƒCƒ“ƒfƒ“ƒg‚ğ‚µ‚È‚¢B
-		// ‚Ü‚½AŸ‚ÌI—¹ƒ^ƒO‚ğ‘‚«‚Ş‚Æ‚«‚à‰üs‚âƒCƒ“ƒfƒ“ƒg‚µ‚È‚¢B
+		// Text ã¯å‰ã®ã‚¿ã‚°ã¨ã®é–“ã«æ”¹è¡Œã‚„ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã‚’ã—ãªã„ã€‚
+		// ã¾ãŸã€æ¬¡ã®çµ‚äº†ã‚¿ã‚°ã‚’æ›¸ãè¾¼ã‚€ã¨ãã‚‚æ”¹è¡Œã‚„ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã—ãªã„ã€‚
 		m_elementStack.GetTop().IndentSkip = true;
 		break;
 	}
 }
 
 //-----------------------------------------------------------------------------
-// —v‘f‚ÌŠJnƒ^ƒO‚ğ•Â‚¶‚é
+// è¦ç´ ã®é–‹å§‹ã‚¿ã‚°ã‚’é–‰ã˜ã‚‹
 //-----------------------------------------------------------------------------
 void XmlWriter::WriteStartTagEnd(bool empty)
 {
@@ -334,7 +334,7 @@ void XmlWriter::WriteStartTagEnd(bool empty)
 }
 
 //-----------------------------------------------------------------------------
-//	beforeEndElement : true ‚Ìê‡A‚±‚ÌŒã‚ÉI—¹ƒ^ƒO‚ğ“ü‚ê‚æ‚¤‚Æ‚µ‚Ä‚¢‚éB
+//	beforeEndElement : true ã®å ´åˆã€ã“ã®å¾Œã«çµ‚äº†ã‚¿ã‚°ã‚’å…¥ã‚Œã‚ˆã†ã¨ã—ã¦ã„ã‚‹ã€‚
 //-----------------------------------------------------------------------------
 void XmlWriter::Indent(bool beforeEndElement)
 {

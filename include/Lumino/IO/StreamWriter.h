@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 #include "Stream.h"
 #include "PathName.h"
@@ -7,7 +7,14 @@
 LN_NAMESPACE_BEGIN
 
 /**
-	@brief	•¶š—ñ‚ğ“Á’è‚ÌƒGƒ“ƒR[ƒfƒBƒ“ƒO‚ÅƒXƒgƒŠ[ƒ€‚É‘‚«‚Ş‚½‚ß‚Ì TextWriter ‚ÌÀ‘•‚Å‚·B
+	@brief		æ–‡å­—åˆ—ã‚’ç‰¹å®šã®ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°ã§ã‚¹ãƒˆãƒªãƒ¼ãƒ ã«æ›¸ãè¾¼ã‚€ãŸã‚ã® TextWriter ã®å®Ÿè£…ã§ã™ã€‚
+	@section	ãƒ•ã‚¡ã‚¤ãƒ«ã«1è¡Œãšã¤æ›¸ãè¾¼ã¿ã€UTF-8 ã¨ã—ã¦ä¿å­˜ã™ã‚‹
+	~~~~~~~~~~~~~~~{.cpp}
+	StreamWriter writer(_T("file"), Encoding::GetUTF8Encoding());
+	writer.WriteLine(_T("text"));
+	writer.WriteLine(10);
+	writer.WriteLine(3.14);
+	~~~~~~~~~~~~~~~
 */
 class StreamWriter
 	: public TextWriter
@@ -15,19 +22,19 @@ class StreamWriter
 public:
 
 	/**
-		@brief		w’è‚µ‚½ƒXƒgƒŠ[ƒ€—p‚Ì StreamWriter ‚ğ‰Šú‰»‚µ‚Ü‚·B
-		@param[in]	filePath	: ‘‚«‚İæƒtƒ@ƒCƒ‹‚ÌƒpƒX
-		@param[in]	encoding	: ‘‚«‚İ‚Ég—p‚·‚éƒGƒ“ƒR[ƒfƒBƒ“ƒO
-		@details	encoding ‚ª NULL ‚Ìê‡‚Í•¶š—ñ‚Ì‘‚«‚İ‚É•¶šƒR[ƒh‚ÌƒfƒR[ƒh‚ğs‚¢‚Ü‚¹‚ñB
+		@brief		æŒ‡å®šã—ãŸã‚¹ãƒˆãƒªãƒ¼ãƒ ç”¨ã® StreamWriter ã‚’åˆæœŸåŒ–ã—ã¾ã™ã€‚
+		@param[in]	filePath	: æ›¸ãè¾¼ã¿å…ˆãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹
+		@param[in]	encoding	: æ›¸ãè¾¼ã¿æ™‚ã«ä½¿ç”¨ã™ã‚‹ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°
+		@details	encoding ãŒ NULL ã®å ´åˆã¯æ–‡å­—åˆ—ã®æ›¸ãè¾¼ã¿æ™‚ã«æ–‡å­—ã‚³ãƒ¼ãƒ‰ã®ãƒ‡ã‚³ãƒ¼ãƒ‰ã‚’è¡Œã„ã¾ã›ã‚“ã€‚
 	*/
 	StreamWriter(Stream* stream, Encoding* encoding = NULL);
 
 	/**
-		@brief		ƒpƒX–¼‚Åw’è‚µ‚½ƒtƒ@ƒCƒ‹—p‚Ì StreamWriter ‚ğ‰Šú‰»‚µ‚Ü‚·B
-		@param[in]	filePath	: ‘‚«‚İæƒtƒ@ƒCƒ‹‚ÌƒpƒX
-		@param[in]	encoding	: ‘‚«‚İ‚Ég—p‚·‚éƒGƒ“ƒR[ƒfƒBƒ“ƒO
-		@param[in]	mode		: ƒtƒ@ƒCƒ‹‚ÌƒI[ƒvƒ“ƒ‚[ƒh
-		@details	encoding ‚ª NULL ‚Ìê‡‚Í•¶š—ñ‚Ì‘‚«‚İ‚É•¶šƒR[ƒh‚ÌƒfƒR[ƒh‚ğs‚¢‚Ü‚¹‚ñB
+		@brief		ãƒ‘ã‚¹åã§æŒ‡å®šã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ç”¨ã® StreamWriter ã‚’åˆæœŸåŒ–ã—ã¾ã™ã€‚
+		@param[in]	filePath	: æ›¸ãè¾¼ã¿å…ˆãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹
+		@param[in]	encoding	: æ›¸ãè¾¼ã¿æ™‚ã«ä½¿ç”¨ã™ã‚‹ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°
+		@param[in]	mode		: ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚ªãƒ¼ãƒ—ãƒ³ãƒ¢ãƒ¼ãƒ‰
+		@details	encoding ãŒ NULL ã®å ´åˆã¯æ–‡å­—åˆ—ã®æ›¸ãè¾¼ã¿æ™‚ã«æ–‡å­—ã‚³ãƒ¼ãƒ‰ã®ãƒ‡ã‚³ãƒ¼ãƒ‰ã‚’è¡Œã„ã¾ã›ã‚“ã€‚
 	*/
 	StreamWriter(const PathName& filePath, Encoding* encoding = NULL, FileWriteMode mode = FileWriteMode_Truncate);
 

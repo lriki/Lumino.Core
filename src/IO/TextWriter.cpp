@@ -1,4 +1,11 @@
-
+﻿/*
+	[2015/11/6]
+		WriteLine() のオーバーロードは、WriteLineString() や WriteLineInt() のように型で名前を分けない。
+		WriteLine() は 与えられたデータの文字列表現を書き込むだけで、
+		数値の場合はプレフィックスをつけるような型別の特殊な処理は行わない。
+		あくまで ToString() のような余計な呼び出しを書きたくないためのユーティリティ。
+		ちなみに Qt は QTextStream::operator<<。
+*/
 #include "../Internal.h"
 #include <Lumino/Base/StringTraits.h>
 #include <Lumino/IO/TextWriter.h>
@@ -18,10 +25,10 @@ TextWriter::TextWriter()
 	//, m_utf16Buffer(BufferSize, false)
 	, m_writtenPreamble(true)
 {
-	// String �𒆊ԕ����R�[�h (UTF16) �ɕϊ����邽�߂̃f�R�[�_
+	// String を中間文字コード (UTF16) に変換するためのデコーダ
 	//m_decoder.Attach(Encoding::GetTCharEncoding()->CreateDecoder());
 
-	// �f�t�H���g Encoding
+	// デフォルト Encoding
 	m_converter.SetSourceEncoding(Encoding::GetTCharEncoding());
 	m_converter.SetDestinationEncoding(Encoding::GetTCharEncoding());
 }
@@ -46,19 +53,19 @@ void TextWriter::SetEncoding(Encoding* encoding)
 	{
 		m_encoder.Attach(m_encoding->CreateEncoder());
 
-		// ���ԃo�b�t�@���w��G���R�[�f�B���O�ɑS�ĕϊ������Ƃ��ɕK�v�ɂȂ�ő�o�b�t�@�T�C�Y���v�Z���A�������m��
+		// 中間バッファを指定エンコーディングに全て変換したときに必要になる最大バッファサイズを計算し、メモリ確保
 		size_t maxSize = Encoding::GetConversionRequiredByteCount(Text::Encoding::GetUTF16Encoding(), m_encoding, m_utf16Buffer.GetSize());
 		m_outputBuffer.Resize(maxSize, false);
 
-		// TCHAR �� ���ԃo�b�t�@ (UTF16) ���A���ԃo�b�t�@�ɔ[�߂��� TCHAR ������
+		// TCHAR → 中間バッファ (UTF16) 時、中間バッファに納められる TCHAR 文字数
 		m_safeTCharCount = m_utf16Buffer.GetSize() / Encoding::GetTCharEncoding()->GetMaxByteCount();
 
-		// BOM ���K�v��
+		// BOM が必要か
 		if (m_encoding->GetPreamble() != NULL) {
 			m_writtenPreamble = false;
 		}
 		else {
-			m_writtenPreamble = true;	// ���� BOM ���������񂾂��Ƃɂ���
+			m_writtenPreamble = true;	// 既に BOM を書き込んだことにする
 		}
 		
 	}
@@ -105,67 +112,76 @@ void TextWriter::Write(const String& str)
 	WriteInternal(str.c_str(), str.GetLength());
 }
 
-void TextWriter::WriteFormat(const TCHAR* format, ...)
-{
-	LN_THROW(0, NotImplementedException);
-}
+
+	/**
+		@brief		書式を指定して文字列を書き込みます。
+		@param[in]	str		: 書式指定文字列
+		@param[in]	...		: 引数リスト
+		@details	注意点等は String::Format() を参照してください。
+	*/
+//	void WriteFormat(const TCHAR* format, ...);
+//void TextWriter::WriteFormat(const TCHAR* format, ...)
+//{
+//	LN_THROW(0, NotImplementedException);
+//}
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void TextWriter::WriteChar(TCHAR ch)
+void TextWriter::Write(TCHAR ch)
 {
 	WriteInternal(&ch, 1);
 }
-void TextWriter::WriteInt16(int16_t value)
+void TextWriter::Write(int16_t value)
 {
 	TCHAR buf[64];
 	int len = StringTraits::SPrintf(buf, 64, _T("%d"), value);
 	WriteInternal(buf, len);
 }
-void TextWriter::WriteInt32(int32_t value)
+void TextWriter::Write(int32_t value)
 {
 	TCHAR buf[64];
 	int len = StringTraits::SPrintf(buf, 64, _T("%d"), value);
 	WriteInternal(buf, len);
 }
-void TextWriter::WriteInt64(int64_t value)
+void TextWriter::Write(int64_t value)
 {
 	TCHAR buf[64];
 	int len = StringTraits::SPrintf(buf, 64, _T("%lld"), value);
 	WriteInternal(buf, len);
 }
-void TextWriter::WriteByte(byte_t value)
+//void Write(byte_t value);
+//void TextWriter::WriteByte(byte_t value)
+//{
+//	TCHAR buf[64];
+//	int len = StringTraits::SPrintf(buf, 64, _T("%u"), value);
+//	WriteInternal(buf, len);
+//}
+void TextWriter::Write(uint16_t value)
 {
 	TCHAR buf[64];
 	int len = StringTraits::SPrintf(buf, 64, _T("%u"), value);
 	WriteInternal(buf, len);
 }
-void TextWriter::WriteUInt16(uint16_t value)
+void TextWriter::Write(uint32_t value)
 {
 	TCHAR buf[64];
 	int len = StringTraits::SPrintf(buf, 64, _T("%u"), value);
 	WriteInternal(buf, len);
 }
-void TextWriter::WriteUInt32(uint32_t value)
-{
-	TCHAR buf[64];
-	int len = StringTraits::SPrintf(buf, 64, _T("%u"), value);
-	WriteInternal(buf, len);
-}
-void TextWriter::WriteUInt64(uint64_t value)
+void TextWriter::Write(uint64_t value)
 {
 	TCHAR buf[64];
 	int len = StringTraits::SPrintf(buf, 64, _T("%llu"), value);
 	WriteInternal(buf, len);
 }
-void TextWriter::WriteFloat(float value)
+void TextWriter::Write(float value)
 {
 	TCHAR buf[64];
 	int len = StringTraits::tsnprintf_l(buf, 64, _T("%f"), m_locale.GetNativeLocale(), value);
 	WriteInternal(buf, len);
 }
-void TextWriter::WriteDouble(double value)
+void TextWriter::Write(double value)
 {
 	TCHAR buf[64];
 	int len = StringTraits::tsnprintf_l(buf, 64, _T("%lf"), m_locale.GetNativeLocale(), value);
@@ -184,74 +200,81 @@ void TextWriter::WriteLine(const TCHAR* str, int len)
 	Write(str, len);
 	WriteLine();
 }
-
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-void TextWriter::WriteLineFormat(const TCHAR* format, ...)
+void TextWriter::WriteLine(const String& str)
 {
-	LN_THROW(0, NotImplementedException);
-}
-
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-void TextWriter::WriteLineChar(TCHAR value)
-{
-	WriteChar(value);
-	WriteLine();
-}
-void TextWriter::WriteLineInt16(int16_t value)
-{
-	WriteInt16(value);
-	WriteLine();
-}
-void TextWriter::WriteLineInt32(int32_t value)
-{
-	WriteInt32(value);
-	WriteLine();
-}
-void TextWriter::WriteLineInt64(int64_t value)
-{
-	WriteInt64(value);
-	WriteLine();
-}
-void TextWriter::WriteLineByte(uint8_t value)
-{
-	WriteByte(value);
-	WriteLine();
-}
-void TextWriter::WriteLineUInt16(uint16_t value)
-{
-	WriteUInt16(value);
-	WriteLine();
-}
-void TextWriter::WriteLineUInt32(uint32_t value)
-{
-	WriteUInt32(value);
-	WriteLine();
-}
-void TextWriter::WriteLineUInt64(uint64_t value)
-{
-	WriteUInt64(value);
-	WriteLine();
-}
-void TextWriter::WriteLineFloat(float value)
-{
-	WriteFloat(value);
-	WriteLine();
-}
-void TextWriter::WriteLineDouble(double value)
-{
-	WriteDouble(value);
+	Write(str);
 	WriteLine();
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void TextWriter::Flash()
+
+	/**
+		@brief		書式を指定して文字列を書き込み、続けて改行を書き込みます。
+		@param[in]	str		: 書式指定文字列
+		@param[in]	...		: 引数リスト
+		@details	注意点等は String::Format() を参照してください。
+	*/
+//	void WriteLineFormat(const TCHAR* format, ...);
+//void TextWriter::WriteLineFormat(const TCHAR* format, ...)
+//{
+//	LN_THROW(0, NotImplementedException);
+//}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void TextWriter::WriteLine(TCHAR value)
 {
+	Write(value);
+	WriteLine();
+}
+void TextWriter::WriteLine(int16_t value)
+{
+	Write(value);
+	WriteLine();
+}
+void TextWriter::WriteLine(int32_t value)
+{
+	Write(value);
+	WriteLine();
+}
+void TextWriter::WriteLine(int64_t value)
+{
+	Write(value);
+	WriteLine();
+}
+//void WriteLine(byte_t value);
+//void TextWriter::WriteLine(uint8_t value)
+//{
+//	Write(value);
+//	WriteLine();
+//}
+void TextWriter::WriteLine(uint16_t value)
+{
+	Write(value);
+	WriteLine();
+}
+void TextWriter::WriteLine(uint32_t value)
+{
+	Write(value);
+	WriteLine();
+}
+void TextWriter::WriteLine(uint64_t value)
+{
+	Write(value);
+	WriteLine();
+}
+void TextWriter::WriteLine(float value)
+{
+	Write(value);
+	WriteLine();
+}
+void TextWriter::WriteLine(double value)
+{
+	Write(value);
+	WriteLine();
 }
 
 //-----------------------------------------------------------------------------
@@ -259,7 +282,7 @@ void TextWriter::Flash()
 //-----------------------------------------------------------------------------
 void TextWriter::WriteInternal(const TCHAR* str, int len)
 {
-	// BOM �̏������݂��K�v�ł���΂����ŏ�������
+	// BOM の書き込みが必要であればここで書き込む
 	if (!m_writtenPreamble)
 	{
 		const byte_t* bom = m_converter.GetDestinationEncoding()->GetPreamble();
@@ -268,7 +291,7 @@ void TextWriter::WriteInternal(const TCHAR* str, int len)
 		m_writtenPreamble = true;
 	}
 
-	// ���͂���Ȃ���ɂ��邱�Ƃ͖���
+	// 入力が空なら特にすることは無い
 	if (str == NULL || len == 0) {
 		return;
 	}
@@ -281,10 +304,10 @@ void TextWriter::WriteInternal(const TCHAR* str, int len)
 
 	if (m_decoder != NULL && m_encoder != NULL)
 	{
-		// �ϊ���Ԃ�ێ��ł��� Encoding �ł���Η]���Ƀ��������m�ۂ��Ȃ��ŕϊ��ł���B
-		if (m_decoder->CanRemain()/* && m_encoder->CanRemain()*/)	// encoder ���͏�ԕۑ��ł��Ȃ��Ă��ǂ�
+		// 変換状態を保持できる Encoding であれば余分にメモリを確保しないで変換できる。
+		if (m_decoder->CanRemain()/* && m_encoder->CanRemain()*/)	// encoder 側は状態保存できなくても良い
 		{
-			// ��̃R�[�h���L���X�g���炯�ɂȂ�Ȃ��悤��
+			// 後のコードがキャストだらけにならないように
 			UTF16* utf16Buf = (Text::UTF16*)m_utf16Buffer.GetData();
 			int utf16ElementCount = m_utf16Buffer.GetSize() / sizeof(UTF16);
 
@@ -293,27 +316,27 @@ void TextWriter::WriteInternal(const TCHAR* str, int len)
 			{
 				int charCount = std::min(len - convCount, m_safeTCharCount);
 
-				// TCHAR �𒆊ԃR�[�h��
+				// TCHAR を中間コードへ
 				size_t outBytesUsed, outCharsUsed;
 				m_decoder->ConvertToUTF16((byte_t*)&str[convCount], charCount * sizeof(TCHAR), utf16Buf, utf16ElementCount, &outBytesUsed, &outCharsUsed);
 
-				// ���ԃR�[�h���o�̓R�[�h��
+				// 中間コードを出力コードへ
 				m_encoder->ConvertFromUTF16(utf16Buf, outCharsUsed, m_outputBuffer.GetData(), m_outputBuffer.GetSize(), &outBytesUsed, &outCharsUsed);
 
-				// �o��
+				// 出力
 				WriteOverride(m_outputBuffer.GetData(), outBytesUsed);
 
 				convCount += charCount;
 			}
 		}
-		// �f�R�[�_���ϊ���Ԃ�ێ��ł��Ȃ��ꍇ�͂�ނ𓾂Ȃ��̂ňꎞ���������m�ۂ��A�\�[�X�o�b�t�@�S�̂���x�ɕϊ�����B
+		// デコーダが変換状態を保持できない場合はやむを得ないので一時メモリを確保し、ソースバッファ全体を一度に変換する。
 		else
 		{
-			// �o��
+			// 出力
 			WriteOverride(m_outputBuffer.GetData(), outBytesUsed);
 		}
 	}
-	// �G���R�[�_������ (SetEncoding() ����Ă��Ȃ�) �ꍇ�́A�����R�[�h�ϊ����s�킸 TCHAR �����̂܂܏o�͂���
+	// エンコーダが無い (SetEncoding() されていない) 場合は、文字コード変換を行わず TCHAR をそのまま出力する
 	else if (m_encoder == NULL)
 	{
 		WriteOverride(str, len * sizeof(TCHAR));

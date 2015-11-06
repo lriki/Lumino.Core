@@ -19,6 +19,7 @@ public:
 	String ToString() const;
 	
 private:
+	virtual void Flash();
 	virtual void WriteOverride(const void* data, size_t byteCount);
 
 private:
