@@ -1,5 +1,6 @@
 ﻿
 #pragma once
+#include "../IO/PathName.h"
 #include "../IO/TextReader.h"
 #include "../IO/MemoryStream.h"
 #include "XmlError.h"

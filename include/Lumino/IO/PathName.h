@@ -140,7 +140,7 @@ public:
 
 	/**
 		@brief		このパスの拡張子を変更した新しいパスを返します。
-		@param[in]	ext	: 新しい拡張子 (先頭の . は省略しても良い)
+		@param[in]	newExt	: 新しい拡張子 (先頭の . は省略しても良い)
 		@code
 					PathName path1("C:/dir/file.txt");
 					PathName path2 = path1.GetWithoutExtension(_T(".dat"));	// => "C:/dir/file.dat"
@@ -149,7 +149,7 @@ public:
 					PathName path2 = path1.GetWithoutExtension(_T(".dat"));	// => "file.dat"
 		@endcode
 	*/
-	GenericPathName<TChar> ChangeExtension(const TChar* ext) const;
+	GenericPathName<TChar> ChangeExtension(const TChar* newExt) const;
 
 	/// パスが空であるかを確認する
 	bool IsEmpty() const { return m_path.IsEmpty(); }

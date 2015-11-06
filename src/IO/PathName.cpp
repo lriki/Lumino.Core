@@ -162,7 +162,7 @@ GenericPathName<TChar> GenericPathName<TChar>::GetWithoutExtension() const
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-GenericPathName<TChar> GenericPathName<TChar>::ChangeExtension(const TChar* ext) const
+GenericPathName<TChar> GenericPathName<TChar>::ChangeExtension(const TChar* newExt) const
 {
 	GenericString<TChar> newPath;
 	for (int i = m_path.GetLength() - 1; i >= 0; --i)
@@ -180,11 +180,11 @@ GenericPathName<TChar> GenericPathName<TChar>::ChangeExtension(const TChar* ext)
 		newPath = m_path;
 	}
 
-	if (ext != NULL) {
-		if (StringTraits::StrLen(ext) != 0 && ext[0] != '.') {
+	if (newExt != NULL) {
+		if (StringTraits::StrLen(newExt) != 0 && newExt[0] != '.') {
 			newPath += '.';
 		}
-		newPath += ext;
+		newPath += newExt;
 	}
 	return GenericPathName<TChar>(newPath);
 }

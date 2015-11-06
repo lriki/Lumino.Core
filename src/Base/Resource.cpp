@@ -1,5 +1,6 @@
 ﻿
 #include "../Internal.h"
+#include <Lumino/Xml/XmlReader.h>
 #include <Lumino/Base/Resource.h>
 
 LN_NAMESPACE_BEGIN
@@ -88,6 +89,94 @@ static InternalResourceManager m_internalResource;
 const String& InternalResource::GetString(const String& name)
 {
 	return m_internalResource.GetString(name);
+}
+
+
+//=============================================================================
+// ResourceSet
+//=============================================================================
+class ResourceSet
+{
+public:
+	ResourceSet() {}
+	~ResourceSet() {}
+
+	void LoadResourceFile(const String& filePath);
+	String* GetString(const String& name);
+
+private:
+	LN_DISALLOW_COPY_AND_ASSIGN(ResourceSet);
+	std::map<String, String>	m_stringMap;
+};
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void ResourceSet::LoadResourceFile(const String& filePath)
+{
+	String name;
+	String value;
+	XmlFileReader reader(filePath);
+	while (reader.Read())
+	{
+		if (reader.GetNodeType() == XmlNodeType::Element &&
+			reader.GetName() == _T("string"))
+		{
+			if (reader.MoveToFirstAttribute())
+			{
+				do {
+					if (reader.GetName() == _T("name")) { name = reader.GetValue(); }
+
+				} while (reader.MoveToNextAttribute());
+			}
+		}
+		if (reader.GetNodeType() == XmlNodeType::Text)
+		{
+			value = reader.GetValue();
+		}
+		if (reader.GetNodeType() == XmlNodeType::EndElement &&
+			reader.GetName() == _T("string"))
+		{
+			m_stringMap[name] = value;
+		}
+	}
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+String* ResourceSet::GetString(const String& name)
+{
+	std::map<String, String>::iterator itr = m_stringMap.find(name);
+	if (itr != m_stringMap.end()) {
+		return &itr->second;
+	}
+	return NULL;
+}
+
+
+//=============================================================================
+// Resources
+//=============================================================================
+
+static ResourceSet g_resourceSet;
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void Resources::RegisterResource(const String& filePath)
+{
+	g_resourceSet.LoadResourceFile(filePath);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+const String& Resources::GetString(const String& name)
+{
+	String* str = g_resourceSet.GetString(name);
+	LN_THROW(str != NULL, KeyNotFoundException, _T("Not found resource key."));
+	return *str;
 }
 
 

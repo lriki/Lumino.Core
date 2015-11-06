@@ -14,6 +14,7 @@ set(LN_TEST_SOURCES
 	UnitTest/Base/Test_Base_Locale.cpp
 	UnitTest/Base/Test_Base_Point.cpp
 	UnitTest/Base/Test_Base_Rect.cpp
+	UnitTest/Base/Test_Base_Resource.cpp
 	UnitTest/Base/Test_Base_Size.cpp
 	UnitTest/Base/Test_Base_SortedArray.cpp
 	UnitTest/Base/Test_Base_STLUtils.cpp

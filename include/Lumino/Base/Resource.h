@@ -6,7 +6,7 @@
 #include "String.h"
 
 LN_NAMESPACE_BEGIN
-	
+
 /**
 	@brief	
 */
@@ -57,6 +57,25 @@ public:
 
 public:
 	static const String& GetString(const String& name);
+};
+
+/**
+	@brief	
+*/
+class Resources
+{
+public:
+
+	/**
+		@brief		指定したリソースファイルを規定のリソースとしてロードします。
+	*/
+	static void RegisterResource(const String& filePath);
+
+	/**
+		@brief		指定したリソース名に対応する文字列リソースを取得します。
+	*/
+	static const String& GetString(const String& name);
+	
 };
 
 LN_NAMESPACE_END
