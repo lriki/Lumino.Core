@@ -6,10 +6,11 @@
 #include "../../include/Lumino/Text/UnicodeUtils.h"
 #include "../../include/Lumino/Text/Encoding.h"
 #include "ASCIIEncoding.h"
-#include "DBCSEncoding.h"
 #include "UTF8Encoding.h"
 #include "UTF16Encoding.h"
 #include "UTF32Encoding.h"
+#include "DBCSEncoding.h"
+#include "EUCJPEncoding.h"
 #ifdef LN_OS_WIN32
 #include "Win32CodePageEncoding.h"
 #endif
@@ -107,6 +108,11 @@ Encoding* Encoding::GetEncoding(EncodingType type)
 		{
 			static DBCSEncoding sjisEncoding(EncodingType_SJIS);
 			return &sjisEncoding;
+		}
+		case EncodingType_EUCJP:
+		{
+			static EUCJPEncoding eucjpEncoding;
+			return &eucjpEncoding;
 		}
 		case EncodingType_GB2312:
 		{

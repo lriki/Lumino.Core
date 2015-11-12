@@ -27,6 +27,7 @@ enum EncodingType
 	//EncodingType_UTF32BN,
 
 	EncodingType_SJIS,		///< 日本語 (シフト JIS) -- cp932(MS932) Windows-31J ※MS実装
+	EncodingType_EUCJP,		///< 日本語 (EUC-JP)
 	EncodingType_GB2312,	///< 簡体字中国語 (GB2312) -- cp936(MS936)
 	EncodingType_EUCKR,		///< 韓国語 (EUC-KR)(=KSX1001) -- cp949(MS949)
 	EncodingType_BIG5,		///< 繁体字中国語 (Big5) -- cp950(MS950)
