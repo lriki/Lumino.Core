@@ -1,7 +1,5 @@
 ﻿
 #pragma once
-#include "../Base/NonCopyable.h"
-#include "../Base/RefObject.h"
 
 LN_NAMESPACE_BEGIN
 
@@ -39,63 +37,61 @@ enum class EncodingType
 /** 文字コード変換のオプションを指定するための構造体 */
 struct EncodingConversionOptions
 {
-	bool	NullTerminated;		///< 変換結果の終端に \0 文字を付加する
+	bool	NullTerminated;		/** 変換結果の終端に \0 文字を付加する */
 };
 
 /** 文字コード変換の結果を受け取るための構造体 */
 struct EncodingConversionResult
 {
-	size_t	BytesUsed;			///< 変換後の有効バイト数
-	size_t	CharsUsed;			///< 変換後の有効文字数(マルチバイト文字を考慮した文字数)
-	bool	UsedDefaultChar;	///< 変換不可文字をデフォルト文字('?') に変換したかどうか
+	size_t	BytesUsed;			/** 変換後の有効バイト数 */
+	size_t	CharsUsed;			/** 変換後の有効文字数(マルチバイト文字を考慮した文字数) */
+	bool	UsedDefaultChar;	/** 変換不可文字をデフォルト文字('?') に変換したかどうか */
 };
 
 /**
-	@brief		文字エンコーディング
+	@brief		文字エンコーディングを表します。
+	@attention	このクラスの各 static メソッドが返す Encoding オブジェクトはグローバルなインスタンスです。返されたオブジェクトは削除してはなりません。
 */
-class Encoding : public RefObject
+class Encoding
 {
 public:
 
 	/**
-		@brief		環境依存のマルチバイト文字コードのエンコーディングを取得する。
-		@details	返されるポインタはグローバルなインスタンスです。このポインタは解放しないでください。
+		@brief		環境依存のマルチバイト文字コードのエンコーディングを取得します。
+		@details	char 型のエンコーディングとみなすことができます。
+					Windows 環境では CP_THREAD_ACP が示すコードページエンコーディングです。それ以外の環境では UTF-8 となります。
 	*/
 	static Encoding* GetSystemMultiByteEncoding();
 
 	/**
-		@brief		ワイド文字のエンコーディングを取得する。
-		@details	返されるポインタはグローバルなインスタンスです。このポインタは解放しないでください。
+		@brief		環境依存のワイド文字のエンコーディングを取得します。
+		@details	wchar_t 型のエンコーディングとみなすことができます。
+					wchar_t のサイズによって UTF-16 または UTF-32 となります。
 	*/
 	static Encoding* GetWideCharEncoding();
 
 	/**
-		@brief		TCHAR 型文字のエンコーディングを取得する。
-		@details	返されるポインタはグローバルなインスタンスです。このポインタは解放しないでください。
+		@brief		TCHAR 型文字のエンコーディングを取得します。
 	*/
 	static Encoding* GetTCharEncoding();
 
 	/**
-		@brief		UTF-8 (BOM 無し)エンコーディングを取得する。
-		@details	返されるポインタはグローバルなインスタンスです。このポインタは解放しないでください。
+		@brief		UTF-8 (BOM 無し)エンコーディングを取得します。
 	*/
 	static Encoding* GetUTF8Encoding();
 
 	/**
-		@brief		UTF-16 (Little) エンコーディングを取得する。
-		@details	返されるポインタはグローバルなインスタンスです。このポインタは解放しないでください。
+		@brief		UTF-16 (Little) エンコーディングを取得します。
 	*/
 	static Encoding* GetUTF16Encoding();
 
 	/**
-		@brief		UTF-16 (Little) エンコーディングを取得する。
-		@details	返されるポインタはグローバルなインスタンスです。このポインタは解放しないでください。
+		@brief		UTF-16 (Little) エンコーディングを取得します。
 	*/
 	static Encoding* GetUTF32Encoding();
 
 	/**
 		@brief		種類を指定してエンコーディングを取得します。
-		@details	返されるポインタはグローバルなインスタンスです。このポインタは解放しないでください。
 	*/
 	static Encoding* GetEncoding(EncodingType type);
 
@@ -110,7 +106,6 @@ public:
 #ifdef LN_OS_WIN32
 	/**
 		@brief		現在のスレッドロケールに基づくデフォルトコードページの Encoding を取得します。
-		@details	返されるポインタはグローバルなインスタンスです。このポインタは解放しないでください。
 	*/
 	static Encoding* GetWin32DefaultCodePageEncoding();
 #endif
@@ -217,13 +212,13 @@ public:
 
 	/**
 		@brief		バイトシーケンスを内部文字列へ変換するデコーダを作成する
-		@details	作成したオブジェクトは使い終えたら Release() を呼び出して参照を解放してください。
+		@details	作成したオブジェクトは、使い終えたら削除する必要があります。
 	*/
 	virtual Decoder* CreateDecoder() const = 0;
 
 	/**
 		@brief		内部文字列をバイトシーケンスへ変換するエンコーダを作成する
-		@details	作成したオブジェクトは使い終えたら Release() を呼び出して参照を解放してください。
+		@details	作成したオブジェクトは、使い終えたら削除する必要があります。
 	*/
 	virtual Encoder* CreateEncoder() const = 0;
 
@@ -256,6 +251,9 @@ protected:
 	virtual ~Encoding() {};
 
 	uint32_t	mFallbackReplacementChar;
+
+private:
+	LN_DISALLOW_COPY_AND_ASSIGN(Encoding);
 };
 
 
@@ -342,6 +340,9 @@ protected:
 	Decoder() : mFallbackReplacementChar(0) {}
 
 	uint32_t	mFallbackReplacementChar;
+
+private:
+	LN_DISALLOW_COPY_AND_ASSIGN(Decoder);
 };
 
 /**
@@ -410,69 +411,9 @@ protected:
 
 protected:
 	uint32_t	mFallbackReplacementChar;
-};
-
-#if 0
-/**
-	@brief		プログラムのロケールに合わせたマルチバイトコードエンコーディング
-	@details	setlocale() にて指定されたロケールの規定文字コードを表します。
-				OS 規定のロケールを使用するには、あらかじめ setlocale( LC_ALL, "" ); のようにするにする必要があります。
-				例えば、日本語 Windws であれば ShiftJIS、Linux であれば UTF-8 となります。
-	@attention	上記解説の通り、既定の文字コードは環境依存です。
-				基本的に ASCII 文字のみで構成されるエンコーディングと考えるのが無難です。
-*/
-class SystemMultiByteEncoding : public Encoding
-{
-public:
-	SystemMultiByteEncoding() {};
-	virtual ~SystemMultiByteEncoding() {};
-
-public:
-	// override Encoding
-	virtual int GetMinByteCount() const;
-	virtual int GetMaxByteCount() const;
-	virtual Decoder* CreateDecoder() const { return LN_NEW SystemMultiByteDecoder(); }
-	virtual Encoder* CreateEncoder() const { return LN_NEW SystemMultiByteEncoder(); }
-	virtual byte_t* GetPreamble() const { return 0; }
-	virtual int GetCharacterCount(const void* buffer, size_t bufferSize) const;
 
 private:
-	// Decoder
-	class SystemMultiByteDecoder : public Decoder
-	{
-	public:
-		SystemMultiByteDecoder() { Reset(); }
-		virtual int GetMinByteCount() { return 1; }
-		virtual int GetMaxByteCount() { return 6; }
-		virtual bool CanRemain() { return false; }
-		virtual void ConvertToUTF16(const byte_t* inBuffer, size_t inBufferByteCount, UTF16* outBuffer, size_t outBufferCharCount, size_t* outBytesUsed, size_t* outCharsUsed);
-		virtual int UsedDefaultCharCount() { return mUsedDefaultCharCount; }
-		virtual bool Completed() { return mCompleted; }
-		virtual void Reset() { mUsedDefaultCharCount = 0; mCompleted = false; }
-
-	private:
-		int			mUsedDefaultCharCount;
-		bool		mCompleted;
-	};
-
-	// Encoder
-	class SystemMultiByteEncoder : public Encoder
-	{
-	public:
-		SystemMultiByteEncoder() { Reset(); }
-		virtual int GetMinByteCount() { return 1; }
-		virtual int GetMaxByteCount() { return 6; }
-		virtual bool CanRemain() { return false; }
-		virtual void ConvertFromUTF16(const UTF16* inBuffer, size_t inBufferCharCount, byte_t* outBuffer, size_t outBufferByteCount, size_t* outBytesUsed, size_t* outCharsUsed);
-		virtual int UsedDefaultCharCount() { return mUsedDefaultCharCount; }
-		virtual bool Completed() { return mCompleted; }
-		virtual void Reset() { mUsedDefaultCharCount = 0; mCompleted = false; }
-
-	private:
-		int			mUsedDefaultCharCount;
-		bool		mCompleted;
-	};
+	LN_DISALLOW_COPY_AND_ASSIGN(Encoder);
 };
-#endif
 
 LN_NAMESPACE_END

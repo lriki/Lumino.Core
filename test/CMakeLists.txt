@@ -10,6 +10,7 @@ set(LN_TEST_SOURCES
 	UnitTest/Base/Test_Base_Enum.cpp
 	UnitTest/Base/Test_Base_Event.cpp
 	UnitTest/Base/Test_Base_Exception.cpp
+	UnitTest/Base/Test_Base_Formatter.cpp
 	UnitTest/Base/Test_Base_List.cpp
 	UnitTest/Base/Test_Base_Locale.cpp
 	UnitTest/Base/Test_Base_Point.cpp

@@ -9,7 +9,7 @@ LN_NAMESPACE_BEGIN
 	@brief		テキスト間のエンコーディングの変換を行うクラスです。
 	@details	同じエンコーディングで何回も変換する際、効率的に変換を行うことができます。
 */
-class EncodingConverter : public NonCopyable
+class EncodingConverter
 {
 public:
 	EncodingConverter();
@@ -61,8 +61,9 @@ private:
 		EncodingConversionResult* outResult);
 
 private:
-	RefPtr<Encoding>			m_dstEncoding;
-	RefPtr<Encoding>			m_srcEncoding;
+	LN_DISALLOW_COPY_AND_ASSIGN(EncodingConverter);
+	Encoding*					m_dstEncoding;
+	Encoding*					m_srcEncoding;
 	Encoder*					m_dstEncoder;
 	Decoder*					m_srcDecoder;
 	ByteBuffer					m_outputBuffer;

@@ -31,9 +31,12 @@ enum _##enumName
 	@see	Doc_EnumExtension_1
 */
 #define LN_ENUM_DECLARE(enumName) \
+	protected: \
+		_##enumName	m_value; \
 	public: \
+		inline operator int() const { return m_value; } \
 		typedef _##enumName enum_type; \
-		enumName() { m_value = 0; } \
+		enumName() { m_value = (enum_type)(0); } \
 		enumName(enum_type v) { m_value = v; } \
 		inline bool operator==(enumName right) const { return m_value == right.m_value; } \
 		inline bool operator==(enum_type right) const { return m_value == right; } \
@@ -58,7 +61,7 @@ public: \
 	static int GetMemberCount() { return GetEnumParser().GetMemberList().GetCount(); } \
 	String ToString() const { return GetEnumParser().ToString(m_value); } \
 	static enumName Parse(const TCHAR* str) { return GetEnumParser().Parse(str); }; \
-	static bool TryParse(const TCHAR* str, enumName* outValue) { return GetEnumParser().TryParse(str, (outValue) ? &outValue->m_value : NULL); }
+	static bool TryParse(const TCHAR* str, enumName* outValue) { return GetEnumParser().TryParse(str, (outValue) ? (int*)&outValue->m_value : NULL); }
 
 /**
 	@brief	ビットフィールドとしてフラグの組み合わせを表す 拡張 enum 型を定義します。
@@ -75,7 +78,10 @@ enum _##enumName
 	@see	Doc_EnumExtension_1
 */
 #define LN_ENUM_FLAGS_DECLARE(enumName) \
+	protected: \
+		int	m_value; \
 	public: \
+		inline operator int() const { return m_value; } \
 		typedef _##enumName enum_type; \
 		enumName() { m_value = 0; } \
 		enumName(enum_type v) { m_value = v; } \
@@ -135,10 +141,10 @@ LN_NAMESPACE_BEGIN
 class Enum
 {
 protected:
-	int	m_value;
+	//int	m_value;
 
 public:
-	inline operator int() const { return m_value; }
+	//inline operator int() const { return m_value; }
 
 	// C++ operators
 	// https://en.wikipedia.org/wiki/Operators_in_C_and_C++

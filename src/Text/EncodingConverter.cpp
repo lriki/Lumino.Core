@@ -13,7 +13,9 @@ LN_NAMESPACE_BEGIN
 //
 //-----------------------------------------------------------------------------
 EncodingConverter::EncodingConverter()
-	: m_dstEncoder(NULL)
+	: m_dstEncoding(NULL)
+	, m_srcEncoding(NULL)
+	, m_dstEncoder(NULL)
 	, m_srcDecoder(NULL)
 	, m_encodingModified(false)
 {
