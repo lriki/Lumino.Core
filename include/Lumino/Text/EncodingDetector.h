@@ -38,7 +38,7 @@ class UTF8NDetector : public IMBSCodeDetector
 public:
 	UTF8NDetector(const void* bytes, size_t bytesSize);
 	virtual ~UTF8NDetector() {}
-	virtual EncodingType GetEncodingType() { return EncodingType_UTF8N; }
+	virtual EncodingType GetEncodingType() { return EncodingType::UTF8N; }
 	virtual void Detect(bool untilUnmatch);
 	virtual int GetScore() { return m_score; }
 	virtual int GetUnMatchCount() { return m_unmatch; }
@@ -61,7 +61,7 @@ class SJISDetector : public IMBSCodeDetector
 public:
 	SJISDetector(const void* bytes, size_t bytesSize);
 	virtual ~SJISDetector() {}
-	virtual EncodingType GetEncodingType() { return EncodingType_SJIS; }
+	virtual EncodingType GetEncodingType() { return EncodingType::SJIS; }
 	virtual void Detect(bool untilUnmatch);
 	virtual int GetScore() { return m_score; }
 	virtual int GetUnMatchCount() { return m_unmatch; }

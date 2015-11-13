@@ -11,7 +11,7 @@ protected:
 TEST_F(IntegrateTest_Text_EUCJPEncoding, ConvertEUCJPToUTF16)
 {
 	size_t bytesUsed, charsUsed;
-	RefPtr<Decoder> decoder(Encoding::GetEncoding(EncodingType_EUCJP)->CreateDecoder(), false);
+	std::unique_ptr<Decoder> decoder(Encoding::GetEncoding(EncodingType::EUCJP)->CreateDecoder());
 
 	// <Test> ASCII と制御文字
 	{
@@ -61,7 +61,7 @@ TEST_F(IntegrateTest_Text_EUCJPEncoding, ConvertEUCJPToUTF16)
 TEST_F(IntegrateTest_Text_EUCJPEncoding, ConvertUTF16ToEUFJP)
 {
 	size_t bytesUsed, charsUsed;
-	RefPtr<Encoder> encoder(Encoding::GetEncoding(EncodingType_EUCJP)->CreateEncoder(), false);
+	std::unique_ptr<Encoder> encoder(Encoding::GetEncoding(EncodingType::EUCJP)->CreateEncoder());
 
 	// <Test> ASCII と制御文字
 	{

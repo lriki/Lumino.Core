@@ -29,10 +29,10 @@ byte_t* UTF8Encoding::GetPreamble() const
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-int UTF8Encoding::GetCharacterCount(const byte_t* buffer, size_t bufferSize) const
+int UTF8Encoding::GetCharacterCount(const void* buffer, size_t bufferSize) const
 {
 	int count;
-	UTFConversionResult result = UnicodeUtils::GetUTF8CharCount(buffer, bufferSize, true, &count);
+	UTFConversionResult result = UnicodeUtils::GetUTF8CharCount((const byte_t*)buffer, bufferSize, true, &count);
 	LN_THROW(result == UTFConversionResult_Success, EncodingException);
 	return count;
 }
@@ -51,7 +51,7 @@ int UTF8Encoding::GetLeadExtraLength(const void* buffer, size_t bufferSize) cons
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void UTF8Encoding::UTF8Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t inBufferByteCount, UTF16* outBuffer, size_t outBufferCharCount, size_t* outBytesUsed, size_t* outCharsUsed)
+void UTF8Encoding::UTF8Decoder::ConvertToUTF16(const byte_t* input, size_t inputByteSize, UTF16* output, size_t outputElementSize, size_t* outBytesUsed, size_t* outCharsUsed)
 {
 	*outBytesUsed = 0;
 	*outCharsUsed = 0;
@@ -68,22 +68,22 @@ void UTF8Encoding::UTF8Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t in
 	{
 		if (m_bomPhase == 0)
 		{
-			if (inBuffer[0] == 0xEF)
+			if (input[0] == 0xEF)
 			{
 				m_bomPhase = 1;
-				++inBuffer;
-				--inBufferByteCount;
-				if (inBufferByteCount == 0) { return; }
+				++input;
+				--inputByteSize;
+				if (inputByteSize == 0) { return; }
 			}
 		}
 		if (m_bomPhase == 1)
 		{
-			if (inBuffer[0] == 0xBB)
+			if (input[0] == 0xBB)
 			{
 				m_bomPhase = 2;
-				++inBuffer;
-				--inBufferByteCount;
-				if (inBufferByteCount == 0) { return; }
+				++input;
+				--inputByteSize;
+				if (inputByteSize == 0) { return; }
 			}
 			else {
 				LN_THROW(0, EncodingException, _T("bom is required."));
@@ -91,12 +91,12 @@ void UTF8Encoding::UTF8Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t in
 		}
 		if (m_bomPhase == 2)
 		{
-			if (inBuffer[0] == 0xBF)
+			if (input[0] == 0xBF)
 			{
 				m_bomPhase = 0;
-				++inBuffer;
-				--inBufferByteCount;
-				if (inBufferByteCount == 0) { return; }
+				++input;
+				--inputByteSize;
+				if (inputByteSize == 0) { return; }
 			}
 			else {
 				LN_THROW(0, EncodingException, _T("bom is required."));
@@ -104,10 +104,10 @@ void UTF8Encoding::UTF8Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t in
 		}
 	}
 
-	const byte_t* srcPos = inBuffer;
-	const byte_t* srcEnd = inBuffer + inBufferByteCount;
-	UTF16* dstPos = outBuffer;
-	UTF16* dstEnd = dstPos + outBufferCharCount;
+	const byte_t* srcPos = input;
+	const byte_t* srcEnd = input + inputByteSize;
+	UTF16* dstPos = output;
+	UTF16* dstEnd = dstPos + outputElementSize;
 	while (srcPos < srcEnd)
 	{
 		LN_THROW(m_lastLeadBytesCount < 5, EncodingException, _T("Illegal UTF-8 char."));
@@ -157,8 +157,8 @@ void UTF8Encoding::UTF8Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t in
 	
 	// 変換
 	//UTFConversionResult result = UnicodeUtils::ConvertUTF8toUTF16(
-	//	(UnicodeUtils::UTF8*)inBuffer, 
-	//	inBufferByteCount,
+	//	(UnicodeUtils::UTF8*)input, 
+	//	inputByteSize,
 	//	(UnicodeUtils::UTF16*)outBuffer, 
 	//	outBufferCharCount,
 	//	&options);
@@ -180,7 +180,7 @@ void UTF8Encoding::UTF8Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t in
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void UTF8Encoding::UTF8Encoder::ConvertFromUTF16(const UTF16* inBuffer, size_t inBufferCharCount, byte_t* outBuffer, size_t outBufferByteCount, size_t* outBytesUsed, size_t* outCharsUsed)
+void UTF8Encoding::UTF8Encoder::ConvertFromUTF16(const UTF16* input, size_t inputElementSize, byte_t* output, size_t outputByteSize, size_t* outBytesUsed, size_t* outCharsUsed)
 {
 	*outCharsUsed = 0;
 	*outBytesUsed = 0;
@@ -190,10 +190,10 @@ void UTF8Encoding::UTF8Encoder::ConvertFromUTF16(const UTF16* inBuffer, size_t i
 	memset(&options, 0, sizeof(options));
 	options.ReplacementChar = mFallbackReplacementChar;
 
-	const UTF16* srcPos = inBuffer;
-	const UTF16* srcEnd = inBuffer + inBufferCharCount;
-	UTF8* dstPos = outBuffer;
-	UTF8* dstEnd = dstPos + outBufferByteCount;
+	const UTF16* srcPos = input;
+	const UTF16* srcEnd = input + inputElementSize;
+	UTF8* dstPos = output;
+	UTF8* dstEnd = dstPos + outputByteSize;
 
 	while (srcPos < srcEnd)
 	{
@@ -263,9 +263,9 @@ void UTF8Encoding::UTF8Encoder::ConvertFromUTF16(const UTF16* inBuffer, size_t i
 	//
 	//// 変換
 	//UTFConversionResult result = UnicodeUtils::ConvertUTF16toUTF8(
-	//	(UnicodeUtils::UTF16*)inBuffer, 
+	//	(UnicodeUtils::UTF16*)input, 
 	//	inBufferCharCount,
-	//	(UnicodeUtils::UTF8*)outBuffer, 
+	//	(UnicodeUtils::UTF8*)output, 
 	//	outBufferByteCount,
 	//	&options);
 	//LN_THROW(result == UTFConversionResult_Success, EncodingException);

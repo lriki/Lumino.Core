@@ -45,19 +45,19 @@ void ASCIIEncoding::ASCIIDecoder::ConvertToUTF16(const byte_t* inBuffer, size_t 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void ASCIIEncoding::ASCIIEncoder::ConvertFromUTF16(const UTF16* inBuffer, size_t inBufferCharCount, byte_t* outBuffer, size_t outBufferByteCount, size_t* outBytesUsed, size_t* outCharsUsed)
+void ASCIIEncoding::ASCIIEncoder::ConvertFromUTF16(const UTF16* input, size_t inputElementSize, byte_t* output, size_t outputByteSize, size_t* outBytesUsed, size_t* outCharsUsed)
 {
-	for (size_t i = 0; i < inBufferCharCount; ++i)
+	for (size_t i = 0; i < inputElementSize; ++i)
 	{
-		UTF16 ch = inBuffer[i];
+		UTF16 ch = input[i];
 
 		// 普通の ASCII 文字
 		if (ch <= 0x7F) {
-			outBuffer[i] = static_cast<byte_t>(ch);
+			output[i] = static_cast<byte_t>(ch);
 		}
 		// 代替文字が指定されていればそれを使う
 		else if (mFallbackReplacementChar != 0x00) {
-			outBuffer[i] = static_cast<byte_t>(mFallbackReplacementChar);
+			output[i] = static_cast<byte_t>(mFallbackReplacementChar);
 		}
 		// ASCII 外で代替文字も無ければエラー
 		else {
@@ -65,8 +65,8 @@ void ASCIIEncoding::ASCIIEncoder::ConvertFromUTF16(const UTF16* inBuffer, size_t
 		}
 	}
 
-	(*outBytesUsed) = inBufferCharCount;	// 文字数がそのままバイト数
-	(*outCharsUsed) = inBufferCharCount;
+	(*outBytesUsed) = inputElementSize;	// 文字数がそのままバイト数
+	(*outCharsUsed) = inputElementSize;
 }
 
 LN_NAMESPACE_END

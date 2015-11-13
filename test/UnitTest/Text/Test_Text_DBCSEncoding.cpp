@@ -13,7 +13,7 @@ TEST_F(Test_Text_DBCSEncoding, SJIS)
 	EncodingConversionOptions options;
 	options.NullTerminated = false;
 
-	Encoding* sjisEnc = Encoding::GetEncoding(EncodingType_SJIS);
+	Encoding* sjisEnc = Encoding::GetEncoding(EncodingType::SJIS);
 	ByteBuffer sjisBuf = FileSystem::ReadAllBytes(LN_TEST_GET_FILE_PATH("TestData/ConvertTable_SJIS_test.txt"));
 	ByteBuffer utf16Buf = FileSystem::ReadAllBytes(LN_TEST_GET_FILE_PATH("TestData/ConvertTable_SJIS_test_UTF16.txt"));
 

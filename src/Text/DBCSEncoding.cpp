@@ -29,7 +29,7 @@ extern "C" const unsigned char g_Big5LeadBytePairs[];
 extern "C" const unsigned short g_Big5ToUTF16Table[];
 extern "C" const unsigned short g_UTF16ToBig5Table[];
 
-const DBCSEncoding::TableInfo DBCSEncoding::Tables[EncodingType_Max] =
+const DBCSEncoding::TableInfo DBCSEncoding::Tables[(const int)EncodingType::TERMINATOR] =
 {
 	{ NULL, NULL, NULL, NULL },	// EncodingType_Unknown
 	{ NULL, NULL, NULL, NULL },	// EncodingType_ASCII
@@ -73,21 +73,21 @@ static bool CheckDBCSLeadByte(const DBCSEncoding::TableInfo* info, byte_t byte)
 //
 //-----------------------------------------------------------------------------
 DBCSEncoding::DBCSEncoding(EncodingType type)
-	: m_encodingType(EncodingType_Unknown)
+	: m_encodingType(EncodingType::Unknown)
 {
-	LN_THROW(Tables[type].leadBytePairs != NULL, ArgumentException);	// DBEncoding としては使えない
+	LN_THROW(Tables[(int)type].leadBytePairs != NULL, ArgumentException);	// DBEncoding としては使えない
 	m_encodingType = type;
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-int DBCSEncoding::GetCharacterCount(const byte_t* buffer, size_t bufferSize) const
+int DBCSEncoding::GetCharacterCount(const void* buffer, size_t bufferSize) const
 {
 	int count = 0;
-	const byte_t* pos = buffer;
-	const byte_t* end = buffer + bufferSize;
-	const TableInfo* tableInfo = &Tables[m_encodingType];
+	const byte_t* pos = (const byte_t*)buffer;
+	const byte_t* end = pos + bufferSize;
+	const TableInfo* tableInfo = &Tables[(int)m_encodingType];
 	while (pos < end)
 	{
 		if (CheckDBCSLeadByte(tableInfo, *pos)) {
@@ -104,27 +104,27 @@ int DBCSEncoding::GetCharacterCount(const byte_t* buffer, size_t bufferSize) con
 //-----------------------------------------------------------------------------
 int DBCSEncoding::GetLeadExtraLength(const void* buffer, size_t bufferSize) const
 {
-	return (CheckDBCSLeadByte(&Tables[m_encodingType], *((const byte_t*)buffer))) ? 1 : 0;
+	return (CheckDBCSLeadByte(&Tables[(int)m_encodingType], *((const byte_t*)buffer))) ? 1 : 0;
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void DBCSEncoding::DBCSDecoder::ConvertToUTF16(const byte_t* inBuffer, size_t inBufferByteCount, UTF16* outBuffer, size_t outBufferCharCount, size_t* outBytesUsed, size_t* outCharsUsed)
+void DBCSEncoding::DBCSDecoder::ConvertToUTF16(const byte_t* input, size_t inputByteSize, UTF16* output, size_t outputElementSize, size_t* outBytesUsed, size_t* outCharsUsed)
 {
-	if (outBufferCharCount > 0) { outBuffer[0] = '\0'; }
+	if (outputElementSize > 0) { output[0] = '\0'; }
 	*outBytesUsed = 0;
 	*outCharsUsed = 0;
 
 	// 入力が 0 文字の場合は何もしない (変換の必要なし)
-	if (inBufferByteCount == 0) { return; }
+	if (inputByteSize == 0) { return; }
 
 	// 変換 (もし前回のバッファ終端が先行バイトだったら、m_lastLeadByte に先行バイトが入っている)
 	size_t inBufPos = 0;	// MBCS
 	size_t outBufPos = 0;	// UTF16
-	for (; inBufPos < inBufferByteCount; ++inBufPos)
+	for (; inBufPos < inputByteSize; ++inBufPos)
 	{
-		byte_t b = inBuffer[inBufPos];
+		byte_t b = input[inBufPos];
 
 		// 先行バイト未発見状態の場合
 		if (m_lastLeadByte == 0x00)
@@ -137,8 +137,8 @@ void DBCSEncoding::DBCSDecoder::ConvertToUTF16(const byte_t* inBuffer, size_t in
 			}
 			else {
 				// シングルバイト文字。普通に変換する。
-				outBuffer[outBufPos] = m_tableInfo->dbcsToUTF16Table[b];
-				LN_THROW(outBuffer[outBufPos] != 0x0000, EncodingException);	// 不正文字
+				output[outBufPos] = m_tableInfo->dbcsToUTF16Table[b];
+				LN_THROW(output[outBufPos] != 0x0000, EncodingException);	// 不正文字
 				++outBufPos;
 			}
 		}
@@ -151,8 +151,8 @@ void DBCSEncoding::DBCSDecoder::ConvertToUTF16(const byte_t* inBuffer, size_t in
 			//}
 
 			// マルチバイト文字。先行バイトを上位バイトにして変換する。
-			outBuffer[outBufPos] = m_tableInfo->dbcsToUTF16Table[(m_lastLeadByte << 8) | (b & 0xFF)];
-			LN_THROW(outBuffer[outBufPos] != 0x0000, EncodingException);	// 不正文字
+			output[outBufPos] = m_tableInfo->dbcsToUTF16Table[(m_lastLeadByte << 8) | (b & 0xFF)];
+			LN_THROW(output[outBufPos] != 0x0000, EncodingException);	// 不正文字
 			++outBufPos;
 			m_lastLeadByte = 0x00;
 		}
@@ -168,21 +168,21 @@ void DBCSEncoding::DBCSDecoder::ConvertToUTF16(const byte_t* inBuffer, size_t in
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void DBCSEncoding::DBCSEncoder::ConvertFromUTF16(const UTF16* inBuffer, size_t inBufferCharCount, byte_t* outBuffer, size_t outBufferByteCount, size_t* outBytesUsed, size_t* outCharsUsed)
+void DBCSEncoding::DBCSEncoder::ConvertFromUTF16(const UTF16* input, size_t inputElementSize, byte_t* output, size_t outputByteSize, size_t* outBytesUsed, size_t* outCharsUsed)
 {
-	if (outBufferByteCount > 0) { outBuffer[0] = '\0'; }
+	if (outputByteSize > 0) { output[0] = '\0'; }
 	*outBytesUsed = 0;
 	*outCharsUsed = 0;
 
 	// 入力が 0 文字の場合は何もしない (変換の必要なし)
-	if (inBufferCharCount == 0) { return; }
+	if (inputElementSize == 0) { return; }
 
 	// 変換
 	size_t inBufPos = 0;	// UTF16
 	size_t outBufPos = 0;	// MBCS
-	for (; inBufPos < inBufferCharCount; ++inBufPos)
+	for (; inBufPos < inputElementSize; ++inBufPos)
 	{
-		UTF16 ch = inBuffer[inBufPos];
+		UTF16 ch = input[inBufPos];
 
 		// サロゲートはエラー
 		if (UnicodeUtils::CheckUTF16HighSurrogate(ch) || UnicodeUtils::CheckUTF16LowSurrogate(ch)) {
@@ -193,14 +193,14 @@ void DBCSEncoding::DBCSEncoder::ConvertFromUTF16(const UTF16* inBuffer, size_t i
 
 		// シングルバイト文字
 		if ((dbBytes & 0xFF00) == 0x0000) {
-			outBuffer[outBufPos] = dbBytes & 0xFF;
+			output[outBufPos] = dbBytes & 0xFF;
 			++outBufPos;
 		}
 		// マルチバイト文字
 		else {
-			outBuffer[outBufPos] = ((dbBytes & 0xFF00) >> 8);
+			output[outBufPos] = ((dbBytes & 0xFF00) >> 8);
 			++outBufPos;
-			outBuffer[outBufPos] = (dbBytes & 0xFF);
+			output[outBufPos] = (dbBytes & 0xFF);
 			++outBufPos;
 		}
 	}

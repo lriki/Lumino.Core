@@ -63,8 +63,8 @@ private:
 private:
 	RefPtr<Encoding>			m_dstEncoding;
 	RefPtr<Encoding>			m_srcEncoding;
-	RefPtr<Encoder>				m_dstEncoder;
-	RefPtr<Decoder>				m_srcDecoder;
+	Encoder*					m_dstEncoder;
+	Decoder*					m_srcDecoder;
 	ByteBuffer					m_outputBuffer;
 	EncodingConversionResult	m_lastResult;
 	ByteBuffer					m_tmpBuffer;			///< 状態を保持できないデコーダを使っている場合に使用する一時バッファ

@@ -18,7 +18,7 @@ LN_NAMESPACE_BEGIN
 EncodingType EncodingDetector::Detect(const void* bytes, size_t bytesSize)
 {
 	if (bytes == NULL || bytesSize == 0) {
-		m_type = EncodingType_Unknown;
+		m_type = EncodingType::Unknown;
 		return m_type;
 	}
 	m_buffer = (const Byte*)bytes;
@@ -26,14 +26,14 @@ EncodingType EncodingDetector::Detect(const void* bytes, size_t bytesSize)
 
 	// UTF 系の BOM チェック
 	EncodingType type = CheckUTFBom();
-	if (type != EncodingType_Unknown) {
+	if (type != EncodingType::Unknown) {
 		m_type = type;
 		return m_type;
 	}
 
 	// ASCII チェック
 	if (CheckASCII()) {
-		m_type = EncodingType_ASCII;
+		m_type = EncodingType::ASCII;
 		return m_type;
 	}
 
@@ -74,7 +74,7 @@ EncodingType EncodingDetector::Detect(const void* bytes, size_t bytesSize)
 		return m_type;
 	}
 
-	m_type = EncodingType_Unknown;	// 判別失敗
+	m_type = EncodingType::Unknown;	// 判別失敗
 	return m_type;
 }
 
@@ -122,11 +122,11 @@ EncodingType EncodingDetector::CheckUTFBom()
 	};
 	BomData data[] = 
 	{
-		{ EncodingType_UTF8,	{ 0xEF, 0xBB, 0xBF, 0x00 }, 3 },
-		{ EncodingType_UTF32L,	{ 0xFF, 0xFE, 0x00, 0x00 }, 4 },	// UTF16Little と同じなので先に判別しないとダメ
-		{ EncodingType_UTF32B,	{ 0x00, 0x00, 0xFE, 0xFF }, 4 },
-		{ EncodingType_UTF16L,	{ 0xFF, 0xFE, 0x00, 0x00 }, 2 },
-		{ EncodingType_UTF16B,	{ 0xFE, 0xFF, 0x00, 0x00 }, 2 },
+		{ EncodingType::UTF8,	{ 0xEF, 0xBB, 0xBF, 0x00 }, 3 },
+		{ EncodingType::UTF32L,	{ 0xFF, 0xFE, 0x00, 0x00 }, 4 },	// UTF16Little と同じなので先に判別しないとダメ
+		{ EncodingType::UTF32B,	{ 0x00, 0x00, 0xFE, 0xFF }, 4 },
+		{ EncodingType::UTF16L,	{ 0xFF, 0xFE, 0x00, 0x00 }, 2 },
+		{ EncodingType::UTF16B,	{ 0xFE, 0xFF, 0x00, 0x00 }, 2 },
 	};
 	for (int i = 0; i < 5; i++)
 	{
@@ -137,7 +137,7 @@ EncodingType EncodingDetector::CheckUTFBom()
 		}
 	}
 
-	return EncodingType_Unknown;	// BOM が無かった
+	return EncodingType::Unknown;	// BOM が無かった
 }
 
 

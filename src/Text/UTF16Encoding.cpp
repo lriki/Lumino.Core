@@ -45,7 +45,7 @@ int UTF16Encoding::GetLeadExtraLength(const void* buffer, size_t bufferSize) con
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-int UTF16Encoding::GetCharacterCount(const byte_t* buffer, size_t bufferSize) const
+int UTF16Encoding::GetCharacterCount(const void* buffer, size_t bufferSize) const
 {
 	int count;
 	UTFConversionResult result = UnicodeUtils::GetUTF16CharCount((const UTF16*)buffer, bufferSize / sizeof(UTF16), true, &count);
@@ -56,7 +56,7 @@ int UTF16Encoding::GetCharacterCount(const byte_t* buffer, size_t bufferSize) co
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void UTF16Encoding::UTF16Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t inBufferByteCount, UTF16* outBuffer, size_t outBufferCharCount, size_t* outBytesUsed, size_t* outCharsUsed)
+void UTF16Encoding::UTF16Decoder::ConvertToUTF16(const byte_t* input, size_t inputByteSize, UTF16* output, size_t outputElementSize, size_t* outBytesUsed, size_t* outCharsUsed)
 {
 	/* バイトストリームの UTF-16 から、内部文字コードの UTF-16 への変換となる。
 	 * バイトストリームは、UTF-16 文字がバッファ終端で途切れる場合も考慮しなければならない。
@@ -68,17 +68,17 @@ void UTF16Encoding::UTF16Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t 
 	{
 		byte_t* word = (byte_t*)&curLead;
 		word[0] = m_lastLeadByte;
-		word[1] = inBuffer[0];
-		inBuffer++;				// 消費した分だけバッファを縮める
-		inBufferByteCount--;	// 消費した分だけバッファを縮める
+		word[1] = input[0];
+		input++;				// 消費した分だけバッファを縮める
+		inputByteSize--;	// 消費した分だけバッファを縮める
 		m_lastLeadByte = 0x00;
 	}
 
 	// 入力が奇数バイト。最後のバイトを取っておく
-	if (inBufferByteCount % 2 != 0) 
+	if (inputByteSize % 2 != 0)
 	{
-		m_lastLeadByte = inBuffer[inBufferByteCount - 1];
-		inBufferByteCount--;	// 消費した分だけバッファを縮める
+		m_lastLeadByte = input[inputByteSize - 1];
+		inputByteSize--;	// 消費した分だけバッファを縮める
 	}
 
 	// 変換 (もし前回のバッファ終端が上位サロゲートだったら、m_lastLeadWord に先行バイトが入っている)
@@ -87,11 +87,11 @@ void UTF16Encoding::UTF16Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t 
 #endif
     size_t inWordPos = (curLead != 0x0000) ? SIZE_T_MAX : 0;	// MBCS
 	size_t outWordPos = 0;									// UTF16
-	size_t inWordCount = inBufferByteCount / 2;
-	uint16_t* inWords = (uint16_t*)inBuffer;
+	size_t inWordCount = inputByteSize / 2;
+	uint16_t* inWords = (uint16_t*)input;
 	size_t charCount = 0;
 	size_t usedByteCount = 0;
-	for (; inWordPos == SIZE_T_MAX || (inWordPos < inWordCount && outWordPos < outBufferCharCount);)
+	for (; inWordPos == SIZE_T_MAX || (inWordPos < inWordCount && outWordPos < outputElementSize);)
 	{
 		uint16_t ch = (inWordPos == SIZE_T_MAX) ? curLead : inWords[inWordPos];	// 途切れたバイトと結合した最初の1文字を考慮
 	
@@ -103,7 +103,7 @@ void UTF16Encoding::UTF16Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t 
 			}
 			else {
 				// 普通のUTF16文字。普通に格納。
-				outBuffer[outWordPos++] = ch;
+				output[outWordPos++] = ch;
 				++charCount;
 				usedByteCount += 2;
 			}
@@ -114,8 +114,8 @@ void UTF16Encoding::UTF16Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t 
 			// 下位サロゲートが見つかれば格納
 			if (UnicodeUtils::CheckUTF16LowSurrogate(ch)) 
 			{
-				outBuffer[outWordPos++] = m_lastLeadWord;
-				outBuffer[outWordPos++] = ch;
+				output[outWordPos++] = m_lastLeadWord;
+				output[outWordPos++] = ch;
 				++charCount;
 				usedByteCount += 4;
 				m_lastLeadWord = 0x0000;
@@ -144,22 +144,22 @@ void UTF16Encoding::UTF16Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void UTF16Encoding::UTF16Encoder::ConvertFromUTF16(const UTF16* inBuffer, size_t inBufferCharCount, byte_t* outBuffer, size_t outBufferByteCount, size_t* outBytesUsed, size_t* outCharsUsed)
+void UTF16Encoding::UTF16Encoder::ConvertFromUTF16(const UTF16* input, size_t inputElementSize, byte_t* output, size_t outputByteSize, size_t* outBytesUsed, size_t* outCharsUsed)
 {
 	/* 内部文字コードの UTF-16 から、バイトストリームの UTF-16 への変換となる。
 	 * 内部文字コードは、必ず 2byte 単位であり、バッファ終端がバイト単位で途切れることは無い。
 	 * そのため状態保持する必要は無く、そのままコピーでよい。
 	 */
 
-	errno_t err = memcpy_s(outBuffer, outBufferByteCount, inBuffer, inBufferCharCount * sizeof(UTF16));
+	errno_t err = memcpy_s(output, outputByteSize, input, inputElementSize * sizeof(UTF16));
 	LN_THROW(err == 0, ArgumentException);
 
 	// 文字数はカウントする
 	int count;
-	UTFConversionResult r = UnicodeUtils::GetUTF16CharCount((UnicodeUtils::UTF16*)inBuffer, inBufferCharCount, true, &count);
+	UTFConversionResult r = UnicodeUtils::GetUTF16CharCount((UnicodeUtils::UTF16*)input, inputElementSize, true, &count);
 	LN_THROW(r == UTFConversionResult_Success, EncodingException);
 
-	*outBytesUsed = inBufferCharCount * sizeof(UTF16);
+	*outBytesUsed = inputElementSize * sizeof(UTF16);
 	*outCharsUsed = count;
 }
 

@@ -41,8 +41,8 @@ TEST_F(Test_Base_Encoding, Convert)
 	options.NullTerminated = false;
 
 	const char* buf1 = "123";
-	RefPtr<Decoder> decoder(Encoding::GetSystemMultiByteEncoding()->CreateDecoder(), false);
-	RefPtr<Encoder> encoder(Encoding::GetWideCharEncoding()->CreateEncoder(), false);
+	std::unique_ptr<Decoder> decoder(Encoding::GetSystemMultiByteEncoding()->CreateDecoder());
+	std::unique_ptr<Encoder> encoder(Encoding::GetWideCharEncoding()->CreateEncoder());
 
 	// src が無い
 	ASSERT_THROW(
@@ -54,7 +54,7 @@ TEST_F(Test_Base_Encoding, Convert)
 		ArgumentException);
 	// encoder が無い
 	ASSERT_THROW(
-		Encoding::Convert(buf1, 0, decoder, NULL, options, NULL),
+		Encoding::Convert(buf1, 0, decoder.get(), NULL, options, NULL),
 		ArgumentException);
 
 	// ↓ストリーミング用状態記憶対応のため、許可する

@@ -32,14 +32,14 @@ TEST_F(Test_Base_Encoding_UTF8, Basic)
 		// "日本語" (UTF-8)
 		byte_t str1[] = { 0xE6, 0x97, 0xA5, 0xE6, 0x9C, 0xAC, 0xE8, 0xAA, 0x9E };
 
-		RefPtr<Decoder> decoder(Encoding::GetUTF8Encoding()->CreateDecoder(), false);
-		RefPtr<Encoder> encoder(Encoding::GetUTF16Encoding()->CreateEncoder(), false);
+		std::unique_ptr<Decoder> decoder(Encoding::GetUTF8Encoding()->CreateDecoder());
+		std::unique_ptr<Encoder> encoder(Encoding::GetUTF16Encoding()->CreateEncoder());
 
 		//size_t bytesUsed;
 		//size_t charsUsed;
 		//bool usedDefaultChar;
 		EncodingConversionResult info;
-		ByteBuffer buf1 = Encoding::Convert(str1, 9, decoder, encoder, options, &info);
+		ByteBuffer buf1 = Encoding::Convert(str1, 9, decoder.get(), encoder.get(), options, &info);
 		
 		uint16_t* utf16str = (uint16_t*)buf1.GetData();
 
@@ -55,14 +55,14 @@ TEST_F(Test_Base_Encoding_UTF8, Basic)
 		// "日本語" (UTF-16)
 		uint16_t utf16str[] = { 0x65E5, 0x672C, 0x8A9e };
 
-		RefPtr<Decoder> decoder(Encoding::GetUTF16Encoding()->CreateDecoder(), false);
-		RefPtr<Encoder> encoder(Encoding::GetUTF8Encoding()->CreateEncoder(), false);
+		std::unique_ptr<Decoder> decoder(Encoding::GetUTF16Encoding()->CreateDecoder());
+		std::unique_ptr<Encoder> encoder(Encoding::GetUTF8Encoding()->CreateEncoder());
 
 		//size_t bytesUsed;
 		//size_t charsUsed;
 		//bool usedDefaultChar;
 		EncodingConversionResult info;
-		ByteBuffer buf1 = Encoding::Convert(utf16str, 6, decoder, encoder, options, &info);
+		ByteBuffer buf1 = Encoding::Convert(utf16str, 6, decoder.get(), encoder.get(), options, &info);
 
 		uint8_t* utf8str = (uint8_t*)buf1.GetData();
 

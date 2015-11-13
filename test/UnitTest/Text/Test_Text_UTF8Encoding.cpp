@@ -13,7 +13,7 @@ static UTF16 g_utf16Hokke[2] = { 0xD867, 0xDE3D };		// ほっけ
 //---------------------------------------------------------------------
 TEST_F(Test_Text_UTF8Encoding_Unit, ConvertToUTF16)
 {
-	RefPtr<Decoder> decoder(Encoding::GetUTF8Encoding()->CreateDecoder(), false);
+	std::unique_ptr<Decoder> decoder(Encoding::GetUTF8Encoding()->CreateDecoder());
 
 	UTF8 utf8Buf[] = {
 		0xE6, 0x97, 0xA5,	// '日'
@@ -65,7 +65,7 @@ TEST_F(Test_Text_UTF8Encoding_Unit, ConvertToUTF16)
 //---------------------------------------------------------------------
 TEST_F(Test_Text_UTF8Encoding_Unit, ConvertFromUTF16)
 {
-	RefPtr<Encoder> encoder(Encoding::GetUTF8Encoding()->CreateEncoder(), false);
+	std::unique_ptr<Encoder> encoder(Encoding::GetUTF8Encoding()->CreateEncoder());
 
 	UTF16 utf16Buf[3] = { 0x65E5, 0x672C, 0x8A9E };	// "日本語"
 	UTF8 utf8Buf[6];

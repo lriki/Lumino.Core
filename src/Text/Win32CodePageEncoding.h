@@ -21,7 +21,7 @@ public:
 	virtual Decoder* CreateDecoder() const { return LN_NEW Win32CodePageDecoder(m_cpInfo); }
 	virtual Encoder* CreateEncoder() const { return LN_NEW Win32CodePageEncoder(m_cpInfo); }
 	virtual byte_t* GetPreamble() const { return NULL; }
-	virtual int GetCharacterCount(const byte_t* buffer, size_t bufferSize) const;
+	virtual int GetCharacterCount(const void* buffer, size_t bufferSize) const;
 	virtual int GetLeadExtraLength(const void* buffer, size_t bufferSize) const;
 
 private:
@@ -37,7 +37,7 @@ private:
 		virtual int GetMinByteCount() { return 1; }
 		virtual int GetMaxByteCount() { return m_maxByteCount; }
 		virtual bool CanRemain() { return m_canRemain; }
-		virtual void ConvertToUTF16(const byte_t* inBuffer, size_t inBufferByteCount, UTF16* outBuffer, size_t outBufferCharCount, size_t* outBytesUsed, size_t* outCharsUsed);
+		virtual void ConvertToUTF16(const byte_t* input, size_t inputByteSize, UTF16* output, size_t outputElementSize, size_t* outBytesUsed, size_t* outCharsUsed);
 		virtual int UsedDefaultCharCount() { return m_usedDefaultCharCount; }
 		virtual bool Completed() { return m_lastLeadByte == 0; }
 		virtual void Reset() { m_usedDefaultCharCount = 0; m_lastLeadByte = 0x0000; }
@@ -58,7 +58,7 @@ private:
 		virtual int GetMinByteCount() { return 1; }
 		virtual int GetMaxByteCount() { return m_maxByteCount; }
 		virtual bool CanRemain() { return m_canRemain; }
-		virtual void ConvertFromUTF16(const UTF16* inBuffer, size_t inBufferCharCount, byte_t* outBuffer, size_t outBufferByteCount, size_t* outBytesUsed, size_t* outCharsUsed);
+		virtual void ConvertFromUTF16(const UTF16* input, size_t inputElementSize, byte_t* output, size_t outputByteSize, size_t* outBytesUsed, size_t* outCharsUsed);
 		virtual int UsedDefaultCharCount() { return m_usedDefaultCharCount; }
 		virtual bool Completed() { return true; }
 		virtual void Reset() { m_usedDefaultCharCount = 0; }

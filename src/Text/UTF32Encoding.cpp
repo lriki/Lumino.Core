@@ -34,7 +34,7 @@ byte_t* UTF32Encoding::GetPreamble() const
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-int UTF32Encoding::GetCharacterCount(const byte_t* buffer, size_t bufferSize) const
+int UTF32Encoding::GetCharacterCount(const void* buffer, size_t bufferSize) const
 {
 	return bufferSize / sizeof(UTF32);
 }
@@ -42,7 +42,7 @@ int UTF32Encoding::GetCharacterCount(const byte_t* buffer, size_t bufferSize) co
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void UTF32Encoding::UTF32Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t inBufferByteCount, UTF16* outBuffer, size_t outBufferCharCount, size_t* outBytesUsed, size_t* outCharsUsed)
+void UTF32Encoding::UTF32Decoder::ConvertToUTF16(const byte_t* input, size_t inputByteSize, UTF16* output, size_t outputElementSize, size_t* outBytesUsed, size_t* outCharsUsed)
 {
 	*outBytesUsed = 0;
 	*outCharsUsed = 0;
@@ -58,35 +58,35 @@ void UTF32Encoding::UTF32Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t 
 		size_t req = 4 - m_lastLeadBytesCount;	// 追加要求バイト数
 		byte_t buf[4];
 		memcpy_s(buf, 4, m_lastLeadBytes, m_lastLeadBytesCount);
-		memcpy_s(buf + m_lastLeadBytesCount, req, inBuffer, req);
+		memcpy_s(buf + m_lastLeadBytesCount, req, input, req);
 
 		// 変換 (1文字だけ)
-		UTFConversionResult result = UnicodeUtils::ConvertUTF32toUTF16((UnicodeUtils::UTF32*)buf, 1, (UnicodeUtils::UTF16*)outBuffer, outBufferCharCount, &options);
+		UTFConversionResult result = UnicodeUtils::ConvertUTF32toUTF16((UnicodeUtils::UTF32*)buf, 1, (UnicodeUtils::UTF16*)output, outputElementSize, &options);
 		LN_THROW(result == UTFConversionResult_Success, EncodingException);
 
 		// バッファ先頭は消費した分だけ進め、バッファサイズは消費した分だけ縮める
-		inBuffer += req;
-		inBufferByteCount -= req;
-		outBuffer += options.ConvertedTargetLength / sizeof(UnicodeUtils::UTF16);
-		outBufferCharCount -= options.ConvertedTargetLength / sizeof(UnicodeUtils::UTF16);
+		input += req;
+		inputByteSize -= req;
+		output += options.ConvertedTargetLength / sizeof(UnicodeUtils::UTF16);
+		outputElementSize -= options.ConvertedTargetLength / sizeof(UnicodeUtils::UTF16);
 		(*outBytesUsed) += options.ConvertedTargetLength * sizeof(UnicodeUtils::UTF16);
 		(*outCharsUsed) += 1;
 	}
 
 	// バッファ終端で文字が途切れている場合は次回の変換に回すため記憶しておく
-	m_lastLeadBytesCount = inBufferByteCount % 4;
+	m_lastLeadBytesCount = inputByteSize % 4;
 	if (m_lastLeadBytesCount > 0)
 	{
-		memcpy_s(m_lastLeadBytes, 4, &inBuffer[inBufferByteCount - m_lastLeadBytesCount], m_lastLeadBytesCount);
-		inBufferByteCount -= m_lastLeadBytesCount;
+		memcpy_s(m_lastLeadBytes, 4, &input[inputByteSize - m_lastLeadBytesCount], m_lastLeadBytesCount);
+		inputByteSize -= m_lastLeadBytesCount;
 	}
 	
 	// 変換
 	UTFConversionResult result = UnicodeUtils::ConvertUTF32toUTF16(
-		(UnicodeUtils::UTF32*)inBuffer, 
-		inBufferByteCount / sizeof(UnicodeUtils::UTF32),
-		(UnicodeUtils::UTF16*)outBuffer, 
-		outBufferCharCount,
+		(UnicodeUtils::UTF32*)input,
+		inputByteSize / sizeof(UnicodeUtils::UTF32),
+		(UnicodeUtils::UTF16*)output,
+		outputElementSize,
 		&options);
 	LN_THROW(result == UTFConversionResult_Success, EncodingException);
 
@@ -98,7 +98,7 @@ void UTF32Encoding::UTF32Decoder::ConvertToUTF16(const byte_t* inBuffer, size_t 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void UTF32Encoding::UTF32Encoder::ConvertFromUTF16(const UTF16* inBuffer, size_t inBufferCharCount, byte_t* outBuffer, size_t outBufferByteCount, size_t* outBytesUsed, size_t* outCharsUsed)
+void UTF32Encoding::UTF32Encoder::ConvertFromUTF16(const UTF16* input, size_t inputElementSize, byte_t* output, size_t outputByteSize, size_t* outBytesUsed, size_t* outCharsUsed)
 {
 	*outBytesUsed = 0;
 	*outCharsUsed = 0;
@@ -111,35 +111,35 @@ void UTF32Encoding::UTF32Encoder::ConvertFromUTF16(const UTF16* inBuffer, size_t
 	// 前回途中で途切れたワードがあれば先に変換する
 	if (m_lastLeadWord != 0x0000)
 	{
-		uint16_t buf[2] = { m_lastLeadWord, inBuffer[0] };
+		uint16_t buf[2] = { m_lastLeadWord, input[0] };
 
 		// 変換 (サロゲートペアで1文字だけ)
-		UTFConversionResult result = UnicodeUtils::ConvertUTF16toUTF32((UnicodeUtils::UTF16*)buf, 2, (UnicodeUtils::UTF32*)outBuffer, outBufferByteCount, &options);
+		UTFConversionResult result = UnicodeUtils::ConvertUTF16toUTF32((UnicodeUtils::UTF16*)buf, 2, (UnicodeUtils::UTF32*)output, outputByteSize, &options);
 		LN_THROW(result == UTFConversionResult_Success, EncodingException);
 
 		// バッファ先頭は消費した分だけ進め、バッファサイズは消費した分だけ縮める
 		size_t usedTargetBytes = options.ConvertedTargetLength * sizeof(UnicodeUtils::UTF32);
-		inBuffer += 1;
-		inBufferCharCount -= 1;
-		outBuffer += usedTargetBytes;
-		outBufferByteCount -= usedTargetBytes;
+		input += 1;
+		inputElementSize -= 1;
+		output += usedTargetBytes;
+		outputByteSize -= usedTargetBytes;
 		(*outBytesUsed) += usedTargetBytes;
 		(*outCharsUsed) += options.CharCount;
 	}
 
 	// 前回途中で途切れたワードがあれば先に変換する (とりあえずエンディアン考慮せず、サロゲートなら取っておく)
-	if (UnicodeUtils::CheckUTF16HighSurrogate(inBuffer[inBufferCharCount - 1])/* || UnicodeUtils::CheckUTF16LowSurrogate(inBuffer[inBufferCharCount])*/)
+	if (UnicodeUtils::CheckUTF16HighSurrogate(input[inputElementSize - 1])/* || UnicodeUtils::CheckUTF16LowSurrogate(inBuffer[inputElementSize])*/)
 	{
-		m_lastLeadWord = inBuffer[inBufferCharCount];
-		inBufferCharCount -= 1;
+		m_lastLeadWord = input[inputElementSize];
+		inputElementSize -= 1;
 	}
 	
 	// 変換
 	UTFConversionResult result = UnicodeUtils::ConvertUTF16toUTF32(
-		(UnicodeUtils::UTF16*)inBuffer, 
-		inBufferCharCount,
-		(UnicodeUtils::UTF32*)outBuffer, 
-		outBufferByteCount / sizeof(UnicodeUtils::UTF32),
+		(UnicodeUtils::UTF16*)input,
+		inputElementSize,
+		(UnicodeUtils::UTF32*)output,
+		outputByteSize / sizeof(UnicodeUtils::UTF32),
 		&options);
 	LN_THROW(result == UTFConversionResult_Success, EncodingException);
 

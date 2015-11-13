@@ -13,6 +13,9 @@ LN_NAMESPACE_BEGIN
 //
 //-----------------------------------------------------------------------------
 EncodingConverter::EncodingConverter()
+	: m_dstEncoder(NULL)
+	, m_srcDecoder(NULL)
+	, m_encodingModified(false)
 {
 }
 
@@ -21,6 +24,8 @@ EncodingConverter::EncodingConverter()
 //-----------------------------------------------------------------------------
 EncodingConverter::~EncodingConverter()
 {
+	LN_SAFE_DELETE(m_dstEncoder);
+	LN_SAFE_DELETE(m_srcDecoder);
 }
 
 //-----------------------------------------------------------------------------
@@ -138,8 +143,11 @@ void EncodingConverter::CheckUpdateEncoderDecoder()
 		LN_THROW(m_dstEncoding != NULL, InvalidOperationException, "DestinationEncoding is not set.");
 		LN_THROW(m_srcEncoding != NULL, InvalidOperationException, "SourceEncoding is not set.");
 
-		m_dstEncoder.Attach(m_dstEncoding->CreateEncoder());
-		m_srcDecoder.Attach(m_srcEncoding->CreateDecoder());
+		LN_SAFE_DELETE(m_dstEncoder);
+		LN_SAFE_DELETE(m_srcDecoder);
+
+		m_dstEncoder = m_dstEncoding->CreateEncoder();
+		m_srcDecoder = m_srcEncoding->CreateDecoder();
 		m_encodingModified = false;
 	}
 }

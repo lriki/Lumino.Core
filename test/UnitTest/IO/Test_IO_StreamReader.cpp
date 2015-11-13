@@ -11,7 +11,7 @@ protected:
 TEST_F(Test_IO_StreamReader, ReadLine)
 {
 #if 0
-	StreamReader reader(LOCALFILE("TestData/Text_SJIS_CRLF.txt"), Encoding::GetEncoding(Text::EncodingType_SJIS));
+	StreamReader reader(LOCALFILE("TestData/Text_SJIS_CRLF.txt"), Encoding::GetEncoding(Text::EncodingType::SJIS));
 	String str, line;
 	int count = 0;
 	while (reader.ReadLine(&line))
@@ -41,7 +41,7 @@ TEST_F(Test_IO_StreamReader, ReadLine)
 		tcharBuf[StreamReader::DefaultBufferSize + 1] = _T('a');
 
 		MemoryStream mem(asciiBuf, LN_ARRAY_SIZE_OF(asciiBuf));
-		StreamReader reader(&mem, Encoding::GetEncoding(EncodingType_SJIS));
+		StreamReader reader(&mem, Encoding::GetEncoding(EncodingType::SJIS));
 
 		String line1, line2, line3;
 		ASSERT_TRUE(reader.ReadLine(&line1));

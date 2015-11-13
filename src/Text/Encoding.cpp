@@ -1,5 +1,6 @@
 ﻿
 #include "../Internal.h"
+#include <memory>
 #include <algorithm>
 #include "../../include/Lumino/Base/RefObject.h"
 #include "../../include/Lumino/Base/ByteBuffer.h"
@@ -99,37 +100,37 @@ Encoding* Encoding::GetEncoding(EncodingType type)
 {
 	switch (type)
 	{
-		case EncodingType_ASCII:
+		case EncodingType::ASCII:
 		{
 			static ASCIIEncoding asciiEncoding;
 			return &asciiEncoding;
 		}
-		case EncodingType_SJIS:
+		case EncodingType::SJIS:
 		{
-			static DBCSEncoding sjisEncoding(EncodingType_SJIS);
+			static DBCSEncoding sjisEncoding(EncodingType::SJIS);
 			return &sjisEncoding;
 		}
-		case EncodingType_EUCJP:
+		case EncodingType::EUCJP:
 		{
 			static EUCJPEncoding eucjpEncoding;
 			return &eucjpEncoding;
 		}
-		case EncodingType_GB2312:
+		case EncodingType::GB2312:
 		{
-			static DBCSEncoding gb2312Encoding(EncodingType_GB2312);
+			static DBCSEncoding gb2312Encoding(EncodingType::GB2312);
 			return &gb2312Encoding;
 		}
-		case EncodingType_EUCKR:
+		case EncodingType::EUCKR:
 		{
-			static DBCSEncoding euckrEncoding(EncodingType_EUCKR);
+			static DBCSEncoding euckrEncoding(EncodingType::EUCKR);
 			return &euckrEncoding;
 		}
-		case EncodingType_BIG5:
+		case EncodingType::BIG5:
 		{
-			static DBCSEncoding big5Encoding(EncodingType_BIG5);
+			static DBCSEncoding big5Encoding(EncodingType::BIG5);
 			return &big5Encoding;
 		}
-		case EncodingType_UTF8:
+		case EncodingType::UTF8:
 		{
 			static UTF8Encoding utf8BOMEncoding(true);
 			return &utf8BOMEncoding;
@@ -188,9 +189,9 @@ ByteBuffer Encoding::Convert(
 	const EncodingConversionOptions& options,
 	EncodingConversionResult* result)
 {
-	RefPtr<Decoder> decoder(srcEncoding->CreateDecoder(), false);
-	RefPtr<Encoder> encoder(targetEncoding->CreateEncoder(), false);
-	return Convert(src, srcByteCount, decoder.GetObjectPtr(), encoder.GetObjectPtr(), options, result);
+	std::unique_ptr<Decoder> decoder(srcEncoding->CreateDecoder());
+	std::unique_ptr<Encoder> encoder(targetEncoding->CreateEncoder());
+	return Convert(src, srcByteCount, decoder.get(), encoder.get(), options, result);
 }
 
 //-----------------------------------------------------------------------------
@@ -273,9 +274,9 @@ void Encoding::Convert(
 	EncodingConversionResult* result)
 {
 	// TODO: できればメモリ確保はしたくないが…
-	RefPtr<Decoder> decoder(srcEncoding->CreateDecoder(), false);
-	RefPtr<Encoder> encoder(destEncoding->CreateEncoder(), false);
-	return Convert(src, srcByteCount, decoder.GetObjectPtr(), dest, destByteCount, encoder.GetObjectPtr(), result);
+	std::unique_ptr<Decoder> decoder(srcEncoding->CreateDecoder());
+	std::unique_ptr<Encoder> encoder(destEncoding->CreateEncoder());
+	return Convert(src, srcByteCount, decoder.get(), dest, destByteCount, encoder.get(), result);
 }
 
 //-----------------------------------------------------------------------------
@@ -344,7 +345,7 @@ void Encoding::Convert(
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-size_t Encoding::CheckPreamble(const byte_t* buffer, size_t bufferSize) const
+size_t Encoding::CheckPreamble(const void* buffer, size_t bufferSize) const
 {
 	LN_VERIFY_RETURNV(buffer != NULL, 0);
 
@@ -401,7 +402,7 @@ int SystemMultiByteEncoding::GetMaxByteCount() const
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-int SystemMultiByteEncoding::GetCharacterCount(const byte_t* buffer, size_t bufferSize) const
+int SystemMultiByteEncoding::GetCharacterCount(const void* buffer, size_t bufferSize) const
 {
 
 }

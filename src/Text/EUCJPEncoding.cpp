@@ -145,11 +145,11 @@ inline EUCJPEncoding::EUCGroup EUCJPEncoding::CheckEUCGroup(const byte_t* pos, i
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-int EUCJPEncoding::GetCharacterCount(const byte_t* buffer, size_t bufferSize) const
+int EUCJPEncoding::GetCharacterCount(const void* buffer, size_t bufferSize) const
 {
 	int count = 0;
-	const byte_t* pos = buffer;
-	const byte_t* end = buffer + bufferSize;
+	const byte_t* pos = (const byte_t*)buffer;
+	const byte_t* end = pos + bufferSize;
 	while (pos < end)
 	{
 		pos += g_eucLeadExtraLength[CheckEUCGroup(pos, end - pos)];
@@ -175,12 +175,12 @@ int EUCJPEncoding::GetLeadExtraLength(const void* buffer, size_t bufferSize) con
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void EUCJPEncoding::EUCJPDecoder::ConvertToUTF16(const byte_t* inBuffer, size_t inBufferByteCount, UTF16* outBuffer, size_t outBufferCharCount, size_t* outBytesUsed, size_t* outCharsUsed)
+void EUCJPEncoding::EUCJPDecoder::ConvertToUTF16(const byte_t* input, size_t inputByteSize, UTF16* output, size_t outputElementSize, size_t* outBytesUsed, size_t* outCharsUsed)
 {
-	const byte_t* srcPos = inBuffer;
-	const byte_t* srcEnd = inBuffer + inBufferByteCount;
-	UTF16* dstPos = outBuffer;
-	UTF16* dstEnd = dstPos + outBufferCharCount;
+	const byte_t* srcPos = input;
+	const byte_t* srcEnd = input + inputByteSize;
+	UTF16* dstPos = output;
+	UTF16* dstEnd = dstPos + outputElementSize;
 
 	while (srcPos < srcEnd)
 	{
@@ -254,8 +254,8 @@ void EUCJPEncoding::EUCJPDecoder::ConvertToUTF16(const byte_t* inBuffer, size_t 
 		++srcPos;
 	}
 
-	*outBytesUsed = srcEnd - inBuffer;
-	*outCharsUsed = dstEnd - outBuffer;	// サロゲートは無いのでコレで良い
+	*outBytesUsed = srcEnd - input;
+	*outCharsUsed = dstEnd - output;	// サロゲートは無いのでコレで良い
 }
 
 //=============================================================================
@@ -264,17 +264,17 @@ void EUCJPEncoding::EUCJPDecoder::ConvertToUTF16(const byte_t* inBuffer, size_t 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void EUCJPEncoding::EUCJPEncoder::ConvertFromUTF16(const UTF16* inBuffer, size_t inBufferCharCount, byte_t* outBuffer, size_t outBufferByteCount, size_t* outBytesUsed, size_t* outCharsUsed)
+void EUCJPEncoding::EUCJPEncoder::ConvertFromUTF16(const UTF16* input, size_t inputElementSize, byte_t* output, size_t outputByteSize, size_t* outBytesUsed, size_t* outCharsUsed)
 {
 	// 入力が 0 文字の場合は何もしない (変換の必要なし)
-	if (inBufferCharCount == 0) { return; }
+	if (inputElementSize == 0) { return; }
 
 	// 変換
 	size_t inBufPos = 0;	// UTF16
 	size_t outBufPos = 0;	// MBCS
-	for (; inBufPos < inBufferCharCount; ++inBufPos)
+	for (; inBufPos < inputElementSize; ++inBufPos)
 	{
-		UTF16 ch = inBuffer[inBufPos];
+		UTF16 ch = input[inBufPos];
 
 		// サロゲートはエラー
 		if (UnicodeUtils::CheckUTF16HighSurrogate(ch) || UnicodeUtils::CheckUTF16LowSurrogate(ch)) {
@@ -286,11 +286,11 @@ void EUCJPEncoding::EUCJPEncoder::ConvertFromUTF16(const UTF16* inBuffer, size_t
 		{
 			byte_t hi  = (g_UTF16ToEUCJPEXTTable[ch] >> 8) & 0xFF;
 			byte_t low = g_UTF16ToEUCJPEXTTable[ch] & 0xFF;
-			outBuffer[outBufPos] = 0x8F;
+			output[outBufPos] = 0x8F;
 			++outBufPos;
-			outBuffer[outBufPos] = hi | 0x80;
+			output[outBufPos] = hi | 0x80;
 			++outBufPos;
-			outBuffer[outBufPos] = low | 0x80;
+			output[outBufPos] = low | 0x80;
 			++outBufPos;
 		}
 		// 2Byte 以下文字
@@ -301,14 +301,14 @@ void EUCJPEncoding::EUCJPEncoder::ConvertFromUTF16(const UTF16* inBuffer, size_t
 			// 半角カタカナ
 			if (0xA0 <= sjis && sjis <= 0xDF)
 			{
-				outBuffer[0] = 0x8E;
-				outBuffer[1] = sjis & 0xFF;
+				output[0] = 0x8E;
+				output[1] = sjis & 0xFF;
 				outBufPos += 2;
 			}
 			// シングルバイト文字
 			else if ((sjis & 0xFF00) == 0x0000)
 			{
-				outBuffer[outBufPos] = sjis & 0xFF;
+				output[outBufPos] = sjis & 0xFF;
 				++outBufPos;
 			}
 			// マルチバイト文字
@@ -318,9 +318,9 @@ void EUCJPEncoding::EUCJPEncoder::ConvertFromUTF16(const UTF16* inBuffer, size_t
 				byte_t b1 = (jis >> 8) & 0xFF;
 				byte_t b2 = jis & 0xFF;
 
-				outBuffer[outBufPos] = b1 | 0x80;
+				output[outBufPos] = b1 | 0x80;
 				++outBufPos;
-				outBuffer[outBufPos] = b2 | 0x80;
+				output[outBufPos] = b2 | 0x80;
 				++outBufPos;
 			}
 		}
