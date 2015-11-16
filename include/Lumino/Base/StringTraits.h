@@ -110,7 +110,7 @@ public:
 		@details	str2 が空文字列である場合は 0 を返します。
 	*/
 	template<typename TChar>
-	static int IndexOf(const TChar* str1, const TChar* str2, int startIndex, CaseSensitivity cs);
+	static int IndexOf(const TChar* str1, const TChar* str2, int startIndex = 0, CaseSensitivity cs = CaseSensitivity::CaseSensitive);
 
 	/**
 		@brief		文字列を検索し、最後に見つかったインデックスを返します。
