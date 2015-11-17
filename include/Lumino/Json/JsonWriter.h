@@ -15,11 +15,11 @@ public:
 	virtual ~JsonWriter();
 
 public:
-	void StartObject();
-	void EndObject();
-	void StartArray();
-	void EndArray();
-	void WriteKey(const TCHAR* str, int length = -1);
+	void WriteStartObject();
+	void WriteEndObject();
+	void WriteStartArray();
+	void WriteEndArray();
+	void WritePropertyName(const TCHAR* str, int length = -1);
 	void WriteNull();
 	void WriteBool(bool value);
 	void WriteDouble(double value);
@@ -45,7 +45,7 @@ protected:
 	virtual void OnString(const TCHAR* str, int length);
 
 private:
-	void WritePrefix();
+	void AutoComplete();
 
 private:
 	struct Level

@@ -12,5 +12,5 @@ protected:
 TEST_F(Test_Base_Formatter, Constructor)
 {
 
-	Formatter<TCHAR>::Format(_T("{0}"), String(_T("aa")));
+	//Formatter<TCHAR>::Format(_T("{0}"), String(_T("aa")));
 }

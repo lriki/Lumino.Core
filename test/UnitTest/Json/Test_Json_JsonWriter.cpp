@@ -1,37 +1,40 @@
 #include <TestConfig.h>
 
-class Test_Json_JsonWriter : public ::testing::Test
+//=============================================================================
+// Test_Json_JsonWriter_Integrate
+//=============================================================================
+class Test_Json_JsonWriter_Integrate : public ::testing::Test
 {
 protected:
 	virtual void SetUp() {}
 	virtual void TearDown() {}
 };
 
-//---------------------------------------------------------------------
-TEST_F(Test_Json_JsonWriter, Example)
+//-----------------------------------------------------------------------------
+TEST_F(Test_Json_JsonWriter_Integrate, Example)
 {
 	StringWriter s;
 	JsonWriter writer(&s);
 
-	writer.StartObject();
-	writer.WriteKey(_T("hello"));
+	writer.WriteStartObject();
+	writer.WritePropertyName(_T("hello"));
 	writer.WriteString(_T("world"));
-	writer.WriteKey(_T("t"));
+	writer.WritePropertyName(_T("t"));
 	writer.WriteBool(true);
-	writer.WriteKey(_T("f"));
+	writer.WritePropertyName(_T("f"));
 	writer.WriteBool(false);
-	writer.WriteKey(_T("n"));
+	writer.WritePropertyName(_T("n"));
 	writer.WriteNull();
-	writer.WriteKey(_T("i"));
+	writer.WritePropertyName(_T("i"));
 	writer.WriteDouble(123);
-	writer.WriteKey(_T("pi"));
+	writer.WritePropertyName(_T("pi"));
 	writer.WriteDouble(3.1416);
-	writer.WriteKey(_T("a"));
-	writer.StartArray();
+	writer.WritePropertyName(_T("a"));
+	writer.WriteStartArray();
 	for (unsigned i = 0; i < 4; i++)
 		writer.WriteDouble(i);
-	writer.EndArray();
-	writer.EndObject();
+	writer.WriteEndArray();
+	writer.WriteEndObject();
 
 	ASSERT_EQ(
 		_T("{\"hello\":\"world\",\"t\":true,\"f\":false,\"n\":null,\"i\":123.000000,\"pi\":3.141600,\"a\":[0.000000,1.000000,2.000000,3.000000]}"),

@@ -10,12 +10,10 @@ LN_NAMESPACE_BEGIN
 class Stream;
 
 /**
-	@brief	ストリームからバイナリデータを読み取るクラスです。
+	@brief		ストリームからバイナリデータを読み取るクラスです。
 
-
-	@code
-	// Wave ファイルのフォーマットを読み取る例
-
+	@section	Wave ファイルのフォーマットを読み取る
+	~~~~~~~~~~~~{.cpp}
 	struct WaveFileHeader
 	{
 		byte_t		RIFF[4];
@@ -38,8 +36,7 @@ class Stream;
 	uint32_t AvgBytesPerSec	= reader.ReadUInt32();
 	uint16_t BlockAlign		= reader.ReadUInt16();
 	uint16_t BitsPerSample	= reader.ReadUInt16();
-
-	@endcode
+	~~~~~~~~~~~~
 */
 class BinaryReader
 {
