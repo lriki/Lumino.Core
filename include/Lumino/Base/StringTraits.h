@@ -135,9 +135,9 @@ public:
 					str1 が str2 より大きい → 0 より大きい値
 	*/
 	template<typename TChar>
-	static int Compare(const TChar* str1, const TChar* str2, int count, CaseSensitivity cs = CaseSensitivity_CaseSensitive);
+	static int Compare(const TChar* str1, const TChar* str2, int count, CaseSensitivity cs = CaseSensitivity::CaseSensitive);
 	template<typename TChar>
-	static int Compare(TChar ch1, TChar ch2, CaseSensitivity cs = CaseSensitivity_CaseSensitive);
+	static int Compare(TChar ch1, TChar ch2, CaseSensitivity cs = CaseSensitivity::CaseSensitive);
 
 	/**
 		@brief		文字列の前後にある空白を除いた文字列の範囲を調べる
@@ -222,7 +222,7 @@ public:
 		@return		分割結果の文字列配列
 	*/
 	template<typename TChar>
-	static GenericStringArray<TChar> Split(const GenericString<TChar>& str, const TChar* delim, StringSplitOptions option = StringSplitOptions_None);
+	static GenericStringArray<TChar> Split(const GenericString<TChar>& str, const TChar* delim, StringSplitOptions option = StringSplitOptions::None);
 
 	/**
 		@brief		[start] ～ [end - 1] の範囲の先頭が改行かを判別し、一致したら文字数を返す ("\r" か "\n" なら 1、"\r\n" なら 2)

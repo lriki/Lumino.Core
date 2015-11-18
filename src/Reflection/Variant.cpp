@@ -19,13 +19,14 @@ const Variant Variant::Null;
 //-----------------------------------------------------------------------------
 Variant::Variant()
 	: m_type(VariantType::Null)
+	, m_object(nullptr)
 {
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void Variant::Set(bool value)
+void Variant::SetBool(bool value)
 {
 	Release();
 	m_type = VariantType::Bool;
@@ -47,6 +48,18 @@ EnumValueType Variant::GetEnumValue() const
 	LN_CHECK_STATE_RETURNV(m_type == VariantType::Enum, false);
 	return m_enum;
 }
+void Variant::SetReflectionObject(ReflectionObject* obj)
+{
+	Release();
+	m_type = VariantType::Object;
+	LN_REFOBJ_SET(m_object, obj);
+}
+ReflectionObject* Variant::GetReflectionObject() const
+{
+	LN_CHECK_STATE(m_type == VariantType::Object || m_type == VariantType::ListObject);	// List Ç‡ Object ÇÃàÍïîÅB
+	return m_object;
+}
+
 
 //-----------------------------------------------------------------------------
 //

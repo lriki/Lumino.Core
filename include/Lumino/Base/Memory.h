@@ -25,8 +25,12 @@ void* LN_CDECL operator new[](size_t size, ::ln::MemoryFlag flag);
 void  LN_CDECL operator delete (void* ptr, ::ln::MemoryFlag flag);
 void  LN_CDECL operator delete[](void* ptr, ::ln::MemoryFlag flag);
 
-#include <crtdbg.h>
+#ifdef LN_OS_WIN32
+#include <crtdbg.h>	// TODO
 #define LN_NEW new(_NORMAL_BLOCK,__FILE__,__LINE__)
-//#define LN_NEW						new(::ln::LN_MM_NORMAL_BLOCK)
+#else
+#define LN_NEW						new(::ln::LN_MM_NORMAL_BLOCK)
+#endif
+
 #define LN_OPERATOR_NEW(size)		::operator new(size,::ln:: LN_MM_NORMAL_BLOCK)
 #define LN_OPERATOR_DELETE(ptr) {	::operator delete(ptr); (ptr) = 0; }

@@ -87,7 +87,7 @@ public:
 	typedef typename GenericStringTraits<TChar>::YCHAR YCHAR;
 
 	typedef GenericString<TChar>	StringT;
-	typedef typename TChar					CharType;
+	typedef TChar					CharType;
     typedef std::size_t size_type;	// for GCC
 
 public:

@@ -8,8 +8,7 @@
 #include "../../include/Lumino/IO/FileSystem.h"
 #include "../../include/Lumino/IO/PathTraits.h"
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
 
 #define MBCS_FILEPATH(mbcsPath, srcWPath) \
 	char mbcsPath[LN_MAX_PATH + 1]; \
@@ -270,4 +269,4 @@ bool FileSystem::GetAttributeInternal(const wchar_t* path, FileAttribute* outAtt
 }
 	
 	
-} // namespace Lumino
+LN_NAMESPACE_END

@@ -24,9 +24,14 @@ enum class VariantType
 	ListObject,
 };
 
-namespace details
+namespace detail
 {
 	extern void* enabler;
+
+	class KindPrimitive {};
+	class KindEnum {};
+	class KindReflectionObject {};
+	class KindReflectionListObject {};
 }
 
 /**
@@ -37,29 +42,25 @@ class Variant
 public:
 	static const Variant Null;
 
-	class KindPrimitive {};
-	class KindEnum {};
-	class KindReflectionObject {};
-	class KindReflectionListObject {};
 
 public:
 	Variant();
 	Variant(const Variant& value);
 	Variant(std::nullptr_t value);
-	Variant(bool value) { Set(value); }
-	Variant(int32_t value) {}
+	Variant(bool value) : Variant() { SetBool(value); }
+	Variant(int32_t value) : Variant() {}
 	Variant(float value);
 	Variant(const TCHAR* value);
 	Variant(const String& value);
-	Variant(const Enum& value) { SetEnumValue(value.GetValue()); }
-	Variant(ReflectionObject* value);
+	Variant(const Enum& value) : Variant() { SetEnumValue(value.GetValue()); }
+	Variant(ReflectionObject* value) : Variant() { SetReflectionObject(value); }
 	Variant(ReflectionListObject* value);
 
 	~Variant() { Release(); }
 	Variant& operator = (const Variant& obj) { Copy(obj); return (*this); }
 
 
-	template<typename T, typename std::enable_if<std::is_enum<T>::value>::type*& = details::enabler>
+	template<typename T, typename std::enable_if<std::is_enum<T>::value>::type*& = detail::enabler>
 	Variant(T value) { SetEnumValue(value); }	// T が enum メンバの場合はこのコンストラクタが呼ばれる。
 
 
@@ -95,6 +96,17 @@ public:
 	template<bool condition, typename IfTrue, typename IfFalse>
 	using conditional_t = typename std::conditional<condition, IfTrue, IfFalse>::type;
 
+	//template<typename T, typename std::enable_if<std::is_pointer<T>::value>::type*& = detail::enabler>
+	//static T Cast(const Variant& value)
+	//{
+	//	using typeKind = first_enabled_t<
+	//		std::enable_if<std::is_base_of<Enum, T>::value, detail::KindEnum>,
+	//		std::enable_if<std::is_base_of<ReflectionListObject, T>::value, detail::KindReflectionListObject>,
+	//		std::enable_if<std::is_base_of<ReflectionObject, T>::value, detail::KindReflectionObject>,
+	//		detail::KindPrimitive>;
+	//	return CastSelector<T, typeKind>::GetValue(value);
+	//}
+
 	/**
 		@brief		指定した Variant の値を指定した型にキャストする。
 		@code
@@ -111,11 +123,20 @@ public:
 		//	EnumSubClass,
 		//	PrimitiveTypeClass >::type
 		//	bar;
-		using typeKind = typename std::conditional <
-			std::is_base_of<Enum, T>::value,
-			KindEnum,
-			KindPrimitive >::type;
-		return CastSelector<T, typeKind>::GetValue(value);
+
+		//using typeKind = typename std::conditional <
+		//	std::is_base_of<Enum, T>::value,
+		//	detail::KindEnum,
+		//	detail::KindPrimitive >::type;
+
+		//using typeKind = first_enabled_t<
+		//	std::enable_if<std::is_base_of<Enum, T>::value, detail::KindEnum>,
+		//	std::enable_if<std::is_base_of<ReflectionListObject, T>::value, detail::KindReflectionListObject>,
+		//	std::enable_if<std::is_base_of<ReflectionObject, T>::value, detail::KindReflectionObject>,
+		//	detail::KindPrimitive>;
+
+		// ここで「GetValue が定義されていない」というエラーが表示される場合、T に Variant が扱えない型が指定されたことを意味する。
+		//return CastSelector<T, typeKind>::GetValue(value);
 
 		//template<typename T>
 		//using bar = first_enabled_t<
@@ -124,16 +145,47 @@ public:
 		//	std::enable_if<typename std::is_base_of<ReflectionObject, T>::type, ReflectionObjectSubClass>,
 		//	PrimitiveTypeClass>;
 		//return CastSelector<T, typename std::is_base_of<Enum, T>::type, typename std::is_base_of<RefPtrCore, T>::type >::GetValue(value);
+
+		return CastValueOrPointerSelector<T>::GetValue(value);
 	}
 
 private:
-	void Set(bool value);
+	void SetBool(bool value);
 	bool GetBool() const;
 	void SetEnumValue(EnumValueType value);
 	EnumValueType GetEnumValue() const;
+	void SetReflectionObject(ReflectionObject* obj);
+	ReflectionObject* GetReflectionObject() const;
 
 
-	template<typename T, typename TType> struct CastSelector { static T GetValue(const Variant& v) { return 0; } };
+	template<typename T> struct CastValueOrPointerSelector
+	{
+		static T GetValue(const Variant& value)
+		{
+			// Cast<T>() の T は値型である場合ここに来る。
+			// Enum かプリミティブ型かを確認する。
+			using typeKind = typename std::conditional<
+				std::is_base_of<Enum, T>::value,
+				detail::KindEnum,
+				detail::KindPrimitive >::type;
+			return CastSelector<T, typeKind>::GetValue(value);
+		}
+	};
+	template<typename T> struct CastValueOrPointerSelector<T*>
+	{
+		static T* GetValue(const Variant& value)
+		{
+			// Cast<T>() の T はポインタ型である場合ここに来る。
+			// KindReflectionListObject または KindReflectionObject のサブクラスであるかを確認する。
+			using typeKind = first_enabled_t<
+				std::enable_if<std::is_base_of<ReflectionListObject, T>::value, detail::KindReflectionListObject>,
+				std::enable_if<std::is_base_of<ReflectionObject, T>::value, detail::KindReflectionObject>,
+				std::false_type>;
+			return CastSelector<T*, typeKind>::GetValue(value);
+		}
+	};
+
+	template<typename T, typename TType> struct CastSelector { /*static T GetValue(const Variant& v) { return 0; }*/ };
 	
 
 
@@ -176,8 +228,9 @@ private:
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-template<> struct Variant::CastSelector<bool, Variant::KindPrimitive>		{ static bool GetValue(const Variant& v) { return v.GetBool(); } };
-template<typename T> struct Variant::CastSelector<T, Variant::KindEnum>		{ static T GetValue(const Variant& v) { return static_cast<T::enum_type>(v.GetEnumValue()); } };
+template<> struct Variant::CastSelector<bool, detail::KindPrimitive>				{ static bool GetValue(const Variant& v) { return v.GetBool(); } };
+template<typename T> struct Variant::CastSelector<T, detail::KindEnum>				{ static T GetValue(const Variant& v) { return static_cast<T::enum_type>(v.GetEnumValue()); } };
+template<typename T> struct Variant::CastSelector<T, detail::KindReflectionObject>	{ static T GetValue(const Variant& v) { return static_cast<T>(v.GetReflectionObject()); } };
 
 } // namespace tr
 LN_NAMESPACE_END

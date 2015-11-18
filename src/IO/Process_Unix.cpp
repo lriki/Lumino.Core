@@ -11,8 +11,8 @@
 extern char **environ;
 #endif
 
-namespace Lumino
-{
+LN_NAMESPACE_BEGIN
+
 //
 //#ifdef _WIN32
 //class InternalPipeStream
@@ -89,7 +89,7 @@ void Process::Start(const PathName& program, const String& args)
         Array<StringA> argList = utf8Args.Split(" ");
 		
 		char** argv = new char *[argList.GetCount() + 2];
-        argv[0] = ::strdup(utf8Path.GetCStr());     // 書き込み可能なポインタを渡さなければならないので strdup
+        argv[0] = ::strdup(utf8Path.c_str());     // 書き込み可能なポインタを渡さなければならないので strdup
 		for (int i = 0; i < argList.GetCount(); ++i) {
 			argv[i + 1] = ::strdup(argList[i].GetCStr());
 		}
@@ -198,4 +198,5 @@ void Process::Dispose()
 }
 //#endif
 
-} // namespace Lumino
+LN_NAMESPACE_END
+

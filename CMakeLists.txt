@@ -354,6 +354,8 @@ if (WIN32)
 	endif()
 
 	set(CMAKE_DEBUG_POSTFIX "d")
+	
+	add_definitions("/EHsc")	# VS2015, cmake で生成すると何故か消えてしまうので明示的に指定する
 
 	# link librarys.
 	list(APPEND LN_LINK_LIBS "imagehlp.lib")
@@ -399,9 +401,6 @@ ln_make_postfix(LN_LIB_POSTFIX)
 if (LN_EXCEPTION_BACKTRACE)
 	add_definitions(-DLN_EXCEPTION_BACKTRACE)
 endif()
-
-
-add_definitions("/EHsc")	# VS2015, cmake で生成すると何故か消えてしまうので明示的に指定する
 
 #--------------------------------------
 # Static library.

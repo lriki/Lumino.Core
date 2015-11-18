@@ -17,6 +17,11 @@ LN_ENUM(VariantTestEnum1)
 };
 LN_ENUM_DECLARE(VariantTestEnum1);
 
+class RefTest1 : public ReflectionObject
+{
+};
+
+
 //---------------------------------------------------------------------
 TEST_F(IntegrationTest_Reflection_Variant, Basic)
 {
@@ -38,6 +43,15 @@ TEST_F(IntegrationTest_Reflection_Variant, Basic)
 		ASSERT_EQ(VariantType::Enum, v2.GetType());
 		ASSERT_EQ(VariantTestEnum1::Value1, Variant::Cast<VariantTestEnum1>(v1));
 		ASSERT_EQ(VariantTestEnum1::Value0, Variant::Cast<VariantTestEnum1>(v2));
+	}
+	// <Test> ReflectionObject 型
+	{
+		RefTest1* obj1 = new RefTest1();
+		Variant v1(obj1);
+		ASSERT_EQ(VariantType::Object, v1.GetType());
+		ASSERT_EQ(obj1, Variant::Cast<RefTest1*>(v1));
+		ASSERT_EQ(obj1, Variant::Cast<ReflectionObject*>(v1));
+		obj1->Release();
 	}
 
 	//CPINFO info;

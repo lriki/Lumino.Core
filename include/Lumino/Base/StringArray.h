@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 #include "Array.h"
 #include "String.h"
@@ -6,25 +6,26 @@
 LN_NAMESPACE_BEGIN
 
 /**
-	@brief	•¶š—ñ‚Ì”z—ñ‚Å‚·B
+	@brief	æ–‡å­—åˆ—ã®é…åˆ—ã§ã™ã€‚
 */
 template<typename TChar>
 class GenericStringArray
 	: public Array< GenericString<TChar> >
 {
 public:
-	typedef GenericString<TChar>	StringType;
+	typedef Array< GenericString<TChar> >	ArrayType;
+	typedef GenericString<TChar>			StringType;
 
 
 public:
 	GenericStringArray() {}
 
-	/** ‰Šú‰»qƒŠƒXƒg‚©‚çì¬‚µ‚Ü‚·B*/
+	/** åˆæœŸåŒ–å­ãƒªã‚¹ãƒˆã‹ã‚‰ä½œæˆã—ã¾ã™ã€‚*/
 	GenericStringArray(std::initializer_list<const TChar*> list)
 	{
-		Reserve(list.size());
+		ArrayType::Reserve(list.size());
 		for (const TChar* str : list) {
-			Add(String(str));
+			ArrayType::Add(String(str));
 		}
 	}
 
@@ -32,10 +33,10 @@ public:
 
 public:
 
-	/** w’è‚µ‚½•¶š—ñ‚ª‚±‚Ì”z—ñ“à‚É‘¶İ‚·‚é‚©‚Ç‚¤‚©‚ğ”»’f‚µ‚Ü‚·B*/
+	/** æŒ‡å®šã—ãŸæ–‡å­—åˆ—ãŒã“ã®é…åˆ—å†…ã«å­˜åœ¨ã™ã‚‹ã‹ã©ã†ã‹ã‚’åˆ¤æ–­ã—ã¾ã™ã€‚*/
 	bool Contains(const TChar* str) const
 	{
-		return std::find(begin(), end(), str) != end();
+		return std::find(ArrayType::begin(), ArrayType::end(), str) != ArrayType::end();
 	}
 	bool Contains(const StringType& str) const		/**< @overload EndsWith */
 	{
