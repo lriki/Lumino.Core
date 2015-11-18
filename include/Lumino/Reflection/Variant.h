@@ -9,7 +9,7 @@ LN_NAMESPACE_BEGIN
 namespace tr
 {
 class ReflectionObject;
-class ReflectionListObject;
+class ReflectionArrayObject;
 
 enum class VariantType
 {
@@ -21,7 +21,7 @@ enum class VariantType
 	Enum,
 	Struct,
 	Object,
-	ListObject,
+	ArrayObject,
 };
 
 namespace detail
@@ -31,7 +31,7 @@ namespace detail
 	class KindPrimitive {};
 	class KindEnum {};
 	class KindReflectionObject {};
-	class KindReflectionListObject {};
+	class KindReflectionArrayObject {};
 }
 
 /**
@@ -45,7 +45,7 @@ public:
 
 public:
 	Variant();
-	Variant(const Variant& value);
+	Variant(const Variant& value) : Variant() { Copy(value); }
 	Variant(std::nullptr_t value);
 	Variant(bool value) : Variant() { SetBool(value); }
 	Variant(int32_t value) : Variant() {}
@@ -54,7 +54,7 @@ public:
 	Variant(const String& value);
 	Variant(const Enum& value) : Variant() { SetEnumValue(value.GetValue()); }
 	Variant(ReflectionObject* value) : Variant() { SetReflectionObject(value); }
-	Variant(ReflectionListObject* value);
+	Variant(ReflectionArrayObject* value) : Variant() { SetReflectionArrayObject(value); }
 
 	~Variant() { Release(); }
 	Variant& operator = (const Variant& obj) { Copy(obj); return (*this); }
@@ -156,6 +156,8 @@ private:
 	EnumValueType GetEnumValue() const;
 	void SetReflectionObject(ReflectionObject* obj);
 	ReflectionObject* GetReflectionObject() const;
+	void SetReflectionArrayObject(ReflectionArrayObject* obj);
+	ReflectionArrayObject* GetReflectionArrayObject() const;
 
 
 	template<typename T> struct CastValueOrPointerSelector
@@ -176,9 +178,9 @@ private:
 		static T* GetValue(const Variant& value)
 		{
 			// Cast<T>() の T はポインタ型である場合ここに来る。
-			// KindReflectionListObject または KindReflectionObject のサブクラスであるかを確認する。
+			// KindReflectionArrayObject または KindReflectionObject のサブクラスであるかを確認する。
 			using typeKind = first_enabled_t<
-				std::enable_if<std::is_base_of<ReflectionListObject, T>::value, detail::KindReflectionListObject>,
+				std::enable_if<std::is_base_of<ReflectionArrayObject, T>::value, detail::KindReflectionArrayObject>,
 				std::enable_if<std::is_base_of<ReflectionObject, T>::value, detail::KindReflectionObject>,
 				std::false_type>;
 			return CastSelector<T*, typeKind>::GetValue(value);
@@ -220,7 +222,7 @@ private:
 		float					m_float;
 		EnumValueType			m_enum;
 		ReflectionObject*		m_object;
-		ReflectionListObject*	m_valueList;
+		ReflectionArrayObject*	m_arrayObject;
 	};
 	String			m_string;
 };
@@ -228,9 +230,10 @@ private:
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-template<> struct Variant::CastSelector<bool, detail::KindPrimitive>				{ static bool GetValue(const Variant& v) { return v.GetBool(); } };
-template<typename T> struct Variant::CastSelector<T, detail::KindEnum>				{ static T GetValue(const Variant& v) { return static_cast<T::enum_type>(v.GetEnumValue()); } };
-template<typename T> struct Variant::CastSelector<T, detail::KindReflectionObject>	{ static T GetValue(const Variant& v) { return static_cast<T>(v.GetReflectionObject()); } };
+template<> struct Variant::CastSelector<bool, detail::KindPrimitive>					{ static bool GetValue(const Variant& v) { return v.GetBool(); } };
+template<typename T> struct Variant::CastSelector<T, detail::KindEnum>					{ static T GetValue(const Variant& v) { return static_cast<typename T::enum_type>(v.GetEnumValue()); } };
+template<typename T> struct Variant::CastSelector<T, detail::KindReflectionObject>		{ static T GetValue(const Variant& v) { return static_cast<T>(v.GetReflectionObject()); } };
+template<typename T> struct Variant::CastSelector<T, detail::KindReflectionArrayObject>	{ static T GetValue(const Variant& v) { return static_cast<T>(v.GetReflectionArrayObject()); } };
 
 } // namespace tr
 LN_NAMESPACE_END

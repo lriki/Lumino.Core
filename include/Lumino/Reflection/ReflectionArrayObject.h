@@ -8,12 +8,12 @@ namespace tr
 /**
 	@brief		
 */
-class ReflectionListObject
+class ReflectionArrayObject
 	: public ReflectionObject
 {
 public:
-	ReflectionListObject();
-	virtual ~ReflectionListObject();
+	ReflectionArrayObject();
+	virtual ~ReflectionArrayObject();
 
 protected:
 

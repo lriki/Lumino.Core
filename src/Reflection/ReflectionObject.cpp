@@ -2,6 +2,7 @@
 #include "../Internal.h"
 #include <Lumino/Reflection/TypeInfo.h>
 #include <Lumino/Reflection/ReflectionObject.h>
+#include <Lumino/Reflection/ReflectionArrayObject.h>
 
 LN_NAMESPACE_BEGIN
 namespace tr
@@ -72,6 +73,25 @@ ReflectionObject::ReflectionObject()
 //
 //-----------------------------------------------------------------------------
 ReflectionObject::~ReflectionObject()
+{
+}
+
+
+//=============================================================================
+// ReflectionArrayObject
+//=============================================================================
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+ReflectionArrayObject::ReflectionArrayObject()
+{
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+ReflectionArrayObject::~ReflectionArrayObject()
 {
 }
 
