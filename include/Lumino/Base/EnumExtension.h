@@ -38,8 +38,8 @@ enum _##enumName
 		typedef _##enumName enum_type; \
 		enumName() { m_value = (enum_type)(0); } \
 		enumName(enum_type v) { m_value = v; } \
-		virtual void SetInt(int value) { m_value = (enum_type)value; } \
-		virtual int GetInt() const { return m_value; } \
+		virtual void SetValue(EnumValueType value) { m_value = (enum_type)value; } \
+		virtual EnumValueType GetValue() const { return m_value; } \
 		inline bool operator==(enumName right) const { return m_value == right.m_value; } \
 		inline bool operator==(enum_type right) const { return m_value == right; } \
 		inline bool operator!=(enumName right) const { return !operator==(right); } \
@@ -87,8 +87,8 @@ enum _##enumName
 		typedef _##enumName enum_type; \
 		enumName() { m_value = 0; } \
 		enumName(enum_type v) { m_value = v; } \
-		virtual void SetInt(int value) { m_value = (enum_type)value; } \
-		virtual int GetInt() const { return m_value; } \
+		virtual void SetValue(EnumValueType value) { m_value = (enum_type)value; } \
+		virtual EnumValueType GetValue() const { return m_value; } \
 		inline bool TestFlag(enum_type f) const throw() { return (m_value & f) == f && (f != 0 || m_value == f); } \
 		inline bool operator==(enumName right) const { return m_value == right.m_value; } \
 		inline bool operator==(_##enumName right) const { return m_value == right; } \
@@ -152,8 +152,8 @@ protected:
 public:
 	//inline operator int() const { return m_value; }
 
-	virtual void SetInt(int value) {}
-	virtual int GetInt() const { return 0; }
+	virtual void SetValue(EnumValueType value) {}
+	virtual EnumValueType GetValue() const { return 0; }
 
 	// C++ operators
 	// https://en.wikipedia.org/wiki/Operators_in_C_and_C++

@@ -48,14 +48,18 @@ set(LN_TEST_SOURCES
 	UnitTest/Threading/Test_Threading_EventFlag.cpp
 	UnitTest/Threading/Test_Threading_Thread.cpp
 	UnitTest/Xml/Test_Xml_XmlReader.cpp
-	UnitTest/Xml/Test_Xml_XmlWriter.cpp)
+	UnitTest/Xml/Test_Xml_XmlWriter.cpp
+	UnitTest/Reflection/Test_Reflection_ReflectionObject.cpp
+	UnitTest/Reflection/Test_Reflection_Variant.cpp
+)
 
 include_directories(
 	"${PROJECT_SOURCE_DIR}/include"
 	"${PROJECT_SOURCE_DIR}/test/gtest/include"
 	"${PROJECT_SOURCE_DIR}/test/gtest"
 	"${PROJECT_SOURCE_DIR}/test/gtest/src"
-	"${PROJECT_SOURCE_DIR}/test/UnitTest")
+	"${PROJECT_SOURCE_DIR}/test/UnitTest"
+)
 
 set(LN_TEST_LIBS LuminoCore_Static)
 if (WIN32)

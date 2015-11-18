@@ -94,7 +94,7 @@ set(LN_SOURCES_Base
 	src/Base/Thickness.cpp
 	src/Base/Version.cpp
 )
-	
+
 set(LN_SOURCES_Text
 	include/Lumino/Text/Encoding.h
 	include/Lumino/Text/EncodingConverter.h
@@ -201,10 +201,14 @@ set(LN_SOURCES_Xml
 	src/Xml/XmlWriter.cpp
 )
 
-
-set(LN_SOURCES_DataModel
-	include/Lumino/Base/Event.h
-	include/Lumino/Base/Event.inl
+set(LN_SOURCES_Reflection
+	include/Lumino/Reflection/Variant.h
+	include/Lumino/Reflection/Property.h
+	include/Lumino/Reflection/ReflectionListObject.h
+	include/Lumino/Reflection/ReflectionObject.h
+	include/Lumino/Reflection/TypeInfo.h
+	src/Reflection/ReflectionObject.cpp
+	src/Reflection/Variant.cpp
 )
 
 set(LN_SOURCES_Testing
@@ -223,20 +227,20 @@ if (WIN32)
 		${LN_SOURCES_Text}
 		src/Text/Win32CodePageEncoding.cpp
 		src/Text/Win32CodePageEncoding.h
-	)	
+	)
 
 elseif (APPLE)
 	set(LN_SOURCES_IO
 		${LN_SOURCES_IO}
 		src/IO/FileSystem_Unix.cpp
 		src/IO/Process_Unix.cpp)
-	
+
 elseif (UNIX)
 	set(LN_SOURCES_IO
 		${LN_SOURCES_IO}
 		src/IO/FileSystem_Unix.cpp
 		src/IO/Process_Unix.cpp)
-		
+
 endif()
 
 #--------------------------------------
@@ -247,15 +251,17 @@ source_group("IO"			FILES ${LN_SOURCES_IO})
 source_group("Json"			FILES ${LN_SOURCES_Json})
 source_group("Threading"	FILES ${LN_SOURCES_Threading})
 source_group("Xml"			FILES ${LN_SOURCES_Xml})
+source_group("Reflection"	FILES ${LN_SOURCES_Reflection})
 source_group("Testing"		FILES ${LN_SOURCES_Testing})
 
-set(LN_SOURCES 
+set(LN_SOURCES
 	${LN_SOURCES_Base}
 	${LN_SOURCES_Text}
 	${LN_SOURCES_IO}
 	${LN_SOURCES_Json}
 	${LN_SOURCES_Threading}
 	${LN_SOURCES_Xml}
+	${LN_SOURCES_Reflection}
 	${LN_SOURCES_Testing})
 
 set(LN_INCLUDE_DIRECTORIES
@@ -284,40 +290,40 @@ function(ln_make_postfix outPostfix)
 		elseif (MSVC_VERSION EQUAL 1900)
 			set(postfix "${postfix}_msvc140")
 		endif()
-		
+
 		# Architecture.
 		# http://stackoverflow.com/questions/5334095/cmake-multiarchitecture-compilation
-		if (${CMAKE_EXE_LINKER_FLAGS} MATCHES "/machine:x64")	# /machine:x64 
+		if (${CMAKE_EXE_LINKER_FLAGS} MATCHES "/machine:x64")	# /machine:x64
 			set(postfix "${postfix}x64")
 		else()
 			set(postfix "${postfix}x86")
 		endif()
-		
+
 		# Unicode.
 		if (${LN_USE_UNICODE_CHAR_SET})
 			set(postfix "${postfix}u")
 		endif()
-		
+
 		set(postfix "${postfix}_static")
-		
+
 		# MSVC Runtime library.
 		if (LN_MSVC_LINK_MULTI_THREAD_STATIC_RUNTIME)
 			set(postfix "${postfix}_MT")
 		else()
 			set(postfix "${postfix}_MD")
 		endif()
-		
+
 		set(${outPostfix} ${postfix} PARENT_SCOPE)
-		
+
 		# end   Make static lib name.
 		#------------------------------------------------------
-		
+
 	elseif (APPLE)
 		set(${outPostfix} "" PARENT_SCOPE)
-		
+
 	elseif (UNIX)
 		set(${outPostfix} "" PARENT_SCOPE)
-		
+
 	else()
 		# Not support.
 	    message(FATAL_ERROR "No supported platform was detected.")
@@ -346,20 +352,20 @@ if (WIN32)
 			endif()
 		endforeach()
 	endif()
-	
+
 	set(CMAKE_DEBUG_POSTFIX "d")
-	
+
 	# link librarys.
 	list(APPEND LN_LINK_LIBS "imagehlp.lib")
 
 elseif (APPLE)
 	set(LN_UNIT_TEST_LINK_LIBS "pthread")
 	set(CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++")
-	
+
 elseif (UNIX)
 	set(LN_UNIT_TEST_LINK_LIBS "pthread")
 	add_definitions("-std=c++11")
-	
+
 	# link librarys.
 	list(APPEND LN_LINK_LIBS "dl")
 	list(APPEND LN_LINK_LIBS "bfd")
@@ -371,7 +377,7 @@ elseif (UNIX)
 
 	#list(APPEND glfw_INCLUDE_DIRS ${OPENGL_INCLUDE_DIR})
     list(APPEND LN_LINK_LIBS ${OPENGL_gl_LIBRARY})
-	
+
 else()
 	# Not support.
     message(FATAL_ERROR "No supported platform was detected.")
@@ -409,4 +415,3 @@ add_subdirectory(test)
 
 # samples.
 #add_subdirectory(sample)
-
