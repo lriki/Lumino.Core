@@ -55,6 +55,8 @@ TEST_F(IntegrationTest_Reflection_Variant, Basic)
 		}
 		printf("%d : %lld\n", f, timer.GetElapsedTimeNS());
 	}
+#endif
+#if 0
 	for (int ffi = 0; ffi < 10; ++ffi)
 	{
 		ln::ElapsedTimer timer;
@@ -85,6 +87,15 @@ TEST_F(IntegrationTest_Reflection_Variant, Basic)
 		ASSERT_EQ(false, Variant::Cast<bool>(v2));
 		ASSERT_EQ(false, Variant::Cast<bool>(v3));
 	}
+	// <Test> TCHAR* 型
+	{
+		Variant v1(_T("str"));
+		Variant v2 = v1;	// copy
+		ASSERT_EQ(VariantType::String, v1.GetType());
+		ASSERT_EQ(VariantType::String, v2.GetType());
+		ASSERT_EQ(_T("str"), Variant::Cast<String>(v1));
+		ASSERT_EQ(_T("str"), Variant::Cast<String>(v2));
+	}
 	// <Test> String 型
 	{
 		Variant v1(String(_T("str")));
@@ -93,7 +104,7 @@ TEST_F(IntegrationTest_Reflection_Variant, Basic)
 		ASSERT_EQ(VariantType::String, v2.GetType());
 		ASSERT_EQ(_T("str"), Variant::Cast<String>(v1));
 		ASSERT_EQ(_T("str"), Variant::Cast<String>(v2));
-		//ASSERT_EQ(_T("str"), Variant::Cast<const String&>(v2));	// 参照文字列型はダメ (static_assert)
+		//ASSERT_EQ(_T("str"), Variant::Cast<const String&>(v2));	// 参照文字列型はコンパイルエラーにする (static_assert)
 	}
 	// <Test> Enum 型
 	{

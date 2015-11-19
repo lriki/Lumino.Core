@@ -16,7 +16,9 @@
 LN_NAMESPACE_BEGIN
 class Encoding;
 template<typename TChar> class GenericStringArray;
-template<typename TChar> class GenericStringCore;
+
+namespace detail { template<typename TChar> class GenericStringCore; }
+namespace tr { class Variant; }
 
 
 /** 大文字と小文字の区別指定 */
@@ -425,6 +427,8 @@ public:
 	static GenericString Format(const TChar* format, ...);				///< @overload Format
 
 private:
+	friend class tr::Variant;
+	void Attach(detail::GenericStringCore<TChar>* core);
 	void AssignTString(const TChar* str, int len);
 	void Realloc();
 	TChar& InternalGetAt(int index);
@@ -435,7 +439,7 @@ private:
 private:
 
 	const TChar* m_ref;		///< 可変長の実引数にされることに備え、クラス先頭のメンバは m_string->c_str() を指しておく
-	GenericStringCore<TChar>*	m_string;
+	detail::GenericStringCore<TChar>*	m_string;
 
 #ifdef LN_GenericString_Extensions
 	LN_GenericString_Extensions;
@@ -504,6 +508,8 @@ typedef GenericString<wchar_t>	StringW;
 
 
 
+namespace detail
+{
 template<typename TChar>
 class GenericStringCore
 	: public std::basic_string<TChar, std::char_traits<TChar>, STLAllocator<TChar> >
@@ -551,5 +557,6 @@ public:
 
 	static GenericStringCore	m_sharedEmpty;
 };
+} // namespace detail
 
 LN_NAMESPACE_END

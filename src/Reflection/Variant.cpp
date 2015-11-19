@@ -38,16 +38,25 @@ bool Variant::GetBool() const
 	LN_CHECK_STATE_RETURNV(m_type == VariantType::Bool, false);
 	return m_bool;
 }
+void Variant::SetString(const TCHAR* value)
+{
+	Release();
+	m_type = VariantType::String;
+	m_string = LN_NEW ln::detail::GenericStringCore<TCHAR>();
+	m_string->assign(value);
+}
 void Variant::SetString(const String& value)
 {
 	Release();
 	m_type = VariantType::String;
-	m_string = value;
+	LN_REFOBJ_SET(m_string, value.m_string);
 }
-const String& Variant::GetString() const
+String Variant::GetString() const
 {
 	LN_CHECK_STATE_RETURNV(m_type == VariantType::String, String::GetEmpty());
-	return m_string;
+	String str;
+	str.Attach(m_string);
+	return str;
 }
 void Variant::SetEnumValue(EnumValueType value)
 {
@@ -60,12 +69,13 @@ EnumValueType Variant::GetEnumValue() const
 	LN_CHECK_STATE_RETURNV(m_type == VariantType::Enum, false);
 	return m_enum;
 }
-void Variant::SetStruct(const void* value, size_t size)
+void Variant::SetStruct(const void* value, size_t size, const std::type_info& typeInfo)
 {
 	LN_CHECK_ARGS(size <= sizeof(m_struct));
 	m_type = VariantType::Struct;
 	memcpy(m_struct, value, size);
 	m_structSize = size;
+	m_typeInfo = &typeInfo;
 }
 const void* Variant::GetStruct() const
 {
@@ -116,7 +126,7 @@ void Variant::Copy(const Variant& obj)
 		m_float = obj.m_float;
 		break;
 	case VariantType::String:
-		m_string = obj.m_string;
+		LN_REFOBJ_SET(m_string, obj.m_string);
 		break;
 	case VariantType::Enum:
 		m_enum = obj.m_enum;
@@ -142,7 +152,10 @@ void Variant::Copy(const Variant& obj)
 //-----------------------------------------------------------------------------
 void Variant::Release()
 {
-	if (m_type == VariantType::Object) {
+	if (m_type == VariantType::String) {
+		LN_SAFE_RELEASE(m_string);
+	}
+	else if (m_type == VariantType::Object) {
 		LN_SAFE_RELEASE(m_object);
 	}
 	else if (m_type == VariantType::ArrayObject) {

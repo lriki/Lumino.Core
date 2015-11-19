@@ -108,7 +108,7 @@ https://msdn.microsoft.com/ja-jp/library/c426s321.aspx
 LN_NAMESPACE_BEGIN
 
 template<typename TChar>
-typename GenericStringCore<TChar> GenericStringCore<TChar>::m_sharedEmpty;
+typename detail::GenericStringCore<TChar> detail::GenericStringCore<TChar>::m_sharedEmpty;
 
 //=============================================================================
 // GenericString
@@ -123,7 +123,7 @@ template<typename TChar>
 GenericString<TChar>::GenericString()
 	: m_string(NULL)
 {
-	LN_REFOBJ_SET(m_string, GenericStringCore<TChar>::GetSharedEmpty());
+	LN_REFOBJ_SET(m_string, detail::GenericStringCore<TChar>::GetSharedEmpty());
 	m_ref = m_string->c_str();
 }
 
@@ -524,7 +524,7 @@ ByteBuffer GenericString<TChar>::ConvertTo(const Encoding* encoding, bool* outUs
 template<typename TChar>
 void GenericString<TChar>::SetEmpty()
 {
-	LN_REFOBJ_SET(m_string, GenericStringCore<TChar>::GetSharedEmpty());
+	LN_REFOBJ_SET(m_string, detail::GenericStringCore<TChar>::GetSharedEmpty());
 }
 
 //-----------------------------------------------------------------------------
@@ -575,7 +575,7 @@ GenericString<TChar> GenericString<TChar>::Remove(TChar ch, CaseSensitivity cs) 
 	}
 
 	// 大文字と小文字を区別する
-	GenericStringCore<TChar>& ss = *newStr.m_string;
+	detail::GenericStringCore<TChar>& ss = *newStr.m_string;
 	if (cs == CaseSensitivity::CaseSensitive)
 	{
 		CmpCaseSensitive<TChar> cmp;
@@ -945,15 +945,24 @@ GenericString<TChar> GenericString<TChar>::Format(const TChar* format, ...)
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
+void GenericString<TChar>::Attach(detail::GenericStringCore<TChar>* core)
+{
+	LN_REFOBJ_SET(m_string, core);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
 void GenericString<TChar>::AssignTString(const TChar* str, int len)
 {
 	LN_SAFE_RELEASE(m_string);
 	if (str == NULL || len == 0) {
 		// 空の文字列になる場合は共有の空文字列を参照する
-		LN_REFOBJ_SET(m_string, GenericStringCore<TChar>::GetSharedEmpty());
+		LN_REFOBJ_SET(m_string, detail::GenericStringCore<TChar>::GetSharedEmpty());
 	}
 	else {
-		m_string = LN_NEW GenericStringCore<TChar>();	// 参照カウントは 1
+		m_string = LN_NEW detail::GenericStringCore<TChar>();	// 参照カウントは 1
 		m_string->assign(str, (len < 0) ? StringTraits::StrLen(str) : len);
 	}
 	m_ref = m_string->c_str();
@@ -966,8 +975,8 @@ template<typename TChar>
 void GenericString<TChar>::Realloc()
 {
 	if (m_string->IsShared()) {
-		GenericStringCore<TChar>* old = m_string;
-		m_string = LN_NEW GenericStringCore<TChar>();	// 参照カウントは 1
+		detail::GenericStringCore<TChar>* old = m_string;
+		m_string = LN_NEW detail::GenericStringCore<TChar>();	// 参照カウントは 1
 		m_string->assign(old->c_str());
 		m_ref = m_string->c_str();
 		LN_SAFE_RELEASE(old);

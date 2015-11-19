@@ -37,7 +37,26 @@ namespace detail
 }
 
 /**
-	@brief		
+	@brief		さまざまなデータ型を格納できる動的型変数です。
+	@details	一般的な Variant や any 型と比べて、格納できるデータ型をある程度制限することで高速化を図っています。
+				格納できるデータ型のサイズは 32byte までです。
+
+	@section	一般的な使い方
+	~~~~~~~~~~~~~~~{.cpp}
+	// 格納
+	Variant v1 = 10;
+	Variant v2 = Point(5, 10);
+	Variant v3 = "str";
+
+	// 取得
+	int a1 = Variant::Cast<int>(v1);
+	Point a2 = Variant::Cast<Point>(v2);
+	String a3 = Variant::Cast<String>(v3);
+	~~~~~~~~~~~~~~~
+
+	@note		Windows7 64Bit Corei7 - 格納と取得を 1000000 回行った速度比較。
+				- Variant		27,625us
+				- boost::any	54,852us
 */
 class Variant
 {
@@ -52,7 +71,7 @@ public:
 	//Variant(bool value) : Variant() { SetBool(value); }
 	//Variant(int32_t value) : Variant() {}
 	//Variant(float value);
-	//Variant(const TCHAR* value);
+	Variant(const TCHAR* value) : Variant() { SetString(value); }
 	//Variant(const String& value);
 	//Variant(const Enum& value) : Variant() { SetEnumValue(value.GetValue()); }
 	////Variant(const ReflectionStruct& value) : Variant() { }
@@ -201,11 +220,12 @@ public:
 private:
 	void SetBool(bool value);
 	bool GetBool() const;
+	void SetString(const TCHAR* value);
 	void SetString(const String& value);
-	const String& GetString() const;
+	String GetString() const;
 	void SetEnumValue(EnumValueType value);
 	EnumValueType GetEnumValue() const;
-	void SetStruct(const void* value, size_t size);
+	void SetStruct(const void* value, size_t size, const std::type_info& typeInfo);
 	const void* GetStruct() const;
 	void SetReflectionObject(ReflectionObject* obj);
 	ReflectionObject* GetReflectionObject() const;
@@ -257,6 +277,7 @@ private:
 	};
 	/* ↑struct 型の判別に is_pod を使用しているが、is_pod はポインタ型も true とみなしてしまうため、前段で分ける必要がある。
 	 * また、ポインタはその実体の型に対して is_base_of したいので、これもまた前段で分ける必要がある。
+	 * 文字列リテラルはポインタ型ではなく配列型となる。コレだけに限って特殊化するのも面倒なので、コンストラクタオーバーロードで解決している。
 	 */
 
 	//template<typename T> struct CastValueOrPointerSelector
@@ -316,14 +337,15 @@ private:
 		bool					m_bool;
 		uint32_t				m_int32;
 		float					m_float;
+		ln::detail::GenericStringCore<TCHAR>*	m_string;
 		EnumValueType			m_enum;
 		ReflectionObject*		m_object;
 		ReflectionArrayObject*	m_arrayObject;
 		byte_t					m_struct[32];
 	};
 	size_t			m_structSize;
-	String			m_string;
-	//const std::type_info*		m_typeInfo;
+	//String			m_string;
+	const std::type_info*		m_typeInfo;
 };
 
 //-----------------------------------------------------------------------------
@@ -337,7 +359,7 @@ template<> struct Variant::AccessorSelector<bool, detail::KindPrimitive>
 template<> struct Variant::AccessorSelector<String, detail::KindPrimitive>
 {
 	static void SetValue(Variant* v, const String& value) { v->SetString(value); }
-	static const String& GetValue(const Variant* v) { return v->GetString(); }
+	static String GetValue(const Variant* v) { return v->GetString(); }		// 戻り値は参照ではダメ
 };
 template<typename T> struct Variant::AccessorSelector<T, detail::KindEnum>
 {
@@ -356,7 +378,7 @@ template<typename T> struct Variant::AccessorSelector<T, detail::KindReflectionA
 };
 template<typename T> struct Variant::AccessorSelector<T, detail::KindStruct>
 {
-	static void SetValue(Variant* v, T value) { v->SetStruct(&value, sizeof(T)); }
+	static void SetValue(Variant* v, T value) { v->SetStruct(&value, sizeof(T), typeid(T)); }
 	static T GetValue(const Variant* v) { return *((T*)v->GetStruct()); }
 };
 template<typename T> struct Variant::AccessorSelector<const T&, detail::KindStruct>	// const Struct& のような参照での get をサポートする
