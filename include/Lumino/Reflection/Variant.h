@@ -1,4 +1,6 @@
-
+ï»¿
+#pragma once
+#include <typeinfo>
 #include <type_traits>
 #include "../Base/Common.h"
 #include "../Base/RefObject.h"
@@ -37,24 +39,24 @@ namespace detail
 }
 
 /**
-	@brief		‚³‚Ü‚´‚Ü‚Èƒf[ƒ^Œ^‚ğŠi”[‚Å‚«‚é“®“IŒ^•Ï”‚Å‚·B
-	@details	ˆê”Ê“I‚È Variant ‚â any Œ^‚Æ”ä‚×‚ÄAŠi”[‚Å‚«‚éƒf[ƒ^Œ^‚ğ‚ ‚é’ö“x§ŒÀ‚·‚é‚±‚Æ‚Å‚‘¬‰»‚ğ}‚Á‚Ä‚¢‚Ü‚·B
-				Ši”[‚Å‚«‚éƒf[ƒ^Œ^‚ÌƒTƒCƒY‚Í 32byte ‚Ü‚Å‚Å‚·B
+	@brief		ã•ã¾ã–ã¾ãªãƒ‡ãƒ¼ã‚¿å‹ã‚’æ ¼ç´ã§ãã‚‹å‹•çš„å‹å¤‰æ•°ã§ã™ã€‚
+	@details	ä¸€èˆ¬çš„ãª Variant ã‚„ any å‹ã¨æ¯”ã¹ã¦ã€æ ¼ç´ã§ãã‚‹ãƒ‡ãƒ¼ã‚¿å‹ã‚’ã‚ã‚‹ç¨‹åº¦åˆ¶é™ã™ã‚‹ã“ã¨ã§é«˜é€ŸåŒ–ã‚’å›³ã£ã¦ã„ã¾ã™ã€‚
+				æ ¼ç´ã§ãã‚‹ãƒ‡ãƒ¼ã‚¿å‹ã®ã‚µã‚¤ã‚ºã¯ 32byte ã¾ã§ã§ã™ã€‚
 
-	@section	ˆê”Ê“I‚Èg‚¢•û
+	@section	ä¸€èˆ¬çš„ãªä½¿ã„æ–¹
 	~~~~~~~~~~~~~~~{.cpp}
-	// Ši”[
+	// æ ¼ç´
 	Variant v1 = 10;
 	Variant v2 = Point(5, 10);
 	Variant v3 = "str";
 
-	// æ“¾
+	// å–å¾—
 	int a1 = Variant::Cast<int>(v1);
 	Point a2 = Variant::Cast<Point>(v2);
 	String a3 = Variant::Cast<String>(v3);
 	~~~~~~~~~~~~~~~
 
-	@note		Windows7 64Bit Corei7 - Ši”[‚Ææ“¾‚ğ 1000000 ‰ñs‚Á‚½‘¬“x”äŠrB
+	@note		Windows7 64Bit Corei7 - æ ¼ç´ã¨å–å¾—ã‚’ 1000000 å›è¡Œã£ãŸé€Ÿåº¦æ¯”è¼ƒã€‚
 				- Variant		27,625us
 				- boost::any	54,852us
 */
@@ -62,6 +64,73 @@ class Variant
 {
 public:
 	static const Variant Null;
+
+	template<typename ...Args>
+	struct first_enabled {};
+
+	template<typename T, typename ...Args>
+	struct first_enabled<std::enable_if<true, T>, Args...> { using type = T; };
+	template<typename T, typename ...Args>
+	struct first_enabled<std::enable_if<false, T>, Args...> : first_enabled<Args...>{};
+	template<typename T, typename ...Args>
+	struct first_enabled<T, Args...> { using type = T; };
+
+	template<typename ...Args>
+	using first_enabled_t = typename first_enabled<Args...>::type;
+
+
+
+
+	template<typename T, typename TKind> struct AccessorSelector {};
+
+
+
+	// å€¤å‹ã¾ãŸã¯å‚ç…§å‹ç”¨ã® AccessorSelectorHelper
+	template<typename T> struct AccessorSelectorHelper
+	{
+		using typeKind = first_enabled_t<
+			std::enable_if<std::is_same<T, bool>::value, detail::KindPrimitive>,
+			std::enable_if<std::is_same<T, String>::value, detail::KindPrimitive>,
+			std::enable_if<std::is_base_of<Enum, T>::value, detail::KindEnum>,
+			std::enable_if<std::is_enum<T>::value, detail::KindEnum>,
+			std::enable_if<std::is_class<std::remove_reference<T>>::value, detail::KindStruct>,		// éPODæ§‹é€ ä½“ or ã‚¯ãƒ©ã‚¹å®Ÿä½“ (remove_reference ã§ã€T=const Struct& ã«å‚™ãˆã‚‹)
+			std::enable_if<std::is_pod<std::remove_reference<T>>::value, detail::KindStruct>,		// PODæ§‹é€ ä½“
+			std::false_type>;
+
+		static void SetValue(Variant* variant, const T& value)
+		{
+			AccessorSelector<T, typeKind>::SetValue(variant, value);
+		}
+		static T GetValue(const Variant& value)
+		{
+			static_assert(std::is_same<T, const String&>::value == false, "Reference string type is not supported.");
+			return AccessorSelector<T, typeKind>::GetValue(&value);
+		}
+	};
+	// ãƒã‚¤ãƒ³ã‚¿å‹ç”¨ã® AccessorSelectorHelper
+	template<typename T> struct AccessorSelectorHelper<T*>
+	{
+		using typeKind = first_enabled_t<
+			std::enable_if<std::is_base_of<ReflectionArrayObject, T>::value, detail::KindReflectionArrayObject>,
+			std::enable_if<std::is_base_of<ReflectionObject, T>::value, detail::KindReflectionObject>,
+			std::false_type>;
+
+		static void SetValue(Variant* variant, T* value)
+		{
+			AccessorSelector<T*, typeKind>::SetValue(variant, value);
+		}
+		static T* GetValue(const Variant& value)
+		{
+			return AccessorSelector<T*, typeKind>::GetValue(&value);
+		}
+	};
+	/* â†‘struct å‹ã®åˆ¤åˆ¥ã« is_pod ã‚’ä½¿ç”¨ã—ã¦ã„ã‚‹ãŒã€is_pod ã¯ãƒã‚¤ãƒ³ã‚¿å‹ã‚‚ true ã¨ã¿ãªã—ã¦ã—ã¾ã†ãŸã‚ã€å‰æ®µã§åˆ†ã‘ã‚‹å¿…è¦ãŒã‚ã‚‹ã€‚
+	 * ã¾ãŸã€ãƒã‚¤ãƒ³ã‚¿ã¯ãã®å®Ÿä½“ã®å‹ã«å¯¾ã—ã¦ is_base_of ã—ãŸã„ã®ã§ã€ã“ã‚Œã‚‚ã¾ãŸå‰æ®µã§åˆ†ã‘ã‚‹å¿…è¦ãŒã‚ã‚‹ã€‚
+	 * æ–‡å­—åˆ—ãƒªãƒ†ãƒ©ãƒ«ã¯ãƒã‚¤ãƒ³ã‚¿å‹ã§ã¯ãªãé…åˆ—å‹ã¨ãªã‚‹ã€‚ã‚³ãƒ¬ã ã‘ã«é™ã£ã¦ç‰¹æ®ŠåŒ–ã™ã‚‹ã®ã‚‚é¢å€’ãªã®ã§ã€ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚ªãƒ¼ãƒãƒ¼ãƒ­ãƒ¼ãƒ‰ã§è§£æ±ºã—ã¦ã„ã‚‹ã€‚
+	 *
+	 * å€¤å´ã¯ remove_reference ã§ã€T=const Struct& ã«å‚™ãˆã¦ã„ã‚‹ã€‚VisualC++ ã§ã¯ã‚³ãƒ¬ç›¸å½“ã®ã“ã¨ã‚’å‹æ‰‹ã«ã‚„ã£ã¦ãã‚Œã‚‹ãŒã€GCC ã§ã¯è‡ªåˆ†ã§å¤–ã•ãªã‘ã‚Œã°ãªã‚‰ãªã„ã€‚
+	 */
+
 
 
 public:
@@ -84,7 +153,6 @@ public:
 
 
 
-	template<typename T, typename TKind> struct AccessorSelector {};
 
 	//template<typename T, typename std::enable_if<std::is_pointer<T>::value>::type*& = detail::enabler>
 	//Variant(const T& value)
@@ -96,7 +164,7 @@ public:
 	//	//PodSetterSelector<T, typeKind>::SetValue(this, value);
 	//}
 
-	//// enum ƒƒ“ƒo or struct
+	//// enum ãƒ¡ãƒ³ãƒ or struct
 	//template<typename T, typename std::enable_if<std::is_pod<T>::value>::type*& = detail::enabler>
 	//Variant(const T& value)
 	//{
@@ -122,14 +190,14 @@ public:
 
 
 	//template<typename T, typename std::enable_if<std::is_enum<T>::value>::type*& = detail::enabler>
-	//Variant(T value) { SetEnumValue(value); }	// T ‚ª enum ƒƒ“ƒo‚Ìê‡‚Í‚±‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ªŒÄ‚Î‚ê‚éB
+	//Variant(T value) { SetEnumValue(value); }	// T ãŒ enum ãƒ¡ãƒ³ãƒã®å ´åˆã¯ã“ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ãŒå‘¼ã°ã‚Œã‚‹ã€‚
 
 
 	//template<typename T, typename std::enable_if<std::is_base_of<T, ReflectionStruct>::value>::type*& = detail::enabler>
 	//Variant(const T& value) { }
 
 	//template<typename T, typename std::enable_if<std::is_pod<T>::value>::type*& = detail::enabler>
-	//Variant(T value) { }	// T ‚ª POD Œ^‚Ìê‡‚Í‚±‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ªŒÄ‚Î‚ê‚éB
+	//Variant(T value) { }	// T ãŒ POD å‹ã®å ´åˆã¯ã“ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ãŒå‘¼ã°ã‚Œã‚‹ã€‚
 
 
 	//template<typename T, EnumSubClass>
@@ -145,24 +213,13 @@ public:
 
 
 
-	template<typename ...Args>
-	struct first_enabled {};
-
-	template<typename T, typename ...Args>
-	struct first_enabled<std::enable_if<true, T>, Args...> { using type = T; };
-	template<typename T, typename ...Args>
-	struct first_enabled<std::enable_if<false, T>, Args...> : first_enabled<Args...>{};
-	template<typename T, typename ...Args>
-	struct first_enabled<T, Args...> { using type = T; };
-
-	template<typename ...Args>
-	using first_enabled_t = typename first_enabled<Args...>::type;
+	
 
 
 	
 	
-	template<bool condition, typename IfTrue, typename IfFalse>
-	using conditional_t = typename std::conditional<condition, IfTrue, IfFalse>::type;
+	//template<bool condition, typename IfTrue, typename IfFalse>
+	//using conditional_t = typename std::conditional<condition, IfTrue, IfFalse>::type;
 
 	//template<typename T, typename std::enable_if<std::is_pointer<T>::value>::type*& = detail::enabler>
 	//static T Cast(const Variant& value)
@@ -176,7 +233,7 @@ public:
 	//}
 
 	/**
-		@brief		w’è‚µ‚½ Variant ‚Ì’l‚ğw’è‚µ‚½Œ^‚ÉƒLƒƒƒXƒg‚·‚éB
+		@brief		æŒ‡å®šã—ãŸ Variant ã®å€¤ã‚’æŒ‡å®šã—ãŸå‹ã«ã‚­ãƒ£ã‚¹ãƒˆã™ã‚‹ã€‚
 		@code
 					UIElement* item = Variant::Cast<UIElement*>(value);
 		@endcode
@@ -203,7 +260,7 @@ public:
 		//	std::enable_if<std::is_base_of<ReflectionObject, T>::value, detail::KindReflectionObject>,
 		//	detail::KindPrimitive>;
 
-		// ‚±‚±‚ÅuGetValue ‚ª’è‹`‚³‚ê‚Ä‚¢‚È‚¢v‚Æ‚¢‚¤ƒGƒ‰[‚ª•\¦‚³‚ê‚éê‡AT ‚É Variant ‚ªˆµ‚¦‚È‚¢Œ^‚ªw’è‚³‚ê‚½‚±‚Æ‚ğˆÓ–¡‚·‚éB
+		// ã“ã“ã§ã€ŒGetValue ãŒå®šç¾©ã•ã‚Œã¦ã„ãªã„ã€ã¨ã„ã†ã‚¨ãƒ©ãƒ¼ãŒè¡¨ç¤ºã•ã‚Œã‚‹å ´åˆã€T ã« Variant ãŒæ‰±ãˆãªã„å‹ãŒæŒ‡å®šã•ã‚ŒãŸã“ã¨ã‚’æ„å‘³ã™ã‚‹ã€‚
 		//return CastSelector<T, typeKind>::GetValue(value);
 
 		//template<typename T>
@@ -236,49 +293,7 @@ private:
 	//void SetValue(ReflectionObject* value) { SetReflectionObject(value); }
 	//void SetValue(ReflectionArrayObject* value) { SetReflectionArrayObject(value); }
 
-	// ’lŒ^—p‚Ì AccessorSelectorHelper
-	template<typename T> struct AccessorSelectorHelper
-	{
-		using typeKind = first_enabled_t<
-			std::enable_if<std::is_same<T, bool>::value, detail::KindPrimitive>,
-			std::enable_if<std::is_same<T, String>::value, detail::KindPrimitive>,
-			std::enable_if<std::is_base_of<Enum, T>::value, detail::KindEnum>,
-			std::enable_if<std::is_enum<T>::value, detail::KindEnum>,
-			std::enable_if<std::is_class<T>::value, detail::KindStruct>,		// ”ñPOD\‘¢‘Ì or ƒNƒ‰ƒXÀ‘Ì
-			std::enable_if<std::is_pod<T>::value, detail::KindStruct>,			// POD\‘¢‘Ì
-			std::false_type>;
-
-		static void SetValue(Variant* variant, const T& value)
-		{
-			AccessorSelector<T, typeKind>::SetValue(variant, value);
-		}
-		static T GetValue(const Variant& value)
-		{
-			static_assert(std::is_same<T, const String&>::value == false, "Reference string type is not supported.");
-			return AccessorSelector<T, typeKind>::GetValue(&value);
-		}
-	};
-	// ƒ|ƒCƒ“ƒ^Œ^—p‚Ì AccessorSelectorHelper
-	template<typename T> struct AccessorSelectorHelper<T*>
-	{
-		using typeKind = first_enabled_t<
-			std::enable_if<std::is_base_of<ReflectionArrayObject, T>::value, detail::KindReflectionArrayObject>,
-			std::enable_if<std::is_base_of<ReflectionObject, T>::value, detail::KindReflectionObject>,
-			std::false_type>;
-
-		static void SetValue(Variant* variant, T* value)
-		{
-			AccessorSelector<T*, typeKind>::SetValue(variant, value);
-		}
-		static T* GetValue(const Variant& value)
-		{
-			return AccessorSelector<T*, typeKind>::GetValue(&value);
-		}
-	};
-	/* ªstruct Œ^‚Ì”»•Ê‚É is_pod ‚ğg—p‚µ‚Ä‚¢‚é‚ªAis_pod ‚Íƒ|ƒCƒ“ƒ^Œ^‚à true ‚Æ‚İ‚È‚µ‚Ä‚µ‚Ü‚¤‚½‚ßA‘O’i‚Å•ª‚¯‚é•K—v‚ª‚ ‚éB
-	 * ‚Ü‚½Aƒ|ƒCƒ“ƒ^‚Í‚»‚ÌÀ‘Ì‚ÌŒ^‚É‘Î‚µ‚Ä is_base_of ‚µ‚½‚¢‚Ì‚ÅA‚±‚ê‚à‚Ü‚½‘O’i‚Å•ª‚¯‚é•K—v‚ª‚ ‚éB
-	 * •¶š—ñƒŠƒeƒ‰ƒ‹‚Íƒ|ƒCƒ“ƒ^Œ^‚Å‚Í‚È‚­”z—ñŒ^‚Æ‚È‚éBƒRƒŒ‚¾‚¯‚ÉŒÀ‚Á‚Ä“Áê‰»‚·‚é‚Ì‚à–Ê“|‚È‚Ì‚ÅAƒRƒ“ƒXƒgƒ‰ƒNƒ^ƒI[ƒo[ƒ[ƒh‚Å‰ğŒˆ‚µ‚Ä‚¢‚éB
-	 */
+	
 
 	//template<typename T> struct CastValueOrPointerSelector
 	//{
@@ -297,8 +312,8 @@ private:
 	//{
 	//	static T* GetValue(const Variant& value)
 	//	{
-	//		// Cast<T>() ‚Ì T ‚Íƒ|ƒCƒ“ƒ^Œ^‚Å‚ ‚éê‡‚±‚±‚É—ˆ‚éB
-	//		// KindReflectionArrayObject ‚Ü‚½‚Í KindReflectionObject ‚ÌƒTƒuƒNƒ‰ƒX‚Å‚ ‚é‚©‚ğŠm”F‚·‚éB
+	//		// Cast<T>() ã® T ã¯ãƒã‚¤ãƒ³ã‚¿å‹ã§ã‚ã‚‹å ´åˆã“ã“ã«æ¥ã‚‹ã€‚
+	//		// KindReflectionArrayObject ã¾ãŸã¯ KindReflectionObject ã®ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã§ã‚ã‚‹ã‹ã‚’ç¢ºèªã™ã‚‹ã€‚
 	//		using typeKind = first_enabled_t<
 	//			std::enable_if<std::is_base_of<ReflectionArrayObject, T>::value, detail::KindReflectionArrayObject>,
 	//			std::enable_if<std::is_base_of<ReflectionObject, T>::value, detail::KindReflectionObject>,
@@ -319,8 +334,8 @@ private:
 	template<> struct CastSelector < Rect, std::false_type >		{ static Rect GetValue(const Variant& v) { return v.GetRect(); } };
 	template<> struct CastSelector < SizeF, std::false_type >		{ static SizeF GetValue(const Variant& v) { return v.GetSizeF(); } };
 	template<> struct CastSelector < ThicknessF, std::false_type > { static const ThicknessF& GetValue(const Variant& v) { return v.GetThicknessF(); } };
-	template<typename T> struct CastSelector < T, std::true_type > { static T GetValue(const Variant& v) { return *((T*)(&v.m_enum)); } };	// TODO: Œ^ƒ`ƒFƒbƒN
-//	template<typename TRefPtr, typename U> struct CastSelector < TRefPtr<U>, std::true_type > { static TRefPtr<U> GetValue(const Variant& v) { return TRefPtr<U>(static_cast<U>(v.GetObject())); } };	// TODO: Œ^ƒ`ƒFƒbƒN
+	template<typename T> struct CastSelector < T, std::true_type > { static T GetValue(const Variant& v) { return *((T*)(&v.m_enum)); } };	// TODO: å‹ãƒã‚§ãƒƒã‚¯
+//	template<typename TRefPtr, typename U> struct CastSelector < TRefPtr<U>, std::true_type > { static TRefPtr<U> GetValue(const Variant& v) { return TRefPtr<U>(static_cast<U>(v.GetObject())); } };	// TODO: å‹ãƒã‚§ãƒƒã‚¯
 #endif
 
 public:
@@ -359,7 +374,7 @@ template<> struct Variant::AccessorSelector<bool, detail::KindPrimitive>
 template<> struct Variant::AccessorSelector<String, detail::KindPrimitive>
 {
 	static void SetValue(Variant* v, const String& value) { v->SetString(value); }
-	static String GetValue(const Variant* v) { return v->GetString(); }		// –ß‚è’l‚ÍQÆ‚Å‚Íƒ_ƒ
+	static String GetValue(const Variant* v) { return v->GetString(); }		// æˆ»ã‚Šå€¤ã¯å‚ç…§ã§ã¯ãƒ€ãƒ¡
 };
 template<typename T> struct Variant::AccessorSelector<T, detail::KindEnum>
 {
@@ -381,7 +396,7 @@ template<typename T> struct Variant::AccessorSelector<T, detail::KindStruct>
 	static void SetValue(Variant* v, T value) { v->SetStruct(&value, sizeof(T), typeid(T)); }
 	static T GetValue(const Variant* v) { return *((T*)v->GetStruct()); }
 };
-template<typename T> struct Variant::AccessorSelector<const T&, detail::KindStruct>	// const Struct& ‚Ì‚æ‚¤‚ÈQÆ‚Å‚Ì get ‚ğƒTƒ|[ƒg‚·‚é
+template<typename T> struct Variant::AccessorSelector<const T&, detail::KindStruct>	// const Struct& ã®ã‚ˆã†ãªå‚ç…§ã§ã® get ã‚’ã‚µãƒãƒ¼ãƒˆã™ã‚‹
 {
 	static const T& GetValue(const Variant* v) { return *((T*)v->GetStruct()); }
 };

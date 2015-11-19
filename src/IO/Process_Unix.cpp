@@ -91,7 +91,7 @@ void Process::Start(const PathName& program, const String& args)
 		char** argv = new char *[argList.GetCount() + 2];
         argv[0] = ::strdup(utf8Path.c_str());     // 書き込み可能なポインタを渡さなければならないので strdup
 		for (int i = 0; i < argList.GetCount(); ++i) {
-			argv[i + 1] = ::strdup(argList[i].GetCStr());
+			argv[i + 1] = ::strdup(argList[i].c_str());
 		}
 		argv[argList.GetCount() + 1] = NULL;
 		
