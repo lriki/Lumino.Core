@@ -10,6 +10,7 @@ namespace tr
 {
 class ReflectionObject;
 class ReflectionArrayObject;
+struct ReflectionStruct;
 
 enum class VariantType
 {
@@ -30,6 +31,7 @@ namespace detail
 
 	class KindPrimitive {};
 	class KindEnum {};
+	class KindStruct {};
 	class KindReflectionObject {};
 	class KindReflectionArrayObject {};
 }
@@ -46,22 +48,69 @@ public:
 public:
 	Variant();
 	Variant(const Variant& value) : Variant() { Copy(value); }
-	Variant(std::nullptr_t value);
-	Variant(bool value) : Variant() { SetBool(value); }
-	Variant(int32_t value) : Variant() {}
-	Variant(float value);
-	Variant(const TCHAR* value);
-	Variant(const String& value);
-	Variant(const Enum& value) : Variant() { SetEnumValue(value.GetValue()); }
-	Variant(ReflectionObject* value) : Variant() { SetReflectionObject(value); }
-	Variant(ReflectionArrayObject* value) : Variant() { SetReflectionArrayObject(value); }
+	//Variant(std::nullptr_t value);
+	//Variant(bool value) : Variant() { SetBool(value); }
+	//Variant(int32_t value) : Variant() {}
+	//Variant(float value);
+	//Variant(const TCHAR* value);
+	//Variant(const String& value);
+	//Variant(const Enum& value) : Variant() { SetEnumValue(value.GetValue()); }
+	////Variant(const ReflectionStruct& value) : Variant() { }
+	//Variant(ReflectionObject* value) : Variant() { SetReflectionObject(value); }
+	//Variant(ReflectionArrayObject* value) : Variant() { SetReflectionArrayObject(value); }
 
 	~Variant() { Release(); }
 	Variant& operator = (const Variant& obj) { Copy(obj); return (*this); }
 
 
-	template<typename T, typename std::enable_if<std::is_enum<T>::value>::type*& = detail::enabler>
-	Variant(T value) { SetEnumValue(value); }	// T が enum メンバの場合はこのコンストラクタが呼ばれる。
+
+
+	template<typename T, typename TKind> struct AccessorSelector {};
+
+	//template<typename T, typename std::enable_if<std::is_pointer<T>::value>::type*& = detail::enabler>
+	//Variant(const T& value)
+	//{
+	//	//using typeKind = first_enabled_t<
+	//	//	std::enable_if<std::is_enum<T>::value, detail::KindEnum>,
+	//	//	std::enable_if<std::is_pointer<T>::value, std::false_type>,
+	//	//	detail::KindStruct>;
+	//	//PodSetterSelector<T, typeKind>::SetValue(this, value);
+	//}
+
+	//// enum メンバ or struct
+	//template<typename T, typename std::enable_if<std::is_pod<T>::value>::type*& = detail::enabler>
+	//Variant(const T& value)
+	//{
+	//	using typeKind = first_enabled_t<
+	//		std::enable_if<std::is_enum<T>::value, detail::KindEnum>,
+	//		std::enable_if<std::is_pointer<T>::value, std::false_type>,
+	//		detail::KindStruct>;
+	//	PodSetterSelector<T, typeKind>::SetValue(this, value);
+	//}
+
+	template<typename T>
+	Variant(const T& value)
+		: Variant()
+	{
+		AccessorSelectorHelper<T>::SetValue(this, value);
+	}
+
+	template<typename T>
+	Variant(RefPtr<T>& value)
+		: Variant(value.GetObjectPtr())
+	{
+	}
+
+
+	//template<typename T, typename std::enable_if<std::is_enum<T>::value>::type*& = detail::enabler>
+	//Variant(T value) { SetEnumValue(value); }	// T が enum メンバの場合はこのコンストラクタが呼ばれる。
+
+
+	//template<typename T, typename std::enable_if<std::is_base_of<T, ReflectionStruct>::value>::type*& = detail::enabler>
+	//Variant(const T& value) { }
+
+	//template<typename T, typename std::enable_if<std::is_pod<T>::value>::type*& = detail::enabler>
+	//Variant(T value) { }	// T が POD 型の場合はこのコンストラクタが呼ばれる。
 
 
 	//template<typename T, EnumSubClass>
@@ -146,49 +195,96 @@ public:
 		//	PrimitiveTypeClass>;
 		//return CastSelector<T, typename std::is_base_of<Enum, T>::type, typename std::is_base_of<RefPtrCore, T>::type >::GetValue(value);
 
-		return CastValueOrPointerSelector<T>::GetValue(value);
+		return AccessorSelectorHelper<T>::GetValue(value);
 	}
 
 private:
 	void SetBool(bool value);
 	bool GetBool() const;
+	void SetString(const String& value);
+	const String& GetString() const;
 	void SetEnumValue(EnumValueType value);
 	EnumValueType GetEnumValue() const;
+	void SetStruct(const void* value, size_t size);
+	const void* GetStruct() const;
 	void SetReflectionObject(ReflectionObject* obj);
 	ReflectionObject* GetReflectionObject() const;
 	void SetReflectionArrayObject(ReflectionArrayObject* obj);
 	ReflectionArrayObject* GetReflectionArrayObject() const;
 
+	//void SetValue(bool value) { SetBool(value); }
+	//void SetValue(ReflectionObject* value) { SetReflectionObject(value); }
+	//void SetValue(ReflectionArrayObject* value) { SetReflectionArrayObject(value); }
 
-	template<typename T> struct CastValueOrPointerSelector
+	// 値型用の AccessorSelectorHelper
+	template<typename T> struct AccessorSelectorHelper
 	{
+		using typeKind = first_enabled_t<
+			std::enable_if<std::is_same<T, bool>::value, detail::KindPrimitive>,
+			std::enable_if<std::is_same<T, String>::value, detail::KindPrimitive>,
+			std::enable_if<std::is_base_of<Enum, T>::value, detail::KindEnum>,
+			std::enable_if<std::is_enum<T>::value, detail::KindEnum>,
+			std::enable_if<std::is_class<T>::value, detail::KindStruct>,		// 非POD構造体 or クラス実体
+			std::enable_if<std::is_pod<T>::value, detail::KindStruct>,			// POD構造体
+			std::false_type>;
+
+		static void SetValue(Variant* variant, const T& value)
+		{
+			AccessorSelector<T, typeKind>::SetValue(variant, value);
+		}
 		static T GetValue(const Variant& value)
 		{
-			// Cast<T>() の T は値型である場合ここに来る。
-			// Enum かプリミティブ型かを確認する。
-			using typeKind = typename std::conditional<
-				std::is_base_of<Enum, T>::value,
-				detail::KindEnum,
-				detail::KindPrimitive >::type;
-			return CastSelector<T, typeKind>::GetValue(value);
+			static_assert(std::is_same<T, const String&>::value == false, "Reference string type is not supported.");
+			return AccessorSelector<T, typeKind>::GetValue(&value);
 		}
 	};
-	template<typename T> struct CastValueOrPointerSelector<T*>
+	// ポインタ型用の AccessorSelectorHelper
+	template<typename T> struct AccessorSelectorHelper<T*>
 	{
+		using typeKind = first_enabled_t<
+			std::enable_if<std::is_base_of<ReflectionArrayObject, T>::value, detail::KindReflectionArrayObject>,
+			std::enable_if<std::is_base_of<ReflectionObject, T>::value, detail::KindReflectionObject>,
+			std::false_type>;
+
+		static void SetValue(Variant* variant, T* value)
+		{
+			AccessorSelector<T*, typeKind>::SetValue(variant, value);
+		}
 		static T* GetValue(const Variant& value)
 		{
-			// Cast<T>() の T はポインタ型である場合ここに来る。
-			// KindReflectionArrayObject または KindReflectionObject のサブクラスであるかを確認する。
-			using typeKind = first_enabled_t<
-				std::enable_if<std::is_base_of<ReflectionArrayObject, T>::value, detail::KindReflectionArrayObject>,
-				std::enable_if<std::is_base_of<ReflectionObject, T>::value, detail::KindReflectionObject>,
-				std::false_type>;
-			return CastSelector<T*, typeKind>::GetValue(value);
+			return AccessorSelector<T*, typeKind>::GetValue(&value);
 		}
 	};
+	/* ↑struct 型の判別に is_pod を使用しているが、is_pod はポインタ型も true とみなしてしまうため、前段で分ける必要がある。
+	 * また、ポインタはその実体の型に対して is_base_of したいので、これもまた前段で分ける必要がある。
+	 */
 
-	template<typename T, typename TType> struct CastSelector { /*static T GetValue(const Variant& v) { return 0; }*/ };
-	
+	//template<typename T> struct CastValueOrPointerSelector
+	//{
+	//	static T GetValue(const Variant& value)
+	//	{
+	//		using typeKind = first_enabled_t<
+	//			std::enable_if<std::is_same<T, bool>::value, detail::KindPrimitive>,
+	//			std::enable_if<std::is_base_of<Enum, T>::value, detail::KindEnum>,
+	//			std::enable_if<std::is_enum<T>::value, detail::KindEnum>,
+	//			std::enable_if<std::is_pod<T>::value, detail::KindPodStruct>,
+	//			std::false_type>;
+	//		return AccessorSelector<T, typeKind>::GetValue(&value);
+	//	}
+	//};
+	//template<typename T> struct CastValueOrPointerSelector<T*>
+	//{
+	//	static T* GetValue(const Variant& value)
+	//	{
+	//		// Cast<T>() の T はポインタ型である場合ここに来る。
+	//		// KindReflectionArrayObject または KindReflectionObject のサブクラスであるかを確認する。
+	//		using typeKind = first_enabled_t<
+	//			std::enable_if<std::is_base_of<ReflectionArrayObject, T>::value, detail::KindReflectionArrayObject>,
+	//			std::enable_if<std::is_base_of<ReflectionObject, T>::value, detail::KindReflectionObject>,
+	//			std::false_type>;
+	//		return AccessorSelector<T*, typeKind>::GetValue(&value);
+	//	}
+	//};
 
 
 #if 0
@@ -223,17 +319,50 @@ private:
 		EnumValueType			m_enum;
 		ReflectionObject*		m_object;
 		ReflectionArrayObject*	m_arrayObject;
+		byte_t					m_struct[32];
 	};
+	size_t			m_structSize;
 	String			m_string;
+	//const std::type_info*		m_typeInfo;
 };
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-template<> struct Variant::CastSelector<bool, detail::KindPrimitive>					{ static bool GetValue(const Variant& v) { return v.GetBool(); } };
-template<typename T> struct Variant::CastSelector<T, detail::KindEnum>					{ static T GetValue(const Variant& v) { return static_cast<typename T::enum_type>(v.GetEnumValue()); } };
-template<typename T> struct Variant::CastSelector<T, detail::KindReflectionObject>		{ static T GetValue(const Variant& v) { return static_cast<T>(v.GetReflectionObject()); } };
-template<typename T> struct Variant::CastSelector<T, detail::KindReflectionArrayObject>	{ static T GetValue(const Variant& v) { return static_cast<T>(v.GetReflectionArrayObject()); } };
+template<> struct Variant::AccessorSelector<bool, detail::KindPrimitive>
+{
+	static void SetValue(Variant* v, bool value) { v->SetBool(value); }
+	static bool GetValue(const Variant* v) { return v->GetBool(); }
+};
+template<> struct Variant::AccessorSelector<String, detail::KindPrimitive>
+{
+	static void SetValue(Variant* v, const String& value) { v->SetString(value); }
+	static const String& GetValue(const Variant* v) { return v->GetString(); }
+};
+template<typename T> struct Variant::AccessorSelector<T, detail::KindEnum>
+{
+	static void SetValue(Variant* v, T value) { v->SetEnumValue(value); }
+	static T GetValue(const Variant* v) { return static_cast<typename T::enum_type>(v->GetEnumValue()); }
+};
+template<typename T> struct Variant::AccessorSelector<T, detail::KindReflectionObject>
+{
+	static void SetValue(Variant* v, T value) { v->SetReflectionObject(value); }
+	static T GetValue(const Variant* v) { return static_cast<T>(v->GetReflectionObject()); }
+};
+template<typename T> struct Variant::AccessorSelector<T, detail::KindReflectionArrayObject>
+{
+	static void SetValue(Variant* v, T value) { v->SetReflectionArrayObject(value); }
+	static T GetValue(const Variant* v) { return static_cast<T>(v->GetReflectionArrayObject()); }
+};
+template<typename T> struct Variant::AccessorSelector<T, detail::KindStruct>
+{
+	static void SetValue(Variant* v, T value) { v->SetStruct(&value, sizeof(T)); }
+	static T GetValue(const Variant* v) { return *((T*)v->GetStruct()); }
+};
+template<typename T> struct Variant::AccessorSelector<const T&, detail::KindStruct>	// const Struct& のような参照での get をサポートする
+{
+	static const T& GetValue(const Variant* v) { return *((T*)v->GetStruct()); }
+};
 
 } // namespace tr
 LN_NAMESPACE_END

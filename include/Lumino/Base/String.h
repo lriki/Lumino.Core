@@ -15,8 +15,9 @@
 
 LN_NAMESPACE_BEGIN
 class Encoding;
-template<typename TChar>
-class GenericStringArray;
+template<typename TChar> class GenericStringArray;
+template<typename TChar> class GenericStringCore;
+
 
 /** 大文字と小文字の区別指定 */
 enum class CaseSensitivity
@@ -432,55 +433,9 @@ private:
 	Encoding* GetThisTypeEncoding() const;
 
 private:
-	class GenericStringCore
-		: public std::basic_string<TChar, std::char_traits<TChar>, STLAllocator<TChar> >
-	{
-	public:
-		GenericStringCore() : m_refCount(1) {}
-		~GenericStringCore() {}
-
-		static GenericStringCore* GetSharedEmpty() { return &m_sharedEmpty; }
-
-#ifdef LN_INTERNAL_COW_THREAD_SAFE
-		inline bool IsShared() const { return (m_refCount.load() > 1); }
-		inline void AddRef() { m_refCount.fetch_add(1, std::memory_order_relaxed);/*m_refCount.Increment();*/ }
-		inline void Release()
-		{
-			int before = m_refCount.fetch_sub(1, std::memory_order_relaxed);
-			/*m_refCount.Decrement();*/
-			//if (m_refCount.Get() <= 0)
-			if (before <= 1)
-			{
-				if (this != GetSharedEmpty()) {		// グローバル変数として定義された String からの解放済み delete 対策
-					delete this;
-				}
-			}
-		}
-	public:
-		std::atomic<int>	m_refCount;
-		//Threading::Atomic		m_refCount;
-#else
-		inline bool IsShared() const { return (m_refCount > 1); }
-		inline void AddRef() { ++m_refCount; }
-		inline void Release()
-		{
-			--m_refCount;
-			if (m_refCount <= 0)
-			{
-				if (this != GetSharedEmpty()) {		// グローバル変数として定義された String からの解放済み delete 対策
-					delete this;
-				}
-			}
-		}
-	public:
-		int		m_refCount;
-#endif
-
-		static GenericStringCore	m_sharedEmpty;
-	};
 
 	const TChar* m_ref;		///< 可変長の実引数にされることに備え、クラス先頭のメンバは m_string->c_str() を指しておく
-	GenericStringCore*	m_string;
+	GenericStringCore<TChar>*	m_string;
 
 #ifdef LN_GenericString_Extensions
 	LN_GenericString_Extensions;
@@ -546,5 +501,55 @@ typedef GenericString<TCHAR>	String;
 typedef GenericString<char>		StringA;
 typedef GenericString<wchar_t>	StringW;
 #endif
+
+
+
+template<typename TChar>
+class GenericStringCore
+	: public std::basic_string<TChar, std::char_traits<TChar>, STLAllocator<TChar> >
+{
+public:
+	GenericStringCore() : m_refCount(1) {}
+	~GenericStringCore() {}
+
+	static GenericStringCore* GetSharedEmpty() { return &m_sharedEmpty; }
+
+#ifdef LN_INTERNAL_COW_THREAD_SAFE
+	inline bool IsShared() const { return (m_refCount.load() > 1); }
+	inline void AddRef() { m_refCount.fetch_add(1, std::memory_order_relaxed);/*m_refCount.Increment();*/ }
+	inline void Release()
+	{
+		int before = m_refCount.fetch_sub(1, std::memory_order_relaxed);
+		/*m_refCount.Decrement();*/
+		//if (m_refCount.Get() <= 0)
+		if (before <= 1)
+		{
+			if (this != GetSharedEmpty()) {		// グローバル変数として定義された String からの解放済み delete 対策
+				delete this;
+			}
+		}
+	}
+public:
+	std::atomic<int>	m_refCount;
+	//Threading::Atomic		m_refCount;
+#else
+	inline bool IsShared() const { return (m_refCount > 1); }
+	inline void AddRef() { ++m_refCount; }
+	inline void Release()
+	{
+		--m_refCount;
+		if (m_refCount <= 0)
+		{
+			if (this != GetSharedEmpty()) {		// グローバル変数として定義された String からの解放済み delete 対策
+				delete this;
+			}
+		}
+	}
+public:
+	int		m_refCount;
+#endif
+
+	static GenericStringCore	m_sharedEmpty;
+};
 
 LN_NAMESPACE_END

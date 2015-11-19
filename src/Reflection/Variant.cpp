@@ -20,6 +20,7 @@ const Variant Variant::Null;
 Variant::Variant()
 	: m_type(VariantType::Null)
 	, m_object(nullptr)
+	, m_structSize(0)
 {
 }
 
@@ -37,6 +38,17 @@ bool Variant::GetBool() const
 	LN_CHECK_STATE_RETURNV(m_type == VariantType::Bool, false);
 	return m_bool;
 }
+void Variant::SetString(const String& value)
+{
+	Release();
+	m_type = VariantType::String;
+	m_string = value;
+}
+const String& Variant::GetString() const
+{
+	LN_CHECK_STATE_RETURNV(m_type == VariantType::String, String::GetEmpty());
+	return m_string;
+}
 void Variant::SetEnumValue(EnumValueType value)
 {
 	Release();
@@ -47,6 +59,18 @@ EnumValueType Variant::GetEnumValue() const
 {
 	LN_CHECK_STATE_RETURNV(m_type == VariantType::Enum, false);
 	return m_enum;
+}
+void Variant::SetStruct(const void* value, size_t size)
+{
+	LN_CHECK_ARGS(size <= sizeof(m_struct));
+	m_type = VariantType::Struct;
+	memcpy(m_struct, value, size);
+	m_structSize = size;
+}
+const void* Variant::GetStruct() const
+{
+	LN_CHECK_STATE_RETURNV(m_type == VariantType::Struct, nullptr);
+	return (const void*)m_struct;
 }
 void Variant::SetReflectionObject(ReflectionObject* obj)
 {
@@ -97,6 +121,10 @@ void Variant::Copy(const Variant& obj)
 	case VariantType::Enum:
 		m_enum = obj.m_enum;
 		break;
+	case VariantType::Struct:
+		m_structSize = obj.m_structSize;
+		memcpy(m_struct, obj.m_struct, m_structSize);
+		break;
 	case VariantType::Object:
 		LN_REFOBJ_SET(m_object, obj.m_object);
 		break;
@@ -121,6 +149,7 @@ void Variant::Release()
 		LN_SAFE_RELEASE(m_arrayObject);
 	}
 	m_type = VariantType::Null;
+	m_structSize = 0;
 }
 
 } // namespace tr
