@@ -74,7 +74,17 @@ TEST_F(IntegrationTest_Reflection_Variant, Basic)
 	}
 #endif
 
-
+	// <Test> nullptr 型
+	{
+		Variant v1(nullptr);
+		Variant v2 = v1;	// copy
+		ASSERT_EQ(VariantType::Null, v1.GetType());
+		ASSERT_EQ(VariantType::Null, v2.GetType());
+		ASSERT_EQ(nullptr, Variant::Cast<nullptr_t>(v1));
+		ASSERT_EQ(nullptr, Variant::Cast<RefTest1*>(v2));	// ReflectionObject で Cast すると nullptr が返ってくる
+		ASSERT_EQ(nullptr, Variant::Cast<ArrayTest1*>(v2));	// ReflectionArrayObject で Cast すると nullptr が返ってくる
+		ASSERT_EQ(NULL, Variant::Cast<RefTest1*>(v2));
+	}
 	// <Test> Bool 型
 	{
 		Variant v1(true);
@@ -86,6 +96,26 @@ TEST_F(IntegrationTest_Reflection_Variant, Basic)
 		ASSERT_EQ(true, Variant::Cast<bool>(v1));
 		ASSERT_EQ(false, Variant::Cast<bool>(v2));
 		ASSERT_EQ(false, Variant::Cast<bool>(v3));
+	}
+	// <Test> int 型
+	{
+		int a = 100;
+		Variant v1(a);
+		Variant v2 = v1;	// copy
+		ASSERT_EQ(VariantType::Int32, v1.GetType());
+		ASSERT_EQ(VariantType::Int32, v2.GetType());
+		ASSERT_EQ(100, Variant::Cast<int>(v1));
+		ASSERT_EQ(100, Variant::Cast<int32_t>(v2));
+	}
+	// <Test> float 型
+	{
+		float a = 100.0f;
+		Variant v1(a);
+		Variant v2 = v1;	// copy
+		ASSERT_EQ(VariantType::Float, v1.GetType());
+		ASSERT_EQ(VariantType::Float, v2.GetType());
+		ASSERT_EQ(100, Variant::Cast<float>(v1));
+		ASSERT_EQ(100, Variant::Cast<int>(v2));		// 算術型ならキャストできる
 	}
 	// <Test> TCHAR* 型
 	{

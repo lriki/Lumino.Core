@@ -27,6 +27,15 @@ Variant::Variant()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+void Variant::SetNullPtr(nullptr_t value)
+{
+	Release();
+}
+nullptr_t Variant::GetNullPtr() const
+{
+	LN_CHECK_STATE_RETURNV(m_type == VariantType::Null, nullptr);
+	return nullptr;
+}
 void Variant::SetBool(bool value)
 {
 	Release();
@@ -38,6 +47,28 @@ bool Variant::GetBool() const
 	LN_CHECK_STATE_RETURNV(m_type == VariantType::Bool, false);
 	return m_bool;
 }
+void Variant::SetArithmetic(int32_t value)
+{
+	Release();
+	m_type = VariantType::Int32;
+	m_int32 = value;
+}
+//void Variant::GetArithmetic(int32_t* value) const
+//{
+//	LN_CHECK_STATE_RETURNV(m_type == VariantType::Int32);
+//	*value = m_int32;
+//}
+void Variant::SetArithmetic(float value)
+{
+	Release();
+	m_type = VariantType::Float;
+	m_float = value;
+}
+//void Variant::GetArithmetic(float* value) const
+//{
+//	LN_CHECK_STATE_RETURNV(m_type == VariantType::Float);
+//	*value = m_float;
+//}
 void Variant::SetString(const TCHAR* value)
 {
 	Release();
@@ -90,6 +121,7 @@ void Variant::SetReflectionObject(ReflectionObject* obj)
 }
 ReflectionObject* Variant::GetReflectionObject() const
 {
+	if (m_type == VariantType::Null) return nullptr;
 	LN_CHECK_STATE(m_type == VariantType::Object || m_type == VariantType::ArrayObject);	// List Ç‡ Object ÇÃàÍïîÅB
 	return m_object;
 }
@@ -101,6 +133,7 @@ void Variant::SetReflectionArrayObject(ReflectionArrayObject* obj)
 }
 ReflectionArrayObject* Variant::GetReflectionArrayObject() const
 {
+	if (m_type == VariantType::Null) return nullptr;
 	LN_CHECK_STATE(m_type == VariantType::ArrayObject);
 	return m_arrayObject;
 }

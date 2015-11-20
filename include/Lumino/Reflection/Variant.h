@@ -23,6 +23,7 @@ enum class VariantType
 	String,
 	Enum,
 	Struct,
+	Pointer,
 	Object,
 	ArrayObject,
 };
@@ -32,8 +33,10 @@ namespace detail
 	extern void* enabler;
 
 	class KindPrimitive {};
+	class KindArithmetic {};	// 算術型。相互キャスト可能
 	class KindEnum {};
 	class KindStruct {};
+	class KindPointer {};
 	class KindReflectionObject {};
 	class KindReflectionArrayObject {};
 }
@@ -89,7 +92,9 @@ public:
 	template<typename T> struct AccessorSelectorHelper
 	{
 		using typeKind = first_enabled_t<
+			std::enable_if<std::is_same<T, std::nullptr_t>::value, detail::KindPrimitive>,
 			std::enable_if<std::is_same<T, bool>::value, detail::KindPrimitive>,
+			std::enable_if<std::is_arithmetic<T>::value, detail::KindArithmetic>,
 			std::enable_if<std::is_same<T, String>::value, detail::KindPrimitive>,
 			std::enable_if<std::is_base_of<Enum, T>::value, detail::KindEnum>,
 			std::enable_if<std::is_enum<T>::value, detail::KindEnum>,
@@ -126,9 +131,17 @@ public:
 	};
 	/* ↑struct 型の判別に is_pod を使用しているが、is_pod はポインタ型も true とみなしてしまうため、前段で分ける必要がある。
 	 * また、ポインタはその実体の型に対して is_base_of したいので、これもまた前段で分ける必要がある。
-	 * 文字列リテラルはポインタ型ではなく配列型となる。コレだけに限って特殊化するのも面倒なので、コンストラクタオーバーロードで解決している。
 	 *
-	 * 値側は remove_reference で、T=const Struct& に備えている。VisualC++ ではコレ相当のことを勝手にやってくれるが、GCC では自分で外さなければならない。
+	 * 文字列リテラルはポインタ型ではなく配列型となる。
+	 * コレだけに限って特殊化するのも面倒なので、コンストラクタオーバーロードで解決している。
+	 *
+	 * 値側は remove_reference で、T=const Struct& に備えている。
+	 * VisualC++ ではコレ相当のことを勝手にやってくれるが、GCC では自分で外さなければならない。
+	 *
+	 * ポインタ型用の AccessorSelectorHelper は必ず必要になる。
+	 * ReflectionObject と ReflectionArrayObject だけであればコンストラクタオーバーロードで解決できるが、
+	 * それらの派生クラスのポインタを渡した場合はテンプレートコンストラクタの方が呼ばれる。
+	 * このときは特殊化しないとダメ。
 	 */
 
 
@@ -275,8 +288,12 @@ public:
 	}
 
 private:
+	void SetNullPtr(nullptr_t value);
+	nullptr_t GetNullPtr() const;
 	void SetBool(bool value);
 	bool GetBool() const;
+	void SetArithmetic(int32_t value);
+	void SetArithmetic(float value);
 	void SetString(const TCHAR* value);
 	void SetString(const String& value);
 	String GetString() const;
@@ -288,6 +305,20 @@ private:
 	ReflectionObject* GetReflectionObject() const;
 	void SetReflectionArrayObject(ReflectionArrayObject* obj);
 	ReflectionArrayObject* GetReflectionArrayObject() const;
+
+	//template<typename T>
+	//T GetArithmetic() const;
+
+	template<typename T, typename std::enable_if<std::is_arithmetic<T>::value>::type*& = detail::enabler>
+	T GetArithmetic() const
+	{
+		switch (m_type)
+		{
+		case VariantType::Int32: return static_cast<T>(m_int32);
+		case VariantType::Float: return static_cast<T>(m_float);
+		default: return 0;
+		}
+	}
 
 	//void SetValue(bool value) { SetBool(value); }
 	//void SetValue(ReflectionObject* value) { SetReflectionObject(value); }
@@ -366,10 +397,20 @@ private:
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+template<> struct Variant::AccessorSelector<std::nullptr_t, detail::KindPrimitive>
+{
+	static void SetValue(Variant* v, std::nullptr_t value) { v->SetNullPtr(value); }
+	static std::nullptr_t GetValue(const Variant* v) { return v->GetNullPtr(); }
+};
 template<> struct Variant::AccessorSelector<bool, detail::KindPrimitive>
 {
 	static void SetValue(Variant* v, bool value) { v->SetBool(value); }
 	static bool GetValue(const Variant* v) { return v->GetBool(); }
+};
+template<typename T> struct Variant::AccessorSelector<T, detail::KindArithmetic>
+{
+	static void SetValue(Variant* v, T value) { v->SetArithmetic(value); }
+	static T GetValue(const Variant* v) { return v->GetArithmetic<T>(); }
 };
 template<> struct Variant::AccessorSelector<String, detail::KindPrimitive>
 {
