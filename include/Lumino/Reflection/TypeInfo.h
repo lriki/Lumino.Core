@@ -1,4 +1,5 @@
 
+#pragma once
 #include "../Base/Common.h"
 #include "../Base/RefObject.h"
 #include "../Base/String.h"

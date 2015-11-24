@@ -2,11 +2,39 @@
 #pragma once
 #include "../Base/Common.h"
 #include "../Base/RefObject.h"
+#include "TypeInfo.h"
 
 LN_NAMESPACE_BEGIN
 namespace tr
 {
-	
+
+class ReflectionHelper
+{
+public:
+	template<class T>
+	static ln::tr::LocalValueHavingFlags* GetLocalValueHavingFlags(ReflectionObject* thisObj)
+	{
+		return &static_cast<T*>(thisObj)->lnref_localValueHavingFlags;
+	}
+
+
+	template<class T>
+	static TypeInfo* GetClassTypeInfo()
+	{
+		return &T::lnref_typeInfo;
+	}
+};
+
+#define LN_TR_REFLECTION_TYPEINFO_DECLARE() \
+	private: \
+		friend class ln::tr::ReflectionHelper; \
+		static ln::tr::TypeInfo					lnref_typeInfo; \
+		ln::tr::LocalValueHavingFlags			lnref_localValueHavingFlags; \
+		virtual ln::tr::TypeInfo*				lnref_GetThisTypeInfo() const;
+
+#define LN_TR_REFLECTION_TYPEINFO_IMPLEMENT(classType, baseClassType) \
+	ln::tr::TypeInfo				classType::lnref_typeInfo(_T(#classType), ln::tr::ReflectionHelper::GetClassTypeInfo<baseClassType>(), &ln::tr::ReflectionHelper::GetLocalValueHavingFlags<classType>); \
+	ln::tr::TypeInfo*				classType::lnref_GetThisTypeInfo() const { return &lnref_typeInfo; }
 
 /**
 	@brief		
@@ -14,6 +42,7 @@ namespace tr
 class ReflectionObject
 	: public RefObject
 {
+	LN_TR_REFLECTION_TYPEINFO_DECLARE();
 public:
 	ReflectionObject();
 	virtual ~ReflectionObject();
@@ -21,19 +50,6 @@ public:
 protected:
 
 };
-
-#define LN_TR_REFLECTION_TYPEINFO_DECLARE() \
-	private: \
-		static TypeInfo			lnref_typeInfo; \
-		LocalValueHavingFlags	lnref_localValueHavingFlags; \
-		virtual TypeInfo*		lnref_GetThisTypeInfo() const; \
-		static uint32_t*		lnref_GetLocalValueHavingFlags(CoreObject* _this);
-		// Å™TODO: ÉâÉÄÉ_éÆÇ…Ç≈Ç´Ç»Ç¢ÅH
-
-#define LN_TR_REFLECTION_TYPEINFO_IMPLEMENT(classType, baseClassType) \
-	TypeInfo				classType::lnref_typeInfo(_T(#classType), baseClassType::GetClassTypeInfo(), &classType::lnref_GetLocalValueHavingFlags); \
-	TypeInfo*				classType::lnref_GetThisTypeInfo() const { return &lnref_typeInfo; } \
-	LocalValueHavingFlags*	classType::lnref_GetLocalValueHavingFlags(CoreObject* _this) { return &static_cast<classType*>(_this)->lnref_localValueHavingFlags; }
 
 
 } // namespace tr

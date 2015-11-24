@@ -19,7 +19,9 @@ enum class VariantType
 	Null,
 	Bool,
 	Int32,
+	UInt32,
 	Float,
+	Double,
 	String,
 	Enum,
 	Struct,
@@ -293,7 +295,9 @@ private:
 	void SetBool(bool value);
 	bool GetBool() const;
 	void SetArithmetic(int32_t value);
+	void SetArithmetic(uint32_t value);
 	void SetArithmetic(float value);
+	void SetArithmetic(double value);
 	void SetString(const TCHAR* value);
 	void SetString(const String& value);
 	String GetString() const;
@@ -306,16 +310,15 @@ private:
 	void SetReflectionArrayObject(ReflectionArrayObject* obj);
 	ReflectionArrayObject* GetReflectionArrayObject() const;
 
-	//template<typename T>
-	//T GetArithmetic() const;
-
 	template<typename T, typename std::enable_if<std::is_arithmetic<T>::value>::type*& = detail::enabler>
 	T GetArithmetic() const
 	{
 		switch (m_type)
 		{
 		case VariantType::Int32: return static_cast<T>(m_int32);
+		case VariantType::UInt32: return static_cast<T>(m_uint32);
 		case VariantType::Float: return static_cast<T>(m_float);
+		case VariantType::Double: return static_cast<T>(m_double);
 		default: return 0;
 		}
 	}
@@ -381,8 +384,10 @@ private:
 	union
 	{
 		bool					m_bool;
-		uint32_t				m_int32;
+		int32_t					m_int32;
+		uint32_t				m_uint32;
 		float					m_float;
+		double					m_double;
 		ln::detail::GenericStringCore<TCHAR>*	m_string;
 		EnumValueType			m_enum;
 		ReflectionObject*		m_object;

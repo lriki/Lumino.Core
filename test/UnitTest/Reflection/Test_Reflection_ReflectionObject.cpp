@@ -10,9 +10,11 @@ protected:
 
 class RefTest1 : public tr::ReflectionObject
 {
+	LN_TR_REFLECTION_TYPEINFO_DECLARE();
 public:
 
 };
+LN_TR_REFLECTION_TYPEINFO_IMPLEMENT(RefTest1, tr::ReflectionObject);
 
 //---------------------------------------------------------------------
 TEST_F(IntegrationTest_Reflection_ReflectionObject, Basic)

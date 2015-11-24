@@ -105,7 +105,17 @@ TEST_F(IntegrationTest_Reflection_Variant, Basic)
 		ASSERT_EQ(VariantType::Int32, v1.GetType());
 		ASSERT_EQ(VariantType::Int32, v2.GetType());
 		ASSERT_EQ(100, Variant::Cast<int>(v1));
-		ASSERT_EQ(100, Variant::Cast<int32_t>(v2));
+		ASSERT_EQ(100, Variant::Cast<int32_t>(v2));		// 算術型ならキャストできる
+	}
+	// <Test> uint32_t 型
+	{
+		uint32_t a = 100;
+		Variant v1(a);
+		Variant v2 = v1;	// copy
+		ASSERT_EQ(VariantType::UInt32, v1.GetType());
+		ASSERT_EQ(VariantType::UInt32, v2.GetType());
+		ASSERT_EQ(100, Variant::Cast<uint32_t>(v1));
+		ASSERT_EQ(100, Variant::Cast<int32_t>(v2));		// 算術型ならキャストできる
 	}
 	// <Test> float 型
 	{
@@ -115,7 +125,17 @@ TEST_F(IntegrationTest_Reflection_Variant, Basic)
 		ASSERT_EQ(VariantType::Float, v1.GetType());
 		ASSERT_EQ(VariantType::Float, v2.GetType());
 		ASSERT_EQ(100, Variant::Cast<float>(v1));
-		ASSERT_EQ(100, Variant::Cast<int>(v2));		// 算術型ならキャストできる
+		ASSERT_EQ(100, Variant::Cast<int>(v2));			// 算術型ならキャストできる
+	}
+	// <Test> double 型
+	{
+		double a = 100.0;
+		Variant v1(a);
+		Variant v2 = v1;	// copy
+		ASSERT_EQ(VariantType::Double, v1.GetType());
+		ASSERT_EQ(VariantType::Double, v2.GetType());
+		ASSERT_EQ(100, Variant::Cast<double>(v1));
+		ASSERT_EQ(100, Variant::Cast<float>(v2));		// 算術型ならキャストできる
 	}
 	// <Test> TCHAR* 型
 	{

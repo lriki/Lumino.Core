@@ -209,6 +209,7 @@ set(LN_SOURCES_Reflection
 	include/Lumino/Reflection/ReflectionStruct.h
 	include/Lumino/Reflection/TypeInfo.h
 	src/Reflection/ReflectionObject.cpp
+	src/Reflection/TypeInfo.cpp
 	src/Reflection/Variant.cpp
 )
 

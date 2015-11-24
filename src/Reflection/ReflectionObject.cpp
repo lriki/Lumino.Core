@@ -54,14 +54,9 @@ void TypeInfo::RegisterProperty(Property* prop)
 //=============================================================================
 // ReflectionObject
 //=============================================================================
+ln::tr::TypeInfo				ReflectionObject::lnref_typeInfo(_T("ReflectionObject"), NULL, NULL);
+ln::tr::TypeInfo*				ReflectionObject::lnref_GetThisTypeInfo() const { return &lnref_typeInfo; }
 
-/*
-	LN_TR_TYPE_INFO_DECLARE
-		static TypeInfo			_typeInfo;					// このクラスを表す TypeInfo
-		LocalValueFlags			_localValueHavingFlags;		// ローカル値を持っているかを示すフラグ
-		virtual TypeInfo*		GetThisTypeInfo() const;	// 派生先末端のクラスの TypeInfo を取得する
-		static LocalValueFlags*	GetLocalValueHavingFlags(CoreObject* _this);	// _localValueHavingFlags を取得する
-*/
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------

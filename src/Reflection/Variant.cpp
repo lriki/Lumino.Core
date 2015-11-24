@@ -53,6 +53,12 @@ void Variant::SetArithmetic(int32_t value)
 	m_type = VariantType::Int32;
 	m_int32 = value;
 }
+void Variant::SetArithmetic(uint32_t value)
+{
+	Release();
+	m_type = VariantType::UInt32;
+	m_uint32 = value;
+}
 //void Variant::GetArithmetic(int32_t* value) const
 //{
 //	LN_CHECK_STATE_RETURNV(m_type == VariantType::Int32);
@@ -69,6 +75,12 @@ void Variant::SetArithmetic(float value)
 //	LN_CHECK_STATE_RETURNV(m_type == VariantType::Float);
 //	*value = m_float;
 //}
+void Variant::SetArithmetic(double value)
+{
+	Release();
+	m_type = VariantType::Double;
+	m_double = value;
+}
 void Variant::SetString(const TCHAR* value)
 {
 	Release();
@@ -155,8 +167,14 @@ void Variant::Copy(const Variant& obj)
 	case VariantType::Int32:
 		m_int32 = obj.m_int32;
 		break;
+	case VariantType::UInt32:
+		m_uint32 = obj.m_uint32;
+		break;
 	case VariantType::Float:
 		m_float = obj.m_float;
+		break;
+	case VariantType::Double:
+		m_double = obj.m_double;
 		break;
 	case VariantType::String:
 		LN_REFOBJ_SET(m_string, obj.m_string);
