@@ -42,6 +42,7 @@ set(LN_SOURCES_Base
 	include/Lumino/Base/CRT.h
 	include/Lumino/Base/Delegate.h
 	include/Lumino/Base/Delegate.inl
+	include/Lumino/Base/Diff.h
 	include/Lumino/Base/DllLoader.h
 	include/Lumino/Base/ElapsedTimer.h
 	include/Lumino/Base/EnumExtension.h
@@ -75,6 +76,7 @@ set(LN_SOURCES_Base
 	include/Lumino/Base/Version.h
 	src/Base/ByteBuffer.cpp
 	src/Base/Cache.cpp
+	src/Base/Diff.cpp
 	src/Base/DllLoader.cpp
 	src/Base/ElapsedTimer.cpp
 	src/Base/Environment.cpp
