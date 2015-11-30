@@ -26,10 +26,25 @@ namespace tr
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-TypeInfo::TypeInfo(const TCHAR* className, TypeInfo* baseClass, HasLocalValueFlagsGetter getter)
+TypeInfo* TypeInfo::GetTypeInfo(const ReflectionObject* obj)
+{
+	return ReflectionHelper::GetTypeInfo(obj);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+TypeInfo::TypeInfo(
+	const TCHAR* className,
+	TypeInfo* baseClass,
+	HasLocalValueFlagsGetter getter,
+	BindingTypeInfoSetter bindingTypeInfoSetter,
+	BindingTypeInfoGetter bindingTypeInfoGetter)
 	: m_name(className)
 	, m_baseClass(baseClass)
 	, m_hasLocalValueFlagsGetter(getter)
+	, m_bindingTypeInfoSetter(bindingTypeInfoSetter)
+	, m_bindingTypeInfoGetter(bindingTypeInfoGetter)
 {
 }
 
@@ -48,6 +63,23 @@ TypeInfo::TypeInfo(const TCHAR* className, TypeInfo* baseClass, HasLocalValueFla
 //		prop->m_registerd = true;
 //	}
 //}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void TypeInfo::SetBindingTypeInfo(void* data)
+{
+	m_bindingTypeInfoSetter(data);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void* TypeInfo::GetBindingTypeInfo(const ReflectionObject* obj)
+{
+	TypeInfo* type = GetTypeInfo(obj);
+	return type->m_bindingTypeInfoGetter();
+}
 
 } // namespace tr
 LN_NAMESPACE_END

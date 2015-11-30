@@ -8,33 +8,19 @@ LN_NAMESPACE_BEGIN
 namespace tr
 {
 
-class ReflectionHelper
-{
-public:
-	template<class T>
-	static ln::tr::LocalValueHavingFlags* GetLocalValueHavingFlags(ReflectionObject* thisObj)
-	{
-		return &static_cast<T*>(thisObj)->lnref_localValueHavingFlags;
-	}
-
-
-	template<class T>
-	static TypeInfo* GetClassTypeInfo()
-	{
-		return &T::lnref_typeInfo;
-	}
-};
 
 #define LN_TR_REFLECTION_TYPEINFO_DECLARE() \
 	private: \
 		friend class ln::tr::ReflectionHelper; \
 		static ln::tr::TypeInfo					lnref_typeInfo; \
 		ln::tr::LocalValueHavingFlags			lnref_localValueHavingFlags; \
-		virtual ln::tr::TypeInfo*				lnref_GetThisTypeInfo() const;
+		virtual ln::tr::TypeInfo*				lnref_GetThisTypeInfo() const; \
+		static void*							lnref_bindingTypeInfo; \
 
 #define LN_TR_REFLECTION_TYPEINFO_IMPLEMENT(classType, baseClassType) \
-	ln::tr::TypeInfo				classType::lnref_typeInfo(_T(#classType), ln::tr::ReflectionHelper::GetClassTypeInfo<baseClassType>(), &ln::tr::ReflectionHelper::GetLocalValueHavingFlags<classType>); \
-	ln::tr::TypeInfo*				classType::lnref_GetThisTypeInfo() const { return &lnref_typeInfo; }
+	ln::tr::TypeInfo				classType::lnref_typeInfo(_T(#classType), ln::tr::ReflectionHelper::GetClassTypeInfo<baseClassType>(), &ln::tr::ReflectionHelper::GetLocalValueHavingFlags<classType>, &ln::tr::ReflectionHelper::SetBindingTypeInfo<classType>, &ln::tr::ReflectionHelper::GetBindingTypeInfo<classType>); \
+	ln::tr::TypeInfo*				classType::lnref_GetThisTypeInfo() const { return &lnref_typeInfo; } \
+	void*							classType::lnref_bindingTypeInfo = nullptr;
 
 /**
 	@brief		
@@ -47,8 +33,13 @@ public:
 	ReflectionObject();
 	virtual ~ReflectionObject();
 
+	void SetUserData(void* data) { m_userData = data; }
+	void* GetUserData() const { return m_userData; }
+
 protected:
 
+private:
+	void*	m_userData;
 };
 
 

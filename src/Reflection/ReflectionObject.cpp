@@ -54,13 +54,14 @@ void TypeInfo::RegisterProperty(Property* prop)
 //=============================================================================
 // ReflectionObject
 //=============================================================================
-ln::tr::TypeInfo				ReflectionObject::lnref_typeInfo(_T("ReflectionObject"), NULL, NULL);
+ln::tr::TypeInfo				ReflectionObject::lnref_typeInfo(_T("ReflectionObject"), nullptr, nullptr, nullptr, nullptr);
 ln::tr::TypeInfo*				ReflectionObject::lnref_GetThisTypeInfo() const { return &lnref_typeInfo; }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 ReflectionObject::ReflectionObject()
+	: m_userData(nullptr)
 {
 }
 
