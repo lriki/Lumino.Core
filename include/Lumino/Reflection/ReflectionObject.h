@@ -2,6 +2,7 @@
 #pragma once
 #include "../Base/Common.h"
 #include "../Base/RefObject.h"
+#include "../Base/Collection.h"
 #include "TypeInfo.h"
 
 LN_NAMESPACE_BEGIN
@@ -42,6 +43,54 @@ private:
 	void*	m_userData;
 };
 
+/**
+	@brief		
+*/
+template<typename T>
+class ReflectionObjectList
+	: public RefObject
+	, public Collection<T>
+{
+public:
+	ReflectionObjectList()
+	{}
+
+	virtual ~ReflectionObjectList()
+	{
+		Clear();
+	}
+
+protected:
+	virtual void InsertItem(int index, const value_type& item) override
+	{
+		Collection<T>::InsertItem(index, item);
+		LN_SAFE_ADDREF(item);
+	}
+	virtual void ClearItems() override
+	{
+		for (auto* item : *this) {
+			LN_SAFE_RELEASE(item);
+		}
+		Collection<T>::ClearItems();
+	}
+	virtual void RemoveItem(int index) override
+	{
+		if (GetAt(index) != nullptr) {
+			GetAt(index)->Release();
+		}
+		Collection<T>::RemoveItem(index);
+	}
+	virtual void SetItem(int index, const value_type& item) override
+	{
+		LN_SAFE_ADDREF(item);
+		if (GetAt(index) != nullptr) {
+			GetAt(index)->Release();
+		}
+		Collection<T>::SetItem(index, item);
+	}
+
+private:
+};
 
 } // namespace tr
 LN_NAMESPACE_END

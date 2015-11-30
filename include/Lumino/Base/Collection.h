@@ -47,7 +47,10 @@ public:
 	Collection() {}
 
 	/** デストラクタ */
-	virtual ~Collection() {}
+	virtual ~Collection()
+	{
+		Clear();
+	}
 
 public:
 
