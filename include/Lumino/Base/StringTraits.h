@@ -21,6 +21,8 @@ enum class NumberConversionResult
 /**
 	@brief		文字列ユーティリティ
 	@details	char および wchar_t 型文字列に対する各操作を行うユーティリティ関数郡です。
+				String クラスではなく、直接 char および wchar_t 型文字列を処理するときに使用します。
+
 				処理の内容は型が違うだけで同一なので template 関数を使用しています。
 				ただし、実装を cpp に隠蔽するため明示的インスタンス化を行っています。
 				このため char まはた wchar_t 型のみにしか使えません。(ほとんど問題ないと思いますが)
@@ -103,14 +105,16 @@ public:
 	/**
 		@brief		文字列を検索し、見つかった最初の文字のインデックスを返します。
 		@param[in]	str1		: 検索対象文字列
+		@param[in]	str1Len		: 検索対象文字列の長さ (-1 の場合 \0 まで)
 		@param[in]	str2		: 検索文字列
+		@param[in]	str2Len		: 検索文字列の長さ (-1 の場合 \0 まで)
 		@param[in]	startIndex	: 検索を開始するインデックス (省略した場合は先頭から)
 		@param[in]	cs			: 大文字と小文字の区別設定
 		@return		見つかった文字列の開始インデックス。見つからなかった場合は -1。
 		@details	str2 が空文字列である場合は 0 を返します。
 	*/
 	template<typename TChar>
-	static int IndexOf(const TChar* str1, const TChar* str2, int startIndex = 0, CaseSensitivity cs = CaseSensitivity::CaseSensitive);
+	static int IndexOf(const TChar* str1, int str1Len, const TChar* str2, int str2Len, int startIndex = 0, CaseSensitivity cs = CaseSensitivity::CaseSensitive);
 
 	/**
 		@brief		文字列を検索し、最後に見つかったインデックスを返します。
@@ -185,6 +189,18 @@ public:
 	*/
 	template<typename TChar>
 	static bool EndsWith(const TChar* str1, int len1, const TChar* str2, int len2, CaseSensitivity cs);
+
+	/**
+		@brief		文字列に含まれる部分文字列の数をカウントします。
+		@param[in]	str1		: 検索対象文字列
+		@param[in]	str1Len		: 検索対象文字列の長さ (-1 の場合 \0 まで)
+		@param[in]	str2		: 検索文字列
+		@param[in]	str2Len		: 検索文字列の長さ (-1 の場合 \0 まで)
+		@param[in]	cs			: 大文字と小文字の区別設定
+		@return		見つかった数。
+	*/
+	template<typename TChar>
+	static int CountString(const TChar* str1, int str1Len, const TChar* str2, int str2Len, CaseSensitivity cs = CaseSensitivity::CaseSensitive);
 
 	/**
 		@brief		文字列の左側(先頭)から指定した文字数を抽出します。

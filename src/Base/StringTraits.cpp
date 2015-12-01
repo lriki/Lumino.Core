@@ -256,7 +256,7 @@ void StringTraits::ConvertMultiToWide(std::wstring* out, const char* input, int 
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-int StringTraits::IndexOf(const TChar* str1, const TChar* str2, int startIndex, CaseSensitivity cs)
+int StringTraits::IndexOf(const TChar* str1, int str1Len, const TChar* str2, int str2Len, int startIndex, CaseSensitivity cs)
 {
 	LN_THROW(str1 && str2, ArgumentException);
 
@@ -264,10 +264,10 @@ int StringTraits::IndexOf(const TChar* str1, const TChar* str2, int startIndex, 
 		return -1;
 	}
 
-	int str1Len = (int)StrLen(str1);
+	str1Len = (str1Len < 0) ? ((int)StrLen(str1)) : str1Len;
 	if (str1Len <= startIndex) { return -1; }
 
-	int str2Len = (int)StrLen(str2);
+	str2Len = (str2Len < 0) ? ((int)StrLen(str2)) : str2Len;
 	if (str2Len <= 0) { return -1; }
 
 	const TChar* pos = str1 + startIndex;
@@ -299,8 +299,8 @@ int StringTraits::IndexOf(const TChar* str1, const TChar* str2, int startIndex, 
 
 	return -1;
 }
-template int StringTraits::IndexOf<char>(const char* str1, const char* str2, int startIndex, CaseSensitivity cs);
-template int StringTraits::IndexOf<wchar_t>(const wchar_t* str1, const wchar_t* str2, int startIndex, CaseSensitivity cs);
+template int StringTraits::IndexOf<char>(const char* str1, int str1Len, const char* str2, int str2Len, int startIndex, CaseSensitivity cs);
+template int StringTraits::IndexOf<wchar_t>(const wchar_t* str1, int str1Len, const wchar_t* str2, int str2Len, int startIndex, CaseSensitivity cs);
 
 
 //-----------------------------------------------------------------------------
@@ -575,6 +575,27 @@ bool StringTraits::EndsWith(const TChar* str1, int len1, const TChar* str2, int 
 }
 template bool StringTraits::EndsWith<char>(const char* str1, int len1, const char* str2, int len2, CaseSensitivity cs);
 template bool StringTraits::EndsWith<wchar_t>(const wchar_t* str1, int len1, const wchar_t* str2, int len2, CaseSensitivity cs);
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+static int StringTraits::CountString(const TChar* str1, int str1Len, const TChar* str2, int str2Len, CaseSensitivity cs)
+{
+	str1Len = (str1Len < 0) ? ((int)StrLen(str1)) : str1Len;
+	str2Len = (str2Len < 0) ? ((int)StrLen(str2)) : str2Len;
+
+	int count = 0;
+	int i = 0;
+	while ((i = IndexOf(str1, str1Len, str2, str2Len, i, cs)) != -1)
+	{
+		i += str2Len;
+		count++;
+	}
+	return count;
+}
+template int StringTraits::CountString<char>(const char* str1, int str1Len, const char* str2, int str2Len, CaseSensitivity cs);
+template int StringTraits::CountString<wchar_t>(const wchar_t* str1, int str1Len, const wchar_t* str2, int str2Len, CaseSensitivity cs);
 
 //-----------------------------------------------------------------------------
 //

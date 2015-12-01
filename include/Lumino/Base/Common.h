@@ -102,7 +102,10 @@
 #endif
 
 #ifndef LN_INTERNAL_ACCESS
-	#define LN_INTERNAL_ACCESS	private
+	#define LN_INTERNAL_ACCESS				private
+#endif
+#ifndef LN_PROTECTED_INTERNAL_ACCESS
+	#define LN_PROTECTED_INTERNAL_ACCESS	protected
 #endif
 
 #ifdef LN_UNICODE
