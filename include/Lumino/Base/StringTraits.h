@@ -197,6 +197,7 @@ public:
 		@param[in]	str2		: 検索文字列
 		@param[in]	str2Len		: 検索文字列の長さ (-1 の場合 \0 まで)
 		@param[in]	cs			: 大文字と小文字の区別設定
+		@details	検索は単語単位です。例えば "*****" から "**" をカウントする場合、結果は 2 になります。
 		@return		見つかった数。
 	*/
 	template<typename TChar>

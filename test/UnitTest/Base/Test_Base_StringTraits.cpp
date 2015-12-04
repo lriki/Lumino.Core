@@ -177,6 +177,7 @@ TEST_F(Test_Base_StringUtils, CountString)
 	ASSERT_EQ(1, StringTraits::CountString(_T("abc"), -1, _T("ab"), -1));
 	ASSERT_EQ(2, StringTraits::CountString(_T("CaseSensitivity"), -1, _T("it"), -1));
 	ASSERT_EQ(0, StringTraits::CountString(_T("abc"), -1, _T("abcd"), -1));
+	ASSERT_EQ(2, StringTraits::CountString(_T("*****"), -1, _T("**"), -1));
 }
 
 //-----------------------------------------------------------------------------
