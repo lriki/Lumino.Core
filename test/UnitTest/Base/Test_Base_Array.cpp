@@ -537,3 +537,14 @@ TEST_F(Test_Base_Array, Iterate)
 		ASSERT_EQ(r, 111);
 	}
 }
+
+//-----------------------------------------------------------------------------
+TEST_F(Test_Base_Array, Issue)
+{
+	Array<int> a1;
+	Array<int>::iterator itr = a1.begin();
+	Array<int>::iterator end = a1.end();
+	for (; itr != end; ++itr) {
+		(*itr);
+	}
+}

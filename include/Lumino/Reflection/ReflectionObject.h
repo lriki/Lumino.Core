@@ -12,6 +12,7 @@ namespace tr
 
 #define LN_TR_REFLECTION_TYPEINFO_DECLARE() \
 	private: \
+		template<typename T> friend class ln::RefPtr; \
 		friend class ln::tr::ReflectionHelper; \
 		static ln::tr::TypeInfo					lnref_typeInfo; \
 		ln::tr::LocalValueHavingFlags			lnref_localValueHavingFlags; \

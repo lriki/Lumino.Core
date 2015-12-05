@@ -74,6 +74,12 @@ public:
 		return RefPtr<T>(LN_NEW T(args...), false);
 	}
 
+	template<typename... TArgs>
+	static RefPtr<T> Construct(TArgs... args)
+	{
+		return RefPtr<T>(LN_NEW T(args...), false);
+	}
+
 	/**
 		@brief		コンストラクタ
 	*/

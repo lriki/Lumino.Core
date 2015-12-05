@@ -21,7 +21,7 @@ public:
 	typedef typename std::pair<TKey, TValue>		value_type;
 	typedef typename std::pair<TKey, TValue>		Pair;
 	typedef typename std::vector<Pair, TAllocator>	InternalArray;
-	typedef typename InternalArray::const_iterator	iterator;
+	typedef typename InternalArray::iterator		iterator;
 	typedef typename InternalArray::const_iterator	const_iterator;
 
 public:
@@ -157,6 +157,17 @@ public:
 		return GetValue(key);
 	}
 
+	template<typename TOtherKey>
+	TValue* Find(const TOtherKey& key)
+	{
+		int index = LowerBound(key);
+		if (index < GetCount() && m_vector[index].first == key)
+		{
+			return &m_vector[index].second;
+		}
+		return nullptr;
+	}
+
 public:
 
 	/*-----------------------------------------------------------------------*/
@@ -172,7 +183,8 @@ public:
 
 private:
 
-	int LowerBound(const TKey& key) const
+	template<typename TOtherKey>
+	int LowerBound(const TOtherKey/*TKey*/& key) const
 	{
 		if (m_vector.empty()) { return GetCount(); }
 
