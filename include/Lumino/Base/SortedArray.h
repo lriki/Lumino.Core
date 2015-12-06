@@ -1,4 +1,4 @@
-/**
+ï»¿/**
 	@file	SortedArray.h
 */
 #pragma once
@@ -10,9 +10,9 @@
 LN_NAMESPACE_BEGIN
 
 /**
-	@brief		ƒL[‚Ì "operator<" ‚ÌÀ‘•‚É‚æ‚è’l‚ğ•À‚×‘Ö‚¦‚ç‚ê‚½AƒL[‚Æ’l‚ÌƒyƒA‚Ì”z—ñ‚Å‚·B
-	@details	‚±‚ÌƒNƒ‰ƒX‚Ì–ğŠ„‚Í std::map ‚Æ—‚Ä‚¢‚Ü‚·‚ªA‚æ‚è‚‘¬‚ÉŒŸõ‹y‚Ñ—v‘f‚ÌƒCƒeƒŒ[ƒg‚ğs‚¤‚±‚Æ‚ª‚Å‚«‚Ü‚·B
-				‚½‚¾‚µAV‚µ‚¢ƒL[‚ğŠi”[‚·‚é‚½‚Ñ‚É”z—ñ‘S‘Ì‚ªƒ\[ƒg‚³‚ê‚é‚½‚ßAƒL[‚ÌXV‚É‚ÍŠÔ‚ª‚©‚©‚è‚Ü‚·B
+	@brief		ã‚­ãƒ¼ã® "operator<" ã®å®Ÿè£…ã«ã‚ˆã‚Šå€¤ã‚’ä¸¦ã¹æ›¿ãˆã‚‰ã‚ŒãŸã€ã‚­ãƒ¼ã¨å€¤ã®ãƒšã‚¢ã®é…åˆ—ã§ã™ã€‚
+	@details	ã“ã®ã‚¯ãƒ©ã‚¹ã®å½¹å‰²ã¯ std::map ã¨ä¼¼ã¦ã„ã¾ã™ãŒã€ã‚ˆã‚Šé«˜é€Ÿã«æ¤œç´¢åŠã³è¦ç´ ã®ã‚¤ãƒ†ãƒ¬ãƒ¼ãƒˆã‚’è¡Œã†ã“ã¨ãŒã§ãã¾ã™ã€‚
+				ãŸã ã—ã€æ–°ã—ã„ã‚­ãƒ¼ã‚’æ ¼ç´ã™ã‚‹ãŸã³ã«é…åˆ—å…¨ä½“ãŒã‚½ãƒ¼ãƒˆã•ã‚Œã‚‹ãŸã‚ã€ã‚­ãƒ¼ã®æ›´æ–°ã«ã¯æ™‚é–“ãŒã‹ã‹ã‚Šã¾ã™ã€‚
 */
 template<typename TKey, typename TValue, typename TAllocator = STLAllocator< std::pair<TKey, TValue> > >
 class SortedArray
@@ -27,7 +27,7 @@ public:
 public:
 
 	/**
-		@brief	Ši”[‚³‚ê‚Ä‚¢‚éƒL[/’lƒyƒA‚Ì”‚ğæ“¾‚µ‚Ü‚·B
+		@brief	æ ¼ç´ã•ã‚Œã¦ã„ã‚‹ã‚­ãƒ¼/å€¤ãƒšã‚¢ã®æ•°ã‚’å–å¾—ã—ã¾ã™ã€‚
 	*/
 	int GetCount() const
 	{
@@ -35,10 +35,10 @@ public:
 	}
 
 	/** 
-		@brief		w’è‚µ‚½ƒL[‚Æ’l‚ÌƒyƒA‚ğ’Ç‰Á‚µ‚Ü‚·B
-		@param[in]	key		: —v‘f‚ÌƒL[
-		@param[in]	value	: —v‘f‚Ì’l
-		@exception	ArgumentException	ƒL[‚ªŠù‚É’Ç‰Á‚³‚ê‚Ä‚¢‚Ü‚·B
+		@brief		æŒ‡å®šã—ãŸã‚­ãƒ¼ã¨å€¤ã®ãƒšã‚¢ã‚’è¿½åŠ ã—ã¾ã™ã€‚
+		@param[in]	key		: è¦ç´ ã®ã‚­ãƒ¼
+		@param[in]	value	: è¦ç´ ã®å€¤
+		@exception	ArgumentException	ã‚­ãƒ¼ãŒæ—¢ã«è¿½åŠ ã•ã‚Œã¦ã„ã¾ã™ã€‚
 	*/
 	void Add(const TKey& key, const TValue& value)
 	{
@@ -54,8 +54,21 @@ public:
 		std::sort(m_vector.begin(), m_vector.end(), Cmp::CmpEventListener);
 	}
 
+	bool Remove(const TKey& key)
+	{
+		typename InternalArray::iterator itr = m_vector.begin();
+		for (; itr != m_vector.end();)
+		{
+			if (itr->first == key) {
+				m_vector.erase(itr);
+				return true;
+			}
+		}
+		return false;
+	}
+
 	/**
-		@brief	w’è‚µ‚½’l‚Æˆê’v‚·‚é’l‚ğ‚Â‘S‚Ä‚Ì—v‘f‚ğíœ‚µ‚Ü‚·B
+		@brief	æŒ‡å®šã—ãŸå€¤ã¨ä¸€è‡´ã™ã‚‹å€¤ã‚’æŒã¤å…¨ã¦ã®è¦ç´ ã‚’å‰Šé™¤ã—ã¾ã™ã€‚
 	*/
 	void RemoveAllValue(const TValue& item)
 	{
@@ -72,8 +85,8 @@ public:
 	}
 
 	/**
-		@brief	w’è‚µ‚½ƒL[‚ªŠi”[‚³‚ê‚Ä‚¢‚é‚©‚ğŠm”F‚µ‚Ü‚·B
-		@return	Ši”[‚³‚ê‚Ä‚¢‚éê‡‚Í trueB‚»‚êˆÈŠO‚Ìê‡‚Í falseB
+		@brief	æŒ‡å®šã—ãŸã‚­ãƒ¼ãŒæ ¼ç´ã•ã‚Œã¦ã„ã‚‹ã‹ã‚’ç¢ºèªã—ã¾ã™ã€‚
+		@return	æ ¼ç´ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯ trueã€‚ãã‚Œä»¥å¤–ã®å ´åˆã¯ falseã€‚
 	*/
 	bool ContainsKey(const TKey& key) const
 	{
@@ -85,8 +98,8 @@ public:
 	}
 
 	/**
-		@brief		w’è‚µ‚½ƒL[‚É’l‚ğİ’è‚µ‚Ü‚·B
-		@details	ƒL[‚ª‘¶İ‚µ‚È‚¢ê‡Aw’è‚µ‚½ƒL[‚Æ’l‚ğ‚ÂV‚µ‚¢—v‘f‚ğì¬‚µ‚Ü‚·B
+		@brief		æŒ‡å®šã—ãŸã‚­ãƒ¼ã«å€¤ã‚’è¨­å®šã—ã¾ã™ã€‚
+		@details	ã‚­ãƒ¼ãŒå­˜åœ¨ã—ãªã„å ´åˆã€æŒ‡å®šã—ãŸã‚­ãƒ¼ã¨å€¤ã‚’æŒã¤æ–°ã—ã„è¦ç´ ã‚’ä½œæˆã—ã¾ã™ã€‚
 	*/
 	void SetValue(const TKey& key, const TValue& value)
 	{
@@ -101,7 +114,7 @@ public:
 	}
 
 	/**
-		@brief		w’è‚µ‚½ƒL[‚ÉŠÖ˜A•t‚¯‚ç‚ê‚Ä‚¢‚é’l‚ğæ“¾‚µ‚Ü‚·B
+		@brief		æŒ‡å®šã—ãŸã‚­ãƒ¼ã«é–¢é€£ä»˜ã‘ã‚‰ã‚Œã¦ã„ã‚‹å€¤ã‚’å–å¾—ã—ã¾ã™ã€‚
 		@exception	KeyNotFoundException
 	*/
 	const TValue& GetValue(const TKey& key) const
@@ -116,9 +129,9 @@ public:
 	}
 
 	/**
-		@brief		w’è‚µ‚½ƒL[‚ÉŠÖ˜A•t‚¯‚ç‚ê‚Ä‚¢‚é’l‚ğæ“¾‚µ‚Ü‚·B
-		@return		ƒL[‚ªŠi”[‚³‚ê‚Ä‚¢‚éê‡‚Í trueB‚»‚êˆÈŠO‚Ìê‡‚Í falseB
-		@details	GetValue() ‚Æ—‚½“®ì‚ğ‚µ‚Ü‚·‚ªAŒŸõ‚Ì¬”Û‚ğ—áŠO‚Å‚Í‚È‚­–ß‚è’l‚Å•Ô‚µ‚Ü‚·B
+		@brief		æŒ‡å®šã—ãŸã‚­ãƒ¼ã«é–¢é€£ä»˜ã‘ã‚‰ã‚Œã¦ã„ã‚‹å€¤ã‚’å–å¾—ã—ã¾ã™ã€‚
+		@return		ã‚­ãƒ¼ãŒæ ¼ç´ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯ trueã€‚ãã‚Œä»¥å¤–ã®å ´åˆã¯ falseã€‚
+		@details	GetValue() ã¨ä¼¼ãŸå‹•ä½œã‚’ã—ã¾ã™ãŒã€æ¤œç´¢ã®æˆå¦ã‚’ä¾‹å¤–ã§ã¯ãªãæˆ»ã‚Šå€¤ã§è¿”ã—ã¾ã™ã€‚
 	*/
 	bool TryGetValue(const TKey& key, TValue* value) const
 	{
@@ -132,8 +145,8 @@ public:
 	}
 
 	/**
-		@brief		w’è‚µ‚½ƒL[‚Ì’l‚ÌQÆ‚ğæ“¾‚µ‚Ü‚·B
-		@details	ƒL[‚ª‘¶İ‚µ‚È‚¢ê‡Aw’è‚µ‚½ƒL[‚ğ‚ÂV‚µ‚¢—v‘f‚ğì¬‚µ‚Ü‚·B
+		@brief		æŒ‡å®šã—ãŸã‚­ãƒ¼ã®å€¤ã®å‚ç…§ã‚’å–å¾—ã—ã¾ã™ã€‚
+		@details	ã‚­ãƒ¼ãŒå­˜åœ¨ã—ãªã„å ´åˆã€æŒ‡å®šã—ãŸã‚­ãƒ¼ã‚’æŒã¤æ–°ã—ã„è¦ç´ ã‚’ä½œæˆã—ã¾ã™ã€‚
 	*/
 	TValue& operator[](const TKey& key)
 	{
@@ -149,12 +162,23 @@ public:
 	}
 
 	/**
-		@brief		w’è‚µ‚½ƒL[‚Ì’l‚ÌQÆ‚ğæ“¾‚µ‚Ü‚·B
+		@brief		æŒ‡å®šã—ãŸã‚­ãƒ¼ã®å€¤ã®å‚ç…§ã‚’å–å¾—ã—ã¾ã™ã€‚
 		@exception	KeyNotFoundException
 	*/
 	const TValue& operator[](const TKey& key) const
 	{
 		return GetValue(key);
+	}
+
+	template<typename TOtherKey>
+	const TValue* Find(const TOtherKey& key) const
+	{
+		int index = LowerBound(key);
+		if (index < GetCount() && m_vector[index].first == key)
+		{
+			return &m_vector[index].second;
+		}
+		return nullptr;
 	}
 
 	template<typename TOtherKey>
