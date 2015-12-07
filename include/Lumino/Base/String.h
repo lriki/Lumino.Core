@@ -3,7 +3,6 @@
 */
 
 #pragma once
-
 #include <vector>
 #include <string>
 #include <atomic>
@@ -140,7 +139,7 @@ public:
 	bool operator>=(const GenericString& right) const	{ return !operator<(right); }
 	bool operator>=(const TChar* right) const			{ return !operator<(right); }
 
-	TChar& operator[](int index);
+	TChar& operator[](int index);		// TODO: StringRef を使うスタイルにしないと危ない
 	const TChar& operator[](int index) const;
 
 	//operator const TChar*() const;
@@ -506,8 +505,6 @@ typedef GenericString<char>		StringA;
 typedef GenericString<wchar_t>	StringW;
 #endif
 
-
-
 namespace detail
 {
 template<typename TChar>
@@ -560,3 +557,5 @@ public:
 } // namespace detail
 
 LN_NAMESPACE_END
+
+#include "StringRef.h"
