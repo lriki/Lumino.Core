@@ -81,7 +81,7 @@ public:
 	}
 
 	/** 末尾に別の配列を連結します。*/
-	void Add(const Array<T>& items)
+	void AddRange(const Array<T>& items)
 	{
 		CheckDetachShared();
 		m_data->m_vector.insert(m_data->m_vector.end(), items.m_data->m_vector.begin(), items.m_data->m_vector.end());

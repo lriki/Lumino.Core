@@ -13,7 +13,7 @@ LN_ENUM(XmlNodeType)
 	/** Read メソッドが呼び出されなかった場合に、XmlReader によって返されます。*/
 	None = 0,
 
-	/** 要素 */
+	/** 要素の開始 */
 	Element,
 
 	/** 要素の終了タグ */

@@ -21,6 +21,44 @@ LN_NAMESPACE_BEGIN
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+#pragma push_macro("GetEnvironmentVariable")
+#undef GetEnvironmentVariable
+String Environment::GetEnvironmentVariable(const String& variableName)
+{
+	return LN_AFX_FUNCNAME(GetEnvironmentVariable)(variableName);
+}
+String Environment::LN_AFX_FUNCNAME(GetEnvironmentVariable)(const String& variableName)
+{
+	String val;
+	bool r = TryGetEnvironmentVariable(variableName, &val);
+	LN_THROW(r, KeyNotFoundException);
+	return val;
+}
+#pragma pop_macro("GetEnvironmentVariable")
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+bool Environment::TryGetEnvironmentVariable(const String& variableName, String* outValue)
+{
+	String name = variableName;
+#ifdef LN_OS_WIN32
+	size_t len;
+	errno_t err = _tgetenv_s(&len, NULL, 0, name.c_str());
+	if (err != 0 || len == 0) {	// Win32 では環境変数を空にはできない
+		return false;
+	}
+	TCHAR* val = new TCHAR[len];
+	_tgetenv_s(&len, val, len, name.c_str());
+	if (outValue) { *outValue = val; }
+	return true;
+#else
+#endif
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 ByteOrder Environment::GetByteOrder()
 {
 	if (IsLittleEndian()) {

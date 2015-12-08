@@ -37,14 +37,32 @@ LN_ENUM_DECLARE(SpecialFolder);
 class Environment
 {
 public:
+#pragma push_macro("GetEnvironmentVariable")
+#undef GetEnvironmentVariable
+	/**
+		@brief		環境変数の値を取得します。
+		@param[in]	variableName	: 環境変数の名前
+		@exception	KeyNotFoundException
+	*/
+	static String GetEnvironmentVariable(const String& variableName);
+	static String LN_AFX_FUNCNAME(GetEnvironmentVariable)(const String& variableName);
+#pragma pop_macro("GetEnvironmentVariable")
 
 	/**
-		@brief	現在の環境のエンディアンを確認します。
+		@brief		環境変数の値を取得します。
+		@param[in]	variableName	: 環境変数の名前
+		@param[out]	outValue		: 環境変数の値を格納する変数のポインタ
+		@return		環境変数が存在し、値が取得できた場合は true。
+	*/
+	static bool TryGetEnvironmentVariable(const String& variableName, String* outValue);
+
+	/**
+		@brief		現在の環境のエンディアンを確認します。
 	*/
 	static ByteOrder GetByteOrder();
 
 	/**
-		@brief	リトルエンディアン環境であるかを確認します。
+		@brief		リトルエンディアン環境であるかを確認します。
 	*/
 	static bool IsLittleEndian();
 

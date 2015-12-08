@@ -330,7 +330,7 @@ TEST_F(Test_Base_Array, Add)
 		Array<String> a1, a2, a3;
 		a2.Add(_T("1")); a2.Add(_T("2"));
 		a3.Add(_T("3")); a3.Add(_T("4"));
-		a1.Add(a2); a1.Add(a3);
+		a1.AddRange(a2); a1.AddRange(a3);
 		ASSERT_EQ(4, a1.GetCount());
 		ASSERT_EQ(_T("1"), a1[0]);
 		ASSERT_EQ(_T("2"), a1[1]);
