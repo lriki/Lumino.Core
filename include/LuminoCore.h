@@ -37,6 +37,7 @@
 #include "Lumino/Base/Event.h"
 #include "Lumino/Base/Resource.h"
 #include "Lumino/Base/StringArray.h"
+#include "Lumino/Base/StringRef.h"
 
 #include "Lumino/IO/PathName.h"
 #include "Lumino/IO/PathTraits.h"

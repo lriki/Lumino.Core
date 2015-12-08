@@ -207,6 +207,7 @@ set(LN_SOURCES_Xml
 set(LN_SOURCES_Reflection
 	include/Lumino/Reflection/Variant.h
 	include/Lumino/Reflection/Property.h
+	include/Lumino/Reflection/PropertyMetadata.h
 	include/Lumino/Reflection/ReflectionArrayObject.h
 	include/Lumino/Reflection/ReflectionObject.h
 	include/Lumino/Reflection/ReflectionStruct.h

@@ -14,6 +14,7 @@
 
 LN_NAMESPACE_BEGIN
 class Encoding;
+template<typename TChar> class GenericStringRef;
 template<typename TChar> class GenericStringArray;
 
 namespace detail { template<typename TChar> class GenericStringCore; }
@@ -125,19 +126,25 @@ public:
 	GenericString& operator+=(const TChar* ptr);
 	GenericString& operator+=(TChar ch);
 
-	bool operator==(const GenericString& right) const	{ return Equals(right); }		///< @see Equals
-	bool operator==(const TChar* right) const			{ return Equals(right); }		///< @see Equals
-	bool operator!=(const GenericString& right) const	{ return !operator==(right); }	///< @see Equals
-	bool operator!=(const TChar* right) const			{ return !operator==(right); }	///< @see Equals
+	bool operator==(const GenericString& right) const			{ return Equals(right); }		///< @see Equals
+	bool operator==(const GenericStringRef<TChar>& right) const	{ return Equals(right); }		///< @see Equals
+	bool operator==(const TChar* right) const					{ return Equals(right); }		///< @see Equals
+	bool operator!=(const GenericString& right) const			{ return !operator==(right); }	///< @see Equals
+	bool operator!=(const GenericStringRef<TChar>& right) const	{ return !operator==(right); }	///< @see Equals
+	bool operator!=(const TChar* right) const					{ return !operator==(right); }	///< @see Equals
 
 	bool operator<(const GenericString& right) const;
+	bool operator<(const GenericStringRef<TChar>& right) const;
 	bool operator<(const TChar* right) const;
 	bool operator>(const GenericString& right) const;
+	bool operator>(const GenericStringRef<TChar>& right) const;
 	bool operator>(const TChar* right) const;
-	bool operator<=(const GenericString& right) const	{ return !operator>(right); }
-	bool operator<=(const TChar* right) const			{ return !operator>(right); }
-	bool operator>=(const GenericString& right) const	{ return !operator<(right); }
-	bool operator>=(const TChar* right) const			{ return !operator<(right); }
+	bool operator<=(const GenericString& right) const			{ return !operator>(right); }
+	bool operator<=(const GenericStringRef<TChar>& right) const	{ return !operator>(right); }
+	bool operator<=(const TChar* right) const					{ return !operator>(right); }
+	bool operator>=(const GenericString& right) const			{ return !operator<(right); }
+	bool operator>=(const GenericStringRef<TChar>& right) const	{ return !operator<(right); }
+	bool operator>=(const TChar* right) const					{ return !operator<(right); }
 
 	TChar& operator[](int index);		// TODO: StringRef を使うスタイルにしないと危ない
 	const TChar& operator[](int index) const;
@@ -300,7 +307,8 @@ public:
 					また、str が NULL の場合は空文字とみなして比較を行います。
 	*/
 	bool Equals(const GenericString& str) const;
-	bool Equals(const TChar* str) const;			///< @overload Equals
+	bool Equals(const GenericStringRef<TChar>& str) const;	/**< @overload Equals */
+	bool Equals(const TChar* str) const;					/**< @overload Equals */
 
 	/**
 		@brief		この文字列と、指定した文字列を比較します。

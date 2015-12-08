@@ -1,4 +1,10 @@
+/*
+	[2015/12/7] LN_TR_PROPERTY
+		metadata はメンバに持っておいたほうが後々都合がよさそう。
+		Property はこれのポインタを参照する。実体は持たない。
+		いずれ metadata の継承とかオーバーライドとかやるときは、ポインタのほうが融通効くかも。
 
+*/
 #include "../Internal.h"
 #include <Lumino/Reflection/TypeInfo.h>
 #include <Lumino/Reflection/ReflectionObject.h>

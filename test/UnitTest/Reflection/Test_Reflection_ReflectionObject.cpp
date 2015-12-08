@@ -12,7 +12,6 @@ class RefTest1 : public tr::ReflectionObject
 {
 	LN_TR_REFLECTION_TYPEINFO_DECLARE();
 public:
-
 };
 LN_TR_REFLECTION_TYPEINFO_IMPLEMENT(RefTest1, tr::ReflectionObject);
 
@@ -20,7 +19,6 @@ class RefTest2 : public RefTest1
 {
 	LN_TR_REFLECTION_TYPEINFO_DECLARE();
 public:
-
 };
 LN_TR_REFLECTION_TYPEINFO_IMPLEMENT(RefTest2, tr::ReflectionObject);
 

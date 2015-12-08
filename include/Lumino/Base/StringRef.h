@@ -2,8 +2,7 @@
 	@file	StringRef.h
 */
 #pragma once
-#include "Common.h"
-#include "StringTraits.h"
+#include <cstddef>
 
 LN_NAMESPACE_BEGIN
 
@@ -35,12 +34,12 @@ public:
 	//GenericStringRef& operator =(GenericStringRef&&) = default;
 	~GenericStringRef() = default;
 
-	const TCHAR* GetBegin();
-	const TCHAR* GetEnd() const { return m_str + m_pos; }
+	const TChar* GetBegin() const { return m_str + m_pos; }
+	const TChar* GetEnd() const { return m_str + m_pos + m_len; }
 	int GetLength() const { return m_len; }
 
 private:
-	const TCHAR*	m_str;
+	const TChar*	m_str;
 	int				m_pos;
 	int				m_len;
 };

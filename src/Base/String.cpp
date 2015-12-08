@@ -308,18 +308,28 @@ bool GenericString<TChar>::operator < (const GenericString& right) const
 	return Compare(right.c_str(), -1, CaseSensitivity::CaseSensitive) < 0;
 }
 template<typename TChar>
+bool GenericString<TChar>::operator < (const GenericStringRef<TChar>& right) const
+{
+	return Compare(right.GetBegin(), right.GetLength(), CaseSensitivity::CaseSensitive) < 0;
+}
+template<typename TChar>
 bool GenericString<TChar>::operator < (const TChar* right) const
 {
 	return Compare(right, -1, CaseSensitivity::CaseSensitive) < 0;
 }
 
 //-----------------------------------------------------------------------------
-// operator<
+// operator>
 //-----------------------------------------------------------------------------
 template<typename TChar>
 bool GenericString<TChar>::operator > (const GenericString& right) const
 {
 	return Compare(right.c_str(), -1, CaseSensitivity::CaseSensitive) > 0;
+}
+template<typename TChar>
+bool GenericString<TChar>::operator > (const GenericStringRef<TChar>& right) const
+{
+	return Compare(right.GetBegin(), right.GetLength(), CaseSensitivity::CaseSensitive) > 0;
 }
 template<typename TChar>
 bool GenericString<TChar>::operator > (const TChar* right) const
@@ -708,6 +718,11 @@ bool GenericString<TChar>::Equals(const GenericString& str) const
 		return false;
 	}
 	return Compare(str.c_str(), str.GetLength(), CaseSensitivity::CaseSensitive) == 0;
+}
+template<typename TChar>
+bool GenericString<TChar>::Equals(const GenericStringRef<TChar>& str) const
+{
+	return Compare(str.GetBegin(), str.GetLength(), CaseSensitivity::CaseSensitive) == 0;
 }
 template<typename TChar>
 bool GenericString<TChar>::Equals(const TChar* str) const
