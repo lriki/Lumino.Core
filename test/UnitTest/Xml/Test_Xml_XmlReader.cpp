@@ -18,19 +18,19 @@ TEST_F(Test_Xml_XmlReader, User)
 	while (reader.Read())
 	{
 		if (reader.GetNodeType() == XmlNodeType::Text) {
-			output += String::Format(_T("type:%s value:%s\n"), reader.GetNodeType().ToString().c_str(), reader.GetValue().c_str());
+			output += String::SPrintf(_T("type:%s value:%s\n"), reader.GetNodeType().ToString().c_str(), reader.GetValue().c_str());
 		}
 		else if (reader.GetNodeType() == XmlNodeType::Whitespace) {
-			output += String::Format(_T("type:%s\n"), reader.GetNodeType().ToString().c_str());
+			output += String::SPrintf(_T("type:%s\n"), reader.GetNodeType().ToString().c_str());
 		}
 		else {
-			output += String::Format(_T("type:%s name:%s\n"), reader.GetNodeType().ToString().c_str(), reader.GetName().c_str());
+			output += String::SPrintf(_T("type:%s name:%s\n"), reader.GetNodeType().ToString().c_str(), reader.GetName().c_str());
 		}
 
 		if (reader.MoveToFirstAttribute())
 		{
 			do {
-				output += String::Format(_T("type:%s name:%s value:%s\n"), reader.GetNodeType().ToString().c_str(), reader.GetName().c_str(), reader.GetValue().c_str());
+				output += String::SPrintf(_T("type:%s name:%s value:%s\n"), reader.GetNodeType().ToString().c_str(), reader.GetName().c_str(), reader.GetValue().c_str());
 
 			} while (reader.MoveToNextAttribute());
 		}

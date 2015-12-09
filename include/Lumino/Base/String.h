@@ -425,13 +425,16 @@ public:
 	/// 空文字列を取得する
 	static const StringT& GetEmpty();
 
+	template<typename... TArgs>
+	static GenericString Format(const GenericStringRef<TChar>& format, const TArgs&... args);
+
 	/**
 		@brief		書式文字列と可変長引数リストから文字列を生成します。
 		@param[in]	format		: 書式文字列 (printf の書式指定構文)
 		@param[in]	...			: 引数リスト
 	*/
-	static GenericString Format(const GenericString& format, ...);
-	static GenericString Format(const TChar* format, ...);				///< @overload Format
+	static GenericString SPrintf(const GenericString& format, ...);
+	static GenericString SPrintf(const TChar* format, ...);				///< @overload SPrintf
 
 private:
 	friend class tr::Variant;

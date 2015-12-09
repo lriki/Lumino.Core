@@ -877,7 +877,7 @@ const GenericString<TChar>& GenericString<TChar>::GetEmpty()
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-GenericString<TChar> GenericString<TChar>::Format(const GenericString<TChar>& format, ...)
+GenericString<TChar> GenericString<TChar>::SPrintf(const GenericString<TChar>& format, ...)
 {
 	// http://jumble-note.blogspot.jp/2012/09/c-vacopy.html
 	const TChar* fmt = format.c_str();	// VS2015 エラー回避。一度変数に入れる。
@@ -908,7 +908,7 @@ GenericString<TChar> GenericString<TChar>::Format(const GenericString<TChar>& fo
 	}
 }
 template<typename TChar>
-GenericString<TChar> GenericString<TChar>::Format(const TChar* format, ...)
+GenericString<TChar> GenericString<TChar>::SPrintf(const TChar* format, ...)
 {
 	va_list args1, args2;
 	va_start(args1, format);

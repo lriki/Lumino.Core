@@ -27,6 +27,15 @@ public:
 		m_str = str.c_str();
 		m_len = str.GetLength();
 	}
+	GenericStringRef(const TChar* begin, const TChar* end)
+		: GenericStringRef()
+	{
+		if (begin != nullptr && end != nullptr && begin <= end)
+		{
+			m_str = begin;
+			m_len = end - begin;
+		}
+	}
 
 	GenericStringRef(GenericStringRef const&) = default;
 	//GenericStringRef(GenericStringRef&&) = default;	// VS2013 がムーブコンストラクタの default を生成しないのでとりあえず無しで。http://stackoverflow.com/questions/24573963/move-constructor-invalid-type-for-defaulted-constructor-vs-2013
@@ -36,6 +45,8 @@ public:
 
 	const TChar* GetBegin() const { return m_str + m_pos; }
 	const TChar* GetEnd() const { return m_str + m_pos + m_len; }
+
+	bool IsEmpty() const { return m_len <= 0; }
 	int GetLength() const { return m_len; }
 
 private:

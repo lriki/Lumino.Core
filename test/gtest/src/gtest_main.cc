@@ -31,6 +31,12 @@
 
 #include "gtest/gtest.h"
 
+int fn1()
+{
+	printf("next.\n");
+	return 0;
+}
+
 GTEST_API_ int main(int argc, char **argv)
 {
 	// Process クラスのテストスタブ
@@ -53,6 +59,8 @@ GTEST_API_ int main(int argc, char **argv)
 		return 0;
 	}
 
+	_onexit(fn1);
+
 
 
 	printf("Running main() from gtest_main.cc\n");
@@ -66,7 +74,7 @@ GTEST_API_ int main(int argc, char **argv)
 	char* testArgs[] = {
 		argv[0],
 		//"--gtest_filter=Test_Text_EncodingDetector.*"
-		"--gtest_filter=Test_Base_Environment.*"
+		"--gtest_filter=Test_Base_Formatter.*"
 	};
 	argc = sizeof(testArgs) / sizeof(char*);
 	testing::InitGoogleTest(&argc, (char**)testArgs);

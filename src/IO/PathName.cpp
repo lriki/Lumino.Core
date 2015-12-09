@@ -364,16 +364,16 @@ GenericPathName<TChar> GenericPathName<TChar>::GetUniqueFilePathInDirectory(cons
 	do
 	{
 		if (filePrefix != NULL && extName != NULL) {
-			filePath.Format(LN_T(TChar, "%s%s%llu%d%s"), dirPath.c_str(), filePrefix, key, number, extName);
+			filePath = GenericStringT::SPrintf(LN_T(TChar, "%s%s%llu%d%s"), dirPath.c_str(), filePrefix, key, number, extName);
 		}
 		else if (filePrefix == NULL && extName != NULL) {
-			filePath.Format(LN_T(TChar, "%s%llu%d%s"), dirPath.c_str(), key, number, extName);
+			filePath = GenericStringT::SPrintf(LN_T(TChar, "%s%llu%d%s"), dirPath.c_str(), key, number, extName);
 		}
 		else if (filePrefix != NULL && extName == NULL) {
-			filePath.Format(LN_T(TChar, "%s%s%llu%d"), dirPath.c_str(), filePrefix, key, number);
+			filePath = GenericStringT::SPrintf(LN_T(TChar, "%s%s%llu%d"), dirPath.c_str(), filePrefix, key, number);
 		}
 		else {
-			filePath.Format(LN_T(TChar, "%s%llu%d"), dirPath.c_str(), key, number);
+			filePath = GenericStringT::SPrintf(LN_T(TChar, "%s%llu%d"), dirPath.c_str(), key, number);
 		}
 
 		number++;

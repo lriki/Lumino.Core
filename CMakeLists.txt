@@ -1,6 +1,6 @@
 ﻿# e.g.) $ cmake -DLN_EXCEPTION_BACKTRACE=OFF ..
 
-cmake_minimum_required (VERSION 2.8.7)
+cmake_minimum_required (VERSION 3.0.0)
 project (LuminoCore)
 
 set(LN_LINK_LIBS "")

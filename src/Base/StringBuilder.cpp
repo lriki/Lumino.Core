@@ -1,5 +1,6 @@
 
 #include "../Internal.h"
+#include <Lumino/Base/StringTraits.h>
 #include <Lumino/Base/StringBuilder.h>
 
 LN_NAMESPACE_BEGIN
@@ -42,12 +43,31 @@ void GenericStringBuilderCore<TChar>::Clear()
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-void GenericStringBuilderCore<TChar>::Append(const TChar* str, int length)
+void GenericStringBuilderCore<TChar>::Append(const TChar ch)
 {
-	if (str == NULL || length <= 0) { return; }	// コピーの必要無し
-	WriteInternal(str, length);
+	Append(&ch, 1);
 }
 
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+void GenericStringBuilderCore<TChar>::Append(const TChar ch, int count)
+{
+	for (int i = 0; i < count; ++i) {
+		Append(ch);
+	}
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+void GenericStringBuilderCore<TChar>::Append(const TChar* str, int length)
+{
+	//if (str == NULL || length <= 0) { return; }	// コピーの必要無し
+	WriteInternal(str, (length < 0) ? StringTraits::StrLen(str) : length);
+}
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------

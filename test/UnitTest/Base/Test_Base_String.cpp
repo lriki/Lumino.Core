@@ -406,7 +406,7 @@ TEST_F(Test_Base_String, AssignCStr)
 }
 
 //---------------------------------------------------------------------
-TEST_F(Test_Base_String, Format)
+TEST_F(Test_Base_String, SPrintf)
 {
 	// StringA Max 文字数チェック
 	{
@@ -415,7 +415,7 @@ TEST_F(Test_Base_String, Format)
 			buf1[i] = 'a';
 		}
 
-		StringA str1 = StringA::Format("%s", buf1);
+		StringA str1 = StringA::SPrintf("%s", buf1);
 		ASSERT_EQ(str1, buf1);	// 同じ文字ができていればOK
 		
 #if 0	// 制限撤廃
@@ -429,7 +429,7 @@ TEST_F(Test_Base_String, Format)
 	// 可変長実引数への指定は保障外だが、一応動くか見ておく。ちなみに GCC ではコンパイルエラーになる。
 	{
 		String str1(_T("str1"));
-		String str2 = String::Format(_T("[%s]"), str1);
+		String str2 = String::SPrintf(_T("[%s]"), str1);
 		ASSERT_EQ(_T("[str1]"), str2);
 	}
 #endif
@@ -441,12 +441,12 @@ TEST_F(Test_Base_String, Format)
 			buf1[i] = L'a';
 		}
 
-		StringW str1 = StringW::Format(L"%s", buf1);
+		StringW str1 = StringW::SPrintf(L"%s", buf1);
 		ASSERT_TRUE(str1 == buf1);	// 同じ文字ができていればOK
 		
 #if 0	// 制限撤廃
 		ASSERT_THROW(
-			StringW::Format(L"%sb", buf1),	// 1文字多い。失敗する
+			StringW::SPrintf(L"%sb", buf1),	// 1文字多い。失敗する
 			ArgumentException);
 #endif
 	}
