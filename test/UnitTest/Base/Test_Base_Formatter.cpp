@@ -8,6 +8,7 @@ protected:
 	virtual void TearDown() {}
 };
 
+#if 0
 //---------------------------------------------------------------------
 TEST_F(Test_Base_Formatter, Basic)
 {
@@ -50,3 +51,4 @@ TEST_F(Test_Base_Formatter, Illigal)
 	ASSERT_THROW(String::Format(_T("{0:D"), _T("a")), InvalidFormatException);
 	ASSERT_THROW(String::Format(_T("{0:D "), _T("a")), InvalidFormatException);
 }
+#endif

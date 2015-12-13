@@ -19,6 +19,7 @@ EncodingConverter::EncodingConverter()
 	, m_srcDecoder(NULL)
 	, m_encodingModified(false)
 {
+	m_options.NullTerminated = false;
 }
 
 //-----------------------------------------------------------------------------
@@ -67,13 +68,28 @@ Encoding* EncodingConverter::GetSourceEncoding() const
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+void EncodingConverter::SetConversionOptions(const EncodingConversionOptions& options)
+{
+	m_options = options;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 const ByteBuffer& EncodingConverter::Convert(const void* data, size_t byteCount, EncodingConversionResult* outResult)
 {
 	CheckUpdateEncoderDecoder();
 
 	// 変換するのに必要なバイト数で領域確保
 	size_t size = Encoding::GetConversionRequiredByteCount(m_srcEncoding, m_dstEncoding, byteCount);
-	m_outputBuffer.Resize(size);
+	if (m_options.NullTerminated) {
+		size += m_dstEncoding->GetMinByteCount();
+	}
+	m_outputBuffer.Resize(size, false);
+
+	if (m_options.NullTerminated) {
+		m_outputBuffer.Clear();
+	}
 
 	if (m_srcDecoder->CanRemain())
 	{

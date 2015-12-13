@@ -38,6 +38,11 @@ public:
 	Encoding* GetSourceEncoding() const;
 
 	/**
+		@brief		変換のオプションを設定します。
+	*/
+	void SetConversionOptions(const EncodingConversionOptions& options);
+
+	/**
 		@brief		テキストを変換します。
 	*/
 	const ByteBuffer& Convert(const void* data, size_t byteCount, EncodingConversionResult* outResult = NULL);
@@ -67,6 +72,7 @@ private:
 	Encoder*					m_dstEncoder;
 	Decoder*					m_srcDecoder;
 	ByteBuffer					m_outputBuffer;
+	EncodingConversionOptions	m_options;
 	EncodingConversionResult	m_lastResult;
 	ByteBuffer					m_tmpBuffer;			///< 状態を保持できないデコーダを使っている場合に使用する一時バッファ
 	bool						m_encodingModified;

@@ -150,6 +150,13 @@ public:
 		LN_SAFE_RELEASE( mPtr );
 	}
 
+	T* DetachAddRef()
+	{
+		T* ptr = mPtr;
+		mPtr = nullptr;
+		return ptr;
+	}
+
 	/**
 		@brief		管理対象オブジェクトへのポインタが NULL であるかを確認する
 	*/

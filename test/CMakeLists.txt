@@ -42,6 +42,7 @@ set(LN_TEST_SOURCES
 	UnitTest/Json/Test_Json_JsonValue.cpp
 	UnitTest/Json/Test_Json_JsonWriter.cpp
 	UnitTest/Text/Test_Text_DBCSEncoding.cpp
+	UnitTest/Text/Test_Text_EncodingConverter.cpp
 	UnitTest/Text/Test_Text_EncodingDetector.cpp
 	UnitTest/Text/Test_Text_EUCJPEncoding.cpp
 	UnitTest/Text/Test_Text_UTF8Encoding.cpp
