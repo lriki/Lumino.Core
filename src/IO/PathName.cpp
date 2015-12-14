@@ -25,18 +25,18 @@ GenericPathName<TChar>::GenericPathName(const GenericPathName& obj)
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-void GenericPathName<TChar>::Assign(const char* path)
+void GenericPathName<TChar>::Assign(const char* path, int length)
 {
-	m_path.AssignCStr(path);
+	m_path.AssignCStr(path, length);
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-void GenericPathName<TChar>::Assign(const wchar_t* path)
+void GenericPathName<TChar>::Assign(const wchar_t* path, int length)
 {
-	m_path.AssignCStr(path);
+	m_path.AssignCStr(path, length);
 }
 
 //-----------------------------------------------------------------------------

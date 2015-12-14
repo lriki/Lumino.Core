@@ -106,7 +106,7 @@ private:
 				void Run()
 				{
 					// スレッド起動
-					m_Thread.Start(LN_CreateDelegate(this, &Test::ThreadFunc));
+					m_Thread.Start(CreateDelegate(this, &Test::ThreadFunc));
 				}
 			};
 	@endcode

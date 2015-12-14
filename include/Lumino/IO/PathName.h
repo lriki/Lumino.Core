@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "../Base/Environment.h"
 #include "../Base/String.h"
+#include "../Base/StringRef.h"
 #include "Common.h"
 #include "PathTraits.h"
 
@@ -52,6 +53,7 @@ public:
 	GenericPathName(const wchar_t* path) { Assign(path); }
 	/// @overload Assign
 	GenericPathName(const GenericStringT& path) { Assign(path); }
+	GenericPathName(const GenericStringRef<TChar>& path) { Assign(path); }
 
 	/// @overload AssignUnderBasePath
 	GenericPathName(const PathNameT& basePath, const char* relativePath) { AssignUnderBasePath(basePath, relativePath); }
@@ -77,11 +79,12 @@ public:
 		@brief		パス文字列を割り当てる
 		@param[in]	path		: パス文字列
 	*/
-	void Assign(const char* path);
+	void Assign(const char* path, int length = -1);
 	/// @overload Assign
-	void Assign(const wchar_t* path);
+	void Assign(const wchar_t* path, int length = -1);
 	/// @overload Assign
 	void Assign(const GenericStringT& path) { Assign(path.c_str()); }
+	void Assign(const GenericStringRef<TChar>& path) { Assign(path.GetBegin(), path.GetLength()); }
 
 	/**
 		@brief		ベースパスと相対パスを連結して、パスを作成する
