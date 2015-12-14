@@ -887,3 +887,16 @@ TEST_F(Test_Base_String, TryToInt)
 	ASSERT_FALSE(String(_T("0xfffffffffffffffff")).TryToInt8(&v));
 }
 
+//---------------------------------------------------------------------
+TEST_F(Test_Base_String, FromNativeCharString)
+{
+	String str = String::FromNativeCharString("abc");
+	ASSERT_EQ(_T("abc"), str);
+}
+
+//---------------------------------------------------------------------
+TEST_F(Test_Base_String, FromNativeWCharString)
+{
+	String str = String::FromNativeWCharString(L"abc");
+	ASSERT_EQ(_T("abc"), str);
+}

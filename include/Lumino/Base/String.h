@@ -157,6 +157,10 @@ public:
 	/// C言語形式の文字列ポインタを返す
 	const TChar* c_str() const;
 	
+
+	/// 終端 \0 までの文字数を返す (マルチバイト文字は考慮しない。CString::GetLength と同様の関数です)
+	int GetLength() const;
+
 	/// 文字列が空の時にtrueを返す
 	bool IsEmpty() const;
 
@@ -168,25 +172,6 @@ public:
 	void Append(const GenericString& str, int len = -1);
 	void Append(const TChar* str, int len = -1);			///< @overload Append
 	void Append(TChar ch);									///< @overload Append
-
-	/**
-		@brief		ネイティブ型文字列を割り当てる
-		@param[in]	str				: 設定する文字列
-		@param[in]	begin			: コピー範囲の開始インデックス (省略した場合は先頭から)
-		@param[in]	length			: コピーする文字列 (省略した場合は終端 \0 まで)
-		@param[in]	usedDefaultChar	: 変換不可文字をデフォルト文字 ('?') に変換したかどうか
-		@details	この関数は char 用、wchar_t 用それぞれオーバーロードされます。
-					型引数 TChar に対して必要であれば、
-					それぞれ Encoding::GetSystemMultiByteEncoding()、Encoding::GetWideCharEncoding() で取得できるエンコーディングを使用して
-					文字コードをの変換を行います。
-					TChar と str の型が同じ場合は文字コードの変換を行いません。
-	*/
-	void AssignCStr(const char* str, int begin, int length, bool* usedDefaultChar = NULL);
-	void AssignCStr(const char* str, int length, bool* usedDefaultChar = NULL);					///< @overload AssignCStr
-	void AssignCStr(const char* str, bool* usedDefaultChar = NULL);								///< @overload AssignCStr
-	void AssignCStr(const wchar_t* str, int begin, int length, bool* usedDefaultChar = NULL);	///< @overload AssignCStr
-	void AssignCStr(const wchar_t* str, int length, bool* usedDefaultChar = NULL);				///< @overload AssignCStr
-	void AssignCStr(const wchar_t* str, bool* usedDefaultChar = NULL);							///< @overload AssignCStr
 
 	/**
 		@brief		指定したエンコーディングを使用し、文字列を変換して設定する
@@ -413,10 +398,41 @@ public:
 	bool		TryToUInt32(uint32_t* outValue, int base = 0) const;	///< @copydoc TryToInt8
 	bool		TryToUInt64(uint64_t* outValue, int base = 0) const;	///< @copydoc TryToInt8
 
-	/// 終端 \0 までの文字数を返す (マルチバイト文字は考慮しない。CString::GetLength と同様の関数です)
-	int GetLength() const;
+	/**
+		@brief		指定した char 配列から文字列を作成します。
+		@param[in]	str		: コピーする文字列
+		@param[in]	length	: コピーする文字数 (省略した場合は終端 \0 まで)
+		@return		作成された文字列
+	*/
+	static GenericString FromNativeCharString(const char* str, int length = -1);
+	
+	/**
+		@brief		指定した wchar_t 配列から文字列を作成します。
+		@param[in]	str		: コピーする文字列
+		@param[in]	length	: コピーする文字数 (省略した場合は終端 \0 まで)
+		@return		作成された文字列
+	*/
+	static GenericString FromNativeWCharString(const wchar_t* str, int length = -1);
 
 
+	/**
+		@brief		ネイティブ型文字列を割り当てる
+		@param[in]	str				: 設定する文字列
+		@param[in]	begin			: コピー範囲の開始インデックス (省略した場合は先頭から)
+		@param[in]	length			: コピーする文字数 (省略した場合は終端 \0 まで)
+		@param[in]	usedDefaultChar	: 変換不可文字をデフォルト文字 ('?') に変換したかどうか
+		@details	この関数は char 用、wchar_t 用それぞれオーバーロードされます。
+					型引数 TChar に対して必要であれば、
+					それぞれ Encoding::GetSystemMultiByteEncoding()、Encoding::GetWideCharEncoding() で取得できるエンコーディングを使用して
+					文字コードをの変換を行います。
+					TChar と str の型が同じ場合は文字コードの変換を行いません。
+	*/
+	void AssignCStr(const char* str, int begin, int length, bool* usedDefaultChar = NULL);
+	void AssignCStr(const char* str, int length, bool* usedDefaultChar = NULL);					///< @overload AssignCStr
+	void AssignCStr(const char* str, bool* usedDefaultChar = NULL);								///< @overload AssignCStr
+	void AssignCStr(const wchar_t* str, int begin, int length, bool* usedDefaultChar = NULL);	///< @overload AssignCStr
+	void AssignCStr(const wchar_t* str, int length, bool* usedDefaultChar = NULL);				///< @overload AssignCStr
+	void AssignCStr(const wchar_t* str, bool* usedDefaultChar = NULL);							///< @overload AssignCStr
 
 public:
 	/// 現在の環境で定義されている改行文字列を取得する

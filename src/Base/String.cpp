@@ -373,6 +373,15 @@ const TChar* GenericString<TChar>::c_str() const
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
+int GenericString<TChar>::GetLength() const
+{
+	return m_string->size();
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
 bool GenericString<TChar>::IsEmpty() const
 {
 	return m_string->empty();
@@ -848,9 +857,18 @@ bool GenericString<TChar>::TryToUInt64(uint64_t* outValue, int base) const { TRY
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-int GenericString<TChar>::GetLength() const
+GenericString<TChar> GenericString<TChar>::FromNativeCharString(const char* str, int length)
 {
-	return m_string->size();
+	GenericString<TChar> out;
+	out.AssignCStr(str, (length < 0) ? StringTraits::StrLen(str) : length);
+	return out;
+}
+template<typename TChar>
+GenericString<TChar> GenericString<TChar>::FromNativeWCharString(const wchar_t* str, int length)
+{
+	GenericString<TChar> out;
+	out.AssignCStr(str, (length < 0) ? StringTraits::StrLen(str) : length);
+	return out;
 }
 
 //-----------------------------------------------------------------------------
