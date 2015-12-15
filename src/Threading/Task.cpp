@@ -16,10 +16,19 @@ namespace tr
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+TaskPtr Task::Create(const Delegate<void()>& action)
+{
+	TaskPtr task(LN_NEW Task(action), false);
+	return task;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 TaskPtr Task::Run(const Delegate<void()>& action)
 {
 	TaskPtr task(LN_NEW Task(action), false);
-	TaskScheduler::GetDefault()->QueueTask(task);
+	task->Start();
 	return task;
 }
 
@@ -28,7 +37,7 @@ TaskPtr Task::Run(const Delegate<void()>& action)
 //-----------------------------------------------------------------------------
 Task::Task(const Delegate<void()>& action)
 	: m_action(action)
-	, m_exception(nullptr)
+	, m_waiting(false)
 {
 }
 
@@ -38,6 +47,24 @@ Task::Task(const Delegate<void()>& action)
 Task::~Task()
 {
 	LN_SAFE_DELETE(m_exception);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void Task::Start()
+{
+	LN_SAFE_DELETE(m_exception);
+	m_waiting.SetFalse();
+	TaskScheduler::GetDefault()->QueueTask(this);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void Task::Wait()
+{
+	m_waiting.Wait();
 }
 
 //-----------------------------------------------------------------------------
@@ -89,13 +116,14 @@ void Task::Execute()
 	catch (Exception& e)
 	{
 		m_exception = e.Copy();
-		//m_status = TaskStatus::Faulted;
+		m_status = TaskStatus::Faulted;
 	}
 	catch (...)
 	{
 		m_exception = LN_NEW Threading::ThreadException();
-		//m_status = TaskStatus::Faulted;
+		m_status = TaskStatus::Faulted;
 	}
+	m_waiting.SetTrue();
 }
 
 } // namespace tr

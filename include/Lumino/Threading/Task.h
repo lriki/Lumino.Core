@@ -3,6 +3,7 @@
 #include "../Base/Exception.h"
 #include "../Base/RefObject.h"
 #include "../Base/Delegate.h"
+#include "EventFlag.h"
 
 LN_NAMESPACE_BEGIN
 namespace tr
@@ -30,7 +31,14 @@ class Task
 	: public RefObject
 {
 public:
+
+	static TaskPtr Create(const Delegate<void()>& action);
+
 	static TaskPtr Run(const Delegate<void()>& action);
+
+	void Start();
+
+	void Wait();
 
 	/** ‚±‚Ì Task ‚ÌŒ»İ‚Ìó‘Ô‚ğæ“¾‚µ‚Ü‚·B*/
 	TaskStatus GetStatus() const;
@@ -54,6 +62,7 @@ private:
 	Delegate<void()>	m_action;
 	TaskStatus	m_status = TaskStatus::Created;
 	Exception*	m_exception = nullptr;
+	Threading::EventFlag	m_waiting;
 };
 
 } // namespace tr

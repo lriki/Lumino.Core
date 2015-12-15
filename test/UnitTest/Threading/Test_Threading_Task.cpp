@@ -41,7 +41,30 @@ TEST_F(IntegrateTest_Threading_Task, Basic)
 	{
 		ASSERT_EQ(true, tasks[i]->IsCompleted());
 	}
+}
 
+//---------------------------------------------------------------------
+TEST_F(IntegrateTest_Threading_Task, Basic2)
+{
+	for (int i = 0; i < 10; i++)
+	{
+		Array<int> ary;
+		int sum;
+		auto funcAdd = [&ary]() { ary.Add(1); };
+		auto funcItr = [&ary, &sum]() { for (int v : ary) { sum += v; } };
 
-	
+		auto task1 = Task::Create(Delegate<void()>(funcAdd));
+		auto task2 = Task::Create(Delegate<void()>(funcItr));
+
+		for (int j = 0; j < 1000; j++)
+		{
+			sum = 0;
+			task1->Start();
+			task1->Wait();
+			task2->Start();
+			task2->Wait();
+			ASSERT_EQ((j + 1), sum);
+		}
+	}
+
 }
