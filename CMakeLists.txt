@@ -184,14 +184,20 @@ set(LN_SOURCES_Threading
 	include/Lumino/Threading/EventFlag.h
 	include/Lumino/Threading/Mutex.h
 	include/Lumino/Threading/ReadWriteMutex.h
+	include/Lumino/Threading/Semaphore.h
+	include/Lumino/Threading/Task.h
+	include/Lumino/Threading/TaskScheduler.h
 	include/Lumino/Threading/Thread.h
 	include/Lumino/Threading/ThreadingExceptions.h
-	src/Threading/ThreadingExceptions.cpp
-	src/Threading/Thread.cpp
 	src/Threading/Atomic.cpp
 	src/Threading/EventFlag.cpp
 	src/Threading/Mutex.cpp
 	src/Threading/ReadWriteMutex.cpp
+	src/Threading/Semaphore.cpp
+	src/Threading/Task.cpp
+	src/Threading/TaskScheduler.cpp
+	src/Threading/Thread.cpp
+	src/Threading/ThreadingExceptions.cpp
 )
 
 set(LN_SOURCES_Xml

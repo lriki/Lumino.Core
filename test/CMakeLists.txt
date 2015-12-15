@@ -50,6 +50,8 @@ set(LN_TEST_SOURCES
 	UnitTest/Text/Test_Text_UTF32Encoding.cpp
 	UnitTest/Threading/Test_Threading_Atomic.cpp
 	UnitTest/Threading/Test_Threading_EventFlag.cpp
+	UnitTest/Threading/Test_Threading_Semaphore.cpp
+	UnitTest/Threading/Test_Threading_Task.cpp
 	UnitTest/Threading/Test_Threading_Thread.cpp
 	UnitTest/Xml/Test_Xml_XmlReader.cpp
 	UnitTest/Xml/Test_Xml_XmlWriter.cpp

@@ -65,8 +65,11 @@
 #include "Lumino/Threading/Atomic.h"
 #include "Lumino/Threading/EventFlag.h"
 #include "Lumino/Threading/Mutex.h"
+#include "Lumino/Threading/Semaphore.h"
 #include "Lumino/Threading/ReadWriteMutex.h"
 #include "Lumino/Threading/Thread.h"
+#include "Lumino/Threading/Task.h"
+#include "Lumino/Threading/TaskScheduler.h"
 
 #include "Lumino/Xml/XmlReader.h"
 #include "Lumino/Xml/XmlWriter.h"

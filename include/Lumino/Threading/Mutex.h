@@ -71,7 +71,7 @@ private:
 			catch (){
 			}
 	@endcode
- */
+*/
 class MutexScopedLock  
 {
 public:
