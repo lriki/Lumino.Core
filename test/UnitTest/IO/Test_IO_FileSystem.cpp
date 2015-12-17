@@ -13,9 +13,9 @@ TEST_F(Test_IO_FileSystem, Exists)
 	// Windows 別ユーザーフォルダは false
 	//ASSERT_FALSE(FileSystem::Exists("C:/Users/user2/Documents/Visual Studio 2013/Settings/CurrentSettings.vssettings"));
 
-	ASSERT_TRUE(FileSystem::Exists(LN_TEST_GET_FILE_PATH("TestData/test1.txt")));
+	ASSERT_TRUE(FileSystem::Exists(LN_LOCALFILE("TestData/test1.txt")));
 	// ディレクトリは false
-	ASSERT_FALSE(FileSystem::Exists(LN_TEST_GET_FILE_PATH("TestData")));
+	ASSERT_FALSE(FileSystem::Exists(LN_LOCALFILE("TestData")));
 	// 空文字列は false
 	ASSERT_FALSE(FileSystem::Exists(""));
 	// 空文字列は false

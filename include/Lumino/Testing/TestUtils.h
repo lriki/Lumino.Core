@@ -27,12 +27,12 @@ public:
 #define LN_TEST_GET_DIR_PATH() TestUtils::GetDirPath(__FILE__)
 
 // __FILE__ と同じフォルダのファイルパス (TCHAR) を取得する
-#define LN_TEST_GET_FILE_PATH(fileName) TestUtils::GetFilePath(__FILE__, fileName).c_str()
+#define LN_LOCALFILE(fileName) TestUtils::GetFilePath(__FILE__, fileName).c_str()
 
 // __FILE__ と同じフォルダのファイルパス (char) を取得する
-#define LN_TEST_GET_FILE_PATH_A(fileName) TestUtils::GetFilePathA(__FILE__, fileName).c_str()
+#define LN_LOCALFILEA(fileName) TestUtils::GetFilePathA(__FILE__, fileName).c_str()
 
 // __FILE__ と同じフォルダのファイルパス (wchar_t) を取得する
-#define LN_TEST_GET_FILE_PATH_W(fileName) TestUtils::GetFilePathW(__FILE__, fileName).c_str()
+#define LN_LOCALFILEW(fileName) TestUtils::GetFilePathW(__FILE__, fileName).c_str()
 
 LN_NAMESPACE_END
