@@ -150,7 +150,7 @@ public:
 		LN_SAFE_RELEASE( mPtr );
 	}
 
-	T* DetachAddRef()
+	T* DetachMove()
 	{
 		T* ptr = mPtr;
 		mPtr = nullptr;
