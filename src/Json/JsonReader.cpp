@@ -1,4 +1,4 @@
-
+ï»¿
 #include "../Internal.h"
 #include <Lumino/Base/StringTraits.h>
 #include <Lumino/IO/StringReader.h>
@@ -57,26 +57,26 @@ void JsonReader::Parse(TextReader* textReader)
 
 	m_reader = textReader;
 
-	// ˆêƒoƒbƒtƒ@B‚à‚µ‘«‚è‚È‚¯‚ê‚ÎŠg’£‚³‚ê‚é
+	// ä¸€æ™‚ãƒãƒƒãƒ•ã‚¡ã€‚ã‚‚ã—è¶³ã‚Šãªã‘ã‚Œã°æ‹¡å¼µã•ã‚Œã‚‹
 	m_tmpStream.Create(512);
 
-	// ƒoƒbƒtƒ@æ“ª‚Ì‹ó”’‚ğ“Ç‚İ”ò‚Î‚·
+	// ãƒãƒƒãƒ•ã‚¡å…ˆé ­ã®ç©ºç™½ã‚’èª­ã¿é£›ã°ã™
 	if (!SkipWhitespace())
 	{
-		// Error: ƒoƒbƒtƒ@‚ª‹ó‚¾‚Á‚½
+		// Error: ãƒãƒƒãƒ•ã‚¡ãŒç©ºã ã£ãŸ
 		m_error.SetError(JsonParseError::DocumentEmpty, m_currentCharCount);
 		return;
 	}
 
-	// ƒ‹[ƒg—v‘f‚Ì‰ğÍ
+	// ãƒ«ãƒ¼ãƒˆè¦ç´ ã®è§£æ
 	if (!ParseValue()) {
 		return;
 	}
 
-	// ƒoƒbƒtƒ@I’[‚Ì‹ó”’‚ğ“Ç‚İ”ò‚Î‚·
+	// ãƒãƒƒãƒ•ã‚¡çµ‚ç«¯ã®ç©ºç™½ã‚’èª­ã¿é£›ã°ã™
 	if (SkipWhitespace())
 	{
-		// Error: •¡”‚Ìƒ‹[ƒg—v‘f‚ªŒ©‚Â‚©‚Á‚½
+		// Error: è¤‡æ•°ã®ãƒ«ãƒ¼ãƒˆè¦ç´ ãŒè¦‹ã¤ã‹ã£ãŸ
 		m_error.SetError(JsonParseError::DocumentRootNotSingular, m_currentCharCount);
 		return;
 	}
@@ -100,13 +100,13 @@ bool JsonReader::ParseValue()
 {
 	switch (m_reader->Peek())
 	{
-		case 'n': return ParseNull();			// null ‚©‚à‚µ‚ê‚È‚¢
-		case 't': return ParseTrue();			// true ‚©‚à‚µ‚ê‚È‚¢
-		case 'f': return ParseFalse();			// false ‚©‚à‚µ‚ê‚È‚¢
-		case '"': return ParseString(false);	// •¶š—ñ‚©‚à‚µ‚ê‚È‚¢
-		case '[': return ParseArray();			// ”z—ñ‚©‚à‚µ‚ê‚È‚¢
-		case '{': return ParseObject();			// ƒIƒuƒWƒFƒNƒg‚©‚à‚µ‚ê‚È‚¢
-		default: return ParseNumber();			// ”’l‚©‚à‚µ‚ê‚È‚¢
+		case 'n': return ParseNull();			// null ã‹ã‚‚ã—ã‚Œãªã„
+		case 't': return ParseTrue();			// true ã‹ã‚‚ã—ã‚Œãªã„
+		case 'f': return ParseFalse();			// false ã‹ã‚‚ã—ã‚Œãªã„
+		case '"': return ParseString(false);	// æ–‡å­—åˆ—ã‹ã‚‚ã—ã‚Œãªã„
+		case '[': return ParseArray();			// é…åˆ—ã‹ã‚‚ã—ã‚Œãªã„
+		case '{': return ParseObject();			// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‹ã‚‚ã—ã‚Œãªã„
+		default: return ParseNumber();			// æ•°å€¤ã‹ã‚‚ã—ã‚Œãªã„
 	}
 }
 
@@ -122,14 +122,14 @@ bool JsonReader::ParseNull()
 	{
 		if (!m_handler->OnNull())
 		{
-			// ’†’f
+			// ä¸­æ–­
 			m_error.SetError(JsonParseError::Termination, m_currentCharCount);
 			return false;
 		}
 	}
 	else
 	{
-		// Error: "null" ‚Å‚Í‚È‚©‚Á‚½
+		// Error: "null" ã§ã¯ãªã‹ã£ãŸ
 		m_error.SetError(JsonParseError::ValueInvalid, m_currentCharCount);
 		return false;
 	}
@@ -148,14 +148,14 @@ bool JsonReader::ParseTrue()
 	{
 		if (!m_handler->OnBool(true))
 		{
-			// ’†’f
+			// ä¸­æ–­
 			m_error.SetError(JsonParseError::Termination, m_currentCharCount);
 			return false;
 		}
 	}
 	else
 	{
-		// Error: "true" ‚Å‚Í‚È‚©‚Á‚½
+		// Error: "true" ã§ã¯ãªã‹ã£ãŸ
 		m_error.SetError(JsonParseError::ValueInvalid, m_currentCharCount);
 		return false;
 	}
@@ -175,14 +175,14 @@ bool JsonReader::ParseFalse()
 	{
 		if (!m_handler->OnBool(false))
 		{
-			// ’†’f
+			// ä¸­æ–­
 			m_error.SetError(JsonParseError::Termination, m_currentCharCount);
 			return false;
 		}
 	}
 	else
 	{
-		// Error: "false" ‚Å‚Í‚È‚©‚Á‚½
+		// Error: "false" ã§ã¯ãªã‹ã£ãŸ
 		m_error.SetError(JsonParseError::ValueInvalid, m_currentCharCount);
 		return false;
 	}
@@ -194,13 +194,13 @@ bool JsonReader::ParseFalse()
 //-----------------------------------------------------------------------------
 bool JsonReader::ParseNumber()
 {
-	// ”’l‚Ö‚Ì•ÏŠ·‚É‚Í strtod ‚ğg—p‚·‚éB‚»‚Ì‚½‚ßA‚Ü‚¸‚Í”’lˆµ‚¢‚Å‚«‚é•¶š‚ğ‘S‚Ä“Ç‚İæ‚é
+	// æ•°å€¤ã¸ã®å¤‰æ›ã«ã¯ strtod ã‚’ä½¿ç”¨ã™ã‚‹ã€‚ãã®ãŸã‚ã€ã¾ãšã¯æ•°å€¤æ‰±ã„ã§ãã‚‹æ–‡å­—ã‚’å…¨ã¦èª­ã¿å–ã‚‹
 	m_tmpStream.Seek(0, SeekOrigin_Begin);
 	int len = 0;
 	TCHAR ch;
 	while (true)
 	{
-		ch = m_reader->Peek();	// “Ç‚Ş‚¾‚¯Bƒ|ƒCƒ“ƒ^‚Íi‚ß‚È‚¢
+		ch = m_reader->Peek();	// èª­ã‚€ã ã‘ã€‚ãƒã‚¤ãƒ³ã‚¿ã¯é€²ã‚ãªã„
 		if (ch == '.' ||
 			('0' <= ch && ch <= '9') ||
 			(ch == 'e' || ch == 'E') ||
@@ -208,42 +208,42 @@ bool JsonReader::ParseNumber()
 		{
 			m_tmpStream.Write(&ch, sizeof(TCHAR));
 			++len;
-			m_reader->Read();	// ‚±‚±‚Å1‚Âi‚ß‚é
+			m_reader->Read();	// ã“ã“ã§1ã¤é€²ã‚ã‚‹
 		}
 		else {
-			break;				// ˆê’v‚µ‚È‚¯‚ê‚Îƒ|ƒCƒ“ƒ^‚Íi‚ß‚È‚¢
+			break;				// ä¸€è‡´ã—ãªã‘ã‚Œã°ãƒã‚¤ãƒ³ã‚¿ã¯é€²ã‚ãªã„
 		}
 	}
 	if (len == 0)
 	{
-		// Error: ”’l‚Á‚Û‚¢•¶š‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½
+		// Error: æ•°å€¤ã£ã½ã„æ–‡å­—ãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸ
 		m_error.SetError(JsonParseError::NumberInvalid, m_currentCharCount);
 		return false;
 	}
 	ch = '\0';
-	m_tmpStream.Write(&ch, sizeof(TCHAR));	// I’[ \0
+	m_tmpStream.Write(&ch, sizeof(TCHAR));	// çµ‚ç«¯ \0
 
-	// double ‚Ö•ÏŠ·‚·‚é
+	// double ã¸å¤‰æ›ã™ã‚‹
 	TCHAR* str = (TCHAR*)m_tmpStream.GetBuffer();
 	const TCHAR* endptr = NULL;
 	NumberConversionResult result;
 	double value = StringTraits::ToDouble(str, len, &endptr, &result);
-	if ((endptr - str) != len)	// ³í‚É•ÏŠ·‚Å‚«‚Ä‚¢‚ê‚ÎA“Ç‚İæ‚Á‚½•¶š”‚ª‘S‚ÄÁ”ï‚³‚ê‚é‚Í‚¸
+	if ((endptr - str) != len)	// æ­£å¸¸ã«å¤‰æ›ã§ãã¦ã„ã‚Œã°ã€èª­ã¿å–ã£ãŸæ–‡å­—æ•°ãŒå…¨ã¦æ¶ˆè²»ã•ã‚Œã‚‹ã¯ãš
 	{
-		// Error: \•¶‚ª³‚µ‚­‚È‚¢
+		// Error: æ§‹æ–‡ãŒæ­£ã—ããªã„
 		m_error.SetError(JsonParseError::NumberInvalid, m_currentCharCount);
 		return false;
 	}
 	if (result == NumberConversionResult::Overflow) {
-		// Error: ƒI[ƒo[ƒtƒ[‚ª”­¶‚µ‚½
+		// Error: ã‚ªãƒ¼ãƒãƒ¼ãƒ•ãƒ­ãƒ¼ãŒç™ºç”Ÿã—ãŸ
 		m_error.SetError(JsonParseError::NumberOverflow, m_currentCharCount);
 		return false;
 	}
 
-	// Handler ‚É’Ê’m‚·‚é
+	// Handler ã«é€šçŸ¥ã™ã‚‹
 	if (!m_handler->OnDouble(value))
 	{
-		// ’†’f
+		// ä¸­æ–­
 		m_error.SetError(JsonParseError::Termination, m_currentCharCount);
 		return false;
 	}
@@ -277,7 +277,7 @@ bool JsonReader::ParseString(bool isKey)
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	};
 
-	// 1‚Â‚¸‚Â“Ç‚ñ‚¾•¶š‚ğŠi”[‚µ‚Ä‚¢‚­ˆêƒoƒbƒtƒ@BƒV[ƒNˆÊ’u‚ğæ“ª‚É–ß‚µ‚Ä‚¨‚­
+	// 1ã¤ãšã¤èª­ã‚“ã æ–‡å­—ã‚’æ ¼ç´ã—ã¦ã„ãä¸€æ™‚ãƒãƒƒãƒ•ã‚¡ã€‚ã‚·ãƒ¼ã‚¯ä½ç½®ã‚’å…ˆé ­ã«æˆ»ã—ã¦ãŠã
 	m_tmpStream.Seek(0, SeekOrigin_Begin);
 
 	m_reader->Read();	// skip '"'
@@ -285,50 +285,50 @@ bool JsonReader::ParseString(bool isKey)
 	{
 		TCHAR c = m_reader->Peek();
 
-		// ƒGƒXƒP[ƒvƒV[ƒPƒ“ƒX
+		// ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã‚·ãƒ¼ã‚±ãƒ³ã‚¹
 		if (c == '\\')
 		{
 			m_reader->Read();	// skip '\'
 			TCHAR esc = m_reader->Read();
-			// Šî–{“I‚ÈƒGƒXƒP[ƒv
+			// åŸºæœ¬çš„ãªã‚¨ã‚¹ã‚±ãƒ¼ãƒ—
 			if (unsigned(esc) < 256 && escapeTable[(unsigned char)esc])
 			{
 				m_tmpStream.Write(&escapeTable[(unsigned char)esc], sizeof(TCHAR));
 			}
-			// Unicode ƒGƒXƒP[ƒv
+			// Unicode ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—
 			else if (esc == 'u')
 			{
-				// –¢À‘•
+				// æœªå®Ÿè£…
 				m_error.SetError(JsonParseError::StringEscapeInvalid, m_currentCharCount);
 				return false;
 			}
 			else
 			{
-				// Error: –³Œø‚ÈƒGƒXƒP[ƒv
+				// Error: ç„¡åŠ¹ãªã‚¨ã‚¹ã‚±ãƒ¼ãƒ—
 				m_error.SetError(JsonParseError::StringEscapeInvalid, m_currentCharCount);
 				return false;
 			}
 		}
-		// •¶š—ñI’[
+		// æ–‡å­—åˆ—çµ‚ç«¯
 		else if (c == '"')
 		{
 			m_reader->Read();	// skip '"'
 			break;
 		}
-		// •¶š—ñ‚Ì“r’†‚Åƒoƒbƒtƒ@‚ªØ‚ê‚½
+		// æ–‡å­—åˆ—ã®é€”ä¸­ã§ãƒãƒƒãƒ•ã‚¡ãŒåˆ‡ã‚ŒãŸ
 		else if (m_reader->IsEOF() || c == '\0')
 		{
-			// Error: " ‚ªˆê’v‚µ‚È‚©‚Á‚½
+			// Error: " ãŒä¸€è‡´ã—ãªã‹ã£ãŸ
 			m_error.SetError(JsonParseError::StringMissQuotationMark, m_currentCharCount);
 			return false;
 		}
-		// 0x20 –¢–‚Ì§Œä•¶š‚Íg‚¦‚È‚¢
+		// 0x20 æœªæº€ã®åˆ¶å¾¡æ–‡å­—ã¯ä½¿ãˆãªã„
 		else if ((unsigned)c < 0x20) {
 			// RFC 4627: unescaped = %x20-21 / %x23-5B / %x5D-10FFFF
 			m_error.SetError(JsonParseError::StringEscapeInvalid, m_currentCharCount);
 			return false;
 		}
-		// •’Ê‚Ì•¶š
+		// æ™®é€šã®æ–‡å­—
 		else
 		{
 			m_tmpStream.Write(&c, sizeof(TCHAR));
@@ -336,7 +336,7 @@ bool JsonReader::ParseString(bool isKey)
 		}
 	}
 
-	// Handler ‚É’Ê’m
+	// Handler ã«é€šçŸ¥
 	bool cont = false;
 	if (isKey) {
 		cont = m_handler->OnKey((TCHAR*)m_tmpStream.GetBuffer(), ((int)m_tmpStream.GetPosition()) / sizeof(TCHAR));
@@ -346,7 +346,7 @@ bool JsonReader::ParseString(bool isKey)
 	}
 	if (!cont)
 	{
-		// ’†’f
+		// ä¸­æ–­
 		m_error.SetError(JsonParseError::Termination, m_currentCharCount);
 		return false;
 	}
@@ -360,10 +360,10 @@ bool JsonReader::ParseArray()
 {
 	m_reader->Read();  // skip '['
 
-	// Handler ‚É Array ‚ÌŠJn‚ğ’Ê’m
+	// Handler ã« Array ã®é–‹å§‹ã‚’é€šçŸ¥
 	if (!m_handler->OnStartArray())
 	{
-		// ’†’f
+		// ä¸­æ–­
 		m_error.SetError(JsonParseError::Termination, m_currentCharCount);
 		return false;
 	}
@@ -371,11 +371,11 @@ bool JsonReader::ParseArray()
 	SkipWhitespace();
 	if (m_reader->Peek() == ']')
 	{
-		// ‹ó”z—ñ‚¾‚Á‚½BArray ‚ÌI—¹‚ğ’Ê’m‚·‚é
-		m_reader->Read(); 	// ']' ‚ÌŸ‚ğw‚µ‚Ä‚¨‚­
+		// ç©ºé…åˆ—ã ã£ãŸã€‚Array ã®çµ‚äº†ã‚’é€šçŸ¥ã™ã‚‹
+		m_reader->Read(); 	// ']' ã®æ¬¡ã‚’æŒ‡ã—ã¦ãŠã
 		if (!m_handler->OnEndArray(0))
 		{
-			// ’†’f
+			// ä¸­æ–­
 			m_error.SetError(JsonParseError::Termination, m_currentCharCount);
 			return false;
 		}
@@ -387,7 +387,7 @@ bool JsonReader::ParseArray()
 	while (true)
 	{
 		if (!ParseValue()) {
-			return false;	// ƒGƒ‰[‚Íˆ—Ï‚İ
+			return false;	// ã‚¨ãƒ©ãƒ¼ã¯å‡¦ç†æ¸ˆã¿
 		}
 
 		++elementCount;
@@ -399,10 +399,10 @@ bool JsonReader::ParseArray()
 			SkipWhitespace();
 			break;
 		case ']':
-			// ”z—ñ‚ÌI’[
+			// é…åˆ—ã®çµ‚ç«¯
 			if (!m_handler->OnEndArray(elementCount))
 			{
-				// ’†’f
+				// ä¸­æ–­
 				m_error.SetError(JsonParseError::Termination, m_currentCharCount);
 				return false;
 			}
@@ -414,7 +414,7 @@ bool JsonReader::ParseArray()
 		}
 	}
 
-	// ‚±‚±‚É—ˆ‚é‚±‚Æ‚Í‚È‚¢
+	// ã“ã“ã«æ¥ã‚‹ã“ã¨ã¯ãªã„
 }
 
 //-----------------------------------------------------------------------------
@@ -424,10 +424,10 @@ bool JsonReader::ParseObject()
 {
 	m_reader->Read();  // Skip '{'
 
-	// ƒIƒuƒWƒFƒNƒg’è‹`‚ÌŠJn
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå®šç¾©ã®é–‹å§‹
 	if (!m_handler->OnStartObject())
 	{
-		// ’†’f
+		// ä¸­æ–­
 		m_error.SetError(JsonParseError::Termination, m_currentCharCount);
 		return false;
 	}
@@ -435,11 +435,11 @@ bool JsonReader::ParseObject()
 	SkipWhitespace();
 	if (m_reader->Peek() == '}')
 	{
-		// ƒƒ“ƒo‚ª1‚Â‚à–³‚©‚Á‚½
-		m_reader->Read();	// '}' ‚ÌŸ‚ğw‚µ‚Ä‚¨‚­
+		// ãƒ¡ãƒ³ãƒãŒ1ã¤ã‚‚ç„¡ã‹ã£ãŸ
+		m_reader->Read();	// '}' ã®æ¬¡ã‚’æŒ‡ã—ã¦ãŠã
 		if (!m_handler->OnEndObject(0))
 		{
-			// ’†’f
+			// ä¸­æ–­
 			m_error.SetError(JsonParseError::Termination, m_currentCharCount);
 			return false;
 		}
@@ -449,26 +449,26 @@ bool JsonReader::ParseObject()
 	int memberCount = 0;
 	while (true)
 	{
-		// Å‰‚Íƒƒ“ƒo–¼
+		// æœ€åˆã¯ãƒ¡ãƒ³ãƒå
 		if (m_reader->Peek() != '"')
 		{
-			// Error: ƒƒ“ƒo–¼‚ÌŠJn‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½
+			// Error: ãƒ¡ãƒ³ãƒåã®é–‹å§‹ãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸ
 			m_error.SetError(JsonParseError::ObjectMissKeyStart, m_currentCharCount);
 			return false;
 		}
 		if (!ParseString(true)) return false;
 		SkipWhitespace();
 
-		// ‘±‚¢‚Ä ':'
+		// ç¶šã„ã¦ ':'
 		if (m_reader->Read() != ':')
 		{
-			// Error: ':' ‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½
+			// Error: ':' ãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸ
 			m_error.SetError(JsonParseError::ObjectMissColon, m_currentCharCount);
 			return false;
 		}
 		SkipWhitespace();
 
-		// ÅŒã‚É’l
+		// æœ€å¾Œã«å€¤
 		if (!ParseValue()) return false;
 		SkipWhitespace();
 
@@ -480,10 +480,10 @@ bool JsonReader::ParseObject()
 			SkipWhitespace();
 			break;
 		case '}':
-			// ƒIƒuƒWƒFƒNƒg’è‹`I’[
+			// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå®šç¾©çµ‚ç«¯
 			if (!m_handler->OnEndObject(memberCount))
 			{
-				// ’†’f
+				// ä¸­æ–­
 				m_error.SetError(JsonParseError::Termination, m_currentCharCount);
 				return false;
 			}
@@ -495,7 +495,7 @@ bool JsonReader::ParseObject()
 		}
 	}
 
-	// ‚±‚±‚É‚Í—ˆ‚È‚¢‚Í‚¸
+	// ã“ã“ã«ã¯æ¥ãªã„ã¯ãš
 }
 
 LN_NAMESPACE_END

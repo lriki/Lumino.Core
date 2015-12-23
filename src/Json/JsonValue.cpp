@@ -1,4 +1,4 @@
-
+ï»¿
 #include "../Internal.h"
 #include <Lumino/Json/JsonValue.h>
 
@@ -248,7 +248,7 @@ void JsonValue::Copy(const JsonValue& obj)
 		m_type = JsonType::Object;
 		m_memberList = LN_NEW MemberList(*obj.m_memberList);
 	}
-	// ª‚à‚µ“¯‚¶Œ^‚Å‚ ‚ê‚Î new ‚µ‚È‚¢‚æ‚¤‚É‚·‚ê‚Î‚à‚¤­‚µƒpƒtƒH[ƒ}ƒ“ƒXã‚°‚ç‚ê‚é
+	// â†‘ã‚‚ã—åŒã˜å‹ã§ã‚ã‚Œã° new ã—ãªã„ã‚ˆã†ã«ã™ã‚Œã°ã‚‚ã†å°‘ã—ãƒ‘ãƒ•ã‚©ãƒ¼ãƒãƒ³ã‚¹ä¸Šã’ã‚‰ã‚Œã‚‹
 }
 
 //-----------------------------------------------------------------------------

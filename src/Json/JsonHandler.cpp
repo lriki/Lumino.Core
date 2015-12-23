@@ -1,4 +1,4 @@
-
+ï»¿
 #include "../Internal.h"
 #include <Lumino/Json/JsonValue.h>
 #include <Lumino/Json/JsonDocument.h>
@@ -21,21 +21,21 @@ JsonHandler::~JsonHandler()
 // JsonDOMHandler
 //=============================================================================
 /*
-	On`() ‚Å³’¼‚Ée‚Ì JsonValue ‚Ö’Ç‰Á‚µ‚Äc ‚È‚ñ‚Ä‚±‚Æ‚â‚Á‚Ä‚é‚ÆA
-	‚©‚È‚è‚Ì‰ñ”‚Ìƒƒ‚ƒŠÄ”z’u‚ª”­¶‚·‚éB
+	Onï½() ã§æ­£ç›´ã«è¦ªã® JsonValue ã¸è¿½åŠ ã—ã¦â€¦ ãªã‚“ã¦ã“ã¨ã‚„ã£ã¦ã‚‹ã¨ã€
+	ã‹ãªã‚Šã®å›æ•°ã®ãƒ¡ãƒ¢ãƒªå†é…ç½®ãŒç™ºç”Ÿã™ã‚‹ã€‚
 
-	JsonValue ‚ÍŠî–{“I‚É’lŒ^‚Æ‚µ‚Äg‚í‚ê‚éBArrayList.Add() ‚È‚ñ‚Ä‚·‚ê‚Î
-	JsonValue ‚ªŠÛ‚²‚ÆƒRƒs[A‚Â‚Ü‚èq Value ‚à‘S•”ƒRƒs[‚·‚é‚±‚Æ‚É‚È‚éB
-	(JsonValue ‚ğ RefObject ‚É‚·‚éè‚à‚ ‚é‚ªA‚»‚ê‚Í‚»‚ê‚Å•p”É‚È new ‚ª•K—v‚É‚È‚é)
+	JsonValue ã¯åŸºæœ¬çš„ã«å€¤å‹ã¨ã—ã¦ä½¿ã‚ã‚Œã‚‹ã€‚ArrayList.Add() ãªã‚“ã¦ã™ã‚Œã°
+	JsonValue ãŒä¸¸ã”ã¨ã‚³ãƒ”ãƒ¼ã€ã¤ã¾ã‚Šå­ Value ã‚‚å…¨éƒ¨ã‚³ãƒ”ãƒ¼ã™ã‚‹ã“ã¨ã«ãªã‚‹ã€‚
+	(JsonValue ã‚’ RefObject ã«ã™ã‚‹æ‰‹ã‚‚ã‚ã‚‹ãŒã€ãã‚Œã¯ãã‚Œã§é »ç¹ãª new ãŒå¿…è¦ã«ãªã‚‹)
 
-	‚±‚ê‚ğ”ğ‚¯‚é‚½‚ßADOM ‚Ì\’z‚Í2ƒXƒeƒbƒv‚É•ª‚©‚ê‚Ä‚¢‚éB
+	ã“ã‚Œã‚’é¿ã‘ã‚‹ãŸã‚ã€DOM ã®æ§‹ç¯‰ã¯2ã‚¹ãƒ†ãƒƒãƒ—ã«åˆ†ã‹ã‚Œã¦ã„ã‚‹ã€‚
 	step1:
-		On`() ‚Å“¾‚ç‚ê‚½’l‚ğƒoƒCƒiƒŠƒf[ƒ^‚É‚µ‚Äƒƒ‚ƒŠ‚Éˆê•Û‘¶‚·‚éB
-		1“x‘S‚Ä‰ğÍ‚·‚é‚±‚Æ‚Å”z—ñ‚Ì—v‘f”‚È‚ÇA•K—v‚Èƒƒ‚ƒŠƒTƒCƒY‚ª‘S‚Ä‚í‚©‚éB
+		Onï½() ã§å¾—ã‚‰ã‚ŒãŸå€¤ã‚’ãƒã‚¤ãƒŠãƒªãƒ‡ãƒ¼ã‚¿ã«ã—ã¦ãƒ¡ãƒ¢ãƒªã«ä¸€æ™‚ä¿å­˜ã™ã‚‹ã€‚
+		1åº¦å…¨ã¦è§£æã™ã‚‹ã“ã¨ã§é…åˆ—ã®è¦ç´ æ•°ãªã©ã€å¿…è¦ãªãƒ¡ãƒ¢ãƒªã‚µã‚¤ã‚ºãŒå…¨ã¦ã‚ã‹ã‚‹ã€‚
 
 	step2:
-		ˆê•Û‘¶‚µ‚½ƒƒ‚ƒŠ‚©‚çƒcƒŠ[\‘¢‚ğ\’z‚·‚éB
-		step1 ‚Å‹‚ß‚½—v‘f”‚È‚Ç‚ğg—p‚·‚é‚±‚Æ‚ÅAƒƒ‚ƒŠŠm•Û‰ñ”‚ğÅ¬ŒÀ‚É—}‚¦‚éB
+		ä¸€æ™‚ä¿å­˜ã—ãŸãƒ¡ãƒ¢ãƒªã‹ã‚‰ãƒ„ãƒªãƒ¼æ§‹é€ ã‚’æ§‹ç¯‰ã™ã‚‹ã€‚
+		step1 ã§æ±‚ã‚ãŸè¦ç´ æ•°ãªã©ã‚’ä½¿ç”¨ã™ã‚‹ã“ã¨ã§ã€ãƒ¡ãƒ¢ãƒªç¢ºä¿å›æ•°ã‚’æœ€å°é™ã«æŠ‘ãˆã‚‹ã€‚
 */
 
 //-----------------------------------------------------------------------------
@@ -103,8 +103,8 @@ bool JsonDOMHandler::OnString(const TCHAR* str, int len)
 bool JsonDOMHandler::OnStartArray()
 {
 	m_writer.WriteUInt8(JsonType::Array);
-	m_startIndexStack.Push((size_t)m_writer.GetPosition());	// Œ»İˆÊ’u‚ğ Array ‚ÌŠJn“_‚Æ‚µ‚ÄŠo‚¦‚Ä‚¨‚­
-	m_writer.WriteUInt32(0);						// —v‘f” (ƒ_ƒ~[)
+	m_startIndexStack.Push((size_t)m_writer.GetPosition());	// ç¾åœ¨ä½ç½®ã‚’ Array ã®é–‹å§‹ç‚¹ã¨ã—ã¦è¦šãˆã¦ãŠã
+	m_writer.WriteUInt32(0);						// è¦ç´ æ•° (ãƒ€ãƒŸãƒ¼)
 	return true;
 }
 
@@ -118,7 +118,7 @@ bool JsonDOMHandler::OnEndArray(int elementCount)
 
 	size_t curPos = (size_t)m_writer.GetPosition();
 	m_writer.Seek(index, SeekOrigin_Begin);
-	m_writer.WriteUInt32(elementCount);				// ƒ_ƒ~[‚Æ‚µ‚ÄŠm•Û‚µ‚Ä‚¢‚½êŠ‚É—v‘f”‚ğ‘‚­
+	m_writer.WriteUInt32(elementCount);				// ãƒ€ãƒŸãƒ¼ã¨ã—ã¦ç¢ºä¿ã—ã¦ã„ãŸå ´æ‰€ã«è¦ç´ æ•°ã‚’æ›¸ã
 	m_writer.Seek(curPos, SeekOrigin_Begin);
 	return true;
 }
@@ -129,8 +129,8 @@ bool JsonDOMHandler::OnEndArray(int elementCount)
 bool JsonDOMHandler::OnStartObject()
 {
 	m_writer.WriteUInt8(JsonType::Object);
-	m_startIndexStack.Push((size_t)m_writer.GetPosition());	// Œ»İˆÊ’u‚ğ Object ‚ÌŠJn“_‚Æ‚µ‚ÄŠo‚¦‚Ä‚¨‚­
-	m_writer.WriteUInt32(0);						// —v‘f” (ƒ_ƒ~[)
+	m_startIndexStack.Push((size_t)m_writer.GetPosition());	// ç¾åœ¨ä½ç½®ã‚’ Object ã®é–‹å§‹ç‚¹ã¨ã—ã¦è¦šãˆã¦ãŠã
+	m_writer.WriteUInt32(0);						// è¦ç´ æ•° (ãƒ€ãƒŸãƒ¼)
 	return true;
 }
 
@@ -139,7 +139,7 @@ bool JsonDOMHandler::OnStartObject()
 //-----------------------------------------------------------------------------
 bool JsonDOMHandler::OnKey(const TCHAR* str, int len)
 {
-	m_writer.WriteUInt8(0x80 | JsonType::String);		// ƒL[‚Å‚ ‚é‚±‚Æ‚ğ¦‚·‚½‚ß‚ÉÅãˆÊ bit ‚ğ—§‚Ä‚Ä‚¨‚­
+	m_writer.WriteUInt8(0x80 | JsonType::String);		// ã‚­ãƒ¼ã§ã‚ã‚‹ã“ã¨ã‚’ç¤ºã™ãŸã‚ã«æœ€ä¸Šä½ bit ã‚’ç«‹ã¦ã¦ãŠã
 	m_writer.WriteInt32(len);
 	m_writer.Write(str, sizeof(TCHAR) * len);
 	return true;
@@ -155,7 +155,7 @@ bool JsonDOMHandler::OnEndObject(int memberCount)
 
 	size_t curPos = (size_t)m_writer.GetPosition();
 	m_writer.Seek(index, SeekOrigin_Begin);
-	m_writer.WriteUInt32(memberCount);				// ƒ_ƒ~[‚Æ‚µ‚ÄŠm•Û‚µ‚Ä‚¢‚½êŠ‚É—v‘f”‚ğ‘‚­
+	m_writer.WriteUInt32(memberCount);				// ãƒ€ãƒŸãƒ¼ã¨ã—ã¦ç¢ºä¿ã—ã¦ã„ãŸå ´æ‰€ã«è¦ç´ æ•°ã‚’æ›¸ã
 	m_writer.Seek(curPos, SeekOrigin_Begin);
 	return true;
 }
@@ -190,13 +190,13 @@ void JsonDOMHandler::BuildValue(BinaryReader* reader, JsonValue* v)
 	case JsonType::String:
 	{
 		int len = reader->ReadInt32();
-		v->SetString(String((TCHAR*)m_valueRawData.GetBuffer((size_t)m_valueRawData.GetPosition()), len));	// ¶ƒƒ‚ƒŠ‚©‚ç•¶š—ñ‚ğ¶¬
-		m_valueRawData.Seek(len * sizeof(TCHAR), SeekOrigin_Current);								// ’¼Úƒƒ‚ƒŠ‚ğ“Ç‚ñ‚¾‚Ì‚Å©•ª‚Åi‚ß‚é
+		v->SetString(String((TCHAR*)m_valueRawData.GetBuffer((size_t)m_valueRawData.GetPosition()), len));	// ç”Ÿãƒ¡ãƒ¢ãƒªã‹ã‚‰æ–‡å­—åˆ—ã‚’ç”Ÿæˆ
+		m_valueRawData.Seek(len * sizeof(TCHAR), SeekOrigin_Current);								// ç›´æ¥ãƒ¡ãƒ¢ãƒªã‚’èª­ã‚“ã ã®ã§è‡ªåˆ†ã§é€²ã‚ã‚‹
 		break;
 	}
 	case JsonType::Array:
 		v->SetArray();
-		v->ResizeValueList(reader->ReadUInt32());	// Ÿ‚Ì uint32 ‚ª—v‘f”
+		v->ResizeValueList(reader->ReadUInt32());	// æ¬¡ã® uint32 ãŒè¦ç´ æ•°
 		for (int i = 0; i < v->GetItemCount(); i++)
 		{
 			BuildValue(reader, &v->GetAtValue(i));
@@ -205,7 +205,7 @@ void JsonDOMHandler::BuildValue(BinaryReader* reader, JsonValue* v)
 	case JsonType::Object:
 	{
 		v->SetObject();
-		v->ResizeMemberList(reader->ReadUInt32());	// Ÿ‚Ì uint32 ‚ª—v‘f”
+		v->ResizeMemberList(reader->ReadUInt32());	// æ¬¡ã® uint32 ãŒè¦ç´ æ•°
 		for (int i = 0; i < v->GetMemberCount(); i++)
 		{
 			BuildMember(reader, &v->GetAtMember(i));
@@ -223,14 +223,15 @@ void JsonDOMHandler::BuildValue(BinaryReader* reader, JsonValue* v)
 //-----------------------------------------------------------------------------
 void JsonDOMHandler::BuildMember(BinaryReader* reader, JsonMember* m)
 {
-	LN_ASSERT(reader->ReadUInt8() == (0x80 | JsonType::String));	// í•Ê‚Í•K‚¸ Key ‚Å‚ ‚é‚Í‚¸
+	LN_ASSERT(reader->ReadUInt8() == (0x80 | JsonType::String));	// ç¨®åˆ¥ã¯å¿…ãš Key ã§ã‚ã‚‹ã¯ãš
 
-	// ƒL[•¶š—ñ
+	// ã‚­ãƒ¼æ–‡å­—åˆ—
+	uint8_t type = reader->ReadUInt8();
 	int len = reader->ReadInt32();
-	m->Name = String((TCHAR*)m_valueRawData.GetBuffer((size_t)m_valueRawData.GetPosition()), len);	// ¶ƒƒ‚ƒŠ‚©‚ç•¶š—ñ‚ğ¶¬
-	m_valueRawData.Seek(len * sizeof(TCHAR), SeekOrigin_Current);							// ’¼Úƒƒ‚ƒŠ‚ğ“Ç‚ñ‚¾‚Ì‚Å©•ª‚Åi‚ß‚é
+	m->Name = String((TCHAR*)m_valueRawData.GetBuffer((size_t)m_valueRawData.GetPosition()), len);	// ç”Ÿãƒ¡ãƒ¢ãƒªã‹ã‚‰æ–‡å­—åˆ—ã‚’ç”Ÿæˆ
+	m_valueRawData.Seek(len * sizeof(TCHAR), SeekOrigin_Current);							// ç›´æ¥ãƒ¡ãƒ¢ãƒªã‚’èª­ã‚“ã ã®ã§è‡ªåˆ†ã§é€²ã‚ã‚‹
 
-	// ’l
+	// å€¤
 	BuildValue(reader, &m->Value);
 }
 

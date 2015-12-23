@@ -87,7 +87,7 @@ TEST_F(Test_IO_FileSystem, Copy_Delete)
 {
 	String src1 = LOCALFILE("TestData/test1.txt");
 	String src2 = LOCALFILE("TestData/test2.txt");
-	String dest = LOCALFILE("TestData/test_copy.txt");
+	String dest = TEMPFILE("test_copy.txt");
 	uint64_t src1Size = FileSystem::GetFileSize(src1.c_str());
 	uint64_t src2Size = FileSystem::GetFileSize(src2.c_str());
 

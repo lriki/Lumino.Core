@@ -1,4 +1,4 @@
-
+ï»¿
 #include "../Internal.h"
 #include <Lumino/Base/StringTraits.h>
 #include <Lumino/Json/JsonWriter.h>
@@ -46,7 +46,7 @@ void JsonWriter::WriteEndObject()
 	m_levelStack.Pop();
 	OnEndObject();
 
-	if (!m_levelStack.IsEmpty()) {	// ƒ‹[ƒg—v‘f‚ÌƒNƒ[ƒY‚É”õ‚¦‚é
+	if (!m_levelStack.IsEmpty()) {	// ãƒ«ãƒ¼ãƒˆè¦ç´ ã®ã‚¯ãƒ­ãƒ¼ã‚ºã«å‚™ãˆã‚‹
 		m_levelStack.GetTop().valueCount++;
 	}
 }
