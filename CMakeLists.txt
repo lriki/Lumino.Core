@@ -166,12 +166,14 @@ set(LN_SOURCES_IO
 
 set(LN_SOURCES_Json
 	include/Lumino/Json/Common.h
+	include/Lumino/Json/JsonDiagnostics.h
 	include/Lumino/Json/JsonDocument.h
 	include/Lumino/Json/JsonError.h
 	include/Lumino/Json/JsonHandler.h
 	include/Lumino/Json/JsonReader.h
 	include/Lumino/Json/JsonValue.h
 	include/Lumino/Json/JsonWriter.h
+	src/Json/JsonDiagnostics.cpp
 	src/Json/JsonDocument.cpp
 	src/Json/JsonHandler.cpp
 	src/Json/JsonReader.cpp
