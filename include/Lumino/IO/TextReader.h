@@ -34,7 +34,8 @@ public:
 		@brief		現在位置から 1 行分の文字列を読み取り、現在位置を移動します。
 		@param[out]	line	: 読み取った文字列を格納する変数のポインタ (改行文字は含まない)
 		@return		既に EOF に到達している場合は false を返します。
-		@details	line が NULL の場合は現在位置を 1 行すすめるだけで、文字列を返しません。
+		@details	CRLF("\r\n") は1つの改行とみなします。 
+					line が NULL の場合は現在位置を 1 行すすめるだけで、文字列を返しません。
 	*/
 	virtual bool ReadLine(String* line) = 0;
 	

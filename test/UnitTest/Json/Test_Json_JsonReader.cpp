@@ -49,10 +49,10 @@ TEST_F(Test_Json_JsonReader, Basic2)
 	// <Test> JSON のルート要素は配列も可能。
 	// <Test> 先頭の空白は読み飛ばす。
 	{
-		//JsonReader2 reader(_T(" \t[]"));
-		//ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::StartArray, reader.GetTokenType());
-		//ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::EndArray, reader.GetTokenType());
-		//ASSERT_EQ(false, reader.Read());
+		JsonReader2 reader(_T(" \t[]"));
+		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::StartArray, reader.GetTokenType());
+		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::EndArray, reader.GetTokenType());
+		ASSERT_EQ(false, reader.Read());
 	}
 
 	// <Test> オブジェクト
@@ -68,7 +68,7 @@ TEST_F(Test_Json_JsonReader, Basic2)
 	}
 	// <Test> 複数のメンバを持つオブジェクト
 	{
-		JsonReader2 reader(_T("{\"name\":\"str\",\"name2\":\"str2\",}"));
+		JsonReader2 reader(_T("{\"name\":\"str\",\"name2\":\"str2\"}"));
 		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::StartObject, reader.GetTokenType());
 		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::PropertyName, reader.GetTokenType()); ASSERT_EQ(_T("name"), reader.GetValue());
 		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::String, reader.GetTokenType()); ASSERT_EQ(_T("str"), reader.GetValue());
@@ -77,6 +77,66 @@ TEST_F(Test_Json_JsonReader, Basic2)
 		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::EndObject, reader.GetTokenType());
 		ASSERT_EQ(false, reader.Read());
 	}
+	// <Test> null
+	// <Test> true
+	// <Test> false
+	{
+		JsonReader2 reader(_T("[null,true,false]"));
+		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::StartArray, reader.GetTokenType());
+		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::Null, reader.GetTokenType());
+		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::Boolean, reader.GetTokenType()); ASSERT_EQ(_T("true"), reader.GetValue());
+		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::Boolean, reader.GetTokenType()); ASSERT_EQ(_T("false"), reader.GetValue());
+		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::EndArray, reader.GetTokenType());
+		ASSERT_EQ(false, reader.Read());
+	}
 }
 
+//---------------------------------------------------------------------
+TEST_F(Test_Json_JsonReader, Error)
+{
+	// <Test> UnterminatedString
+	{
+		JsonReader2 reader(_T("{\""));
+		while (reader.TryRead());
+		ASSERT_EQ(JsonParseError2::UnterminatedString, reader.GetError().code);
+	}
+	// <Test> InvalidStringChar
+	{
+		JsonReader2 reader(_T("{\"\a\"}"));
+		while (reader.TryRead());
+		ASSERT_EQ(JsonParseError2::InvalidStringChar, reader.GetError().code);
+	}
+	// <Test> InvalidStringEscape
+	{
+		JsonReader2 reader(_T("{\"\\a\"}"));
+		while (reader.TryRead());
+		ASSERT_EQ(JsonParseError2::InvalidStringEscape, reader.GetError().code);
+	}
+	// <Test> InvalidObjectClosing
+	{
+		JsonReader2 reader(_T("{\"\":\"\",}"));
+		while (reader.TryRead());
+		ASSERT_EQ(JsonParseError2::InvalidObjectClosing, reader.GetError().code);
+		ASSERT_EQ(7, reader.GetError().column);	// } の位置
+	}
+	// <Test> ArrayInvalidClosing
+	{
+		JsonReader2 reader(_T("[\"\",]"));
+		while (reader.TryRead());
+		ASSERT_EQ(JsonParseError2::ArrayInvalidClosing, reader.GetError().code);
+		ASSERT_EQ(4, reader.GetError().column);	// ] の位置
+	}
+	// <Test> ValueInvalid
+	{
+		JsonReader2 reader(_T("[n]"));
+		while (reader.TryRead());
+		ASSERT_EQ(JsonParseError2::ValueInvalid, reader.GetError().code);
+		JsonReader2 reader2(_T("[t]"));
+		while (reader2.TryRead());
+		ASSERT_EQ(JsonParseError2::ValueInvalid, reader.GetError().code);
+		JsonReader2 reader3(_T("[f]"));
+		while (reader3.TryRead());
+		ASSERT_EQ(JsonParseError2::ValueInvalid, reader.GetError().code);
+	}
+}
 

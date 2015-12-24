@@ -50,6 +50,140 @@ private:
 
 
 
+
+
+namespace detail
+{
+
+class PositioningTextReader
+	: public TextReader
+{
+public:
+	PositioningTextReader(TextReader* innter)
+	{
+		m_innter = innter;
+		m_pos = 0;
+		m_line = 0;
+		m_column = 0;
+		m_lastCR = false;
+		//m_matched = 0;
+	}
+
+	virtual int Peek() override
+	{
+		return m_innter->Peek();
+	}
+
+	virtual int Read() override
+	{
+		int c = m_innter->Read();
+		if (c >= 0) {
+			AdvancePosition((TCHAR)c);
+		}
+		return c;
+	}
+
+	// TODO: ReadLine と ReadToEnd は Read を実装すれば使えるようにするべき
+	virtual bool ReadLine(String* line) override
+	{
+		LN_THROW(0, NotImplementedException);
+		//bool r = m_innter->ReadLine(line);
+		//++m_line;
+		//m_column = 0;
+		//return r;
+	}
+
+	virtual String ReadToEnd() override
+	{
+		LN_THROW(0, NotImplementedException);
+	}
+
+	virtual bool IsEOF() override
+	{
+		return m_innter->IsEOF();
+	}
+
+	int GetPosition() const
+	{
+		return m_pos;
+	}
+
+	int GetLineNumber() const
+	{
+		return m_line;
+	}
+
+	int GetColumnNumber() const
+	{
+		return m_column;
+	}
+
+private:
+
+	void AdvancePosition(TCHAR ch)
+	{
+		++m_pos;
+		if (m_lastCR)
+		{
+			m_lastCR = false;
+			if (ch == '\n')
+			{
+				return;
+			}
+		}
+		
+		if (ch == '\r' || ch == '\n')
+		{
+			++m_line;
+			m_column = 0;
+			if (ch == '\r') {
+				m_lastCR = true;
+			}
+			return;
+		}
+
+		++m_column;
+
+		//if (m_lastCR)
+		//{
+		//	if (ch == '/n')
+		//	{
+		//		/* CRLF */
+		//		++m_line;
+		//		m_column = 0;
+		//		m_lastCR = false;
+		//		return;
+		//	}
+		//	else
+		//	{
+		//		/* CR */
+
+		//	}
+		//}
+		//if (ch == '/r')
+		//{
+		//	m_lastCR = true;
+		//	return;
+		//}
+		//else if (ch == '/n')
+		//{
+
+		//}
+	}
+
+private:
+	RefPtr<TextReader>	m_innter;
+	int					m_pos;
+	int					m_line;
+	int					m_column;
+	bool				m_lastCR;
+	//int					m_matched;
+};
+
+}
+
+
+
 enum class JsonToken
 {
 	None = 0,
@@ -69,8 +203,11 @@ enum class JsonToken
 	/** オブジェクトのプロパティの名前 */
 	PropertyName,
 
-	/** "null" トークン */
-	//Null,
+	/** "null" 値 */
+	Null,
+
+	/** 真偽値 ("true" または "false") */
+	Boolean,
 
 	/** 文字列値 */
 	String,
@@ -91,6 +228,8 @@ public:
 	*/
 	bool Read();
 
+	bool TryRead();
+
 	/**
 		@brief		現在のノードの種類を取得します。
 	*/
@@ -102,11 +241,15 @@ public:
 	*/
 	const String& GetValue() const;
 
+	const JsonError2& GetError() const;
+
 private:
 	enum class State
 	{
 		Start,
-		Object,
+		ObjectStart,	// { の次の状態。次は } でも良い。
+		Object,			// , の次の状態。次は } ではダメ。
+		ArrayStart,
 		Array,
 		Property,
 		PostValue,
@@ -133,25 +276,31 @@ private:
 		ContainerType		containerType = ContainerType::None;
 	};
 
-	RefPtr<TextReader>		m_reader;
+	//RefPtr<TextReader>		m_reader;
+	RefPtr<detail::PositioningTextReader>	m_reader;
 	//State					m_currentState;
 	ParserState				m_currentState;
 	Token					m_currentToken;
 	String					m_value;
 	Array<TCHAR>			m_textCache;
 	Stack<ParserState>		m_stateStack;
+	JsonError2				m_error;
 
 	JsonReader2();
 	bool SkipWhitespace();
 	bool ParseValue();
+	bool ParseNull();
+	bool ParseTrue();
+	bool ParseFalse();
 	bool ParseObject();
 	bool TryParsePropertyName();
 	bool ParseString(bool isKey);
 	bool ParsePostValue(bool* outSkip);
 
-	void SetToken(JsonToken newToken, bool hasValue);
+	bool SetToken(JsonToken newToken, const TCHAR* value = nullptr, int valueLen = 0);
 	void PushState(/*ContainerType containerType*/);
 	void PopState();
+	void SetError(JsonParseError2 code, const String& message = String::GetEmpty());
 };
 
 LN_NAMESPACE_END

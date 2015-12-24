@@ -48,4 +48,37 @@ public:
 	String			Message;
 };
 
+
+
+
+
+/** JSON 解析のエラーコード */
+LN_ENUM(JsonParseError2)
+{
+	NoError = 0,						/**< エラーは発生していない */
+
+	UnterminatedString,		/**< 文字列の終端が見つかる前に EOF が見つかった。*/
+	InvalidStringChar,		/**< 文字列内に JSON では使用できない文字が見つかった。(制御文字など)*/
+	InvalidStringEscape,	/**< 文字列内に無効なエスケープシーケンスが見つかった。*/
+	UnexpectedToken,		/**< 予期しないトークンが見つかった。*/
+	InvalidObjectClosing,	/**< オブジェクトが正しく閉じられていない。*/
+
+	ArrayInvalidClosing,	/**< 配列が正しく閉じられていない。*/
+
+	ValueInvalid,			/**< 無効な値 */
+};
+LN_ENUM_DECLARE(JsonParseError2);
+
+/**
+	@brief	JSON 解析中のエラーを表します。
+*/
+class JsonError2
+{
+public:
+	JsonParseError2	code = JsonParseError2::NoError;
+	int				line = 0;
+	int				column = 0;
+	String			message;
+};
+
 LN_NAMESPACE_END
