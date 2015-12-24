@@ -3,7 +3,6 @@
 */
 #pragma once
 #include "Array.h"
-#include "NonCopyable.h"
 
 LN_NAMESPACE_BEGIN
 
@@ -26,8 +25,9 @@ struct CollectionTraits<T*>
 	@details	Collection は、継承して独自のコレクションを定義することを想定した Array クラスのラッパーです。
 */
 template<typename T, typename TAllocator = STLAllocator<T> >
-class Collection : private NonCopyable
+class Collection
 {
+	LN_DISALLOW_COPY_AND_ASSIGN(Collection);
 public:
 	typedef Array<T>							internal_array;
 	typedef typename internal_array::value_type			value_type;
@@ -111,6 +111,9 @@ public:
 		ClearItems();
 	}
 
+	/** 配列用のメモリを指定したサイズで確保します。*/
+	void Reserve(int size) { m_array.Reserve(size); }
+
 	/** 指定した要素がこの配列内に存在するかどうかを判断します。*/
 	bool Contains(const T& item) const
 	{
@@ -135,22 +138,25 @@ public:
 	}
 
 	/** 指定したインデックスに要素を設定します。*/
-	void SetAt(int index, T& item)
-	{
-		SetItem(index, item);
-	}
-
-	/** 指定したインデックスに要素を設定します。*/
-	void SetAt(int index, const T& item)
-	{
-		SetItemConst(index, item);
-	}
+	void SetAt(int index, const T& item) { m_array.SetAt(index, item); }
 
 	/** 指定したインデックスにある要素への参照を取得します。*/
-	reference GetAt(int index)
-	{
-		return m_array.GetAt(index);
-	}
+	reference GetAt(int index) { return m_array.GetAt(index); }
+
+	/** 指定したインデックスにある要素への参照を取得します。*/
+	const_reference GetAt(int index) const { return m_array.GetAt(index); }
+
+	/** 先頭要素の参照を返します。*/
+	reference GetFront() { return m_array.GetFront(); }
+
+	/** 先頭要素の参照を返します。*/
+	const_reference GetFront() const { return m_array.GetFront(); }
+
+	/** 終端要素の参照を返します。*/
+	reference GetLast() { return m_array.GetLast(); }
+
+	/** 終端要素の参照を返します。*/
+	const_reference GetLast() const { return m_array.GetLast(); }
 
 	/** 指定したインデックスにある要素への参照を取得します。*/
 	//reference operator[] (int index)
@@ -173,6 +179,9 @@ public:
 	iterator		end()			{ return iterator(m_array.end()); }
 	const_iterator	end() const		{ return const_iterator(m_array.end()); }
 
+	const_iterator	cbegin() const	{ return const_iterator(m_array.begin()); }
+	const_iterator	cend() const	{ return const_iterator(m_array.end()); }
+
 	/** @} */
 
 public:
@@ -189,10 +198,12 @@ public:
 		bool operator<(const const_iterator& right) const	{ return m_internalItr < right.m_internalItr; }
 
 		const_reference operator*() const	{ return *m_internalItr; }
-		pointer operator->() const			{ return m_internalItr.operator->(); }
+		const_pointer operator->() const	{ return m_internalItr.operator->(); }
 
 		const_iterator& operator++()		{ ++m_internalItr; return (*this); }
 		const_iterator operator++(int)		{ const_iterator tmp = *this; ++(*this); return tmp; }
+
+		difference_type operator-(const const_iterator& right) const { return (m_internalItr - right.m_internalItr); }
 
 	private:
 		friend class Collection;
@@ -217,6 +228,8 @@ public:
 
 		iterator& operator++()				{ ++m_internalItr; return (*this); }
 		iterator operator++(int)			{ iterator tmp = *this; ++(*this); return tmp; }
+
+		difference_type operator-(const const_iterator& right) const { return (m_internalItr - right.m_internalItr); }
 
 	private:
 		friend class Collection;
