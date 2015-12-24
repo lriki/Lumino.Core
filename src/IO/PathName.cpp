@@ -121,6 +121,17 @@ void GenericPathName<TChar>::Append(const TChar* path)
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
+GenericPathName<TChar> GenericPathName<TChar>::GetFileNameWithoutExtension() const
+{
+	TChar path[LN_MAX_PATH];
+	PathTraits::GetFileNameWithoutExtension(m_path.c_str(), path);
+	return GenericPathName<TChar>(path);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
 const GenericString<TChar> GenericPathName<TChar>::GetStrEndSeparator() const
 {
 	GenericStringT newStr = m_path;
