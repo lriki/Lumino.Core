@@ -4,8 +4,8 @@
 #include <Lumino/Base/ByteBuffer.h>
 #include <Lumino/Text/Encoding.h>
 #include <Lumino/Base/RefObject.h>
-#include <Lumino/Base/StringTraits.h>
 #include <Lumino/Base/String.h>
+#include <Lumino/Base/StringTraits.h>
 #include <Lumino/Base/Locale.h>
 #include <Lumino/Base/Environment.h>
 #include <Lumino/Base/StringArray.h>

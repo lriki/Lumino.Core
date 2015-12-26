@@ -2,9 +2,9 @@
 #include "../Internal.h"
 #include <math.h>
 #include <wctype.h>
-#include "../../include/Lumino/Base/RefObject.h"
-#include "../../include/Lumino/Base/String.h"
-#include "../../include/Lumino/Base/StringTraits.h"
+#include <Lumino/Base/RefObject.h>
+#include <Lumino/Base/String.h>
+#include <Lumino/Base/StringTraits.h>
 #include <Lumino/Base/StringArray.h>
 
 // for ToDouble()

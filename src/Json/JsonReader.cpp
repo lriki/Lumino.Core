@@ -1,6 +1,6 @@
 ﻿
 #include "../Internal.h"
-#include <Lumino/Base/StringTraits.h>
+#include <Lumino/Base/String.h>
 #include <Lumino/IO/StringReader.h>
 #include <Lumino/Json/JsonReader.h>
 

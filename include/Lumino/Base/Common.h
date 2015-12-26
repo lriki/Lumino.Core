@@ -187,21 +187,44 @@
 /** Root namespace. */
 LN_NAMESPACE_BEGIN
 
-	class ImplAccessor;
+class ImplAccessor;
 
-	template<typename BaseType = char>	// GCC では GenericString 内部に定義できないので外に出している
-	class GenericStringTraits
-	{
-	public:
-		typedef char	XCHAR;
-		typedef wchar_t	YCHAR;
-	};
-	template<>
-	class GenericStringTraits<wchar_t>
-	{
-	public:
-		typedef wchar_t	XCHAR;
-		typedef char	YCHAR;
-	};
+template<typename BaseType = char>	// GCC では GenericString 内部に定義できないので外に出している
+class GenericStringTraits
+{
+public:
+	typedef char	XCHAR;
+	typedef wchar_t	YCHAR;
+};
+template<>
+class GenericStringTraits<wchar_t>
+{
+public:
+	typedef wchar_t	XCHAR;
+	typedef char	YCHAR;
+};
+
+/** 大文字と小文字の区別指定 */
+enum class CaseSensitivity
+{
+	CaseSensitive = 0,	/**< 大文字と小文字を区別する */
+	CaseInsensitive,	/**< 大文字と小文字を区別しない */
+};
+
+/** String::Split() の出力方法 */
+enum class StringSplitOptions
+{
+	None = 0,			/**< 出力は空の文字列を含む */
+	RemoveEmptyEntries,	/**< 出力は空の文字列を含まない */
+};
+
+/** */
+enum class NumberConversionResult
+{
+	Success = 0,
+	ArgsError,
+	FormatError,
+	Overflow,
+};
 
 LN_NAMESPACE_END

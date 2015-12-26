@@ -20,21 +20,6 @@ template<typename TChar> class GenericStringArray;
 namespace detail { template<typename TChar> class GenericStringCore; }
 namespace tr { class Variant; }
 
-
-/** 大文字と小文字の区別指定 */
-enum class CaseSensitivity
-{
-	CaseSensitive = 0,	/**< 大文字と小文字を区別する */
-	CaseInsensitive,	/**< 大文字と小文字を区別しない */
-};
-
-/** String::Split() の出力方法 */
-enum class StringSplitOptions
-{
-	None = 0,			/**< 出力は空の文字列を含む */
-	RemoveEmptyEntries,	/**< 出力は空の文字列を含まない */
-};
-
 /**
 	@brief		文字列を表すクラスです。
 
@@ -585,4 +570,5 @@ public:
 
 LN_NAMESPACE_END
 
+#include "StringTraits.h"
 #include "StringRef.h"

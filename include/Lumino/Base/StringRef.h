@@ -1,20 +1,21 @@
-/**
+ï»¿/**
 	@file	StringRef.h
 */
 #pragma once
 #include <cstddef>
+#include "StringTraits.h"
 
 LN_NAMESPACE_BEGIN
 
 /**
-	@brief	‚ ‚é•¶š—ñ‚É‘Î‚·‚é•”•ª•¶š—ñ‚ÌQÆ‚ğ•Û‚µ‚Ü‚·B
+	@brief	ã‚ã‚‹æ–‡å­—åˆ—ã«å¯¾ã™ã‚‹éƒ¨åˆ†æ–‡å­—åˆ—ã®å‚ç…§ã‚’ä¿æŒã—ã¾ã™ã€‚
 */
 template<typename TChar>
 class GenericStringRef
 {
 public:
 	GenericStringRef() : m_str(nullptr), m_pos(0), m_len(0) {}
-	GenericStringRef(nullptr_t) : GenericStringRef(){}
+	GenericStringRef(std::nullptr_t) : GenericStringRef(){}
 	GenericStringRef(const TChar* str)
 		: GenericStringRef()
 	{
@@ -38,7 +39,7 @@ public:
 	}
 
 	GenericStringRef(GenericStringRef const&) = default;
-	//GenericStringRef(GenericStringRef&&) = default;	// VS2013 ‚ªƒ€[ƒuƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Ì default ‚ğ¶¬‚µ‚È‚¢‚Ì‚Å‚Æ‚è‚ ‚¦‚¸–³‚µ‚ÅBhttp://stackoverflow.com/questions/24573963/move-constructor-invalid-type-for-defaulted-constructor-vs-2013
+	//GenericStringRef(GenericStringRef&&) = default;	// VS2013 ãŒãƒ ãƒ¼ãƒ–ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã® default ã‚’ç”Ÿæˆã—ãªã„ã®ã§ã¨ã‚Šã‚ãˆãšç„¡ã—ã§ã€‚http://stackoverflow.com/questions/24573963/move-constructor-invalid-type-for-defaulted-constructor-vs-2013
 	GenericStringRef& operator =(GenericStringRef const&) = default;
 	//GenericStringRef& operator =(GenericStringRef&&) = default;
 	~GenericStringRef() = default;

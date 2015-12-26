@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "../Internal.h"
-#include "../../include/Lumino/Base/StringTraits.h"
+#include "../../include/Lumino/Base/String.h"
 #include "../../include/Lumino/Text/UnicodeUtils.h"
 #include "../../include/Lumino/Text/EncodingDetector.h"
 

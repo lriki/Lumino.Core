@@ -1,6 +1,6 @@
 ﻿
 #include "../Internal.h"
-#include "../../include/Lumino/Base/StringTraits.h"
+#include "../../include/Lumino/Base/String.h"
 #include "../../include/Lumino/IO/PathTraits.h"
 #include "../../include/Lumino/IO/DirectoryUtils.h"
 

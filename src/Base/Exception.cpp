@@ -165,7 +165,7 @@
 #include "../Internal.h"
 #include <Lumino/Base/CRT.h>
 #include <Lumino/Base/Exception.h>
-#include <Lumino/Base/StringTraits.h>
+#include <Lumino/Base/String.h>
 #include <Lumino/Base/Logger.h>
 #include <Lumino/Base/Resource.h>
 

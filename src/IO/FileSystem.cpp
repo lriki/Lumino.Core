@@ -2,7 +2,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include "../Internal.h"
-#include "../../include/Lumino/Base/StringTraits.h"
+#include "../../include/Lumino/Base/String.h"
 #include "../../include/Lumino/Base/ByteBuffer.h"
 #include "../../include/Lumino/Text/Encoding.h"
 #include "../../include/Lumino/IO/FileStream.h"

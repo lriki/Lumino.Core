@@ -4,19 +4,14 @@
 #include <ctype.h>
 #include <wctype.h>
 #include <string>
-#include "String.h"
+//#include "String.h"
 #include "STLUtils.h"
 #include "Array.h"
 
 LN_NAMESPACE_BEGIN
 
-enum class NumberConversionResult
-{
-	Success = 0,
-	ArgsError,
-	FormatError,
-	Overflow,
-};
+template<typename TChar> class GenericString;
+template<typename TChar> class GenericStringArray;
 
 /**
 	@brief		文字列ユーティリティ

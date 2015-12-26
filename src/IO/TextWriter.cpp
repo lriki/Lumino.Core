@@ -7,7 +7,7 @@
 		ちなみに Qt は QTextStream::operator<<。
 */
 #include "../Internal.h"
-#include <Lumino/Base/StringTraits.h>
+#include <Lumino/Base/String.h>
 #include <Lumino/IO/TextWriter.h>
 
 LN_NAMESPACE_BEGIN

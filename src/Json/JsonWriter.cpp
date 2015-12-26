@@ -1,6 +1,6 @@
 ﻿
 #include "../Internal.h"
-#include <Lumino/Base/StringTraits.h>
+#include <Lumino/Base/String.h>
 #include <Lumino/Json/JsonWriter.h>
 
 LN_NAMESPACE_BEGIN
