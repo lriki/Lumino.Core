@@ -161,7 +161,7 @@ const wchar_t* Environment::GetNewLine<wchar_t>()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-#ifdef LN_OS_WIN32
+#if defined(LN_OS_WIN32)
 template<>
 void Environment::GetSpecialFolderPath(SpecialFolder specialFolder, char* outPath)
 {
@@ -228,6 +228,46 @@ void Environment::GetSpecialFolderPath(SpecialFolder specialFolder, TChar* outPa
 		break;
 	}
 	LN_THROW(0, InvalidOperationException);
+}
+template void Environment::GetSpecialFolderPath(SpecialFolder specialFolder, char* outPath);
+template void Environment::GetSpecialFolderPath(SpecialFolder specialFolder, wchar_t* outPath);
+
+#elif defined(LN_OS_MAC)
+
+template<typename TChar>
+void Environment::GetSpecialFolderPath(SpecialFolder specialFolder, TChar* outPath)
+{
+	short domain = kOnAppropriateDisk;
+
+	OSType type = kDesktopFolderType;
+	switch (specialFolder)
+	{
+		case SpecialFolder::ApplicationData:
+			type = kApplicationSupportFolderType;
+			break;
+		case SpecialFolder::Temporary:
+			type = kTemporaryFolderType;
+			break;
+		default:
+			LN_THROW(0, ArgumentException);
+			break;
+	}
+
+	FSRef ref;
+	if (FSFindFolder(domain, translateLocation(type), false, &ref) != 0) {
+		LN_THROW(0, SystemException);
+		return;
+	}
+
+	ByteBuffer buf(2048);
+	if (FSRefMakePath(&ref, reinterpret_cast<UInt8 *>(buf.GetData()), buf.GetSize()) != noErr) {
+		LN_THROW(0, SystemException);
+		return;
+	}
+
+	GenericString<TChar> path;
+	path.AssignCStr((const char*)buf.GetConstData(), buf.GetSize());
+	StringTraits::tstrcpy(outPath, LN_MAX_PATH, path.c_str());
 }
 template void Environment::GetSpecialFolderPath(SpecialFolder specialFolder, char* outPath);
 template void Environment::GetSpecialFolderPath(SpecialFolder specialFolder, wchar_t* outPath);

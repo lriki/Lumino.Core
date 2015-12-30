@@ -518,6 +518,10 @@ LN_EXCEPTION_BASIC_CONSTRUCTOR_IMPLEMENT(EndOfStreamException, InternalResource:
 //=============================================================================
 LN_EXCEPTION_BASIC_CONSTRUCTOR_IMPLEMENT(EncodingException, InternalResource::EncodingError);
 
+//=============================================================================
+// EncodingException
+//=============================================================================
+LN_EXCEPTION_BASIC_CONSTRUCTOR_IMPLEMENT(SystemException, InternalResource::SystemError);
 
 
 #ifdef LN_OS_WIN32

@@ -4,7 +4,11 @@
 #include <stdio.h>
 #include <windows.h>
 #include <stdlib.h>
+
+#pragma warning( push )
+#pragma warning ( disable : 4091 )	// VS2015 で dbghelp.h が標準ヘッダなのに警告出すのが気になるので。
 #include <dbghelp.h>
+#pragma warning( pop )
 
 #ifdef LN_DEBUG
 #else

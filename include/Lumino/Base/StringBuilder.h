@@ -60,7 +60,7 @@ public:
 	template<typename... TArgs>
 	void AppendFormat(const GenericStringRef<TChar>& format, const TArgs&... args);
 
-	void AppendFormatInternal(const GenericStringRef<TChar>& format, typename Formatter<TChar>::FormatList* args);
+	void AppendFormatInternal(const GenericStringRef<TChar>& format, typename detail::FormatList<TChar>* args);
 };
 
 
@@ -77,7 +77,7 @@ void GenericStringBuilder<TChar>::AppendFormat(const GenericStringRef<TChar>& fo
 }
 
 template<typename TChar>
-void GenericStringBuilder<TChar>::AppendFormatInternal(const GenericStringRef<TChar>& format, typename Formatter<TChar>::FormatList* args)
+void GenericStringBuilder<TChar>::AppendFormatInternal(const GenericStringRef<TChar>& format, typename detail::FormatList<TChar>* args)
 {
 	const TChar* pos = format.GetBegin();
 	const TChar* end = format.GetEnd();

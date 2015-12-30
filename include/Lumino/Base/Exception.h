@@ -416,6 +416,19 @@ public:
 	virtual Exception* Copy() const { return LN_NEW EncodingException(*this); }
 };
 
+/**
+	@brief	システムAPIの呼び出しで予期しないエラーが発生した。
+*/
+class SystemException
+	: public Exception
+{
+public:
+	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECLARE(SystemException);
+
+public:
+	// override Exception
+	virtual Exception* Copy() const { return LN_NEW SystemException(*this); }
+};
 
 #ifdef LN_OS_WIN32
 /**

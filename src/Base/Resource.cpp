@@ -48,6 +48,7 @@ const String InternalResource::InvalidFormatError(_T("InvalidFormatError"));
 const String InternalResource::NotImplementedError(_T("NotImplementedError"));
 const String InternalResource::KeyNotFoundError(_T("KeyNotFoundError"));
 const String InternalResource::EncodingError(_T("EncodingError"));
+const String InternalResource::SystemError(_T("SystemError"));
 const String InternalResource::OverflowError(_T("OverflowError"));
 const String InternalResource::Win32Error(_T("Win32Error"));
 const String InternalResource::ComError(_T("ComError"));
@@ -74,6 +75,7 @@ public:
 		AddString(InternalResource::InvalidFormatError, _T("入力データの形式が不正、あるいはサポートされていません。"));
 		AddString(InternalResource::EndOfStreamError, _T("ストリームの末尾を越えてアクセスしようとしました。"));
 		AddString(InternalResource::EncodingError, _T("マッピングできない文字または不正シーケンスが見つかりました。"));
+		AddString(InternalResource::SystemError, _T("システムAPIの呼び出しで予期しないエラーが発生しました。"));
 		AddString(InternalResource::Win32Error, _T("WindowsAPI の呼び出しでエラーが発生しました。"));
 		AddString(InternalResource::ComError, _T("COM の呼び出しでエラーが発生しました。"));
 

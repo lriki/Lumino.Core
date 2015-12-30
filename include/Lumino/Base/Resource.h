@@ -50,6 +50,7 @@ public:
 	static const String InvalidFormatError;
 	static const String EndOfStreamError;
 	static const String EncodingError;
+	static const String SystemError;
 	static const String Win32Error;
 	static const String ComError;
 

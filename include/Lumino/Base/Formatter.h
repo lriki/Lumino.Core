@@ -11,6 +11,98 @@
 
 LN_NAMESPACE_BEGIN
 
+namespace detail
+{
+
+// 引数1つ分。データへの参照は void* で持つ
+template<typename TChar>
+class FormatArg
+{
+public:
+	FormatArg() {}
+
+	template<typename T>
+	FormatArg(const T& value)
+		: m_value(static_cast<const void*>(&value))
+		, m_formatImpl(&FormatImpl<T>)	// T に応じた変換関数のポインタ
+	{
+	}
+
+	GenericString<TChar> DoFormat(const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam) const
+	{
+		return m_formatImpl(format, formatParam, m_value);
+	}
+
+private:
+	template<typename T>
+	static GenericString<TChar> FormatImpl(const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const void* value)
+	{
+		return Formatter2<TChar, T>::Format(format, formatParam, *static_cast<const T*>(value));
+		//return FormatValue(format, formatParam, *static_cast<const T*>(value));
+	}
+
+	const void* m_value;
+	GenericString<TChar>(*m_formatImpl)(const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const void* value);
+};
+
+template<typename TChar>
+class FormatList
+{
+public:
+	FormatList(FormatArg<TChar>* argList, int count)
+		: m_argList(argList), m_count(count)
+	{}
+
+	const FormatArg<TChar>& GetArg(int index) const { return m_argList[index]; }
+	int GetCount() const { return m_count; }
+
+private:
+	//friend void vformat(std::ostream& out, const char* fmt, const FormatList& list);
+	const FormatArg<TChar>* m_argList;
+	int m_count;
+};
+
+
+template<typename TChar, int N>
+class FormatListN : public FormatList<TChar>
+{
+public:
+	template<typename... Args>
+	FormatListN(const Args&... args)
+		: FormatList<TChar>(&m_argsStore[0], N)
+		, m_argsStore LN_FORMAT_BRACED_INIT_WORKAROUND({ FormatArg(args)... })	// この部分は → のように展開される {FormatArg(e1), FormatArg(e2), FormatArg(e3)} http://en.cppreference.com/w/cpp/language/parameter_pack
+	{
+		static_assert(sizeof...(args) == N, "Invalid args count.");
+	}
+
+private:
+	std::array<FormatArg<TChar>, N> m_argsStore;
+};
+
+// 引数リスト0個の場合の特殊化
+template<typename TChar>
+class FormatListN<TChar, 0> : public FormatList<TChar>
+{
+public: FormatListN() : FormatList<TChar>(0, 0) {}
+};
+
+//template<> class FormatListN<0> : public FormatList
+//{
+//public: FormatListN() : FormatList(0, 0) {}
+//};
+
+
+
+
+
+
+template<typename TChar, typename... Args>
+static FormatListN<TChar, sizeof...(Args)> MakeArgList(const Args&... args)
+{
+	return FormatListN<TChar, sizeof...(args)>(args...);
+}
+
+} // namespace detail
 
 /**
 	@brief		
@@ -32,88 +124,6 @@ public:
 
 
 
-
-
-	// 引数1つ分。データへの参照は void* で持つ
-	class FormatArg
-	{
-	public:
-		FormatArg() {}
-
-		template<typename T>
-		FormatArg(const T& value)
-			: m_value(static_cast<const void*>(&value))
-			, m_formatImpl(&FormatImpl<T>)	// T に応じた変換関数のポインタ
-		{
-		}
-
-		String DoFormat(const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam) const
-		{
-			return m_formatImpl(format, formatParam, m_value);
-		}
-
-	private:
-		template<typename T>
-		static String FormatImpl(const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const void* value)
-		{
-			return Formatter2<TChar, T>::Format(format, formatParam, *static_cast<const T*>(value));
-			//return FormatValue(format, formatParam, *static_cast<const T*>(value));
-		}
-
-		const void* m_value;
-		String(*m_formatImpl)(const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const void* value);
-	};
-
-	class FormatList
-	{
-	public:
-		FormatList(FormatArg* argList, int count)
-			: m_argList(argList), m_count(count)
-		{}
-
-		const FormatArg& GetArg(int index) const { return m_argList[index]; }
-		int GetCount() const { return m_count; }
-
-	private:
-		//friend void vformat(std::ostream& out, const char* fmt, const FormatList& list);
-		const FormatArg* m_argList;
-		int m_count;
-	};
-
-	template<int N>
-	class FormatListN : public FormatList
-	{
-	public:
-		template<typename... Args>
-		FormatListN(const Args&... args)
-			: FormatList(&m_argsStore[0], N)
-			, m_argsStore LN_FORMAT_BRACED_INIT_WORKAROUND({ FormatArg(args)... })	// この部分は → のように展開される {FormatArg(e1), FormatArg(e2), FormatArg(e3)} http://en.cppreference.com/w/cpp/language/parameter_pack
-		{
-			static_assert(sizeof...(args) == N, "Invalid args count.");
-		}
-
-	private:
-		std::array<FormatArg, N> m_argsStore;
-	};
-
-	// 引数リスト0個の場合の特殊化
-	template<>
-	class FormatListN<0> : public FormatList
-	{
-		public: FormatListN() : FormatList(0, 0) {}
-	};
-
-	//template<> class FormatListN<0> : public FormatList
-	//{
-	//public: FormatListN() : FormatList(0, 0) {}
-	//};
-
-
-	template<typename... Args>
-	static FormatListN<sizeof...(Args)> MakeArgList(const Args&... args)
-	{
-		return FormatListN<sizeof...(args)>(args...);
-	}
 
 public:
 
