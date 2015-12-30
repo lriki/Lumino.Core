@@ -1,4 +1,4 @@
-﻿# e.g.) $ cmake -DLN_EXCEPTION_BACKTRACE=OFF ..
+# e.g.) $ cmake -DLN_EXCEPTION_BACKTRACE=OFF ..
 
 cmake_minimum_required (VERSION 3.0.0)
 project (LuminoCore)
@@ -377,6 +377,8 @@ if (WIN32)
 elseif (APPLE)
 	set(LN_UNIT_TEST_LINK_LIBS "pthread")
 	set(CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++")
+	FIND_LIBRARY(CARBON_LIBRARY Carbon)
+	list(APPEND LN_LINK_LIBS ${CARBON_LIBRARY})
 
 elseif (UNIX)
 	set(LN_UNIT_TEST_LINK_LIBS "pthread")

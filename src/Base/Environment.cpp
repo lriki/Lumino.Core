@@ -5,6 +5,7 @@
     #include <Shlobj.h>
 #elif defined(LN_OS_MAC)
     #include <mach/mach_time.h>
+#include <CoreServices/CoreServices.h>
 #endif
 #include <Lumino/Base/Environment.h>
 
@@ -254,7 +255,7 @@ void Environment::GetSpecialFolderPath(SpecialFolder specialFolder, TChar* outPa
 	}
 
 	FSRef ref;
-	if (FSFindFolder(domain, translateLocation(type), false, &ref) != 0) {
+	if (FSFindFolder(domain, type, false, &ref) != 0) {
 		LN_THROW(0, SystemException);
 		return;
 	}

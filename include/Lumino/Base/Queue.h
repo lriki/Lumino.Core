@@ -1,8 +1,8 @@
 ﻿
 #pragma once
-
 #include <deque>
 #include "STLUtils.h"
+#include "RefObject.h"
 
 LN_NAMESPACE_BEGIN
 

@@ -80,7 +80,7 @@ TEST_F(IntegrationTest_Reflection_Variant, Basic)
 		Variant v2 = v1;	// copy
 		ASSERT_EQ(VariantType::Null, v1.GetType());
 		ASSERT_EQ(VariantType::Null, v2.GetType());
-		ASSERT_EQ(nullptr, Variant::Cast<nullptr_t>(v1));
+        ASSERT_EQ(nullptr, Variant::Cast<std::nullptr_t>(v1));
 		ASSERT_EQ(nullptr, Variant::Cast<RefTest1*>(v2));	// ReflectionObject で Cast すると nullptr が返ってくる
 		ASSERT_EQ(nullptr, Variant::Cast<ArrayTest1*>(v2));	// ReflectionArrayObject で Cast すると nullptr が返ってくる
 		ASSERT_EQ(NULL, Variant::Cast<RefTest1*>(v2));

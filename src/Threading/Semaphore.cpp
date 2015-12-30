@@ -53,11 +53,11 @@ void Semaphore::Unlock()
 //
 //-----------------------------------------------------------------------------
 Semaphore::Semaphore(int startCount, int maxCount)
-	: mValue(startCount)
-	, mMaxCount(maxCount)
+	: m_value(startCount)
+	, m_maxCount(maxCount)
 {
-	pthread_mutex_init(&mMutex, 0);
-	pthread_cond_init(&mCondition, 0);
+	pthread_mutex_init(&m_mutex, 0);
+	pthread_cond_init(&m_condition, 0);
 }
 
 //-----------------------------------------------------------------------------
@@ -65,42 +65,42 @@ Semaphore::Semaphore(int startCount, int maxCount)
 //-----------------------------------------------------------------------------
 Semaphore::~Semaphore()
 {
-	pthread_cond_destroy(&mCondition);
-	pthread_mutex_destroy(&mMutex);
+	pthread_cond_destroy(&m_condition);
+	pthread_mutex_destroy(&m_mutex);
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void Semaphore::decrease()
+void Semaphore::Lock()
 {
-	pthread_mutex_lock(&mMutex);
-	while (mValue < 1)
+	pthread_mutex_lock(&m_mutex);
+	while (m_value < 1)
 	{
-		pthread_cond_wait(&mCondition, &mMutex);
+		pthread_cond_wait(&m_condition, &m_mutex);
 	}
-	mValue -= 1;
-	if (mValue < 0)
+	m_value -= 1;
+	if (m_value < 0)
 	{
-		mValue = 0;
+		m_value = 0;
 	}
-	pthread_cond_broadcast(&mCondition);
-	pthread_mutex_unlock(&mMutex);
+	pthread_cond_broadcast(&m_condition);
+	pthread_mutex_unlock(&m_mutex);
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void Semaphore::increase()
+void Semaphore::Unlock()
 {
-	pthread_mutex_lock(&mMutex);
-	mValue += 1;
-	if (mValue > mMaxCount)
+	pthread_mutex_lock(&m_mutex);
+	m_value += 1;
+	if (m_value > m_maxCount)
 	{
-		mValue = mMaxCount;
+		m_value = m_maxCount;
 	}
-	pthread_cond_broadcast(&mCondition);
-	pthread_mutex_unlock(&mMutex);
+	pthread_cond_broadcast(&m_condition);
+	pthread_mutex_unlock(&m_mutex);
 }
 #endif
 
