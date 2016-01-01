@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 #include "../Base/Common.h"
 #include "../Base/EnumExtension.h"
@@ -9,20 +9,20 @@ namespace tr
 {
 class Property;
 	
-/* ƒvƒƒpƒeƒB‚Ì“®ìƒIƒvƒVƒ‡ƒ“‚Å‚·B*/
+/* ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®å‹•ä½œã‚ªãƒ—ã‚·ãƒ§ãƒ³ã§ã™ã€‚*/
 LN_ENUM_FLAGS(PropertyOptions)
 {
-	None = 0x0000,			/**< ƒIƒvƒVƒ‡ƒ“w’è–³‚µB*/
-	Inherits = 0x0001,		/**< q—v‘f‚É‚æ‚Á‚ÄŒp³‚³‚ê‚Ü‚·B*/
+	None = 0x0000,			/**< ã‚ªãƒ—ã‚·ãƒ§ãƒ³æŒ‡å®šç„¡ã—ã€‚*/
+	Inherits = 0x0001,		/**< å­è¦ç´ ã«ã‚ˆã£ã¦ç¶™æ‰¿ã•ã‚Œã¾ã™ã€‚*/
 };
 LN_ENUM_FLAGS_DECLARE(PropertyOptions);
 
 /**
-	@brief	ƒvƒƒpƒeƒB‚Ì‰Šú’l‚È‚Ç‚Ìƒƒ^ƒf[ƒ^‚ğ’è‹`‚µ‚Ü‚·B
+	@brief	ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®åˆæœŸå€¤ãªã©ã®ãƒ¡ã‚¿ãƒ‡ãƒ¼ã‚¿ã‚’å®šç¾©ã—ã¾ã™ã€‚
 */
 class PropertyMetadata
 {
-	// ƒƒ“ƒoŠÖ”ƒ|ƒCƒ“ƒ^‚Í void* ‚É•ÏŠ·‚Å‚«‚È‚¢B‚»‚Ì‚½‚ßƒ‰ƒbƒv‚·‚éƒNƒ‰ƒX‚ğ—pˆÓ‚µ‚Ä‚¢‚é
+	// ãƒ¡ãƒ³ãƒé–¢æ•°ãƒã‚¤ãƒ³ã‚¿ã¯ void* ã«å¤‰æ›ã§ããªã„ã€‚ãã®ãŸã‚ãƒ©ãƒƒãƒ—ã™ã‚‹ã‚¯ãƒ©ã‚¹ã‚’ç”¨æ„ã—ã¦ã„ã‚‹
 	class CallbackWrapper
 	{
 	public:

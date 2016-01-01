@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 #include <array>
 #include "Common.h"
@@ -11,10 +11,13 @@
 
 LN_NAMESPACE_BEGIN
 
+template<typename TChar, typename TValue>
+struct Formatter;
+
 namespace detail
 {
 
-// ˆø”1‚Â•ªBƒf[ƒ^‚Ö‚ÌQÆ‚Í void* ‚Å‚Â
+// å¼•æ•°1ã¤åˆ†ã€‚ãƒ‡ãƒ¼ã‚¿ã¸ã®å‚ç…§ã¯ void* ã§æŒã¤
 template<typename TChar>
 class FormatArg
 {
@@ -24,7 +27,7 @@ public:
 	template<typename T>
 	FormatArg(const T& value)
 		: m_value(static_cast<const void*>(&value))
-		, m_formatImpl(&FormatImpl<T>)	// T ‚É‰‚¶‚½•ÏŠ·ŠÖ”‚Ìƒ|ƒCƒ“ƒ^
+		, m_formatImpl(&FormatImpl<T>)	// T ã«å¿œã˜ãŸå¤‰æ›é–¢æ•°ã®ãƒã‚¤ãƒ³ã‚¿
 	{
 	}
 
@@ -70,7 +73,7 @@ public:
 	template<typename... Args>
 	FormatListN(const Args&... args)
 		: FormatList<TChar>(&m_argsStore[0], N)
-		, m_argsStore LN_FORMAT_BRACED_INIT_WORKAROUND({ FormatArg(args)... })	// ‚±‚Ì•”•ª‚Í ¨ ‚Ì‚æ‚¤‚É“WŠJ‚³‚ê‚é {FormatArg(e1), FormatArg(e2), FormatArg(e3)} http://en.cppreference.com/w/cpp/language/parameter_pack
+		, m_argsStore LN_FORMAT_BRACED_INIT_WORKAROUND({ FormatArg<TChar>(args)... })	// ã“ã®éƒ¨åˆ†ã¯ â†’ ã®ã‚ˆã†ã«å±•é–‹ã•ã‚Œã‚‹ {FormatArg(e1), FormatArg(e2), FormatArg(e3)} http://en.cppreference.com/w/cpp/language/parameter_pack
 	{
 		static_assert(sizeof...(args) == N, "Invalid args count.");
 	}
@@ -79,7 +82,7 @@ private:
 	std::array<FormatArg<TChar>, N> m_argsStore;
 };
 
-// ˆø”ƒŠƒXƒg0ŒÂ‚Ìê‡‚Ì“Áê‰»
+// å¼•æ•°ãƒªã‚¹ãƒˆ0å€‹ã®å ´åˆã®ç‰¹æ®ŠåŒ–
 template<typename TChar>
 class FormatListN<TChar, 0> : public FormatList<TChar>
 {
@@ -108,38 +111,38 @@ static FormatListN<TChar, sizeof...(Args)> MakeArgList(const Args&... args)
 	@brief		
 	https://msdn.microsoft.com/ja-jp/library/txafckwd(v=vs.110).aspx#Anchor_1
 */
-template<typename TChar>
-class Formatter
-{
-public:
-
-	//static GenericString<TChar> FormatValue(const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const String& value)
-	//{
-	//	return value;
-	//}
-	//static GenericString<TChar> FormatValue(const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const TCHAR* value)
-	//{
-	//	return GenericString<TChar>(value);
-	//}
-
-
-
-
-public:
-
-	template<typename... TArgs>
-	static void Format(const TChar* format, const TArgs&... args)
-	{
-		auto list = MakeArgList(args...);
-		printf("");
-	}
-
-
-};
+//template<typename TChar>
+//class Formatter
+//{
+//public:
+//
+//	//static GenericString<TChar> FormatValue(const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const String& value)
+//	//{
+//	//	return value;
+//	//}
+//	//static GenericString<TChar> FormatValue(const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const TCHAR* value)
+//	//{
+//	//	return GenericString<TChar>(value);
+//	//}
+//
+//
+//
+//
+//public:
+//
+//	template<typename... TArgs>
+//	static void Format(const TChar* format, const TArgs&... args)
+//	{
+//		auto list = MakeArgList(args...);
+//		printf("");
+//	}
+//
+//
+//};
 
 
 template<typename TChar, typename TValue>
-struct Formatter2
+struct Formatter
 {
 	static GenericString<TChar> Format(const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const TValue& value)
 	{
@@ -148,7 +151,7 @@ struct Formatter2
 	}
 };
 template<typename TChar, std::size_t N>
-struct Formatter2<TChar, const TChar [N]>
+struct Formatter<TChar, const TChar [N]>
 {
 	static GenericString<TChar> Format(const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const TChar* value)
 	{
@@ -156,7 +159,7 @@ struct Formatter2<TChar, const TChar [N]>
 	}
 };
 template<typename TChar>
-struct Formatter2<TChar, int32_t>
+struct Formatter<TChar, int32_t>
 {
 	static GenericString<TChar> Format(const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const TChar* value)
 	{

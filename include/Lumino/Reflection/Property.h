@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 #include "../Base/Common.h"
 #include "../Base/RefObject.h"
@@ -17,9 +17,9 @@ class PropertyInstanceData
 	: public RefObject
 {
 public:
-	Property*			InheritanceKey;		// ƒvƒƒpƒeƒB‚ğe‚©‚çŒp³‚·‚é‚Æ‚«Athis ‚Ü‚½‚Í‚±‚Ì’l‚ğƒL[‚Æ‚µ‚ÄŒŸõ‚·‚éB
-	ReflectionObject*	InheritanceParent;	// ª‚Ì‚ÅŒ©‚Â‚©‚Á‚½e‚ ‚é‚¢‚Í‘cæƒIƒuƒWƒFƒNƒg
-	const Property*		InheritanceTarget;	// ª‚ÌƒIƒuƒWƒFƒNƒg‚Ì‚Ç‚ÌƒvƒƒpƒeƒB‚©‚çó‚¯Œp‚®‚© (‘–¸‚ÌŒ‹‰ÊŒp³Œ³‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡A‚±‚Ì PropertyInstanceData ‚ª•\‚· Propery ‚ğw‚·B‚±‚Ì‚Æ‚« InheritanceParent ‚Í NULL)
+	Property*			InheritanceKey;		// ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’è¦ªã‹ã‚‰ç¶™æ‰¿ã™ã‚‹ã¨ãã€this ã¾ãŸã¯ã“ã®å€¤ã‚’ã‚­ãƒ¼ã¨ã—ã¦æ¤œç´¢ã™ã‚‹ã€‚
+	ReflectionObject*	InheritanceParent;	// â†‘ã®ã§è¦‹ã¤ã‹ã£ãŸè¦ªã‚ã‚‹ã„ã¯ç¥–å…ˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	const Property*		InheritanceTarget;	// â†‘ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã©ã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‹ã‚‰å—ã‘ç¶™ãã‹ (èµ°æŸ»ã®çµæœç¶™æ‰¿å…ƒãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå ´åˆã€ã“ã® PropertyInstanceData ãŒè¡¨ã™ Propery ã‚’æŒ‡ã™ã€‚ã“ã®ã¨ã InheritanceParent ã¯ NULL)
 	uint16_t			RevisionCount;
 	uint16_t			PathRevisionCount;
 	bool				IsDefault;
@@ -34,8 +34,8 @@ public:
 };
 
 /**
-	@brief		ReflectionObject ‚ÌƒTƒuƒNƒ‰ƒX‚ªÀ‘•‚Å‚«‚éƒvƒƒpƒeƒB‚ğ•\‚µ‚Ü‚·B
-	@details	ƒvƒƒpƒeƒB‚ÍAƒƒ“ƒo•Ï”‚É‘Î‚·‚éŠÈˆÕ“I‚ÈƒŠƒtƒŒƒNƒVƒ‡ƒ“‚ğ’ñ‹Ÿ‚µ‚Ü‚·B		
+	@brief		ReflectionObject ã®ã‚µãƒ–ã‚¯ãƒ©ã‚¹ãŒå®Ÿè£…ã§ãã‚‹ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’è¡¨ã—ã¾ã™ã€‚
+	@details	ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã¯ã€ãƒ¡ãƒ³ãƒå¤‰æ•°ã«å¯¾ã™ã‚‹ç°¡æ˜“çš„ãªãƒªãƒ•ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³ã‚’æä¾›ã—ã¾ã™ã€‚		
 */
 class Property
 {
@@ -61,36 +61,36 @@ public:
 	private: static PropertyMetadata metadata_##propVar; \
 	private: static std::shared_ptr<PropertyInstanceData>* getInstanceData_##propVar(CoreObject* obj); \
 	private: std::shared_ptr<PropertyInstanceData> instanceData_##propVar = NULL;
-	// ªTODO: unique_ptr ‚Ì•û‚ªƒƒ‚ƒŠg‚í‚È‚¢‚©‚àH
+	// â†‘TODO: unique_ptr ã®æ–¹ãŒãƒ¡ãƒ¢ãƒªä½¿ã‚ãªã„ã‹ã‚‚ï¼Ÿ
 
 /*
 	LN_TR_PROPERTY(String, TextProperty);
 
-		ˆÈ‰º‚Ì‚æ‚¤‚É“WŠJ‚³‚ê‚éB
+		ä»¥ä¸‹ã®ã‚ˆã†ã«å±•é–‹ã•ã‚Œã‚‹ã€‚
 
 	public:
 		static const ln::tr::Property*	TextProperty;
 
 	private:
-		// w’è‚µ‚½ƒIƒuƒWƒFƒNƒg‚É’l‚ğİ’è‚·‚é
+		// æŒ‡å®šã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«å€¤ã‚’è¨­å®šã™ã‚‹
 		static void	 set_TextProperty(CoreObject* obj, String value);
 
-		// w’è‚µ‚½ƒIƒuƒWƒFƒNƒg‚Ì’l‚ğæ“¾‚·‚é
+		// æŒ‡å®šã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å€¤ã‚’å–å¾—ã™ã‚‹
 		static String get_TextProperty(const CoreObject* obj);
 
-		// w’è‚µ‚½ƒIƒuƒWƒFƒNƒg‚É‘Î‚µ‚ÄAPropertyMetadata ‚É“o˜^‚³‚ê‚Ä‚¢‚é PropertyChangedCallback ‚ğŒÄ‚Ño‚·
+		// æŒ‡å®šã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«å¯¾ã—ã¦ã€PropertyMetadata ã«ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ PropertyChangedCallback ã‚’å‘¼ã³å‡ºã™
 		static void changed_TextProperty(CoreObject* obj, PropertyChangedEventArgs* e);
 
-		// Property ƒIƒuƒWƒFƒNƒg‚Ì‰Šú‰»‚ğs‚¤
+		// Property ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®åˆæœŸåŒ–ã‚’è¡Œã†
 		static PropertyInitializer<valueType> init_TextProperty;
 
-		// ƒvƒƒpƒeƒB‚Ìƒƒ^î•ñ’è‹`
+		// ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®ãƒ¡ã‚¿æƒ…å ±å®šç¾©
 		static PropertyMetadata metadata_TextProperty;
 
-		// ƒIƒuƒWƒFƒNƒg‚Ì‚Â PropertyInstanceData ‚Ìƒ|ƒCƒ“ƒ^‚Ö‚ÌQÆ‚ğæ“¾‚·‚é (PropertyInstanceData ‚Í–{“–‚É•K—v‚É‚È‚Á‚½‚É new ‚³‚ê‚é)
+		// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æŒã¤ PropertyInstanceData ã®ãƒã‚¤ãƒ³ã‚¿ã¸ã®å‚ç…§ã‚’å–å¾—ã™ã‚‹ (PropertyInstanceData ã¯æœ¬å½“ã«å¿…è¦ã«ãªã£ãŸæ™‚ã« new ã•ã‚Œã‚‹)
 		static std::shared_ptr<PropertyInstanceData>* getInstanceData_##propVar(CoreObject* obj);
 
-		// PropertyInstanceData ‚Ìƒ|ƒCƒ“ƒ^
+		// PropertyInstanceData ã®ãƒã‚¤ãƒ³ã‚¿
 		private: std::shared_ptr<PropertyInstanceData> instanceData_TextProperty = NULL;
 */
 

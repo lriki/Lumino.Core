@@ -290,8 +290,8 @@ public:
 	}
 
 private:
-	void SetNullPtr(nullptr_t value);
-	nullptr_t GetNullPtr() const;
+	void SetNullPtr(std::nullptr_t value);
+	std::nullptr_t GetNullPtr() const;
 	void SetBool(bool value);
 	bool GetBool() const;
 	void SetArithmetic(int32_t value);

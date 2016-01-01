@@ -1,4 +1,4 @@
-
+﻿
 #include "../Internal.h"
 #include <Lumino/Reflection/ReflectionObject.h>
 #include <Lumino/Reflection/ReflectionArrayObject.h>
@@ -27,11 +27,11 @@ Variant::Variant()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void Variant::SetNullPtr(nullptr_t value)
+void Variant::SetNullPtr(std::nullptr_t value)
 {
 	Release();
 }
-nullptr_t Variant::GetNullPtr() const
+std::nullptr_t Variant::GetNullPtr() const
 {
 	LN_CHECK_STATE_RETURNV(m_type == VariantType::Null, nullptr);
 	return nullptr;
@@ -134,7 +134,7 @@ void Variant::SetReflectionObject(ReflectionObject* obj)
 ReflectionObject* Variant::GetReflectionObject() const
 {
 	if (m_type == VariantType::Null) return nullptr;
-	LN_CHECK_STATE(m_type == VariantType::Object || m_type == VariantType::ArrayObject);	// List �� Object �̈ꕔ�B
+	LN_CHECK_STATE(m_type == VariantType::Object || m_type == VariantType::ArrayObject);	// List も Object の一部。
 	return m_object;
 }
 void Variant::SetReflectionArrayObject(ReflectionArrayObject* obj)

@@ -1,17 +1,10 @@
-
+ï»¿
 #include <stdio.h>
-
 #include "gtest/gtest.h"
-
-int fn1()
-{
-	printf("next.\n");
-	return 0;
-}
 
 GTEST_API_ int main(int argc, char **argv)
 {
-	// Process ƒNƒ‰ƒX‚ÌƒeƒXƒgƒXƒ^ƒu
+	// Process ã‚¯ãƒ©ã‚¹ã®ãƒ†ã‚¹ãƒˆã‚¹ã‚¿ãƒ–
 	if (strcmp(argv[argc - 1], "--proctest1") == 0)
 	{
 		printf("stdout");
@@ -21,28 +14,25 @@ GTEST_API_ int main(int argc, char **argv)
 	{
 		char str[256];
 		scanf("%s", &str);
-		return strlen(str);		// •¶š”‚ğ•Ô‚·
+		return strlen(str);		// æ–‡å­—æ•°ã‚’è¿”ã™
 	}
 	else if (strcmp(argv[argc - 1], "--proctest3") == 0)
 	{
 		char str[256];
 		scanf("%s", &str);
-		printf("[%s]", str);	// [ ] ‚ğ‚Â‚¯‚Äo—Í
+		printf("[%s]", str);	// [ ] ã‚’ã¤ã‘ã¦å‡ºåŠ›
 		return 0;
 	}
 
-	_onexit(fn1);
 
-
-
-	printf("Running main() from gtest_main.cc\n");
+	printf("Running main()\n");
 	
 #ifdef _WIN32
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
 	setlocale(LC_ALL, "");
 
-#if 0	// •”•ª“I‚ÉƒeƒXƒg‚ğÀs‚µ‚½‚è‚·‚é
+#if 0	// éƒ¨åˆ†çš„ã«ãƒ†ã‚¹ãƒˆã‚’å®Ÿè¡Œã—ãŸã‚Šã™ã‚‹
 	char* testArgs[] = {
 		argv[0],
 		//"--gtest_filter=Test_Text_EncodingDetector.*"

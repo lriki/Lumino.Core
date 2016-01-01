@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 #include "../Base/Common.h"
 #include "../Base/RefObject.h"
@@ -62,12 +62,12 @@ public:
 public:
 	
 	/**
-		@brief	w’è‚µ‚½ƒIƒuƒWƒFƒNƒg‚ÌŒ^î•ñ‚ğæ“¾‚µ‚Ü‚·B
+		@brief	æŒ‡å®šã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å‹æƒ…å ±ã‚’å–å¾—ã—ã¾ã™ã€‚
 	*/
 	static TypeInfo* GetTypeInfo(const ReflectionObject* obj);
 
 	/**
-		@brief	Œ^ˆø”‚Éw’è‚µ‚½ƒNƒ‰ƒXŒ^‚ÌŒ^î•ñ‚ğæ“¾‚µ‚Ü‚·B
+		@brief	å‹å¼•æ•°ã«æŒ‡å®šã—ãŸã‚¯ãƒ©ã‚¹å‹ã®å‹æƒ…å ±ã‚’å–å¾—ã—ã¾ã™ã€‚
 	*/
 	template<class T>
 	static TypeInfo* GetTypeInfo();
@@ -81,30 +81,30 @@ public:
 		BindingTypeInfoGetter bindingTypeInfoGetter);
 	
 	/**
-		@brief	ƒNƒ‰ƒX–¼‚ğæ“¾‚µ‚Ü‚·B
+		@brief	ã‚¯ãƒ©ã‚¹åã‚’å–å¾—ã—ã¾ã™ã€‚
 	*/
 	const String& GetName() const { return m_name; }
 
 	void RegisterProperty(Property* prop);
 	Property* FindProperty(const String& name) const;
 
-	//// childObjProp ‚ªŒp³‚Å‚«‚éƒvƒƒpƒeƒB‚ğ‚±‚Ì TypeInfo ‚©‚ç’T‚·BŒ©‚Â‚©‚ç‚È‚¯‚ê‚Î NULL ‚ğ•Ô‚·B
-	//// childObj : childObjProp ‚ğ‚ÂƒIƒuƒWƒFƒNƒg
+	//// childObjProp ãŒç¶™æ‰¿ã§ãã‚‹ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’ã“ã® TypeInfo ã‹ã‚‰æ¢ã™ã€‚è¦‹ã¤ã‹ã‚‰ãªã‘ã‚Œã° NULL ã‚’è¿”ã™ã€‚
+	//// childObj : childObjProp ã‚’æŒã¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 	//Property* FindInheritanceProperty(const Property* childObjProp, CoreObject* childObj) const;
 
 	//void RegisterRoutedEvent(RoutedEvent* ev);
-	//RoutedEvent* FindRoutedEvent(const String& name) const;	// TODO: ‚¢‚ç‚È‚¢‚©‚à
+	//RoutedEvent* FindRoutedEvent(const String& name) const;	// TODO: ã„ã‚‰ãªã„ã‹ã‚‚
 	//void InvokeRoutedEvent(CoreObject* owner, const RoutedEvent* ev, RoutedEventArgs* e);
 
-	///// RoutedEventHandler ‚ÍAƒ†[ƒU[‚ª“®“I‚É’Ç‰Á‚Å‚«‚éƒnƒ“ƒhƒ‰‚æ‚è‚à‘O‚ÉŒÄ‚Ño‚³‚ê‚éB
-	///// WPF ‚Å‚ÍuÃ“Iƒnƒ“ƒhƒ‰v‚ÆŒÄ‚Î‚ê‚Ä‚¢‚éB“®“IƒCƒxƒ“ƒg‚É“o˜^‚·‚é‚Ì‚É”ä‚×Aƒƒ‚ƒŠ‚ğg—p‚µ‚È‚¢B
+	///// RoutedEventHandler ã¯ã€ãƒ¦ãƒ¼ã‚¶ãƒ¼ãŒå‹•çš„ã«è¿½åŠ ã§ãã‚‹ãƒãƒ³ãƒ‰ãƒ©ã‚ˆã‚Šã‚‚å‰ã«å‘¼ã³å‡ºã•ã‚Œã‚‹ã€‚
+	///// WPF ã§ã¯ã€Œé™çš„ãƒãƒ³ãƒ‰ãƒ©ã€ã¨å‘¼ã°ã‚Œã¦ã„ã‚‹ã€‚å‹•çš„ã‚¤ãƒ™ãƒ³ãƒˆã«ç™»éŒ²ã™ã‚‹ã®ã«æ¯”ã¹ã€ãƒ¡ãƒ¢ãƒªã‚’ä½¿ç”¨ã—ãªã„ã€‚
 	//void RegisterRoutedEventHandler(const RoutedEvent* ev, RoutedEventHandler* handler);
 	//RoutedEventHandler* FindRoutedEventHandler(const RoutedEvent* ev) const;
 
 	//TypeInfo* GetBaseClass() const { return m_baseClass; }
 	//uint32_t* GetHasLocalValueFlags(CoreObject* obj) { return m_hasLocalValueFlagsGetter(obj); }
 
-	///// ƒx[ƒXƒNƒ‰ƒX‚àŠÜ‚ß‚½‘S‚Ä‚ÌƒvƒƒpƒeƒB‚ğ—ñ‹“‚·‚é
+	///// ãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹ã‚‚å«ã‚ãŸå…¨ã¦ã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’åˆ—æŒ™ã™ã‚‹
 	//static void ForEachAllProperty(const TypeInfo* typeInfo, const std::function<void(Property*)>& callback);
 
 
@@ -119,10 +119,10 @@ protected:
 private:
 	//typedef SortedArray<const RoutedEvent*, RoutedEventHandler*>	RoutedEventHandlerList;
 
-	String						m_name;						// ƒNƒ‰ƒX–¼
-	TypeInfo*					m_baseClass;				// Œp³Œ³ƒNƒ‰ƒX‚ğ¦‚· TypeInfo
-	Array<Property*>			m_propertyList;				// ‚±‚ÌŒ^‚ÌƒNƒ‰ƒX‚ª‚à‚ÂƒvƒƒpƒeƒB‚ÌƒŠƒXƒg
-	HasLocalValueFlagsGetter	m_hasLocalValueFlagsGetter;	// ƒvƒƒpƒeƒB‚ªƒ[ƒJƒ‹’l‚ğ•Û‚µ‚Ä‚¢‚é‚©‚ğ¦‚·ƒrƒbƒgƒtƒ‰ƒO‚ğæ“¾‚·‚éƒR[ƒ‹ƒoƒbƒNBƒ[ƒJƒ‹’l‚ğ‚½‚È‚¢ê‡‚ÍƒvƒƒpƒeƒB‚Ì’l‚ğe‚©‚çŒp³‚·‚éB
+	String						m_name;						// ã‚¯ãƒ©ã‚¹å
+	TypeInfo*					m_baseClass;				// ç¶™æ‰¿å…ƒã‚¯ãƒ©ã‚¹ã‚’ç¤ºã™ TypeInfo
+	Array<Property*>			m_propertyList;				// ã“ã®å‹ã®ã‚¯ãƒ©ã‚¹ãŒã‚‚ã¤ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®ãƒªã‚¹ãƒˆ
+	HasLocalValueFlagsGetter	m_hasLocalValueFlagsGetter;	// ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ãŒãƒ­ãƒ¼ã‚«ãƒ«å€¤ã‚’ä¿æŒã—ã¦ã„ã‚‹ã‹ã‚’ç¤ºã™ãƒ“ãƒƒãƒˆãƒ•ãƒ©ã‚°ã‚’å–å¾—ã™ã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã€‚ãƒ­ãƒ¼ã‚«ãƒ«å€¤ã‚’æŒãŸãªã„å ´åˆã¯ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®å€¤ã‚’è¦ªã‹ã‚‰ç¶™æ‰¿ã™ã‚‹ã€‚
 	BindingTypeInfoSetter		m_bindingTypeInfoSetter;
 	BindingTypeInfoGetter		m_bindingTypeInfoGetter;
 
@@ -135,7 +135,7 @@ private:
 //
 //-----------------------------------------------------------------------------
 template<class T>
-inline static TypeInfo* TypeInfo::GetTypeInfo()
+inline TypeInfo* TypeInfo::GetTypeInfo()
 {
 	return ReflectionHelper::GetTypeInfo<T>();
 }

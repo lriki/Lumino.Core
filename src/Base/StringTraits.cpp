@@ -580,7 +580,7 @@ template bool StringTraits::EndsWith<wchar_t>(const wchar_t* str1, int len1, con
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-static int StringTraits::CountString(const TChar* str1, int str1Len, const TChar* str2, int str2Len, CaseSensitivity cs)
+int StringTraits::CountString(const TChar* str1, int str1Len, const TChar* str2, int str2Len, CaseSensitivity cs)
 {
 	str1Len = (str1Len < 0) ? ((int)StrLen(str1)) : str1Len;
 	str2Len = (str2Len < 0) ? ((int)StrLen(str2)) : str2Len;

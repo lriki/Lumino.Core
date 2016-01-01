@@ -1,8 +1,8 @@
-/*
+﻿/*
 	[2015/12/7] LN_TR_PROPERTY
-		metadata �̓����o�Ɏ����Ă������ق�����X�s�����悳�����B
-		Property �͂���̃|�C���^���Q�Ƃ���B���͎̂����Ȃ��B
-		������ metadata �̌p���Ƃ��I�[�o�[���C�h�Ƃ����Ƃ��́A�|�C���^�̂ق����Z�ʌ��������B
+		metadata はメンバに持っておいたほうが後々都合がよさそう。
+		Property はこれのポインタを参照する。実体は持たない。
+		いずれ metadata の継承とかオーバーライドとかやるときは、ポインタのほうが融通効くかも。
 
 */
 #include "../Internal.h"
@@ -19,15 +19,15 @@ namespace tr
 //=============================================================================
 
 /*
-	HasLocalValueFlagsGetter �̓N���X���ƂɕK�v�ƂȂ�B
-	ReflectionObject �ɉ��z�֐����������Ď擾����킯�ɂ͍s���Ȃ��B
-	�Ⴆ�΁A
+	HasLocalValueFlagsGetter はクラスごとに必要となる。
+	ReflectionObject に仮想関数を持たせて取得するわけには行かない。
+	例えば、
 		ReflectionObject
 			UIElement
 				Control
 					Button
-	�Ƃ����p���֌W���������ꍇ�AUIElement �� LocalFlags �͔h�����E��֌W�Ȃ�
-	������ UIElement �ɒ�`���ꂽ�v���p�e�B�� LocalFlags ���ق����B
+	という継承関係があった場合、UIElement の LocalFlags は派生元・先関係なく
+	純粋に UIElement に定義されたプロパティの LocalFlags がほしい。
 */
 
 //-----------------------------------------------------------------------------

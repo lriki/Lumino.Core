@@ -144,7 +144,7 @@ public:
 		@brief		バッファの先頭アドレスを取得します。
 	*/
 	byte_t* GetData() { CheckDetachShared(); return m_core->m_buffer; }
-	const byte_t* GetData() const { return m_core->m_buffer; }
+	const byte_t* GetData() const { return m_core->m_buffer; }			/** @overload GetData */
 
 	/**
 		@brief		バッファの先頭アドレスを取得します。メモリの再割り当ては行われません。

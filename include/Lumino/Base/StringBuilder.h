@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 #include "ByteBuffer.h"
 #include "String.h"
@@ -35,7 +35,7 @@ private:
 
 protected:
 	ByteBuffer	m_buffer;
-	size_t		m_bufferUsed;	///< m_buffer “à‚Ìg—p’†ƒoƒCƒg”
+	size_t		m_bufferUsed;	///< m_buffer å†…ã®ä½¿ç”¨ä¸­ãƒã‚¤ãƒˆæ•°
 };
 
 
@@ -84,7 +84,7 @@ void GenericStringBuilder<TChar>::AppendFormatInternal(const GenericStringRef<TC
 	TChar ch;
 	while (pos < end)
 	{
-		// { ‚ğŒ©‚Â‚¯‚é‚Ü‚Å‰ñ‚éƒ‹[ƒv
+		// { ã‚’è¦‹ã¤ã‘ã‚‹ã¾ã§å›ã‚‹ãƒ«ãƒ¼ãƒ—
 		while (pos < end)
 		{
 			ch = *pos;
@@ -92,20 +92,20 @@ void GenericStringBuilder<TChar>::AppendFormatInternal(const GenericStringRef<TC
 
 			if (ch == '}')
 			{
-				if (pos < end && *pos == '}') {	// } ‚ÌƒGƒXƒP[ƒv "}}"
+				if (pos < end && *pos == '}') {	// } ã®ã‚¨ã‚¹ã‚±ãƒ¼ãƒ— "}}"
 					++pos;
 				}
 				else {
-					LN_THROW(0, InvalidFormatException);	// ’P”­‚Ì } ‚ªŒ»‚ê‚Ä‚Í‚È‚ç‚È‚¢
+					LN_THROW(0, InvalidFormatException);	// å˜ç™ºã® } ãŒç¾ã‚Œã¦ã¯ãªã‚‰ãªã„
 				}
 			}
 			if (ch == '{')
 			{
-				if (pos < end && *pos == '{') { 	// { ‚ÌƒGƒXƒP[ƒv "{{"
+				if (pos < end && *pos == '{') { 	// { ã®ã‚¨ã‚¹ã‚±ãƒ¼ãƒ— "{{"
 					++pos;
 				}
 				else if (pos >= end) {
-					LN_THROW(0, InvalidFormatException);	// { ‚ÅI‚í‚Á‚½
+					LN_THROW(0, InvalidFormatException);	// { ã§çµ‚ã‚ã£ãŸ
 				}
 				else {
 					break;
@@ -114,11 +114,11 @@ void GenericStringBuilder<TChar>::AppendFormatInternal(const GenericStringRef<TC
 
 			Append(ch);
 		}
-		// ‚±‚Ì“_‚Å pos ‚Í { ‚ÌŸ‚ğw‚µ‚Ä‚¢‚é
+		// ã“ã®æ™‚ç‚¹ã§ pos ã¯ { ã®æ¬¡ã‚’æŒ‡ã—ã¦ã„ã‚‹
 
 		if (pos >= end) { break; }
 
-		// Ÿ‚Ì•¶š‚Í•K‚¸”š‚Å‚È‚¯‚ê‚Î‚È‚ç‚È‚¢
+		// æ¬¡ã®æ–‡å­—ã¯å¿…ãšæ•°å­—ã§ãªã‘ã‚Œã°ãªã‚‰ãªã„
 		if ('0' <= *pos && *pos <= '9') {
 		}
 		else {
@@ -126,36 +126,36 @@ void GenericStringBuilder<TChar>::AppendFormatInternal(const GenericStringRef<TC
 		}
 
 		//-----------------------------------------------------------
-		// Index ƒRƒ“ƒ|[ƒlƒ“ƒg (Œ^ˆø”‚ÌƒCƒ“ƒfƒbƒNƒX‚ğæ‚èo‚·)
+		// Index ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ (å‹å¼•æ•°ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’å–ã‚Šå‡ºã™)
 		int index = 0;
 		do
 		{
 			index = (index * 10) + ((*pos) - '0');
 			++pos;
-			LN_THROW(pos < end, InvalidFormatException);	// ƒCƒ“ƒfƒbƒNƒX‰ğÍ’†‚É \0 ‚É‚È‚Á‚½
+			LN_THROW(pos < end, InvalidFormatException);	// ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹è§£æä¸­ã« \0 ã«ãªã£ãŸ
 
 		} while ((*pos) >= '0' && (*pos) <= '9');
 		LN_THROW(index < args->GetCount(), InvalidFormatException);
 
 		//-----------------------------------------------------------
-		// Alignment ƒRƒ“ƒ|[ƒlƒ“ƒg
-		while (pos < end && *pos == ' ') { pos++; }	// æ“ª‚Ì‹ó”’‚ğ–³‹
-		bool leftJustify = false;					// ¶‹l‚ß‚É‚·‚é‚©H
+		// Alignment ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
+		while (pos < end && *pos == ' ') { pos++; }	// å…ˆé ­ã®ç©ºç™½ã‚’ç„¡è¦–
+		bool leftJustify = false;					// å·¦è©°ã‚ã«ã™ã‚‹ã‹ï¼Ÿ
 		int width = 0;
-		if (*pos == ',')	// , ‚Å‚ ‚ê‚Î‰ğÍŠJnB–³‚¯‚ê‚ÎÈ—ª‚³‚ê‚Ä‚¢‚é
+		if (*pos == ',')	// , ã§ã‚ã‚Œã°è§£æé–‹å§‹ã€‚ç„¡ã‘ã‚Œã°çœç•¥ã•ã‚Œã¦ã„ã‚‹
 		{
 			pos++;
 			while (pos < end && *pos == ' ') { pos++; }
 			LN_THROW(pos < end, InvalidFormatException);
 
-			if (*pos == '-')	// •„†‚ª - ‚È‚ç¶‹l‚ß
+			if (*pos == '-')	// ç¬¦å·ãŒ - ãªã‚‰å·¦è©°ã‚
 			{
 				leftJustify = true;
 				++pos;
 				LN_THROW(pos < end, InvalidFormatException);
 			}
 
-			// Ÿ‚Íâ‘Î”š
+			// æ¬¡ã¯çµ¶å¯¾æ•°å­—
 			LN_THROW('0' <= *pos && *pos <= '9', InvalidFormatException);
 			do
 			{
@@ -167,8 +167,8 @@ void GenericStringBuilder<TChar>::AppendFormatInternal(const GenericStringRef<TC
 		}
 
 		//-----------------------------------------------------------
-		// FormatString ƒRƒ“ƒ|[ƒlƒ“ƒg
-		while (pos < end && *pos == ' ') { pos++; }	// æ“ª‚Ì‹ó”’‚ğ–³‹
+		// FormatString ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
+		while (pos < end && *pos == ' ') { pos++; }	// å…ˆé ­ã®ç©ºç™½ã‚’ç„¡è¦–
 		const TChar* fmtBegin = nullptr;
 		const TChar* fmtEnd = nullptr;
 		const TChar* fmtParamEnd = nullptr;
@@ -186,7 +186,7 @@ void GenericStringBuilder<TChar>::AppendFormatInternal(const GenericStringRef<TC
 				fmtEnd = pos;
 			}
 
-			// "D4" ‚Ì‚æ‚¤‚ÉŒã‚ë‚ª®”‚Ìƒpƒ‰ƒ[ƒ^‚É‚È‚Á‚Ä‚¢‚é‚Æ‚«A‚±‚±‚Å®”•”•ª‚ğæ‚èo‚µ‚Ä‚µ‚Ü‚¤ (•ÏŠ·‘¤‚ªŠy‚Å‚«‚é‚æ‚¤‚É)
+			// "D4" ã®ã‚ˆã†ã«å¾Œã‚ãŒæ•´æ•°ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã«ãªã£ã¦ã„ã‚‹ã¨ãã€ã“ã“ã§æ•´æ•°éƒ¨åˆ†ã‚’å–ã‚Šå‡ºã—ã¦ã—ã¾ã† (å¤‰æ›å´ãŒæ¥½ã§ãã‚‹ã‚ˆã†ã«)
 			ch = *(fmtEnd - 1);
 			if (ch >= '0' && ch <= '9')
 			{
@@ -200,15 +200,15 @@ void GenericStringBuilder<TChar>::AppendFormatInternal(const GenericStringRef<TC
 			}
 		}
 
-		// ÅŒã‚Í } ‚Å‚È‚¯‚ê‚Î‚È‚ç‚È‚¢
+		// æœ€å¾Œã¯ } ã§ãªã‘ã‚Œã°ãªã‚‰ãªã„
 		LN_THROW(*pos == '}', InvalidFormatException);
 
 		GenericString<TChar> str = args->GetArg(index).DoFormat(GenericStringRef<TChar>(fmtBegin, fmtEnd), GenericStringRef<TChar>(fmtEnd, fmtParamEnd));
 
 		int pad = width - str.GetLength();
-		if (!leftJustify && pad > 0) Append(' ', pad);
+		if (!leftJustify && pad > 0) GenericStringBuilderCore<TChar>::Append(' ', pad);
 		Append(str.c_str(), str.GetLength());
-		if (leftJustify && pad > 0) Append(' ', pad);
+		if (leftJustify && pad > 0) GenericStringBuilderCore<TChar>::Append(' ', pad);
 
 		++pos;
 	}

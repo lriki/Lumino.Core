@@ -1,4 +1,4 @@
-
+﻿
 #pragma once
 #include "../Base/Common.h"
 #include "../Base/RefObject.h"
@@ -53,12 +53,15 @@ class ReflectionObjectList
 	, public Collection<T>
 {
 public:
+	typedef typename Collection<T>::value_type	value_type;
+
+public:
 	ReflectionObjectList()
 	{}
 
 	virtual ~ReflectionObjectList()
 	{
-		Clear();
+		Collection<T>::Clear();
 	}
 
 protected:
@@ -76,16 +79,16 @@ protected:
 	}
 	virtual void RemoveItem(int index) override
 	{
-		if (GetAt(index) != nullptr) {
-			GetAt(index)->Release();
+		if (Collection<T>::GetAt(index) != nullptr) {
+			Collection<T>::GetAt(index)->Release();
 		}
 		Collection<T>::RemoveItem(index);
 	}
 	virtual void SetItem(int index, const value_type& item) override
 	{
 		LN_SAFE_ADDREF(item);
-		if (GetAt(index) != nullptr) {
-			GetAt(index)->Release();
+		if (Collection<T>::GetAt(index) != nullptr) {
+			Collection<T>::GetAt(index)->Release();
 		}
 		Collection<T>::SetItem(index, item);
 	}
