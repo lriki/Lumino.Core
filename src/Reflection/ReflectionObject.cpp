@@ -6,9 +6,12 @@
 
 */
 #include "../Internal.h"
+#include <Lumino/Reflection/Notify.h>
 #include <Lumino/Reflection/TypeInfo.h>
 #include <Lumino/Reflection/ReflectionObject.h>
 #include <Lumino/Reflection/ReflectionArrayObject.h>
+#include <Lumino/Reflection/ReflectionEventArgs.h>
+#include <Lumino/Reflection/Property.h>
 
 LN_NAMESPACE_BEGIN
 namespace tr
@@ -78,6 +81,63 @@ ReflectionObject::~ReflectionObject()
 {
 }
 
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void ReflectionObject::RaiseReflectionEvent(const ReflectionEventBase& ev, ReflectionEventArgs* args)
+{
+	ev.Raise(args);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void ReflectionObject::OnPropertyChanged(PropertyChangedEventArgs* e)
+{
+	// e->Property を持つクラスのコールバックを呼び出す
+	//e->changedProperty->NotifyPropertyChange(this, e);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+void ReflectionObject::SetPropertyValueInternal(const Property* prop, const Variant& value, bool reset)
+{
+	//if (prop->IsStored())
+	//{
+	//	// 必要になったので作る
+	//	if (m_propertyDataStore == NULL) { m_propertyDataStore = LN_NEW PropertyDataStore(); }
+	//	m_propertyDataStore->SetValue(prop, value);
+	//}
+	//else {
+		prop->SetValue(this, value);
+	//}
+
+	//PropertyInstanceData* data = prop->GetPropertyInstanceData(this);
+	//if (data != NULL)
+	//{
+	//	if (reset) {
+	//		data->IsDefault = true;
+	//	}
+	//	else
+	//	{
+	//		if (data->IsDefault == true)
+	//		{
+	//			// 新しく設定される瞬間、これまで継承元として参照していたプロパティと this に対して
+	//			// プロパティ参照更新値を1つ進める。子は Get しようとしたとき、継承元を再検索する。
+	//			// TODO: SetTypedPropertyValue にも同じようなのがある。共通化したい。あとテスト
+	//			if (data->InheritanceParent != NULL) {
+	//				data->InheritanceTarget->GetPropertyInstanceData(data->InheritanceParent)->PathRevisionCount++;
+	//			}
+	//			data->PathRevisionCount++;
+	//		}
+	//		data->IsDefault = false;
+	//		data->RevisionCount++;
+	//	}
+	//}
+
+	//SetPropertyValue(prop->GetName(), value);	// TODO: GetName じゃなくて、型情報も考慮するように。あるいは生ポインタ
+}
 
 //=============================================================================
 // ReflectionArrayObject

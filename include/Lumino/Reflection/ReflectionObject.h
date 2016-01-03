@@ -9,20 +9,26 @@ LN_NAMESPACE_BEGIN
 namespace tr
 {
 
-
-#define LN_TR_REFLECTION_TYPEINFO_DECLARE() \
+#define LN_TR_REFLECTION_TYPEINFO_DECLARE_COMMON(typeInfo) \
 	private: \
 		template<typename T> friend class ln::RefPtr; \
 		friend class ln::tr::ReflectionHelper; \
-		static ln::tr::TypeInfo					lnref_typeInfo; \
+		static typeInfo							lnref_typeInfo; \
 		ln::tr::LocalValueHavingFlags			lnref_localValueHavingFlags; \
-		virtual ln::tr::TypeInfo*				lnref_GetThisTypeInfo() const; \
+		virtual typeInfo*						lnref_GetThisTypeInfo() const; \
 		static void*							lnref_bindingTypeInfo; \
 
-#define LN_TR_REFLECTION_TYPEINFO_IMPLEMENT(classType, baseClassType) \
-	ln::tr::TypeInfo				classType::lnref_typeInfo(_T(#classType), ln::tr::ReflectionHelper::GetClassTypeInfo<baseClassType>(), &ln::tr::ReflectionHelper::GetLocalValueHavingFlags<classType>, &ln::tr::ReflectionHelper::SetBindingTypeInfo<classType>, &ln::tr::ReflectionHelper::GetBindingTypeInfo<classType>); \
-	ln::tr::TypeInfo*				classType::lnref_GetThisTypeInfo() const { return &lnref_typeInfo; } \
+#define LN_TR_REFLECTION_TYPEINFO_IMPLEMENT_COMMON(typeInfo, classType, baseClassType) \
+	typeInfo						classType::lnref_typeInfo(_T(#classType), ln::tr::ReflectionHelper::GetClassTypeInfo<baseClassType>(), &ln::tr::ReflectionHelper::GetLocalValueHavingFlags<classType>, &ln::tr::ReflectionHelper::SetBindingTypeInfo<classType>, &ln::tr::ReflectionHelper::GetBindingTypeInfo<classType>); \
+	typeInfo*						classType::lnref_GetThisTypeInfo() const { return &lnref_typeInfo; } \
 	void*							classType::lnref_bindingTypeInfo = nullptr;
+
+#define LN_TR_REFLECTION_TYPEINFO_DECLARE() \
+	LN_TR_REFLECTION_TYPEINFO_DECLARE_COMMON(ln::tr::TypeInfo)
+
+#define LN_TR_REFLECTION_TYPEINFO_IMPLEMENT(classType, baseClassType) \
+	LN_TR_REFLECTION_TYPEINFO_IMPLEMENT_COMMON(ln::tr::TypeInfo, classType, baseClassType)
+
 
 /**
 	@brief		
@@ -38,9 +44,15 @@ public:
 	void SetUserData(void* data) { m_userData = data; }
 	void* GetUserData() const { return m_userData; }
 
+
 protected:
+	friend class Property;
+	void RaiseReflectionEvent(const ReflectionEventBase& ev, ReflectionEventArgs* args);
+	virtual void OnPropertyChanged(PropertyChangedEventArgs* e);
 
 private:
+	void SetPropertyValueInternal(const Property* prop, const Variant& value, bool reset);
+
 	void*	m_userData;
 };
 

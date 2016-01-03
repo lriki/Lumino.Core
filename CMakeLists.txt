@@ -213,13 +213,20 @@ set(LN_SOURCES_Xml
 )
 
 set(LN_SOURCES_Reflection
-	include/Lumino/Reflection/Variant.h
+	include/Lumino/Reflection/Common.h
+	include/Lumino/Reflection/EventArgsPool.h
+	include/Lumino/Reflection/Notify.h
 	include/Lumino/Reflection/Property.h
 	include/Lumino/Reflection/PropertyMetadata.h
 	include/Lumino/Reflection/ReflectionArrayObject.h
+	include/Lumino/Reflection/ReflectionEventArgs.h
 	include/Lumino/Reflection/ReflectionObject.h
 	include/Lumino/Reflection/ReflectionStruct.h
 	include/Lumino/Reflection/TypeInfo.h
+	include/Lumino/Reflection/Variant.h
+	src/Reflection/Notify.cpp
+	src/Reflection/Property.cpp
+	src/Reflection/ReflectionEventArgs.cpp
 	src/Reflection/ReflectionObject.cpp
 	src/Reflection/TypeInfo.cpp
 	src/Reflection/Variant.cpp

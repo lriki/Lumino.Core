@@ -1,11 +1,25 @@
 ﻿
 #include "../Internal.h"
+#include <Lumino/Reflection/Notify.h>
 #include <Lumino/Reflection/TypeInfo.h>
+#include <Lumino/Reflection/ReflectionEventArgs.h>
 #include <Lumino/Reflection/ReflectionObject.h>
+#include <Lumino/Reflection/Property.h>
 
 LN_NAMESPACE_BEGIN
 namespace tr
 {
+
+//=============================================================================
+// ReflectionHelper
+//=============================================================================
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+//void ReflectionHelper::RaiseReflectionEvent(ReflectionObject* obj, ReflectionEventBase* ev, ReflectionEventArgs* e)
+//{
+//	ev->Raise(e);
+//}
 
 //=============================================================================
 // TypeInfo
@@ -45,24 +59,54 @@ TypeInfo::TypeInfo(
 	, m_hasLocalValueFlagsGetter(getter)
 	, m_bindingTypeInfoSetter(bindingTypeInfoSetter)
 	, m_bindingTypeInfoGetter(bindingTypeInfoGetter)
+	, m_internalGroup(0)
 {
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-//void TypeInfo::RegisterProperty(Property* prop)
-//{
-//	LN_VERIFY_RETURN(!prop->m_registerd);
-//	LN_VERIFY_RETURN(m_propertyList.GetCount() < 32);
+void TypeInfo::RegisterProperty(Property* prop)
+{
+	LN_VERIFY_RETURN(!prop->m_registerd);
+	LN_VERIFY_RETURN(m_propertyList.GetCount() < 32);
+	prop->m_localIndex = m_propertyList.GetCount();
+	m_propertyList.Add(prop);
+	prop->m_registerd = true;
+}
+
+//-----------------------------------------------------------------------------
 //
-//	//if (!prop->m_registerd)
-//	{
-//		prop->m_localIndex = m_propertyList.GetCount();
-//		m_propertyList.Add(prop);
-//		prop->m_registerd = true;
-//	}
-//}
+//-----------------------------------------------------------------------------
+void TypeInfo::RegisterReflectionEvent(ReflectionEventInfo* ev)
+{
+	LN_VERIFY_RETURN(!ev->m_registerd);
+	m_routedEventList.Add(ev);
+	ev->m_registerd = true;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+bool TypeInfo::InvokeReflectionEvent(ReflectionObject* target, const ReflectionEventInfo* ev, ReflectionEventArgs* e)
+{
+	for (ReflectionEventInfo* dynamicEvent : m_routedEventList)
+	{
+		if (dynamicEvent == ev)
+		{
+			// owner に AddHandler されているイベントハンドラを呼び出す。
+			dynamicEvent->CallEvent(target, e);
+			return e->handled;	// ev と同じイベントは1つしかリスト内に無いはずなのですぐ return
+		}
+	}
+
+	// ベースクラスがあれば、さらにベースクラスを見に行く
+	if (m_baseClass != nullptr)
+	{
+		return m_baseClass->InvokeReflectionEvent(target, ev, e);
+	}
+	return false;
+}
 
 //-----------------------------------------------------------------------------
 //
