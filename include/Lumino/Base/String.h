@@ -13,12 +13,14 @@
 #include "../Threading/Atomic.h"
 
 LN_NAMESPACE_BEGIN
+class Locale;
 class Encoding;
 template<typename TChar> class GenericStringRef;
 template<typename TChar> class GenericStringArray;
 
 namespace detail { template<typename TChar> class GenericStringCore; }
 namespace tr { class Variant; }
+
 
 /**
 	@brief		文字列を表すクラスです。
@@ -89,6 +91,7 @@ public:
 	GenericString(const TChar* str);
 	GenericString(const TChar* str, int length);
 	GenericString(const TChar* str, int begin, int length);
+	GenericString(TChar ch);
 
 	// YCHAR (対の文字型は AssignCStr で文字コード変換を行う)
 	GenericString(const GenericString<YCHAR>& str);
@@ -426,16 +429,45 @@ public:
 	/// 空文字列を取得する
 	static const StringT& GetEmpty();
 
-	template<typename... TArgs>
-	static GenericString Format(const GenericStringRef<TChar>& format, const TArgs&... args);
-
 	/**
 		@brief		書式文字列と可変長引数リストから文字列を生成します。
 		@param[in]	format		: 書式文字列 (printf の書式指定構文)
 		@param[in]	...			: 引数リスト
+
+		@details	指定できる書式はC言語標準の printf 等の書式です。
+					~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+					String str1 = String::SPrintf(_T("%d"), 100);			// => "100"
+					~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+					各書式指定子の詳細な仕様は環境に依存します。
+					特にこれらの中には32ビットシステムと64ビットシステムとの間で移植性がはっきりしないものがありますので、
+					そういったシステムで利用する場合はオーバーラン等に注意してください。
+
+					こういった移植性や後述する引数リストにクラスの実体を指定できてしまう問題を回避するため、
+					Format() を使用することを推奨します。
+
+		@attention	引数リストに指定できるのは環境がサポートしているプリミティブ型だけです。
+					String クラス等のクラスや構造体を指定した場合は未定義動作となります。
+					~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+					String str1 = String::SPrintf(_T("%d"), 100);			// => "100"
+					String str2 = String::SPrintf(_T("%ss"), str1);			// => NG (未定義動作)
+					String str2 = String::SPrintf(_T("%ss"), str1.c_str());	// => "100s"
+					~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	*/
 	static GenericString SPrintf(const GenericString& format, ...);
-	static GenericString SPrintf(const TChar* format, ...);				///< @overload SPrintf
+	static GenericString SPrintf(const TChar* format, ...);				/**< @overload SPrintf */
+	
+	/**
+		@brief		書式文字列と可変長引数リストから文字列を生成します。
+		@param[in]	locale		: ロケール
+		@param[in]	format		: 書式文字列
+		@param[in]	...			: 引数リスト
+		@details	
+	*/
+	template<typename... TArgs>
+	static GenericString Format(const GenericStringRef<TChar>& format, const TArgs&... args);
+	template<typename... TArgs>
+	static GenericString Format(const Locale& locale, const GenericStringRef<TChar>& format, const TArgs&... args);
 
 private:
 	friend class tr::Variant;

@@ -304,7 +304,7 @@ void Property::SetPropertyValueDirect(ReflectionObject* obj, const Property* pro
 //
 //-----------------------------------------------------------------------------
 template<typename TValue>
-const TValue& Property::GetPropertyValueDirect(const ReflectionObject* obj, const Property* prop) const
+const TValue& Property::GetPropertyValueDirect(const ReflectionObject* obj, const Property* prop)
 {
 	LN_THROW(prop != NULL, ArgumentException);
 

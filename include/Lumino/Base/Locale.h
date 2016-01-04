@@ -2,6 +2,7 @@
 	@file	Locale.h
 */
 #pragma once
+#include <locale>
 #include "String.h"
 
 LN_NAMESPACE_BEGIN
@@ -19,6 +20,10 @@ public:
 	*/
 	Locale();
 
+	/**
+		@brief		ロケール名を指定してオブジェクトを構築します。
+	*/
+	Locale(const TCHAR* name);
 
 	Locale(const Locale& locale);
 	Locale& operator=(const Locale& locale);
@@ -39,12 +44,14 @@ public:
 	static const Locale& GetC();
 
 public:
+	const std::locale& GetStdLocale() const;
 	NativeLocale_t GetNativeLocale() const;
 
 private:
 	void Release();
 
 private:
+	std::locale		m_stdLocale;
 	NativeLocale_t	m_nativeLocale;
 #ifdef LN_OS_WIN32
 	StringW			m_nativeName;

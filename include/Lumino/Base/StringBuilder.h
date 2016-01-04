@@ -58,9 +58,9 @@ public:
 
 
 	template<typename... TArgs>
-	void AppendFormat(const GenericStringRef<TChar>& format, const TArgs&... args);
+	void AppendFormat(const Locale& locale, const GenericStringRef<TChar>& format, const TArgs&... args);
 
-	void AppendFormatInternal(const GenericStringRef<TChar>& format, typename detail::FormatList<TChar>* args);
+	void AppendFormatInternal(const Locale& locale, const GenericStringRef<TChar>& format, typename detail::FormatList<TChar>* args);
 };
 
 
@@ -70,14 +70,14 @@ public:
 
 template<typename TChar>
 template<typename... TArgs>
-void GenericStringBuilder<TChar>::AppendFormat(const GenericStringRef<TChar>& format, const TArgs&... args)
+void GenericStringBuilder<TChar>::AppendFormat(const Locale& locale, const GenericStringRef<TChar>& format, const TArgs&... args)
 {
-	auto list = Formatter<TChar>::MakeArgList(args...);
-	AppendFormatInternal(format, &list);
+	auto list = detail::MakeArgList<TChar>(args...);
+	AppendFormatInternal(locale, format, &list);
 }
 
 template<typename TChar>
-void GenericStringBuilder<TChar>::AppendFormatInternal(const GenericStringRef<TChar>& format, typename detail::FormatList<TChar>* args)
+void GenericStringBuilder<TChar>::AppendFormatInternal(const Locale& locale, const GenericStringRef<TChar>& format, typename detail::FormatList<TChar>* args)
 {
 	const TChar* pos = format.GetBegin();
 	const TChar* end = format.GetEnd();
@@ -203,7 +203,7 @@ void GenericStringBuilder<TChar>::AppendFormatInternal(const GenericStringRef<TC
 		// 最後は } でなければならない
 		LN_THROW(*pos == '}', InvalidFormatException);
 
-		GenericString<TChar> str = args->GetArg(index).DoFormat(GenericStringRef<TChar>(fmtBegin, fmtEnd), GenericStringRef<TChar>(fmtEnd, fmtParamEnd));
+		GenericString<TChar> str = args->GetArg(index).DoFormat(locale, GenericStringRef<TChar>(fmtBegin, fmtEnd), GenericStringRef<TChar>(fmtEnd, fmtParamEnd));
 
 		int pad = width - str.GetLength();
 		if (!leftJustify && pad > 0) GenericStringBuilderCore<TChar>::Append(' ', pad);
@@ -228,7 +228,19 @@ template<typename... TArgs>
 GenericString<TChar> GenericString<TChar>::Format(const GenericStringRef<TChar>& format, const TArgs&... args)
 {
 	GenericStringBuilder<TChar> sb;
-	sb.AppendFormat(format, args...);
+	sb.AppendFormat(Locale::GetC(), format, args...);
+	return sb.ToString();
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+template<typename... TArgs>
+GenericString<TChar> GenericString<TChar>::Format(const Locale& locale, const GenericStringRef<TChar>& format, const TArgs&... args)
+{
+	GenericStringBuilder<TChar> sb;
+	sb.AppendFormat(locale, format, args...);
 	return sb.ToString();
 }
 

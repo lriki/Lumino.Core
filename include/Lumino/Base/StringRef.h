@@ -50,6 +50,10 @@ public:
 	bool IsEmpty() const { return m_len <= 0; }
 	int GetLength() const { return m_len; }
 
+	int Compare(const TChar* str, int count = -1, CaseSensitivity cs = CaseSensitivity::CaseSensitive) const { return StringTraits::Compare(GetBegin(), m_len, str, -1, count, cs); }
+
+	const TChar& operator[](int index) const  { return *(m_str + m_pos + index); }
+
 private:
 	const TChar*	m_str;
 	int				m_pos;

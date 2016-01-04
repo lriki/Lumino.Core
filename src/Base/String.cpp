@@ -182,6 +182,11 @@ GenericString<TChar>::GenericString(const TChar* str, int begin, int length)
 {
 	AssignTString(str + begin, length);
 }
+template<typename TChar>
+GenericString<TChar>::GenericString(TChar ch)
+	: GenericString(&ch, 1)
+{
+}
 
 //-----------------------------------------------------------------------------
 // YCHAR コンストラクタ系

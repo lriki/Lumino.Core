@@ -132,6 +132,20 @@ Locale::Locale()
 	, m_nativeName()
 {
 	GetNativeDefaultLocale(&m_nativeLocale, &m_nativeName);
+	StringA name = m_nativeName;
+	m_stdLocale = std::locale(name.c_str());
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+Locale::Locale(const TCHAR* name)
+	: m_nativeLocale(0)
+	, m_nativeName(name)
+{
+	m_nativeLocale = CreateNativeLocale(m_nativeName.c_str());
+	StringA t = m_nativeName;
+	m_stdLocale = std::locale(t.c_str());
 }
 
 //-----------------------------------------------------------------------------
@@ -142,6 +156,7 @@ Locale::Locale(const Locale& locale)
 	, m_nativeName(locale.m_nativeName)
 {
 	m_nativeLocale = CreateNativeLocale(m_nativeName.c_str());
+	m_stdLocale = locale.m_stdLocale;
 }
 
 //-----------------------------------------------------------------------------
@@ -151,6 +166,7 @@ Locale& Locale::operator=(const Locale& locale)
 {
 	m_nativeName = locale.m_nativeName;
 	m_nativeLocale = CreateNativeLocale(m_nativeName.c_str());
+	m_stdLocale = locale.m_stdLocale;
 	return (*this);
 }
 
@@ -168,6 +184,14 @@ Locale::~Locale()
 void Locale::Release()
 {
 	FreeNativeLocale(m_nativeLocale);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+const std::locale& Locale::GetStdLocale() const
+{
+	return m_stdLocale;
 }
 
 //-----------------------------------------------------------------------------
@@ -196,6 +220,7 @@ const Locale& Locale::GetC()
 	static bool init = false;
 	if (!init)
 	{
+		locale.m_stdLocale = std::locale("C");
 #ifdef LN_OS_WIN32
 		locale.m_nativeLocale = CreateNativeLocale(L"C");
 		locale.m_nativeName = L"C";

@@ -428,6 +428,20 @@ template int StringTraits::Compare<wchar_t>(const wchar_t* str1, const wchar_t* 
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
+int StringTraits::Compare(const TChar* str1, int str1Len, const TChar* str2, int str2Len, int count, CaseSensitivity cs)
+{
+	str1Len = (str1Len < 0) ? StrLen(str1) : str1Len;
+	str2Len = (str2Len < 0) ? StrLen(str2) : str2Len;
+	if (str1Len < str2Len) return 1;
+	return Compare(str1, str2, count, cs);
+}
+template int StringTraits::Compare<char>(const char* str1, int str1Len, const char* str2, int str2Len, int count, CaseSensitivity cs);
+template int StringTraits::Compare<wchar_t>(const wchar_t* str1, int str1Len, const wchar_t* str2, int str2Len, int count, CaseSensitivity cs);
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
 int StringTraits::Compare(TChar ch1, TChar ch2, CaseSensitivity cs)
 {
 	if (cs == CaseSensitivity::CaseSensitive) {

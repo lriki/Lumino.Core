@@ -1,6 +1,7 @@
 ﻿
 #pragma once
 #include <array>
+#include <strstream>
 #include "Common.h"
 
 #if defined(_MSC_VER) && _MSC_VER <= 1800 // VS2013
@@ -11,11 +12,33 @@
 
 LN_NAMESPACE_BEGIN
 
-template<typename TChar, typename TValue>
+template<typename TChar, typename TKind, typename TValue>
 struct Formatter;
+
+
+
 
 namespace detail
 {
+
+
+struct FormatArgType
+{
+	struct KindArithmetic {};
+	struct KindString {};
+};
+
+
+
+
+
+
+
+
+
+
+
+
 
 // 引数1つ分。データへの参照は void* で持つ
 template<typename TChar>
@@ -31,21 +54,24 @@ public:
 	{
 	}
 
-	GenericString<TChar> DoFormat(const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam) const
+	GenericString<TChar> DoFormat(const Locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam) const
 	{
-		return m_formatImpl(format, formatParam, m_value);
+		return m_formatImpl(locale, format, formatParam, m_value);
 	}
 
 private:
 	template<typename T>
-	static GenericString<TChar> FormatImpl(const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const void* value)
+	static GenericString<TChar> FormatImpl(const Locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const void* value)
 	{
-		return Formatter2<TChar, T>::Format(format, formatParam, *static_cast<const T*>(value));
-		//return FormatValue(format, formatParam, *static_cast<const T*>(value));
+		using typeKind = STLUtils::first_enabled_t<
+			std::enable_if<std::is_arithmetic<T>::value, detail::FormatArgType::KindArithmetic>,
+			std::enable_if<std::is_same<T, String>::value, detail::FormatArgType::KindString>,
+			std::false_type>;
+		return Formatter<TChar, typeKind, T>::Format(locale, format, formatParam, *static_cast<const T*>(value));
 	}
 
 	const void* m_value;
-	GenericString<TChar>(*m_formatImpl)(const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const void* value);
+	GenericString<TChar>(*m_formatImpl)(const Locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const void* value);
 };
 
 template<typename TChar>
@@ -140,42 +166,130 @@ static FormatListN<TChar, sizeof...(Args)> MakeArgList(const Args&... args)
 //
 //};
 
+//
+//template<typename TChar>
+//struct FormatterTraits
+//{
+//};
+//template<>
+//struct FormatterTraits<char>
+//{
+//	typedef std::strstream tstrstream;
+//};
+//template<>
+//struct FormatterTraits<wchar_t>
+//{
+//	typedef std::wstringstream tstrstream;
+//};
 
-template<typename TChar, typename TValue>
+
+template<typename TChar>
+class StdCharArrayBuffer : public std::basic_streambuf<TChar, std::char_traits<TChar> >
+{
+public:
+	TChar* m_begin;
+
+	StdCharArrayBuffer(TChar* buffer, size_t bufferLength)
+	{
+		m_begin = buffer;
+		TChar* bufferEnd = buffer + bufferLength;
+		setp(buffer, bufferEnd);
+		setg(buffer, buffer, bufferEnd);
+	}
+
+	const TChar* GetCStr()
+	{
+		*pptr() = '\0';
+		return m_begin;
+	}
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+template<typename TChar, typename TKind, typename TValue>
 struct Formatter
 {
-	static GenericString<TChar> Format(const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const TValue& value)
+	static GenericString<TChar> Format(const Locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const TValue& value)
 	{
+		// ここでエラーとなる場合、引数リストに不正な型を指定している。
 		static_assert(0, "Invalid Format args.");
 		return GenericString<TChar>();
 	}
 };
 template<typename TChar, std::size_t N>
-struct Formatter<TChar, const TChar [N]>
+struct Formatter<TChar, std::false_type, const TChar[N]>
 {
-	static GenericString<TChar> Format(const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const TChar* value)
+	static GenericString<TChar> Format(const Locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const TChar* value)
 	{
 		return GenericString<TChar>(value);
 	}
 };
+
 template<typename TChar>
-struct Formatter<TChar, int32_t>
+struct Formatter<TChar, detail::FormatArgType::KindArithmetic, char>
 {
-	static GenericString<TChar> Format(const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const TChar* value)
+	static GenericString<TChar> Format(const Locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, char value)
 	{
-		return GenericString<TChar>(value);
+		return GenericString<TChar>((TChar)value);
 	}
 };
 
+template<typename TChar, typename TValue>
+struct Formatter<TChar, detail::FormatArgType::KindArithmetic, TValue>
+{
+	static GenericString<TChar> Format(const Locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, TValue value)
+	{
+		TCHAR buf[64];
+		StdCharArrayBuffer<TCHAR> b(buf, 64);
+		std::basic_ostream<TCHAR, std::char_traits<TCHAR> > os(&b);
+		os.imbue(locale.GetStdLocale());
 
-//template<typename TChar>
-//struct Formatter2<TChar, String>
-//{
-//	static String Format(const StringRef& format, const StringRef& formatParam, const String* value)
-//	{
-//
-//	}
-//};
+		if (format.IsEmpty())
+		{
+		}
+		else if (format.GetLength() == 1)
+		{
+			if (format[0] == 'x' || format[0] == 'X')
+			{
+				os << std::hex;
+				if (format[0] == 'X') { os << std::uppercase; }
+			}
+			else if (format[0] == 'e' || format[0] == 'E')
+			{
+				os << std::scientific;
+				if (format[0] == 'E') { os << std::uppercase; }
+
+				if (!formatParam.IsEmpty())
+				{
+					NumberConversionResult result;
+					const TChar* dummy;
+					uint32_t n = StringTraits::ToInt32(formatParam.GetBegin(), formatParam.GetLength(), 10, &dummy, &result);
+					LN_THROW(result == NumberConversionResult::Success, InvalidFormatException);
+					os << std::setprecision(n);
+				}
+			}
+		}
+		else
+		{
+			LN_THROW(0, InvalidFormatException);
+		}
+		// http://sla0.jp/2012/04/cpp%E3%81%AEiostream%E3%83%95%E3%82%A9%E3%83%BC%E3%83%9E%E3%83%83%E3%83%88%E6%8C%87%E5%AE%9A%E6%97%A9%E8%A6%8B%E8%A1%A8/
+
+		os << value;
+		return GenericString<TChar>(b.GetCStr());
+	}
+};
 
 
 

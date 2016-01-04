@@ -70,18 +70,6 @@ class Variant
 public:
 	static const Variant Null;
 
-	template<typename ...Args>
-	struct first_enabled {};
-
-	template<typename T, typename ...Args>
-	struct first_enabled<std::enable_if<true, T>, Args...> { using type = T; };
-	template<typename T, typename ...Args>
-	struct first_enabled<std::enable_if<false, T>, Args...> : first_enabled<Args...>{};
-	template<typename T, typename ...Args>
-	struct first_enabled<T, Args...> { using type = T; };
-
-	template<typename ...Args>
-	using first_enabled_t = typename first_enabled<Args...>::type;
 
 
 
@@ -93,7 +81,7 @@ public:
 	// 値型または参照型用の AccessorSelectorHelper
 	template<typename T> struct AccessorSelectorHelper
 	{
-		using typeKind = first_enabled_t<
+		using typeKind = STLUtils::first_enabled_t<
 			std::enable_if<std::is_same<T, std::nullptr_t>::value, detail::KindPrimitive>,
 			std::enable_if<std::is_same<T, bool>::value, detail::KindPrimitive>,
 			std::enable_if<std::is_arithmetic<T>::value, detail::KindArithmetic>,
@@ -117,7 +105,7 @@ public:
 	// ポインタ型用の AccessorSelectorHelper
 	template<typename T> struct AccessorSelectorHelper<T*>
 	{
-		using typeKind = first_enabled_t<
+		using typeKind = STLUtils::first_enabled_t<
 			std::enable_if<std::is_base_of<ReflectionArrayObject, T>::value, detail::KindReflectionArrayObject>,
 			std::enable_if<std::is_base_of<ReflectionObject, T>::value, detail::KindReflectionObject>,
 			std::false_type>;
