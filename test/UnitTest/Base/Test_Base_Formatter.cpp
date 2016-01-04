@@ -1,6 +1,19 @@
 ﻿#include <TestConfig.h>
 #include <Lumino/Base/Formatter.h>
 
+namespace ln
+{
+
+	//template</*typename TChar, */std::size_t N>
+	//struct Formatter<TCHAR, std::false_type, wchar_t[N]>
+	//{
+	//	static GenericString<TCHAR> Format(const Locale& locale, const GenericStringRef<TCHAR>& format, const GenericStringRef<TCHAR>& formatParam,  const wchar_t value[N])
+	//	{
+	//		return GenericString<TCHAR>(value);
+	//	}
+	//};
+}
+
 class Test_Base_Formatter : public ::testing::Test
 {
 protected:
@@ -95,10 +108,17 @@ TEST_F(Test_Base_Formatter, Basic)
 	}
 	// <Test> exp
 	{
+#if _MSC_VER >= 1900	// VS2015 でちょっと変わった？
+		ASSERT_EQ(_T("1.005000e+02"), String::Format(_T("{0:e}"), 100.5));
+		ASSERT_EQ(_T("1.005000E+02"), String::Format(_T("{0:E}"), 100.5));
+		ASSERT_EQ(_T("1.01e+02"), String::Format(_T("{0:e2}"), 100.5));
+		ASSERT_EQ(_T("1.00500000E+02"), String::Format(_T("{0:E8}"), 100.5));
+#else
 		ASSERT_EQ(_T("1.005000e+002"), String::Format(_T("{0:e}"), 100.5));
 		ASSERT_EQ(_T("1.005000E+002"), String::Format(_T("{0:E}"), 100.5));
 		ASSERT_EQ(_T("1.01e+002"), String::Format(_T("{0:e2}"), 100.5));
 		ASSERT_EQ(_T("1.00500000E+002"), String::Format(_T("{0:E8}"), 100.5));
+#endif
 	}
 }
 

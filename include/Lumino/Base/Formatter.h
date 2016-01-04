@@ -228,9 +228,9 @@ struct Formatter
 	}
 };
 template<typename TChar, std::size_t N>
-struct Formatter<TChar, std::false_type, const TChar[N]>
+struct Formatter<TChar, std::false_type, /*const*/ TChar[N]>
 {
-	static GenericString<TChar> Format(const Locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const TChar* value)
+	static GenericString<TChar> Format(const Locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const TChar value[N])
 	{
 		return GenericString<TChar>(value);
 	}

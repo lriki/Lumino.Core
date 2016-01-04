@@ -17,8 +17,11 @@ Win32CodePageEncoding::Win32CodePageEncoding(UINT codePage)
 {
 	BOOL r = ::GetCPInfoEx(codePage, 0, &m_cpInfo);
 	LN_THROW(r, Win32Exception, ::GetLastError());
-
-	m_name = String::SPrintf(_T("cp%u"), codePage);
+	
+	// 以前 String::SPrintf を使っていたが、その中から呼ばれて無限再起することがあるのでやめた
+	TCHAR buf[32];
+	_stprintf_s(buf, _T("cp%u"), codePage);
+	m_name = buf;
 }
 
 //-----------------------------------------------------------------------------
