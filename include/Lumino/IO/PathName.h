@@ -290,7 +290,7 @@ LN_NAMESPACE_END
 LN_NAMESPACE_BEGIN
 
 template<typename TChar>
-struct Formatter<TChar, std::false_type, GenericPathName<TChar>>
+struct Formatter<TChar, detail::FormatArgType::KindString, GenericPathName<TChar>>
 {
 	static GenericString<TChar> Format(const std::locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const GenericPathName<TChar>& value)
 	{

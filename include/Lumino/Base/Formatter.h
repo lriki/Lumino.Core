@@ -2,6 +2,7 @@
 #pragma once
 #include <array>
 #include <strstream>
+#include <iomanip>
 #include "Common.h"
 
 #if defined(_MSC_VER) && _MSC_VER <= 1800 // VS2013
@@ -11,6 +12,9 @@
 #endif
 
 LN_NAMESPACE_BEGIN
+
+template<typename TChar>
+class GenericPathName;
 
 template<typename TChar, typename TKind, typename TValue>
 struct Formatter;
@@ -26,7 +30,17 @@ struct FormatArgType
 {
 	struct KindArithmetic {};
 	struct KindString {};
+	struct KindPointer {};
 };
+
+
+template<typename TChar, typename T>
+struct IsCharArray : std::false_type {};
+template<typename TChar, std::size_t N>
+struct IsCharArray<TChar, TChar[N]> : std::true_type{};
+template<typename TChar, std::size_t N>
+struct IsCharArray<TChar, const TChar[N]> : std::true_type{};
+
 
 // 引数1つ分。データへの参照は void* で持つ
 template<typename TChar>
@@ -42,25 +56,32 @@ public:
 	{
 	}
 
-	GenericString<TChar> DoFormat(const Locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam) const
+	GenericString<TChar> DoFormat(const std::locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam) const
 	{
 		return m_formatImpl(locale, format, formatParam, m_value);
 	}
 
 private:
 	template<typename T>
-	static GenericString<TChar> FormatImpl(const Locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const void* value)
+	static GenericString<TChar> FormatImpl(const std::locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const void* value)
 	{
 		using typeKind = STLUtils::first_enabled_t<
-			std::enable_if<std::is_arithmetic<T>::value, detail::FormatArgType::KindArithmetic>,
-			std::enable_if<std::is_same<T, GenericString<TChar>>::value, detail::FormatArgType::KindString>,
-			std::enable_if<std::is_same<T, std::basic_string<TChar>>::value, detail::FormatArgType::KindString>,
+			std::enable_if<std::is_arithmetic<T>::value,					detail::FormatArgType::KindArithmetic>,
+			std::enable_if<std::is_same<T, std::basic_string<TChar>>::value,detail::FormatArgType::KindString>,
+			std::enable_if<std::is_same<T, GenericString<TChar>>::value,	detail::FormatArgType::KindString>,
+			std::enable_if<std::is_same<T, GenericPathName<TChar>>::value,	detail::FormatArgType::KindString>,
+			std::enable_if<IsCharArray<TChar, T>::value,					detail::FormatArgType::KindPointer>,
+			std::enable_if<IsCharArray<TChar, T>::value,					detail::FormatArgType::KindPointer>,
+			std::enable_if<std::is_same<T, TChar*>::value,					detail::FormatArgType::KindPointer>,
+			std::enable_if<std::is_same<T, const TChar*>::value,			detail::FormatArgType::KindPointer>,
 			std::false_type>;
-		return Formatter<TChar, typeKind, T>::Format(locale.GetStdLocale(), format, formatParam, *static_cast<const T*>(value));
+		// ここでエラーとなる場合、復号書式の引数リストに不正な型を指定している。
+		static_assert(std::is_same<typeKind, std::false_type>::value == false, "Invalid format args. Please check the type of value specified in the composite format.");
+		return Formatter<TChar, typeKind, T>::Format(locale, format, formatParam, *static_cast<const T*>(value));
 	}
 
 	const void* m_value;
-	GenericString<TChar>(*m_formatImpl)(const Locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const void* value);
+	GenericString<TChar>(*m_formatImpl)(const std::locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const void* value);
 };
 
 // 引数リストのベースクラス
@@ -128,7 +149,7 @@ public:
 
 	const TChar* GetCStr()
 	{
-		*pptr() = '\0';
+		*std::basic_streambuf<TChar, std::char_traits<TChar> >::pptr() = '\0';
 		return m_begin;
 	}
 };
@@ -163,17 +184,17 @@ protected:
 
 
 
-template<typename TChar, typename TKind, typename TValue>
-struct Formatter
-{
-	static GenericString<TChar> Format(const std::locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const TValue& value)
-	{
-		// ここでエラーとなる場合、復号書式の引数リストに不正な型を指定している。
-		static_assert(0, "Invalid format args. Please check the type of value specified in the composite format.");
-		return GenericString<TChar>();
-	}
-};
-
+//template<typename TChar, typename TKind, typename TValue>
+//struct Formatter
+//{
+//	static GenericString<TChar> Format(const std::locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const TValue& value)
+//	{
+//		// ここでエラーとなる場合、復号書式の引数リストに不正な型を指定している。
+//		static_assert(0, "Invalid format args. Please check the type of value specified in the composite format.");
+//		return GenericString<TChar>();
+//	}
+//};
+//
 // bool
 template<typename TChar>
 struct Formatter<TChar, detail::FormatArgType::KindArithmetic, bool>
@@ -191,7 +212,7 @@ struct Formatter<TChar, detail::FormatArgType::KindArithmetic, bool>
 
 // TChar[]
 template<typename TChar, std::size_t N>
-struct Formatter<TChar, std::false_type, /*const*/ TChar[N]>	// VS2015
+struct Formatter<TChar, detail::FormatArgType::KindPointer, /*const*/ TChar[N]>	// VS2015
 {
 	static GenericString<TChar> Format(const std::locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const TChar value[N])
 	{
@@ -202,7 +223,7 @@ struct Formatter<TChar, std::false_type, /*const*/ TChar[N]>	// VS2015
 
 // const TChar[]
 template<typename TChar, std::size_t N>
-struct Formatter<TChar, std::false_type, const TChar[N]>		// VS2013
+struct Formatter<TChar, detail::FormatArgType::KindPointer, const TChar[N]>		// VS2013
 {
 	static GenericString<TChar> Format(const std::locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const TChar value[N])
 	{
@@ -213,7 +234,7 @@ struct Formatter<TChar, std::false_type, const TChar[N]>		// VS2013
 
 // TChar*
 template<typename TChar>
-struct Formatter<TChar, std::false_type, TChar*>
+struct Formatter<TChar, detail::FormatArgType::KindPointer, TChar*>
 {
 	static GenericString<TChar> Format(const std::locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, TChar* value)
 	{
@@ -224,7 +245,7 @@ struct Formatter<TChar, std::false_type, TChar*>
 
 // const TChar*
 template<typename TChar>
-struct Formatter<TChar, std::false_type, const TChar*>
+struct Formatter<TChar, detail::FormatArgType::KindPointer, const TChar*>
 {
 	static GenericString<TChar> Format(const std::locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const TChar* value)
 	{

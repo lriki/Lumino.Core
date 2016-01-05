@@ -24,6 +24,11 @@ protected:
 };
 
 
+//template<typename T, std::size_t N>
+//struct IsCharArray<std::is_same<T, wchar_t[N]>> : std::true_type{};
+//template<typename T, std::size_t N>
+//struct IsCharArray<std::is_same<T, const wchar_t[N]>> : std::true_type{};
+
 //---------------------------------------------------------------------
 TEST_F(Test_Base_Formatter, Basic)
 {

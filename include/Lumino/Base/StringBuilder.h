@@ -203,7 +203,7 @@ void GenericStringBuilder<TChar>::AppendFormatInternal(const Locale& locale, con
 		// 最後は } でなければならない
 		LN_THROW(*pos == '}', InvalidFormatException);
 
-		GenericString<TChar> str = args->GetArg(index).DoFormat(locale, GenericStringRef<TChar>(fmtBegin, fmtEnd), GenericStringRef<TChar>(fmtEnd, fmtParamEnd));
+		GenericString<TChar> str = args->GetArg(index).DoFormat(locale.GetStdLocale(), GenericStringRef<TChar>(fmtBegin, fmtEnd), GenericStringRef<TChar>(fmtEnd, fmtParamEnd));
 
 		int pad = width - str.GetLength();
 		if (!leftJustify && pad > 0) GenericStringBuilderCore<TChar>::Append(' ', pad);
