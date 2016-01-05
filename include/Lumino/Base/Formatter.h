@@ -16,7 +16,7 @@ template<typename TChar, typename TKind, typename TValue>
 struct Formatter;
 
 
-
+// https://msdn.microsoft.com/ja-jp/library/txafckwd(v=vs.110).aspx#Anchor_1
 
 namespace detail
 {
@@ -27,18 +27,6 @@ struct FormatArgType
 	struct KindArithmetic {};
 	struct KindString {};
 };
-
-
-
-
-
-
-
-
-
-
-
-
 
 // 引数1つ分。データへの参照は void* で持つ
 template<typename TChar>
@@ -65,15 +53,17 @@ private:
 	{
 		using typeKind = STLUtils::first_enabled_t<
 			std::enable_if<std::is_arithmetic<T>::value, detail::FormatArgType::KindArithmetic>,
-			std::enable_if<std::is_same<T, String>::value, detail::FormatArgType::KindString>,
+			std::enable_if<std::is_same<T, GenericString<TChar>>::value, detail::FormatArgType::KindString>,
+			std::enable_if<std::is_same<T, std::basic_string<TChar>>::value, detail::FormatArgType::KindString>,
 			std::false_type>;
-		return Formatter<TChar, typeKind, T>::Format(locale, format, formatParam, *static_cast<const T*>(value));
+		return Formatter<TChar, typeKind, T>::Format(locale.GetStdLocale(), format, formatParam, *static_cast<const T*>(value));
 	}
 
 	const void* m_value;
 	GenericString<TChar>(*m_formatImpl)(const Locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const void* value);
 };
 
+// 引数リストのベースクラス
 template<typename TChar>
 class FormatList
 {
@@ -86,12 +76,11 @@ public:
 	int GetCount() const { return m_count; }
 
 private:
-	//friend void vformat(std::ostream& out, const char* fmt, const FormatList& list);
 	const FormatArg<TChar>* m_argList;
 	int m_count;
 };
 
-
+// 引数リスト
 template<typename TChar, int N>
 class FormatListN : public FormatList<TChar>
 {
@@ -115,74 +104,14 @@ class FormatListN<TChar, 0> : public FormatList<TChar>
 public: FormatListN() : FormatList<TChar>(0, 0) {}
 };
 
-//template<> class FormatListN<0> : public FormatList
-//{
-//public: FormatListN() : FormatList(0, 0) {}
-//};
-
-
-
-
-
-
+// 可変長引数から FormatList を作る
 template<typename TChar, typename... Args>
 static FormatListN<TChar, sizeof...(Args)> MakeArgList(const Args&... args)
 {
 	return FormatListN<TChar, sizeof...(args)>(args...);
 }
 
-} // namespace detail
-
-/**
-	@brief		
-	https://msdn.microsoft.com/ja-jp/library/txafckwd(v=vs.110).aspx#Anchor_1
-*/
-//template<typename TChar>
-//class Formatter
-//{
-//public:
-//
-//	//static GenericString<TChar> FormatValue(const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const String& value)
-//	//{
-//	//	return value;
-//	//}
-//	//static GenericString<TChar> FormatValue(const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const TCHAR* value)
-//	//{
-//	//	return GenericString<TChar>(value);
-//	//}
-//
-//
-//
-//
-//public:
-//
-//	template<typename... TArgs>
-//	static void Format(const TChar* format, const TArgs&... args)
-//	{
-//		auto list = MakeArgList(args...);
-//		printf("");
-//	}
-//
-//
-//};
-
-//
-//template<typename TChar>
-//struct FormatterTraits
-//{
-//};
-//template<>
-//struct FormatterTraits<char>
-//{
-//	typedef std::strstream tstrstream;
-//};
-//template<>
-//struct FormatterTraits<wchar_t>
-//{
-//	typedef std::wstringstream tstrstream;
-//};
-
-
+// ostream が直接文字列配列に書き出せるようにする
 template<typename TChar>
 class StdCharArrayBuffer : public std::basic_streambuf<TChar, std::char_traits<TChar> >
 {
@@ -204,6 +133,23 @@ public:
 	}
 };
 
+// 整数フォーマットに , を付ける
+template<typename TChar>
+class CommaNumpunct : public std::numpunct<TChar>
+{
+protected:
+	virtual TChar do_thousands_sep() const
+	{
+		return LN_T(TChar, ',');
+	}
+
+	virtual std::basic_string<TChar> do_grouping() const
+	{
+		return LN_T(TChar, "\03");
+	}
+};
+
+} // namespace detail
 
 
 
@@ -220,26 +166,99 @@ public:
 template<typename TChar, typename TKind, typename TValue>
 struct Formatter
 {
-	static GenericString<TChar> Format(const Locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const TValue& value)
+	static GenericString<TChar> Format(const std::locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const TValue& value)
 	{
-		// ここでエラーとなる場合、引数リストに不正な型を指定している。
-		static_assert(0, "Invalid Format args.");
+		// ここでエラーとなる場合、復号書式の引数リストに不正な型を指定している。
+		static_assert(0, "Invalid format args. Please check the type of value specified in the composite format.");
 		return GenericString<TChar>();
 	}
 };
-template<typename TChar, std::size_t N>
-struct Formatter<TChar, std::false_type, /*const*/ TChar[N]>
+
+// bool
+template<typename TChar>
+struct Formatter<TChar, detail::FormatArgType::KindArithmetic, bool>
 {
-	static GenericString<TChar> Format(const Locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const TChar value[N])
+	static GenericString<TChar> Format(const std::locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, bool value)
 	{
+		if (value) {
+			return GenericString<TChar>(LN_T(TChar, "True"));
+		}
+		else {
+			return GenericString<TChar>(LN_T(TChar, "False"));
+		}
+	}
+};
+
+// TChar[]
+template<typename TChar, std::size_t N>
+struct Formatter<TChar, std::false_type, /*const*/ TChar[N]>	// VS2015
+{
+	static GenericString<TChar> Format(const std::locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const TChar value[N])
+	{
+		LN_THROW(format.IsEmpty(), InvalidFormatException);
 		return GenericString<TChar>(value);
 	}
 };
 
+// const TChar[]
+template<typename TChar, std::size_t N>
+struct Formatter<TChar, std::false_type, const TChar[N]>		// VS2013
+{
+	static GenericString<TChar> Format(const std::locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const TChar value[N])
+	{
+		LN_THROW(format.IsEmpty(), InvalidFormatException);
+		return GenericString<TChar>(value);
+	}
+};
+
+// TChar*
+template<typename TChar>
+struct Formatter<TChar, std::false_type, TChar*>
+{
+	static GenericString<TChar> Format(const std::locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, TChar* value)
+	{
+		LN_THROW(format.IsEmpty(), InvalidFormatException);
+		return GenericString<TChar>(value);
+	}
+};
+
+// const TChar*
+template<typename TChar>
+struct Formatter<TChar, std::false_type, const TChar*>
+{
+	static GenericString<TChar> Format(const std::locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const TChar* value)
+	{
+		LN_THROW(format.IsEmpty(), InvalidFormatException);
+		return GenericString<TChar>(value);
+	}
+};
+
+// std::basic_string
+template<typename TChar>
+struct Formatter<TChar, detail::FormatArgType::KindString, std::basic_string<TChar>>
+{
+	static GenericString<TChar> Format(const std::locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const std::basic_string<TChar>& value)
+	{
+		return GenericString<TChar>(value.c_str());
+	}
+};
+
+// GenericString
+template<typename TChar>
+struct Formatter<TChar, detail::FormatArgType::KindString, GenericString<TChar>>
+{
+	static GenericString<TChar> Format(const std::locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const GenericString<TChar>& value)
+	{
+		return value;
+	}
+};
+
+
+
 template<typename TChar>
 struct Formatter<TChar, detail::FormatArgType::KindArithmetic, char>
 {
-	static GenericString<TChar> Format(const Locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, char value)
+	static GenericString<TChar> Format(const std::locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, char value)
 	{
 		return GenericString<TChar>((TChar)value);
 	}
@@ -248,35 +267,65 @@ struct Formatter<TChar, detail::FormatArgType::KindArithmetic, char>
 template<typename TChar, typename TValue>
 struct Formatter<TChar, detail::FormatArgType::KindArithmetic, TValue>
 {
-	static GenericString<TChar> Format(const Locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, TValue value)
+	static GenericString<TChar> Format(const std::locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, TValue value)
 	{
-		TCHAR buf[64];
-		StdCharArrayBuffer<TCHAR> b(buf, 64);
-		std::basic_ostream<TCHAR, std::char_traits<TCHAR> > os(&b);
-		os.imbue(locale.GetStdLocale());
+		TChar buf[64];
+		detail::StdCharArrayBuffer<TChar> b(buf, 64);
+		std::basic_ostream<TChar, std::char_traits<TChar> > os(&b);
+		os.imbue(locale);
+
+		int32_t precision = -1;
+		if (!formatParam.IsEmpty())
+		{
+			NumberConversionResult result;
+			const TChar* dummy;
+			precision = StringTraits::ToInt32(formatParam.GetBegin(), formatParam.GetLength(), 10, &dummy, &result);
+			LN_THROW(result == NumberConversionResult::Success, InvalidFormatException);
+		}
 
 		if (format.IsEmpty())
 		{
 		}
 		else if (format.GetLength() == 1)
 		{
-			if (format[0] == 'x' || format[0] == 'X')
+			if (format[0] == 'd' || format[0] == 'D')
+			{
+				if (precision >= 0)
+				{
+					// 0埋め
+					os << std::setfill((TChar)'0') << std::setw(precision);
+				}
+			}
+			else if (format[0] == 'x' || format[0] == 'X')
 			{
 				os << std::hex;
 				if (format[0] == 'X') { os << std::uppercase; }
+
+				if (precision >= 0)
+				{
+					// 0埋め
+					os << std::setfill((TChar)'0') << std::setw(precision);
+				}
+			}
+			else if (format[0] == 'f' || format[0] == 'F')
+			{
+				os << std::fixed;
+
+				if (precision >= 0)
+				{
+					// 小数点以下の精度
+					os << std::setprecision(precision);
+				}
 			}
 			else if (format[0] == 'e' || format[0] == 'E')
 			{
 				os << std::scientific;
 				if (format[0] == 'E') { os << std::uppercase; }
 
-				if (!formatParam.IsEmpty())
+				if (precision >= 0)
 				{
-					NumberConversionResult result;
-					const TChar* dummy;
-					uint32_t n = StringTraits::ToInt32(formatParam.GetBegin(), formatParam.GetLength(), 10, &dummy, &result);
-					LN_THROW(result == NumberConversionResult::Success, InvalidFormatException);
-					os << std::setprecision(n);
+					// 小数点以下の精度
+					os << std::setprecision(precision);
 				}
 			}
 		}

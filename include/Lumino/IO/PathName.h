@@ -283,3 +283,19 @@ typedef GenericPathName<char>		PathNameA;
 typedef GenericPathName<wchar_t>	PathNameW;
 
 LN_NAMESPACE_END
+
+
+#include "../Base/Formatter.h"
+
+LN_NAMESPACE_BEGIN
+
+template<typename TChar>
+struct Formatter<TChar, std::false_type, GenericPathName<TChar>>
+{
+	static GenericString<TChar> Format(const std::locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const GenericPathName<TChar>& value)
+	{
+		return value.GetString();
+	}
+};
+
+LN_NAMESPACE_END

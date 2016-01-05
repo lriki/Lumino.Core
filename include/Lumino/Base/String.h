@@ -404,7 +404,7 @@ public:
 
 
 	/**
-		@brief		ネイティブ型文字列を割り当てる
+		@brief		ネイティブ型文字列を割り当てます。
 		@param[in]	str				: 設定する文字列
 		@param[in]	begin			: コピー範囲の開始インデックス (省略した場合は先頭から)
 		@param[in]	length			: コピーする文字数 (省略した場合は終端 \0 まで)
@@ -416,11 +416,11 @@ public:
 					TChar と str の型が同じ場合は文字コードの変換を行いません。
 	*/
 	void AssignCStr(const char* str, int begin, int length, bool* usedDefaultChar = NULL);
-	void AssignCStr(const char* str, int length, bool* usedDefaultChar = NULL);					///< @overload AssignCStr
-	void AssignCStr(const char* str, bool* usedDefaultChar = NULL);								///< @overload AssignCStr
-	void AssignCStr(const wchar_t* str, int begin, int length, bool* usedDefaultChar = NULL);	///< @overload AssignCStr
-	void AssignCStr(const wchar_t* str, int length, bool* usedDefaultChar = NULL);				///< @overload AssignCStr
-	void AssignCStr(const wchar_t* str, bool* usedDefaultChar = NULL);							///< @overload AssignCStr
+	void AssignCStr(const char* str, int length, bool* usedDefaultChar = NULL);					/**< @overload AssignCStr */
+	void AssignCStr(const char* str, bool* usedDefaultChar = NULL);								/**< @overload AssignCStr */
+	void AssignCStr(const wchar_t* str, int begin, int length, bool* usedDefaultChar = NULL);	/**< @overload AssignCStr */
+	void AssignCStr(const wchar_t* str, int length, bool* usedDefaultChar = NULL);				/**< @overload AssignCStr */
+	void AssignCStr(const wchar_t* str, bool* usedDefaultChar = NULL);							/**< @overload AssignCStr */
 
 public:
 	/// 現在の環境で定義されている改行文字列を取得する
@@ -458,16 +458,106 @@ public:
 	static GenericString SPrintf(const TChar* format, ...);				/**< @overload SPrintf */
 	
 	/**
-		@brief		書式文字列と可変長引数リストから文字列を生成します。
+		@brief		複合書式文字列と可変長引数リストから文字列を生成します。
 		@param[in]	locale		: ロケール
 		@param[in]	format		: 書式文字列
 		@param[in]	...			: 引数リスト
-		@details	
+
+		@details	この関数は書式として、.NET Framework で使用されている複合書式文字列を受け取ります。
+					~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+					String name = "file";
+					int index = 5;
+					fileName = String::Format("{0}_{1}.txt", name, index);
+					~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+					各書式指定項目の構文は次の通りです。
+					~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+					{index[,alignment][:formatString][precision]}
+					~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+					- index			: 引数リストに指定された値の番号。
+					- alignment		: フィールドの幅。書式設定された文字列よりも長い場合空白で埋められ、値が正の場合は右揃え、負の場合は左揃えになります。
+					- formatString	: 書式指定文字列。以下のセクションを参照してください。
+					- precision		: 精度指定子。formatString によって意味が変わります。
+
+		@section	10 進数 ("D") 書式指定子
+
+					数値を 10 進数文字列に変換します。入力は整数型のみサポートします。
+
+					精度指定子は変換後の文字列の最小桁数です。
+					出力がこの桁数未満の場合は0埋めを行います。
+					~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+					String::Format("{0:D}", 12345));			// => "12345"
+					String::Format("{0:d}", -12345));			// => "-12345"
+					String::Format("{0:D8}", 12345));			// => "00012345"
+					~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+		@section	16 進数 ("X") 書式指定子
+
+					数値を 16 進数文字列に変換します。入力は整数型のみサポートします。
+					書式指定子が大文字か小文字かによって出力される文字列の大文字か小文字が決まります。
+
+					精度指定子は変換後の文字列の最小桁数です。
+					出力がこの桁数未満の場合は0埋めを行います。
+					~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+					String::Format("{0:x}", 0x2045e);			// => "2045e"
+					String::Format("{0:X}", 0x2045e);			// => "2045E"
+					String::Format("{0:X8}", 0x2045e);			// => "0002045E"
+					String::Format("0x{0:X}", 255);				// => "0xFF"
+					~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		
+		@section	固定小数点 ("F") 書式指定子
+
+					実数を固定小数点の文字列に変換します。
+
+					精度指定子は小数部の桁数です。
+					~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+					String::Format("{0:F}", 25.1879));					// => "25.1879"
+					String::Format("{0:f}", 25.1879));					// => "25.1879"
+					String::Format("{0:F2}", 25.1879));					// => "25.19"
+					String::Format(Locale("fr"), "{0:F2}", 25.1879));	// => "25,187900"
+					~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+		@section	指数 ("E") 書式指定子
+
+					実数を指数表現の文字列に変換します。
+					書式指定子が大文字か小文字かによって出力される文字列の大文字か小文字が決まります。
+
+					精度指定子は小数部の桁数です。
+					~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+					String::Format("{0:e}", 12345.6789);				// => "1.234568e+004"
+					String::Format("{0:E10}", 12345.6789);				// => "1.2345678900E+004"
+					String::Format("{0:e4}", 12345.6789);				// => "1.2346e+004"
+					String::Format(Locale("fr"), "{0:E}", 12345.6789);	// => "1,234568E+004"
+					~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+		@section	{} のエスケープ
+
+					左中かっこ ({) および右中かっこ (}) は、書式指定項目の開始および終了として解釈されます。
+					したがって、左中かっこおよび右中かっこを文字として表示するためには、エスケープ シーケンスを使用する必要があります。
+					左中かっこを 1 つ ("{") 表示するには、左中かっこ 2 つ ("{{") を固定テキストに指定します。
+					~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+					String::Format("{{0}}");					// => "{0}"
+					String::Format("{{{0}}}", 1);				// => "{1}"
+					~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+		@section	型安全性
+
+					引数リストに指定された値の型が受け入れられない場合、static_assert によってコンパイル時に不正を検出します。
+					また、型のサイズは引数リストに指定された値の型から求めるため printf 書式の移植性の問題もありません。
+
+					引数リストに入力できる値の型は以下の通りです。
+					- 文字型 (char, wchar_t)
+					- 8～64bit の整数型
+					- 実数型 (float, double)
+					- bool 型
+					- 文字配列 (char*, char[], wchar_t*, wchar_t[])
+					- std::string クラス (std::basic_string<T>)
+					- String クラス (GenericString<T>)
 	*/
 	template<typename... TArgs>
 	static GenericString Format(const GenericStringRef<TChar>& format, const TArgs&... args);
 	template<typename... TArgs>
-	static GenericString Format(const Locale& locale, const GenericStringRef<TChar>& format, const TArgs&... args);
+	static GenericString Format(const Locale& locale, const GenericStringRef<TChar>& format, const TArgs&... args);	/**< @overload Format */
 
 private:
 	friend class tr::Variant;

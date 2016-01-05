@@ -4,14 +4,16 @@
 namespace ln
 {
 
-	//template</*typename TChar, */std::size_t N>
-	//struct Formatter<TCHAR, std::false_type, wchar_t[N]>
+	//// GenericString
+	//template<>
+	//struct Formatter<TCHAR, detail::FormatArgType::KindString, String>
 	//{
-	//	static GenericString<TCHAR> Format(const Locale& locale, const GenericStringRef<TCHAR>& format, const GenericStringRef<TCHAR>& formatParam,  const wchar_t value[N])
+	//	static GenericString<TCHAR> Format(const Locale& locale, const GenericStringRef<TCHAR>& format, const GenericStringRef<TCHAR>& formatParam, String value)
 	//	{
-	//		return GenericString<TCHAR>(value);
+	//		return value;
 	//	}
 	//};
+	//composite formatting
 }
 
 class Test_Base_Formatter : public ::testing::Test
@@ -100,13 +102,61 @@ TEST_F(Test_Base_Formatter, Basic)
 	{
 		ASSERT_EQ(_T("1.5"), String::Format(_T("{0}"), 1.5));
 	}
+	// <Test> bool
+	{
+		bool a = true;
+		ASSERT_EQ(_T("True"), String::Format(_T("{0}"), a));
+		ASSERT_EQ(_T("False"), String::Format(_T("{0}"), false));
+	}
+	// <Test> char[]/wchar_t[]
+	{
+		ASSERT_EQ(_T("abc"), String::Format(_T("{0}"), _T("abc")));
+	}
+	// <Test> char*/wchar_t*
+	{
+		TCHAR buf[] = _T("abc");
+		TCHAR* t1 = (TCHAR*)buf;
+		const TCHAR* t2 = _T("def");
+		ASSERT_EQ(_T("abcdef"), String::Format(_T("{0}{1}"), t1, t2));
+	}
+	// <Test> std::string
+	{
+		std::basic_string<TCHAR> s = _T("abc");
+		ASSERT_EQ(_T("abc"), String::Format(_T("{0}"), s));
+	}
+	// <Test> String
+	{
+		String s = _T("abc");
+		ASSERT_EQ(_T("abc"), String::Format(_T("{0}"), s));
+	}
+	// <Test> PathName
+	{
+		PathName s = _T("abc");
+		ASSERT_EQ(_T("abc"), String::Format(_T("{0}"), s));
+	}
 
-	// <Test> hex
+	//auto aa = String::Format(Locale::GetDefault(), _T("{0}"), 12445.6789);
+
+	// <Test> D
+	{
+		ASSERT_EQ(_T("15"), String::Format(_T("{0:D}"), 15));
+		ASSERT_EQ(_T("15"), String::Format(_T("{0:d}"), 15));
+		ASSERT_EQ(_T("0015"), String::Format(_T("{0:D4}"), 15));
+	}
+	// <Test> X
 	{
 		ASSERT_EQ(_T("F"), String::Format(_T("{0:X}"), 15));
 		ASSERT_EQ(_T("f"), String::Format(_T("{0:x}"), 15));
+		ASSERT_EQ(_T("000f"), String::Format(_T("{0:x4}"), 15));
 	}
-	// <Test> exp
+	// <Test> F
+	{
+		ASSERT_EQ(_T("25.187900"), String::Format(_T("{0:F}"), 25.1879));
+		ASSERT_EQ(_T("25.187900"), String::Format(_T("{0:f}"), 25.1879));
+		ASSERT_EQ(_T("25.19"), String::Format(_T("{0:F2}"), 25.1879));
+		ASSERT_EQ(_T("25,187900"), String::Format(Locale(_T("fr")), _T("{0:F}"), 25.1879));
+	}
+	// <Test> E
 	{
 #if _MSC_VER >= 1900	// VS2015 でちょっと変わった？
 		ASSERT_EQ(_T("1.005000e+02"), String::Format(_T("{0:e}"), 100.5));
@@ -120,6 +170,13 @@ TEST_F(Test_Base_Formatter, Basic)
 		ASSERT_EQ(_T("1.00500000E+002"), String::Format(_T("{0:E8}"), 100.5));
 #endif
 	}
+
+	// <Test> {}
+	{
+		ASSERT_EQ(_T("{0}"), String::Format(_T("{{0}}")));
+		ASSERT_EQ(_T("{1}"), String::Format(_T("{{{0}}}"), 1));
+	}
+
 }
 
 //---------------------------------------------------------------------
@@ -142,6 +199,43 @@ TEST_F(Test_Base_Formatter, Illigal)
 		ASSERT_THROW(String::Format(_T("{0:"), _T("a")), InvalidFormatException);
 		ASSERT_THROW(String::Format(_T("{0:D"), _T("a")), InvalidFormatException);
 		ASSERT_THROW(String::Format(_T("{0:D "), _T("a")), InvalidFormatException);
+	}
+}
+
+
+//---------------------------------------------------------------------
+TEST_F(Test_Base_Formatter, Examples)
+{
+	{
+		String name = _T("file");
+		int index = 5;
+		String fileName = String::Format(_T("{0}_{1}.txt"), name, index);
+		ASSERT_EQ(_T("file_5.txt"), fileName);
+	}
+	{
+		ASSERT_EQ(_T("12345"), String::Format(_T("{0:D}"), 12345));
+		ASSERT_EQ(_T("-12345"), String::Format(_T("{0:d}"), -12345));
+		ASSERT_EQ(_T("00012345"), String::Format(_T("{0:D8}"), 12345));
+	}
+	{
+#if _MSC_VER >= 1900	// VS2015 でちょっと変わった？
+		ASSERT_EQ(_T("1.234568e+04"), String::Format(_T("{0:e}"), 12345.6789));
+		ASSERT_EQ(_T("1.2345678900E+04"), String::Format(_T("{0:E10}"), 12345.6789));
+		ASSERT_EQ(_T("1.2346e+04"), String::Format(_T("{0:e4}"), 12345.6789));
+		ASSERT_EQ(_T("1,234568E+04"), String::Format(Locale(_T("fr")), _T("{0:E}"), 12345.6789));
+#else
+		ASSERT_EQ(_T("1.234568e+004"), String::Format(_T("{0:e}"), 12345.6789));
+		ASSERT_EQ(_T("1.2345678900E+004"), String::Format(_T("{0:E10}"), 12345.6789));
+		ASSERT_EQ(_T("1.2346e+004"), String::Format(_T("{0:e4}"), 12345.6789));
+		ASSERT_EQ(_T("1,234568E+004"), String::Format(Locale(_T("fr")), _T("{0:E}"), 12345.6789));
+#endif
+	}
+
+	{
+		ASSERT_EQ(_T("2045e"), String::Format(_T("{0:x}"), 0x2045e));
+		ASSERT_EQ(_T("2045E"), String::Format(_T("{0:X}"), 0x2045e));
+		ASSERT_EQ(_T("0002045E"), String::Format(_T("{0:X8}"), 0x2045e));
+		ASSERT_EQ(_T("0xFF"), String::Format(_T("0x{0:X}"), 255));
 	}
 }
 
