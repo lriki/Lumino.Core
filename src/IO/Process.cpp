@@ -135,7 +135,7 @@ void Process::Start(const PathName& program, const StringArray& argsList)
 //-----------------------------------------------------------------------------
 StreamWriter* Process::GetStandardInput() const
 {
-	LN_CHECK_STATE(m_standardInputWriter != NULL, "Not redirected.");
+	LN_CHECK_STATE(m_standardInputWriter != nullptr, "Not redirected.");
 	return m_standardInputWriter;
 }
 
@@ -144,7 +144,7 @@ StreamWriter* Process::GetStandardInput() const
 //-----------------------------------------------------------------------------
 StreamReader* Process::GetStandardOutput() const
 {
-	LN_CHECK_STATE(m_standardOutputReader != NULL, "Not redirected.");
+	LN_CHECK_STATE(m_standardOutputReader != nullptr, "Not redirected.");
 	return m_standardOutputReader;
 }
 
@@ -153,7 +153,7 @@ StreamReader* Process::GetStandardOutput() const
 //-----------------------------------------------------------------------------
 StreamReader* Process::GetStandardError() const
 {
-	LN_CHECK_STATE(m_standardErrorReader != NULL, "Not redirected.");
+	LN_CHECK_STATE(m_standardErrorReader != nullptr, "Not redirected.");
 	return m_standardErrorReader;
 }
 
@@ -163,7 +163,7 @@ StreamReader* Process::GetStandardError() const
 int Process::Execute(const PathName& program, const String& args, String* stdOutput)
 {
 	Process proc;
-	proc.SetRedirectStandardOutput(stdOutput != NULL);
+	proc.SetRedirectStandardOutput(stdOutput != nullptr);
 	proc.Start(program, args);
 	if (stdOutput != NULL) {
 		*stdOutput = proc.GetStandardOutput()->ReadToEnd();

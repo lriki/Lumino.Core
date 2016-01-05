@@ -195,7 +195,8 @@ public:
     bool operator == ( const T* ptr ) const { return ( mPtr == ptr ); }
 
     /// operator!=
-    bool operator != ( const T* ptr ) const { return ( mPtr != ptr ); }
+    //bool operator != ( const T* ptr ) const { return ( mPtr != ptr ); }
+	bool operator != (std::nullptr_t ptr) const { return (mPtr != ptr); }
 
     // operator< (for STL cmp)
     bool operator < ( const T* ptr ) const { return mPtr < ptr; }
