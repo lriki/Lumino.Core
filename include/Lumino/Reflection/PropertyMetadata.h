@@ -74,7 +74,7 @@ public:
 		m_defaultValue = defaultValue;
 		m_propertyChangedCallback = LN_NEW SimpleCallbackWrapper< void(TOwnerClass::*)(PropertyChangedEventArgs*) >(propertyChanged);
 		m_options = options;
-		m_inheritanceKey = inheritanceKey;
+		//m_inheritanceKey = inheritanceKey;
 	}
 
 	~PropertyMetadata()

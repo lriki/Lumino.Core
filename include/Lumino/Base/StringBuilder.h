@@ -3,6 +3,7 @@
 #include "ByteBuffer.h"
 #include "String.h"
 #include "Formatter.h"
+#include "Locale.h"
 
 LN_NAMESPACE_BEGIN
 
@@ -112,7 +113,7 @@ void GenericStringBuilder<TChar>::AppendFormatInternal(const Locale& locale, con
 				}
 			}
 
-			Append(ch);
+			GenericStringBuilderCore<TChar>::Append(ch);
 		}
 		// この時点で pos は { の次を指している
 
@@ -207,7 +208,7 @@ void GenericStringBuilder<TChar>::AppendFormatInternal(const Locale& locale, con
 
 		int pad = width - str.GetLength();
 		if (!leftJustify && pad > 0) GenericStringBuilderCore<TChar>::Append(' ', pad);
-		Append(str.c_str(), str.GetLength());
+		GenericStringBuilderCore<TChar>::Append(str.c_str(), str.GetLength());
 		if (leftJustify && pad > 0) GenericStringBuilderCore<TChar>::Append(' ', pad);
 
 		++pos;

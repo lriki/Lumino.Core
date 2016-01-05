@@ -143,8 +143,8 @@ public:
 	{
 		m_begin = buffer;
 		TChar* bufferEnd = buffer + bufferLength;
-		setp(buffer, bufferEnd);
-		setg(buffer, buffer, bufferEnd);
+		std::basic_streambuf<TChar, std::char_traits<TChar> >::setp(buffer, bufferEnd);
+		std::basic_streambuf<TChar, std::char_traits<TChar> >::setg(buffer, buffer, bufferEnd);
 	}
 
 	const TChar* GetCStr()

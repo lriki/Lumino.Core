@@ -338,7 +338,7 @@ public:
 
 
 #define LN_TR_PROPERTY(valueType, propVar) \
-	public:  static const ln::tr::Property*							propVar##; \
+	public:  static const ln::tr::Property*							propVar; \
 	private: static void											set_##propVar(ln::tr::ReflectionObject* obj, valueType& value); \
 	private: static void											get_##propVar(ln::tr::ReflectionObject* obj, valueType** valuePtr); \
 	private: static ln::tr::TypedPropertyInitializer<valueType>		init_##propVar; \
