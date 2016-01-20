@@ -203,10 +203,13 @@ enum class JsonToken
 	/** オブジェクトのプロパティの名前 */
 	PropertyName,
 
+	/** 数値型 (double) */
+	Double,
+
 	/** "null" 値 */
 	Null,
 
-	/** 真偽値 ("true" または "false") */
+	/** 真偽値 ("true" または "false"。GetValue() で値を確認すること) */
 	Boolean,
 
 	/** 文字列値 */
@@ -273,7 +276,7 @@ private:
 	{
 		State				state = State::Start;
 		String				propertyName;
-		ContainerType		containerType = ContainerType::None;
+		ContainerType		containerType = ContainerType::None;	// 現在解析中のブロックの種類
 	};
 
 	//RefPtr<TextReader>		m_reader;
@@ -292,6 +295,7 @@ private:
 	bool ParseNull();
 	bool ParseTrue();
 	bool ParseFalse();
+	bool ParseNumber();
 	bool ParseObject();
 	bool TryParsePropertyName();
 	bool ParseString(bool isKey);

@@ -11,7 +11,7 @@ protected:
 TEST_F(Test_IO_StreamReader, ReadLine)
 {
 #if 0
-	StreamReader reader(LOCALFILE("TestData/Text_SJIS_CRLF.txt"), Encoding::GetEncoding(Text::EncodingType::SJIS));
+	StreamReader reader(LOCALFILE("TestData/Text_SJIS_CRLF.txt"), nullptr);
 	String str, line;
 	int count = 0;
 	while (reader.ReadLine(&line))

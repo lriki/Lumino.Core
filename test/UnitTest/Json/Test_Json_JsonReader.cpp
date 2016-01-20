@@ -89,6 +89,98 @@ TEST_F(Test_Json_JsonReader, Basic2)
 		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::EndArray, reader.GetTokenType());
 		ASSERT_EQ(false, reader.Read());
 	}
+	// <Test> 数値
+	{
+		JsonReader2 reader(_T("[10]"));
+		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::StartArray, reader.GetTokenType());
+		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::Double, reader.GetTokenType()); ASSERT_EQ(_T("10"), reader.GetValue());
+		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::EndArray, reader.GetTokenType());
+		ASSERT_EQ(false, reader.Read());
+	}
+}
+
+//---------------------------------------------------------------------
+TEST_F(Test_Json_JsonReader, Integrate)
+{
+	// http://json.org/example.html
+	// <Integrate> オフィシャルページのサンプル1
+	{
+		StreamReader r(LOCALFILE(_T("TestData/JSONExample1.json")));
+		JsonReader2 jr(&r);
+		ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::StartObject, jr.GetTokenType());
+			ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::PropertyName, jr.GetTokenType()); ASSERT_EQ(_T("glossary"), jr.GetValue());
+			ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::StartObject, jr.GetTokenType());
+				ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::PropertyName, jr.GetTokenType()); ASSERT_EQ(_T("title"), jr.GetValue());
+				ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::String, jr.GetTokenType()); ASSERT_EQ(_T("example glossary"), jr.GetValue());
+				ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::PropertyName, jr.GetTokenType()); ASSERT_EQ(_T("GlossDiv"), jr.GetValue());
+				ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::StartObject, jr.GetTokenType());
+					ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::PropertyName, jr.GetTokenType()); ASSERT_EQ(_T("title"), jr.GetValue());
+					ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::String, jr.GetTokenType()); ASSERT_EQ(_T("S"), jr.GetValue());
+					ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::PropertyName, jr.GetTokenType()); ASSERT_EQ(_T("GlossList"), jr.GetValue());
+					ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::StartObject, jr.GetTokenType());
+						ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::PropertyName, jr.GetTokenType()); ASSERT_EQ(_T("GlossEntry"), jr.GetValue());
+						ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::StartObject, jr.GetTokenType());
+							ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::PropertyName, jr.GetTokenType()); ASSERT_EQ(_T("ID"), jr.GetValue());
+							ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::String, jr.GetTokenType()); ASSERT_EQ(_T("SGML"), jr.GetValue());
+							ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::PropertyName, jr.GetTokenType()); ASSERT_EQ(_T("SortAs"), jr.GetValue());
+							ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::String, jr.GetTokenType()); ASSERT_EQ(_T("SGML"), jr.GetValue());
+							ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::PropertyName, jr.GetTokenType()); ASSERT_EQ(_T("GlossTerm"), jr.GetValue());
+							ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::String, jr.GetTokenType()); ASSERT_EQ(_T("Standard Generalized Markup Language"), jr.GetValue());
+							ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::PropertyName, jr.GetTokenType()); ASSERT_EQ(_T("Acronym"), jr.GetValue());
+							ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::String, jr.GetTokenType()); ASSERT_EQ(_T("SGML"), jr.GetValue());
+							ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::PropertyName, jr.GetTokenType()); ASSERT_EQ(_T("Abbrev"), jr.GetValue());
+							ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::String, jr.GetTokenType()); ASSERT_EQ(_T("ISO 8879:1986"), jr.GetValue());
+							ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::PropertyName, jr.GetTokenType()); ASSERT_EQ(_T("GlossDef"), jr.GetValue());
+							ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::StartObject, jr.GetTokenType());
+								ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::PropertyName, jr.GetTokenType()); ASSERT_EQ(_T("para"), jr.GetValue());
+								ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::String, jr.GetTokenType()); ASSERT_EQ(_T("A meta-markup language, used to create markup languages such as DocBook."), jr.GetValue());
+								ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::PropertyName, jr.GetTokenType()); ASSERT_EQ(_T("GlossSeeAlso"), jr.GetValue());
+								ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::StartArray, jr.GetTokenType());
+									ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::String, jr.GetTokenType()); ASSERT_EQ(_T("GML"), jr.GetValue());
+									ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::String, jr.GetTokenType()); ASSERT_EQ(_T("XML"), jr.GetValue());
+								ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::EndArray, jr.GetTokenType());
+							ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::EndObject, jr.GetTokenType());
+							ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::PropertyName, jr.GetTokenType()); ASSERT_EQ(_T("GlossSee"), jr.GetValue());
+							ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::String, jr.GetTokenType()); ASSERT_EQ(_T("markup"), jr.GetValue());
+						ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::EndObject, jr.GetTokenType());
+					ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::EndObject, jr.GetTokenType());
+				ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::EndObject, jr.GetTokenType());
+			ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::EndObject, jr.GetTokenType());
+		ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::EndObject, jr.GetTokenType());
+		ASSERT_EQ(false, jr.Read());
+	}
+	// <Integrate> オフィシャルページのサンプル2
+	{
+		StreamReader r(LOCALFILE(_T("TestData/JSONExample2.json")));
+		JsonReader2 jr(&r);
+		while (jr.Read());
+		ASSERT_EQ(JsonParseError2::NoError, jr.GetError().code);
+		ASSERT_EQ(true, r.IsEOF());
+	}
+	// <Integrate> オフィシャルページのサンプル3
+	{
+		StreamReader r(LOCALFILE(_T("TestData/JSONExample3.json")));
+		JsonReader2 jr(&r);
+		while (jr.Read());
+		ASSERT_EQ(JsonParseError2::NoError, jr.GetError().code);
+		ASSERT_EQ(true, r.IsEOF());
+	}
+	// <Integrate> オフィシャルページのサンプル4
+	{
+		StreamReader r(LOCALFILE(_T("TestData/JSONExample4.json")));
+		JsonReader2 jr(&r);
+		while (jr.Read());
+		ASSERT_EQ(JsonParseError2::NoError, jr.GetError().code);
+		ASSERT_EQ(true, r.IsEOF());
+	}
+	// <Integrate> オフィシャルページのサンプル5
+	{
+		StreamReader r(LOCALFILE(_T("TestData/JSONExample5.json")));
+		JsonReader2 jr(&r);
+		while (jr.Read());
+		ASSERT_EQ(JsonParseError2::NoError, jr.GetError().code);
+		ASSERT_EQ(true, r.IsEOF());
+	}
 }
 
 //---------------------------------------------------------------------
@@ -140,3 +232,37 @@ TEST_F(Test_Json_JsonReader, Error)
 	}
 }
 
+//---------------------------------------------------------------------
+TEST_F(Test_Json_JsonReader, Issues)
+{
+	// <Issue> ネストされた配列の終端で解析が終了してしまう。
+	{
+		StringReader r(_T(R"([{"tags": ["dolor"]},"end"])"));
+		JsonReader2 jr(&r);
+		while (jr.Read());
+		ASSERT_EQ(JsonParseError2::NoError, jr.GetError().code);
+		ASSERT_EQ(true, r.IsEOF());
+	}
+	// <Issue> プロパティの値が配列だと、次のプロパティの解析で終了してしまう。
+	{
+		StringReader r(_T(R"({"tags": [],"friends":"10"})"));
+		JsonReader2 jr(&r);
+		while (jr.Read());
+		ASSERT_EQ(JsonParseError2::NoError, jr.GetError().code);
+		ASSERT_EQ(true, r.IsEOF());
+	}
+}
+
+//---------------------------------------------------------------------
+//TEST_F(Test_Json_JsonReader, JsonGenerator)
+//{
+//	StreamReader r(Test_GetTempFilePath(_T("JsonGenerator.txt")));
+//	JsonReader2 jr(&r);
+//
+//	while (jr.Read())
+//	{
+//		printf("%s ", jr.GetValue().c_str());
+//	}
+//	ASSERT_EQ(JsonParseError2::NoError, jr.GetError().code);
+//	ASSERT_EQ(true, r.IsEOF());
+//}

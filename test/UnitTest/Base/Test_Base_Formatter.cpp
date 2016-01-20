@@ -63,8 +63,7 @@ TEST_F(Test_Base_Formatter, Basic)
 
 	// <Test> char/wchar_t
 	{
-		ASSERT_EQ(_T("a"), String::Format(_T("{0}"), 'a'));
-		ASSERT_EQ(_T("a"), String::Format(_T("{0}"), L'a'));
+		ASSERT_EQ(_T("a"), String::Format(_T("{0}"), _T('a')));
 	}
 	// <Test> int16_t
 	{

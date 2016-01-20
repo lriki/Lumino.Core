@@ -61,6 +61,8 @@ LN_ENUM(JsonParseError2)
 	InvalidStringChar,		/**< 文字列内に JSON では使用できない文字が見つかった。(制御文字など)*/
 	InvalidStringEscape,	/**< 文字列内に無効なエスケープシーケンスが見つかった。*/
 	UnexpectedToken,		/**< 予期しないトークンが見つかった。*/
+	InvalidNumber,			/**< 不正な数値形式。*/
+	NumberOverflow,			/**< 数値の変換でオーバーフローが発生した。*/
 	InvalidObjectClosing,	/**< オブジェクトが正しく閉じられていない。*/
 
 	ArrayInvalidClosing,	/**< 配列が正しく閉じられていない。*/

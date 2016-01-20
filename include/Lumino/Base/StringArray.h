@@ -43,6 +43,21 @@ public:
 		return Contains(str.c_str());
 	}
 
+
+	int IndexOf(const TChar* str, int startIndex = 0, CaseSensitivity cs = CaseSensitivity::CaseSensitive) const
+	{
+		int len = StringTraits::StrLen(str);
+		for (int i = startIndex; i < ArrayType::GetCount(); ++i)
+		{
+			const StringType& item = GetAt(i);
+			if (StringTraits::Compare(item.c_str(), item.GetLength(), str, len, -1, cs) == 0)
+			{
+				return i;
+			}
+		}
+		return -1;
+	}
+
 };
 
 typedef GenericStringArray<TCHAR>	StringArray;
