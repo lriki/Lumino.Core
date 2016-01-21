@@ -902,3 +902,16 @@ TEST_F(Test_Base_String, FromNativeWCharString)
 	String str = String::FromNativeWCharString(L"abc");
 	ASSERT_EQ(_T("abc"), str);
 }
+
+//---------------------------------------------------------------------
+TEST_F(Test_Base_String, Issue)
+{
+	// <Issue> 空文字列への += で、他の String の初期値が変わってしまう。
+	{
+		String s1;
+		String s2;
+		s2 += _T("a");
+		ASSERT_EQ(_T(""), s1);
+		ASSERT_EQ(_T("a"), s2);
+	}
+}

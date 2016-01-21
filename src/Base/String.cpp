@@ -26,6 +26,12 @@ http://murank.github.io/wxwidgetsjp/2.9.4/overview_unicode.html#overview_unicode
 Tchar.h における汎用テキストのマッピング
 https://msdn.microsoft.com/ja-jp/library/c426s321.aspx
 
+[2015/1/21] char*, wchar_t* へのキャスト演算子はサポートしない。
+	普段は便利でも、落とし穴に落ちたときの原因がすごくわかりづらいため。
+	・Variant に入れるときとか、String と TCHAR でオーバーロード組む必要があるときに邪魔。 
+	・CStringと三項演算子の問題。
+	http://www.g-ishihara.com/mfc_st_02.htm
+
 [2015/8/3] VS2013 では InterlockedIncrement() を使った参照カウント操作は std::string のコピーよりも高いスコアを出した。
 	他の環境でもよいスコアが出ればスレッドセーフ化も検討するかもしれない。
 
@@ -121,9 +127,8 @@ static const int MaxFormatLength = 1024;
 //-----------------------------------------------------------------------------
 template<typename TChar>
 GenericString<TChar>::GenericString()
-	: m_string(NULL)
+	: m_string(detail::GenericStringCore<TChar>::GetSharedEmpty())
 {
-	LN_REFOBJ_SET(m_string, detail::GenericStringCore<TChar>::GetSharedEmpty());
 	m_ref = m_string->c_str();
 }
 
@@ -144,7 +149,7 @@ GenericString<TChar>::GenericString(const GenericString& str)
 	: m_ref(NULL)
 	, m_string(NULL)
 {
-	LN_REFOBJ_SET(m_string, str.m_string);
+	Attach(str.m_string);
 	m_ref = m_string->c_str();
 }
 template<typename TChar>
@@ -240,7 +245,7 @@ GenericString<TChar>::GenericString(const YCHAR* str, int begin, int length)
 template<typename TChar>
 GenericString<TChar>& GenericString<TChar>::operator=(const GenericString& right)
 {
-	LN_REFOBJ_SET(m_string, right.m_string);
+	Attach(right.m_string);
 	m_ref = m_string->c_str();
 	return (*this);
 }
@@ -548,7 +553,7 @@ ByteBuffer GenericString<TChar>::ConvertTo(const Encoding* encoding, bool* outUs
 template<typename TChar>
 void GenericString<TChar>::SetEmpty()
 {
-	LN_REFOBJ_SET(m_string, detail::GenericStringCore<TChar>::GetSharedEmpty());
+	Attach(detail::GenericStringCore<TChar>::GetSharedEmpty());
 }
 
 //-----------------------------------------------------------------------------
@@ -995,11 +1000,13 @@ template<typename TChar>
 void GenericString<TChar>::AssignTString(const TChar* str, int len)
 {
 	LN_SAFE_RELEASE(m_string);
-	if (str == NULL || len == 0) {
+	if (str == NULL || len == 0)
+	{
 		// 空の文字列になる場合は共有の空文字列を参照する
-		LN_REFOBJ_SET(m_string, detail::GenericStringCore<TChar>::GetSharedEmpty());
+		Attach(detail::GenericStringCore<TChar>::GetSharedEmpty());
 	}
-	else {
+	else 
+	{
 		m_string = LN_NEW detail::GenericStringCore<TChar>();	// 参照カウントは 1
 		m_string->assign(str, (len < 0) ? StringTraits::StrLen(str) : len);
 	}
@@ -1012,7 +1019,8 @@ void GenericString<TChar>::AssignTString(const TChar* str, int len)
 template<typename TChar>
 void GenericString<TChar>::Realloc()
 {
-	if (m_string->IsShared()) {
+	if (m_string->IsShared())
+	{
 		detail::GenericStringCore<TChar>* old = m_string;
 		m_string = LN_NEW detail::GenericStringCore<TChar>();	// 参照カウントは 1
 		m_string->assign(old->c_str());

@@ -653,18 +653,30 @@ public:
 	static GenericStringCore* GetSharedEmpty() { return &m_sharedEmpty; }
 
 #ifdef LN_INTERNAL_COW_THREAD_SAFE
-	inline bool IsShared() const { return (m_refCount.load() > 1); }
-	inline void AddRef() { m_refCount.fetch_add(1, std::memory_order_relaxed);/*m_refCount.Increment();*/ }
+	// ※ m_sharedEmpty の参照カウントは操作しない。String を初期化しただけでオーバーヘッドが出るのを避けるため。
+	inline bool IsShared() const { return IsSharedEmpty() || (m_refCount.load() > 1); }
+	inline bool IsSharedEmpty() const { return this == GetSharedEmpty(); }
+	inline void AddRef()
+	{
+		if (IsSharedEmpty()) {
+			return;
+		}
+		m_refCount.fetch_add(1, std::memory_order_relaxed);/*m_refCount.Increment();*/
+	}
 	inline void Release()
 	{
+		if (IsSharedEmpty()) {
+			return;
+		}
+
 		int before = m_refCount.fetch_sub(1, std::memory_order_relaxed);
 		/*m_refCount.Decrement();*/
 		//if (m_refCount.Get() <= 0)
 		if (before <= 1)
 		{
-			if (this != GetSharedEmpty()) {		// グローバル変数として定義された String からの解放済み delete 対策
+			//if (this != GetSharedEmpty()) {		// グローバル変数として定義された String からの解放済み delete 対策
 				delete this;
-			}
+			//}
 		}
 	}
 public:
