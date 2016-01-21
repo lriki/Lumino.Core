@@ -371,14 +371,14 @@ template int StringTraits::LastIndexOf<wchar_t>(const wchar_t* str1, int str1Len
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-int StringTraits::Compare(const TChar* str1, const TChar* str2, int count, CaseSensitivity cs)
+int StringTraits::Compare(const TChar* str1, int str1Len, const TChar* str2, int str2Len, int count, CaseSensitivity cs)
 {
-	if (str1 == NULL || str2 == NULL)
+	if (str1 == nullptr || str2 == nullptr)
 	{
-		if (str1 == NULL && str2 == NULL) {
+		if (str1 == nullptr && str2 == nullptr) {
 			return 0;
 		}
-		else if (str1 == NULL) {
+		else if (str1 == nullptr) {
 			return -1;		// NULL < ""
 		}
 		else {
@@ -386,8 +386,23 @@ int StringTraits::Compare(const TChar* str1, const TChar* str2, int count, CaseS
 		}
 	}
 
-	count = (count < 0) ? INT_MAX : count;
-	
+	// 必要があれば文字数カウント
+	str1Len = (str1Len < 0) ? StrLen(str1) : str1Len;
+	str2Len = (str2Len < 0) ? StrLen(str2) : str2Len;
+	int minCount = std::min(str1Len, str2Len);
+	int maxCount = std::max(str1Len, str2Len);
+
+	// チェックする文字数
+	if (count < 0)
+	{
+		count = minCount;
+	}
+	else
+	{
+		maxCount = count;
+		count = std::min(minCount, count);
+	}
+
 	if (cs == CaseSensitivity::CaseSensitive)
 	{
 		while (count > 0)
@@ -395,14 +410,13 @@ int StringTraits::Compare(const TChar* str1, const TChar* str2, int count, CaseS
 			if (*str1 != *str2) {
 				return ((unsigned int)(*str1)) - ((unsigned int)(*str2));
 			}
-			if (*str1 == 0) {
-				break;
-			}
+			//if (*str1 == 0) {
+			//	break;
+			//}
 			++str1;
 			++str2;
 			--count;
 		}
-		return 0;
 	}
 	else
 	{
@@ -411,32 +425,34 @@ int StringTraits::Compare(const TChar* str1, const TChar* str2, int count, CaseS
 			if (ToUpper(*str1) != ToUpper(*str2)) {
 				return ((unsigned int)(ToUpper(*str1))) - ((unsigned int)(ToUpper(*str2)));
 			}
-			if (*str1 == 0) {
-				break;
-			}
+			//if (*str1 == 0) {
+			//	break;
+			//}
 			++str1;
 			++str2;
 			--count;
 		}
-		return 0;
 	}
+
+	if (minCount < maxCount)
+	{
+		return str1Len - str2Len;
+	}
+	return 0;
 }
-template int StringTraits::Compare<char>(const char* str1, const char* str2, int count, CaseSensitivity cs);
-template int StringTraits::Compare<wchar_t>(const wchar_t* str1, const wchar_t* str2, int count, CaseSensitivity cs);
+template int StringTraits::Compare<char>(const char* str1, int str1Len, const char* str2, int str2Len, int count, CaseSensitivity cs);
+template int StringTraits::Compare<wchar_t>(const wchar_t* str1, int str1Len, const wchar_t* str2, int str2Len, int count, CaseSensitivity cs);
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-int StringTraits::Compare(const TChar* str1, int str1Len, const TChar* str2, int str2Len, int count, CaseSensitivity cs)
+int StringTraits::Compare(const TChar* str1, const TChar* str2, int count, CaseSensitivity cs)
 {
-	str1Len = (str1Len < 0) ? StrLen(str1) : str1Len;
-	str2Len = (str2Len < 0) ? StrLen(str2) : str2Len;
-	if (str1Len < str2Len) return 1;
-	return Compare(str1, str2, count, cs);
+	return Compare(str1, -1, str2, -1, count, cs);
 }
-template int StringTraits::Compare<char>(const char* str1, int str1Len, const char* str2, int str2Len, int count, CaseSensitivity cs);
-template int StringTraits::Compare<wchar_t>(const wchar_t* str1, int str1Len, const wchar_t* str2, int str2Len, int count, CaseSensitivity cs);
+template int StringTraits::Compare<char>(const char* str1, const char* str2, int count, CaseSensitivity cs);
+template int StringTraits::Compare<wchar_t>(const wchar_t* str1, const wchar_t* str2, int count, CaseSensitivity cs);
 
 //-----------------------------------------------------------------------------
 //

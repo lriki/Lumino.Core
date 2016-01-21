@@ -486,6 +486,8 @@ TEST_F(Test_Base_String, IndexOf)
 	String str1(_T("abcdef"));
 	ASSERT_EQ(1, str1.IndexOf(_T("bcd")));
 	ASSERT_EQ(4, str1.IndexOf(_T('e')));
+
+	ASSERT_EQ(1, str1.IndexOf(String(_T("bcd"))));
 }
 
 //---------------------------------------------------------------------

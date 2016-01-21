@@ -77,6 +77,7 @@ public:
 	typedef typename GenericStringTraits<TChar>::YCHAR YCHAR;
 
 	typedef GenericString<TChar>	StringT;
+	typedef GenericStringRef<TChar>	StringRefT;
 	typedef TChar					CharType;
     typedef std::size_t size_type;	// for GCC
 
@@ -226,10 +227,10 @@ public:
 		@param[in]	str			: 検索文字列
 		@param[in]	startIndex	: 検索を開始するインデックス (省略した場合は先頭から)
 		@param[in]	cs		: 大文字と小文字の区別設定
-		@return		見つからなかった場合は -1。str が殻文字列である場合は 0。
+		@return		見つからなかった場合は -1。str が空文字列である場合は 0。
 	*/
-	int IndexOf(const TChar* str, int startIndex = 0, CaseSensitivity cs = CaseSensitivity::CaseSensitive) const;
-	int IndexOf(TChar ch,         int startIndex = 0, CaseSensitivity cs = CaseSensitivity::CaseSensitive) const;	/**< @overload IndexOf */
+	int IndexOf(const StringRefT& str, int startIndex = 0, CaseSensitivity cs = CaseSensitivity::CaseSensitive) const;
+	int IndexOf(TChar ch,              int startIndex = 0, CaseSensitivity cs = CaseSensitivity::CaseSensitive) const;	/**< @overload IndexOf */
 
 	/**
 		@brief		文字列を検索し、最後に見つかったインデックスを返します。

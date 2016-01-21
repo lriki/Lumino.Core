@@ -247,6 +247,12 @@ public:
 	const JsonError2& GetError() const;
 
 private:
+	enum class ResultState
+	{
+		Success = 0,
+		Error = 1,
+	};
+
 	enum class State
 	{
 		Start,

@@ -126,19 +126,21 @@ public:
 	/**
 		@brief		2 つの文字列を比較します。
 		@param[in]	str1		: 比較文字列
+		@param[in]	str1Len		: 検索対象文字列の長さ (-1 の場合 \0 まで)
 		@param[in]	str2		: 比較文字列
+		@param[in]	str2Len		: 検索対象文字列の長さ (-1 の場合 \0 まで)
 		@param[in]	count		: 比較する文字数
 		@param[in]	cs			: 大文字と小文字の区別設定
-		@return		str1 が str2 より小さい → 0 より小さい値
-					str1 と str2 が等しい   → 0
-					str1 が str2 より大きい → 0 より大きい値
+		@return		str1 が str2 より小さい (str1 < str2)  → 0 より小さい値
+					str1 と str2 が等しい   (str1 == str2) → 0
+					str1 が str2 より大きい (str1 > str2)  → 0 より大きい値
 	*/
+	template<typename TChar>
+	static int Compare(const TChar* str1, int str1Len, const TChar* str2, int str2Len, int count, CaseSensitivity cs = CaseSensitivity::CaseSensitive);
 	template<typename TChar>
 	static int Compare(const TChar* str1, const TChar* str2, int count, CaseSensitivity cs = CaseSensitivity::CaseSensitive);
 	template<typename TChar>
 	static int Compare(TChar ch1, TChar ch2, CaseSensitivity cs = CaseSensitivity::CaseSensitive);
-	template<typename TChar>
-	static int Compare(const TChar* str1, int str1Len, const TChar* str2, int str2Len, int count, CaseSensitivity cs = CaseSensitivity::CaseSensitive);
 
 	/**
 		@brief		文字列の前後にある空白を除いた文字列の範囲を調べる

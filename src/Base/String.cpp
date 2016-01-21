@@ -665,9 +665,9 @@ bool GenericString<TChar>::Contains(TChar ch, CaseSensitivity cs) const
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-int GenericString<TChar>::IndexOf(const TChar* str, int startIndex, CaseSensitivity cs) const
+int GenericString<TChar>::IndexOf(const StringRefT& str, int startIndex, CaseSensitivity cs) const
 {
-	return StringTraits::IndexOf(c_str(), GetLength(), str, StringTraits::StrLen(str), startIndex, cs);
+	return StringTraits::IndexOf(c_str(), GetLength(), str.GetBegin(), str.GetLength(), startIndex, cs);
 }
 
 //-----------------------------------------------------------------------------
