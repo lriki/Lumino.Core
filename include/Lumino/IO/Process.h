@@ -160,6 +160,8 @@ public:
 	*/
 	static int Execute(const PathName& program, const String& args = String(), String* stdOutput = NULL);
 
+	// TODO: 出力のエンコーディングを指定したい。linux 系のコマンドラインツールだと文字コードがUTF8
+
 private:
 	void TryGetExitCode();
 	void Dispose();

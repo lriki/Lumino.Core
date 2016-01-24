@@ -111,6 +111,8 @@ public:
 	static bool ExistsDirectory(const wchar_t* path);
 	template<typename TString> static inline bool ExistsDirectory(const TString& path) { return ExistsDirectory(path.c_str()); }
 
+#pragma push_macro("CreateDirectory")
+#undef CreateDirectory
 	/**
 		@brief		ディレクトリを作成します。
 		@param[in]	path	: 作成するディレクトリのパス
@@ -119,6 +121,10 @@ public:
 	*/
 	static void CreateDirectory(const char* path);
 	static void CreateDirectory(const wchar_t* path);
+
+	static void LN_AFX_FUNCNAME(CreateDirectory)(const char* path);
+	static void LN_AFX_FUNCNAME(CreateDirectory)(const wchar_t* path);
+#pragma pop_macro("CreateDirectory")
 
 
 	/// 現在の位置とデータ(ファイル)サイズ、オフセット、基準(SEEK_xxxx)を受け取って、新しいシーク位置を返す

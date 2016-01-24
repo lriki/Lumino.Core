@@ -92,6 +92,7 @@ public:
 		@param[in]	relativePath	: パス文字列
 		@details	relativePath がフルパスの場合は basePath を無視します。
 	*/
+	// TODO: 絶対パスにしてほしくない
 	void AssignUnderBasePath(const PathNameT& basePath, const char* relativePath);
 	/// @overload AssignUnderBasePath
 	void AssignUnderBasePath(const PathNameT& basePath, const wchar_t* relativePath);
@@ -215,8 +216,11 @@ public:
 	/** 
 		@brief		このパスから指定したパスへの相対パスを取得します。
 		@details	target とこのパスは絶対パスである必要があります。
+					同じパスである場合は . が返ります。
+		@attention	双方のパスはディレクトリパスである必要があります。
 	*/
 	GenericPathName<TChar> MakeRelative(const GenericPathName<TChar>& target) const;
+	// TODO: おしりに / はつかなくていい。
 
 
 	/**

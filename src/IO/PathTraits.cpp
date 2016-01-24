@@ -720,14 +720,43 @@ template int PathTraits::Compare<wchar_t>(wchar_t ch1, wchar_t ch2, CaseSensitiv
 // path1 から見たときの path2 の相対パス
 //-----------------------------------------------------------------------------
 template<typename TChar>
+static bool IsInternalSeparator(const TChar* path, int i, int len/*, int slen*/)
+{
+	if (i == len)
+	{
+		if (!PathTraits::IsSeparatorChar(path[i - 1])) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	if (PathTraits::IsSeparatorChar(path[i])) {
+		return true;
+	}
+	return false;
+}
+template<typename TChar>
 GenericString<TChar> PathTraits::DiffPath(const TChar* path1, int len1, const TChar* path2, int len2, CaseSensitivity cs)
 {
+	// パス終端がセパレータでなければもう１字見るようにし、以降の処理でそれはセパレータとする
+	int slen1 = (IsSeparatorChar(path1[len1 - 1])) ? len1 : len1 + 1;
+	int slen2 = (IsSeparatorChar(path1[len2 - 1])) ? len2 : len2 + 1;
+
 	// 双方のパスの先頭から完全に一致する部分を探す。
 	int i = 0;	// 最初の不一致を指す
 	int si = 0;	// 一致部分の中の最後のセパレータ位置
-	for (; (i < len1) && (i < len2); ++i)
+	for (; (i < slen1) && (i < slen2); ++i)
 	{
-		if (Compare(path1[i], path2[i], cs) != 0) {
+		if (IsInternalSeparator(path1, i, len1) && IsInternalSeparator(path2, i, len2)) {
+			// "/a/b/c" vs "/a/b" のようなとき、path2 の b の後ろをセパレータ扱いにしたい
+			si = i;
+		}
+		//else if ((i >= len1) && (i >= len2)) {
+		//	// ↑の if の後、1ループしてここで終了する
+		//	break;
+		//}
+		else if (Compare(path1[i], path2[i], cs) != 0) {
 			break;
 		}
 		else if (IsSeparatorChar(path1[i])) {
@@ -735,29 +764,37 @@ GenericString<TChar> PathTraits::DiffPath(const TChar* path1, int len1, const TC
 		}
 	}
 
+	//if (i == len2 && i != len1 && IsSeparatorChar(path2[i]))
+	//{
+
+	//}
+
 	// 終端に / が無いことに備えて終端 \0 までを見る。path1 はディレクトリパスと仮定する。
-	if (i == len1 && IsSeparatorChar(path2[i])) {
-		si = i;
-	}
+	//if (i == len1 && IsSeparatorChar(path2[i])) {
+	//	si = i;
+	//}
 
 	// 完全不一致
 	if (i == 0) {
 		return path2;
 	}
 	// 完全一致
-	if (i == len1 && i == len2) {
-		return GenericString<TChar>::GetEmpty();
+	if (i == slen1 && i == slen2) {
+		return GenericString<TChar>(_T("."));	// TODO: 共通文字列にしたい。メモリ確保したくない//::GetEmpty();
 	}
 
 	// path1 の残りの部分からセパレータを探す。このセパレータの数が、戻る深さ(../) の数になる。
 	GenericString<TChar> relLead;
-	for (; i < len1; ++i)
+	for (; i < slen1; ++i)
 	{
-		if (IsSeparatorChar(path1[i])) {
+		if (IsInternalSeparator(path1, i, len1)) {
 			relLead += LN_T(TChar, "../");
 		}
 	}
 
+	if (si >= len2) {	// 終端に仮のセパレータがあるとした場合
+		return relLead;
+	}
 	return relLead + GenericString<TChar>(path2, si + 1, len2 - (si + 1));
 }
 template GenericString<char> PathTraits::DiffPath(const char* path1, int len1, const char* path2, int len2, CaseSensitivity cs);
