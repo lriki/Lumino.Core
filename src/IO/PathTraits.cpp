@@ -741,7 +741,7 @@ GenericString<TChar> PathTraits::DiffPath(const TChar* path1, int len1, const TC
 {
 	// パス終端がセパレータでなければもう１字見るようにし、以降の処理でそれはセパレータとする
 	int slen1 = (IsSeparatorChar(path1[len1 - 1])) ? len1 : len1 + 1;
-	int slen2 = (IsSeparatorChar(path1[len2 - 1])) ? len2 : len2 + 1;
+	int slen2 = (IsSeparatorChar(path2[len2 - 1])) ? len2 : len2 + 1;
 
 	// 双方のパスの先頭から完全に一致する部分を探す。
 	int i = 0;	// 最初の不一致を指す
@@ -783,19 +783,28 @@ GenericString<TChar> PathTraits::DiffPath(const TChar* path1, int len1, const TC
 		return GenericString<TChar>(_T("."));	// TODO: 共通文字列にしたい。メモリ確保したくない//::GetEmpty();
 	}
 
-	// path1 の残りの部分からセパレータを探す。このセパレータの数が、戻る深さ(../) の数になる。
-	GenericString<TChar> relLead;
+	// path1 の残りの部分からセパレータを探す。このセパレータの数が、戻る深さ(..) の数になる。
+	GenericString<TChar> relLead;	// TODO: StringBuilder
 	for (; i < slen1; ++i)
 	{
-		if (IsInternalSeparator(path1, i, len1)) {
-			relLead += LN_T(TChar, "../");
+		if (IsInternalSeparator(path1, i, len1))
+		{
+			if (!relLead.IsEmpty()) {
+				relLead += LN_T(TChar, "/");
+			}
+			relLead += LN_T(TChar, "..");
 		}
 	}
 
 	if (si >= len2) {	// 終端に仮のセパレータがあるとした場合
 		return relLead;
 	}
-	return relLead + GenericString<TChar>(path2, si + 1, len2 - (si + 1));
+
+	int subLen = len2 - (si + 1);
+	if (IsSeparatorChar(path2[len2-1])) {
+		--subLen;
+	}
+	return relLead + GenericString<TChar>(path2, si + 1, subLen);
 }
 template GenericString<char> PathTraits::DiffPath(const char* path1, int len1, const char* path2, int len2, CaseSensitivity cs);
 template GenericString<wchar_t> PathTraits::DiffPath(const wchar_t* path1, int len1, const wchar_t* path2, int len2, CaseSensitivity cs);

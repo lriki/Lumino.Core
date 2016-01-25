@@ -160,3 +160,116 @@ TEST_F(Test_IO_PathName, GetSpecialFolderPath)
 	}
 }
 
+//-----------------------------------------------------------------------------
+TEST_F(Test_IO_PathName, Unit_MakeRelative)
+{
+	// <Test> パスが一致する場合は "." を返す
+	{
+		PathName path1(_T("d1/d2/d3"));
+		PathName path2(_T("d1/d2/d3"));
+		path1 = path1.CanonicalizePath();
+		path2 = path2.CanonicalizePath();
+		ASSERT_EQ(_T("."), path1.MakeRelative(path2).GetString());
+
+		// 末尾がセパレータのパターンを見る
+		{
+			PathName path1 = PathName(_T("d1/d2/d3/")).CanonicalizePath();
+			PathName path2 = PathName(_T("d1/d2/d3")).CanonicalizePath();
+			ASSERT_EQ(_T("."), path1.MakeRelative(path2).GetString());
+		}
+		{
+			PathName path1 = PathName(_T("d1/d2/d3")).CanonicalizePath();
+			PathName path2 = PathName(_T("d1/d2/d3/")).CanonicalizePath();
+			ASSERT_EQ(_T("."), path1.MakeRelative(path2).GetString());
+		}
+		{
+			PathName path1 = PathName(_T("d1/d2/d3/")).CanonicalizePath();
+			PathName path2 = PathName(_T("d1/d2/d3/")).CanonicalizePath();
+			ASSERT_EQ(_T("."), path1.MakeRelative(path2).GetString());
+		}
+	}
+	// <Test> パスの末尾は / があっても無くても良い
+	{
+		PathName path1(_T("d1/d2/d3"));
+		PathName path2(_T("d1/d2/d3"));
+		path1 = path1.CanonicalizePath();
+		path2 = path2.CanonicalizePath();
+		ASSERT_EQ(_T("."), path1.MakeRelative(path2).GetString());
+	}
+	// <Test> 1つ上のディレクトリへ戻る場合は ".." を返す
+	{
+		PathName path1(_T("d1/d2/d3/"));
+		PathName path2(_T("d1/d2/"));
+		path1 = path1.CanonicalizePath();
+		path2 = path2.CanonicalizePath();
+		ASSERT_EQ(_T(".."), path1.MakeRelative(path2).GetString());
+
+		// 末尾がセパレータのパターンを見る
+		{
+			PathName path1 = PathName(_T("d1/d2/d3")).CanonicalizePath();
+			PathName path2 = PathName(_T("d1/d2/")).CanonicalizePath();
+			ASSERT_EQ(_T(".."), path1.MakeRelative(path2).GetString());
+		}
+		{
+			PathName path1 = PathName(_T("d1/d2/d3/")).CanonicalizePath();
+			PathName path2 = PathName(_T("d1/d2")).CanonicalizePath();
+			ASSERT_EQ(_T(".."), path1.MakeRelative(path2).GetString());
+		}
+		{
+			PathName path1 = PathName(_T("d1/d2/d3")).CanonicalizePath();
+			PathName path2 = PathName(_T("d1/d2")).CanonicalizePath();
+			ASSERT_EQ(_T(".."), path1.MakeRelative(path2).GetString());
+		}
+	}
+	// <Test> 2つ上のディレクトリへ戻る場合は "../.." を返す
+	{
+		PathName path1 = PathName(_T("d1/d2/d3/")).CanonicalizePath();
+		PathName path2 = PathName(_T("d1/")).CanonicalizePath();
+		ASSERT_EQ(_T("../.."), path1.MakeRelative(path2).GetString());
+		// 末尾がセパレータのパターンを見る
+		{
+			PathName path1 = PathName(_T("d1/d2/d3")).CanonicalizePath();
+			PathName path2 = PathName(_T("d1/")).CanonicalizePath();
+			ASSERT_EQ(_T("../.."), path1.MakeRelative(path2).GetString());
+		}
+		{
+			PathName path1 = PathName(_T("d1/d2/d3/")).CanonicalizePath();
+			PathName path2 = PathName(_T("d1")).CanonicalizePath();
+			ASSERT_EQ(_T("../.."), path1.MakeRelative(path2).GetString());
+		}
+		{
+			PathName path1 = PathName(_T("d1/d2/d3")).CanonicalizePath();
+			PathName path2 = PathName(_T("d1")).CanonicalizePath();
+			ASSERT_EQ(_T("../.."), path1.MakeRelative(path2).GetString());
+		}
+	}
+	// <Test> 1つ上のディレクトリへ戻る場合は ".." を返す
+	{
+		PathName path1 = PathName(_T("d1/d2/")).CanonicalizePath();
+		PathName path2 = PathName(_T("d1/d2/d3/")).CanonicalizePath();
+		ASSERT_EQ(_T("d3"), path1.MakeRelative(path2).GetString());
+		// 末尾がセパレータのパターンを見る
+		{
+			PathName path1 = PathName(_T("d1/d2")).CanonicalizePath();
+			PathName path2 = PathName(_T("d1/d2/d3/")).CanonicalizePath();
+			ASSERT_EQ(_T("d3"), path1.MakeRelative(path2).GetString());
+		}
+		{
+			PathName path1 = PathName(_T("d1/d2/")).CanonicalizePath();
+			PathName path2 = PathName(_T("d1/d2/d3")).CanonicalizePath();
+			ASSERT_EQ(_T("d3"), path1.MakeRelative(path2).GetString());
+		}
+		{
+			PathName path1 = PathName(_T("d1/d2")).CanonicalizePath();
+			PathName path2 = PathName(_T("d1/d2/d3")).CanonicalizePath();
+			ASSERT_EQ(_T("d3"), path1.MakeRelative(path2).GetString());
+		}
+	}
+	// <Test> 2つ上のディレクトリへ戻る場合は "../.." を返す
+	{
+		PathName path1 = PathName(_T("d1/")).CanonicalizePath();
+		PathName path2 = PathName(_T("d1/d2/d3")).CanonicalizePath();
+		ASSERT_EQ(_T("d2/d3"), path1.MakeRelative(path2).GetString().Replace(_T("\\"), _T("/")));
+	}
+}
+
