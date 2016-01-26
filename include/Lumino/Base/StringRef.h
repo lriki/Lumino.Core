@@ -20,7 +20,7 @@ public:
 		: GenericStringRef()
 	{
 		m_str = str;
-		m_len = StringTraits::StrLen(m_str);
+		m_len = StringTraits::StrLen(m_str);	// TODO: これ strlen じゃなくて templateの[N]で取ればもう少し高速化できそう
 	}
 	GenericStringRef(const GenericString<TChar>& str)
 		: GenericStringRef()
@@ -53,12 +53,25 @@ public:
 	int Compare(const TChar* str, int count = -1, CaseSensitivity cs = CaseSensitivity::CaseSensitive) const { return StringTraits::Compare(GetBegin(), m_len, str, -1, count, cs); }
 
 	const TChar& operator[](int index) const  { return *(m_str + m_pos + index); }
+	
+	bool Equals(const GenericStringRef<TChar>& str) const { return Compare(str.GetBegin(), str.GetLength()) == 0; }
+	
 
 private:
 	const TChar*	m_str;
 	int				m_pos;
 	int				m_len;
 };
+
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+inline bool operator==(const TChar* left, const GenericStringRef<TChar>& right)
+{
+	return right.Equals(left);
+}
 
 typedef GenericStringRef<TCHAR>		StringRef;
 typedef GenericStringRef<char>		StringRefA;

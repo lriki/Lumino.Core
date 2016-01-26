@@ -62,6 +62,7 @@ set(LN_SOURCES_Base
 	include/Lumino/Base/Queue.h
 	include/Lumino/Base/Rect.h
 	include/Lumino/Base/RefObject.h
+	include/Lumino/Base/Regex.h
 	include/Lumino/Base/Resource.h
 	include/Lumino/Base/Size.h
 	include/Lumino/Base/SortedArray.h

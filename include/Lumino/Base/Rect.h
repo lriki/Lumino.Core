@@ -1,6 +1,5 @@
 ﻿
 #pragma once
-
 #include "Point.h"
 #include "Size.h"
 
