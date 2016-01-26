@@ -38,6 +38,7 @@
 #include "Lumino/Base/Resource.h"
 #include "Lumino/Base/StringArray.h"
 #include "Lumino/Base/StringRef.h"
+#include "Lumino/Base/Regex.h"
 
 #include "Lumino/IO/PathName.h"
 #include "Lumino/IO/PathTraits.h"

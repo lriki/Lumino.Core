@@ -27,7 +27,7 @@ public:
 	bool Match(const StringRefT& input, GenericMatchResult<TChar>* outResult = nullptr) const
 	{
 		if (outResult != nullptr) {
-			return std::regex_match(input.GetBegin(), input.GetEnd(), outResult->m_matchResults, re.m_regex, std::regex_constants::match_default);
+			return std::regex_match(input.GetBegin(), input.GetEnd(), outResult->m_matchResults, m_regex, std::regex_constants::match_default);
 		}
 		else {
 			return std::regex_match(input.GetBegin(), input.GetEnd(), m_regex, std::regex_constants::match_default);
@@ -37,7 +37,7 @@ public:
 	bool Search(const StringRefT& input, GenericMatchResult<TChar>* outResult = nullptr) const
 	{
 		if (outResult != nullptr) {
-			return std::regex_search(input.GetBegin(), input.GetEnd(), outResult->m_matchResults, re.m_regex, std::regex_constants::match_default);
+			return std::regex_search(input.GetBegin(), input.GetEnd(), outResult->m_matchResults, m_regex, std::regex_constants::match_default);
 		}
 		else {
 			return std::regex_search(input.GetBegin(), input.GetEnd(), m_regex, std::regex_constants::match_default);
@@ -82,7 +82,7 @@ public:
 	const StringRefT& GetGroup(int index) const
 	{
 		LN_THROW(0 <= index && index < m_matchResults.size(), OutOfRangeException);
-		return StringRef(m_matchResults.begin(), m_matchResults.length());
+		return StringRef(m_matchResults[index].first, m_matchResults[index].second);
 	}
 	
 	const StringRefT& operator[](int index) const

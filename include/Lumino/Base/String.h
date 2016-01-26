@@ -89,6 +89,7 @@ public:
 	GenericString(const GenericString& str);
 	GenericString(const GenericString& str, int length);
 	GenericString(const GenericString& str, int begin, int length);
+	GenericString(const StringRefT& str);
 	GenericString(const TChar* str);
 	GenericString(const TChar* str, int length);
 	GenericString(const TChar* str, int begin, int length);

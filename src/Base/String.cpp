@@ -167,6 +167,13 @@ GenericString<TChar>::GenericString(const GenericString& str, int begin, int len
 	AssignTString(str.m_string->c_str() + begin, length);	// str+begin にしないと、暗黙的コンストラクタの呼び出しが発生してしまう
 }
 template<typename TChar>
+GenericString<TChar>::GenericString(const StringRefT& str)
+	: m_ref(NULL)
+	, m_string(NULL)
+{
+	AssignTString(str.GetBegin(), str.GetLength());
+}
+template<typename TChar>
 GenericString<TChar>::GenericString(const TChar* str)
 	: m_ref(NULL)
 	, m_string(NULL)
