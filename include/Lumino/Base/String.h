@@ -207,12 +207,16 @@ public:
 
 	/**
 		@brief		文字列の置換を行う
-		@param[in]	from
-		@param[in]	to
+		@param[in]	from	: 置換される文字列
+		@param[in]	to		: 出現するすべての from を置換する文字列
 		@return		置換結果の文字列
 		@details	from に一致するすべての文字列を to に置換します。
+					~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+					String str = "abc";
+					str = str.Replace("bc", "d");	// => "ad"
+					~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	*/
-	StringT Replace(const TChar* from, const TChar* to) const;
+	StringT Replace(const StringRefT& from, const StringRefT& to) const;
 
 	/**
 		@brief		指定した文字列がこの文字列内に存在するかを判断します。

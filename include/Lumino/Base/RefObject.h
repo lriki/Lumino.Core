@@ -68,14 +68,22 @@ public:
 
 public:
 
+	// TODO: いらない
 	template<typename... TArgs>
 	static RefPtr<T> Create(TArgs... args)
 	{
 		return RefPtr<T>(LN_NEW T(args...), false);
 	}
 
+	// TODO: いらない
 	template<typename... TArgs>
 	static RefPtr<T> Construct(TArgs... args)
+	{
+		return RefPtr<T>(LN_NEW T(args...), false);
+	}
+
+	template<typename... TArgs>
+	static RefPtr<T> MakeRef(TArgs... args)
 	{
 		return RefPtr<T>(LN_NEW T(args...), false);
 	}

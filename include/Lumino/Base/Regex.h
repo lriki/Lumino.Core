@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 #include <regex>
 #include "String.h"
@@ -71,21 +71,21 @@ class GenericMatchResult
 public:
 	typedef GenericStringRef<TChar>	StringRefT;
 	
-	const StringRefT& GetValue() const
+	StringRefT GetValue() const
 	{
 		return GetGroup(0);
 	}
 	
 	int GetGroupCount() const { return m_matchResults.size(); }
 	
-	// index=0 ‚Íƒ}ƒbƒ`‚µ‚½‘S‘Ì‚ğ•Ô‚·
-	const StringRefT& GetGroup(int index) const
+	// index=0 ã¯ãƒãƒƒãƒã—ãŸå…¨ä½“ã‚’è¿”ã™
+	StringRefT GetGroup(int index) const
 	{
-		LN_THROW(0 <= index && index < m_matchResults.size(), OutOfRangeException);
+		LN_THROW(0 <= index && index < (int)m_matchResults.size(), OutOfRangeException);
 		return StringRef(m_matchResults[index].first, m_matchResults[index].second);
 	}
 	
-	const StringRefT& operator[](int index) const
+	StringRefT operator[](int index) const
 	{
 		return GetGroup(index);
 	}

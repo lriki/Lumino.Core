@@ -633,7 +633,7 @@ GenericString<TChar> GenericString<TChar>::Remove(TChar ch, CaseSensitivity cs) 
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-GenericString<TChar> GenericString<TChar>::Replace(const TChar* from, const TChar* to) const
+GenericString<TChar> GenericString<TChar>::Replace(const StringRefT& from, const StringRefT& to) const
 {
 	GenericString<TChar> newStr(*this);
 	if (newStr.IsEmpty()) {
@@ -642,17 +642,18 @@ GenericString<TChar> GenericString<TChar>::Replace(const TChar* from, const TCha
 	}
 
 	size_type pos = 0;
-	size_t fromLength = StringTraits::StrLen(from);
-	size_t toLength = StringTraits::StrLen(to);
+	size_t fromLength = from.GetLength();
+	size_t toLength = to.GetLength();
 
-	while (pos = newStr.m_string->find(from, pos), pos != std::basic_string<TChar>::npos)
+	while (pos = newStr.m_string->find(from.GetBegin(), pos, fromLength), pos != std::basic_string<TChar>::npos)
 	{
-		newStr.m_string->replace(pos, fromLength, to);
+		newStr.m_string->replace(pos, fromLength, to.GetBegin(), toLength);
 		pos += toLength;
 	}
 
 	return newStr;
 }
+
 
 //-----------------------------------------------------------------------------
 //

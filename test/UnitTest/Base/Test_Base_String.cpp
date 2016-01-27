@@ -579,13 +579,37 @@ TEST_F(Test_Base_String, Remove)
 }
 
 //---------------------------------------------------------------------
-TEST_F(Test_Base_String, Replace)
+TEST_F(Test_Base_String, Unit_Replace)
 {
-	StringA str1("test");
-	StringA str2 = str1.Replace("es", "b");
-	ASSERT_EQ('t', str2[0]);
-	ASSERT_EQ('b', str2[1]);
-	ASSERT_EQ('t', str2[2]);
+	// <Unit> 部分一致を置換できること。
+	// <Unit> TCHAR* を渡せること。
+	{
+		StringA str1("test");
+		StringA str2 = str1.Replace("es", "b");
+		ASSERT_EQ('t', str2[0]);
+		ASSERT_EQ('b', str2[1]);
+		ASSERT_EQ('t', str2[2]);
+	}
+	// <Unit> 全ての一致を置換できること。
+	{
+		String str1(_T("aaa"));
+		String str2 = str1.Replace(String(_T("a")), String(_T("b")));
+		ASSERT_EQ(_T("bbb"), str2);
+	}
+	// <Unit> String を渡せること。
+	{
+		String str1(_T("a"));
+		String str2 = str1.Replace(String(_T("a")), String(_T("b")));
+		ASSERT_EQ(_T("b"), str2);
+	}
+	// <Unit> StringRef を渡せること。
+	{
+		String str1(_T("reabcdef"));
+		TCHAR buf1[] = _T("abc");
+		TCHAR buf2[] = _T("def");
+		String str2 = str1.Replace(StringRef(buf1, buf1 + 2), StringRef(buf2, buf2 + 2));
+		ASSERT_EQ(_T("redecdef"), str2);
+	}
 }
 
 //---------------------------------------------------------------------

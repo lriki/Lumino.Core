@@ -169,8 +169,10 @@ public:
 	/** パスの示す先がディレクトリであるかを確認します。*/
 	bool IsDirectory() const;
 
-	/// 指定された拡張子を持っているかを確認する (pExt の . の有無は問わない)
-	bool CheckExt(const TChar* ext) const;
+	/// 指定された拡張子を持っているかを確認する (ext の . の有無は問わない)
+	bool CheckExt(const TChar* ext) const;	// TODO: obsolete
+
+	bool EqualExtension(const TChar* ext) const { return CheckExt(ext); }
 
 	/**
 		@brief		親ディレクトリの PathName を返す
