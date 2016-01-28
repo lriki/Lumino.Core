@@ -870,8 +870,16 @@ static NumberConversionResult StrToNumInternal(
 	// 基数によってプレフィックスをスキップする
 	if (base == 8)
 	{
-		if (p[0] == '0') {
+		if (p[0] == '0')
+		{
 			++p;
+			if (p >= end)
+			{
+				if (outEndPtr != NULL) { *outEndPtr = p; }
+				*outNumber = 0;
+				return NumberConversionResult::Success;
+			}
+
 		}
 	}
 	else if (base == 16)
