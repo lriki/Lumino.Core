@@ -14,14 +14,14 @@ TEST_F(Test_IO_PathName, Constructor)
 	{
 		PathName path = String("dir");
 	}
-	// <Test> コンストラクタでベースパスと結合した場合は単純化される。
+	// <Test> 
 	{
-		PathName base = _T("C:/dir1/dir2");
+		PathName base = _T("dir1/dir2");
 		PathName path(base, _T("../file1.txt"));
 #ifdef LN_OS_WIN32
-		ASSERT_STREQ(_T("C:\\dir1\\file1.txt"), path.c_str());
+		ASSERT_STREQ(_T("dir1/dir2\\../file1.txt"), path.c_str());
 #else
-		ASSERT_STREQ(_T("C:/dir1/file1.txt"), path.c_str());
+		ASSERT_STREQ(_T("dir1/dir2/../file1.txt"), path.c_str());
 #endif
 	}
 }
