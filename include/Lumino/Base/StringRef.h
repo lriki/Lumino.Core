@@ -7,6 +7,9 @@
 
 LN_NAMESPACE_BEGIN
 
+template<typename TChar>
+class GenericPathName;
+
 /**
 	@brief	ある文字列に対する部分文字列の参照を保持します。
 */
@@ -36,6 +39,12 @@ public:
 			m_str = begin;
 			m_len = end - begin;
 		}
+	}
+	GenericStringRef(const GenericPathName<TChar>& path)
+		: GenericStringRef()
+	{
+		m_str = path.GetString().c_str();
+		m_len = path.GetString().GetLength();
 	}
 
 	GenericStringRef(GenericStringRef const&) = default;

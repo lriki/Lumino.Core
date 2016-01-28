@@ -154,7 +154,7 @@ void Process::Start(const PathName& program, const String& args)
 	si.wShowWindow = SW_HIDE;
 
 	// exe 名と引数を連結してコマンドライン文字列を作る
-	String cmdArgs = program;
+	String cmdArgs = program.GetString();
 	if (!args.IsEmpty()) {
 		cmdArgs += _T(" ");
 		cmdArgs += args;
