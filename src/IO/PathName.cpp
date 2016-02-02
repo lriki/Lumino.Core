@@ -132,6 +132,17 @@ GenericPathName<TChar> GenericPathName<TChar>::GetFileNameWithoutExtension() con
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
+GenericStringRef<TChar> GenericPathName<TChar>::GetExtension(bool withDot) const LN_NOEXCEPT
+{
+	StringRefT ref;
+	PathTraits::GetExtension(m_path.c_str(), withDot, &ref);
+	return ref;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
 const GenericString<TChar> GenericPathName<TChar>::GetStrEndSeparator() const
 {
 	GenericStringT newStr = m_path;

@@ -260,6 +260,47 @@ template void PathTraits::GetExtension(const wchar_t* path, wchar_t* outExt);
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
+Result PathTraits::GetExtension(const TChar* path, bool withDot, GenericStringRef<TChar>* outRef) LN_NOEXCEPT
+{
+	if (path == nullptr || outRef == nullptr) { return Result::ArgumentError; }
+	outRef->Attach(path, 0, 0);
+
+	int len = StringTraits::StrLen(path);
+	for (int i = len; i >= 0; --i)
+	{
+		TChar ch = path[i];
+		if (ch == '.')
+		{
+			if (withDot)
+			{
+				if (i != len - 1) {
+					*outRef = GenericStringRef<TChar>(&path[i], len - i);
+					break;
+				}
+			}
+			else
+			{
+				if (i + 1 != len - 1) {
+					*outRef = GenericStringRef<TChar>(&path[i + 1], len - i);
+					break;
+				}
+			}
+
+			break;	// "file." のようなパターン
+		}
+		if (ch == DirectorySeparatorChar || ch == AltDirectorySeparatorChar || ch == VolumeSeparatorChar) {
+			break;		// . の前にセパレータが見つかった
+		}
+	}
+	return Result::Success;
+}
+template Result PathTraits::GetExtension(const char* path, bool withDot, GenericStringRef<char>* outRef) LN_NOEXCEPT;
+template Result PathTraits::GetExtension(const wchar_t* path, bool withDot, GenericStringRef<wchar_t>* outRef) LN_NOEXCEPT;
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
 int PathTraits::CanonicalizePath(const TChar* srcPath, size_t srcLen, TChar* outPath)
 {
 	/*	

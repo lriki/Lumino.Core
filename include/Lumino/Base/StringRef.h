@@ -40,6 +40,12 @@ public:
 			m_len = end - begin;
 		}
 	}
+	GenericStringRef(const TChar* begin, int length)
+		: GenericStringRef()
+	{
+		m_str = begin;
+		m_len = length;
+	}
 	GenericStringRef(const GenericPathName<TChar>& path)
 		: GenericStringRef()
 	{
@@ -65,6 +71,18 @@ public:
 	
 	bool Equals(const GenericStringRef<TChar>& str) const { return Compare(str.GetBegin(), str.GetLength()) == 0; }
 	
+	void Detach() LN_NOEXCEPT
+	{
+		m_str = nullptr;
+		m_pos = 0;
+		m_len = 0;
+	}
+	void Attach(const TChar* str, int pos, int len) LN_NOEXCEPT
+	{
+		m_str = str;
+		m_pos = pos;
+		m_len = len;
+	}
 
 private:
 	const TChar*	m_str;

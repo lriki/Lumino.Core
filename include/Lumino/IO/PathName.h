@@ -122,7 +122,7 @@ public:
 
 	/**
 		@brief		ファイルの拡張子を取得します。
-		@param[in]	path		: パス文字列
+		@param[in]	withDot		: true の場合、結果は '.' を含み、false の場合は含まない
 		@details	拡張子を持たない場合は空文字列を返します。
 		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		PathName("file.txt").GetExtension()			// => ".txt"
@@ -133,7 +133,7 @@ public:
 		PathName(".").GetExtension()				// => ""
 		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	*/
-	StringRefT GetExtension(bool withDot = true) const;
+	StringRefT GetExtension(bool withDot = true) const LN_NOEXCEPT;
 
 	/** C言語形式の文字列ポインタを返します。*/
 	const TChar* c_str() const { return m_path.c_str(); }

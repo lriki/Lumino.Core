@@ -82,10 +82,13 @@ public:
 					"file.txt"			=> ".txt"
 					"dir.a\file"		=> ""
 					"file."				=> ""
+					".", "a/", "/", ".."=> ""
 		@endcode
 	*/
 	template<typename TChar>
 	static void GetExtension(const TChar* path, TChar* outExt);
+	template<typename TChar>
+	static Result GetExtension(const TChar* path, bool withDot, GenericStringRef<TChar>* outRef) LN_NOEXCEPT;
 
 	/**
 		@brief		パスを単純化する

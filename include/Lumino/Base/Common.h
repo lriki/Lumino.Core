@@ -95,7 +95,7 @@
 	#define LN_CDECL	
 #endif
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && _MSC_VER < 1900
 	#define LN_NOEXCEPT
 #else
 	#define LN_NOEXCEPT noexcept
@@ -226,5 +226,13 @@ enum class NumberConversionResult
 	FormatError,
 	Overflow,
 };
+
+/** */
+enum class Result
+{
+	Success = 0,
+	ArgumentError,
+};
+
 
 LN_NAMESPACE_END

@@ -64,6 +64,23 @@ TEST_F(Test_IO_PathName, GetWithoutExtension)
 }
 
 //-----------------------------------------------------------------------------
+TEST_F(Test_IO_PathName, GetExtension)
+{
+	ASSERT_EQ(_T(".txt"), PathName(_T("file.txt")).GetExtension());
+	ASSERT_EQ(_T("txt"), PathName(_T("file.txt")).GetExtension(false));
+	ASSERT_EQ(_T(".txt"), PathName(_T("file.tmp.txt")).GetExtension());
+	ASSERT_EQ(_T(""), PathName(_T("file")).GetExtension());
+	ASSERT_EQ(_T(""), PathName(_T("")).GetExtension());
+	ASSERT_EQ(_T(""), PathName(_T(".")).GetExtension());
+
+	ASSERT_EQ(_T(""), PathName(_T("dir.a\file")).GetExtension());
+	ASSERT_EQ(_T(""), PathName(_T("file.")).GetExtension());
+	ASSERT_EQ(_T(""), PathName(_T("..")).GetExtension());
+	ASSERT_EQ(_T(""), PathName(_T("a/")).GetExtension());
+	ASSERT_EQ(_T(""), PathName(_T("/")).GetExtension());
+}
+
+//-----------------------------------------------------------------------------
 TEST_F(Test_IO_PathName, Compare)
 {
 #ifdef LN_OS_WIN32
