@@ -41,7 +41,8 @@ public:
 
 public:
 	typedef GenericPathName<TChar>	PathNameT;
-	typedef GenericString<TChar>	GenericStringT;
+	typedef GenericString<TChar>	GenericStringT;	// TODO: StringT
+	typedef GenericStringRef<TChar>	StringRefT;
 
 public:
 	GenericPathName() {}
@@ -102,7 +103,7 @@ public:
 	void AssignUnderBasePath(const PathNameT& basePath, const PathNameT& relativePath) { AssignUnderBasePath(basePath, relativePath.c_str()); }
 
 	/**
-		@brief		現在のパスに別のパス文字列を連結する
+		@brief		現在のパスに別のパス文字列を連結します。
 		@param[in]	path		: パス文字列
 		@details	現在のパスの末尾にセパレータが無い場合は付加し、文字列を連結します。
 					path が絶対パスであれば、現在のパスを置き換えます。
@@ -119,7 +120,22 @@ public:
 
 	GenericPathName<TChar> GetFileNameWithoutExtension() const;
 
-	/// パスの TChar 文字列を返す
+	/**
+		@brief		ファイルの拡張子を取得します。
+		@param[in]	path		: パス文字列
+		@details	拡張子を持たない場合は空文字列を返します。
+		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		PathName("file.txt").GetExtension()			// => ".txt"
+		PathName("file.txt").GetExtension(false)	// => "txt"
+		PathName("file.tmp.txt").GetExtension()		// => ".txt"
+		PathName("file").GetExtension()				// => ""
+		PathName("").GetExtension()					// => ""
+		PathName(".").GetExtension()				// => ""
+		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	*/
+	StringRefT GetExtension(bool withDot = true) const;
+
+	/** C言語形式の文字列ポインタを返します。*/
 	const TChar* c_str() const { return m_path.c_str(); }
 	
 	/// パス文字列を返す
