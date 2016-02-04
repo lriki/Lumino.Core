@@ -118,3 +118,12 @@ TEST_F(Test_IO_FileSystem, Copy_Delete)
 	ASSERT_FALSE(FileSystem::Exists(dest.c_str()));
 }
 
+//-----------------------------------------------------------------------------
+TEST_F(Test_IO_FileSystem, CreateDirectory)
+{
+	FileSystem::CreateDirectory(TEMPFILE("Test_IO_FileSystem/CreateDirectory"));
+	FileSystem::WriteAllText(TEMPFILE("Test_IO_FileSystem/CreateDirectory/file"), _T("test"));
+	FileSystem::DeleteDirectory(TEMPFILE("Test_IO_FileSystem"), true);
+	ASSERT_FALSE(FileSystem::ExistsDirectory(TEMPFILE("Test_IO_FileSystem")));	// 消えている
+}
+

@@ -74,12 +74,36 @@ public:
 
 	/**
 		@brief		ファイルを削除する
-		@param[in]	filePath		: 削除するファイル名
+		@param[in]	filePath		: 削除するファイルのパス
 		@details	削除するファイルが存在しない場合、例外はスローされません。
 	*/
 	static void Delete(const char* filePath);
 	static void Delete(const wchar_t* filePath);
 
+	/**
+		@brief		ディレクトリを削除します。
+		@param[in]	path			: 削除するディレクトリのパス
+		@param[in]	recursive		: 
+	*/
+	template<typename TChar>
+	static void DeleteDirectory(const TChar* path, bool recursive);
+
+
+
+	static StringArrayA GetFileSystemEntries(const char* directoryPath, const char* pattern);
+	static StringArrayW GetFileSystemEntries(const wchar_t* directoryPath, const wchar_t* pattern);
+
+
+
+
+
+
+
+
+
+
+
+	
 	/// ファイルサイズを取得する
 	static uint64_t GetFileSize(const TCHAR* filePath);
 

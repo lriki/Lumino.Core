@@ -7,6 +7,7 @@
 #include "../../include/Lumino/Text/Encoding.h"
 #include "../../include/Lumino/IO/FileStream.h"
 #include "../../include/Lumino/IO/FileSystem.h"
+#include <filesystem>
 
 LN_NAMESPACE_BEGIN
 #if 0

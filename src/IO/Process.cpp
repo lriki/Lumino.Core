@@ -119,6 +119,10 @@ void Process::Start(const PathName& program, const StringArray& argsList)
 	String args;
 	for (int i = 0; i < argsList.GetCount(); ++i)
 	{
+		if (!args.IsEmpty()) {
+			args += _T(' ');
+		}
+
 		String tmp = argsList[i];
 		if (tmp.Contains(_T(' ')) || tmp.Contains(_T('\t')))
 		{
@@ -126,8 +130,9 @@ void Process::Start(const PathName& program, const StringArray& argsList)
 			{
 				tmp = _T('\"') + tmp + _T('\"');
 			}
-			args += _T(' ') + tmp;
 		}
+
+		args += tmp;
 	}
 
 	Start(program, args);

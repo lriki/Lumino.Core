@@ -128,6 +128,90 @@ void FileSystem::Delete(const wchar_t* filePath)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+static BOOL RemoveDirectoryT(LPCSTR lpPathName) { return ::RemoveDirectoryA(lpPathName); }
+static BOOL RemoveDirectoryT(LPCWSTR lpPathName) { return ::RemoveDirectoryW(lpPathName); }
+
+template<typename TChar>
+void FileSystem::DeleteDirectory(const TChar* path, bool recursive)
+{
+	if (recursive)
+	{
+		auto list = GetFileSystemEntries(path, nullptr);
+		for (auto path : list)
+		{
+			if (GetAttribute(path.c_str()) == FileAttribute::Directory) {
+				DeleteDirectory(path.c_str(), recursive);
+			}
+			else {
+				Delete(path.c_str());
+			}
+		}
+	}
+	BOOL r = RemoveDirectoryT(path);
+	if (r == FALSE) {
+		Win32IOErrorToExceptionThrow(::GetLastError(), path);
+	}
+}
+template void FileSystem::DeleteDirectory<char>(const char* path, bool recursive);
+template void FileSystem::DeleteDirectory<wchar_t>(const wchar_t* path, bool recursive);
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+StringArrayA FileSystem::GetFileSystemEntries(const char* directoryPath, const char* pattern)
+{
+	LN_THROW(0, NotImplementedException);
+	return StringArrayA();
+}
+StringArrayW FileSystem::GetFileSystemEntries(const wchar_t* directoryPath, const wchar_t* pattern)
+{
+	StringArrayW fileList;
+	PathNameW dirPathKey(directoryPath);
+	StringW dirPath(dirPathKey.GetStrEndSeparator());
+
+	// 
+	if (pattern) {
+		dirPathKey.Append(pattern);
+	}
+	else {
+		dirPathKey.Append(_T("*"));
+	}
+
+	// 検索開始
+	WIN32_FIND_DATA fd;
+	HANDLE h = ::FindFirstFileW(dirPathKey.c_str(), &fd);
+	if (h == INVALID_HANDLE_VALUE)
+	{
+		DWORD dwError = ::GetLastError();
+		if (dwError == ERROR_FILE_NOT_FOUND ||
+			dwError == ERROR_NO_MORE_FILES){
+			// これらは許可。空の配列を返す。
+			return fileList;
+		}
+		else {
+			LN_THROW(0, Win32Exception, dwError);
+		}
+	}
+
+	do
+	{
+		if (wcscmp(fd.cFileName, L".") == 0 || wcscmp(fd.cFileName, L"..") == 0) {
+			// これらはいらない
+		}
+		else {
+			fileList.Add(dirPath + fd.cFileName);
+		}
+
+	} while (::FindNextFile(h, &fd));
+
+	// 終了
+	::FindClose(h);
+	return fileList;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 uint64_t FileSystem::GetFileSize(const TCHAR* filePath)
 {
 	LN_THROW( filePath != NULL, ArgumentException );
