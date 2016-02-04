@@ -374,6 +374,15 @@ TEST_F(Test_Base_Array, Remove)
 		ASSERT_EQ(3, a1[1]);
 		ASSERT_EQ(2, a1[2]);
 	}
+	// <Unit> ラムダ式で条件指定できること
+	{
+		Array<int> a1 = ary;
+		a1.Remove([](int v){ return v == 2; });
+		ASSERT_EQ(3, a1.GetCount());
+		ASSERT_EQ(1, a1[0]);
+		ASSERT_EQ(3, a1[1]);
+		ASSERT_EQ(2, a1[2]);
+	}
 	// <Test> RemoveAt
 	{
 		Array<int> a1 = ary;

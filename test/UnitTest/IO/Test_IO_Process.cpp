@@ -97,3 +97,17 @@ TEST_F(Test_IO_Process, Start)
 			FileNotFoundException);
 	}
 }
+
+//-----------------------------------------------------------------------------
+TEST_F(Test_IO_Process, Issue)
+{
+	// <Issue> UTF8文字列が標準出力されたとき、文字コード変換エラーになっていた。
+	{
+		Process proc;
+		proc.SetRedirectStandardOutput(true);
+		proc.SetStandardOutputEncoding(Encoding::GetUTF8Encoding());	// エンコーディングを明示することで回避する
+		proc.Start(_T("LuminoCore_UnitTest"), _T("--proctest4_utf8"));
+		String str = proc.GetStandardOutput()->ReadToEnd();
+		ASSERT_EQ(_T("あ"), str);
+	}
+}

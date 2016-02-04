@@ -94,7 +94,7 @@ void Process::Start(const PathName& program, const String& args)
 
 		// 標準出力の Writer を作る
 		RefPtr<InternalPipeStream> stream(LN_NEW InternalPipeStream(InternalPipeStream::WriteSide, m_hInputWrite), false);
-		m_standardInputWriter.Attach(LN_NEW StreamWriter(stream, Encoding::GetWin32DefaultCodePageEncoding()));
+		m_standardInputWriter.Attach(LN_NEW StreamWriter(stream, m_standardInputEncoding));
 	}
 
 	// 標準出力のパイプを作る
@@ -117,7 +117,7 @@ void Process::Start(const PathName& program, const String& args)
 
 		// 標準出力の Reader を作る
 		RefPtr<InternalPipeStream> stream(LN_NEW InternalPipeStream(InternalPipeStream::ReadSide, m_hOutputRead), false);
-		m_standardOutputReader.Attach(LN_NEW StreamReader(stream, Encoding::GetWin32DefaultCodePageEncoding()));
+		m_standardOutputReader.Attach(LN_NEW StreamReader(stream, m_standardOutputEncoding));
 	}
 
 	// 標準エラー出力のパイプを作る
@@ -140,7 +140,7 @@ void Process::Start(const PathName& program, const String& args)
 
 		// 標準出力の Reader を作る
 		RefPtr<InternalPipeStream> stream(LN_NEW InternalPipeStream(InternalPipeStream::ReadSide, m_hErrorRead), false);
-		m_standardErrorReader.Attach(LN_NEW StreamReader(stream, Encoding::GetWin32DefaultCodePageEncoding()));
+		m_standardErrorReader.Attach(LN_NEW StreamReader(stream, m_standardErrorEncoding));
 	}
 
 	// 子プロセスの標準出力の出力先を↑で作ったパイプにする

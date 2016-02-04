@@ -52,6 +52,27 @@ public:
 	*/
 	void SetRedirectStandardError(bool enabled);
 
+	/**
+		@brief		標準出力のエンコーディングを設定します。
+		@details	Start() の前に設定する必要があります。
+					規定値は Encoding::GetGetSystemMultiByteEncoding() です。
+	*/
+	void SetStandardOutputEncoding(Encoding* encoding) LN_NOEXCEPT { m_standardOutputEncoding = encoding; }
+
+	/**
+		@brief		標準出力をリダイレクトするかを設定します。
+		@details	Start() の前に設定する必要があります。
+					規定値は Encoding::GetGetSystemMultiByteEncoding() です。
+	*/
+	void SetStandardInputEncoding(Encoding* encoding) LN_NOEXCEPT{ m_standardInputEncoding = encoding; }
+
+	/**
+		@brief		標準エラー出力をリダイレクトするかを設定します。
+		@details	Start() の前に設定する必要があります。
+					規定値は Encoding::GetGetSystemMultiByteEncoding() です。
+	*/
+	void SetStandardErrorEncoding(Encoding* encoding) LN_NOEXCEPT{ m_standardErrorEncoding = encoding; }
+
 #ifdef LN_CPP11
 	/**
 		@brief		標準出力に行が書き込まれたときに呼び出されるコールバック関数を設定します。
@@ -173,6 +194,9 @@ private:
 	bool						m_redirectStandardInput;
 	bool						m_redirectStandardOutput;
 	bool						m_redirectStandardError;
+	Encoding*					m_standardOutputEncoding;
+	Encoding*					m_standardInputEncoding;
+	Encoding*					m_standardErrorEncoding;
 	RefPtr<StreamWriter>		m_standardInputWriter;
 	RefPtr<StreamReader>		m_standardOutputReader;
 	RefPtr<StreamReader>		m_standardErrorReader;

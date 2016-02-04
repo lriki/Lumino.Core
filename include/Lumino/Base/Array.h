@@ -109,6 +109,23 @@ public:
 		return STLUtils::Remove(m_data->m_vector, item);
 	}
 
+	/** 指定した条件に一致する最初の要素を削除します。(正常に削除された場合は true を返す。要素が見つからなければ false を返す)*/
+	template<typename TPred>
+	bool Remove(TPred pred)
+	{
+		CheckDetachShared();
+		auto itr = m_data->m_vector.begin();
+		auto end = m_data->m_vector.end();
+		for (; itr != end; ++itr)
+		{
+			if (pred((*itr))) {
+				m_data->m_vector.erase(itr);
+				return true;
+			}
+		}
+		return false;
+	}
+
 	/** 指定したインデックスにある要素を削除します。*/
 	void RemoveAt(int index)
 	{
@@ -117,19 +134,19 @@ public:
 		m_data->m_vector.erase(m_data->m_vector.begin() + index);
 	}
 
+	/** item に一致する全ての要素を削除します。*/
+	void RemoveAll(const value_type& item)
+	{
+		CheckDetachShared();
+		STLUtils::RemoveAll(m_data->m_vector, item);
+	}
+
 	/** 指定した条件に一致する全ての要素を削除します。*/
 	template<typename TPred>
 	void RemoveAll(TPred pred)
 	{
 		CheckDetachShared();
 		STLUtils::RemoveAll(m_data->m_vector, pred);
-	}
-
-	/** item に一致する全ての要素を削除します。*/
-	void RemoveAll(const value_type& item)
-	{
-		CheckDetachShared();
-		STLUtils::RemoveAll(m_data->m_vector, item);
 	}
 
 	/** 終端要素を削除します。*/

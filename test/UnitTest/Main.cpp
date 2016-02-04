@@ -23,6 +23,12 @@ GTEST_API_ int main(int argc, char **argv)
 		printf("[%s]", str);	// [ ] をつけて出力
 		return 0;
 	}
+	else if (strcmp(argv[argc - 1], "--proctest4_utf8") == 0)
+	{
+		char str[4] = { 0xE3, 0x81, 0x82, 0x00 };	// UTF8 'あ'
+		printf(str);
+		return 0;
+	}
 
 
 	printf("Running main()\n");
@@ -36,7 +42,7 @@ GTEST_API_ int main(int argc, char **argv)
 	char* testArgs[] = {
 		argv[0],
 		//"--gtest_filter=Test_Text_EncodingDetector.*"
-		"--gtest_filter=Test_IO_PathName.*"
+		"--gtest_filter=Test_IO_Process.*"
 	};
 	argc = sizeof(testArgs) / sizeof(char*);
 	testing::InitGoogleTest(&argc, (char**)testArgs);
