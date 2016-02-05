@@ -3,7 +3,7 @@
 
 LN_NAMESPACE_BEGIN
 
-class InternalPipeStream
+class Process::InternalPipeStream
 	: public Stream
 {
 public:
@@ -93,8 +93,8 @@ void Process::Start(const PathName& program, const String& args)
 		m_hInputRead = hPipe[R];
 
 		// 標準出力の Writer を作る
-		RefPtr<InternalPipeStream> stream(LN_NEW InternalPipeStream(InternalPipeStream::WriteSide, m_hInputWrite), false);
-		m_standardInputWriter.Attach(LN_NEW StreamWriter(stream, m_standardInputEncoding));
+		m_stdinPipeStream = LN_NEW InternalPipeStream(InternalPipeStream::WriteSide, m_hInputWrite);
+		m_standardInputWriter.Attach(LN_NEW StreamWriter(m_stdinPipeStream, m_standardInputEncoding));
 	}
 
 	// 標準出力のパイプを作る
@@ -116,8 +116,8 @@ void Process::Start(const PathName& program, const String& args)
 		m_hOutputWrite = hPipe[W];
 
 		// 標準出力の Reader を作る
-		RefPtr<InternalPipeStream> stream(LN_NEW InternalPipeStream(InternalPipeStream::ReadSide, m_hOutputRead), false);
-		m_standardOutputReader.Attach(LN_NEW StreamReader(stream, m_standardOutputEncoding));
+		m_stdoutPipeStream = LN_NEW InternalPipeStream(InternalPipeStream::ReadSide, m_hOutputRead);
+		m_standardOutputReader.Attach(LN_NEW StreamReader(m_stdoutPipeStream, m_standardOutputEncoding));
 	}
 
 	// 標準エラー出力のパイプを作る
@@ -139,8 +139,8 @@ void Process::Start(const PathName& program, const String& args)
 		m_hErrorWrite = hPipe[W];
 
 		// 標準出力の Reader を作る
-		RefPtr<InternalPipeStream> stream(LN_NEW InternalPipeStream(InternalPipeStream::ReadSide, m_hErrorRead), false);
-		m_standardErrorReader.Attach(LN_NEW StreamReader(stream, m_standardErrorEncoding));
+		m_stderrPipeStream = LN_NEW InternalPipeStream(InternalPipeStream::ReadSide, m_hErrorRead);
+		m_standardErrorReader.Attach(LN_NEW StreamReader(m_stderrPipeStream, m_standardErrorEncoding));
 	}
 
 	// 子プロセスの標準出力の出力先を↑で作ったパイプにする
@@ -209,6 +209,19 @@ bool Process::WaitForExit(int timeoutMSec)
 {
 	if (m_processInfo.hProcess != NULL)
 	{
+		// TODO:ここでやるべき？とりあえず暫定。
+		if (m_standardOutputExternalStream != nullptr && m_stdoutPipeStream != nullptr)
+		{
+			byte_t buf[1024];
+			size_t size;
+			while ((size = m_stdoutPipeStream->Read(buf, 1024)) > 0)
+			{
+				m_standardOutputExternalStream->Write(buf, size);
+			}
+		}
+
+
+
 		// 終了した場合は制御を返し、WAIT_OBJECT_0 が返ってくる
 		DWORD r = ::WaitForSingleObject(m_processInfo.hProcess, (timeoutMSec < 0) ? INFINITE : timeoutMSec);
 		if (r == WAIT_TIMEOUT) {
@@ -269,6 +282,10 @@ void Process::Dispose()
 			::CloseHandle(m_processInfo.hProcess);
 			m_processInfo.hProcess = NULL;
 		}
+
+		LN_SAFE_RELEASE(m_stdinPipeStream);
+		LN_SAFE_RELEASE(m_stdoutPipeStream);
+		LN_SAFE_RELEASE(m_stderrPipeStream);
 
 		// 書き込み側ハンドルは、WaitForSingleObject() の前でクローズしておく。
 		// こうしておかないと、子プロセスの ReadFile() がブロックし続けてしまい、

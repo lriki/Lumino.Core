@@ -53,6 +53,13 @@ public:
 	void SetRedirectStandardError(bool enabled);
 
 	/**
+		@brief		標準入力のエンコーディングを設定します。
+		@details	Start() の前に設定する必要があります。
+					規定値は Encoding::GetGetSystemMultiByteEncoding() です。
+	*/
+	void SetStandardInputEncoding(Encoding* encoding) LN_NOEXCEPT{ m_standardInputEncoding = encoding; }
+		
+	/**
 		@brief		標準出力のエンコーディングを設定します。
 		@details	Start() の前に設定する必要があります。
 					規定値は Encoding::GetGetSystemMultiByteEncoding() です。
@@ -60,18 +67,18 @@ public:
 	void SetStandardOutputEncoding(Encoding* encoding) LN_NOEXCEPT { m_standardOutputEncoding = encoding; }
 
 	/**
-		@brief		標準出力をリダイレクトするかを設定します。
-		@details	Start() の前に設定する必要があります。
-					規定値は Encoding::GetGetSystemMultiByteEncoding() です。
-	*/
-	void SetStandardInputEncoding(Encoding* encoding) LN_NOEXCEPT{ m_standardInputEncoding = encoding; }
-
-	/**
-		@brief		標準エラー出力をリダイレクトするかを設定します。
+		@brief		標準エラー出力のエンコーディングを設定します。
 		@details	Start() の前に設定する必要があります。
 					規定値は Encoding::GetGetSystemMultiByteEncoding() です。
 	*/
 	void SetStandardErrorEncoding(Encoding* encoding) LN_NOEXCEPT{ m_standardErrorEncoding = encoding; }
+		
+	/**
+		@brief		標準出力を Stream へリダイレクトする場合、リダイレクト先の Stream を設定します。
+		@details	リダイレクト先の Stream が設定されている場合、GetStandardOutput() を呼び出すことはできません。
+					Start() の前に設定する必要があります。
+	*/
+	void SetStandardOutputStream(Stream* stream) LN_NOEXCEPT{ m_standardOutputExternalStream = stream; }
 
 #ifdef LN_CPP11
 	/**
@@ -181,25 +188,29 @@ public:
 	*/
 	static int Execute(const PathName& program, const String& args = String(), String* stdOutput = NULL);
 
-	// TODO: 出力のエンコーディングを指定したい。linux 系のコマンドラインツールだと文字コードがUTF8
-
 private:
+	class InternalPipeStream;
+
 	void TryGetExitCode();
 	void Dispose();
 	void Thread_ReadStdOutput();
 	void Thread_ReadStdError();
 
-private:
 	PathName					m_workingDirectory;
 	bool						m_redirectStandardInput;
 	bool						m_redirectStandardOutput;
 	bool						m_redirectStandardError;
-	Encoding*					m_standardOutputEncoding;
 	Encoding*					m_standardInputEncoding;
+	Encoding*					m_standardOutputEncoding;
 	Encoding*					m_standardErrorEncoding;
+	Stream*						m_standardOutputExternalStream;
 	RefPtr<StreamWriter>		m_standardInputWriter;
 	RefPtr<StreamReader>		m_standardOutputReader;
 	RefPtr<StreamReader>		m_standardErrorReader;
+	InternalPipeStream*			m_stdinPipeStream;
+	InternalPipeStream*			m_stdoutPipeStream;
+	InternalPipeStream*			m_stderrPipeStream;
+
 #ifdef LN_CPP11
 	Delegate<void(String)>		m_outputDataReceivedCallback;
 	Delegate<void(String)>		m_errorDataReceivedCallback;
