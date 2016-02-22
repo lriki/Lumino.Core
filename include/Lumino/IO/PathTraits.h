@@ -34,7 +34,7 @@ public:
 
 	/// path が絶対パスであるかを判定する ("C:/AAA"、"/AAA" 両方判定)
 	template<typename TChar>
-	static bool IsAbsolutePath(const TChar* path);
+	static bool IsAbsolutePath(const TChar* path, int len = -1);
 
 	/**
 		@brief		パス文字列からディレクトリ部分を取り出す

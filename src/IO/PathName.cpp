@@ -43,12 +43,12 @@ void GenericPathName<TChar>::Assign(const wchar_t* path, int length)
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-void GenericPathName<TChar>::AssignUnderBasePath(const PathNameT& basePath, const char* relativePath)
+void GenericPathName<TChar>::AssignUnderBasePath(const PathNameT& basePath, const char* relativePath, int len)
 {
 	// フルパスの場合はそのまま割り当てる
-	if (PathTraits::IsAbsolutePath(relativePath))
+	if (PathTraits::IsAbsolutePath(relativePath, len))
 	{
-		m_path.AssignCStr(relativePath);
+		m_path.AssignCStr(relativePath, len);
 	}
 	// フルパスでなければ結合する
 	else
@@ -61,7 +61,7 @@ void GenericPathName<TChar>::AssignUnderBasePath(const PathNameT& basePath, cons
 
 		// relativePath 結合
 		GenericStringT rel;
-		rel.AssignCStr(relativePath);
+		rel.AssignCStr(relativePath, len);
 		m_path += rel;
 	}
 
@@ -73,12 +73,12 @@ void GenericPathName<TChar>::AssignUnderBasePath(const PathNameT& basePath, cons
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-void GenericPathName<TChar>::AssignUnderBasePath(const PathNameT& basePath, const wchar_t* relativePath)
+void GenericPathName<TChar>::AssignUnderBasePath(const PathNameT& basePath, const wchar_t* relativePath, int len)
 {
 	// フルパスの場合はそのまま割り当てる
-	if (PathTraits::IsAbsolutePath(relativePath))
+	if (PathTraits::IsAbsolutePath(relativePath, len))
 	{
-		m_path.AssignCStr(relativePath);
+		m_path.AssignCStr(relativePath, len);
 	}
 	// フルパスでなければ結合する
 	else
@@ -92,7 +92,7 @@ void GenericPathName<TChar>::AssignUnderBasePath(const PathNameT& basePath, cons
 
 		// relativePath 結合
 		GenericStringT rel;
-		rel.AssignCStr(relativePath);
+		rel.AssignCStr(relativePath, len);
 		m_path += rel;
 	}
 
@@ -215,7 +215,7 @@ GenericPathName<TChar> GenericPathName<TChar>::ChangeExtension(const TChar* newE
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-bool GenericPathName<TChar>::IsAbsolutePath() const
+bool GenericPathName<TChar>::IsAbsolute() const
 {
 	return PathTraits::IsAbsolutePath(m_path.c_str());
 }
@@ -312,7 +312,7 @@ bool GenericPathName<TChar>::ExistsDirectory() const
 template<typename TChar>
 GenericPathName<TChar> GenericPathName<TChar>::MakeRelative(const GenericPathName<TChar>& target) const
 {
-	LN_CHECK_ARGS(IsAbsolutePath() && target.IsAbsolutePath());
+	LN_CHECK_ARGS(IsAbsolute() && target.IsAbsolute());
 	GenericString<TChar> rel = PathTraits::DiffPath<TChar>(m_path.c_str(), m_path.GetLength(), target.m_path.c_str(), target.m_path.GetLength(), FileSystem::GetFileSystemCaseSensitivity());
 	return GenericPathName<TChar>(rel);
 }

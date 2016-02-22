@@ -63,6 +63,8 @@ public:
 	/// @overload AssignUnderBasePath
 	GenericPathName(const PathNameT& basePath, const GenericStringT& relativePath) { AssignUnderBasePath(basePath, relativePath); }
 	/// @overload AssignUnderBasePath
+	GenericPathName(const PathNameT& basePath, const GenericStringRef<TChar>& relativePath) { AssignUnderBasePath(basePath, relativePath); }
+	/// @overload AssignUnderBasePath
 	GenericPathName(const PathNameT& basePath, const PathNameT& relativePath) { AssignUnderBasePath(basePath, relativePath); }
 
 	// operators
@@ -94,11 +96,13 @@ public:
 		@details	relativePath がフルパスの場合は basePath を無視します。
 	*/
 	// TODO: 絶対パスにしてほしくない
-	void AssignUnderBasePath(const PathNameT& basePath, const char* relativePath);
+	void AssignUnderBasePath(const PathNameT& basePath, const char* relativePath, int len = -1);
 	/// @overload AssignUnderBasePath
-	void AssignUnderBasePath(const PathNameT& basePath, const wchar_t* relativePath);
+	void AssignUnderBasePath(const PathNameT& basePath, const wchar_t* relativePath, int len = -1);
 	/// @overload AssignUnderBasePath
 	void AssignUnderBasePath(const PathNameT& basePath, const GenericStringT& relativePath) { AssignUnderBasePath(basePath, relativePath.c_str()); }
+	/// @overload AssignUnderBasePath
+	void AssignUnderBasePath(const PathNameT& basePath, const GenericStringRef<TChar>& relativePath) { AssignUnderBasePath(basePath, relativePath.GetBegin(), relativePath.GetLength()); }
 	/// @overload AssignUnderBasePath
 	void AssignUnderBasePath(const PathNameT& basePath, const PathNameT& relativePath) { AssignUnderBasePath(basePath, relativePath.c_str()); }
 
@@ -177,7 +181,7 @@ public:
 	bool IsEmpty() const { return m_path.IsEmpty(); }
 
 	/// 絶対パスであるかを確認する
-	bool IsAbsolutePath() const;
+	bool IsAbsolute() const;
 
 	/// ルートディレクトリであるかを確認する
 	bool IsRoot() const;

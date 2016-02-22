@@ -134,6 +134,8 @@
 #define LN_CHECK_STATE_RETURN(exp, ...)					if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::ln::InvalidOperationException)) { return; }
 #define LN_CHECK_STATE_RETURNV(exp, returnValue, ...)	if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::ln::InvalidOperationException)) { return returnValue; }
 
+//
+#define LN_NOTIMPLEMENTED(...)	LN_THROW(0, ln::NotImplementedException, __VA_ARGS__);
 
 LN_NAMESPACE_BEGIN
 

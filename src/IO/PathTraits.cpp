@@ -77,9 +77,12 @@ template bool PathTraits::IsRootPath<wchar_t>(const wchar_t* path);
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-bool PathTraits::IsAbsolutePath(const TChar* path)
+bool PathTraits::IsAbsolutePath(const TChar* path, int len)
 {
 	LN_THROW(path != NULL, ArgumentException);
+	if (len < 0) {
+		len = INT_MAX;
+	}
 
 	// UNIX ルートパス
 	if (path[0] == '/') return true;
@@ -92,11 +95,16 @@ bool PathTraits::IsAbsolutePath(const TChar* path)
 			//	return true;
 			//}
 		}
+
+		--len;
+		if (len == 0) {
+			break;
+		}
 	}
 	return false;
 }
-template bool PathTraits::IsAbsolutePath<char>(const char* path);
-template bool PathTraits::IsAbsolutePath<wchar_t>(const wchar_t* path);
+template bool PathTraits::IsAbsolutePath<char>(const char* path, int len);
+template bool PathTraits::IsAbsolutePath<wchar_t>(const wchar_t* path, int len);
 
 //-----------------------------------------------------------------------------
 //
