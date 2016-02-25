@@ -89,6 +89,18 @@ public:
 	static void GetExtension(const TChar* path, TChar* outExt);
 	template<typename TChar>
 	static Result GetExtension(const TChar* path, bool withDot, GenericStringRef<TChar>* outRef) LN_NOEXCEPT;
+	
+	/**
+		@brief		パス文字列を結合します。
+		@param[in]	path1			: 1つ目のパス文字列
+		@param[in]	path1Len		: 1つ目のパス文字列の長さ
+		@param[in]	path1			: 2つ目のパス文字列
+		@param[in]	path1Len		: 2つ目のパス文字列の長さ
+		@param[out]	outPath			: 結合されたパスの格納先
+		@param[in]	pathCapacity	: outPath のサイズ
+	*/
+	template<typename TChar>
+	static Result Combine(const TChar* path1, int path1Len, const TChar* path2, int path2Len, TChar* outPath, int pathCapacity) LN_NOEXCEPT;
 
 	/**
 		@brief		パスを単純化する

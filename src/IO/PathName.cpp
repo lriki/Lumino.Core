@@ -310,6 +310,17 @@ bool GenericPathName<TChar>::ExistsDirectory() const
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
+bool GenericPathName<TChar>::ExistsFileInDirectory(const StringRefT& relPath) const LN_NOEXCEPT
+{
+	TChar path[LN_MAX_PATH];
+	PathTraits::Combine(m_path.c_str(), m_path.GetLength(), relPath.GetBegin(), relPath.GetLength(), path, LN_MAX_PATH);
+	return FileSystem::Exists(path);
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
 GenericPathName<TChar> GenericPathName<TChar>::MakeRelative(const GenericPathName<TChar>& target) const
 {
 	LN_CHECK_ARGS(IsAbsolute() && target.IsAbsolute());

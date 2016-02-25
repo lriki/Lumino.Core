@@ -178,7 +178,7 @@ StringArrayW FileSystem::GetFileSystemEntries(const wchar_t* directoryPath, cons
 	}
 
 	// 検索開始
-	WIN32_FIND_DATA fd;
+	WIN32_FIND_DATAW fd;
 	HANDLE h = ::FindFirstFileW(dirPathKey.c_str(), &fd);
 	if (h == INVALID_HANDLE_VALUE)
 	{
@@ -202,7 +202,7 @@ StringArrayW FileSystem::GetFileSystemEntries(const wchar_t* directoryPath, cons
 			fileList.Add(dirPath + fd.cFileName);
 		}
 
-	} while (::FindNextFile(h, &fd));
+	} while (::FindNextFileW(h, &fd));
 
 	// 終了
 	::FindClose(h);

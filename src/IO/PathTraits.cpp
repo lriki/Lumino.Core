@@ -309,6 +309,49 @@ template Result PathTraits::GetExtension(const wchar_t* path, bool withDot, Gene
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
+Result PathTraits::Combine(const TChar* path1, int path1Len, const TChar* path2, int path2Len, TChar* outPath, int pathCapacity) LN_NOEXCEPT
+{
+	if (path1 == nullptr) return Result::ArgumentError;
+	if (path2 == nullptr) return Result::ArgumentError;
+	if (outPath == nullptr) return Result::ArgumentError;
+
+	if (!IsAbsolutePath(path2, path2Len))
+	{
+		// path1 結合
+		if (path1Len > pathCapacity) return Result::ArgumentError;
+		memcpy(outPath, path1, path1Len * sizeof(TChar));
+		outPath += path1Len;
+		pathCapacity -= path1Len;
+
+		// セパレータ 結合
+		if (path1Len > 0 && !IsSeparatorChar(*(outPath - 1)))
+		{
+			if (1 > pathCapacity) return Result::ArgumentError;
+			outPath[0] = DirectorySeparatorChar;
+			outPath += 1;
+			pathCapacity -= 1;
+		}
+	}
+
+	// path2 結合
+	if (path2Len > pathCapacity) return Result::ArgumentError;
+	memcpy(outPath, path2, path2Len * sizeof(TChar));
+	outPath += path2Len;
+	pathCapacity -= path2Len;
+
+	// 終端 null
+	if (1 > pathCapacity) return Result::ArgumentError;
+	outPath[0] = '\0';
+
+	return Result::Success;
+}
+template Result PathTraits::Combine(const char* path1, int path1Len, const char* path2, int path2Len, char* outPath, int pathCapacity) LN_NOEXCEPT;
+template Result PathTraits::Combine(const wchar_t* path1, int path1Len, const wchar_t* path2, int path2Len, wchar_t* outPath, int pathCapacity) LN_NOEXCEPT;
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
 int PathTraits::CanonicalizePath(const TChar* srcPath, size_t srcLen, TChar* outPath)
 {
 	/*	

@@ -139,6 +139,9 @@ public:
 	*/
 	StringRefT GetExtension(bool withDot = true) const LN_NOEXCEPT;
 
+	/** パス文字列の長さを返します。*/
+	int GetLength() const { return m_path.GetLength(); }
+
 	/** C言語形式の文字列ポインタを返します。*/
 	const TChar* c_str() const { return m_path.c_str(); }
 	
@@ -234,6 +237,11 @@ public:
 	*/
 	// TODO :↑に同じようなのがある…
 	bool ExistsDirectory() const;
+
+	/**
+		@brief		このパスの指す先がディレクトリ内に、指定した名前のファイルが存在するかを確認します。
+	*/
+	bool ExistsFileInDirectory(const StringRefT& relPath) const LN_NOEXCEPT;
 
 	/** 
 		@brief		このパスから指定したパスへの相対パスを取得します。
