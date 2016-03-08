@@ -4,6 +4,7 @@
 #include "../Base/RefObject.h"
 #include "../Base/Collection.h"
 #include "TypeInfo.h"
+#include "Notify.h"
 
 LN_NAMESPACE_BEGIN
 namespace tr
@@ -49,6 +50,9 @@ protected:
 	friend class Property;
 	void RaiseReflectionEvent(const ReflectionEventBase& ev, ReflectionEventArgs* args);
 	virtual void OnPropertyChanged(PropertyChangedEventArgs* e);
+
+	template<typename... TArgs>
+	void RaiseDelegateEvent(DelegateEvent<TArgs...>& ev, TArgs... args) { ev.Raise(args...); }
 
 private:
 	void SetPropertyValueInternal(const Property* prop, const Variant& value, bool reset);

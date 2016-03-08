@@ -129,5 +129,84 @@ private:
 #define LN_REFLECTION_EVENT_IMPLEMENT(ownerClass, eventArgs, eventInfoVar, name, ev) \
 	LN_REFLECTION_EVENT_IMPLEMENT_COMMON(tr::ReflectionEventInfo, ownerClass, eventArgs, eventInfoVar, name, ev);
 
+
+
+
+
+
+/**
+	@brief		ルーティングフレームワークを伴わないイベント。
+*/
+//template<typename>
+//class DelegateEvent {};
+template<typename... TArgs>
+class DelegateEvent/*<void(TArgs...)>*/		// 戻り値は void 固定。ハンドラが1つも登録されていないときは何を返せばいいのか分からないため。
+{
+public:
+	typedef Delegate<void(TArgs...)> DelegateType;
+
+	void AddHandler(const DelegateType& handler)
+	{
+		m_handlerList.Add(handler);
+	}
+
+	void AddHandler(const std::function<void(TArgs...)>& handler)	// void operator += (const DelegateType& handler) だけだと暗黙変換が効かずコンパイルエラーとなっていたため用意
+	{
+		AddHandler(DelegateType(handler));
+	}
+
+	void RemoveHandler(const DelegateType& handler)
+	{
+		m_handlerList.Remove(handler);
+	}
+
+	void operator += (const DelegateType& handler)
+	{
+		AddHandler(handler);
+	}
+
+	void operator += (const std::function<void(TArgs...)>& handler)	// void operator += (const DelegateType& handler) だけだと暗黙変換が効かずコンパイルエラーとなっていたため用意
+	{
+		AddHandler(DelegateType(handler));
+	}
+
+	void operator -= (const DelegateType& handler)
+	{
+		RemoveHandler(handler);
+	}
+
+private:
+	friend class ReflectionObject;
+
+	Array<DelegateType> m_handlerList;
+
+	void Clear()
+	{
+		m_handlerList.Clear();
+	}
+
+	bool IsEmpty() const
+	{
+		return m_handlerList.IsEmpty();
+	}
+
+	void Raise(TArgs... args)
+	{
+		int count = m_handlerList.GetCount();
+		if (count > 0)
+		{
+			for (int i = 0; i < count - 1; ++i)
+			{
+				m_handlerList[i].Call(args...);
+			}
+			m_handlerList[count - 1].Call(args...);	// 戻り値を戻すのは最後の1つ。(.NET の動作)
+		}
+	}
+};
+
+
+
+
+
 } // namespace tr
 LN_NAMESPACE_END

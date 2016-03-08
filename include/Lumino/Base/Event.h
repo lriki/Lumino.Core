@@ -1,4 +1,4 @@
-
+﻿
 #pragma once
 #include "../Base/Array.h"
 #include "../Base/Delegate.h"
@@ -38,7 +38,7 @@ public:
 		{
 			m_handlerList[i].Call(args...);
 		}
-		return m_handlerList[count - 1].Call(args...);	// �߂�l��߂��͍̂Ō��1�B
+		return m_handlerList[count - 1].Call(args...);	// 戻り値を戻すのは最後の1つ。(.NET の動作)
 	}
 
 	bool IsEmpty() const

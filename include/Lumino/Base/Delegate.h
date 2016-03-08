@@ -137,6 +137,13 @@ public:
 		, m_type(HolderType::FuncObj)
 	{}
 
+	/** ラムダ式・関数オブジェクト用のコンストラクタ */
+	//template < typename T >
+	//Delegate(const T& func)
+	//	: m_holder(LN_NEW FuncObjHolder(func))
+	//	, m_type(HolderType::FuncObj)
+	//{}
+
 	/** コピーコンストラクタ */
 	Delegate(const Delegate& d)
 		: Delegate()
@@ -175,7 +182,7 @@ public:
 	/** 関数を呼び出します。operator() と同じ動作です。*/
 	TRet Call(TArgs... args) const
 	{
-		m_holder->Call(args...);
+		return m_holder->Call(args...);
 	}
 
 	/** 関数を呼び出します。*/

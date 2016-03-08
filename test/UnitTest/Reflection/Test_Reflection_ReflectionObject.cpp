@@ -32,8 +32,10 @@ public:
 	LN_REFLECTION_EVENT(tr::ReflectionEventArgs, ClickedEvent);
 public:
 	tr::ReflectionEvent<tr::ReflectionEventArgs>	Clicked;
+	tr::DelegateEvent<int>							Clicked2;
 
 	void OnClicked() { tr::ReflectionEventArgs e; RaiseReflectionEvent(Clicked, &e); }
+	void OnClicked2(int a) { RaiseDelegateEvent(Clicked2, a); }
 };
 LN_TR_REFLECTION_TYPEINFO_IMPLEMENT(EventTest1, tr::ReflectionObject);
 LN_REFLECTION_EVENT_IMPLEMENT(EventTest1, tr::ReflectionEventArgs, ClickedEvent, "Clicked", Clicked);
@@ -67,6 +69,17 @@ TEST_F(IntegrationTest_Reflection_ReflectionObject, Event)
 	t1.OnClicked();
 	t1.OnClicked();
 	ASSERT_EQ(2, count);
+}
+
+//---------------------------------------------------------------------
+TEST_F(IntegrationTest_Reflection_ReflectionObject, DelegateEvent)
+{
+	int count = 0;
+	EventTest1 t1;
+	t1.Clicked2 += [&count](int a) { count += a;};
+	t1.OnClicked2(1);
+	t1.OnClicked2(2);
+	ASSERT_EQ(3, count);
 }
 
 //---------------------------------------------------------------------

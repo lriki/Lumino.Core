@@ -100,11 +100,11 @@ public:
 	/// @overload AssignUnderBasePath
 	void AssignUnderBasePath(const PathNameT& basePath, const wchar_t* relativePath, int len = -1);
 	/// @overload AssignUnderBasePath
-	void AssignUnderBasePath(const PathNameT& basePath, const GenericStringT& relativePath) { AssignUnderBasePath(basePath, relativePath.c_str()); }
+	void AssignUnderBasePath(const PathNameT& basePath, const GenericStringT& relativePath) { AssignUnderBasePath(basePath, relativePath.c_str(), relativePath.GetLength()); }
 	/// @overload AssignUnderBasePath
 	void AssignUnderBasePath(const PathNameT& basePath, const GenericStringRef<TChar>& relativePath) { AssignUnderBasePath(basePath, relativePath.GetBegin(), relativePath.GetLength()); }
 	/// @overload AssignUnderBasePath
-	void AssignUnderBasePath(const PathNameT& basePath, const PathNameT& relativePath) { AssignUnderBasePath(basePath, relativePath.c_str()); }
+	void AssignUnderBasePath(const PathNameT& basePath, const PathNameT& relativePath) { AssignUnderBasePath(basePath, relativePath.c_str(), relativePath.GetLength()); }
 
 	/**
 		@brief		現在のパスに別のパス文字列を連結します。
