@@ -113,5 +113,8 @@ private:
 };
 
 } // namespace tr
+
+typedef tr::ReflectionObject Object;
+
 LN_NAMESPACE_END
 
