@@ -29,6 +29,7 @@ set(LN_TEST_SOURCES
 	UnitTest/Base/Test_Base_StringTraits.cpp
 	UnitTest/Base/Test_Base_UnicodeUtils.cpp
 	UnitTest/Base/Test_Base_UTF32Encoding.cpp
+	UnitTest/Base/Test_Base_WeakRefPtr.cpp
 	UnitTest/IO/Test_IO_BinaryReader.cpp
 	UnitTest/IO/Test_IO_File.cpp
 	UnitTest/IO/Test_IO_FileStream.cpp
