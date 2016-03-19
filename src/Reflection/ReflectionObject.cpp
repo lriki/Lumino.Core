@@ -71,6 +71,7 @@ ln::tr::TypeInfo*				ReflectionObject::lnref_GetThisTypeInfo() const { return &l
 //-----------------------------------------------------------------------------
 ReflectionObject::ReflectionObject()
 	: m_userData(nullptr)
+	, m_animationData(nullptr)
 	, m_weakRefInfo(nullptr)
 {
 }
@@ -85,6 +86,8 @@ ReflectionObject::~ReflectionObject()
 	{
 		m_weakRefInfo->owner = nullptr;
 	}
+
+	LN_SAFE_DELETE(m_animationData);
 }
 
 //-----------------------------------------------------------------------------

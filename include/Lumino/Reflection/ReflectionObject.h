@@ -32,6 +32,14 @@ namespace tr
 #define LN_TR_REFLECTION_TYPEINFO_IMPLEMENT(classType, baseClassType) \
 	LN_TR_REFLECTION_TYPEINFO_IMPLEMENT_COMMON(ln::tr::TypeInfo, classType, baseClassType)
 
+namespace detail
+{
+class ReflectionObjectAnimationData
+{
+public:
+	virtual ~ReflectionObjectAnimationData() {}
+};
+}
 
 /**
 	@brief		
@@ -60,6 +68,7 @@ private:
 	void SetPropertyValueInternal(const Property* prop, const Variant& value, bool reset);
 
 	void*	m_userData;
+	detail::ReflectionObjectAnimationData*	m_animationData;
 
 	friend class ReflectionHelper;
 	detail::WeakRefInfo* RequestWeakRefInfo()

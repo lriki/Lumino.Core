@@ -61,6 +61,15 @@ public:
 	{
 		return obj->RequestWeakRefInfo();
 	}
+	template<class T, class TData>
+	inline static TData* RequestAnimationData(T* obj)
+	{
+		if (obj->m_animationData == nullptr)
+		{
+			obj->m_animationData = LN_NEW TData();
+		}
+		return static_cast<TData*>(obj->m_animationData);
+	}
 	//static void RaiseReflectionEvent(ReflectionObject* obj, ReflectionEventBase* ev, ReflectionEventArgs* e);
 };
 
