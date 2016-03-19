@@ -1,5 +1,7 @@
 ﻿
 #pragma once
+#include <atomic>
+#include "../Threading/Mutex.h"
 #include "../Base/Common.h"
 #include "../Base/RefObject.h"
 #include "../Base/Collection.h"
@@ -58,6 +60,120 @@ private:
 	void SetPropertyValueInternal(const Property* prop, const Variant& value, bool reset);
 
 	void*	m_userData;
+
+	friend class ReflectionHelper;
+	detail::WeakRefInfo* RequestWeakRefInfo()
+	{
+		Threading::MutexScopedLock lock(m_weakRefInfoMutex);
+		if (m_weakRefInfo == nullptr)
+		{
+			m_weakRefInfo = LN_NEW detail::WeakRefInfo();
+			m_weakRefInfo->owner = this;
+		}
+		return m_weakRefInfo;
+	}
+	detail::WeakRefInfo*	m_weakRefInfo;
+	Threading::Mutex		m_weakRefInfoMutex;
+};
+
+/**
+	@brief
+	@details
+		監視しているオブジェクトにアクセスする場合は IsAlive() と Resolve() を併用しないでください。
+		マルチスレッドプログラムで不正アクセスの可能性があります。
+		次のコードは間違いです。
+		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		WeakRefPtr<MyClass> weak(obj);
+		if (weak.IsAlive())
+			weak->Resolve()->Func();
+		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		正しいコードは次の通りです。
+		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		WeakRefPtr<MyClass> weak(obj);
+		RefPtr<MyClass> ptr = weak.Resolve();
+		if (ptr != nullptr)
+			ptr->Func();
+		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+template <class T>
+class WeakRefPtr
+{
+public:
+
+	/** コンストラクタ */
+	WeakRefPtr()
+		: m_weakRefInfo(nullptr)
+	{}
+
+	/** コンストラクタ */
+	WeakRefPtr(T* obj)
+		: m_weakRefInfo(nullptr)
+	{
+		Set(ReflectionHelper::RequestWeakRefInfo(obj));
+	}
+
+	/** コピーコンストラクタ */
+	WeakRefPtr(const WeakRefPtr<T>& obj)
+		: m_weakRefInfo(nullptr)
+	{
+		Set(obj.m_weakRefInfo);
+	}
+
+	/** デストラクタ */
+	virtual ~WeakRefPtr()
+	{
+		Release();
+	}
+
+	/** 監視しているオブジェクトが削除されておらず、使用できるかを確認します。*/
+	bool IsAlive() const
+	{
+		return (m_weakRefInfo != nullptr && m_weakRefInfo->owner != nullptr);
+	}
+
+	/** 監視しているオブジェクトへの RefPtr を取得します。*/
+	RefPtr<T> Resolve() const
+	{
+		if (!IsAlive())
+		{
+			return RefPtr<T>();
+		}
+		return RefPtr<T>(static_cast<T*>(m_weakRefInfo->owner));
+	}
+
+	/** */
+	WeakRefPtr<T>& operator =(const WeakRefPtr<T>& obj)
+	{
+		Set(obj.m_weakRefInfo);
+		return *this;
+	}
+
+private:
+	
+	void Set(detail::WeakRefInfo* info)
+	{
+		Release();
+		m_weakRefInfo = info;
+		if (m_weakRefInfo != nullptr)
+		{
+			m_weakRefInfo->weakRefCount.fetch_add(1, std::memory_order_relaxed);
+		}
+	}
+	
+	void Release()
+	{
+		if (m_weakRefInfo != nullptr)
+		{
+			int before = m_weakRefInfo->weakRefCount.fetch_sub(1, std::memory_order_relaxed);
+			if (before <= 1)
+			{
+				delete m_weakRefInfo;
+			}
+			m_weakRefInfo = nullptr;
+		}
+	}
+	
+	detail::WeakRefInfo*	m_weakRefInfo;
 };
 
 /**

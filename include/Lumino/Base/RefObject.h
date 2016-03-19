@@ -1,10 +1,10 @@
 ﻿
 #pragma once
-
 #include "NonCopyable.h"
 #include "../Threading/Atomic.h"
 
 LN_NAMESPACE_BEGIN
+class RefObject;
 
 /// 参照カウントのインクリメント
 #ifndef LN_SAFE_ADDREF
@@ -23,6 +23,7 @@ LN_NAMESPACE_BEGIN
 	if (a) (a)->Release(); \
     (a) = (b); \
 }
+
 
 /**
 	@brief	参照カウントを持つクラスの基底
@@ -49,9 +50,11 @@ public:
 	void TryGCAddRef();
 	void GCRelease();
 
+
 protected:
-    Threading::Atomic	mReferenceCount;	///< 参照カウント
-	Threading::Atomic	m_refPtrReferenced;
+    Threading::Atomic		mReferenceCount;	///< 参照カウント
+	Threading::Atomic		m_refPtrReferenced;
+
 };
 
 class RefPtrCore {};

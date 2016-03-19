@@ -71,6 +71,7 @@ ln::tr::TypeInfo*				ReflectionObject::lnref_GetThisTypeInfo() const { return &l
 //-----------------------------------------------------------------------------
 ReflectionObject::ReflectionObject()
 	: m_userData(nullptr)
+	, m_weakRefInfo(nullptr)
 {
 }
 
@@ -79,6 +80,11 @@ ReflectionObject::ReflectionObject()
 //-----------------------------------------------------------------------------
 ReflectionObject::~ReflectionObject()
 {
+	Threading::MutexScopedLock lock(m_weakRefInfoMutex);
+	if (m_weakRefInfo != nullptr)
+	{
+		m_weakRefInfo->owner = nullptr;
+	}
 }
 
 //-----------------------------------------------------------------------------

@@ -12,6 +12,16 @@ class ReflectionObject;
 class Property;
 typedef uint32_t LocalValueHavingFlags;
 
+namespace detail
+{
+	// 1つの ReflectionObject に対して1つ作られる
+	struct WeakRefInfo
+	{
+		RefObject*			owner;
+		std::atomic<int>	weakRefCount;
+	};
+}
+
 class ReflectionHelper
 {
 public:
@@ -46,6 +56,11 @@ public:
 		return &T::lnref_typeInfo;
 	}
 
+	template<class T>
+	inline static detail::WeakRefInfo* RequestWeakRefInfo(T* obj)
+	{
+		return obj->RequestWeakRefInfo();
+	}
 	//static void RaiseReflectionEvent(ReflectionObject* obj, ReflectionEventBase* ev, ReflectionEventArgs* e);
 };
 
