@@ -35,7 +35,7 @@ Property::~Property()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void Property::NotifyPropertyChanged(ReflectionObject* target, const Property* prop, const Variant& newValue, const Variant& oldValue)
+void Property::NotifyPropertyChanged(ReflectionObject* target, const Property* prop, const Variant& newValue, const Variant& oldValue, PropertySetSource source)
 {
 	RefPtr<PropertyChangedEventArgs> e(g_eventArgsPool.Create<PropertyChangedEventArgs>(prop, newValue, oldValue), false);
 	target->OnPropertyChanged(e);
@@ -44,9 +44,9 @@ void Property::NotifyPropertyChanged(ReflectionObject* target, const Property* p
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void Property::SetPropertyValue(ReflectionObject* obj, const Property* prop, const Variant& value)
+void Property::SetPropertyValue(ReflectionObject* obj, const Property* prop, const Variant& value, PropertySetSource source)
 {
-	obj->SetPropertyValueInternal(prop, value, false);
+	obj->SetPropertyValueInternal(prop, value, false, source);
 }
 
 //-----------------------------------------------------------------------------

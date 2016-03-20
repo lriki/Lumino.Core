@@ -18,9 +18,38 @@ namespace detail
 	struct WeakRefInfo
 	{
 		RefObject*			owner;
-		std::atomic<int>	weakRefCount;
+		std::atomic<int>	weakRefCount = 1;
+
+		inline void AddRef()
+		{
+			weakRefCount.fetch_add(1, std::memory_order_relaxed);
+		}
+
+		inline void Release()
+		{
+			int before = weakRefCount.fetch_sub(1, std::memory_order_relaxed);
+			if (before <= 1)
+			{
+				delete this;
+			}
+		}
 	};
 }
+
+namespace detail
+{
+	class ReflectionObjectAnimationData
+	{
+	public:
+		virtual ~ReflectionObjectAnimationData() {}
+		virtual void OnPropertyChangedByLocal(ReflectionObject* owner, const Property* prop) = 0;
+	};
+}
+enum class PropertySetSource
+{
+	ByLocal,
+	ByAnimation,
+};
 
 class ReflectionHelper
 {
@@ -69,6 +98,11 @@ public:
 			obj->m_animationData = LN_NEW TData();
 		}
 		return static_cast<TData*>(obj->m_animationData);
+	}
+	template<class T>
+	inline static detail::ReflectionObjectAnimationData* GetAnimationData(T* obj)
+	{
+		return obj->m_animationData;
 	}
 	//static void RaiseReflectionEvent(ReflectionObject* obj, ReflectionEventBase* ev, ReflectionEventArgs* e);
 };

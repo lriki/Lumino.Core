@@ -84,6 +84,7 @@ ReflectionObject::~ReflectionObject()
 	Threading::MutexScopedLock lock(m_weakRefInfoMutex);
 	if (m_weakRefInfo != nullptr)
 	{
+		m_weakRefInfo->Release();
 		m_weakRefInfo->owner = nullptr;
 	}
 
@@ -110,7 +111,7 @@ void ReflectionObject::OnPropertyChanged(PropertyChangedEventArgs* e)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void ReflectionObject::SetPropertyValueInternal(const Property* prop, const Variant& value, bool reset)
+void ReflectionObject::SetPropertyValueInternal(const Property* prop, const Variant& value, bool reset, PropertySetSource source)
 {
 	//if (prop->IsStored())
 	//{
@@ -119,7 +120,7 @@ void ReflectionObject::SetPropertyValueInternal(const Property* prop, const Vari
 	//	m_propertyDataStore->SetValue(prop, value);
 	//}
 	//else {
-		prop->SetValue(this, value);
+		prop->SetValue(this, value, source);
 	//}
 
 	//PropertyInstanceData* data = prop->GetPropertyInstanceData(this);

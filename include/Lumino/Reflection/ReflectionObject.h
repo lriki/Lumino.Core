@@ -32,14 +32,6 @@ namespace tr
 #define LN_TR_REFLECTION_TYPEINFO_IMPLEMENT(classType, baseClassType) \
 	LN_TR_REFLECTION_TYPEINFO_IMPLEMENT_COMMON(ln::tr::TypeInfo, classType, baseClassType)
 
-namespace detail
-{
-class ReflectionObjectAnimationData
-{
-public:
-	virtual ~ReflectionObjectAnimationData() {}
-};
-}
 
 /**
 	@brief		
@@ -65,7 +57,7 @@ protected:
 	void RaiseDelegateEvent(DelegateEvent<TArgs...>& ev, TArgs... args) { ev.Raise(args...); }
 
 private:
-	void SetPropertyValueInternal(const Property* prop, const Variant& value, bool reset);
+	void SetPropertyValueInternal(const Property* prop, const Variant& value, bool reset, PropertySetSource source);
 
 	void*	m_userData;
 	detail::ReflectionObjectAnimationData*	m_animationData;
@@ -157,6 +149,13 @@ public:
 		return *this;
 	}
 
+	/** */
+	WeakRefPtr<T>& operator =(T* obj)
+	{
+		Set(ReflectionHelper::RequestWeakRefInfo(obj));
+		return *this;
+	}
+
 private:
 	
 	void Set(detail::WeakRefInfo* info)
@@ -165,7 +164,7 @@ private:
 		m_weakRefInfo = info;
 		if (m_weakRefInfo != nullptr)
 		{
-			m_weakRefInfo->weakRefCount.fetch_add(1, std::memory_order_relaxed);
+			m_weakRefInfo->AddRef();
 		}
 	}
 	
@@ -173,11 +172,7 @@ private:
 	{
 		if (m_weakRefInfo != nullptr)
 		{
-			int before = m_weakRefInfo->weakRefCount.fetch_sub(1, std::memory_order_relaxed);
-			if (before <= 1)
-			{
-				delete m_weakRefInfo;
-			}
+			m_weakRefInfo->Release();
 			m_weakRefInfo = nullptr;
 		}
 	}

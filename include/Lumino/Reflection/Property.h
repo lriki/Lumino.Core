@@ -45,7 +45,7 @@ public:
 	Property(TypeInfo* ownerClassType, PropertyMetadata* metadata, bool stored);
 	virtual ~Property();
 
-	virtual void SetValue(ReflectionObject* target, Variant value) const { LN_THROW(0, InvalidOperationException); }
+	virtual void SetValue(ReflectionObject* target, Variant value, PropertySetSource source) const { LN_THROW(0, InvalidOperationException); }
 	virtual Variant GetValue(const ReflectionObject* target) const { LN_THROW(0, InvalidOperationException); }
 	virtual void AddItem(ReflectionObject* target, const Variant& value) const { LN_THROW(0, InvalidOperationException); }
 
@@ -62,7 +62,7 @@ public:
 	/**
 		@brief		指定したオブジェクトのプロパティの値を設定します。
 	*/
-	static void SetPropertyValue(ReflectionObject* obj, const Property* prop, const Variant& value);
+	static void SetPropertyValue(ReflectionObject* obj, const Property* prop, const Variant& value, PropertySetSource source = PropertySetSource::ByLocal);
 	
 	/**
 		@brief		指定したオブジェクトのプロパティの値を取得します。
@@ -73,7 +73,7 @@ public:
 		@brief		指定したオブジェクトのプロパティの値を設定します。あらかじめ型が分かっている場合、SetPropertyValue() よりも少ないオーバーヘッドで設定できます。
 	*/
 	template<typename TValue>
-	static void SetPropertyValueDirect(ReflectionObject* obj, const Property* prop, const TValue& value);
+	static void SetPropertyValueDirect(ReflectionObject* obj, const Property* prop, const TValue& value, PropertySetSource source = PropertySetSource::ByLocal);
 
 	/**
 		@brief		指定したオブジェクトのプロパティの値を取得します。あらかじめ型が分かっている場合、GetPropertyValue() よりも少ないオーバーヘッドで設定できます。
@@ -82,7 +82,7 @@ public:
 	static const TValue& GetPropertyValueDirect(const ReflectionObject* obj, const Property* prop);
 
 protected:
-	static void NotifyPropertyChanged(ReflectionObject* target, const Property* prop, const Variant& newValue, const Variant& oldValue);
+	static void NotifyPropertyChanged(ReflectionObject* target, const Property* prop, const Variant& newValue, const Variant& oldValue, PropertySetSource source);
 
 private:
 	friend class TypeInfo;
@@ -124,9 +124,9 @@ public:
 public:
 	virtual const String& GetName() const { return m_name; }
 
-	virtual void SetValue(ReflectionObject* target, Variant value) const
+	virtual void SetValue(ReflectionObject* target, Variant value, PropertySetSource source) const
 	{
-		SetValueDirect(target, Variant::Cast<TValue>(value));
+		SetValueDirect(target, Variant::Cast<TValue>(value), source);
 	}
 	virtual Variant GetValue(const ReflectionObject* target) const
 	{
@@ -148,7 +148,7 @@ public:
 	virtual bool IsWritable() const { return m_getter != NULL; }
 	//virtual bool IsList() const { return ListOperationSelector2<TValue>::IsList(); }
 
-	void SetValueDirect(ReflectionObject* target, const TValue& value) const
+	void SetValueDirect(ReflectionObject* target, const TValue& value, PropertySetSource source) const
 	{
 		LN_THROW(m_setter != NULL, InvalidOperationException);
 
@@ -157,18 +157,24 @@ public:
 		uint32_t* flags = GetOwnerClassType()->GetHasLocalValueFlags(target);
 		(*flags) |= f;
 
+
+		if (source == PropertySetSource::ByLocal && ReflectionHelper::GetAnimationData(target) != nullptr)
+		{
+			ReflectionHelper::GetAnimationData(target)->OnPropertyChangedByLocal(target, this);
+		}
+
 		if (m_getter != NULL)
 		{
 			TValue* v;
 			m_getter(target, &v);
 			Variant oldValue(*v);
 			m_setter(target, const_cast<TValue&>(value));
-			NotifyPropertyChanged(target, this, value, oldValue);
+			NotifyPropertyChanged(target, this, value, oldValue, source);
 		}
 		else
 		{
 			m_setter(target, const_cast<TValue&>(value));
-			NotifyPropertyChanged(target, this, value, Variant::Null);
+			NotifyPropertyChanged(target, this, value, Variant::Null, source);
 		}
 	}
 	const TValue& GetValueDirect(const ReflectionObject* target) const
@@ -278,11 +284,11 @@ public:
 //
 //-----------------------------------------------------------------------------
 template<typename TValue>
-void Property::SetPropertyValueDirect(ReflectionObject* obj, const Property* prop, const TValue& value)
+void Property::SetPropertyValueDirect(ReflectionObject* obj, const Property* prop, const TValue& value, PropertySetSource source)
 {
 	LN_THROW(prop != NULL, ArgumentException);
 	auto t = static_cast<const TypedProperty<TValue>*>(prop);
-	t->SetValueDirect(obj, value);
+	t->SetValueDirect(obj, value, source);
 	//PropertyInstanceData* data = prop->GetPropertyInstanceData(this);
 	//if (data != NULL)
 	//{
@@ -338,12 +344,12 @@ public:
 
 
 #define LN_TR_PROPERTY(valueType, propVar) \
-	public:  static const ln::tr::Property*							propVar; \
 	private: static void											set_##propVar(ln::tr::ReflectionObject* obj, valueType& value); \
 	private: static void											get_##propVar(ln::tr::ReflectionObject* obj, valueType** valuePtr); \
 	private: static ln::tr::TypedPropertyInitializer<valueType>		init_##propVar; \
 	private: static std::unique_ptr<ln::tr::PropertyInstanceData>*	getInstanceData_##propVar(ln::tr::ReflectionObject* obj); \
-	private: std::unique_ptr<ln::tr::PropertyInstanceData>			instanceData_##propVar = nullptr;
+	private: std::unique_ptr<ln::tr::PropertyInstanceData>			instanceData_##propVar = nullptr; \
+	public:  static const ln::tr::Property*							propVar;
 
 #define LN_TR_PROPERTY_IMPLEMENT(ownerClass, valueType, propVar, propName, memberVar, metadata) \
 	ln::tr::PropertyMetadata						ownerClass_##metadata_##propVar = metadata; \
