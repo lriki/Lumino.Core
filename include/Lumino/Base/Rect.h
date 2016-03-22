@@ -60,6 +60,11 @@ public:
 	void Set(int x, int y, int width, int height) { X = x; Y = y; Width = width; Height = height; }
 
 	/**
+		@brief	各要素を設定します。
+	*/
+	void Set(int x, int y, const Size& size) { X = x; Y = y; Width = size.Width; Height = size.Height; }
+
+	/**
 		@brief	左辺の x 軸の値を取得します。
 	*/
 	int GetLeft() const { return X; }
