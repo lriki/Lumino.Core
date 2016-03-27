@@ -196,6 +196,8 @@ public:
 public:
 	bool operator == (const Rect& obj) const { return (X == obj.X && Y == obj.Y && Width == obj.Width && Height == obj.Height); }
 	bool operator != (const Rect& obj) const { return !operator==(obj); }
+
+	static Rect MakeFromBounds(int left, int top, int right, int bottom) { return Rect(left, top, right - left, bottom - top); }
 };
 
 /**
