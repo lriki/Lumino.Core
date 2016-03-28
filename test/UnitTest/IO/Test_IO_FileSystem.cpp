@@ -13,17 +13,17 @@ TEST_F(Test_IO_FileSystem, Exists)
 	// Windows 別ユーザーフォルダは false
 	//ASSERT_FALSE(FileSystem::Exists("C:/Users/user2/Documents/Visual Studio 2013/Settings/CurrentSettings.vssettings"));
 
-	ASSERT_TRUE(FileSystem::Exists(LN_LOCALFILE("TestData/test1.txt")));
+	ASSERT_TRUE(FileSystem::ExistsFile(LN_LOCALFILE("TestData/test1.txt")));
 	// ディレクトリは false
-	ASSERT_FALSE(FileSystem::Exists(LN_LOCALFILE("TestData")));
+	ASSERT_FALSE(FileSystem::ExistsFile(LN_LOCALFILE("TestData")));
 	// 空文字列は false
-	ASSERT_FALSE(FileSystem::Exists(""));
+	ASSERT_FALSE(FileSystem::ExistsFile(""));
 	// 空文字列は false
-	ASSERT_FALSE(FileSystem::Exists(L""));
+	ASSERT_FALSE(FileSystem::ExistsFile(L""));
 	// NULL は false
-	ASSERT_FALSE(FileSystem::Exists((char*)NULL));
+	ASSERT_FALSE(FileSystem::ExistsFile((char*)NULL));
 	// NULL は false
-	ASSERT_FALSE(FileSystem::Exists((wchar_t*)NULL));
+	ASSERT_FALSE(FileSystem::ExistsFile((wchar_t*)NULL));
 }
 
 //-----------------------------------------------------------------------------
@@ -92,7 +92,7 @@ TEST_F(Test_IO_FileSystem, Copy_Delete)
 	uint64_t src2Size = FileSystem::GetFileSize(src2.c_str());
 
 	// 最初はコピー先ファイルが無いこと。
-	ASSERT_FALSE(FileSystem::Exists(dest.c_str()));
+	ASSERT_FALSE(FileSystem::ExistsFile(dest.c_str()));
 
 	// コピー
 	FileSystem::Copy(src1.c_str(), dest.c_str(), false);
@@ -115,7 +115,7 @@ TEST_F(Test_IO_FileSystem, Copy_Delete)
 	FileSystem::Delete(dest.c_str());
 
 	// 消えている
-	ASSERT_FALSE(FileSystem::Exists(dest.c_str()));
+	ASSERT_FALSE(FileSystem::ExistsFile(dest.c_str()));
 }
 
 //-----------------------------------------------------------------------------

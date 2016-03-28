@@ -38,8 +38,8 @@ public:
 					(ユーザーA は ユーザーB の "マイドキュメント" フォルダのファイルにアクセスできない)
 					また、パスが空文字や NULL の場合も false を返します。
 	*/
-	static bool Exists(const char* filePath);
-	static bool Exists(const wchar_t* filePath);
+	static bool ExistsFile(const StringRefA& filePath);
+	static bool ExistsFile(const StringRefW& filePath);
 	//template<typename TChar> static bool Exists2(const TChar* filePath);		/**< a */
 	//template<typename TString> static bool Exists2(const TString& filePath);	/**< b */
 

@@ -49,7 +49,7 @@ void FileStream::Open(const TCHAR* filePath, FileOpenMode openMode)
 
 	if (m_openModeFlags.TestFlag(FileOpenMode::Deferring))
 	{
-		if (!FileSystem::Exists(filePath)) {
+		if (!FileSystem::ExistsFile(filePath)) {
 			LN_THROW(0, FileNotFoundException, filePath);
 		}
 	}

@@ -294,7 +294,7 @@ std::string GenericPathName<TChar>::ToLocalChar() const
 template<typename TChar>
 bool GenericPathName<TChar>::ExistsFile() const
 {
-	return FileSystem::Exists(m_path.c_str());
+	return FileSystem::ExistsFile(m_path.c_str());
 }
 
 //-----------------------------------------------------------------------------
@@ -314,7 +314,7 @@ bool GenericPathName<TChar>::ExistsFileInDirectory(const StringRefT& relPath) co
 {
 	TChar path[LN_MAX_PATH];
 	PathTraits::Combine(m_path.c_str(), m_path.GetLength(), relPath.GetBegin(), relPath.GetLength(), path, LN_MAX_PATH);
-	return FileSystem::Exists(path);
+	return FileSystem::ExistsFile(path);
 }
 
 //-----------------------------------------------------------------------------
@@ -410,7 +410,7 @@ GenericPathName<TChar> GenericPathName<TChar>::GetUniqueFilePathInDirectory(cons
 		}
 
 		number++;
-	} while (FileSystem::Exists(filePath.c_str()));
+	} while (FileSystem::ExistsFile(filePath.c_str()));
 
 	return PathNameT(filePath.c_str());
 }

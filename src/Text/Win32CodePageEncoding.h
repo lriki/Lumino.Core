@@ -28,7 +28,7 @@ private:
 	CPINFOEX	m_cpInfo;
 	String		m_name;
 
-private:
+LN_INTERNAL_ACCESS:
 	// Decoder
 	class Win32CodePageDecoder : public Decoder
 	{

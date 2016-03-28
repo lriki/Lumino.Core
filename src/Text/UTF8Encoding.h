@@ -26,7 +26,7 @@ public:
 private:
 	bool	m_byteOrderMark;
 
-private:
+LN_INTERNAL_ACCESS:
 	// Decoder
 	class UTF8Decoder : public Decoder
 	{

@@ -45,10 +45,13 @@ static void Win32IOErrorToExceptionThrow(DWORD errorCode, const TChar* message)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-bool FileSystem::Exists(const char* filePath)
+bool FileSystem::ExistsFile(const StringRefA& filePath)
 {
+	char tmpPath[MAX_PATH];
+	filePath.CopyTo(tmpPath, MAX_PATH);
+
 	// ※fopen によるチェックはNG。ファイルが排他ロックで開かれていた時に失敗する。
-	DWORD attr = ::GetFileAttributesA(filePath);
+	DWORD attr = ::GetFileAttributesA(tmpPath);
 	// 他ユーザーフォルダ内のファイルにアクセスしようとすると attr = -1 になる。
 	// このとき GetLastError() は ERROR_ACCESS_DENIED である。
 	// .NET の仕様にあわせ、エラーは一律 false で返している。
@@ -56,9 +59,12 @@ bool FileSystem::Exists(const char* filePath)
 			(attr & FILE_ATTRIBUTE_DIRECTORY) == 0);
 }
 
-bool FileSystem::Exists(const wchar_t* filePath)
+bool FileSystem::ExistsFile(const StringRefW& filePath)
 {
-	DWORD attr = ::GetFileAttributesW(filePath);
+	wchar_t tmpPath[MAX_PATH];
+	filePath.CopyTo(tmpPath, MAX_PATH);
+
+	DWORD attr = ::GetFileAttributesW(tmpPath);
 	return ((attr != -1) &&
 			(attr & FILE_ATTRIBUTE_DIRECTORY) == 0);
 }

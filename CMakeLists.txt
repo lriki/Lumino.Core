@@ -94,6 +94,7 @@ set(LN_SOURCES_Base
 	src/Base/Size.cpp
 	src/Base/String.cpp
 	src/Base/StringBuilder.cpp
+	src/Base/StringRef.cpp
 	src/Base/StringTraits.cpp
 	src/Base/Thickness.cpp
 	src/Base/Version.cpp
