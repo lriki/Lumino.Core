@@ -133,6 +133,7 @@ set(LN_SOURCES_IO
 	include/Lumino/IO/BinaryWriter.h
 	include/Lumino/IO/Common.h
 	include/Lumino/IO/Console.h
+	include/Lumino/IO/DirectoryIterator.h
 	include/Lumino/IO/DirectoryUtils.h
 	include/Lumino/IO/File.h
 	include/Lumino/IO/FileStream.h
@@ -151,6 +152,7 @@ set(LN_SOURCES_IO
 	src/IO/BinaryReader.cpp
 	src/IO/BinaryWriter.cpp
 	src/IO/Console.cpp
+	src/IO/DirectoryIterator.cpp
 	src/IO/DirectoryUtils.cpp
 	src/IO/File.cpp
 	src/IO/FileStream.cpp
