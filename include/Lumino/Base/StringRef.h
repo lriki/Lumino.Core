@@ -84,14 +84,15 @@ public:
 		m_len = len;
 	}
 
-	void CopyTo(TChar* dest, int destLen) const
+	int CopyTo(TChar* dest, int destLen) const
 	{
 		LN_THROW(destLen > m_len, OutOfRangeException);
 		StringTraits::tstrcpy(dest, destLen, m_str + m_pos);
 		dest[m_len] = '\0';
+		return m_len;
 	}
 
-	void CopyToLocal8Bit(char* dest, int destLen) const;
+	int CopyToLocal8Bit(char* dest, int destLen) const;
 
 private:
 	const TChar*	m_str;

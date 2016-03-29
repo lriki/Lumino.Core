@@ -14,12 +14,12 @@ LN_NAMESPACE_BEGIN
 // 
 //-----------------------------------------------------------------------------
 template<>
-void GenericStringRef<char>::CopyToLocal8Bit(char* dest, int destLen) const
+int GenericStringRef<char>::CopyToLocal8Bit(char* dest, int destLen) const
 {
-	CopyTo(dest, destLen);
+	return CopyTo(dest, destLen);
 }
 template<>
-void GenericStringRef<wchar_t>::CopyToLocal8Bit(char* dest, int destLen) const
+int GenericStringRef<wchar_t>::CopyToLocal8Bit(char* dest, int destLen) const
 {
 #ifdef LN_OS_WIN32
 	CPINFOEX cpInfo;
@@ -30,12 +30,14 @@ void GenericStringRef<wchar_t>::CopyToLocal8Bit(char* dest, int destLen) const
 	size_t charUsed = 0;
 	enc.ConvertFromUTF16(m_str + m_pos, m_len, (byte_t*)dest, destLen - 1, &byteUsed, &charUsed);
 	dest[byteUsed] = '\0';
+	return byteUsed;
 #else
 	UTF8Encoding::UTF8Encoder enc(false);
 	size_t byteUsed = 0;
 	size_t charUsed = 0;
 	enc.ConvertFromUTF16(m_str + m_pos, m_len, (byte_t*)dest, destLen - 1, &byteUsed, &charUsed);
 	dest[byteUsed] = '\0';
+	return byteUsed;
 #endif
 	//std::mbstate_t state = std::mbstate_t();
 	//int len = 1 + std::wcsrtombs(nullptr, &wstr, 0, &state);	// +1 は '\0' の分

@@ -127,3 +127,21 @@ TEST_F(Test_IO_FileSystem, CreateDirectory)
 	ASSERT_FALSE(FileSystem::ExistsDirectory(TEMPFILE("Test_IO_FileSystem")));	// 消えている
 }
 
+//-----------------------------------------------------------------------------
+TEST_F(Test_IO_FileSystem, ForEachFilesInDirectory)
+{
+	FileSystem::CreateDirectory(TEMPFILE("Test_IO_FileSystem/ForEachFilesInDirectory"));
+	FileSystem::CreateDirectory(TEMPFILE("Test_IO_FileSystem/ForEachFilesInDirectory/dir1"));
+	FileSystem::CreateDirectory(TEMPFILE("Test_IO_FileSystem/ForEachFilesInDirectory/dir2"));
+	FileSystem::WriteAllText(TEMPFILE("Test_IO_FileSystem/ForEachFilesInDirectory/file1"), _T("test"));
+	FileSystem::WriteAllText(TEMPFILE("Test_IO_FileSystem/ForEachFilesInDirectory/file2"), _T("test"));
+
+	StringArray list;
+	FileSystem::ForEachFilesInDirectory<TCHAR>(TEMPFILE("Test_IO_FileSystem/ForEachFilesInDirectory"), [&list](const TCHAR* path) { list.Add(path); });
+
+	ASSERT_EQ(4, list.GetCount());
+	ASSERT_EQ(_T("dir1"), list[0]);
+	ASSERT_EQ(_T("dir2"), list[1]);
+	ASSERT_EQ(_T("file1"), list[2]);
+	ASSERT_EQ(_T("file2"), list[3]);
+}

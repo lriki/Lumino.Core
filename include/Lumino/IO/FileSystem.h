@@ -6,6 +6,7 @@
 #include "../Base/RefObject.h"
 #include "../Base/String.h"
 #include "../Base/EnumExtension.h"
+#include "DirectoryUtils.h"
 
 LN_NAMESPACE_BEGIN
 class Encoding;
@@ -135,6 +136,10 @@ public:
 	static bool ExistsDirectory(const wchar_t* path);
 	template<typename TString> static inline bool ExistsDirectory(const TString& path) { return ExistsDirectory(path.c_str()); }
 
+	// TODO: これだけだと FileSystem::ForEachFilesInDirectory<TCHAR>() のように明示的な型指定が必要
+	template<typename TChar, typename TCallback>
+	static void ForEachFilesInDirectory(const GenericStringRef<TChar>& path, TCallback callback);
+
 #pragma push_macro("CreateDirectory")
 #undef CreateDirectory
 	/**
@@ -166,5 +171,20 @@ private:
 	static bool GetAttributeInternal(const wchar_t* path, FileAttribute* outAttr);
 	template<typename TChar> static void CreateDirectoryInternal(const TChar* path);
 };
+
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar, typename TCallback>
+static void FileSystem::ForEachFilesInDirectory(const GenericStringRef<TChar>& path, TCallback callback)
+{
+	GenericFileFinder<TChar> finder(path);
+	while (finder.GetCurrent() != nullptr)
+	{
+		callback(finder.GetCurrent());
+		finder.Next();
+	}
+}
 
 LN_NAMESPACE_END

@@ -18,9 +18,11 @@
     #define LN_OS_WIN32
 #elif defined(__APPLE__) || defined(__APPLE_CC__) || defined(__OSX__)
     #define LN_OS_MAC
+	#define LN_OS_FAMILY_UNIX
 #else	// とりあえず
 	#define LN_OS_LINUX
 	#define LN_X11
+	#define LN_OS_FAMILY_UNIX
 #endif
 
 // コンパイラ
