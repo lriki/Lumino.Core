@@ -1,6 +1,6 @@
 ﻿#pragma once
-
 #include "../Base/Array.h"
+#include "PathName.h"
 
 LN_NAMESPACE_BEGIN
 
@@ -30,47 +30,81 @@ public:
 };
 
 
+template<typename TChar>
+class GenericFileFinderBase
+{
+public:
+
+	bool IsWorking() const
+	{
+		return !m_combinedPath.IsEmpty();
+	}
+
+	const GenericPathName<TChar>& GetCurrent() const
+	{
+		return m_combinedPath;
+	}
+
+protected:
+	GenericFileFinderBase(const GenericStringRef<TChar>& dirPath)
+		: m_dirPath(dirPath)
+	{}
+
+	virtual ~GenericFileFinderBase()
+	{}
+
+	void SetCurrentFileName(const TChar* fileName)
+	{
+		if (fileName != nullptr)
+			m_combinedPath.AssignUnderBasePath(m_dirPath, fileName);
+		else
+			m_combinedPath.SetEmpty();
+	}
+
+private:
+	GenericPathName<TChar>	m_dirPath;
+	GenericPathName<TChar>	m_combinedPath;
+};
+
 #if defined(LN_OS_WIN32)
 template<typename TChar>
 class GenericFileFinder
+	: public GenericFileFinderBase<TChar>
 {
 public:
-	GenericFileFinder(const GenericStringRef<TChar>& path);
+	GenericFileFinder(const GenericStringRef<TChar>& dirPath);
 	~GenericFileFinder();
-	const TChar* GetCurrent() const;
 	bool Next();
 };
 
 // for char
 template<>
 class GenericFileFinder<char>
+	: public GenericFileFinderBase<char>
 {
 public:
-	GenericFileFinder(const GenericStringRef<char>& path);
+	GenericFileFinder(const GenericStringRef<char>& dirPath);
 	~GenericFileFinder();
-	const char* GetCurrent() const;
 	bool Next();
 
 private:
 	HANDLE				m_fh;
 	WIN32_FIND_DATAA	m_fd;
-	bool				m_end;
 };
 
 // for wchar_t
 template<>
 class GenericFileFinder<wchar_t>
+	: public GenericFileFinderBase<wchar_t>
 {
 public:
 	GenericFileFinder(const GenericStringRef<wchar_t>& path);
 	~GenericFileFinder();
-	const wchar_t* GetCurrent() const;
 	bool Next();
 
 private:
 	HANDLE				m_fh;
 	WIN32_FIND_DATAW	m_fd;
-	bool				m_end;
 };
 #elif defined(LN_OS_FAMILY_UNIX)
 #endif

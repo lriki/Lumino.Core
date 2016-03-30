@@ -2,11 +2,12 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include "../Internal.h"
-#include "../../include/Lumino/Base/String.h"
-#include "../../include/Lumino/Base/ByteBuffer.h"
-#include "../../include/Lumino/Text/Encoding.h"
-#include "../../include/Lumino/IO/FileStream.h"
-#include "../../include/Lumino/IO/FileSystem.h"
+#include <Lumino/Base/String.h>
+#include <Lumino/Base/ByteBuffer.h>
+#include <Lumino/Text/Encoding.h>
+#include <Lumino/IO/FileStream.h>
+#include <Lumino/IO/FileSystem.h>
+#include <Lumino/IO/PathName.h>
 #include <filesystem>
 
 LN_NAMESPACE_BEGIN
@@ -278,6 +279,10 @@ size_t FileSystem::GetFileSize( FILE* stream )
 template<typename TChar> static bool Exists2(const TChar* filePath);
 template<typename TString> static bool Exists2(const TString& filePath);
 
+
+
+
+
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
@@ -295,6 +300,59 @@ FileAttribute FileSystem::GetAttribute(const wchar_t* filePath)
 	LN_THROW(r, FileNotFoundException, filePath);
 	return attr;
 }
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+void FileSystem::CopyDirectory(const GenericStringRef<TChar>& srcPath, const GenericStringRef<TChar>& destPath, bool overwrite, bool recursive)
+{
+	LN_CHECK_ARGS_RETURN(!srcPath.IsEmpty());
+	LN_CHECK_ARGS_RETURN(!destPath.IsEmpty());
+
+	// 上書きしないとき、すでにフォルダが存在してはならない
+	if (!overwrite)
+	{
+		LN_THROW(ExistsDirectory(srcPath.GetBegin()), IOException);	// TODO: range
+	}
+
+	// コピー先フォルダを作っておく
+	FileSystem::CreateDirectory(destPath.GetBegin());	// TODO: range
+
+	GenericFileFinder<TChar> finder(srcPath);
+	while (finder.IsWorking())
+	{
+		const GenericPathName<TChar>& src = finder.GetCurrent();
+		GenericPathName<TChar> dest(destPath, src.GetFileName());
+
+		if (src.ExistsFile())
+		{
+			// コピー先にファイルとして存在していて、上書きする場合はコピーする
+			if (dest.ExistsFile())
+			{
+				if (overwrite)
+				{
+					Copy(src, dest, true);
+				}
+			}
+			else
+			{
+				Copy(src, dest, false);
+			}
+		}
+		else if (src.ExistsDirectory())
+		{
+			if (recursive)
+			{
+				CopyDirectory<TChar>(src, dest, overwrite, recursive);
+			}
+		}
+
+		finder.Next();
+	}
+}
+template void FileSystem::CopyDirectory<char>(const GenericStringRef<char>& srcPath, const GenericStringRef<char>& destPath, bool overwrite, bool recursive);
+template void FileSystem::CopyDirectory<wchar_t>(const GenericStringRef<wchar_t>& srcPath, const GenericStringRef<wchar_t>& destPath, bool overwrite, bool recursive);
 
 //-----------------------------------------------------------------------------
 //

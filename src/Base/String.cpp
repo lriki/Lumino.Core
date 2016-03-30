@@ -999,6 +999,7 @@ template<typename TChar>
 void GenericString<TChar>::Attach(detail::GenericStringCore<TChar>* core)
 {
 	LN_REFOBJ_SET(m_string, core);
+	m_ref = m_string->c_str();
 }
 
 //-----------------------------------------------------------------------------

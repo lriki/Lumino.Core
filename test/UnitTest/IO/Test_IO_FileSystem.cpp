@@ -128,6 +128,23 @@ TEST_F(Test_IO_FileSystem, CreateDirectory)
 }
 
 //-----------------------------------------------------------------------------
+TEST_F(Test_IO_FileSystem, CopyDirectory)
+{
+	FileSystem::CreateDirectory(TEMPFILE("Test_IO_FileSystem/CopyDirectory"));
+	FileSystem::CreateDirectory(TEMPFILE("Test_IO_FileSystem/CopyDirectory/dir1"));
+	FileSystem::CreateDirectory(TEMPFILE("Test_IO_FileSystem/CopyDirectory/dir2"));
+	FileSystem::WriteAllText(TEMPFILE("Test_IO_FileSystem/CopyDirectory/file1.txt"), _T("test"));
+	FileSystem::WriteAllText(TEMPFILE("Test_IO_FileSystem/CopyDirectory/dir2/file2.txt"), _T("test"));
+
+	FileSystem::CopyDirectory<TCHAR>(TEMPFILE("Test_IO_FileSystem/CopyDirectory"), TEMPFILE("Test_IO_FileSystem/CopyDirectory2"), true, true);
+
+	ASSERT_EQ(true, FileSystem::ExistsDirectory(TEMPFILE("Test_IO_FileSystem/CopyDirectory2/dir1")));
+	ASSERT_EQ(true, FileSystem::ExistsDirectory(TEMPFILE("Test_IO_FileSystem/CopyDirectory2/dir2")));
+	ASSERT_EQ(true, FileSystem::ExistsFile(TEMPFILE("Test_IO_FileSystem/CopyDirectory2/file1.txt")));
+	ASSERT_EQ(true, FileSystem::ExistsFile(TEMPFILE("Test_IO_FileSystem/CopyDirectory2/dir2/file2.txt")));
+}
+
+//-----------------------------------------------------------------------------
 TEST_F(Test_IO_FileSystem, ForEachFilesInDirectory)
 {
 	FileSystem::CreateDirectory(TEMPFILE("Test_IO_FileSystem/ForEachFilesInDirectory"));
@@ -136,12 +153,16 @@ TEST_F(Test_IO_FileSystem, ForEachFilesInDirectory)
 	FileSystem::WriteAllText(TEMPFILE("Test_IO_FileSystem/ForEachFilesInDirectory/file1"), _T("test"));
 	FileSystem::WriteAllText(TEMPFILE("Test_IO_FileSystem/ForEachFilesInDirectory/file2"), _T("test"));
 
-	StringArray list;
-	FileSystem::ForEachFilesInDirectory<TCHAR>(TEMPFILE("Test_IO_FileSystem/ForEachFilesInDirectory"), [&list](const TCHAR* path) { list.Add(path); });
+	Array<PathName> list;
+	FileSystem::ForEachFilesInDirectory<TCHAR>(TEMPFILE("Test_IO_FileSystem/ForEachFilesInDirectory"), [&list](const PathName& path) { list.Add(path); });
 
 	ASSERT_EQ(4, list.GetCount());
-	ASSERT_EQ(_T("dir1"), list[0]);
-	ASSERT_EQ(_T("dir2"), list[1]);
-	ASSERT_EQ(_T("file1"), list[2]);
-	ASSERT_EQ(_T("file2"), list[3]);
+	ASSERT_EQ(true, list[0].IsAbsolute());
+	ASSERT_EQ(_T("dir1"), list[0].GetFileName());
+	ASSERT_EQ(true, list[1].IsAbsolute());
+	ASSERT_EQ(_T("dir2"), list[1].GetFileName());
+	ASSERT_EQ(true, list[2].IsAbsolute());
+	ASSERT_EQ(_T("file1"), list[2].GetFileName());
+	ASSERT_EQ(true, list[3].IsAbsolute());
+	ASSERT_EQ(_T("file2"), list[3].GetFileName());
 }

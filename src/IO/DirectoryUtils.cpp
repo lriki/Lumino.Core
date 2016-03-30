@@ -121,12 +121,12 @@ static void MakePattern(const GenericStringRef<TChar>& path, TChar* pattern)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-GenericFileFinder<char>::GenericFileFinder(const GenericStringRef<char>& path)
-	: m_fh(INVALID_HANDLE_VALUE)
-	, m_end(false)
+GenericFileFinder<char>::GenericFileFinder(const GenericStringRef<char>& dirPath)
+	: GenericFileFinderBase(dirPath)
+	, m_fh(INVALID_HANDLE_VALUE)
 {
 	char pattern[LN_MAX_PATH];
-	MakePattern(path, pattern);
+	MakePattern(dirPath, pattern);
 
 	m_fh = ::FindFirstFileA(pattern, &m_fd);
 	if (m_fh == INVALID_HANDLE_VALUE)
@@ -135,7 +135,7 @@ GenericFileFinder<char>::GenericFileFinder(const GenericStringRef<char>& path)
 		if (dwError == ERROR_FILE_NOT_FOUND ||
 			dwError == ERROR_NO_MORE_FILES)
 		{
-			m_end = true;
+			SetCurrentFileName(nullptr);
 		}
 		else
 		{
@@ -144,6 +144,7 @@ GenericFileFinder<char>::GenericFileFinder(const GenericStringRef<char>& path)
 	}
 	else
 	{
+		SetCurrentFileName(m_fd.cFileName);
 		if (strcmp(m_fd.cFileName, ".") == 0 || strcmp(m_fd.cFileName, "..") == 0)
 		{
 			Next();
@@ -165,30 +166,22 @@ GenericFileFinder<char>::~GenericFileFinder()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-const char* GenericFileFinder<char>::GetCurrent() const
-{
-	if (m_end) return nullptr;
-	return m_fd.cFileName;
-}
-
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 bool GenericFileFinder<char>::Next()
 {
 	do
 	{
 		if (::FindNextFileA(m_fh, &m_fd) != 0)
 		{
-			// 継続
+			SetCurrentFileName(m_fd.cFileName);
 		}
 		else
 		{
-			m_end = true;
+			m_fd.cFileName[0] = '\0';
+			SetCurrentFileName(nullptr);
 		}
 	} while (strcmp(m_fd.cFileName, ".") == 0 || strcmp(m_fd.cFileName, "..") == 0);
 
-	return !m_end;
+	return !GetCurrent().IsEmpty();
 }
 
 
@@ -198,12 +191,12 @@ bool GenericFileFinder<char>::Next()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-GenericFileFinder<wchar_t>::GenericFileFinder(const GenericStringRef<wchar_t>& path)
-	: m_fh(INVALID_HANDLE_VALUE)
-	, m_end(false)
+GenericFileFinder<wchar_t>::GenericFileFinder(const GenericStringRef<wchar_t>& dirPath)
+	: GenericFileFinderBase(dirPath)
+	, m_fh(INVALID_HANDLE_VALUE)
 {
 	wchar_t pattern[LN_MAX_PATH];
-	MakePattern(path, pattern);
+	MakePattern(dirPath, pattern);
 
 	m_fh = ::FindFirstFileW(pattern, &m_fd);
 	if (m_fh == INVALID_HANDLE_VALUE)
@@ -212,7 +205,7 @@ GenericFileFinder<wchar_t>::GenericFileFinder(const GenericStringRef<wchar_t>& p
 		if (dwError == ERROR_FILE_NOT_FOUND ||
 			dwError == ERROR_NO_MORE_FILES)
 		{
-			m_end = true;
+			SetCurrentFileName(nullptr);
 		}
 		else
 		{
@@ -221,6 +214,7 @@ GenericFileFinder<wchar_t>::GenericFileFinder(const GenericStringRef<wchar_t>& p
 	}
 	else
 	{
+		SetCurrentFileName(m_fd.cFileName);
 		if (wcscmp(m_fd.cFileName, L".") == 0 || wcscmp(m_fd.cFileName, L"..") == 0)
 		{
 			Next();
@@ -242,30 +236,22 @@ GenericFileFinder<wchar_t>::~GenericFileFinder()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-const wchar_t* GenericFileFinder<wchar_t>::GetCurrent() const
-{
-	if (m_end) return nullptr;
-	return m_fd.cFileName;
-}
-
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 bool GenericFileFinder<wchar_t>::Next()
 {
 	do
 	{
 		if (::FindNextFileW(m_fh, &m_fd) != 0)
 		{
-			// 継続
+			SetCurrentFileName(m_fd.cFileName);
 		}
 		else
 		{
-			m_end = true;
+			m_fd.cFileName[0] = '\0';
+			SetCurrentFileName(nullptr);
 		}
 	} while (wcscmp(m_fd.cFileName, L".") == 0 || wcscmp(m_fd.cFileName, L"..") == 0);
 
-	return !m_end;
+	return !GetCurrent().IsEmpty();
 }
 #elif defined(LN_OS_FAMILY_UNIX)
 #endif

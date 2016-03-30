@@ -90,6 +90,13 @@ public:
 	static void DeleteDirectory(const TChar* path, bool recursive);
 
 
+	/**
+		@brief		
+		@param[in]	overwrite		: コピー先のファイルとディレクトリを上書きする場合は true
+	*/
+	template<typename TChar>
+	static void CopyDirectory(const GenericStringRef<TChar>& srcPath, const GenericStringRef<TChar>& destPath, bool overwrite, bool recursive);
+
 
 	static StringArrayA GetFileSystemEntries(const char* directoryPath, const char* pattern);
 	static StringArrayW GetFileSystemEntries(const wchar_t* directoryPath, const wchar_t* pattern);
@@ -180,7 +187,7 @@ template<typename TChar, typename TCallback>
 static void FileSystem::ForEachFilesInDirectory(const GenericStringRef<TChar>& path, TCallback callback)
 {
 	GenericFileFinder<TChar> finder(path);
-	while (finder.GetCurrent() != nullptr)
+	while (!finder.GetCurrent().IsEmpty())
 	{
 		callback(finder.GetCurrent());
 		finder.Next();
