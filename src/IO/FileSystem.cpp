@@ -305,7 +305,7 @@ FileAttribute FileSystem::GetAttribute(const wchar_t* filePath)
 //
 //-----------------------------------------------------------------------------
 template<typename TChar>
-void FileSystem::CopyDirectory(const GenericStringRef<TChar>& srcPath, const GenericStringRef<TChar>& destPath, bool overwrite, bool recursive)
+void FileSystem::CopyDirectoryInternal(const GenericStringRef<TChar>& srcPath, const GenericStringRef<TChar>& destPath, bool overwrite, bool recursive)
 {
 	LN_CHECK_ARGS_RETURN(!srcPath.IsEmpty());
 	LN_CHECK_ARGS_RETURN(!destPath.IsEmpty());
@@ -344,15 +344,15 @@ void FileSystem::CopyDirectory(const GenericStringRef<TChar>& srcPath, const Gen
 		{
 			if (recursive)
 			{
-				CopyDirectory<TChar>(src, dest, overwrite, recursive);
+				CopyDirectoryInternal<TChar>(src, dest, overwrite, recursive);
 			}
 		}
 
 		finder.Next();
 	}
 }
-template void FileSystem::CopyDirectory<char>(const GenericStringRef<char>& srcPath, const GenericStringRef<char>& destPath, bool overwrite, bool recursive);
-template void FileSystem::CopyDirectory<wchar_t>(const GenericStringRef<wchar_t>& srcPath, const GenericStringRef<wchar_t>& destPath, bool overwrite, bool recursive);
+template void FileSystem::CopyDirectoryInternal<char>(const GenericStringRef<char>& srcPath, const GenericStringRef<char>& destPath, bool overwrite, bool recursive);
+template void FileSystem::CopyDirectoryInternal<wchar_t>(const GenericStringRef<wchar_t>& srcPath, const GenericStringRef<wchar_t>& destPath, bool overwrite, bool recursive);
 
 //-----------------------------------------------------------------------------
 //

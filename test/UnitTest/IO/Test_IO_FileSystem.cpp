@@ -136,7 +136,7 @@ TEST_F(Test_IO_FileSystem, CopyDirectory)
 	FileSystem::WriteAllText(TEMPFILE("Test_IO_FileSystem/CopyDirectory/file1.txt"), _T("test"));
 	FileSystem::WriteAllText(TEMPFILE("Test_IO_FileSystem/CopyDirectory/dir2/file2.txt"), _T("test"));
 
-	FileSystem::CopyDirectory<TCHAR>(TEMPFILE("Test_IO_FileSystem/CopyDirectory"), TEMPFILE("Test_IO_FileSystem/CopyDirectory2"), true, true);
+	FileSystem::CopyDirectory(TEMPFILE("Test_IO_FileSystem/CopyDirectory"), TEMPFILE("Test_IO_FileSystem/CopyDirectory2"), true, true);
 
 	ASSERT_EQ(true, FileSystem::ExistsDirectory(TEMPFILE("Test_IO_FileSystem/CopyDirectory2/dir1")));
 	ASSERT_EQ(true, FileSystem::ExistsDirectory(TEMPFILE("Test_IO_FileSystem/CopyDirectory2/dir2")));

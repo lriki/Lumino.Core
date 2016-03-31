@@ -94,8 +94,17 @@ public:
 		@brief		
 		@param[in]	overwrite		: コピー先のファイルとディレクトリを上書きする場合は true
 	*/
+	static void CopyDirectory(const GenericStringRef<char>& srcPath, const GenericStringRef<char>& destPath, bool overwrite, bool recursive)
+	{
+		CopyDirectoryInternal(srcPath, destPath, overwrite, recursive);
+	}
+	static void CopyDirectory(const GenericStringRef<wchar_t>& srcPath, const GenericStringRef<wchar_t>& destPath, bool overwrite, bool recursive)
+	{
+		CopyDirectoryInternal(srcPath, destPath, overwrite, recursive);
+	}
+
 	template<typename TChar>
-	static void CopyDirectory(const GenericStringRef<TChar>& srcPath, const GenericStringRef<TChar>& destPath, bool overwrite, bool recursive);
+	static void CopyDirectoryInternal(const GenericStringRef<TChar>& srcPath, const GenericStringRef<TChar>& destPath, bool overwrite, bool recursive);
 
 
 	static StringArrayA GetFileSystemEntries(const char* directoryPath, const char* pattern);
