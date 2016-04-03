@@ -402,9 +402,8 @@ String FileSystem::ReadAllText(const TCHAR* filePath, const Encoding* encoding)
 //-----------------------------------------------------------------------------
 void FileSystem::WriteAllBytes(const TCHAR* filePath, const void* buffer, size_t size)
 {
-	FileStream stream;
-	stream.Open(filePath, FileOpenMode::Write | FileOpenMode::Truncate);
-	stream.Write(buffer, size);
+	FileStreamPtr stream = FileStream::Create(filePath, FileOpenMode::Write | FileOpenMode::Truncate);
+	stream->Write(buffer, size);
 }
 
 //-----------------------------------------------------------------------------

@@ -12,8 +12,18 @@ LN_NAMESPACE_BEGIN
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+FileStreamPtr FileStream::Create(const TCHAR* filePath, FileOpenMode openMode)
+{
+	FileStreamPtr ptr(LN_NEW FileStream(), false);
+	ptr->Open(filePath, openMode);
+	return ptr;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 FileStream::FileStream()
-	: m_stream(NULL)
+	: m_stream(nullptr)
 	, m_openModeFlags(FileOpenMode::None)
 {
 }
@@ -21,12 +31,12 @@ FileStream::FileStream()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-FileStream::FileStream(const TCHAR* filePath, FileOpenMode openMode)
-	: m_stream(NULL)
-	, m_openModeFlags(FileOpenMode::None)
-{
-	Open(filePath, openMode);
-}
+//FileStream::FileStream(const TCHAR* filePath, FileOpenMode openMode)
+//	: m_stream(NULL)
+//	, m_openModeFlags(FileOpenMode::None)
+//{
+//	Open(filePath, openMode);
+//}
 
 //-----------------------------------------------------------------------------
 //

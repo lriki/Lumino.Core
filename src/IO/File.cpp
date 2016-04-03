@@ -42,7 +42,7 @@ File::~File()
 void File::Open(FileOpenMode openMode)
 {
 	LN_THROW(m_fileStream == NULL, InvalidOperationException);	// すでにファイルが開かれている
-	m_fileStream = LN_NEW FileStream(m_filePath.c_str(), openMode);
+	m_fileStream = FileStream::Create(m_filePath.c_str(), openMode);
 }
 
 //-----------------------------------------------------------------------------
@@ -50,7 +50,7 @@ void File::Open(FileOpenMode openMode)
 //-----------------------------------------------------------------------------
 void File::Close()
 {
-	LN_SAFE_RELEASE(m_fileStream);
+	m_fileStream.SafeRelease();
 }
 
 //-----------------------------------------------------------------------------

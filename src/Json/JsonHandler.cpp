@@ -47,7 +47,7 @@ JsonDOMHandler::JsonDOMHandler(JsonDocument* document)
 	, m_writer(&m_valueRawData)
 {
 	LN_CHECK_ARGS_RETURN(document != NULL);
-	m_valueRawData.Create(2048);
+	m_valueRawData.Initialize(2048);
 }
 
 //-----------------------------------------------------------------------------

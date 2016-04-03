@@ -58,7 +58,7 @@ void JsonReader::Parse(TextReader* textReader)
 	m_reader = textReader;
 
 	// 一時バッファ。もし足りなければ拡張される
-	m_tmpStream.Create(512);
+	m_tmpStream.Initialize(512);
 
 	// バッファ先頭の空白を読み飛ばす
 	if (!SkipWhitespace())

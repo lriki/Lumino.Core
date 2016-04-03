@@ -5,6 +5,37 @@
 
 LN_NAMESPACE_BEGIN
 
+//=============================================================================
+// MemoryStream
+//=============================================================================
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+MemoryStreamPtr MemoryStream::Create()
+{
+	MemoryStreamPtr ptr(LN_NEW MemoryStream(), false);
+	return ptr;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+MemoryStreamPtr MemoryStream::Create(void* buffer, size_t size)
+{
+	MemoryStreamPtr ptr(LN_NEW MemoryStream(buffer, size), false);
+	return ptr;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+MemoryStreamPtr MemoryStream::Create(const void* buffer, size_t size, bool copy)
+{
+	MemoryStreamPtr ptr(LN_NEW MemoryStream(buffer, size, copy), false);
+	return ptr;
+}
+
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
@@ -29,7 +60,7 @@ MemoryStream::MemoryStream(void* buffer, size_t size)
 	, m_fixedBufferSize(0)
 	, m_autoDelete(false)
 {
-	Create(buffer, size);
+	Initialize(buffer, size);
 }
 
 //-----------------------------------------------------------------------------
@@ -42,7 +73,7 @@ MemoryStream::MemoryStream(const void* buffer, size_t size, bool copy)
 	, m_fixedBufferSize(0)
 	, m_autoDelete(false)
 {
-	Create(buffer, size, copy);
+	Initialize(buffer, size, copy);
 }
 
 //-----------------------------------------------------------------------------
@@ -58,7 +89,7 @@ MemoryStream::~MemoryStream()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void MemoryStream::Create(size_t uSize)
+void MemoryStream::Initialize(size_t uSize)
 {
 	m_buffer.resize(uSize);
 	m_seekPos = 0;
@@ -67,7 +98,7 @@ void MemoryStream::Create(size_t uSize)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void MemoryStream::Create(void* buffer, size_t size)
+void MemoryStream::Initialize(void* buffer, size_t size)
 {
 	m_fixedBuffer = buffer;
 	m_fixedBufferSize = size;
@@ -76,7 +107,7 @@ void MemoryStream::Create(void* buffer, size_t size)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void MemoryStream::Create(const void* buffer, size_t size, bool copy)
+void MemoryStream::Initialize(const void* buffer, size_t size, bool copy)
 {
 	if (copy)
 	{

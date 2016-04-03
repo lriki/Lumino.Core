@@ -10,8 +10,8 @@ protected:
 //-----------------------------------------------------------------------------
 TEST_F(Test_IO_BinaryReader, Basic)
 {
-	FileStream file(LOCALFILE("TestData/BinaryReaderTest.dat"), FileOpenMode::Read);
-	BinaryReader reader(&file);
+	FileStreamPtr file = FileStream::Create(LOCALFILE("TestData/BinaryReaderTest.dat"), FileOpenMode::Read);
+	BinaryReader reader(file);
 
 	// 1byte
 	ASSERT_EQ(17, reader.ReadInt8());
@@ -53,8 +53,8 @@ TEST_F(Test_IO_BinaryReader, Basic)
 //-----------------------------------------------------------------------------
 TEST_F(Test_IO_BinaryReader, BytesSpecified)
 {
-	FileStream file(LOCALFILE("TestData/BinaryReaderTest.dat"), FileOpenMode::Read);
-	BinaryReader reader(&file);
+	FileStreamPtr file = FileStream::Create(LOCALFILE("TestData/BinaryReaderTest.dat"), FileOpenMode::Read);
+	BinaryReader reader(file);
 
 	// 1byte
 	ASSERT_EQ(17, reader.ReadInt(1));

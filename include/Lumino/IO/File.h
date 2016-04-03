@@ -83,8 +83,7 @@ public:
 
 private:
 	PathName		m_filePath;
-	FileStream*		m_fileStream;
-
+	FileStreamPtr	m_fileStream;
 };
 
 LN_NAMESPACE_END
