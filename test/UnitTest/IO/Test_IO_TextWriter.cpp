@@ -66,7 +66,7 @@ TEST_F(Test_IO_TextWriter, WriteLine)
 
 		StringWriter writer;
 		writer.SetNewLine(_T("\n"));
-		writer.WriteLine(_T("abc"), 2);
+		writer.WriteLine(StringRef(_T("abc"), 2));
 		writer.WriteLine(String("def"));
 		writer.WriteLine(_T('g'));
 		writer.WriteLine(v_int16_t);

@@ -87,8 +87,8 @@ public:
 		@param[in]	str		: 書き込む文字列
 		@param[in]	len		: 書き込む文字数 (-1 の場合は \0 まで)
 	*/
-	void WriteLine(const TCHAR* str, int len = -1);
-	void WriteLine(const String& str);
+	//void WriteLine(const StringRef& str);
+	//void WriteLine(const String& str);
 	
 	/**
 		@brief		文字を書き込みます。
@@ -115,6 +115,9 @@ public:
 	*/
 	void WriteLine(float value);
 	void WriteLine(double value);		/**< @copydoc WriteLine(float) */
+
+	template<typename... TArgs>
+	void WriteLine(const StringRef& str, const TArgs&... args) { String s = String::Format(str, args...); WriteInternal(s.c_str(), s.GetLength()); WriteLine(); }
 
 	/**
 		@brief		バッファリングデータを全てストリームに書き出します。

@@ -195,16 +195,16 @@ void TextWriter::WriteLine()
 {
 	WriteInternal(m_newLine.c_str(), m_newLine.GetLength());
 }
-void TextWriter::WriteLine(const TCHAR* str, int len)
-{
-	Write(str, len);
-	WriteLine();
-}
-void TextWriter::WriteLine(const String& str)
-{
-	Write(str);
-	WriteLine();
-}
+//void TextWriter::WriteLine(const StringRef& str)
+//{
+//	Write(str.GetBegin(), str.GetLength());
+//	WriteLine();
+//}
+//void TextWriter::WriteLine(const String& str)
+//{
+//	Write(str);
+//	WriteLine();
+//}
 
 //-----------------------------------------------------------------------------
 //

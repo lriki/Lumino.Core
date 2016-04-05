@@ -203,7 +203,8 @@ public:
     bool operator ! () const { return ( mPtr == NULL ); }
     
     /// operator== 
-    bool operator == ( const T* ptr ) const { return ( mPtr == ptr ); }
+    bool operator == (const T* ptr) const { return (mPtr == ptr); }
+	bool operator == (T* ptr) { return (mPtr == ptr); }
 
     /// operator!=
     //bool operator != ( const T* ptr ) const { return ( mPtr != ptr ); }

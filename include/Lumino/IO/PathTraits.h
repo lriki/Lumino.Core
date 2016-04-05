@@ -36,6 +36,10 @@ public:
 	template<typename TChar>
 	static bool IsAbsolutePath(const TChar* path, int len = -1);
 
+	/** 文字列の末尾がディレクトリセパレータであるかを確認します。*/
+	template<typename TChar>
+	static bool EndWithSeparator(const TChar* path, int len = -1);
+
 	/**
 		@brief		パス文字列からディレクトリ部分を取り出す
 		@param[in]	path	: ファイルまたはディレクトリのパス

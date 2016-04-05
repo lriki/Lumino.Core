@@ -55,7 +55,7 @@ void GenericPathName<TChar>::AssignUnderBasePath(const PathNameT& basePath, cons
 	{
 		m_path = basePath.m_path;
 		// 末尾にセパレータがなければ付加する
-		if (!m_path.EndsWith(Separator)) {
+		if (!PathTraits::EndWithSeparator(m_path.c_str(), m_path.GetLength())) {
 			m_path += Separator;
 		}
 
@@ -86,7 +86,7 @@ void GenericPathName<TChar>::AssignUnderBasePath(const PathNameT& basePath, cons
 		m_path = basePath.m_path;
 		//if ((*m_path.rbegin()) != Separator) {	// 末尾セパレータ
 		// 末尾がセパレータでなければ付加する
-		if (!m_path.EndsWith(Separator)) {
+		if (!PathTraits::EndWithSeparator(m_path.c_str(), m_path.GetLength())) {
 			m_path += Separator;
 		}
 
@@ -110,7 +110,7 @@ void GenericPathName<TChar>::Append(const TChar* path)
 		m_path = path;
 	}
 	else {
-		if (m_path.GetLength() > 0 && !m_path.EndsWith(Separator))/*(*m_path.rbegin()) != Separator)*/ {	// 末尾セパレータ
+		if (m_path.GetLength() > 0 && !PathTraits::EndWithSeparator(m_path.c_str(), m_path.GetLength()))/*(*m_path.rbegin()) != Separator)*/ {	// 末尾セパレータ
 			m_path += Separator;
 		}
 		m_path += path;
@@ -146,7 +146,7 @@ template<typename TChar>
 const GenericString<TChar> GenericPathName<TChar>::GetStrEndSeparator() const
 {
 	GenericStringT newStr = m_path;
-	if (!newStr.IsEmpty() && !newStr.EndsWith(Separator)/*(*newStr.rbegin()) != Separator*/) {	// 末尾セパレータ
+	if (!newStr.IsEmpty() && !PathTraits::EndWithSeparator(newStr.c_str(), newStr.GetLength())/*(*newStr.rbegin()) != Separator*/) {	// 末尾セパレータ
 		newStr += Separator;
 	}
 	return newStr;

@@ -24,6 +24,12 @@ TEST_F(Test_IO_PathName, Constructor)
 		ASSERT_STREQ(_T("dir1/dir2/../file1.txt"), path.c_str());
 #endif
 	}
+	// <Test> 
+	{
+		PathName path(_T("a/"), _T("b"));
+		ASSERT_STREQ(_T("a/b"), path.c_str());
+
+	}
 }
 
 //-----------------------------------------------------------------------------
