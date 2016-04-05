@@ -172,13 +172,17 @@ StreamReader* Process::GetStandardError() const
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-int Process::Execute(const PathName& program, const String& args, String* stdOutput)
+int Process::Execute(const PathName& program, const String& args, String* outStdOutput, String* outStdError)
 {
 	Process proc;
-	proc.SetRedirectStandardOutput(stdOutput != nullptr);
+	proc.SetRedirectStandardOutput(outStdOutput != nullptr);
+	proc.SetRedirectStandardError(outStdError != nullptr);
 	proc.Start(program, args);
-	if (stdOutput != NULL) {
-		*stdOutput = proc.GetStandardOutput()->ReadToEnd();
+	if (outStdOutput != nullptr) {
+		*outStdOutput = proc.GetStandardOutput()->ReadToEnd();
+	}
+	if (outStdError != nullptr) {
+		*outStdError = proc.GetStandardError()->ReadToEnd();
 	}
 	proc.WaitForExit();
 	return proc.GetExitCode();

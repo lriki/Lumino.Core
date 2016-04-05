@@ -180,13 +180,14 @@ public:
 
 	/**
 		@brief		プロセスを起動し、終了するまで待機します。
-		@param[in]	program		: プログラム名または実行ファイルパス
-		@param[in]	args		: コマンドライン引数
-		@param[out]	stdOutput	: 標準入力をリダイレクトし文字列として受け取る場合、その文字列を格納する変数のポインタを指定する
+		@param[in]	program			: プログラム名または実行ファイルパス
+		@param[in]	args			: コマンドライン引数
+		@param[out]	outStdOutput	: 標準出力をリダイレクトし文字列として受け取る場合、その文字列を格納する変数のポインタを指定する
+		@param[out]	outStdError		: 標準エラー出力をリダイレクトし文字列として受け取る場合、その文字列を格納する変数のポインタを指定する
 		@return		プロセスの終了コード
 		@exception	FileNotFoundException	: program が見つからなかった。
 	*/
-	static int Execute(const PathName& program, const String& args = String(), String* stdOutput = NULL);
+	static int Execute(const PathName& program, const String& args = String(), String* outStdOutput = nullptr, String* outStdError = nullptr);
 
 private:
 	class InternalPipeStream;
