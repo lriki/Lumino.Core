@@ -324,9 +324,16 @@ void FileSystem::CopyDirectoryInternal(const GenericStringRef<TChar>& srcPath, c
 	{
 		const GenericPathName<TChar>& src = finder.GetCurrent();
 		GenericPathName<TChar> dest(destPath, src.GetFileName());
+		
 
 		if (src.ExistsFile())
 		{
+			if (dest.ExistsDirectory())
+			{
+				// src と dest で同名なのに種類が違う。xcopy 的にはファイルを結合してしまうが・・・
+				LN_NOTIMPLEMENTED();
+			}
+
 			// コピー先にファイルとして存在していて、上書きする場合はコピーする
 			if (dest.ExistsFile())
 			{
@@ -342,6 +349,12 @@ void FileSystem::CopyDirectoryInternal(const GenericStringRef<TChar>& srcPath, c
 		}
 		else if (src.ExistsDirectory())
 		{
+			if (dest.ExistsFile())
+			{
+				// src と dest で同名なのに種類が違う。xcopy 的にはファイルを結合してしまうが・・・
+				LN_NOTIMPLEMENTED();
+			}
+
 			if (recursive)
 			{
 				CopyDirectoryInternal<TChar>(src, dest, overwrite, recursive);
