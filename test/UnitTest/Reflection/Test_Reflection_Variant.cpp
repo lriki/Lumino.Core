@@ -190,10 +190,10 @@ TEST_F(IntegrationTest_Reflection_Variant, Basic)
 		ASSERT_EQ(VariantType::Struct, v1.GetType());
 		ASSERT_EQ(VariantType::Struct, v2.GetType());
 		ASSERT_EQ(VariantType::Struct, v3.GetType());
-		ASSERT_EQ(10, Variant::Cast<Point>(v1).X);
-		ASSERT_EQ(20, Variant::Cast<Point>(v2).Y);
-		ASSERT_EQ(10, Variant::Cast<const Point&>(v2).X);	// 参照で取り出せる
-		ASSERT_EQ(30, Variant::Cast<Point>(v3).X);
+		ASSERT_EQ(10, Variant::Cast<Point>(v1).x);
+		ASSERT_EQ(20, Variant::Cast<Point>(v2).y);
+		ASSERT_EQ(10, Variant::Cast<const Point&>(v2).x);	// 参照で取り出せる
+		ASSERT_EQ(30, Variant::Cast<Point>(v3).x);
 	}
 	// <Test> ReflectionObject 型
 	{

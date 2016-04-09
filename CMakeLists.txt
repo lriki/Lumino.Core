@@ -58,13 +58,10 @@ set(LN_SOURCES_Base
 	include/Lumino/Base/Memory.h
 	include/Lumino/Base/NonCopyable.h
 	include/Lumino/Base/Nullable.h
-	include/Lumino/Base/Point.h
 	include/Lumino/Base/Queue.h
-	include/Lumino/Base/Rect.h
 	include/Lumino/Base/RefObject.h
 	include/Lumino/Base/Regex.h
 	include/Lumino/Base/Resource.h
-	include/Lumino/Base/Size.h
 	include/Lumino/Base/SortedArray.h
 	include/Lumino/Base/Stack.h
 	include/Lumino/Base/STLUtils.h
@@ -87,11 +84,8 @@ set(LN_SOURCES_Base
 	src/Base/Locale.cpp
 	src/Base/Logger.cpp
 	src/Base/Memory.cpp
-	src/Base/Point.cpp
-	src/Base/Rect.cpp
 	src/Base/RefObject.cpp
 	src/Base/Resource.cpp
-	src/Base/Size.cpp
 	src/Base/String.cpp
 	src/Base/StringBuilder.cpp
 	src/Base/StringRef.cpp

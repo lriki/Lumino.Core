@@ -156,16 +156,16 @@ TEST_F(IntegrationTest_Reflection_ReflectionObject, Property)
 		// SetPropertyValue/GetPropertyValue
 		Point pt1(1, 2);
 		tr::Property::SetPropertyValue(&t1, PropertyTest1::V3Property, pt1);
-		ASSERT_EQ(1, t1.m_v3.X);
-		ASSERT_EQ(2, t1.m_v3.Y);
+		ASSERT_EQ(1, t1.m_v3.x);
+		ASSERT_EQ(2, t1.m_v3.y);
 		tr::Variant v = tr::Property::GetPropertyValue(&t1, PropertyTest1::V3Property);
-		ASSERT_EQ(1, tr::Variant::Cast<Point>(v).X);
-		ASSERT_EQ(2, tr::Variant::Cast<Point>(v).Y);
+		ASSERT_EQ(1, tr::Variant::Cast<Point>(v).x);
+		ASSERT_EQ(2, tr::Variant::Cast<Point>(v).y);
 
 		// アクセサメンバ関数
 		t1.SetV3(Point(3, 4));
-		ASSERT_EQ(3, t1.GetV3().X);
-		ASSERT_EQ(4, t1.GetV3().Y);
+		ASSERT_EQ(3, t1.GetV3().x);
+		ASSERT_EQ(4, t1.GetV3().y);
 	}
 
 	// <Test> RefPtr
