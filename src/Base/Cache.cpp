@@ -58,6 +58,17 @@ CacheKey::CacheKey(const String& str)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
+CacheKey::CacheKey(const StringRef& str)
+	: m_keyType(Type_String)
+	, m_hashCode(0)
+	, m_string(str)
+	, m_pathName()
+{
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 CacheKey::CacheKey(const PathName& path)
 	: m_keyType(Type_PathName)
 	, m_hashCode(0)

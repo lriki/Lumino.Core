@@ -25,6 +25,7 @@ public:
 	explicit CacheKey(uint64_t hashCode);
 	explicit CacheKey(const TCHAR* str);
 	explicit CacheKey(const String& str);
+	explicit CacheKey(const StringRef& str);
 	explicit CacheKey(const PathName& path);
 
 	bool operator == (const CacheKey& key) const;
