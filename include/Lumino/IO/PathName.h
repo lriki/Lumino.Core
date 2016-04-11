@@ -316,6 +316,33 @@ typedef GenericPathName<TCHAR>		PathName;
 typedef GenericPathName<char>		PathNameA;
 typedef GenericPathName<wchar_t>	PathNameW;
 
+namespace detail
+{
+static const int LocalPathBaseLength = 255 + 1;
+
+// 文字列が短ければスタックに、長ければヒープに確保する
+template<typename TChar>
+class GenericStaticallyLocalPath
+{
+public:
+	GenericStaticallyLocalPath(const GenericStringRef<char>& path);
+	GenericStaticallyLocalPath(const GenericStringRef<wchar_t>& path);
+	
+	const TChar* c_str() const { return m_path.IsEmpty() ? m_static : m_path.c_str(); }
+
+	bool IsStatic() const { return m_path.IsEmpty(); }
+
+private:
+	TChar					m_static[LocalPathBaseLength];
+	GenericString<TChar>	m_path;
+};
+
+typedef GenericStaticallyLocalPath<TCHAR>	StaticallyLocalPath;
+typedef GenericStaticallyLocalPath<char>	StaticallyLocalPathA;
+typedef GenericStaticallyLocalPath<wchar_t>	StaticallyLocalPathW;
+
+} // namespace detail
+
 LN_NAMESPACE_END
 
 

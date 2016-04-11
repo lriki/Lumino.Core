@@ -427,4 +427,70 @@ GenericString<TChar> GenericPathName<TChar>::GetUniqueFileNameInDirectory(const 
 template class GenericPathName<char>;
 template class GenericPathName<wchar_t>;
 
+
+
+namespace detail
+{
+
+// dst の長さは LocalPathBaseLength であること
+static int ConvertNativeString(const GenericStringRef<char>& src, char* dst)
+{
+	if (src.GetLength() >= LocalPathBaseLength) return -1;
+	return src.CopyTo(dst, LocalPathBaseLength);
+}
+static int ConvertNativeString(const GenericStringRef<wchar_t>& src, wchar_t* dst)
+{
+	if (src.GetLength() >= LocalPathBaseLength) return -1;
+	return src.CopyTo(dst, LocalPathBaseLength);
+}
+static int ConvertNativeString(const GenericStringRef<char>& src, wchar_t* dst)
+{
+	if (src.GetLength() >= LocalPathBaseLength) return -1;
+	char tmp[LocalPathBaseLength + 1];
+	src.CopyTo(tmp, LocalPathBaseLength);
+
+	size_t size;
+	errno_t err = mbstowcs_s(&size, dst, LocalPathBaseLength, tmp, LocalPathBaseLength);
+	if (err != 0) return -1;
+	return size;
+}
+static int ConvertNativeString(const GenericStringRef<wchar_t>& src, char* dst)
+{
+	if (src.GetLength() >= LocalPathBaseLength) return -1;
+	wchar_t tmp[LocalPathBaseLength + 1];
+	src.CopyTo(tmp, LocalPathBaseLength);
+
+	size_t size;
+	errno_t err = wcstombs_s(&size, dst, LocalPathBaseLength, tmp, LocalPathBaseLength);
+	if (err != 0) return -1;
+	return size;
+}
+
+template<typename TChar>
+GenericStaticallyLocalPath<TChar>::GenericStaticallyLocalPath(const GenericStringRef<char>& path)
+{
+	m_static[0] = '0';
+	if (ConvertNativeString(path, m_static) < 0)
+	{
+		// 文字列が長すぎるなど、変換失敗したら String へ割り当てる
+		m_path.AssignCStr(path.GetBegin(), path.GetLength());
+	}
+}
+
+template<typename TChar>
+GenericStaticallyLocalPath<TChar>::GenericStaticallyLocalPath(const GenericStringRef<wchar_t>& path)
+{
+	m_static[0] = '0';
+	if (ConvertNativeString(path, m_static) < 0)
+	{
+		// 文字列が長すぎるなど、変換失敗したら String へ割り当てる
+		m_path.AssignCStr(path.GetBegin(), path.GetLength());
+	}
+}
+
+template class GenericStaticallyLocalPath<char>;
+template class GenericStaticallyLocalPath<wchar_t>;
+
+} // namespace detail
+
 LN_NAMESPACE_END
