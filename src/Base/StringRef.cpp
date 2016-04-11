@@ -32,12 +32,20 @@ int GenericStringRef<wchar_t>::CopyToLocal8Bit(char* dest, int destLen) const
 	dest[byteUsed] = '\0';
 	return byteUsed;
 #else
-	UTF8Encoding::UTF8Encoder enc(false);
-	size_t byteUsed = 0;
-	size_t charUsed = 0;
-	enc.ConvertFromUTF16(m_str + m_pos, m_len, (byte_t*)dest, destLen - 1, &byteUsed, &charUsed);
-	dest[byteUsed] = '\0';
-	return byteUsed;
+	// TODO: メモリ確保伴わないようにはできるけど時間ないので後回し
+	EncodingConversionResult result;
+	Encoding::Convert(
+		m_str + m_pos, m_len * sizeof(wchar_t), Encoding::GetWideCharEncoding(),
+		dest, destLen, Encoding::GetUTF8Encoding(),
+		&result);
+	return result.ByteUsed;
+
+	//UTF8Encoding::UTF8Encoder enc(false);
+	//size_t byteUsed = 0;
+	//size_t charUsed = 0;
+	//enc.ConvertFromUTF16(m_str + m_pos, m_len, (byte_t*)dest, destLen - 1, &byteUsed, &charUsed);
+	//dest[byteUsed] = '\0';
+	//return byteUsed;
 #endif
 	//std::mbstate_t state = std::mbstate_t();
 	//int len = 1 + std::wcsrtombs(nullptr, &wstr, 0, &state);	// +1 は '\0' の分

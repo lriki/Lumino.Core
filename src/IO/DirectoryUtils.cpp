@@ -135,7 +135,7 @@ GenericFileFinder<char>::GenericFileFinder(const GenericStringRef<char>& dirPath
 		if (dwError == ERROR_FILE_NOT_FOUND ||
 			dwError == ERROR_NO_MORE_FILES)
 		{
-			SetCurrentFileName(nullptr);
+			SetCurrentFileName((char*)NULL);
 		}
 		else
 		{
@@ -177,7 +177,7 @@ bool GenericFileFinder<char>::Next()
 		else
 		{
 			m_fd.cFileName[0] = '\0';
-			SetCurrentFileName(nullptr);
+			SetCurrentFileName((char*)NULL);
 		}
 	} while (strcmp(m_fd.cFileName, ".") == 0 || strcmp(m_fd.cFileName, "..") == 0);
 
@@ -205,7 +205,7 @@ GenericFileFinder<wchar_t>::GenericFileFinder(const GenericStringRef<wchar_t>& d
 		if (dwError == ERROR_FILE_NOT_FOUND ||
 			dwError == ERROR_NO_MORE_FILES)
 		{
-			SetCurrentFileName(nullptr);
+			SetCurrentFileName((wchar_t*)NULL);
 		}
 		else
 		{
@@ -247,13 +247,81 @@ bool GenericFileFinder<wchar_t>::Next()
 		else
 		{
 			m_fd.cFileName[0] = '\0';
-			SetCurrentFileName(nullptr);
+			SetCurrentFileName((wchar_t*)NULL);
 		}
 	} while (wcscmp(m_fd.cFileName, L".") == 0 || wcscmp(m_fd.cFileName, L"..") == 0);
 
 	return !GetCurrent().IsEmpty();
 }
 #elif defined(LN_OS_FAMILY_UNIX)
+
+
+
+template<typename TChar>
+GenericFileFinder<TChar>::GenericFileFinder(const GenericStringRef<TChar>& dirPath)
+	: GenericFileFinderBase<TChar>(dirPath)
+{
+	StringA t;
+	t.AssignCStr(GenericFileFinderBase<TChar>::m_dirPath.c_str());
+	Initializ(t.c_str());
+}
+
+//template<typename TChar>
+//GenericFileFinder<TChar>::GenericFileFinder(const GenericStringRef<char>& dirPath)
+//	: GenericFileFinderBase(dirPath)
+//{
+//	StringA t = dirPath;
+//	Initializ(t.c_str());
+//}
+//
+//template<typename TChar>
+//GenericFileFinder<TChar>::GenericFileFinder(const GenericStringRef<wchar_t>& dirPath)
+//	: GenericFileFinderBase(dirPath)
+//{
+//	StringA t = StringA::FromNativeWCharString(dirPath.GetBegin(), dirPath.GetLength());
+//	Initializ(t.c_str());
+//}
+
+template<typename TChar>
+GenericFileFinder<TChar>::~GenericFileFinder()
+{
+	if (m_dir != NULL)
+	{
+		closedir(m_dir);
+	}
+}
+
+template<typename TChar>
+void GenericFileFinder<TChar>::Initializ(const char* dirPath)
+{
+	m_dir = opendir(dirPath);
+	LN_THROW(m_dir != NULL, IOException, dirPath);
+
+	Next();
+}
+
+template<typename TChar>
+bool GenericFileFinder<TChar>::Next()
+{
+	struct dirent* entry;
+	do
+	{
+		entry = readdir(m_dir);
+		if (entry)
+		{
+			GenericFileFinderBase<TChar>::SetCurrentFileName(entry->d_name);
+		}
+		else
+		{
+			GenericFileFinderBase<TChar>::SetCurrentFileName((char*)NULL);
+		}
+	} while (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0);
+
+	return !GenericFileFinderBase<TChar>::GetCurrent().IsEmpty();
+}
+
+
+
 #endif
 
 // テンプレートのインスタンス化

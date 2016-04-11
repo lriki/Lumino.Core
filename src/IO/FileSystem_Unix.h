@@ -16,10 +16,10 @@ LN_NAMESPACE_BEGIN
 		LN_THROW(0, IOException); \
 	}
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-static bool is_stat_writable(struct stat *st, const char *path)
+	//-----------------------------------------------------------------------------
+	//
+	//-----------------------------------------------------------------------------
+	static bool is_stat_writable(struct stat *st, const char *path)
 {
 	// 制限なしに書き込み可であるか
 	if (st->st_mode & S_IWOTH)
@@ -37,16 +37,17 @@ static bool is_stat_writable(struct stat *st, const char *path)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-bool FileSystem::ExistsFile(const char* filePath)
+bool FileSystem::ExistsFile(const StringRefA& filePath)
 {
-	if (filePath == NULL) {
-		return false;
-	}
+	//if (filePath == NULL) {
+	//	return false;
+	//}
+	PathNameA path(filePath);
 
 	// ※fopen によるチェックはNG。ファイルが排他ロックで開かれていた時に失敗する。
 	// ※access によるチェックもNG。ディレクトリも考慮してしまう。
 	struct stat st;
-	int ret = ::stat(filePath, &st);
+	int ret = ::stat(path.c_str(), &st);
 	if (ret == 0)
 	{
 		if (S_ISDIR(st.st_mode)) {
@@ -75,12 +76,12 @@ bool FileSystem::ExistsFile(const char* filePath)
 	return true;
 #endif
 }
-bool FileSystem::ExistsFile(const wchar_t* filePath)
+bool FileSystem::ExistsFile(const StringRefW& filePath)
 {
-	if (filePath == NULL) {
-		return false;
-	}
-	MBCS_FILEPATH(mbcsFilePath, filePath);
+	//if (filePath == NULL) {
+	//	return false;
+	//}
+	MBCS_FILEPATH(mbcsFilePath, filePath.GetBegin());	// TODO: GetBegin
 	return ExistsFile(mbcsFilePath);
 }
 
@@ -92,12 +93,13 @@ void FileSystem::SetAttribute(const char* filePath, uint32_t attrs)
 	struct stat st;
 	int ret = ::stat(filePath, &st);
 	LN_THROW(ret != -1, IOException);
-	
+
 	// 変更できるのは読み取り属性だけ。
 	// 隠し属性は Unix ではファイル名で表現する。
 	if (attrs & FileAttribute::ReadOnly) {
 		ret = ::chmod(filePath, st.st_mode & ~(S_IWUSR | S_IWOTH | S_IWGRP));
-	} else {
+	}
+	else {
 		ret = ::chmod(filePath, st.st_mode | S_IWUSR);
 	}
 	LN_THROW(ret != -1, IOException);
@@ -117,15 +119,15 @@ void FileSystem::Copy(const char* sourceFileName, const char* destFileName, bool
 	if (!overwrite && ExistsFile(destFileName)) {
 		LN_THROW(0, IOException);
 	}
-	
+
 	// http://ppp-lab.sakura.ne.jp/ProgrammingPlacePlus/c/044.html
 	FILE* fpSrc = fopen(sourceFileName, "rb");
-	if (fpSrc == NULL){
+	if (fpSrc == NULL) {
 		LN_THROW(0, IOException);
 	}
 
 	FILE* fpDest = fopen(destFileName, "wb");
-	if (fpDest == NULL){
+	if (fpDest == NULL) {
 		LN_THROW(0, IOException);
 	}
 
@@ -136,10 +138,10 @@ void FileSystem::Copy(const char* sourceFileName, const char* destFileName, bool
 	{
 		byte_t b;
 		fread(&b, 1, 1, fpSrc);
-		if (feof(fpSrc)){
+		if (feof(fpSrc)) {
 			break;
 		}
-		if (ferror(fpSrc)){
+		if (ferror(fpSrc)) {
 			LN_THROW(0, IOException);
 		}
 
@@ -170,17 +172,17 @@ void FileSystem::Delete(const wchar_t* filePath)
 	MBCS_FILEPATH(mbcsFilePath, filePath);
 	Delete(mbcsFilePath);
 }
-	
+
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 uint64_t FileSystem::GetFileSize(const TCHAR* filePath)
 {
-	LN_THROW( filePath != NULL, ArgumentException );
+	LN_THROW(filePath != NULL, ArgumentException);
 
 	FILE* fp;
-	errno_t r = _tfopen_s( &fp, filePath, _T("r") );
-	LN_THROW( r == 0, FileNotFoundException );
+	errno_t r = _tfopen_s(&fp, filePath, _T("r"));
+	LN_THROW(r == 0, FileNotFoundException);
 
 	uint64_t size = 0;
 	try
@@ -189,21 +191,21 @@ uint64_t FileSystem::GetFileSize(const TCHAR* filePath)
 	}
 	catch (...)
 	{
-		fclose( fp );
+		fclose(fp);
 		throw;
 	}
-	fclose( fp );
+	fclose(fp);
 	return size;
 }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-uint64_t FileSystem::GetFileSize( FILE* stream )
+uint64_t FileSystem::GetFileSize(FILE* stream)
 {
 	struct stat stbuf;
-	int handle = fileno( stream );
-	if ( handle == 0 ) {
+	int handle = fileno(stream);
+	if (handle == 0) {
 		return 0;
 	}
 	if (fstat(handle, &stbuf) == -1) {
@@ -237,7 +239,7 @@ bool FileSystem::GetAttributeInternal(const char* path, FileAttribute* outAttr)
 	if (ret == -1) {
 		return false;
 	}
-	
+
 	const char* fileName = PathTraits::GetFileNameSub(path);
 	FileAttribute attrs;
 	if (S_ISDIR(st.st_mode))
@@ -267,6 +269,6 @@ bool FileSystem::GetAttributeInternal(const wchar_t* path, FileAttribute* outAtt
 	MBCS_FILEPATH(mbcsFilePath, path);
 	return GetAttributeInternal(mbcsFilePath, outAttr);
 }
-	
-	
+
+
 LN_NAMESPACE_END

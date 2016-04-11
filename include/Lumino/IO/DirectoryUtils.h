@@ -2,6 +2,10 @@
 #include "../Base/Array.h"
 #include "PathName.h"
 
+#if defined(LN_OS_FAMILY_UNIX)
+#include <dirent.h>
+#endif
+
 LN_NAMESPACE_BEGIN
 
 /**
@@ -53,7 +57,14 @@ protected:
 	virtual ~GenericFileFinderBase()
 	{}
 
-	void SetCurrentFileName(const TChar* fileName)
+	void SetCurrentFileName(const char* fileName)
+	{
+		if (fileName != nullptr)
+			m_combinedPath.AssignUnderBasePath(m_dirPath, fileName);
+		else
+			m_combinedPath.SetEmpty();
+	}
+	void SetCurrentFileName(const wchar_t* fileName)
 	{
 		if (fileName != nullptr)
 			m_combinedPath.AssignUnderBasePath(m_dirPath, fileName);
@@ -61,7 +72,7 @@ protected:
 			m_combinedPath.SetEmpty();
 	}
 
-private:
+protected:
 	GenericPathName<TChar>	m_dirPath;
 	GenericPathName<TChar>	m_combinedPath;
 };
@@ -107,6 +118,25 @@ private:
 	WIN32_FIND_DATAW	m_fd;
 };
 #elif defined(LN_OS_FAMILY_UNIX)
+
+
+template<typename TChar>
+class GenericFileFinder
+	: public GenericFileFinderBase<TChar>
+{
+public:
+	GenericFileFinder(const GenericStringRef<TChar>& dirPath);
+	//GenericFileFinder(const GenericStringRef<char>& dirPath);
+	//GenericFileFinder(const GenericStringRef<wchar_t>& dirPath);
+	~GenericFileFinder();
+	bool Next();
+
+private:
+	void Initializ(const char* dirPath);
+
+	DIR*	m_dir;
+};
+
 #endif
 
 

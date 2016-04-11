@@ -83,7 +83,8 @@ void Process::Start(const PathName& program, const String& args)
     if (pid == 0)
 	{
 		// 子プロセス側はこの if に入る
-		StringA utf8Path(program);
+		StringA utf8Path;
+		utf8Path.AssignCStr(program.c_str());
 
         StringA utf8Args(args);
         Array<StringA> argList = utf8Args.Split(" ");

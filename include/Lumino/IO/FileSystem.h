@@ -193,7 +193,7 @@ private:
 //
 //-----------------------------------------------------------------------------
 template<typename TChar, typename TCallback>
-static void FileSystem::ForEachFilesInDirectory(const GenericStringRef<TChar>& path, TCallback callback)
+inline void FileSystem::ForEachFilesInDirectory(const GenericStringRef<TChar>& path, TCallback callback)
 {
 	GenericFileFinder<TChar> finder(path);
 	while (!finder.GetCurrent().IsEmpty())

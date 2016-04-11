@@ -18,7 +18,12 @@ namespace detail
 	struct WeakRefInfo
 	{
 		RefObject*			owner;
-		std::atomic<int>	weakRefCount = 1;
+		std::atomic<int>	weakRefCount;// = 1;	// GCC で使えなかった
+
+		WeakRefInfo()
+			: owner(nullptr)
+			, weakRefCount(1)
+		{}
 
 		inline void AddRef()
 		{

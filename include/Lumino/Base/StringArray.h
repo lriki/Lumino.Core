@@ -49,7 +49,7 @@ public:
 		int len = StringTraits::StrLen(str);
 		for (int i = startIndex; i < ArrayType::GetCount(); ++i)
 		{
-			const StringType& item = GetAt(i);
+			const StringType& item = ArrayType::GetAt(i);
 			if (StringTraits::Compare(item.c_str(), item.GetLength(), str, len, -1, cs) == 0)
 			{
 				return i;
