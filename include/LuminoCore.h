@@ -23,8 +23,6 @@
 #include "Lumino/Base/Memory.h"
 #include "Lumino/Base/NonCopyable.h"
 #include "Lumino/Base/Delegate.h"
-#include "Lumino/Base/Size.h"
-#include "Lumino/Base/Rect.h"
 #include "Lumino/Base/Stack.h"
 #include "Lumino/Base/Environment.h"
 #include "Lumino/Base/EnumExtension.h"

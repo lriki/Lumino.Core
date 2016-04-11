@@ -151,6 +151,8 @@ set(LN_SOURCES_IO
 	src/IO/File.cpp
 	src/IO/FileStream.cpp
 	src/IO/FileSystem.cpp
+	src/IO/FileSystem_Unix.h
+	src/IO/FileSystem_Win32.h
 	src/IO/MemoryStream.cpp
 	src/IO/PathName.cpp
 	src/IO/PathTraits.cpp
@@ -239,7 +241,6 @@ set(LN_SOURCES_Testing
 if (WIN32)
 	set(LN_SOURCES_IO
 		${LN_SOURCES_IO}
-		src/IO/FileSystem_Win32.cpp
 		src/IO/Process_Win32.cpp)
 
 	set(LN_SOURCES_Text
@@ -251,13 +252,11 @@ if (WIN32)
 elseif (APPLE)
 	set(LN_SOURCES_IO
 		${LN_SOURCES_IO}
-		src/IO/FileSystem_Unix.cpp
 		src/IO/Process_Unix.cpp)
 
 elseif (UNIX)
 	set(LN_SOURCES_IO
 		${LN_SOURCES_IO}
-		src/IO/FileSystem_Unix.cpp
 		src/IO/Process_Unix.cpp)
 
 endif()

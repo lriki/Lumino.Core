@@ -10,6 +10,12 @@
 #include <Lumino/IO/PathName.h>
 #include <filesystem>
 
+#ifdef LN_OS_WIN32
+#include "FileSystem_Win32.h"
+#else
+#include "FileSystem_Unix.h"
+#endif
+
 LN_NAMESPACE_BEGIN
 #if 0
 

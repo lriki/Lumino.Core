@@ -5,6 +5,17 @@
 #include <Lumino/Reflection/Variant.h>
 using namespace ln::tr;
 
+// テスト用
+class Point
+{
+public:
+	int x, y;
+
+	Point(int x_, int y_)
+		: x(x_), y(y_)
+	{}
+};
+
 class IntegrationTest_Reflection_Variant : public ::testing::Test
 {
 protected:

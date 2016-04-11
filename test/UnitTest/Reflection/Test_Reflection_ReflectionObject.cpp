@@ -4,6 +4,21 @@
 #include <Lumino/Reflection/ReflectionObject.h>
 #include <Lumino/Reflection/Property.h>
 
+// テスト用
+class Point
+{
+public:
+	int x, y;
+
+	Point()
+		: x(0), y(0)
+	{}
+
+	Point(int x_, int y_)
+		: x(x_), y(y_)
+	{}
+};
+
 class IntegrationTest_Reflection_ReflectionObject : public ::testing::Test
 {
 protected:
@@ -93,6 +108,7 @@ public:
 	LN_TR_PROPERTY(RefTest2*, V4Property);
 
 public:
+
 	void SetV1(int v) { return tr::Property::SetPropertyValueDirect<int>(this, V1Property, v); }
 	int GetV1() const { return tr::Property::GetPropertyValueDirect<int>(this, V1Property); }
 

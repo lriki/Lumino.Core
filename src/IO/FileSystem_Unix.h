@@ -37,7 +37,7 @@ static bool is_stat_writable(struct stat *st, const char *path)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-bool FileSystem::Exists(const char* filePath)
+bool FileSystem::ExistsFile(const char* filePath)
 {
 	if (filePath == NULL) {
 		return false;
@@ -75,13 +75,13 @@ bool FileSystem::Exists(const char* filePath)
 	return true;
 #endif
 }
-bool FileSystem::Exists(const wchar_t* filePath)
+bool FileSystem::ExistsFile(const wchar_t* filePath)
 {
 	if (filePath == NULL) {
 		return false;
 	}
 	MBCS_FILEPATH(mbcsFilePath, filePath);
-	return Exists(mbcsFilePath);
+	return ExistsFile(mbcsFilePath);
 }
 
 //-----------------------------------------------------------------------------
@@ -114,7 +114,7 @@ void FileSystem::SetAttribute(const wchar_t* filePath, uint32_t attrs)
 void FileSystem::Copy(const char* sourceFileName, const char* destFileName, bool overwrite)
 {
 	// コピー先ファイルの存在確認
-	if (!overwrite && Exists(destFileName)) {
+	if (!overwrite && ExistsFile(destFileName)) {
 		LN_THROW(0, IOException);
 	}
 	
