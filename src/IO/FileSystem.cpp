@@ -307,6 +307,32 @@ FileAttribute FileSystem::GetAttribute(const wchar_t* filePath)
 	return attr;
 }
 
+
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+void FileSystem::DeleteDirectoryInternal(const GenericStringRef<TChar>& path, bool recursive)
+{
+	detail::GenericStaticallyLocalPath<TChar> localPath(path);
+	if (recursive)
+	{
+		auto list = GetFileSystemEntries(localPath.c_str(), nullptr);
+		for (auto entPath : list)
+		{
+			if (GetAttribute(entPath.c_str()) == FileAttribute::Directory) {
+				DeleteDirectoryInternal<TChar>(entPath, recursive);	// recursive
+			}
+			else {
+				Delete(entPath.c_str());
+			}
+		}
+	}
+	RemoveDirectoryImpl(localPath.c_str());
+}
+template void FileSystem::DeleteDirectoryInternal<char>(const GenericStringRef<char>& path, bool recursive);
+template void FileSystem::DeleteDirectoryInternal<wchar_t>(const GenericStringRef<wchar_t>& path, bool recursive);
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------

@@ -270,5 +270,18 @@ bool FileSystem::GetAttributeInternal(const wchar_t* path, FileAttribute* outAtt
 	return GetAttributeInternal(mbcsFilePath, outAttr);
 }
 
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+static void RemoveDirectoryImpl(const char* path)
+{
+	int r = rmdir(path);
+	LN_THROW(r == 0, IOException);
+}
+static void RemoveDirectoryImpl(const wchar_t* path)
+{
+	detail::GenericStaticallyLocalPath<char> localPath(path);
+	RemoveDirectoryImpl(localPath.c_str());
+}
 
 LN_NAMESPACE_END

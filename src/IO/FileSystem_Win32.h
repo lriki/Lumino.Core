@@ -47,6 +47,8 @@ static void Win32IOErrorToExceptionThrow(DWORD errorCode, const TChar* message)
 //-----------------------------------------------------------------------------
 bool FileSystem::ExistsFile(const StringRefA& filePath)
 {
+	if (filePath.IsNullOrEmpty()) return false;
+
 	char tmpPath[MAX_PATH];
 	filePath.CopyTo(tmpPath, MAX_PATH);
 
@@ -61,6 +63,8 @@ bool FileSystem::ExistsFile(const StringRefA& filePath)
 
 bool FileSystem::ExistsFile(const StringRefW& filePath)
 {
+	if (filePath.IsNullOrEmpty()) return false;
+
 	wchar_t tmpPath[MAX_PATH];
 	filePath.CopyTo(tmpPath, MAX_PATH);
 
@@ -134,32 +138,20 @@ void FileSystem::Delete(const wchar_t* filePath)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-static BOOL RemoveDirectoryT(LPCSTR lpPathName) { return ::RemoveDirectoryA(lpPathName); }
-static BOOL RemoveDirectoryT(LPCWSTR lpPathName) { return ::RemoveDirectoryW(lpPathName); }
-
-template<typename TChar>
-void FileSystem::DeleteDirectory(const TChar* path, bool recursive)
+static void RemoveDirectoryImpl(LPCSTR lpPathName)
 {
-	if (recursive)
-	{
-		auto list = GetFileSystemEntries(path, nullptr);
-		for (auto path : list)
-		{
-			if (GetAttribute(path.c_str()) == FileAttribute::Directory) {
-				DeleteDirectory(path.c_str(), recursive);
-			}
-			else {
-				Delete(path.c_str());
-			}
-		}
-	}
-	BOOL r = RemoveDirectoryT(path);
+	BOOL r = ::RemoveDirectoryA(lpPathName);
 	if (r == FALSE) {
-		Win32IOErrorToExceptionThrow(::GetLastError(), path);
+		Win32IOErrorToExceptionThrow(::GetLastError(), lpPathName);
 	}
 }
-template void FileSystem::DeleteDirectory<char>(const char* path, bool recursive);
-template void FileSystem::DeleteDirectory<wchar_t>(const wchar_t* path, bool recursive);
+static void RemoveDirectoryImpl(LPCWSTR lpPathName)
+{
+	BOOL r = ::RemoveDirectoryW(lpPathName);
+	if (r == FALSE) {
+		Win32IOErrorToExceptionThrow(::GetLastError(), lpPathName);
+	}
+}
 
 //-----------------------------------------------------------------------------
 //

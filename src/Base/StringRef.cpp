@@ -1,4 +1,8 @@
-﻿
+﻿/*
+	[2016/4/12] IsNullOrEmpty()
+		null か空かは区別できたほうがいい・・・と思う。
+		安全管理的には、null は null のままにして値が変なことを知れたほうがよい。
+*/
 #pragma once
 #include "../Internal.h"
 #include <Lumino/Base/StringRef.h>
@@ -38,7 +42,7 @@ int GenericStringRef<wchar_t>::CopyToLocal8Bit(char* dest, int destLen) const
 		m_str + m_pos, m_len * sizeof(wchar_t), Encoding::GetWideCharEncoding(),
 		dest, destLen, Encoding::GetUTF8Encoding(),
 		&result);
-	return result.ByteUsed;
+	return result.BytesUsed;
 
 	//UTF8Encoding::UTF8Encoder enc(false);
 	//size_t byteUsed = 0;

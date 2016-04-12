@@ -86,8 +86,11 @@ public:
 		@param[in]	path			: 削除するディレクトリのパス
 		@param[in]	recursive		: 
 	*/
+	static void DeleteDirectory(const StringRefA& path, bool recursive) { DeleteDirectoryInternal(path, recursive); }
+	static void DeleteDirectory(const StringRefW& path, bool recursive) { DeleteDirectoryInternal(path, recursive); }
+
 	template<typename TChar>
-	static void DeleteDirectory(const TChar* path, bool recursive);
+	static void DeleteDirectoryInternal(const GenericStringRef<TChar>& path, bool recursive);
 
 
 	/**
