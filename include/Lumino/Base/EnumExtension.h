@@ -36,6 +36,7 @@ enum _##enumName
 	public: \
 		inline operator int() const { return m_value; } \
 		typedef _##enumName enum_type; \
+		typedef _##enumName value_type; \
 		enumName() { m_value = (enum_type)(0); } \
 		enumName(enum_type v) { m_value = v; } \
 		virtual void SetValue(EnumValueType value) { m_value = (enum_type)value; } \
@@ -85,6 +86,7 @@ enum _##enumName
 	public: \
 		inline operator int() const { return m_value; } \
 		typedef _##enumName enum_type; \
+		typedef _##enumName value_type; \
 		enumName() { m_value = 0; } \
 		enumName(enum_type v) { m_value = v; } \
 		virtual void SetValue(EnumValueType value) { m_value = (enum_type)value; } \
