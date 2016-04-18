@@ -78,9 +78,9 @@ bool FileSystem::ExistsFile(const StringRefA& filePath)
 }
 bool FileSystem::ExistsFile(const StringRefW& filePath)
 {
-	//if (filePath == NULL) {
-	//	return false;
-	//}
+	if (filePath.IsNullOrEmpty()) {
+		return false;
+	}
 	MBCS_FILEPATH(mbcsFilePath, filePath.GetBegin());	// TODO: GetBegin
 	return ExistsFile(mbcsFilePath);
 }

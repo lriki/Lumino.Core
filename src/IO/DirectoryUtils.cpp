@@ -314,6 +314,7 @@ bool GenericFileFinder<TChar>::Next()
 		else
 		{
 			GenericFileFinderBase<TChar>::SetCurrentFileName((char*)NULL);
+            break;
 		}
 	} while (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0);
 

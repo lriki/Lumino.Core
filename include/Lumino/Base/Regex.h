@@ -21,7 +21,7 @@ public:
     using StringRefT = GenericStringRef<TChar>;
 
 	GenericRegex(const StringRefT& pattern)
-		: m_regex(pattern.GetBegin(), pattern.GetLength())
+    : m_regex(pattern.GetBegin(), pattern.GetLength(), std::basic_regex<TChar>::ECMAScript)
 	{
 	}
 	
