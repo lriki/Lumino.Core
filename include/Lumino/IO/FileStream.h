@@ -28,6 +28,9 @@ public:
 	*/
 	void Close();
 
+	/** ファイルの絶対パスを取得します。*/
+	const PathName& GetFilePath() const { return m_filePath; }
+
 public:
 	// override
 	virtual bool CanRead() const;

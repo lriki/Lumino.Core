@@ -38,6 +38,9 @@ public:
 	StreamReader(const TCHAR* filePath, Encoding* encoding = NULL);
 
 	~StreamReader();
+
+public:
+	Stream* GetStream() const { return m_stream; }
 	
 public:
 	virtual int Peek();

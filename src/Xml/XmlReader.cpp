@@ -1030,7 +1030,8 @@ void XmlReader::ExpandReservedEntities(TCHAR* text, int len)
 XmlFileReader::XmlFileReader(const PathName& filePath, Encoding* encoding )
 	: XmlReader()
 {
-	RefPtr<StreamReader> file(LN_NEW StreamReader(filePath, encoding), false);
+	m_filePath = filePath.CanonicalizePath();
+	RefPtr<StreamReader> file(LN_NEW StreamReader(m_filePath, encoding), false);
 	InitializeReader(file);
 }
 

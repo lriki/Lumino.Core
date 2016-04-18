@@ -54,7 +54,7 @@ void FileStream::Open(const TCHAR* filePath, FileOpenMode openMode)
 	LN_ASSERT( filePath );
 	Close();
 
-	m_filePath = filePath;
+	m_filePath = PathName(filePath).CanonicalizePath();
 	m_openModeFlags = openMode;
 
 	if (m_openModeFlags.TestFlag(FileOpenMode::Deferring))

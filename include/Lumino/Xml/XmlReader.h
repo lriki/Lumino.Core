@@ -243,6 +243,13 @@ public:
 	XmlFileReader(const PathName& filePath, Encoding* encoding = NULL);
 
 	virtual ~XmlFileReader();
+
+
+	/** ファイルの絶対パスを取得します。*/
+	const PathName& GetFilePath() const { return m_filePath; }
+
+private:
+	PathName	m_filePath;
 };
 
 LN_NAMESPACE_END
