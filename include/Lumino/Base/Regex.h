@@ -17,10 +17,11 @@ class GenericRegex
 {
 
 public:
-	typedef GenericStringRef<TChar>				StringRefT;
+	//typedef GenericStringRef<TChar>				StringRefT;
+    using StringRefT = GenericStringRef<TChar>;
 
 	GenericRegex(const StringRefT& pattern)
-		: m_regex(pattern.GetBegin(), pattern.GetLength())
+		: m_regex(std::basic_regex<char>(pattern.GetBegin()))
 	{
 	}
 	
@@ -57,8 +58,8 @@ public:
 	}
 
 private:
-	typedef std::basic_regex<TChar>	std_regex;
-	std_regex	m_regex;
+	//typedef std::basic_regex<TChar>	std_regex;
+	std::basic_regex<char>	m_regex;
 };
 
 

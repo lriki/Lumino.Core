@@ -25,8 +25,8 @@ GTEST_API_ int main(int argc, char **argv)
 	}
 	else if (strcmp(argv[argc - 1], "--proctest4_utf8") == 0)
 	{
-		char str[4] = { 0xE3, 0x81, 0x82, 0x00 };	// UTF8 'あ'
-		printf(str);
+        unsigned char str[4] = { 0xE3, 0x81, 0x82, 0x00 };	// UTF8 'あ'
+		printf((char*)str);
 		return 0;
 	}
 

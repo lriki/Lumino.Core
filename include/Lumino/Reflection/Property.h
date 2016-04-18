@@ -185,6 +185,7 @@ public:
 		return *v;
 	}
 
+#if 0
 	template<typename T>
 	void AddItemInternal(T& list, const Variant& item) const	// 値型
 	{
@@ -195,6 +196,7 @@ public:
 	{
 		ListOperationSelector<T, std::is_base_of<CoreList, T>::type >::AddItem(*list, item);
 	}
+#endif
 
 
 	template<typename T, typename TIsList> struct ListOperationSelector
