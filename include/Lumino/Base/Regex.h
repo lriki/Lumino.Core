@@ -21,7 +21,7 @@ public:
     using StringRefT = GenericStringRef<TChar>;
 
 	GenericRegex(const StringRefT& pattern)
-		: m_regex(std::basic_regex<char>(pattern.GetBegin()))
+		: m_regex(pattern.GetBegin(), pattern.GetLength())
 	{
 	}
 	
@@ -59,7 +59,7 @@ public:
 
 private:
 	//typedef std::basic_regex<TChar>	std_regex;
-	std::basic_regex<char>	m_regex;
+	std::basic_regex<TChar>	m_regex;
 };
 
 

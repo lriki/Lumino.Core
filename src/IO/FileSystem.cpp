@@ -318,15 +318,18 @@ void FileSystem::DeleteDirectoryInternal(const GenericStringRef<TChar>& path, bo
 	detail::GenericStaticallyLocalPath<TChar> localPath(path);
 	if (recursive)
 	{
-		auto list = GetFileSystemEntries(localPath.c_str(), nullptr);
-		for (auto entPath : list)
+		GenericFileFinder<TChar> finder(localPath.c_str());
+		while (!finder.GetCurrent().IsEmpty())
 		{
-			if (GetAttribute(entPath.c_str()) == FileAttribute::Directory) {
-				DeleteDirectoryInternal<TChar>(entPath, recursive);	// recursive
+			if (GetAttribute(finder.GetCurrent().c_str()) == FileAttribute::Directory)
+			{
+				DeleteDirectoryInternal<TChar>(finder.GetCurrent(), recursive);	// recursive
 			}
-			else {
-				Delete(entPath.c_str());
+			else // TODO: 他の属性みないとダメ。シンボリックリンクとか
+			{
+				Delete(finder.GetCurrent().c_str());
 			}
+			finder.Next();
 		}
 	}
 	RemoveDirectoryImpl(localPath.c_str());

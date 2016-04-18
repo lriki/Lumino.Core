@@ -110,10 +110,6 @@ public:
 	static void CopyDirectoryInternal(const GenericStringRef<TChar>& srcPath, const GenericStringRef<TChar>& destPath, bool overwrite, bool recursive);
 
 
-	static StringArrayA GetFileSystemEntries(const char* directoryPath, const char* pattern);
-	static StringArrayW GetFileSystemEntries(const wchar_t* directoryPath, const wchar_t* pattern);
-
-
 
 
 

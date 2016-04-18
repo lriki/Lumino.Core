@@ -152,60 +152,60 @@ static void RemoveDirectoryImpl(LPCWSTR lpPathName)
 		Win32IOErrorToExceptionThrow(::GetLastError(), lpPathName);
 	}
 }
-
-//-----------------------------------------------------------------------------
 //
-//-----------------------------------------------------------------------------
-StringArrayA FileSystem::GetFileSystemEntries(const char* directoryPath, const char* pattern)
-{
-	LN_THROW(0, NotImplementedException);
-	return StringArrayA();
-}
-StringArrayW FileSystem::GetFileSystemEntries(const wchar_t* directoryPath, const wchar_t* pattern)
-{
-	StringArrayW fileList;
-	PathNameW dirPathKey(directoryPath);
-	StringW dirPath(dirPathKey.GetStrEndSeparator());
-
-	// 
-	if (pattern) {
-		dirPathKey.Append(pattern);
-	}
-	else {
-		dirPathKey.Append(_T("*"));
-	}
-
-	// 検索開始
-	WIN32_FIND_DATAW fd;
-	HANDLE h = ::FindFirstFileW(dirPathKey.c_str(), &fd);
-	if (h == INVALID_HANDLE_VALUE)
-	{
-		DWORD dwError = ::GetLastError();
-		if (dwError == ERROR_FILE_NOT_FOUND ||
-			dwError == ERROR_NO_MORE_FILES){
-			// これらは許可。空の配列を返す。
-			return fileList;
-		}
-		else {
-			LN_THROW(0, Win32Exception, dwError);
-		}
-	}
-
-	do
-	{
-		if (wcscmp(fd.cFileName, L".") == 0 || wcscmp(fd.cFileName, L"..") == 0) {
-			// これらはいらない
-		}
-		else {
-			fileList.Add(dirPath + fd.cFileName);
-		}
-
-	} while (::FindNextFileW(h, &fd));
-
-	// 終了
-	::FindClose(h);
-	return fileList;
-}
+////-----------------------------------------------------------------------------
+////
+////-----------------------------------------------------------------------------
+//StringArrayA FileSystem::GetFileSystemEntries(const char* directoryPath, const char* pattern)
+//{
+//	LN_THROW(0, NotImplementedException);
+//	return StringArrayA();
+//}
+//StringArrayW FileSystem::GetFileSystemEntries(const wchar_t* directoryPath, const wchar_t* pattern)
+//{
+//	StringArrayW fileList;
+//	PathNameW dirPathKey(directoryPath);
+//	StringW dirPath(dirPathKey.GetStrEndSeparator());
+//
+//	// 
+//	if (pattern) {
+//		dirPathKey.Append(pattern);
+//	}
+//	else {
+//		dirPathKey.Append(_T("*"));
+//	}
+//
+//	// 検索開始
+//	WIN32_FIND_DATAW fd;
+//	HANDLE h = ::FindFirstFileW(dirPathKey.c_str(), &fd);
+//	if (h == INVALID_HANDLE_VALUE)
+//	{
+//		DWORD dwError = ::GetLastError();
+//		if (dwError == ERROR_FILE_NOT_FOUND ||
+//			dwError == ERROR_NO_MORE_FILES){
+//			// これらは許可。空の配列を返す。
+//			return fileList;
+//		}
+//		else {
+//			LN_THROW(0, Win32Exception, dwError);
+//		}
+//	}
+//
+//	do
+//	{
+//		if (wcscmp(fd.cFileName, L".") == 0 || wcscmp(fd.cFileName, L"..") == 0) {
+//			// これらはいらない
+//		}
+//		else {
+//			fileList.Add(dirPath + fd.cFileName);
+//		}
+//
+//	} while (::FindNextFileW(h, &fd));
+//
+//	// 終了
+//	::FindClose(h);
+//	return fileList;
+//}
 
 //-----------------------------------------------------------------------------
 //
