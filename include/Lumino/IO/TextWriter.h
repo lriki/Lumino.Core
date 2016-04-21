@@ -116,6 +116,8 @@ public:
 	void WriteLine(float value);
 	void WriteLine(double value);		/**< @copydoc WriteLine(float) */
 
+	void WriteLine(const StringRef& str) { WriteInternal(str.GetBegin(), str.GetLength()); WriteLine(); }
+
 	template<typename... TArgs>
 	void WriteLine(const StringRef& str, const TArgs&... args) { String s = String::Format(str, args...); WriteInternal(s.c_str(), s.GetLength()); WriteLine(); }
 

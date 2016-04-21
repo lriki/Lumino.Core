@@ -230,7 +230,7 @@ enum class NumberConversionResult
 };
 
 /** */
-enum class Result
+enum class Result	// TODO: ちょっと一般的な名前すぎ
 {
 	Success = 0,
 	ArgumentError,

@@ -23,6 +23,10 @@ public:
 
 	static void WriteLine();
 
+
+	static void WriteLine(const StringRefA& str);
+	static void WriteLine(const StringRefW& str);
+
 	template<typename... TArgs>
 	static void WriteLine(const StringRefA& str, const TArgs&... args);
 	template<typename... TArgs>
