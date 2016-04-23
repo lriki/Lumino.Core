@@ -98,6 +98,11 @@ public:
 
 	int CopyToLocal8Bit(char* dest, int destLen) const;
 
+	GenericString<TChar> Mid(int start, int count) const
+	{
+		return StringTraits::Mid(GetBegin(), start, count);
+	}
+
 private:
 	const TChar*	m_str;
 	int				m_pos;

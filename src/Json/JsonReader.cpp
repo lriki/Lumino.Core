@@ -603,6 +603,65 @@ const JsonError2& JsonReader2::GetError() const
 	return m_error;
 }
 
+void JsonReader2::ReadAsStartObject()
+{
+	if (!Read() || GetTokenType() != JsonToken::StartObject)
+	{
+		LN_THROW(0, InvalidFormatException);
+	}
+}
+
+void JsonReader2::ReadAsEndObject()
+{
+	if (!Read() || GetTokenType() != JsonToken::EndObject)
+	{
+		LN_THROW(0, InvalidFormatException);
+	}
+}
+
+void JsonReader2::ReadAsStartArray()
+{
+	if (!Read() || GetTokenType() != JsonToken::StartArray)
+	{
+		LN_THROW(0, InvalidFormatException);
+	}
+}
+
+void JsonReader2::ReadAsEndArray()
+{
+	if (!Read() || GetTokenType() != JsonToken::EndArray)
+	{
+		LN_THROW(0, InvalidFormatException);
+	}
+}
+
+bool JsonReader2::ReadAsBool()
+{
+	if (!Read() || GetTokenType() != JsonToken::Boolean)
+	{
+		LN_THROW(0, InvalidFormatException);
+	}
+	return GetValue()[0] == 't';
+}
+
+const String& JsonReader2::ReadAsPropertyName()
+{
+	if (!Read() || GetTokenType() != JsonToken::PropertyName)
+	{
+		LN_THROW(0, InvalidFormatException);
+	}
+	return GetValue();
+}
+
+const String& JsonReader2::ReadAsString()
+{
+	if (!Read() || GetTokenType() != JsonToken::String)
+	{
+		LN_THROW(0, InvalidFormatException);
+	}
+	return GetValue();
+}
+
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------

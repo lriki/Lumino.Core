@@ -210,7 +210,7 @@ enum class JsonToken
 	Null,
 
 	/** 真偽値 ("true" または "false"。GetValue() で値を確認すること) */
-	Boolean,
+	Boolean,	// TODO: Bool (Xml とそろえる？)
 
 	/** 文字列値 */
 	String,
@@ -245,6 +245,14 @@ public:
 	const String& GetValue() const;
 
 	const JsonError2& GetError() const;
+
+	void ReadAsStartObject();
+	void ReadAsEndObject();
+	void ReadAsStartArray();
+	void ReadAsEndArray();
+	const String& ReadAsPropertyName();
+	bool ReadAsBool();
+	const String& ReadAsString();
 
 private:
 	enum class ResultState

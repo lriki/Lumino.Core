@@ -30,6 +30,10 @@ public:
 	*/
 	StringReader(const String& str);
 
+	StringReader(const TCHAR* str);
+
+	StringReader(const StringRef& str);
+
 	virtual ~StringReader();
 
 public:
@@ -41,8 +45,9 @@ public:
 	virtual bool IsEOF();
 
 private:
-	String	m_src;
-	int		m_pos;
+	String		m_src;
+	StringRef	m_range;
+	int			m_pos;
 };
 
 LN_NAMESPACE_END
