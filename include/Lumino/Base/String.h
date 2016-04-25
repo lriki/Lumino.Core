@@ -15,6 +15,7 @@
 LN_NAMESPACE_BEGIN
 class Locale;
 class Encoding;
+template<typename TChar> class GenericCharRef;
 template<typename TChar> class GenericStringRef;
 template<typename TChar> class GenericStringArray;
 
@@ -136,7 +137,7 @@ public:
 	bool operator>=(const GenericStringRef<TChar>& right) const	{ return !operator<(right); }
 	bool operator>=(const TChar* right) const					{ return !operator<(right); }
 
-	TChar& operator[](int index);		// TODO: StringRef を使うスタイルにしないと危ない
+	GenericCharRef<TChar> operator[](int index);
 	const TChar& operator[](int index) const;
 
 	//operator const TChar*() const;
@@ -565,6 +566,13 @@ public:
 	template<typename... TArgs>
 	static GenericString Format(const Locale& locale, const GenericStringRef<TChar>& format, const TArgs&... args);	/**< @overload Format */
 
+	/**
+		@brief		String に格納されているデータへのポインタを返します。
+		@details	返されたポインタは、文字列を構成する文字にアクセスして変更するために使用することができます。
+					格納されているデータが複数の String から参照されている場合はデータをコピーし、新しいデータのポインタを返します。
+	*/
+	TChar* GetData();
+
 private:
 	friend class tr::Variant;
 	void Attach(detail::GenericStringCore<TChar>* core);
@@ -576,6 +584,7 @@ private:
 	Encoding* GetThisTypeEncoding() const;
 
 private:
+	template<class TChar> friend class GenericCharRef;
 
 	const TChar* m_ref;		///< 可変長の実引数にされることに備え、クラス先頭のメンバは m_string->c_str() を指しておく
 	detail::GenericStringCore<TChar>*	m_string;
@@ -584,6 +593,43 @@ private:
 	LN_GenericString_Extensions;
 #endif
 };
+
+
+
+template<typename TChar>
+class GenericCharRef
+{
+private:
+	template<class TChar> friend class GenericString;
+
+	GenericString<TChar>& m_str;
+	int m_idx;
+
+	inline GenericCharRef(GenericString<TChar>& str, int idx)
+		: m_str(str), m_idx(idx)
+	{}
+
+public:
+
+	inline operator TChar() const
+	{
+		LN_THROW(m_idx < static_cast<int>(m_str.m_string->size()), InvalidOperationException);
+		return m_str.m_string->at(m_idx);
+	}
+
+	inline GenericCharRef& operator=(TChar ch)
+	{
+		m_str.Realloc();
+		m_str.m_string[i] = ch;
+		return *this;
+	}
+	inline GenericCharRef& operator=(const GenericCharRef& ch) { return operator=(static_cast<TChar>(ch)); }
+	inline GenericCharRef& operator=(unsigned short ch) { return operator=(static_cast<TChar>(ch)); }
+	inline GenericCharRef& operator=(short ch) { return operator=(static_cast<TChar>(ch)); }
+	inline GenericCharRef& operator=(unsigned int ch) { return operator=(static_cast<TChar>(ch)); }
+	inline GenericCharRef& operator=(int ch) { return operator=(static_cast<TChar>(ch)); }
+};
+
 
 template<typename TChar>
 inline GenericString<TChar> operator+(const GenericString<TChar>& left, const GenericString<TChar>& right)
@@ -631,6 +677,13 @@ inline bool operator==(const TChar* left, const GenericString<TChar>& right)
 {
 	return right.Equals(left);
 }
+
+template<typename TChar>
+GenericCharRef<TChar> GenericString<TChar>::operator[](int index)
+{
+	return GenericCharRef<TChar>(*this, index);
+}
+
 
 #ifdef LN_DOXYGEN
 /// @see GenericString
@@ -707,6 +760,8 @@ public:
 	static GenericStringCore	m_sharedEmpty;
 };
 } // namespace detail
+
+
 
 LN_NAMESPACE_END
 

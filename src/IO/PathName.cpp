@@ -66,7 +66,8 @@ void GenericPathName<TChar>::AssignUnderBasePath(const PathNameT& basePath, cons
 	}
 
 	// 単純化する (.NET の Uri の動作に合わせる)
-	PathTraits::CanonicalizePath(&m_path);
+	//PathTraits::CanonicalizePath(&m_path);
+	// ↑× 相対パスはそのまま扱いたい
 }
 
 //-----------------------------------------------------------------------------
@@ -98,6 +99,7 @@ void GenericPathName<TChar>::AssignUnderBasePath(const PathNameT& basePath, cons
 
 	// 単純化する (.NET の Uri の動作に合わせる)
 	//PathTraits::CanonicalizePath(&m_path);
+	// ↑× 相対パスはそのまま扱いたい
 }
 
 //-----------------------------------------------------------------------------

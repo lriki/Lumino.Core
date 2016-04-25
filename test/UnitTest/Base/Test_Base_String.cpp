@@ -1,5 +1,46 @@
 ﻿#include <TestConfig.h>
 
+class IntegrationTest_Base_String : public ::testing::Test
+{
+protected:
+	virtual void SetUp() {}
+	virtual void TearDown() {}
+};
+
+//---------------------------------------------------------------------
+TEST_F(IntegrationTest_Base_String, Concat)
+{
+	// <Integration> 文字列を連結する
+	{
+		String str1 = _T("12");
+		String str2 = _T("56");
+		str1 = str1 + _T("34");
+		str1 += str2;
+		str1.Append(_T("78"));
+		ASSERT_EQ(_T("12345678"), str1);
+	}
+}
+
+//---------------------------------------------------------------------
+TEST_F(IntegrationTest_Base_String, Replace)
+{
+	// <Integration> 文字列を置換する
+	{
+		String str1 = _T("abcdcd");
+
+		// "ab" を "12" に置き換える
+		str1 = str1.Replace(_T("ab"), _T("12"));
+
+		// "cd" を "345" に置き換える
+		String from = _T("cd");
+		String to = _T("345");
+		str1 = str1.Replace(from, to);
+
+		ASSERT_EQ(_T("12345345"), str1);
+	}
+}
+
+
 class Test_Base_String : public ::testing::Test
 {
 protected:

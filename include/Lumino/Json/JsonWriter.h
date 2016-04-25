@@ -2,6 +2,7 @@
 #pragma once
 #include "../Base/Stack.h"
 #include "../IO/TextWriter.h"
+#include "Common.h"
 
 LN_NAMESPACE_BEGIN
 
@@ -43,9 +44,10 @@ protected:
 	virtual void OnBool(bool value);
 	virtual void OnDouble(double value);
 	virtual void OnString(const TCHAR* str, int length);
+	virtual void OnIndent(int level);
 
 private:
-	void AutoComplete();
+	void AutoComplete(JsonToken token);
 
 private:
 	struct Level

@@ -357,11 +357,11 @@ bool GenericString<TChar>::operator > (const TChar* right) const
 //-----------------------------------------------------------------------------
 // operator[]
 //-----------------------------------------------------------------------------
-template<typename TChar>
-TChar& GenericString<TChar>::operator[](int index)
-{
-	return InternalGetAt(index);
-}
+//template<typename TChar>
+//TChar& GenericString<TChar>::operator[](int index)
+//{
+//	return InternalGetAt(index);
+//}
 template<typename TChar>
 const TChar& GenericString<TChar>::operator[](int index) const
 {
@@ -907,6 +907,16 @@ const GenericString<TChar>& GenericString<TChar>::GetEmpty()
 {
 	static GenericString<TChar> str;
 	return str;
+}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+template<typename TChar>
+TChar* GenericString<TChar>::GetData()
+{
+	Realloc();
+	return &m_string->at(0);
 }
 
 //-----------------------------------------------------------------------------

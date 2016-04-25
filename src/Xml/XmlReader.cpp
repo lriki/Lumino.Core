@@ -243,7 +243,7 @@ const String& XmlReader::GetValue()
 			m_tmpValue.AssignCStr(name, m_currentNode->ValueLen);
 
 			// ’è‹`Ï‚İ Entity ‚ğ“WŠJ‚·‚é
-			ExpandReservedEntities(&m_tmpValue[0], m_tmpValue.GetLength());
+			ExpandReservedEntities(m_tmpValue.GetData(), m_tmpValue.GetLength());
 		}
 	}
 	return m_tmpValue;

@@ -2,6 +2,7 @@
 #pragma once
 #include "../IO/TextReader.h"
 #include "../IO/MemoryStream.h"
+#include "Common.h"
 #include "JsonError.h"
 #include "JsonHandler.h"
 
@@ -182,39 +183,6 @@ private:
 
 }
 
-
-
-enum class JsonToken
-{
-	None = 0,
-
-	/** オブジェクト定義の開始 ('{') */
-	StartObject,
-
-	/** オブジェクト定義の終了 ('}') */
-	EndObject,
-
-	/** 配列定義の開始 ('[') */
-	StartArray,
-
-	/** 配列定義の終了 (']') */
-	EndArray,
-
-	/** オブジェクトのプロパティの名前 */
-	PropertyName,
-
-	/** 数値型 (double) */
-	Double,
-
-	/** "null" 値 */
-	Null,
-
-	/** 真偽値 ("true" または "false"。GetValue() で値を確認すること) */
-	Boolean,	// TODO: Bool (Xml とそろえる？)
-
-	/** 文字列値 */
-	String,
-};
 
 class JsonReader2
 {
