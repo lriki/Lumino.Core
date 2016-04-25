@@ -584,7 +584,7 @@ private:
 	Encoding* GetThisTypeEncoding() const;
 
 private:
-	template<class TChar> friend class GenericCharRef;
+	template<typename T> friend class GenericCharRef;
 
 	const TChar* m_ref;		///< 可変長の実引数にされることに備え、クラス先頭のメンバは m_string->c_str() を指しておく
 	detail::GenericStringCore<TChar>*	m_string;
@@ -600,7 +600,7 @@ template<typename TChar>
 class GenericCharRef
 {
 private:
-	template<class TChar> friend class GenericString;
+	template<typename T> friend class GenericString;
 
 	GenericString<TChar>& m_str;
 	int m_idx;
@@ -620,7 +620,7 @@ public:
 	inline GenericCharRef& operator=(TChar ch)
 	{
 		m_str.Realloc();
-		m_str.m_string[i] = ch;
+		m_str.m_string[m_idx] = ch;
 		return *this;
 	}
 	inline GenericCharRef& operator=(const GenericCharRef& ch) { return operator=(static_cast<TChar>(ch)); }
