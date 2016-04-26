@@ -620,7 +620,7 @@ public:
 	inline GenericCharRef& operator=(TChar ch)
 	{
 		m_str.Realloc();
-		m_str.m_string[m_idx] = ch;
+		m_str.m_string->at(m_idx) = ch;
 		return *this;
 	}
 	inline GenericCharRef& operator=(const GenericCharRef& ch) { return operator=(static_cast<TChar>(ch)); }
