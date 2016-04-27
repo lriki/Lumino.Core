@@ -27,7 +27,20 @@ void StringTraits::tstrcpy(wchar_t* dst, int dstLen, const wchar_t* src)
 {
 	wcscpy_s(dst, dstLen, src);
 }
-
+int StringTraits::tcsicmp(const char* s1, const char* s2)
+{
+	int len1 = strlen(s1);
+	int len2 = strlen(s2);
+	if (len1 != len2) return len2 - len1;
+	return StrNICmp(s1, s2, len1);
+}
+int StringTraits::tcsicmp(const wchar_t* s1, int dstLen, const wchar_t* s2)
+{
+	int len1 = wcslen(s1);
+	int len2 = wcslen(s2);
+	if (len1 != len2) return len2 - len1;
+	return StrNICmp(s1, s2, len1);
+}
 #ifdef LN_OS_WIN32
 int StringTraits::tvscprintf_l(const char* format, NativeLocale_t locale, va_list args)
 {
@@ -58,18 +71,18 @@ public:
 int StringTraits::tvscprintf_l(const char* format, NativeLocale_t locale, va_list args)
 {
 	ScopedLocaleRAII _loc(locale);
-	FILE *stdnul = fopen("/dev/null", "wb");   
-	if (!stdnul) { return EOF; } 
-	int retvalue = vfprintf(stdnul, format, args);   
+	FILE *stdnul = fopen("/dev/null", "wb");
+	if (!stdnul) { return EOF; }
+	int retvalue = vfprintf(stdnul, format, args);
 	fclose(stdnul);
 	return retvalue;
 }
 int StringTraits::tvscprintf_l(const wchar_t* format, NativeLocale_t locale, va_list args)
 {
 	ScopedLocaleRAII _loc(locale);
-	FILE *stdnul = fopen("/dev/null", "wb");   
-	if (!stdnul) { return EOF; } 
-	int retvalue = vfwprintf(stdnul, format, args);   
+	FILE *stdnul = fopen("/dev/null", "wb");
+	if (!stdnul) { return EOF; }
+	int retvalue = vfwprintf(stdnul, format, args);
 	fclose(stdnul);
 	return retvalue;
 }
@@ -154,7 +167,7 @@ int				StringTraits::VSPrintf(char* out, int charCount, const char* format, va_l
 int				StringTraits::VSPrintf(wchar_t* out, int charCount, const wchar_t* format, va_list args) { return vswprintf(out, charCount, format, args); }
 #else
 int				StringTraits::VSPrintf(char* out, int charCount, const char* format, va_list args) { return vsnprintf(out, charCount, format, args); }
-int				StringTraits::VSPrintf(wchar_t* out, int charCount, const wchar_t* format, va_list args) 
+int				StringTraits::VSPrintf(wchar_t* out, int charCount, const wchar_t* format, va_list args)
 {
 	LN_THROW(0, NotImplementedException);	// vswprintf は動作保障無し
 	return vswprintf(out, charCount, format, args);
@@ -382,7 +395,7 @@ int StringTraits::Compare(const TChar* str1, int str1Len, const TChar* str2, int
 			return -1;		// NULL < ""
 		}
 		else {
-			return 1;		// "" > NULL 
+			return 1;		// "" > NULL
 		}
 	}
 
@@ -573,7 +586,7 @@ bool StringTraits::EndsWith(const TChar* str1, int len1, const TChar* str2, int 
 
 	const TChar* p1 = str1 + len1;
 	const TChar* p2 = str2 + len2;
-	
+
 	// 大文字小文字を区別しない場合
 	if (cs == CaseSensitivity::CaseInsensitive)
 	{

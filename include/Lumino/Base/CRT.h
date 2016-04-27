@@ -312,7 +312,10 @@ inline errno_t _fopen_s(
 	}
 
 	*pFile = fopen(filename, mode);
-	return 0;
+    if (*pFile) {
+        return 0;
+    }
+    return EINVAL;
 }
 
 //-----------------------------------------------------------------------------

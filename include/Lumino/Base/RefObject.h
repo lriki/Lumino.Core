@@ -90,6 +90,13 @@ public:
 	{
 		return RefPtr<T>(LN_NEW T(args...), false);
 	}
+    
+    template<class T2>
+    static RefPtr<T> StaticCast(const RefPtr<T2>& other)
+    {
+        T* ptr = static_cast<T*>(other.GetObjectPtr());
+        return RefPtr<T>(ptr, true);
+    }
 
 	/**
 		@brief		コンストラクタ
@@ -176,12 +183,12 @@ public:
 	/**
 		@brief		管理対象オブジェクトへのポインタを取得する
 	*/
-	const T* GetObjectPtr() const	{ return mPtr; }
+    T* GetObjectPtr() const	{ return mPtr; }    //TODO: Getで十分かな
 
 	/**
 		@brief		管理対象オブジェクトへのポインタを取得する
 	*/
-	T* GetObjectPtr() { return mPtr; }
+	//T* GetObjectPtr() { return mPtr; }
 
 public:
 

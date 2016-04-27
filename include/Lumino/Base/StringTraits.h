@@ -31,6 +31,8 @@ public:
 
 	static void tstrcpy(char* dst, int dstLen, const char* src);
 	static void tstrcpy(wchar_t* dst, int dstLen, const wchar_t* src);
+	static int tcsicmp(const char* s1, const char* s2);
+	static int tcsicmp(const wchar_t* s1, int dstLen, const wchar_t* s2);
 	static int tvscprintf_l(const char* format, NativeLocale_t locale, va_list args);
 	static int tvscprintf_l(const wchar_t* format, NativeLocale_t locale, va_list args);
 	static int tvsnprintf_l(char* out, int charCount, const char* format, NativeLocale_t locale, va_list args);
@@ -61,7 +63,7 @@ public:
 	static bool IsSpace(TChar ch);
 
 	/**
-		@brief		
+		@brief
 		@attention	文字数を計る機能は保障しない。linux では wchar_t 用に文字列を計る関数が無いため。
 	*/
 	static int VSPrintf(char* out, int charCount, const char* format, va_list args);
@@ -144,7 +146,7 @@ public:
 
 	/**
 		@brief		文字列の前後にある空白を除いた文字列の範囲を調べる
-		@param[in]	
+		@param[in]
 	*/
 	template<typename TChar>
 	static void Trim(const TChar* begin, int length, const TChar** outBegin, int* outLength);
@@ -168,7 +170,7 @@ public:
 	*/
 	//template<typename TChar>
 	//static void FormatVAList(const TChar* format, va_list args, GenericString<TChar>* out);
-	
+
 	/**
 		@brief		文字列の先頭が、指定した文字列と一致するかどうかを判断します。
 		@details	str2 が空文字の場合は必ず true が返ります。
@@ -254,7 +256,7 @@ public:
 	*/
 	template<typename TChar>
 	static bool IndexOfNewLineSequence(const TChar* start, const TChar* end, int* outIndex, int* outNewLineCodeCount);
-	
+
 	/**
 		@brief		ワイルドカード('*', '?')を考慮して文字列を比較する
 		@param[in]	puttern		: ワイルドカードを含むパターン文字列
@@ -274,7 +276,7 @@ public:
 		@details	次の書式に従い、文字列を数値に変換します。<br>
 					[whitespace] [{+ | – }] [0 [{ x | X }]] [digits | letters]		<br>
 					16 進数値のアルファベットは大文字と小文字を区別しません。		<br><br>
-					
+
 					基数に 0 を指定すると、文字列の先頭文字から基数を自動判別します。<br>
 					"0x" または "0X" であれば 16 進数、"0" であれば 8 進数、それ以外であれば 10 進数です。
 					基数に 8 または 16 が指定されている際、文字列の先頭は "0" または "0x" である必要はありません。<br><br>
@@ -310,7 +312,7 @@ public:
 		@brief		文字列を実数値に変換します。
 		@details	次の書式に従い、文字列を数値に変換します。	<br>
 					[whitespace] [sign] [digits] [.digits] [ {e | E }[sign]digits]	<br><br>
-					
+
 					この変換処理はロケールに依存せず、'.' を小数点とみなします。
 					※標準関数の strtod はロケールに依存し、例えばフランス語として設定されている場合、',' を小数点として認識してしまいます。('.' はエラーとなります)
 					JSON 等の '.' が小数点として定められている文字列を変換する場合、この関数を使用します。

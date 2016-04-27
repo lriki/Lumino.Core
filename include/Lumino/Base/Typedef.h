@@ -166,7 +166,8 @@ inline const wchar_t LN_T_ChooseCW<wchar_t>(const char /*c*/, const wchar_t w)
 #ifdef LN_UNICODE
 	typedef wchar_t		TCHAR;
 	#define __T(x)      L ## x
-	#define _tcslen		wcslen
+    #define _tcslen		wcslen
+    #define _tcsicmp    wcsicmp
 	#define _tcscmp		wcscmp
 	#define _tcsstr		wcsstr
 	#define _tcscpy_s	wcscpy_s
@@ -177,6 +178,7 @@ inline const wchar_t LN_T_ChooseCW<wchar_t>(const char /*c*/, const wchar_t w)
 	#define __T(x)      x
 	#define _tcslen		strlen
 	#define _tcscmp		strcmp
+    #define _tcsicmp    stricmp
 	#define _tcsstr		strstr
 	#define _tcscpy_s	strcpy_s
 	#define _tfopen_s	_fopen_s
