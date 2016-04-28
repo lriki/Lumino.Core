@@ -32,7 +32,7 @@ public:
 	static void tstrcpy(char* dst, int dstLen, const char* src);
 	static void tstrcpy(wchar_t* dst, int dstLen, const wchar_t* src);
 	static int tcsicmp(const char* s1, const char* s2);
-	static int tcsicmp(const wchar_t* s1, int dstLen, const wchar_t* s2);
+	static int tcsicmp(const wchar_t* s1, const wchar_t* s2);
 	static int tvscprintf_l(const char* format, NativeLocale_t locale, va_list args);
 	static int tvscprintf_l(const wchar_t* format, NativeLocale_t locale, va_list args);
 	static int tvsnprintf_l(char* out, int charCount, const char* format, NativeLocale_t locale, va_list args);

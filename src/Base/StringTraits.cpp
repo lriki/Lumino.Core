@@ -34,7 +34,7 @@ int StringTraits::tcsicmp(const char* s1, const char* s2)
 	if (len1 != len2) return len2 - len1;
 	return StrNICmp(s1, s2, len1);
 }
-int StringTraits::tcsicmp(const wchar_t* s1, int dstLen, const wchar_t* s2)
+int StringTraits::tcsicmp(const wchar_t* s1, const wchar_t* s2)
 {
 	int len1 = wcslen(s1);
 	int len2 = wcslen(s2);
