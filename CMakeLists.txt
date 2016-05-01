@@ -70,7 +70,6 @@ set(LN_SOURCES_Base
 	include/Lumino/Base/StringBuilder.h
 	include/Lumino/Base/StringRef.h
 	include/Lumino/Base/StringTraits.h
-	include/Lumino/Base/Thickness.h
 	include/Lumino/Base/Typedef.h
 	include/Lumino/Base/Version.h
 	src/Base/ByteBuffer.cpp
@@ -90,7 +89,6 @@ set(LN_SOURCES_Base
 	src/Base/StringBuilder.cpp
 	src/Base/StringRef.cpp
 	src/Base/StringTraits.cpp
-	src/Base/Thickness.cpp
 	src/Base/Version.cpp
 )
 
