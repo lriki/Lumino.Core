@@ -240,15 +240,15 @@ public:
 		return &mPtr;
 	}
 
-    /// ->
-    T* operator -> ()
-    {
-        LN_ASSERT( mPtr != NULL );
-        return mPtr;
-    }
+    ///// ->
+    //T* operator -> ()
+    //{
+    //    LN_ASSERT( mPtr != NULL );
+    //    return mPtr;
+    //}
 
 	/// ->
-    const T* operator -> () const
+    T* operator -> () const
     {
         LN_ASSERT( mPtr != NULL );
         return mPtr;
