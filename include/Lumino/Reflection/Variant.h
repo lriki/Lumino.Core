@@ -185,12 +185,6 @@ public:
 		AccessorSelectorHelper<T>::SetValue(this, value);
 	}
 
-	template<typename T>
-	Variant(RefPtr<T>& value)
-		: Variant(value.GetObjectPtr())
-	{
-	}
-
 
 	//template<typename T, typename std::enable_if<std::is_enum<T>::value>::type*& = detail::enabler>
 	//Variant(T value) { SetEnumValue(value); }	// T が enum メンバの場合はこのコンストラクタが呼ばれる。

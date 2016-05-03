@@ -34,10 +34,11 @@ LN_TR_REFLECTION_TYPEINFO_IMPLEMENT(PropertyChangedEventArgs, ReflectionEventArg
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-PropertyChangedEventArgs::PropertyChangedEventArgs(const Property* prop, const Variant& newValue, const Variant& oldValue)
+PropertyChangedEventArgs::PropertyChangedEventArgs(const Property* prop, const Variant& newValue_, const Variant& oldValue_, PropertySetSource cause_)
 	: changedProperty(prop)
-	, newValue(newValue)
-	, oldValue(oldValue)
+	, newValue(newValue_)
+	, oldValue(oldValue_)
+	, cause(cause_)
 {
 }
 

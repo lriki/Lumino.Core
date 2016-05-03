@@ -37,7 +37,7 @@ Property::~Property()
 //-----------------------------------------------------------------------------
 void Property::NotifyPropertyChanged(ReflectionObject* target, const Property* prop, const Variant& newValue, const Variant& oldValue, PropertySetSource source)
 {
-	RefPtr<PropertyChangedEventArgs> e(g_eventArgsPool.Create<PropertyChangedEventArgs>(prop, newValue, oldValue), false);
+	RefPtr<PropertyChangedEventArgs> e(g_eventArgsPool.Create<PropertyChangedEventArgs>(prop, newValue, oldValue, source), false);
 	target->OnPropertyChanged(e);
 }
 

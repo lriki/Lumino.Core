@@ -157,12 +157,6 @@ public:
 		uint32_t* flags = GetOwnerClassType()->GetHasLocalValueFlags(target);
 		(*flags) |= f;
 
-
-		if (source == PropertySetSource::ByLocal && ReflectionHelper::GetAnimationData(target) != nullptr)
-		{
-			ReflectionHelper::GetAnimationData(target)->OnPropertyChangedByLocal(target, this);
-		}
-
 		if (m_getter != NULL)
 		{
 			TValue* v;

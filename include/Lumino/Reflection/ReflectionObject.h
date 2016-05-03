@@ -60,7 +60,6 @@ private:
 	void SetPropertyValueInternal(const Property* prop, const Variant& value, bool reset, PropertySetSource source);
 
 	void*	m_userData;
-	detail::ReflectionObjectAnimationData*	m_animationData;
 
 	friend class ReflectionHelper;
 	detail::WeakRefInfo* RequestWeakRefInfo()

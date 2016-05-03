@@ -105,7 +105,7 @@ public:
 	LN_TR_PROPERTY(int, V1Property);
 	LN_TR_PROPERTY(RefTest1*, V2Property);
 	LN_TR_PROPERTY(Point, V3Property);
-	LN_TR_PROPERTY(RefTest2*, V4Property);
+	LN_TR_PROPERTY(RefPtr<RefTest2>, V4Property);
 
 public:
 
@@ -118,8 +118,8 @@ public:
 	void SetV3(const Point& v) { return tr::Property::SetPropertyValueDirect<Point>(this, V3Property, v); }
 	const Point& GetV3() const { return tr::Property::GetPropertyValueDirect<Point>(this, V3Property); }
 
-	void SetV4(RefTest2* v) { return tr::Property::SetPropertyValueDirect<RefTest2*>(this, V4Property, v); }
-	RefTest2* GetV4() const { return tr::Property::GetPropertyValueDirect<RefTest2*>(this, V4Property); }
+	void SetV4(RefTest2* v) { return tr::Property::SetPropertyValueDirect<RefPtr<RefTest2>>(this, V4Property, v); }
+	RefTest2* GetV4() const { return tr::Property::GetPropertyValueDirect<RefPtr<RefTest2>>(this, V4Property); }
 
 public:
 	int m_v1 = 0;
@@ -131,7 +131,7 @@ LN_TR_REFLECTION_TYPEINFO_IMPLEMENT(PropertyTest1, tr::ReflectionObject);
 LN_TR_PROPERTY_IMPLEMENT(PropertyTest1, int, V1Property, "V1", m_v1, tr::PropertyMetadata());
 LN_TR_PROPERTY_IMPLEMENT(PropertyTest1, RefTest1*, V2Property, "V2", m_v2, tr::PropertyMetadata());
 LN_TR_PROPERTY_IMPLEMENT(PropertyTest1, Point, V3Property, "V3", m_v3, tr::PropertyMetadata());
-LN_TR_PROPERTY_IMPLEMENT(PropertyTest1, RefTest2*, V4Property, "V4", m_v4, tr::PropertyMetadata());
+LN_TR_PROPERTY_IMPLEMENT(PropertyTest1, RefPtr<RefTest2>, V4Property, "V4", m_v4, tr::PropertyMetadata());
 
 
 TEST_F(IntegrationTest_Reflection_ReflectionObject, Property)
@@ -191,7 +191,7 @@ TEST_F(IntegrationTest_Reflection_ReflectionObject, Property)
 		tr::Property::SetPropertyValue(&t1, PropertyTest1::V4Property, p1);
 		ASSERT_EQ(p1, t1.m_v4);
 		tr::Variant v = tr::Property::GetPropertyValue(&t1, PropertyTest1::V4Property);
-		ASSERT_EQ(p1.GetObjectPtr(), tr::Variant::Cast<RefTest2*>(v));
+		ASSERT_EQ(p1.GetObjectPtr(), tr::Variant::Cast<RefPtr<RefTest2>>(v));
 
 		// アクセサメンバ関数
 		RefPtr<RefTest2> p2(LN_NEW RefTest2(), false);

@@ -41,15 +41,6 @@ namespace detail
 	};
 }
 
-namespace detail
-{
-	class ReflectionObjectAnimationData
-	{
-	public:
-		virtual ~ReflectionObjectAnimationData() {}
-		virtual void OnPropertyChangedByLocal(ReflectionObject* owner, const Property* prop) = 0;
-	};
-}
 enum class PropertySetSource
 {
 	ByLocal,
@@ -104,12 +95,6 @@ public:
 		}
 		return static_cast<TData*>(obj->m_animationData);
 	}
-	template<class T>
-	inline static detail::ReflectionObjectAnimationData* GetAnimationData(T* obj)
-	{
-		return obj->m_animationData;
-	}
-	//static void RaiseReflectionEvent(ReflectionObject* obj, ReflectionEventBase* ev, ReflectionEventArgs* e);
 };
 
 /**

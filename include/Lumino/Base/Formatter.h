@@ -69,6 +69,7 @@ private:
 			std::enable_if<std::is_arithmetic<T>::value,					detail::FormatArgType::KindArithmetic>,
 			std::enable_if<std::is_same<T, std::basic_string<TChar>>::value,detail::FormatArgType::KindString>,
 			std::enable_if<std::is_same<T, GenericString<TChar>>::value,	detail::FormatArgType::KindString>,
+			std::enable_if<std::is_same<T, GenericStringRef<TChar>>::value,	detail::FormatArgType::KindString>,
 			std::enable_if<std::is_same<T, GenericPathName<TChar>>::value,	detail::FormatArgType::KindString>,
 			std::enable_if<IsCharArray<TChar, T>::value,					detail::FormatArgType::KindPointer>,
 			std::enable_if<IsCharArray<TChar, T>::value,					detail::FormatArgType::KindPointer>,
@@ -182,7 +183,10 @@ protected:
 
 
 
-
+//-----------------------------------------------------------------------------
+/*
+	以下、値を GenericString に変換するための特殊化関数群。
+*/
 
 //template<typename TChar, typename TKind, typename TValue>
 //struct Formatter
@@ -274,8 +278,17 @@ struct Formatter<TChar, detail::FormatArgType::KindString, GenericString<TChar>>
 	}
 };
 
+// GenericStringRef
+template<typename TChar>
+struct Formatter<TChar, detail::FormatArgType::KindString, GenericStringRef<TChar>>
+{
+	static GenericString<TChar> Format(const std::locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const GenericStringRef<TChar>& value)
+	{
+		return value;
+	}
+};
 
-
+// char
 template<typename TChar>
 struct Formatter<TChar, detail::FormatArgType::KindArithmetic, char>
 {
@@ -285,6 +298,7 @@ struct Formatter<TChar, detail::FormatArgType::KindArithmetic, char>
 	}
 };
 
+// 上記以外の算術型 (int や float)
 template<typename TChar, typename TValue>
 struct Formatter<TChar, detail::FormatArgType::KindArithmetic, TValue>
 {

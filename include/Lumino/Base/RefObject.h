@@ -233,19 +233,6 @@ public:
         LN_ASSERT( mPtr != NULL );
         return *mPtr;
 	}
-	
-	T** operator&() throw()
-	{
-		//LN_ASSERT(mPtr == NULL);
-		return &mPtr;
-	}
-
-    ///// ->
-    //T* operator -> ()
-    //{
-    //    LN_ASSERT( mPtr != NULL );
-    //    return mPtr;
-    //}
 
 	/// ->
     T* operator -> () const
