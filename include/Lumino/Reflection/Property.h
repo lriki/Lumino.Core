@@ -12,27 +12,30 @@ namespace tr
 
 // TODO; Internal
 typedef void(*PropertyChangedCallback)(ReflectionObject* obj, PropertyChangedEventArgs* e);
-typedef std::unique_ptr<PropertyInstanceData>*(*InstanceDataGetterFunc)(ReflectionObject* obj);
+typedef PropertyInstanceData*(*InstanceDataGetterFunc)(ReflectionObject* obj);
 
 // TODO; Internal
-class PropertyInstanceData
-	: public RefObject
+struct PropertyInstanceData
+//	: public RefObject	// TODO: これもいらないかも
 {
-public:
-	Property*			InheritanceKey;		// プロパティを親から継承するとき、this またはこの値をキーとして検索する。
-	ReflectionObject*	InheritanceParent;	// ↑ので見つかった親あるいは祖先オブジェクト
-	const Property*		InheritanceTarget;	// ↑のオブジェクトのどのプロパティから受け継ぐか (走査の結果継承元が見つからなかった場合、この PropertyInstanceData が表す Propery を指す。このとき InheritanceParent は NULL)
-	uint16_t			RevisionCount;
-	uint16_t			PathRevisionCount;
-	bool				IsDefault;
+//public:
+	PropertySetSource	baseValueSource = PropertySetSource::Default;
 
-	PropertyInstanceData()
-		: InheritanceTarget(nullptr)
-		, InheritanceParent(nullptr)
-		, RevisionCount(0)
-		, PathRevisionCount(0)
-		, IsDefault(true)
-	{}
+	//// TODO: 以下、昔の
+	//Property*			InheritanceKey;		// プロパティを親から継承するとき、this またはこの値をキーとして検索する。
+	//ReflectionObject*	InheritanceParent;	// ↑ので見つかった親あるいは祖先オブジェクト
+	//const Property*		InheritanceTarget;	// ↑のオブジェクトのどのプロパティから受け継ぐか (走査の結果継承元が見つからなかった場合、この PropertyInstanceData が表す Propery を指す。このとき InheritanceParent は NULL)
+	//uint16_t			RevisionCount;
+	//uint16_t			PathRevisionCount;
+	//bool				IsDefault;
+
+	//PropertyInstanceData()
+	//	: InheritanceTarget(nullptr)
+	//	, InheritanceParent(nullptr)
+	//	, RevisionCount(0)
+	//	, PathRevisionCount(0)
+	//	, IsDefault(true)
+	//{}
 };
 
 /**
@@ -80,6 +83,30 @@ public:
 	*/
 	template<typename TValue>
 	static const TValue& GetPropertyValueDirect(const ReflectionObject* obj, const Property* prop);
+
+
+	static PropertyInstanceData* GetInstanceData(ReflectionObject* obj, const Property* prop)
+	{
+		//if (prop->m_instanceDataGetterFunc == nullptr) return nullptr;
+		return prop->m_instanceDataGetterFunc(obj);
+
+		//std::unique_ptr<PropertyInstanceData>* pp = prop->m_instanceDataGetterFunc(obj);
+		//if ((*pp) == nullptr) pp->reset(LN_NEW PropertyInstanceData());
+		//return pp->get();
+	}
+
+	static void SetBaseValueSource(ReflectionObject* obj, const Property* prop, PropertySetSource source)
+	{
+		PropertyInstanceData* data = GetInstanceData(obj, prop);
+		data->baseValueSource = source;
+	}
+
+	static PropertySetSource GetBaseValueSource(ReflectionObject* obj, const Property* prop)
+	{
+		PropertyInstanceData* data = GetInstanceData(obj, prop);
+		//if (data == nullptr) return PropertySetSource::Default;
+		return data->baseValueSource;
+	}
 
 protected:
 	static void NotifyPropertyChanged(ReflectionObject* target, const Property* prop, const Variant& newValue, const Variant& oldValue, PropertySetSource source);
@@ -156,6 +183,8 @@ public:
 		uint32_t f = 0x1 << GetLocalIndex();
 		uint32_t* flags = GetOwnerClassType()->GetHasLocalValueFlags(target);
 		(*flags) |= f;
+
+		SetBaseValueSource(target, this, source);
 
 		if (m_getter != NULL)
 		{
@@ -343,8 +372,8 @@ public:
 	private: static void											set_##propVar(ln::tr::ReflectionObject* obj, valueType& value); \
 	private: static void											get_##propVar(ln::tr::ReflectionObject* obj, valueType** valuePtr); \
 	private: static ln::tr::TypedPropertyInitializer<valueType>		init_##propVar; \
-	private: static std::unique_ptr<ln::tr::PropertyInstanceData>*	getInstanceData_##propVar(ln::tr::ReflectionObject* obj); \
-	private: std::unique_ptr<ln::tr::PropertyInstanceData>			instanceData_##propVar = nullptr; \
+	private: static ln::tr::PropertyInstanceData*					getInstanceData_##propVar(ln::tr::ReflectionObject* obj); \
+	private: ln::tr::PropertyInstanceData							instanceData_##propVar; \
 	public:  static const ln::tr::Property*							propVar;
 
 #define LN_TR_PROPERTY_IMPLEMENT(ownerClass, valueType, propVar, propName, memberVar, metadata) \
@@ -354,7 +383,7 @@ public:
 	void											ownerClass::set_##propVar(ln::tr::ReflectionObject* obj, valueType& value) { tr::PropertyHelper::SetValue(static_cast<ownerClass*>(obj)->memberVar, value);/*static_cast<ownerClass*>(obj)->memberVar = const_cast<valueType&>(value);*/ } \
 	void											ownerClass::get_##propVar(ln::tr::ReflectionObject* obj, valueType** valuePtr) { tr::PropertyHelper::GetValue(static_cast<ownerClass*>(obj)->memberVar, valuePtr); } \
 	ln::tr::TypedPropertyInitializer<valueType>		ownerClass::init_##propVar(&_##propVar, &ownerClass::set_##propVar, &ownerClass::get_##propVar,/* &ownerClass::metadata_##propVar,*/ ownerClass::getInstanceData_##propVar); \
-	std::unique_ptr<ln::tr::PropertyInstanceData>*	ownerClass::getInstanceData_##propVar(ln::tr::ReflectionObject* obj) { return &(static_cast<ownerClass*>(obj)->instanceData_##propVar); }
+	ln::tr::PropertyInstanceData*					ownerClass::getInstanceData_##propVar(ln::tr::ReflectionObject* obj) { return &(static_cast<ownerClass*>(obj)->instanceData_##propVar); }
 
 //	typedef void(ownerClass::*PropertyChangedCallback_##propVar)(ln::tr::PropertyChangedEventArgs*);
 //	void											ownerClass::changed_##propVar(ln::tr::ReflectionObject* obj, PropertyChangedEventArgs* e) { auto func = metadata_##propVar.GetPropertyChangedCallback<PropertyChangedCallback_##propVar>(); if (func != nullptr) { (static_cast<ownerClass*>(obj)->*func)(e); } }

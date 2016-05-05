@@ -45,12 +45,7 @@ enum _##enumName
 		inline bool operator==(enum_type right) const { return m_value == right; } \
 		inline bool operator!=(enumName right) const { return !operator==(right); } \
 		inline bool operator!=(enum_type right) const { return !operator==(right); } \
-		friend inline bool operator==(enumName::enum_type left, enumName right) throw(); \
-		friend inline bool operator!=(enumName::enum_type left, enumName right) throw(); \
-	}; \
-	inline bool operator==(enumName::enum_type left, enumName right) throw() { return left == right.m_value; } \
-	inline bool operator!=(enumName::enum_type left, enumName right) throw() { return left != right.m_value; } \
-
+	};
 
 /**
 	@brief	拡張 enum 型の型情報にアクセスする機能を定義します。
@@ -101,8 +96,6 @@ enum _##enumName
 		inline enumName& operator |= (const enumName& v) { m_value |= v.m_value; return *this; } \
 		inline enumName& operator |= (enum_type v) { m_value |= v; return *this; } \
 		inline enumName operator~() const throw() { enumName value; value.m_value = ~m_value; return value; } \
-		friend inline bool operator==(enumName::enum_type left, enumName right) throw(); \
-		friend inline bool operator!=(enumName::enum_type left, enumName right) throw(); \
 		friend inline enumName operator&(const enumName& left, const enumName& right) throw(); \
 		friend inline enumName operator&(const enumName& left, enum_type right) throw(); \
 		friend inline enumName operator&(enum_type left, const enumName& right) throw(); \
@@ -113,8 +106,6 @@ enum _##enumName
 		friend inline enumName operator|(enum_type left, enum_type right) throw(); \
 		friend inline enumName operator~(enumName::enum_type v) throw(); \
 	}; \
-	inline bool operator==(enumName::enum_type left, enumName right) throw() { return left == right.m_value; } \
-	inline bool operator!=(enumName::enum_type left, enumName right) throw() { return left != right.m_value; } \
 	inline enumName operator&(const enumName& left, const enumName& right) throw()		{ enumName value; value.m_value = left.m_value & right.m_value; return value; } \
 	inline enumName operator&(const enumName& left, enumName::enum_type right) throw()	{ enumName value; value.m_value = left.m_value & right; return value; } \
 	inline enumName operator&(enumName::enum_type left, const enumName& right) throw()	{ enumName value; value.m_value = right.m_value & left;  return value; } \

@@ -12,7 +12,15 @@ class ReflectionEventBase;
 class ReflectionEventArgs;
 class PropertyMetadata;
 class PropertyChangedEventArgs;
-class PropertyInstanceData;
+struct PropertyInstanceData;
+
+enum class PropertySetSource
+{
+	Default = 0,
+	ByStyle = 1,
+	ByLocal = 2,
+	ByAnimation = 3,
+};
 
 } // namespace tr
 LN_NAMESPACE_END

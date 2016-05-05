@@ -210,12 +210,16 @@ public:
     bool operator ! () const { return ( mPtr == NULL ); }
     
     /// operator== 
-    bool operator == (const T* ptr) const { return (mPtr == ptr); }
-	bool operator == (T* ptr) { return (mPtr == ptr); }
+    //bool operator == (std::nullptr_t ptr) const { return (mPtr == ptr); }
+    //bool operator == (const T* ptr) const { return (mPtr == ptr); }
+	//bool operator == (T* ptr) { return (mPtr == ptr); }
+	//bool operator == (const RefPtr<T>& ptr) const { return (mPtr == ptr.mPtr); }
 
     /// operator!=
     //bool operator != ( const T* ptr ) const { return ( mPtr != ptr ); }
-	bool operator != (std::nullptr_t ptr) const { return (mPtr != ptr); }
+	//bool operator != (std::nullptr_t ptr) const { return (mPtr != ptr); }
+	//bool operator != (const T* ptr) const { return (mPtr != ptr); }
+	//bool operator != (const RefPtr<T>& ptr) const { return (mPtr != ptr.mPtr); }
 
     // operator< (for STL cmp)
     bool operator < ( const T* ptr ) const { return mPtr < ptr; }
@@ -248,5 +252,43 @@ public:
 protected:
 	T* mPtr;
 };
+
+template<typename T1, typename T2>
+bool operator==(const RefPtr<T1>& left, const RefPtr<T2>& right) LN_NOEXCEPT
+{
+	return (left.GetObjectPtr() == right.GetObjectPtr());
+}
+
+template<typename T>
+bool operator==(std::nullptr_t left, const RefPtr<T>& right) LN_NOEXCEPT
+{
+	return ((T*)0 == right.GetObjectPtr());
+}
+
+template<typename T>
+bool operator==(const RefPtr<T>& left, std::nullptr_t right) LN_NOEXCEPT
+{
+	return (left.GetObjectPtr() == (T*)0);
+}
+
+
+
+template<typename T1, typename T2>
+bool operator!=(const RefPtr<T1>& left, const RefPtr<T2>& right) LN_NOEXCEPT
+{
+	return (left.GetObjectPtr() != right.GetObjectPtr());
+}
+
+template<typename T>
+bool operator!=(std::nullptr_t left, const RefPtr<T>& right) LN_NOEXCEPT
+{
+	return ((T*)0 != right.GetObjectPtr());
+}
+
+template<typename T>
+bool operator!=(const RefPtr<T>& left, std::nullptr_t right) LN_NOEXCEPT
+{
+	return (left.GetObjectPtr() != (T*)0);
+}
 
 LN_NAMESPACE_END

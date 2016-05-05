@@ -33,6 +33,7 @@ public:
 	{
 		m_str = str.c_str();
 		m_len = str.GetLength();
+		// TODO: String に代入するときコピーされるの避けたい
 	}
 	GenericStringRef(const TChar* begin, const TChar* end)
 		: GenericStringRef()

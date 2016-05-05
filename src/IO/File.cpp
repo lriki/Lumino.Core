@@ -41,7 +41,7 @@ File::~File()
 //-----------------------------------------------------------------------------
 void File::Open(FileOpenMode openMode)
 {
-	LN_THROW(m_fileStream == NULL, InvalidOperationException);	// すでにファイルが開かれている
+	LN_THROW(m_fileStream == nullptr, InvalidOperationException);	// すでにファイルが開かれている
 	m_fileStream = FileStream::Create(m_filePath.c_str(), openMode);
 }
 

@@ -41,12 +41,6 @@ namespace detail
 	};
 }
 
-enum class PropertySetSource
-{
-	ByLocal,
-	ByAnimation,
-};
-
 class ReflectionHelper
 {
 public:

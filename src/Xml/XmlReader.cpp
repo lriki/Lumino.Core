@@ -145,7 +145,7 @@ XmlReader::~XmlReader()
 //-----------------------------------------------------------------------------
 void XmlReader::InitializeReader(TextReader* reader)
 {
-	LN_CHECK_STATE(m_reader == NULL);
+	LN_CHECK_STATE(m_reader == nullptr);
 	m_reader = reader;
 }
 

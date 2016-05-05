@@ -202,7 +202,7 @@ int Process::GetExitCode()
 //-----------------------------------------------------------------------------
 void Process::BeginOutputReadLine()
 {
-	LN_CHECK_STATE(m_standardOutputReader != NULL);
+	LN_CHECK_STATE(m_standardOutputReader != nullptr);
 
 	// 読み取りスレッドを立てる
 #ifdef LN_CPP11
@@ -218,7 +218,7 @@ void Process::BeginOutputReadLine()
 //-----------------------------------------------------------------------------
 void Process::BeginErrorReadLine()
 {
-	LN_CHECK_STATE(m_standardErrorReader != NULL);
+	LN_CHECK_STATE(m_standardErrorReader != nullptr);
 
 	// 読み取りスレッドを立てる
 #ifdef LN_CPP11
