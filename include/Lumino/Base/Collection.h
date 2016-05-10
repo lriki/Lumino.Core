@@ -239,6 +239,12 @@ public:
 
 protected:
 
+	void Resize(int count)
+	{
+		LN_THROW(m_array.IsEmpty(), NotImplementedException);	// TODO: いまのところ初期化用
+		m_array.Resize(count);
+	}
+
 	/** 指定したインデックスの位置に要素を挿入します。*/
 	virtual void InsertItem(int index, const value_type& item)
 	{

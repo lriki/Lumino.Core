@@ -158,19 +158,19 @@ public:
 	}
 
 	/** 配列用のメモリを指定したサイズで確保します。*/
-	void Reserve(int size)
+	void Reserve(int count)
 	{
-		LN_CHECK_ARGS_RETURN(size >= 0);
+		LN_CHECK_ARGS_RETURN(count >= 0);
 		CheckDetachShared();
-		m_data->m_vector.reserve(size);
+		m_data->m_vector.reserve(count);
 	}
 
 	/** 配列の要素数を変更します。*/
-	void Resize(int size)
+	void Resize(int count)
 	{
-		LN_CHECK_ARGS_RETURN(size >= 0);
+		LN_CHECK_ARGS_RETURN(count >= 0);
 		CheckDetachShared();
-		m_data->m_vector.resize(size);
+		m_data->m_vector.resize(count);
 	}
 
 	/** 指定した要素がこの配列内に存在するかどうかを判断します。*/
