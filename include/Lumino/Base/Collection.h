@@ -138,7 +138,7 @@ public:
 	}
 
 	/** 指定したインデックスに要素を設定します。*/
-	void SetAt(int index, const T& item) { m_array.SetAt(index, item); }
+	void SetAt(int index, const T& item) { SetItem(index, item); }
 
 	/** 指定したインデックスにある要素への参照を取得します。*/
 	reference GetAt(int index) { return m_array.GetAt(index); }
