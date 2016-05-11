@@ -305,9 +305,7 @@ public:
 
 
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TValue>
 void Property::SetPropertyValueDirect(ReflectionObject* obj, const Property* prop, const TValue& value, PropertySetSource source)
 {
@@ -331,9 +329,7 @@ void Property::SetPropertyValueDirect(ReflectionObject* obj, const Property* pro
 	//}
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TValue>
 const TValue& Property::GetPropertyValueDirect(const ReflectionObject* obj, const Property* prop)
 {

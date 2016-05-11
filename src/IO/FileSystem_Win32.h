@@ -9,9 +9,7 @@
 
 LN_NAMESPACE_BEGIN
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 static void Win32IOErrorToExceptionThrow(DWORD errorCode, const TChar* message)
 {
@@ -42,9 +40,7 @@ static void Win32IOErrorToExceptionThrow(DWORD errorCode, const TChar* message)
 	}
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 bool FileSystem::ExistsFile(const StringRefA& filePath)
 {
 	if (filePath.IsNullOrEmpty()) return false;
@@ -73,9 +69,7 @@ bool FileSystem::ExistsFile(const StringRefW& filePath)
 			(attr & FILE_ATTRIBUTE_DIRECTORY) == 0);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void FileSystem::SetAttribute(const char* filePath, uint32_t attr)
 {
 	DWORD dwAttr = 0;
@@ -96,9 +90,7 @@ void FileSystem::SetAttribute(const wchar_t* filePath, uint32_t attr)
 	if (r == FALSE) { Win32IOErrorToExceptionThrow(::GetLastError(), filePath); }
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void FileSystem::Copy(const char* sourceFileName, const char* destFileName, bool overwrite)
 {
 	BOOL bRes = ::CopyFileA(sourceFileName, destFileName, (overwrite) ? FALSE : TRUE);
@@ -117,9 +109,7 @@ void FileSystem::Copy(const wchar_t* sourceFileName, const wchar_t* destFileName
 	}
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void FileSystem::Delete(const char* filePath)
 {
 	BOOL r = ::DeleteFileA(filePath);
@@ -135,9 +125,7 @@ void FileSystem::Delete(const wchar_t* filePath)
 	}
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 static void RemoveDirectoryImpl(LPCSTR lpPathName)
 {
 	BOOL r = ::RemoveDirectoryA(lpPathName);
@@ -153,9 +141,9 @@ static void RemoveDirectoryImpl(LPCWSTR lpPathName)
 	}
 }
 //
-////-----------------------------------------------------------------------------
+////------------------------------------------------------------------------------
 ////
-////-----------------------------------------------------------------------------
+////------------------------------------------------------------------------------
 //StringArrayA FileSystem::GetFileSystemEntries(const char* directoryPath, const char* pattern)
 //{
 //	LN_THROW(0, NotImplementedException);
@@ -207,9 +195,7 @@ static void RemoveDirectoryImpl(LPCWSTR lpPathName)
 //	return fileList;
 //}
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 uint64_t FileSystem::GetFileSize(const TCHAR* filePath)
 {
 	LN_THROW( filePath != NULL, ArgumentException );
@@ -232,9 +218,7 @@ uint64_t FileSystem::GetFileSize(const TCHAR* filePath)
 	return size;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 uint64_t FileSystem::GetFileSize(FILE* stream)
 {
 	struct _stat stbuf;
@@ -248,9 +232,7 @@ uint64_t FileSystem::GetFileSize(FILE* stream)
 	return stbuf.st_size;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //bool FileSystem::ExistsDirectory(const char* path)
 //{
 //	DWORD attr = ::GetFileAttributesA(path);
@@ -262,9 +244,7 @@ uint64_t FileSystem::GetFileSize(FILE* stream)
 //	return (attr != -1 && (attr & FILE_ATTRIBUTE_DIRECTORY) != 0);
 //}
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 bool FileSystem::mkdir(const char* path)
 {
 	return ::CreateDirectoryA(path, NULL) != FALSE;
@@ -273,9 +253,7 @@ bool FileSystem::mkdir(const wchar_t* path)
 {
 	return ::CreateDirectoryW(path, NULL) != FALSE;
 }
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 bool FileSystem::GetAttributeInternal(const char* path, FileAttribute* outAttr)
 {
 	DWORD attr = ::GetFileAttributesA(path);

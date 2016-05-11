@@ -16,9 +16,9 @@ LN_NAMESPACE_BEGIN
 		LN_THROW(0, IOException); \
 	}
 
-	//-----------------------------------------------------------------------------
+	//------------------------------------------------------------------------------
 	//
-	//-----------------------------------------------------------------------------
+	//------------------------------------------------------------------------------
 	static bool is_stat_writable(struct stat *st, const char *path)
 {
 	// 制限なしに書き込み可であるか
@@ -34,9 +34,7 @@ LN_NAMESPACE_BEGIN
 	return access(path, W_OK) == 0;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 bool FileSystem::ExistsFile(const StringRefA& filePath)
 {
 	//if (filePath == NULL) {
@@ -85,9 +83,7 @@ bool FileSystem::ExistsFile(const StringRefW& filePath)
 	return ExistsFile(mbcsFilePath);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void FileSystem::SetAttribute(const char* filePath, uint32_t attrs)
 {
 	struct stat st;
@@ -110,9 +106,7 @@ void FileSystem::SetAttribute(const wchar_t* filePath, uint32_t attrs)
 	return SetAttribute(mbcsFilePath, attrs);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void FileSystem::Copy(const char* sourceFileName, const char* destFileName, bool overwrite)
 {
 	// コピー先ファイルの存在確認
@@ -159,9 +153,7 @@ void FileSystem::Copy(const wchar_t* sourceFileName, const wchar_t* destFileName
 	Copy(mbcsSrc, mbcsDest, overwrite);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void FileSystem::Delete(const char* filePath)
 {
 	int ret = remove(filePath);
@@ -173,9 +165,7 @@ void FileSystem::Delete(const wchar_t* filePath)
 	Delete(mbcsFilePath);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 uint64_t FileSystem::GetFileSize(const TCHAR* filePath)
 {
 	LN_THROW(filePath != NULL, ArgumentException);
@@ -198,9 +188,7 @@ uint64_t FileSystem::GetFileSize(const TCHAR* filePath)
 	return size;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 uint64_t FileSystem::GetFileSize(FILE* stream)
 {
 	struct stat stbuf;
@@ -213,9 +201,7 @@ uint64_t FileSystem::GetFileSize(FILE* stream)
 	}
 	return stbuf.st_size;
 }
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 bool FileSystem::mkdir(const char* path)
 {
 	int ret = ::mkdir(path, 0755);
@@ -227,9 +213,7 @@ bool FileSystem::mkdir(const wchar_t* path)
 	return mkdir(mbcsFilePath);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 bool FileSystem::GetAttributeInternal(const char* path, FileAttribute* outAttr)
 {
 	// Unix 系の場合、ファイルの先頭が . であれば隠しファイルである。
@@ -270,9 +254,7 @@ bool FileSystem::GetAttributeInternal(const wchar_t* path, FileAttribute* outAtt
 	return GetAttributeInternal(mbcsFilePath, outAttr);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 static void RemoveDirectoryImpl(const char* path)
 {
 	int r = rmdir(path);

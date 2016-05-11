@@ -221,9 +221,7 @@ typedef GenericStringBuilder<wchar_t>	StringBuilderW;
 
 
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 template<typename... TArgs>
 GenericString<TChar> GenericString<TChar>::Format(const GenericStringRef<TChar>& format, const TArgs&... args)
@@ -233,9 +231,7 @@ GenericString<TChar> GenericString<TChar>::Format(const GenericStringRef<TChar>&
 	return sb.ToString();
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 template<typename... TArgs>
 GenericString<TChar> GenericString<TChar>::Format(const Locale& locale, const GenericStringRef<TChar>& format, const TArgs&... args)

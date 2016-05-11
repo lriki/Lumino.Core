@@ -188,9 +188,7 @@ private:
 };
 
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar, typename TCallback>
 inline void FileSystem::ForEachFilesInDirectory(const GenericStringRef<TChar>& path, TCallback callback)
 {

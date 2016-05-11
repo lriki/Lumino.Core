@@ -116,15 +116,13 @@ LN_NAMESPACE_BEGIN
 template<typename TChar>
 typename detail::GenericStringCore<TChar> detail::GenericStringCore<TChar>::m_sharedEmpty;
 
-//=============================================================================
+//==============================================================================
 // GenericString
-//=============================================================================
+//==============================================================================
 
 static const int MaxFormatLength = 1024;
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericString<TChar>::GenericString()
 	: m_string(detail::GenericStringCore<TChar>::GetSharedEmpty())
@@ -132,18 +130,16 @@ GenericString<TChar>::GenericString()
 	m_ref = m_string->c_str();
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericString<TChar>::~GenericString()
 {
 	LN_SAFE_RELEASE(m_string);
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // TChar コンストラクタ系
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericString<TChar>::GenericString(const GenericString& str)
 	: m_ref(NULL)
@@ -200,9 +196,9 @@ GenericString<TChar>::GenericString(TChar ch)
 {
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // YCHAR コンストラクタ系
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericString<TChar>::GenericString(const GenericString<YCHAR>& str)
 	: m_ref(NULL)
@@ -246,9 +242,9 @@ GenericString<TChar>::GenericString(const YCHAR* str, int begin, int length)
 	AssignCStr(str, begin, length);
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // operator=
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericString<TChar>& GenericString<TChar>::operator=(const GenericString& right)
 {
@@ -288,9 +284,9 @@ GenericString<TChar>& GenericString<TChar>::operator=(const YCHAR* right)
 	return (*this);
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // operator+=
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericString<TChar>& GenericString<TChar>::operator+=(const GenericString<TChar>& right)
 {
@@ -316,9 +312,9 @@ GenericString<TChar>& GenericString<TChar>::operator+=(TChar ch)
 	return (*this);
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // operator<
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 bool GenericString<TChar>::operator < (const GenericString& right) const
 {
@@ -335,9 +331,9 @@ bool GenericString<TChar>::operator < (const TChar* right) const
 	return Compare(right, -1, CaseSensitivity::CaseSensitive) < 0;
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // operator>
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 bool GenericString<TChar>::operator > (const GenericString& right) const
 {
@@ -354,9 +350,9 @@ bool GenericString<TChar>::operator > (const TChar* right) const
 	return Compare(right, -1, CaseSensitivity::CaseSensitive) > 0;
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // operator[]
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //template<typename TChar>
 //TChar& GenericString<TChar>::operator[](int index)
 //{
@@ -368,45 +364,37 @@ const TChar& GenericString<TChar>::operator[](int index) const
 	return InternalGetAt(index);
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // operator  cast
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //template<typename TChar>
 //GenericString<TChar>::operator const TChar*() const
 //{
 //	return c_str();
 //}
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 const TChar* GenericString<TChar>::c_str() const
 {
 	return m_string->c_str();
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 int GenericString<TChar>::GetLength() const
 {
 	return m_string->size();
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 bool GenericString<TChar>::IsEmpty() const
 {
 	return m_string->empty();
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 void GenericString<TChar>::Append(const GenericString& str, int len)
 {
@@ -433,9 +421,7 @@ void GenericString<TChar>::Append(TChar ch)
 	Append(&ch, 1);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 void GenericString<TChar>::AssignCStr(const char* str, int begin, int length, bool* outUsedDefaultChar)
 {
@@ -469,9 +455,7 @@ void GenericString<TChar>::AssignCStr(const char* str, bool* usedDefaultChar)
 	AssignCStr(str, 0, -1, usedDefaultChar);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 void GenericString<TChar>::AssignCStr(const wchar_t* str, int begin, int length, bool* outUsedDefaultChar)
 {
@@ -505,9 +489,7 @@ void GenericString<TChar>::AssignCStr(const wchar_t* str, bool* usedDefaultChar)
 	AssignCStr(str, 0, -1, usedDefaultChar);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 void GenericString<TChar>::ConvertFrom(const void* buffer, int byteCount, const Encoding* encoding, bool* outUsedDefaultChar)
 {
@@ -536,9 +518,7 @@ void GenericString<TChar>::ConvertFrom(const void* buffer, int byteCount, const 
 	}
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 ByteBuffer GenericString<TChar>::ConvertTo(const Encoding* encoding, bool* outUsedDefaultChar) const
 {
@@ -554,27 +534,21 @@ ByteBuffer GenericString<TChar>::ConvertTo(const Encoding* encoding, bool* outUs
 	return buf;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 void GenericString<TChar>::SetEmpty()
 {
 	Attach(detail::GenericStringCore<TChar>::GetSharedEmpty());
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericString<TChar> GenericString<TChar>::SubString(int startIndex, int length) const
 {
 	return StringT(*this, startIndex, length);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericString<TChar> GenericString<TChar>::Trim() const
 {
@@ -584,9 +558,7 @@ GenericString<TChar> GenericString<TChar>::Trim() const
 	return GenericString<TChar>(begin, length);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 struct CmpCaseSensitive
 {
@@ -629,9 +601,7 @@ GenericString<TChar> GenericString<TChar>::Remove(TChar ch, CaseSensitivity cs) 
 	return newStr;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericString<TChar> GenericString<TChar>::Replace(const StringRefT& from, const StringRefT& to) const
 {
@@ -655,18 +625,14 @@ GenericString<TChar> GenericString<TChar>::Replace(const StringRefT& from, const
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 bool GenericString<TChar>::Contains(const TChar* str, CaseSensitivity cs) const
 {
 	return IndexOf(str, 0, cs) >= 0;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 bool GenericString<TChar>::Contains(TChar ch, CaseSensitivity cs) const
 {
@@ -674,18 +640,14 @@ bool GenericString<TChar>::Contains(TChar ch, CaseSensitivity cs) const
 	return IndexOf(str, 0, cs) >= 0;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 int GenericString<TChar>::IndexOf(const StringRefT& str, int startIndex, CaseSensitivity cs) const
 {
 	return StringTraits::IndexOf(c_str(), GetLength(), str.GetBegin(), str.GetLength(), startIndex, cs);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 int GenericString<TChar>::IndexOf(TChar ch, int startIndex, CaseSensitivity cs) const
 {
@@ -693,9 +655,7 @@ int GenericString<TChar>::IndexOf(TChar ch, int startIndex, CaseSensitivity cs) 
 	return StringTraits::IndexOf(c_str(), GetLength(), str, StringTraits::StrLen(str), startIndex, cs);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 int GenericString<TChar>::LastIndexOf(const TChar* str, int startIndex, int count, CaseSensitivity cs) const
 {
@@ -707,9 +667,7 @@ int GenericString<TChar>::LastIndexOf(TChar ch, int startIndex, int count, CaseS
 	return StringTraits::LastIndexOf(c_str(), GetLength(), &ch, 1, startIndex, count, cs);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 bool GenericString<TChar>::StartsWith(const TChar* str, CaseSensitivity cs) const
 {
@@ -721,9 +679,7 @@ bool GenericString<TChar>::StartsWith(TChar ch, CaseSensitivity cs ) const
 	return StringTraits::EndsWith(c_str(), GetLength(), &ch, 1, cs);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 bool GenericString<TChar>::EndsWith(const TChar* str, CaseSensitivity cs) const
 {
@@ -735,9 +691,7 @@ bool GenericString<TChar>::EndsWith(TChar ch, CaseSensitivity cs) const
 	return StringTraits::EndsWith(c_str(), GetLength(), &ch, 1, cs);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 bool GenericString<TChar>::Equals(const GenericString& str) const
 {
@@ -757,54 +711,42 @@ bool GenericString<TChar>::Equals(const TChar* str) const
 	return Compare((str) ? str : GetEmpty().c_str(), -1, CaseSensitivity::CaseSensitive) == 0;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 int GenericString<TChar>::Compare(const TChar* str, int count, CaseSensitivity cs) const
 {
 	return StringTraits::Compare(c_str(), str, count/*(count < 0) ? GetLength() : count*/, cs);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericString<TChar> GenericString<TChar>::Left(int count) const
 {
 	return StringTraits::Left(c_str(), count);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericString<TChar> GenericString<TChar>::Right(int count) const
 {
 	return StringTraits::Right(c_str(), count);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericString<TChar> GenericString<TChar>::Mid(int start, int count) const
 {
 	return StringTraits::Mid(c_str(), start, count);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericStringArray<TChar> GenericString<TChar>::Split(const TChar* delim, StringSplitOptions option) const
 {
 	return StringTraits::Split(*this, delim, option);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 #define TO_INT_DEF(type, func) \
 	const TChar* str; \
 	const TChar* end; \
@@ -837,9 +779,7 @@ uint64_t GenericString<TChar>::ToUInt64(int base) const { TO_INT_DEF(uint64_t, T
 
 #undef TO_INT_DEF
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 #define TRY_TO_INT_DEF(type, func) \
 	const TChar* str; \
 	const TChar* end; \
@@ -871,9 +811,7 @@ bool GenericString<TChar>::TryToUInt64(uint64_t* outValue, int base) const { TRY
 
 #undef TRY_TO_INT_DEF
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericString<TChar> GenericString<TChar>::FromNativeCharString(const char* str, int length)
 {
@@ -889,9 +827,7 @@ GenericString<TChar> GenericString<TChar>::FromNativeWCharString(const wchar_t* 
 	return out;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 const GenericString<TChar>& GenericString<TChar>::GetNewLine()
 {
@@ -899,9 +835,7 @@ const GenericString<TChar>& GenericString<TChar>::GetNewLine()
 	return nl;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 const GenericString<TChar>& GenericString<TChar>::GetEmpty()
 {
@@ -909,9 +843,7 @@ const GenericString<TChar>& GenericString<TChar>::GetEmpty()
 	return str;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 TChar* GenericString<TChar>::GetData()
 {
@@ -919,9 +851,7 @@ TChar* GenericString<TChar>::GetData()
 	return &m_string->at(0);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericString<TChar> GenericString<TChar>::SPrintf(const GenericString<TChar>& format, ...)
 {
@@ -1002,9 +932,7 @@ GenericString<TChar> GenericString<TChar>::SPrintf(const TChar* format, ...)
 //}
 
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 void GenericString<TChar>::Attach(detail::GenericStringCore<TChar>* core)
 {
@@ -1012,9 +940,7 @@ void GenericString<TChar>::Attach(detail::GenericStringCore<TChar>* core)
 	m_ref = m_string->c_str();
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 void GenericString<TChar>::AssignTString(const TChar* str, int len)
 {
@@ -1032,9 +958,9 @@ void GenericString<TChar>::AssignTString(const TChar* str, int len)
 	m_ref = m_string->c_str();
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // ソース文字列の共有参照を切り、新しい GenericStringCore を確保する
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 void GenericString<TChar>::Realloc()
 {
@@ -1051,9 +977,9 @@ void GenericString<TChar>::Realloc()
 	}
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 TChar& GenericString<TChar>::InternalGetAt(int index)
 {
@@ -1061,9 +987,9 @@ TChar& GenericString<TChar>::InternalGetAt(int index)
 	return m_string->at(index);
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 const TChar& GenericString<TChar>::InternalGetAt(int index) const
 {
@@ -1071,9 +997,7 @@ const TChar& GenericString<TChar>::InternalGetAt(int index) const
 	return m_string->at(index);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 Encoding* GenericString<TChar>::GetThisTypeEncoding() const
 {

@@ -6,7 +6,7 @@ protected:
 	virtual void SetUp() {}
 	virtual void TearDown() {}
 };
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_IO_File, Open)
 {
 	File file1(LOCALFILE("TestData/test1.txt"));

@@ -7,7 +7,7 @@ protected:
 	virtual void TearDown() {}
 };
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_Resource, Integrate)
 {
 	Resources::RegisterResource(LOCALFILE("TestData/ResourceTest1.txt"));

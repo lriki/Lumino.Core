@@ -5,9 +5,9 @@
 
 LN_NAMESPACE_BEGIN
 
-//=============================================================================
+//==============================================================================
 // DBCSEncoding
-//=============================================================================
+//==============================================================================
 
 // SJIS
 extern "C" const unsigned char g_SJISLeadBytePairs[];
@@ -50,9 +50,7 @@ const DBCSEncoding::TableInfo DBCSEncoding::Tables[(const int)EncodingType::TERM
 	{ _T("Big5"), g_Big5LeadBytePairs, g_Big5ToUTF16Table, g_UTF16ToBig5Table },		// EncodingType_BIG5
 };
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 static bool CheckDBCSLeadByte(const DBCSEncoding::TableInfo* info, byte_t byte)
 {
 	for (int i = 0; i < DBCSEncoding::LeadBytePairsSize / 2; ++i)
@@ -69,9 +67,7 @@ static bool CheckDBCSLeadByte(const DBCSEncoding::TableInfo* info, byte_t byte)
 	return false;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 DBCSEncoding::DBCSEncoding(EncodingType type)
 	: m_encodingType(EncodingType::Unknown)
 {
@@ -79,9 +75,7 @@ DBCSEncoding::DBCSEncoding(EncodingType type)
 	m_encodingType = type;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 int DBCSEncoding::GetCharacterCount(const void* buffer, size_t bufferSize) const
 {
 	int count = 0;
@@ -99,17 +93,13 @@ int DBCSEncoding::GetCharacterCount(const void* buffer, size_t bufferSize) const
 	return count;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 int DBCSEncoding::GetLeadExtraLength(const void* buffer, size_t bufferSize) const
 {
 	return (CheckDBCSLeadByte(&Tables[(int)m_encodingType], *((const byte_t*)buffer))) ? 1 : 0;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void DBCSEncoding::DBCSDecoder::ConvertToUTF16(const byte_t* input, size_t inputByteSize, UTF16* output, size_t outputElementSize, size_t* outBytesUsed, size_t* outCharsUsed)
 {
 	if (outputElementSize > 0) { output[0] = '\0'; }
@@ -165,9 +155,7 @@ void DBCSEncoding::DBCSDecoder::ConvertToUTF16(const byte_t* input, size_t input
 	*outCharsUsed = outBufPos;					// 変換後の文字数
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void DBCSEncoding::DBCSEncoder::ConvertFromUTF16(const UTF16* input, size_t inputElementSize, byte_t* output, size_t outputByteSize, size_t* outBytesUsed, size_t* outCharsUsed)
 {
 	if (outputByteSize > 0) { output[0] = '\0'; }

@@ -22,9 +22,7 @@ LN_NAMESPACE_BEGIN
 
 #ifdef _WIN32
 #else
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 static bool is_stat_writable(struct stat *st, const char *path)
 {
 	// 制限なしに書き込み可であるか
@@ -41,9 +39,7 @@ static bool is_stat_writable(struct stat *st, const char *path)
 }
 #endif
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 bool FileSystem::Exists(const char* filePath)
 {
 	// ※fopen によるチェックはNG。ファイルが排他ロックで開かれていた時に失敗する。
@@ -82,9 +78,7 @@ bool FileSystem::Exists(const wchar_t* filePath)
 #endif
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 uint32_t FileSystem::GetAttribute(const char* filePath)
 {
 #ifdef _WIN32
@@ -146,9 +140,7 @@ uint32_t FileSystem::GetAttribute(const wchar_t* filePath)
 #endif
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void FileSystem::Copy(const char* sourceFileName, const char* destFileName, bool overwrite)
 {
 #ifdef _WIN32
@@ -201,9 +193,7 @@ void FileSystem::Copy(const wchar_t* sourceFileName, const wchar_t* destFileName
 #endif
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void FileSystem::Delete(const char* filePath)
 {
 #ifdef _WIN32
@@ -225,9 +215,7 @@ void FileSystem::Delete(const wchar_t* filePath)
 #endif
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 size_t FileSystem::GetFileSize(const TCHAR* filePath)
 {
 	LN_THROW( filePath != NULL, ArgumentException );
@@ -250,9 +238,7 @@ size_t FileSystem::GetFileSize(const TCHAR* filePath)
 	return size;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 size_t FileSystem::GetFileSize( FILE* stream )
 {
 #if defined(LN_OS_WIN32)
@@ -289,9 +275,7 @@ template<typename TString> static bool Exists2(const TString& filePath);
 
 
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 FileAttribute FileSystem::GetAttribute(const char* filePath)
 {
 	FileAttribute attr;
@@ -309,9 +293,7 @@ FileAttribute FileSystem::GetAttribute(const wchar_t* filePath)
 
 
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 void FileSystem::DeleteDirectoryInternal(const GenericStringRef<TChar>& path, bool recursive)
 {
@@ -336,9 +318,7 @@ void FileSystem::DeleteDirectoryInternal(const GenericStringRef<TChar>& path, bo
 }
 template void FileSystem::DeleteDirectoryInternal<char>(const GenericStringRef<char>& path, bool recursive);
 template void FileSystem::DeleteDirectoryInternal<wchar_t>(const GenericStringRef<wchar_t>& path, bool recursive);
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 void FileSystem::CopyDirectoryInternal(const GenericStringRef<TChar>& srcPath, const GenericStringRef<TChar>& destPath, bool overwrite, bool recursive)
 {
@@ -402,9 +382,7 @@ void FileSystem::CopyDirectoryInternal(const GenericStringRef<TChar>& srcPath, c
 template void FileSystem::CopyDirectoryInternal<char>(const GenericStringRef<char>& srcPath, const GenericStringRef<char>& destPath, bool overwrite, bool recursive);
 template void FileSystem::CopyDirectoryInternal<wchar_t>(const GenericStringRef<wchar_t>& srcPath, const GenericStringRef<wchar_t>& destPath, bool overwrite, bool recursive);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 ByteBuffer FileSystem::ReadAllBytes(const char* filePath)
 {
 	FILE* fp;
@@ -428,9 +406,7 @@ ByteBuffer FileSystem::ReadAllBytes(const wchar_t* filePath)
 	return buffer;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 String FileSystem::ReadAllText(const TCHAR* filePath, const Encoding* encoding)
 {
 	// TODO: BOM
@@ -445,18 +421,14 @@ String FileSystem::ReadAllText(const TCHAR* filePath, const Encoding* encoding)
 	return str;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void FileSystem::WriteAllBytes(const TCHAR* filePath, const void* buffer, size_t size)
 {
 	FileStreamPtr stream = FileStream::Create(filePath, FileOpenMode::Write | FileOpenMode::Truncate);
 	stream->Write(buffer, size);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void FileSystem::WriteAllText(const TCHAR* filePath, const String& str, const Encoding* encoding)
 {
 	encoding = (encoding == NULL) ? Encoding::GetUTF8Encoding() : encoding;
@@ -494,9 +466,7 @@ int64_t FileSystem::CalcSeekPoint(int64_t curPoint, int64_t maxSize, int64_t off
 	return newPoint;
 }
     
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 bool FileSystem::ExistsDirectory(const char* path)
 {
 	FileAttribute attr;
@@ -510,9 +480,7 @@ bool FileSystem::ExistsDirectory(const wchar_t* path)
 	return attr.TestFlag(FileAttribute::Directory);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 CaseSensitivity FileSystem::GetFileSystemCaseSensitivity()
 {
 #ifdef LN_OS_WIN32
@@ -522,9 +490,7 @@ CaseSensitivity FileSystem::GetFileSystemCaseSensitivity()
 #endif
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 void FileSystem::CreateDirectoryInternal(const TChar* path)
 {

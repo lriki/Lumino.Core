@@ -6,7 +6,7 @@ protected:
 	virtual void SetUp() {}
 	virtual void TearDown() {}
 };
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_IO_MemoryStream, Variable)
 {
 	MemoryStreamPtr s = MemoryStream::Create();
@@ -18,7 +18,7 @@ TEST_F(Test_IO_MemoryStream, Variable)
 	ASSERT_EQ('t', buf[3]);
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_IO_MemoryStream, Fixed)
 {
 	byte_t buf[256];

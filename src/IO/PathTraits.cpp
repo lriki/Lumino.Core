@@ -6,13 +6,11 @@
 
 LN_NAMESPACE_BEGIN
 
-//=============================================================================
+//==============================================================================
 // PathTraits
-//=============================================================================
+//==============================================================================
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 bool PathTraits::IsSeparatorChar(TChar ch)
 {
@@ -25,9 +23,7 @@ bool PathTraits::IsSeparatorChar(TChar ch)
 template bool PathTraits::IsSeparatorChar<char>(char ch);
 template bool PathTraits::IsSeparatorChar<wchar_t>(wchar_t ch);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 bool PathTraits::IsVolumeSeparatorChar(TChar ch)
 {
@@ -40,9 +36,7 @@ bool PathTraits::IsVolumeSeparatorChar(TChar ch)
 template bool PathTraits::IsVolumeSeparatorChar<char>(char ch);
 template bool PathTraits::IsVolumeSeparatorChar<wchar_t>(wchar_t ch);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 bool PathTraits::IsRootPath(const TChar* path)
 {
@@ -73,9 +67,7 @@ bool PathTraits::IsRootPath(const TChar* path)
 template bool PathTraits::IsRootPath<char>(const char* path);
 template bool PathTraits::IsRootPath<wchar_t>(const wchar_t* path);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 bool PathTraits::IsAbsolutePath(const TChar* path, int len)
 {
@@ -106,9 +98,7 @@ bool PathTraits::IsAbsolutePath(const TChar* path, int len)
 template bool PathTraits::IsAbsolutePath<char>(const char* path, int len);
 template bool PathTraits::IsAbsolutePath<wchar_t>(const wchar_t* path, int len);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 bool PathTraits::EndWithSeparator(const TChar* path, int len)
 {
@@ -123,9 +113,7 @@ bool PathTraits::EndWithSeparator(const TChar* path, int len)
 template bool PathTraits::EndWithSeparator<char>(const char* path, int len);
 template bool PathTraits::EndWithSeparator<wchar_t>(const wchar_t* path, int len);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericString<TChar> PathTraits::GetDirectoryPath(const TChar* path)
 {
@@ -188,9 +176,7 @@ GenericString<TChar> PathTraits::GetDirectoryPath(const TChar* path)
 template GenericString<char> PathTraits::GetDirectoryPath<char>(const char* path);
 template GenericString<wchar_t> PathTraits::GetDirectoryPath<wchar_t>(const wchar_t* path);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericString<TChar> PathTraits::GetFileName(const TChar* path)
 {
@@ -200,9 +186,7 @@ template GenericString<char> PathTraits::GetFileName(const char* path);
 template GenericString<wchar_t> PathTraits::GetFileName(const wchar_t* path);
 
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 const TChar* PathTraits::GetFileNameSub(const TChar* path)
 {
@@ -225,9 +209,7 @@ const TChar* PathTraits::GetFileNameSub(const TChar* path)
 template const char* PathTraits::GetFileNameSub(const char* path);
 template const wchar_t* PathTraits::GetFileNameSub(const wchar_t* path);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 void PathTraits::GetFileNameWithoutExtension(const TChar* path, TChar* outExt)
 {
@@ -251,9 +233,7 @@ void PathTraits::GetFileNameWithoutExtension(const TChar* path, TChar* outExt)
 template void PathTraits::GetFileNameWithoutExtension(const char* path, char* outExt);
 template void PathTraits::GetFileNameWithoutExtension(const wchar_t* path, wchar_t* outExt);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 void PathTraits::GetExtension(const TChar* path, TChar* outExt)
 {
@@ -281,9 +261,7 @@ void PathTraits::GetExtension(const TChar* path, TChar* outExt)
 template void PathTraits::GetExtension(const char* path, char* outExt);
 template void PathTraits::GetExtension(const wchar_t* path, wchar_t* outExt);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 Result PathTraits::GetExtension(const TChar* path, bool withDot, GenericStringRef<TChar>* outRef) LN_NOEXCEPT
 {
@@ -322,9 +300,7 @@ Result PathTraits::GetExtension(const TChar* path, bool withDot, GenericStringRe
 template Result PathTraits::GetExtension(const char* path, bool withDot, GenericStringRef<char>* outRef) LN_NOEXCEPT;
 template Result PathTraits::GetExtension(const wchar_t* path, bool withDot, GenericStringRef<wchar_t>* outRef) LN_NOEXCEPT;
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 Result PathTraits::Combine(const TChar* path1, int path1Len, const TChar* path2, int path2Len, TChar* outPath, int pathCapacity) LN_NOEXCEPT
 {
@@ -365,9 +341,7 @@ Result PathTraits::Combine(const TChar* path1, int path1Len, const TChar* path2,
 template Result PathTraits::Combine(const char* path1, int path1Len, const char* path2, int path2Len, char* outPath, int pathCapacity) LN_NOEXCEPT;
 template Result PathTraits::Combine(const wchar_t* path1, int path1Len, const wchar_t* path2, int path2Len, wchar_t* outPath, int pathCapacity) LN_NOEXCEPT;
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 int PathTraits::CanonicalizePath(const TChar* srcPath, size_t srcLen, TChar* outPath)
 {
@@ -613,9 +587,7 @@ int PathTraits::CanonicalizePath(const TChar* srcPath, size_t srcLen, TChar* out
 template int PathTraits::CanonicalizePath(const char* srcPath, size_t srcLen, char* outPath);
 template int PathTraits::CanonicalizePath(const wchar_t* srcPath, size_t srcLen, wchar_t* outPath);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 void PathTraits::CanonicalizePath(const TChar* srcPath, TChar* outPath)
 {
@@ -641,9 +613,7 @@ void PathTraits::CanonicalizePath(const TChar* srcPath, TChar* outPath)
 template void PathTraits::CanonicalizePath<char>(const char* srcPath, char* outPath);
 template void PathTraits::CanonicalizePath<wchar_t>(const wchar_t* srcPath, wchar_t* outPath);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 void PathTraits::CanonicalizePath(GenericString<TChar>* path)
 {
@@ -658,9 +628,7 @@ template void PathTraits::CanonicalizePath<char>(GenericString<char>* path);
 template void PathTraits::CanonicalizePath<wchar_t>(GenericString<wchar_t>* path);
 
 #if 0
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<>
 void PathTraits::CanonicalizePath(const char* srcPath, char* outPath)
 {
@@ -715,9 +683,7 @@ void PathTraits::CanonicalizePath(const wchar_t* srcPath, wchar_t* outPath)
 //template void PathTraits::CanonicalizePath<wchar_t>(const TChar* srcPath, TChar* outPath);
 
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 void PathTraits::NormalizeSeparator(TChar* srcPath)
 {
@@ -740,9 +706,7 @@ void PathTraits::NormalizeSeparator(TChar* srcPath)
 @details	DirectorySeparatorChar と AltDirectorySeparatorChar は等価とみなします。
 また、大文字小文字を区別しません。
 */
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 int PathTraits::Compare(const TChar* path1, const TChar* path2)
 {
@@ -802,9 +766,7 @@ int PathTraits::Compare(const TChar* path1, const TChar* path2)
 #endif
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 bool PathTraits::Equals(const TChar* path1, const TChar* path2)
 {
@@ -813,9 +775,7 @@ bool PathTraits::Equals(const TChar* path1, const TChar* path2)
 template bool PathTraits::Equals<char>(const char* path1, const char* path2);
 template bool PathTraits::Equals<wchar_t>(const wchar_t* path1, const wchar_t* path2);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 int PathTraits::Compare(TChar ch1, TChar ch2, CaseSensitivity cs)
 {
@@ -825,9 +785,9 @@ int PathTraits::Compare(TChar ch1, TChar ch2, CaseSensitivity cs)
 template int PathTraits::Compare<char>(char ch1, char ch2, CaseSensitivity cs);
 template int PathTraits::Compare<wchar_t>(wchar_t ch1, wchar_t ch2, CaseSensitivity cs);
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // path1 から見たときの path2 の相対パス
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 static bool IsInternalSeparator(const TChar* path, int i, int len/*, int slen*/)
 {

@@ -114,9 +114,7 @@ int StringTraits::tsnprintf_l(wchar_t* out, int charCount, const wchar_t* format
 	return r;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 size_t StringTraits::StrLen(const TChar* str)
 {
@@ -128,9 +126,7 @@ template size_t StringTraits::StrLen<UTF8>(const UTF8* str);
 template size_t StringTraits::StrLen<UTF16>(const UTF16* str);
 template size_t StringTraits::StrLen<UTF32>(const UTF32* str);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 TChar StringTraits::ToUpper(TChar ch)
 {
@@ -140,9 +136,7 @@ template UTF8 StringTraits::ToUpper<UTF8>(UTF8 ch);
 template UTF16 StringTraits::ToUpper<UTF16>(UTF16 ch);
 template UTF32 StringTraits::ToUpper<UTF32>(UTF32 ch);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 bool StringTraits::IsSpace(TChar ch)
 {
@@ -255,9 +249,7 @@ int StringTraits::StrNICmp(const wchar_t* s1, const wchar_t* s2, size_t count)
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void StringTraits::ConvertMultiToWide(std::wstring* out, const char* input, int inputLength)
 {
 	StringW strWide;
@@ -265,9 +257,7 @@ void StringTraits::ConvertMultiToWide(std::wstring* out, const char* input, int 
 	(*out) = strWide.c_str();
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 int StringTraits::IndexOf(const TChar* str1, int str1Len, const TChar* str2, int str2Len, int startIndex, CaseSensitivity cs)
 {
@@ -316,9 +306,7 @@ template int StringTraits::IndexOf<char>(const char* str1, int str1Len, const ch
 template int StringTraits::IndexOf<wchar_t>(const wchar_t* str1, int str1Len, const wchar_t* str2, int str2Len, int startIndex, CaseSensitivity cs);
 
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 int StringTraits::LastIndexOf(const TChar* str1, int str1Len, const TChar* str2, int str2Len, int startIndex, int count, CaseSensitivity cs)
 {
@@ -380,9 +368,7 @@ int StringTraits::LastIndexOf(const TChar* str1, int str1Len, const TChar* str2,
 template int StringTraits::LastIndexOf<char>(const char* str1, int str1Len, const char* str2, int str2Len, int startIndex, int count, CaseSensitivity cs);
 template int StringTraits::LastIndexOf<wchar_t>(const wchar_t* str1, int str1Len, const wchar_t* str2, int str2Len, int startIndex, int count, CaseSensitivity cs);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 int StringTraits::Compare(const TChar* str1, int str1Len, const TChar* str2, int str2Len, int count, CaseSensitivity cs)
 {
@@ -456,9 +442,7 @@ int StringTraits::Compare(const TChar* str1, int str1Len, const TChar* str2, int
 template int StringTraits::Compare<char>(const char* str1, int str1Len, const char* str2, int str2Len, int count, CaseSensitivity cs);
 template int StringTraits::Compare<wchar_t>(const wchar_t* str1, int str1Len, const wchar_t* str2, int str2Len, int count, CaseSensitivity cs);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 int StringTraits::Compare(const TChar* str1, const TChar* str2, int count, CaseSensitivity cs)
 {
@@ -467,9 +451,7 @@ int StringTraits::Compare(const TChar* str1, const TChar* str2, int count, CaseS
 template int StringTraits::Compare<char>(const char* str1, const char* str2, int count, CaseSensitivity cs);
 template int StringTraits::Compare<wchar_t>(const wchar_t* str1, const wchar_t* str2, int count, CaseSensitivity cs);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 int StringTraits::Compare(TChar ch1, TChar ch2, CaseSensitivity cs)
 {
@@ -483,9 +465,7 @@ int StringTraits::Compare(TChar ch1, TChar ch2, CaseSensitivity cs)
 template int StringTraits::Compare<char>(char ch1, char ch2, CaseSensitivity cs);
 template int StringTraits::Compare<wchar_t>(wchar_t ch1, wchar_t ch2, CaseSensitivity cs);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 void StringTraits::Trim(const TChar* begin, int length, const TChar** outBegin, int* outLength)
 {
@@ -523,9 +503,7 @@ void StringTraits::Trim(const TChar* begin, int length, const TChar** outBegin, 
 template void StringTraits::Trim<char>(const char* begin, int length, const char** outBegin, int* outLength);
 template void StringTraits::Trim<wchar_t>(const wchar_t* begin, int length, const wchar_t** outBegin, int* outLength);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //template<typename TChar>
 //GenericString<TChar> StringTraits::Format(const TChar* format, ...)
 //{
@@ -545,9 +523,7 @@ template void StringTraits::Trim<wchar_t>(const wchar_t* begin, int length, cons
 //template GenericString<char> StringTraits::Format(const char* format, ...);
 //template GenericString<wchar_t> StringTraits::Format(const wchar_t* format, ...);
 //
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //template<typename TChar>
 //void StringTraits::FormatVAList(const TChar* format, va_list args, GenericString<TChar>* out)
 //{
@@ -563,9 +539,7 @@ template void StringTraits::Trim<wchar_t>(const wchar_t* begin, int length, cons
 //template void StringTraits::FormatVAList<char>(const char* format, va_list args, GenericString<char>* out);
 //template void StringTraits::FormatVAList<wchar_t>(const wchar_t* format, va_list args, GenericString<wchar_t>* out);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 bool StringTraits::StartsWith(const TChar* str1, int len1, const TChar* str2, int len2, CaseSensitivity cs)
 {
@@ -574,9 +548,7 @@ bool StringTraits::StartsWith(const TChar* str1, int len1, const TChar* str2, in
 template bool StringTraits::StartsWith<char>(const char* str1, int len1, const char* str2, int len2, CaseSensitivity cs);
 template bool StringTraits::StartsWith<wchar_t>(const wchar_t* str1, int len1, const wchar_t* str2, int len2, CaseSensitivity cs);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 bool StringTraits::EndsWith(const TChar* str1, int len1, const TChar* str2, int len2, CaseSensitivity cs)
 {
@@ -619,9 +591,7 @@ bool StringTraits::EndsWith(const TChar* str1, int len1, const TChar* str2, int 
 template bool StringTraits::EndsWith<char>(const char* str1, int len1, const char* str2, int len2, CaseSensitivity cs);
 template bool StringTraits::EndsWith<wchar_t>(const wchar_t* str1, int len1, const wchar_t* str2, int len2, CaseSensitivity cs);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 int StringTraits::CountString(const TChar* str1, int str1Len, const TChar* str2, int str2Len, CaseSensitivity cs)
 {
@@ -640,9 +610,7 @@ int StringTraits::CountString(const TChar* str1, int str1Len, const TChar* str2,
 template int StringTraits::CountString<char>(const char* str1, int str1Len, const char* str2, int str2Len, CaseSensitivity cs);
 template int StringTraits::CountString<wchar_t>(const wchar_t* str1, int str1Len, const wchar_t* str2, int str2Len, CaseSensitivity cs);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericString<TChar> StringTraits::Left(const TChar* str, int count)
 {
@@ -659,9 +627,7 @@ GenericString<TChar> StringTraits::Left(const TChar* str, int count)
 template GenericString<char> StringTraits::Left<char>(const char* str, int count);
 template GenericString<wchar_t> StringTraits::Left<wchar_t>(const wchar_t* str, int count);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericString<TChar> StringTraits::Right(const TChar* str, int count)
 {
@@ -678,9 +644,7 @@ GenericString<TChar> StringTraits::Right(const TChar* str, int count)
 template GenericString<char> StringTraits::Right<char>(const char* str, int count);
 template GenericString<wchar_t> StringTraits::Right<wchar_t>(const wchar_t* str, int count);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericString<TChar> StringTraits::Mid(const TChar* str, int start, int count)
 {
@@ -709,9 +673,7 @@ GenericString<TChar> StringTraits::Mid(const TChar* str, int start, int count)
 template GenericString<char> StringTraits::Mid<char>(const char* str, int start, int count);
 template GenericString<wchar_t> StringTraits::Mid<wchar_t>(const wchar_t* str, int start, int count);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericStringArray<TChar> StringTraits::Split(const GenericString<TChar>& str, const TChar* delim, StringSplitOptions option)
 {
@@ -758,9 +720,7 @@ GenericStringArray<TChar> StringTraits::Split(const GenericString<TChar>& str, c
 template GenericStringArray<char> StringTraits::Split(const GenericString<char>& str, const char* delim, StringSplitOptions option);
 template GenericStringArray<wchar_t> StringTraits::Split(const GenericString<wchar_t>& str, const wchar_t* delim, StringSplitOptions option);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename T>
 int StringTraits::CheckNewLineSequence(const T* start, const T* end)
 {
@@ -784,9 +744,7 @@ template int StringTraits::CheckNewLineSequence<byte_t>(const byte_t* start, con
 template int StringTraits::CheckNewLineSequence<char>(const char* start, const char* end);
 template int StringTraits::CheckNewLineSequence<wchar_t>(const wchar_t* start, const wchar_t* end);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 bool StringTraits::IndexOfNewLineSequence(const TChar* start, const TChar* end, int* outIndex, int* outNewLineCodeCount)
 {
@@ -807,9 +765,7 @@ bool StringTraits::IndexOfNewLineSequence(const TChar* start, const TChar* end, 
 template bool StringTraits::IndexOfNewLineSequence<char>(const char* start, const char* end, int* outIndex, int* outNewLineCodeCount);
 template bool StringTraits::IndexOfNewLineSequence<wchar_t>(const wchar_t* start, const wchar_t* end, int* outIndex, int* outNewLineCodeCount);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 bool StringTraits::Match(const TChar* pattern, const TChar* str)
 {
@@ -828,10 +784,10 @@ bool StringTraits::Match(const TChar* pattern, const TChar* str)
 template bool StringTraits::Match<char>(const char* pattern, const char* str);
 template bool StringTraits::Match<wchar_t>(const wchar_t* pattern, const wchar_t* str);
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // Note:C言語標準では uint64_t 用の 変換関数が無いため自作した。
 //		ちなみに C++ の istream も uint64_t 用の変換は標準ではない。(VC++にはあるが)
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar, typename TSigned, typename TUnigned>
 static NumberConversionResult StrToNumInternal(
 	const TChar* str,
@@ -980,9 +936,7 @@ static NumberConversionResult StrToNumInternal(
 	return result;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 int8_t StringTraits::ToInt8(const TChar* str, int len, int base, const TChar** outEndPtr, NumberConversionResult* outResult)
 {
@@ -994,9 +948,7 @@ int8_t StringTraits::ToInt8(const TChar* str, int len, int base, const TChar** o
 template int8_t StringTraits::ToInt8<char>(const char* str, int len, int base, const char** outEndPtr, NumberConversionResult* outResult);
 template int8_t StringTraits::ToInt8<wchar_t>(const wchar_t* str, int len, int base, const wchar_t** outEndPtr, NumberConversionResult* outResult);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 uint8_t StringTraits::ToUInt8(const TChar* str, int len, int base, const TChar** outEndPtr, NumberConversionResult* outResult)
 {
@@ -1008,9 +960,7 @@ uint8_t StringTraits::ToUInt8(const TChar* str, int len, int base, const TChar**
 template uint8_t StringTraits::ToUInt8<char>(const char* str, int len, int base, const char** outEndPtr, NumberConversionResult* outResult);
 template uint8_t StringTraits::ToUInt8<wchar_t>(const wchar_t* str, int len, int base, const wchar_t** outEndPtr, NumberConversionResult* outResult);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 int16_t StringTraits::ToInt16(const TChar* str, int len, int base, const TChar** outEndPtr, NumberConversionResult* outResult)
 {
@@ -1022,9 +972,7 @@ int16_t StringTraits::ToInt16(const TChar* str, int len, int base, const TChar**
 template int16_t StringTraits::ToInt16<char>(const char* str, int len, int base, const char** outEndPtr, NumberConversionResult* outResult);
 template int16_t StringTraits::ToInt16<wchar_t>(const wchar_t* str, int len, int base, const wchar_t** outEndPtr, NumberConversionResult* outResult);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 uint16_t StringTraits::ToUInt16(const TChar* str, int len, int base, const TChar** outEndPtr, NumberConversionResult* outResult)
 {
@@ -1036,9 +984,7 @@ uint16_t StringTraits::ToUInt16(const TChar* str, int len, int base, const TChar
 template uint16_t StringTraits::ToUInt16<char>(const char* str, int len, int base, const char** outEndPtr, NumberConversionResult* outResult);
 template uint16_t StringTraits::ToUInt16<wchar_t>(const wchar_t* str, int len, int base, const wchar_t** outEndPtr, NumberConversionResult* outResult);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 int32_t StringTraits::ToInt32(const TChar* str, int len, int base, const TChar** outEndPtr, NumberConversionResult* outResult)
 {
@@ -1050,9 +996,7 @@ int32_t StringTraits::ToInt32(const TChar* str, int len, int base, const TChar**
 template int32_t StringTraits::ToInt32<char>(const char* str, int len, int base, const char** outEndPtr, NumberConversionResult* outResult);
 template int32_t StringTraits::ToInt32<wchar_t>(const wchar_t* str, int len, int base, const wchar_t** outEndPtr, NumberConversionResult* outResult);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 uint32_t StringTraits::ToUInt32(const TChar* str, int len, int base, const TChar** outEndPtr, NumberConversionResult* outResult)
 {
@@ -1064,9 +1008,7 @@ uint32_t StringTraits::ToUInt32(const TChar* str, int len, int base, const TChar
 template uint32_t StringTraits::ToUInt32<char>(const char* str, int len, int base, const char** outEndPtr, NumberConversionResult* outResult);
 template uint32_t StringTraits::ToUInt32<wchar_t>(const wchar_t* str, int len, int base, const wchar_t** outEndPtr, NumberConversionResult* outResult);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 int64_t StringTraits::ToInt64(const TChar* str, int len, int base, const TChar** outEndPtr, NumberConversionResult* outResult)
 {
@@ -1078,9 +1020,7 @@ int64_t StringTraits::ToInt64(const TChar* str, int len, int base, const TChar**
 template int64_t StringTraits::ToInt64<char>(const char* str, int len, int base, const char** outEndPtr, NumberConversionResult* outResult);
 template int64_t StringTraits::ToInt64<wchar_t>(const wchar_t* str, int len, int base, const wchar_t** outEndPtr, NumberConversionResult* outResult);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 uint64_t StringTraits::ToUInt64(const TChar* str, int len, int base, const TChar** outEndPtr, NumberConversionResult* outResult)
 {
@@ -1092,9 +1032,7 @@ uint64_t StringTraits::ToUInt64(const TChar* str, int len, int base, const TChar
 template uint64_t StringTraits::ToUInt64<char>(const char* str, int len, int base, const char** outEndPtr, NumberConversionResult* outResult);
 template uint64_t StringTraits::ToUInt64<wchar_t>(const wchar_t* str, int len, int base, const wchar_t** outEndPtr, NumberConversionResult* outResult);
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 #ifdef _WIN32
 static bool g_localeInitialized = false;
 static _locale_t g_locale;

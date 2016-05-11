@@ -5,13 +5,11 @@
 
 LN_NAMESPACE_BEGIN
 
-//=============================================================================
+//==============================================================================
 // UTF16Encoding
-//=============================================================================
+//==============================================================================
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 UTF16Encoding::UTF16Encoding(bool bigEndian, bool byteOrderMark)
 	: m_bigEndian(bigEndian)
 	, m_byteOrderMark(byteOrderMark)
@@ -21,9 +19,7 @@ UTF16Encoding::UTF16Encoding(bool bigEndian, bool byteOrderMark)
 	}
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 byte_t* UTF16Encoding::GetPreamble() const
 {
 	static byte_t bom[] = { 0x00 };
@@ -31,9 +27,7 @@ byte_t* UTF16Encoding::GetPreamble() const
 	return bom;
 };
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 int UTF16Encoding::GetLeadExtraLength(const void* buffer, size_t bufferSize) const
 {
 	bool s;
@@ -42,9 +36,7 @@ int UTF16Encoding::GetLeadExtraLength(const void* buffer, size_t bufferSize) con
 	return (s) ? 1 : 0;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 int UTF16Encoding::GetCharacterCount(const void* buffer, size_t bufferSize) const
 {
 	int count;
@@ -53,9 +45,7 @@ int UTF16Encoding::GetCharacterCount(const void* buffer, size_t bufferSize) cons
 	return count;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void UTF16Encoding::UTF16Decoder::ConvertToUTF16(const byte_t* input, size_t inputByteSize, UTF16* output, size_t outputElementSize, size_t* outBytesUsed, size_t* outCharsUsed)
 {
 	/* バイトストリームの UTF-16 から、内部文字コードの UTF-16 への変換となる。
@@ -141,9 +131,7 @@ void UTF16Encoding::UTF16Decoder::ConvertToUTF16(const byte_t* input, size_t inp
 	(*outCharsUsed) = charCount;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void UTF16Encoding::UTF16Encoder::ConvertFromUTF16(const UTF16* input, size_t inputElementSize, byte_t* output, size_t outputByteSize, size_t* outBytesUsed, size_t* outCharsUsed)
 {
 	/* 内部文字コードの UTF-16 から、バイトストリームの UTF-16 への変換となる。

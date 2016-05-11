@@ -38,27 +38,21 @@ private:
 };
 
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 inline const GenericPathName<TChar>& GenericDirectoryIterator<TChar>::GetPath() const
 {
 	return m_path;;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 inline bool GenericDirectoryIterator<TChar>::operator == (const GenericDirectoryIterator<TChar>& right) const
 {
 	return m_path.Equals(right.m_path);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 inline bool GenericDirectoryIterator<TChar>::operator != (const GenericDirectoryIterator<TChar>& right) const
 {

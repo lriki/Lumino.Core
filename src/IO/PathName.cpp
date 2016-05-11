@@ -8,40 +8,32 @@
 
 LN_NAMESPACE_BEGIN
 
-//=============================================================================
+//==============================================================================
 // GenericPathName
-//=============================================================================
+//==============================================================================
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericPathName<TChar>::GenericPathName(const GenericPathName& obj)
 	: m_path(obj.m_path)
 {
 }
 	
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 void GenericPathName<TChar>::Assign(const char* path, int length)
 {
 	m_path.AssignCStr(path, length);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 void GenericPathName<TChar>::Assign(const wchar_t* path, int length)
 {
 	m_path.AssignCStr(path, length);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 void GenericPathName<TChar>::AssignUnderBasePath(const PathNameT& basePath, const char* relativePath, int len)
 {
@@ -70,9 +62,7 @@ void GenericPathName<TChar>::AssignUnderBasePath(const PathNameT& basePath, cons
 	// ↑× 相対パスはそのまま扱いたい
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 void GenericPathName<TChar>::AssignUnderBasePath(const PathNameT& basePath, const wchar_t* relativePath, int len)
 {
@@ -102,9 +92,7 @@ void GenericPathName<TChar>::AssignUnderBasePath(const PathNameT& basePath, cons
 	// ↑× 相対パスはそのまま扱いたい
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 void GenericPathName<TChar>::Append(const TChar* path)
 {
@@ -119,9 +107,7 @@ void GenericPathName<TChar>::Append(const TChar* path)
 	}
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericPathName<TChar> GenericPathName<TChar>::GetFileNameWithoutExtension() const
 {
@@ -130,9 +116,7 @@ GenericPathName<TChar> GenericPathName<TChar>::GetFileNameWithoutExtension() con
 	return GenericPathName<TChar>(path);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericStringRef<TChar> GenericPathName<TChar>::GetExtension(bool withDot) const LN_NOEXCEPT
 {
@@ -141,9 +125,7 @@ GenericStringRef<TChar> GenericPathName<TChar>::GetExtension(bool withDot) const
 	return ref;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 const GenericString<TChar> GenericPathName<TChar>::GetStrEndSeparator() const
 {
@@ -154,9 +136,7 @@ const GenericString<TChar> GenericPathName<TChar>::GetStrEndSeparator() const
 	return newStr;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericPathName<TChar> GenericPathName<TChar>::GetWithoutExtension() const
 {
@@ -182,9 +162,7 @@ GenericPathName<TChar> GenericPathName<TChar>::GetWithoutExtension() const
 	return GenericPathName<TChar>(m_path.Left(dotPos));
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericPathName<TChar> GenericPathName<TChar>::ChangeExtension(const TChar* newExt) const
 {
@@ -213,36 +191,28 @@ GenericPathName<TChar> GenericPathName<TChar>::ChangeExtension(const TChar* newE
 	return GenericPathName<TChar>(newPath);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 bool GenericPathName<TChar>::IsAbsolute() const
 {
 	return PathTraits::IsAbsolutePath(m_path.c_str());
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 bool GenericPathName<TChar>::IsRoot() const
 {
 	return PathTraits::IsRootPath(m_path.c_str());
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 bool GenericPathName<TChar>::IsDirectory() const
 {
 	return FileSystem::ExistsDirectory(m_path.c_str());
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 bool GenericPathName<TChar>::CheckExt(const TChar* ext) const
 {
@@ -250,9 +220,7 @@ bool GenericPathName<TChar>::CheckExt(const TChar* ext) const
 	return StringTraits::EndsWith(m_path.c_str(), m_path.GetLength(), ext, -1, CaseSensitivity::CaseInsensitive);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericPathName<TChar> GenericPathName<TChar>::GetParent() const
 {
@@ -267,9 +235,7 @@ GenericPathName<TChar> GenericPathName<TChar>::GetParent() const
 	return GenericPathName(PathTraits::GetDirectoryPath(m_path.c_str()).c_str());
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericPathName<TChar> GenericPathName<TChar>::CanonicalizePath() const
 {
@@ -279,9 +245,7 @@ GenericPathName<TChar> GenericPathName<TChar>::CanonicalizePath() const
 	return GenericPathName<TChar>(tmpPath);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 std::string GenericPathName<TChar>::ToLocalChar() const
 {
@@ -290,27 +254,21 @@ std::string GenericPathName<TChar>::ToLocalChar() const
 	return std::string(tmp.c_str());
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 bool GenericPathName<TChar>::ExistsFile() const
 {
 	return FileSystem::ExistsFile(m_path.c_str());
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 bool GenericPathName<TChar>::ExistsDirectory() const
 {
 	return FileSystem::ExistsDirectory(m_path.c_str());
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 bool GenericPathName<TChar>::ExistsFileInDirectory(const StringRefT& relPath) const LN_NOEXCEPT
 {
@@ -319,9 +277,7 @@ bool GenericPathName<TChar>::ExistsFileInDirectory(const StringRefT& relPath) co
 	return FileSystem::ExistsFile(path);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericPathName<TChar> GenericPathName<TChar>::MakeRelative(const GenericPathName<TChar>& target) const
 {
@@ -330,9 +286,7 @@ GenericPathName<TChar> GenericPathName<TChar>::MakeRelative(const GenericPathNam
 	return GenericPathName<TChar>(rel);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericPathName<TChar> GenericPathName<TChar>::GetCurrentDirectory()
 {
@@ -348,9 +302,7 @@ GenericPathName<TChar> GenericPathName<TChar>::GetCurrentDirectory()
 	return path;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericPathName<TChar> GenericPathName<TChar>::GetSpecialFolderPath(SpecialFolder specialFolder, const TChar* childDir, SpecialFolderOption option)
 {
@@ -383,9 +335,7 @@ GenericPathName<TChar> GenericPathName<TChar>::GetSpecialFolderPath(SpecialFolde
 	}
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericPathName<TChar> GenericPathName<TChar>::GetUniqueFilePathInDirectory(const PathNameT& directory, const TChar* filePrefix, const TChar* extName)
 {

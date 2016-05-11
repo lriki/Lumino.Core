@@ -49,8 +49,6 @@ private:
 };
 
 //------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------
 template<typename... TArgs>
 void Console::WriteLine(const StringRefA& str, const TArgs&... args)
 {
@@ -59,8 +57,6 @@ void Console::WriteLine(const StringRefA& str, const TArgs&... args)
 	WriteLine();
 }
 
-//------------------------------------------------------------------------------
-//
 //------------------------------------------------------------------------------
 template<typename... TArgs>
 void Console::WriteLine(const StringRefW& str, const TArgs&... args)
@@ -71,8 +67,6 @@ void Console::WriteLine(const StringRefW& str, const TArgs&... args)
 }
 
 //------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------
 template<typename... TArgs>
 void Console::WriteLineError(const StringRefA& str, const TArgs&... args)
 {
@@ -81,8 +75,6 @@ void Console::WriteLineError(const StringRefA& str, const TArgs&... args)
 	WriteLineError();
 }
 
-//------------------------------------------------------------------------------
-//
 //------------------------------------------------------------------------------
 template<typename... TArgs>
 void Console::WriteLineError(const StringRefW& str, const TArgs&... args)

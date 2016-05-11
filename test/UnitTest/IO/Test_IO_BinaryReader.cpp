@@ -7,7 +7,7 @@ protected:
 	virtual void TearDown() {}
 };
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_IO_BinaryReader, Basic)
 {
 	FileStreamPtr file = FileStream::Create(LOCALFILE("TestData/BinaryReaderTest.dat"), FileOpenMode::Read);
@@ -50,7 +50,7 @@ TEST_F(Test_IO_BinaryReader, Basic)
 	ASSERT_TRUE(reader.IsEOF());
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_IO_BinaryReader, BytesSpecified)
 {
 	FileStreamPtr file = FileStream::Create(LOCALFILE("TestData/BinaryReaderTest.dat"), FileOpenMode::Read);

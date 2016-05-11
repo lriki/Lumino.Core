@@ -7,7 +7,7 @@ protected:
 	virtual void TearDown() {}
 };
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_IO_FileSystem, Exists)
 {
 	// Windows 別ユーザーフォルダは false
@@ -26,7 +26,7 @@ TEST_F(Test_IO_FileSystem, Exists)
 	ASSERT_FALSE(FileSystem::ExistsFile((wchar_t*)NULL));
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_IO_FileSystem, GetAttribute)
 {
 	uint32_t attr;
@@ -82,7 +82,7 @@ TEST_F(Test_IO_FileSystem, GetAttribute)
 }
 
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_IO_FileSystem, Copy_Delete)
 {
 	String src1 = LOCALFILE("TestData/test1.txt");
@@ -118,7 +118,7 @@ TEST_F(Test_IO_FileSystem, Copy_Delete)
 	ASSERT_FALSE(FileSystem::ExistsFile(dest.c_str()));
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_IO_FileSystem, CreateDirectory)
 {
 	FileSystem::CreateDirectory(TEMPFILE("Test_IO_FileSystem/CreateDirectory"));
@@ -127,7 +127,7 @@ TEST_F(Test_IO_FileSystem, CreateDirectory)
 	ASSERT_FALSE(FileSystem::ExistsDirectory(TEMPFILE("Test_IO_FileSystem")));	// 消えている
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_IO_FileSystem, CopyDirectory)
 {
 	FileSystem::CreateDirectory(TEMPFILE("Test_IO_FileSystem/CopyDirectory"));
@@ -144,7 +144,7 @@ TEST_F(Test_IO_FileSystem, CopyDirectory)
 	ASSERT_EQ(true, FileSystem::ExistsFile(TEMPFILE("Test_IO_FileSystem/CopyDirectory2/dir2/file2.txt")));
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_IO_FileSystem, ForEachFilesInDirectory)
 {
 	FileSystem::CreateDirectory(TEMPFILE("Test_IO_FileSystem/ForEachFilesInDirectory"));

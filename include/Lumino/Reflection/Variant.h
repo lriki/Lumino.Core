@@ -381,9 +381,7 @@ private:
 	const std::type_info*		m_typeInfo;
 };
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 template<> struct Variant::AccessorSelector<std::nullptr_t, detail::KindPrimitive>
 {
 	static void SetValue(Variant* v, std::nullptr_t value) { v->SetNullPtr(value); }

@@ -7,7 +7,7 @@ protected:
 	virtual void TearDown() {}
 };
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_IO_PathTraits, GetFileNameWithoutExtension)
 {
 	TCHAR result[LN_MAX_PATH];

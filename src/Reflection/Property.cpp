@@ -8,14 +8,12 @@ LN_NAMESPACE_BEGIN
 namespace tr
 {
 
-//=============================================================================
+//==============================================================================
 // Property
-//=============================================================================
+//==============================================================================
 static EventArgsPool g_eventArgsPool;
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 Property::Property(TypeInfo* ownerClassType, PropertyMetadata* metadata, bool stored)
 	: m_ownerClassType(ownerClassType)
 	, m_metadata(metadata)
@@ -25,33 +23,25 @@ Property::Property(TypeInfo* ownerClassType, PropertyMetadata* metadata, bool st
 	m_ownerClassType->RegisterProperty(this);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 Property::~Property()
 {
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void Property::NotifyPropertyChanged(ReflectionObject* target, const Property* prop, const Variant& newValue, const Variant& oldValue, PropertySetSource source)
 {
 	RefPtr<PropertyChangedEventArgs> e(g_eventArgsPool.Create<PropertyChangedEventArgs>(prop, newValue, oldValue, source), false);
 	target->OnPropertyChanged(e);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void Property::SetPropertyValue(ReflectionObject* obj, const Property* prop, const Variant& value, PropertySetSource source)
 {
 	obj->SetPropertyValueInternal(prop, value, false, source);
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 Variant Property::GetPropertyValue(ReflectionObject* obj, const Property* prop)
 {
 	//if (prop->IsStored())

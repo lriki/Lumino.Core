@@ -9,7 +9,7 @@ protected:
 
 static int Func1(const StringRef& str) { return str.GetLength(); }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(IntegrateTest_Base_StringRef, Constructor)
 {
 	// <Test> 文字列リテラルと String でオーバーロードできること。

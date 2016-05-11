@@ -6,13 +6,11 @@
 
 LN_NAMESPACE_BEGIN
 
-//=============================================================================
+//==============================================================================
 // Win32CodePageEncoding
-//=============================================================================
+//==============================================================================
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 Win32CodePageEncoding::Win32CodePageEncoding(UINT codePage)
 {
 	BOOL r = ::GetCPInfoEx(codePage, 0, &m_cpInfo);
@@ -24,9 +22,7 @@ Win32CodePageEncoding::Win32CodePageEncoding(UINT codePage)
 	m_name = buf;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 int Win32CodePageEncoding::GetCharacterCount(const void* buffer, size_t bufferSize) const
 {
 	int count = 0;
@@ -43,21 +39,17 @@ int Win32CodePageEncoding::GetCharacterCount(const void* buffer, size_t bufferSi
 	return count;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 int Win32CodePageEncoding::GetLeadExtraLength(const void* buffer, size_t bufferSize) const
 {
 	return (::IsDBCSLeadByteEx(m_cpInfo.CodePage, *((const byte_t*)buffer))) ? 1 : 0;
 }
 
-//=============================================================================
+//==============================================================================
 // Win32CodePageEncoding::Win32CodePageDecoder
-//=============================================================================
+//==============================================================================
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 Win32CodePageEncoding::Win32CodePageDecoder::Win32CodePageDecoder(const CPINFOEX& cpInfo)
 	: m_codePage(cpInfo.CodePage)
 	, m_maxByteCount(cpInfo.MaxCharSize)
@@ -72,9 +64,7 @@ Win32CodePageEncoding::Win32CodePageDecoder::Win32CodePageDecoder(const CPINFOEX
 	Reset();
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void Win32CodePageEncoding::Win32CodePageDecoder::ConvertToUTF16(const byte_t* input, size_t inputByteSize, UTF16* output, size_t outputElementSize, size_t* outBytesUsed, size_t* outCharsUsed)
 {
 	if (outputElementSize > 0) {
@@ -156,13 +146,11 @@ void Win32CodePageEncoding::Win32CodePageDecoder::ConvertToUTF16(const byte_t* i
 	*outCharsUsed = count;
 }
 
-//=============================================================================
+//==============================================================================
 // Win32CodePageEncoding::Win32CodePageEncoder
-//=============================================================================
+//==============================================================================
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 Win32CodePageEncoding::Win32CodePageEncoder::Win32CodePageEncoder(const CPINFOEX& cpInfo)
 	: m_codePage(cpInfo.CodePage)
 	, m_maxByteCount(cpInfo.MaxCharSize)
@@ -174,9 +162,7 @@ Win32CodePageEncoding::Win32CodePageEncoder::Win32CodePageEncoder(const CPINFOEX
 	Reset();
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void Win32CodePageEncoding::Win32CodePageEncoder::ConvertFromUTF16(const UTF16* input, size_t inputElementSize, byte_t* output, size_t outputByteSize, size_t* outBytesUsed, size_t* outCharsUsed)
 {
 	if (outputByteSize > 0) {

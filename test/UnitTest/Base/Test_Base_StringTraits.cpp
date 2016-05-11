@@ -7,7 +7,7 @@ protected:
 	virtual void TearDown() {}
 };
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_StringUtils, StrLen)
 {
 	UTF8 str_u8[] = { 'A', 'B', 'C', 0x00 };
@@ -19,7 +19,7 @@ TEST_F(Test_Base_StringUtils, StrLen)
 	ASSERT_EQ(3, StringTraits::StrLen(str_u32));
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_StringUtils, ToUpper)
 {
 	{
@@ -42,7 +42,7 @@ TEST_F(Test_Base_StringUtils, ToUpper)
 	}
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_StringUtils, IsSpace)
 {
 	{
@@ -69,7 +69,7 @@ TEST_F(Test_Base_StringUtils, IsSpace)
 	}
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_StringUtils, Unit_Compare)
 {
 	// <Test> 文字数指定無しの全体比較
@@ -120,7 +120,7 @@ TEST_F(Test_Base_StringUtils, Unit_Compare)
 	}
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_StringUtils, EndsWith)
 {
 	// 普通に比較
@@ -222,7 +222,7 @@ TEST_F(Test_Base_StringUtils, EndsWith)
 	}
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_StringUtils, CountString)
 {
 	ASSERT_EQ(1, StringTraits::CountString(_T("abc"), -1, _T("ab"), -1));
@@ -231,7 +231,7 @@ TEST_F(Test_Base_StringUtils, CountString)
 	ASSERT_EQ(2, StringTraits::CountString(_T("*****"), -1, _T("**"), -1));
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_StringUtils, ToInt8)
 {
 	int8_t n;
@@ -259,7 +259,7 @@ TEST_F(Test_Base_StringUtils, ToInt8)
 	ASSERT_EQ(NumberConversionResult::Overflow, r);
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_StringUtils, ToUInt8)
 {
 	uint8_t n;
@@ -287,7 +287,7 @@ TEST_F(Test_Base_StringUtils, ToUInt8)
 	ASSERT_EQ(NumberConversionResult::Overflow, r);
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_StringUtils, ToInt16)
 {
 	int16_t n;
@@ -315,7 +315,7 @@ TEST_F(Test_Base_StringUtils, ToInt16)
 	ASSERT_EQ(NumberConversionResult::Overflow, r);
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_StringUtils, ToUInt16)
 {
 	uint16_t n;
@@ -343,7 +343,7 @@ TEST_F(Test_Base_StringUtils, ToUInt16)
 	ASSERT_EQ(NumberConversionResult::Overflow, r);
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_StringUtils, ToInt32)
 {
 	int32_t n;
@@ -371,7 +371,7 @@ TEST_F(Test_Base_StringUtils, ToInt32)
 	ASSERT_EQ(NumberConversionResult::Overflow, r);
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_StringUtils, ToUInt32)
 {
 	uint32_t n;
@@ -399,7 +399,7 @@ TEST_F(Test_Base_StringUtils, ToUInt32)
 	ASSERT_EQ(NumberConversionResult::Overflow, r);
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_StringUtils, ToInt64)
 {
 	int64_t n;
@@ -427,7 +427,7 @@ TEST_F(Test_Base_StringUtils, ToInt64)
 	ASSERT_EQ(NumberConversionResult::Overflow, r);
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_StringUtils, ToUInt64)
 {
 	uint64_t n;
@@ -455,7 +455,7 @@ TEST_F(Test_Base_StringUtils, ToUInt64)
 	ASSERT_EQ(NumberConversionResult::Overflow, r);
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_StringUtils, ToUInt)
 {
 	const TCHAR* str;
@@ -531,7 +531,7 @@ TEST_F(Test_Base_StringUtils, ToUInt)
 	//DBL_MAX_EXP;
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_StringUtils, ToDouble)
 {
 	const TCHAR* str;
