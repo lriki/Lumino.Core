@@ -160,7 +160,7 @@ public:
 	/** 配列用のメモリを指定したサイズで確保します。*/
 	void Reserve(int count)
 	{
-		LN_CHECK_ARGS_RETURN(count >= 0);
+		LN_CHECK_ARG(count >= 0);
 		CheckDetachShared();
 		m_data->m_vector.reserve(count);
 	}
@@ -168,7 +168,7 @@ public:
 	/** 配列の要素数を変更します。*/
 	void Resize(int count)
 	{
-		LN_CHECK_ARGS_RETURN(count >= 0);
+		LN_CHECK_ARG(count >= 0);
 		CheckDetachShared();
 		m_data->m_vector.resize(count);
 	}

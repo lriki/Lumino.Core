@@ -322,8 +322,8 @@ template void FileSystem::DeleteDirectoryInternal<wchar_t>(const GenericStringRe
 template<typename TChar>
 void FileSystem::CopyDirectoryInternal(const GenericStringRef<TChar>& srcPath, const GenericStringRef<TChar>& destPath, bool overwrite, bool recursive)
 {
-	LN_CHECK_ARGS_RETURN(!srcPath.IsEmpty());
-	LN_CHECK_ARGS_RETURN(!destPath.IsEmpty());
+	LN_CHECK_ARG(!srcPath.IsEmpty());
+	LN_CHECK_ARG(!destPath.IsEmpty());
 
 	// 上書きしないとき、すでにフォルダが存在してはならない
 	if (!overwrite)

@@ -44,8 +44,8 @@ TypeInfo::TypeInfo(const TCHAR* className, TypeInfo* baseClass, HasLocalValueFla
 //------------------------------------------------------------------------------
 void TypeInfo::RegisterProperty(Property* prop)
 {
-	LN_VERIFY_RETURN(!prop->m_registerd);
-	LN_VERIFY_RETURN(m_propertyList.GetCount() < 32);
+	LN_CHECK_ARG(!prop->m_registerd);
+	LN_CHECK_ARG(m_propertyList.GetCount() < 32);
 
 	//if (!prop->m_registerd)
 	{

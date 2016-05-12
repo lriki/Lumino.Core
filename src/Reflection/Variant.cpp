@@ -29,7 +29,7 @@ void Variant::SetNullPtr(std::nullptr_t value)
 }
 std::nullptr_t Variant::GetNullPtr() const
 {
-	LN_CHECK_STATE_RETURNV(m_type == VariantType::Null, nullptr);
+	LN_CHECK_STATE(m_type == VariantType::Null);
 	return nullptr;
 }
 void Variant::SetBool(bool value)
@@ -40,7 +40,7 @@ void Variant::SetBool(bool value)
 }
 bool Variant::GetBool() const
 {
-	LN_CHECK_STATE_RETURNV(m_type == VariantType::Bool, false);
+	LN_CHECK_STATE(m_type == VariantType::Bool);
 	return m_bool;
 }
 void Variant::SetArithmetic(int32_t value)
@@ -92,7 +92,7 @@ void Variant::SetString(const String& value)
 }
 String Variant::GetString() const
 {
-	LN_CHECK_STATE_RETURNV(m_type == VariantType::String, String::GetEmpty());
+	LN_CHECK_STATE(m_type == VariantType::String);
 	String str;
 	str.Attach(m_string);
 	return str;
@@ -105,12 +105,12 @@ void Variant::SetEnumValue(EnumValueType value)
 }
 EnumValueType Variant::GetEnumValue() const
 {
-	LN_CHECK_STATE_RETURNV(m_type == VariantType::Enum, false);
+	LN_CHECK_STATE(m_type == VariantType::Enum);
 	return m_enum;
 }
 void Variant::SetStruct(const void* value, size_t size, const std::type_info& typeInfo)
 {
-	LN_CHECK_ARGS(size <= sizeof(m_struct));
+	LN_CHECK_ARG(size <= sizeof(m_struct));
 	m_type = VariantType::Struct;
 	memcpy(m_struct, value, size);
 	m_structSize = size;
@@ -118,7 +118,7 @@ void Variant::SetStruct(const void* value, size_t size, const std::type_info& ty
 }
 const void* Variant::GetStruct() const
 {
-	LN_CHECK_STATE_RETURNV(m_type == VariantType::Struct, nullptr);
+	LN_CHECK_STATE(m_type == VariantType::Struct);
 	return (const void*)m_struct;
 }
 void Variant::SetReflectionObject(ReflectionObject* obj)

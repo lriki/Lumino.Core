@@ -12,7 +12,7 @@ LN_NAMESPACE_BEGIN
 JsonWriter::JsonWriter(TextWriter* textWriter)
 	: m_textWriter(textWriter)
 {
-	LN_VERIFY_RETURN(m_textWriter != NULL);
+	LN_CHECK_ARG(m_textWriter != NULL);
 	m_levelStack.Reserve(32);
 }
 
@@ -32,8 +32,8 @@ void JsonWriter::WriteStartObject()
 //------------------------------------------------------------------------------
 void JsonWriter::WriteEndObject()
 {
-	LN_VERIFY_RETURN(m_levelStack.GetCount() >= 1);
-	LN_VERIFY_RETURN(!m_levelStack.GetTop().inArray);
+	LN_CHECK_ARG(m_levelStack.GetCount() >= 1);
+	LN_CHECK_ARG(!m_levelStack.GetTop().inArray);
 
 	m_levelStack.Pop();
 	OnEndObject();
@@ -54,8 +54,8 @@ void JsonWriter::WriteStartArray()
 //------------------------------------------------------------------------------
 void JsonWriter::WriteEndArray()
 {
-	LN_VERIFY_RETURN(m_levelStack.GetCount() >= 2);
-	LN_VERIFY_RETURN(m_levelStack.GetTop().inArray);
+	LN_CHECK_ARG(m_levelStack.GetCount() >= 2);
+	LN_CHECK_ARG(m_levelStack.GetTop().inArray);
 
 	m_levelStack.Pop();
 	OnEndArray();
@@ -65,7 +65,7 @@ void JsonWriter::WriteEndArray()
 //------------------------------------------------------------------------------
 void JsonWriter::WritePropertyName(const TCHAR* str, int length)
 {
-	LN_VERIFY_RETURN(m_levelStack.GetCount() >= 1);
+	LN_CHECK_ARG(m_levelStack.GetCount() >= 1);
 	length = (length <= -1) ? StringTraits::StrLen(str) : 0;
 
 	AutoComplete(JsonToken::PropertyName);
@@ -76,7 +76,7 @@ void JsonWriter::WritePropertyName(const TCHAR* str, int length)
 //------------------------------------------------------------------------------
 void JsonWriter::WriteNull()
 {
-	LN_VERIFY_RETURN(m_levelStack.GetCount() >= 1);
+	LN_CHECK_ARG(m_levelStack.GetCount() >= 1);
 
 	AutoComplete(JsonToken::Null);
 	OnNull();
@@ -86,7 +86,7 @@ void JsonWriter::WriteNull()
 //------------------------------------------------------------------------------
 void JsonWriter::WriteBool(bool value)
 {
-	LN_VERIFY_RETURN(m_levelStack.GetCount() >= 1);
+	LN_CHECK_ARG(m_levelStack.GetCount() >= 1);
 
 	AutoComplete(JsonToken::Boolean);
 	OnBool(value);
@@ -96,7 +96,7 @@ void JsonWriter::WriteBool(bool value)
 //------------------------------------------------------------------------------
 void JsonWriter::WriteDouble(double value)
 {
-	LN_VERIFY_RETURN(m_levelStack.GetCount() >= 1);
+	LN_CHECK_ARG(m_levelStack.GetCount() >= 1);
 
 	AutoComplete(JsonToken::Double);
 	OnDouble(value);
@@ -106,7 +106,7 @@ void JsonWriter::WriteDouble(double value)
 //------------------------------------------------------------------------------
 void JsonWriter::WriteString(const TCHAR* str, int length)	// TODO: StringRef
 {
-	LN_VERIFY_RETURN(m_levelStack.GetCount() >= 1);
+	LN_CHECK_ARG(m_levelStack.GetCount() >= 1);
 	length = (length <= -1) ? StringTraits::StrLen(str) : 0;
 
 	AutoComplete(JsonToken::String);

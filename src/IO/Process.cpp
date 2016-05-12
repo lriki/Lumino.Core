@@ -123,21 +123,21 @@ void Process::Start(const PathName& program, const StringArray& argsList)
 //------------------------------------------------------------------------------
 StreamWriter* Process::GetStandardInput() const
 {
-	LN_CHECK_STATE(m_standardInputWriter != nullptr, "Not redirected.");
+	LN_CHECK_STATE(m_standardInputWriter != nullptr);
 	return m_standardInputWriter;
 }
 
 //------------------------------------------------------------------------------
 StreamReader* Process::GetStandardOutput() const
 {
-	LN_CHECK_STATE(m_standardOutputReader != nullptr, "Not redirected.");
+	LN_CHECK_STATE(m_standardOutputReader != nullptr);
 	return m_standardOutputReader;
 }
 
 //------------------------------------------------------------------------------
 StreamReader* Process::GetStandardError() const
 {
-	LN_CHECK_STATE(m_standardErrorReader != nullptr, "Not redirected.");
+	LN_CHECK_STATE(m_standardErrorReader != nullptr);
 	return m_standardErrorReader;
 }
 

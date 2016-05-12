@@ -44,117 +44,27 @@
 	}
 
 
-#define LN_DO_CHECK	// TODO: とりあえず
-#define LN_DO_CHECK_THROW	// TODO: とりあえず
 
-#ifdef LN_DO_CHECK
-	#ifdef LN_DO_CHECK_THROW
-		#define _LN_VERIFY_ASSERT_INTERNAL(exp, exception)	(AssertInternalThrow<exception>(exp, __FILE__, __LINE__))
-	#else
-		#define _LN_VERIFY_ASSERT_INTERNAL(exp, exception)	(AssertInternal(exp))
-	#endif
-#else
-	#define _LN_VERIFY_ASSERT_INTERNAL(exp, exception)	(exp)
+// TODO: コンパイルオプションで指定したい
+#define LN_DO_CHECK_ASSERT
+//#define LN_DO_CHECK_THROW
+
+#if defined(LN_DO_CHECK_ASSERT)
+	#define LN_CHECK_ARG(expression)	assert(expression);
+	#define LN_CHECK_STATE(expression)	assert(expression);
+#elif defined(LN_DO_CHECK_THROW)
+	#define LN_CHECK_ARG(expression)	LN_THROW(expression, ::ln::ArgumentException, #expression);
+	#define LN_CHECK_STATE(expression)	LN_THROW(expression, ::ln::InvalidOperationException, #expression);
+#elif
+	#define LN_CHECK_ARG(expression)
+	#define LN_CHECK_STATE(expression)
 #endif
 
-#ifdef LN_DO_CHECK_THROW
-	#define _LN_ENSURE_ASSERT_INTERNAL(exp, exception)	(AssertInternalThrow<exception>(exp, __FILE__, __LINE__))
-#else
-	#define _LN_ENSURE_ASSERT_INTERNAL(exp, exception)	(AssertInternal(exp))
-#endif
-
-///*
-//	LN_VERIFY	… assert と似た動作をするが、Release モードでも表現式は実行される。
-//	LN_ENSURE	… Release モードでもエラーが生成される。現在は例外を throw する。
-//*/
-//
-///**
-//	@brief	LN_DO_CHECK が有効の場合、表現式を実行し結果が false であればアサートします。LN_DO_CHECK が無効でも表現式は実行されます。
-//	@code
-//			if (LN_VERIFY(stream != NULL))
-//			{
-//				stream->Read(...);
-//			}
-//	@endcode
-//*/
-//#define LN_VERIFY(exp)	_LN_VERIFY_ASSERT_INTERNAL(exp, Exception)
-//
-///**
-//	@brief	LN_DO_CHECK が有効の場合、表現式を実行し結果が true であればアサートします。LN_DO_CHECK が無効でも表現式は実行されます。
-//	@code
-//			if (LN_VERIFY_ASSERT(stream != NULL)) { return; }
-//			stream->Read(...);
-//	@endcode
-//*/
-//#define LN_VERIFY_ASSERT(exp)	(!(_LN_VERIFY_ASSERT_INTERNAL(exp, Exception)))
-
-/**
-	@brief		式の結果が false であれば return により処理を中断します。
-	@details	assert と似ていますが、DEBUG シンボルの定義有無にかかわらず式は必ず実行されます。
-				LN_DO_CHECK が有効の場合、式の結果が false であればアサートします。
-	@code
-				void ToInt(const char* text, int** outValue)
-				{
-					LN_VERIFY_RETURN(text != NULL);
-					LN_VERIFY_RETURN(outPos != NULL, "outValue is NULL.");
-					...
-					*outValue = XXXX;
-				}
-	@endcode
-*/
-#define LN_VERIFY_RETURN(exp, ...)					if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::ln::VerifyException)) { return; }
-
-/**
-	@brief		式の結果が false であれば return により処理を中断します。return で使用する戻り値を指定します。
-	@see		LN_VERIFY_RETURN
-	@code
-				bool ToInt(const char* text, int** outValue)
-				{
-					LN_VERIFY_RETURN(text != NULL, false);
-					LN_VERIFY_RETURN(outValue != NULL, false, "outValue is NULL.");
-					...
-					*outValue = XXXX;
-					return true;
-				}
-	@endcode
-*/
-#define LN_VERIFY_RETURNV(exp, returnValue, ...)	if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::ln::VerifyException)) { return returnValue; }
-
-
-// 試験運用中
-#define LN_VERIFY_ARGS(exp)							_LN_VERIFY_ASSERT_INTERNAL(exp, ::ln::ArgumentException)
-#define LN_VERIFY_ARGS_RETURN(exp)					if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::ln::ArgumentException)) { return; }
-#define LN_VERIFY_ARGS_RETURNV(exp, returnValue)	if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::ln::ArgumentException)) { return returnValue; }
-
-// 試験運用中。Release でも例外を throw する。中身は TODO。必ず throw なら RETURN はいらない気がする・・・
-#define LN_CHECK_ARGS(exp)							_LN_VERIFY_ASSERT_INTERNAL(exp, ln::ArgumentException)
-#define LN_CHECK_ARGS_RETURN(exp)					if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::ln::ArgumentException)) { return; }
-#define LN_CHECK_ARGS_RETURNV(exp, returnValue)		if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::ln::ArgumentException)) { return returnValue; }
-#define LN_CHECK_STATE(exp, ...)						_LN_VERIFY_ASSERT_INTERNAL(exp, ln::InvalidOperationException)
-#define LN_CHECK_STATE_RETURN(exp, ...)					if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::ln::InvalidOperationException)) { return; }
-#define LN_CHECK_STATE_RETURNV(exp, returnValue, ...)	if (!_LN_VERIFY_ASSERT_INTERNAL(exp, ::ln::InvalidOperationException)) { return returnValue; }
 
 //
 #define LN_NOTIMPLEMENTED(...)	LN_THROW(0, ln::NotImplementedException, __VA_ARGS__);
 
 LN_NAMESPACE_BEGIN
-
-	inline bool AssertInternal(bool result) 	// result が false であれば assert
-	{ 
-		assert(result);
-		return result;
-	}
-
-	template<typename TException>
-	inline bool AssertInternalThrow(bool result, const char* file, int line)	// result が false であれば throw
-	{ 
-		if (!result) {
-			TException e = TException();// (__VA_ARGS__)
-			e.SetSourceLocationInfo(file, line);
-			throw e;
-		}
-		return result;
-	}
 
 /**
 	@brief	例外ベースクラス

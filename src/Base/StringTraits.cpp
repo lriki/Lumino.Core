@@ -321,8 +321,8 @@ int StringTraits::LastIndexOf(const TChar* str1, int str1Len, const TChar* str2,
 		return (str2Len == 0) ? 0 : -1;
 	}
 
-	LN_VERIFY_RETURNV(startIndex >= 0, -1);			// startIndex は 0 以上でなければならない。
-	LN_VERIFY_RETURNV(startIndex < str1Len, -1);	// startIndex は str1 の長さを超えてはならない。
+	LN_CHECK_ARG(startIndex >= 0);			// startIndex は 0 以上でなければならない。
+	LN_CHECK_ARG(startIndex < str1Len);		// startIndex は str1 の長さを超えてはならない。
 
 	// 検索文字数が 0 の場合は必ず検索開始位置でヒットする (strstr と同じ動作)
 	if (str2Len == 0 && count >= 0 && startIndex - count + 1 >= 0) {
@@ -331,7 +331,7 @@ int StringTraits::LastIndexOf(const TChar* str1, int str1Len, const TChar* str2,
 
 	const TChar* pos = str1 + startIndex;							// 検索範囲の末尾の文字を指す。
 	const TChar* end = (count < 0) ? str1 : pos - (count - 1);		// 検索範囲の先頭の文字を指す。
-	LN_VERIFY_RETURNV(end <= pos, -1);								// 末尾と先頭が逆転してないこと。
+	LN_CHECK_ARG(end <= pos);										// 末尾と先頭が逆転してないこと。
 
 	if (pos - end < (str2Len-1)) {
 		return -1;	// 検索範囲が検索文字数よりも少ない場合は見つかるはずがない

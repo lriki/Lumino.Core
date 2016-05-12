@@ -20,7 +20,8 @@ void JsonDocument::Parse(const String& text)
 }
 void JsonDocument::Parse(const TCHAR* text, int len)
 {
-	LN_CHECK_ARGS_RETURN(text != NULL);
+	LN_CHECK_ARG(text != NULL);
+
 	StringReader textReader(String(text, (len < 0) ? StringTraits::StrLen(text) : len));
 	Parse(&textReader);
 }
