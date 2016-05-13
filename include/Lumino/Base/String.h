@@ -95,6 +95,7 @@ public:
 	GenericString(const TChar* str, int length);
 	GenericString(const TChar* str, int begin, int length);
 	GenericString(TChar ch);
+	GenericString(int count, TChar ch);
 
 	// YCHAR (対の文字型は AssignCStr で文字コード変換を行う)
 	GenericString(const GenericString<YCHAR>& str);
@@ -577,6 +578,7 @@ private:
 	friend class tr::Variant;
 	void Attach(detail::GenericStringCore<TChar>* core);
 	void AssignTString(const TChar* str, int len);
+	void AssignTString(int count, TChar ch);
 	void Realloc();
 	TChar& InternalGetAt(int index);
 	const TChar& InternalGetAt(int index) const;

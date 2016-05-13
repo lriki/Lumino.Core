@@ -142,51 +142,51 @@ GenericString<TChar>::~GenericString()
 //------------------------------------------------------------------------------
 template<typename TChar>
 GenericString<TChar>::GenericString(const GenericString& str)
-	: m_ref(NULL)
-	, m_string(NULL)
+	: m_ref(nullptr)
+	, m_string(nullptr)
 {
 	Attach(str.m_string);
 	m_ref = m_string->c_str();
 }
 template<typename TChar>
 GenericString<TChar>::GenericString(const GenericString& str, int length)
-	: m_ref(NULL)
-	, m_string(NULL)
+	: m_ref(nullptr)
+	, m_string(nullptr)
 {
 	AssignTString(str.m_string->c_str(), length);
 }
 template<typename TChar>
 GenericString<TChar>::GenericString(const GenericString& str, int begin, int length)
-	: m_ref(NULL)
-	, m_string(NULL)
+	: m_ref(nullptr)
+	, m_string(nullptr)
 {
 	AssignTString(str.m_string->c_str() + begin, length);	// str+begin にしないと、暗黙的コンストラクタの呼び出しが発生してしまう
 }
 template<typename TChar>
 GenericString<TChar>::GenericString(const StringRefT& str)
-	: m_ref(NULL)
-	, m_string(NULL)
+	: m_ref(nullptr)
+	, m_string(nullptr)
 {
 	AssignTString(str.GetBegin(), str.GetLength());
 }
 template<typename TChar>
 GenericString<TChar>::GenericString(const TChar* str)
-	: m_ref(NULL)
-	, m_string(NULL)
+	: m_ref(nullptr)
+	, m_string(nullptr)
 {
 	AssignTString(str, -1);
 }
 template<typename TChar>
 GenericString<TChar>::GenericString(const TChar* str, int length)
-	: m_ref(NULL)
-	, m_string(NULL)
+	: m_ref(nullptr)
+	, m_string(nullptr)
 {
 	AssignTString(str, length);
 }
 template<typename TChar>
 GenericString<TChar>::GenericString(const TChar* str, int begin, int length)
-	: m_ref(NULL)
-	, m_string(NULL)
+	: m_ref(nullptr)
+	, m_string(nullptr)
 {
 	AssignTString(str + begin, length);
 }
@@ -196,48 +196,56 @@ GenericString<TChar>::GenericString(TChar ch)
 {
 }
 
+template<typename TChar>
+GenericString<TChar>::GenericString(int count, TChar ch)
+	: m_ref(nullptr)
+	, m_string(nullptr)
+{
+	AssignTString(count, ch);
+}
+
 //------------------------------------------------------------------------------
 // YCHAR コンストラクタ系
 //------------------------------------------------------------------------------
 template<typename TChar>
 GenericString<TChar>::GenericString(const GenericString<YCHAR>& str)
-	: m_ref(NULL)
-	, m_string(NULL)
+	: m_ref(nullptr)
+	, m_string(nullptr)
 {
 	AssignCStr(str.c_str());
 }
 template<typename TChar>
 GenericString<TChar>::GenericString(const GenericString<YCHAR>& str, int length)
-	: m_ref(NULL)
-	, m_string(NULL)
+	: m_ref(nullptr)
+	, m_string(nullptr)
 {
 	AssignCStr(str.c_str(), length);
 }
 template<typename TChar>
 GenericString<TChar>::GenericString(const GenericString<YCHAR>& str, int begin, int length)
-	: m_ref(NULL)
-	, m_string(NULL)
+	: m_ref(nullptr)
+	, m_string(nullptr)
 {
 	AssignCStr(str.c_str(), begin, length);
 }
 template<typename TChar>
 GenericString<TChar>::GenericString(const YCHAR* str)
-	: m_ref(NULL)
-	, m_string(NULL)
+	: m_ref(nullptr)
+	, m_string(nullptr)
 {
 	AssignCStr(str);
 }
 template<typename TChar>
 GenericString<TChar>::GenericString(const YCHAR* str, int length)
-	: m_ref(NULL)
-	, m_string(NULL)
+	: m_ref(nullptr)
+	, m_string(nullptr)
 {
 	AssignCStr(str, length);
 }
 template<typename TChar>
 GenericString<TChar>::GenericString(const YCHAR* str, int begin, int length)
-	: m_ref(NULL)
-	, m_string(NULL)
+	: m_ref(nullptr)
+	, m_string(nullptr)
 {
 	AssignCStr(str, begin, length);
 }
@@ -408,7 +416,7 @@ void GenericString<TChar>::Append(const GenericString& str, int len)
 template<typename TChar>
 void GenericString<TChar>::Append(const TChar* str, int len)
 {
-	if (str == NULL || len == 0) {
+	if (str == nullptr || len == 0) {
 		return;		// 空文字列なので何もしない
 	}
 	Realloc();	// 共有参照を切る
@@ -425,11 +433,11 @@ void GenericString<TChar>::Append(TChar ch)
 template<typename TChar>
 void GenericString<TChar>::AssignCStr(const char* str, int begin, int length, bool* outUsedDefaultChar)
 {
-	if (str == NULL) {
+	if (str == nullptr) {
 		SetEmpty();
 		return;
 	}
-	//LN_THROW(str != NULL, ArgumentException);	// std::string の assign は NULL が渡されたときの動作は未定義。VS2013 では制御が返ってこなくなった
+	//LN_THROW(str != nullptr, ArgumentException);	// std::string の assign は nullptr が渡されたときの動作は未定義。VS2013 では制御が返ってこなくなった
 
 	if (length <= -1) {
 		length = INT_MAX;
@@ -459,11 +467,11 @@ void GenericString<TChar>::AssignCStr(const char* str, bool* usedDefaultChar)
 template<typename TChar>
 void GenericString<TChar>::AssignCStr(const wchar_t* str, int begin, int length, bool* outUsedDefaultChar)
 {
-	if (str == NULL) {
+	if (str == nullptr) {
 		SetEmpty();
 		return;
 	}
-	//LN_THROW(str != NULL, ArgumentException);	// std::string の assign は NULL が渡されたときの動作は未定義。VS2013 では制御が返ってこなくなった
+	//LN_THROW(str != nullptr, ArgumentException);	// std::string の assign は nullptr が渡されたときの動作は未定義。VS2013 では制御が返ってこなくなった
 
 	if (length <= -1) {
 		length = INT_MAX;
@@ -510,7 +518,7 @@ void GenericString<TChar>::ConvertFrom(const void* buffer, int byteCount, const 
 
 		EncodingConversionResult result;
 		const ByteBuffer tmpBuffer = Encoding::Convert(buffer, byteCount, encoding, thisTypeEncoding, options, &result);
-		if (outUsedDefaultChar != NULL) {
+		if (outUsedDefaultChar != nullptr) {
 			*outUsedDefaultChar = result.UsedDefaultChar;
 		}
 
@@ -527,7 +535,7 @@ ByteBuffer GenericString<TChar>::ConvertTo(const Encoding* encoding, bool* outUs
 
 	EncodingConversionResult result;
 	const ByteBuffer buf = Encoding::Convert(c_str(), GetByteCount(), GetThisTypeEncoding(), encoding, options, &result);
-	if (outUsedDefaultChar != NULL) {
+	if (outUsedDefaultChar != nullptr) {
 		*outUsedDefaultChar = result.UsedDefaultChar;
 	}
 
@@ -789,7 +797,7 @@ uint64_t GenericString<TChar>::ToUInt64(int base) const { TO_INT_DEF(uint64_t, T
 	type num = StringTraits::func(str, len, base, &end, &res); \
 	if (end != str + len) { return false; } \
 	if (res != NumberConversionResult::Success) { return false; } \
-	if (outValue != NULL) { *outValue = num; } \
+	if (outValue != nullptr) { *outValue = num; } \
 	return true;
 
 template<typename TChar>
@@ -945,7 +953,7 @@ template<typename TChar>
 void GenericString<TChar>::AssignTString(const TChar* str, int len)
 {
 	LN_SAFE_RELEASE(m_string);
-	if (str == NULL || len == 0)
+	if (str == nullptr || len == 0)
 	{
 		// 空の文字列になる場合は共有の空文字列を参照する
 		Attach(detail::GenericStringCore<TChar>::GetSharedEmpty());
@@ -954,6 +962,24 @@ void GenericString<TChar>::AssignTString(const TChar* str, int len)
 	{
 		m_string = LN_NEW detail::GenericStringCore<TChar>();	// 参照カウントは 1
 		m_string->assign(str, (len < 0) ? StringTraits::StrLen(str) : len);
+	}
+	m_ref = m_string->c_str();
+}
+
+//------------------------------------------------------------------------------
+template<typename TChar>
+void GenericString<TChar>::AssignTString(int count, TChar ch)
+{
+	LN_SAFE_RELEASE(m_string);
+	if (count == 0)
+	{
+		// 空の文字列になる場合は共有の空文字列を参照する
+		Attach(detail::GenericStringCore<TChar>::GetSharedEmpty());
+	}
+	else
+	{
+		m_string = LN_NEW detail::GenericStringCore<TChar>();	// 参照カウントは 1
+		m_string->assign((size_t)count, ch);
 	}
 	m_ref = m_string->c_str();
 }
