@@ -240,13 +240,13 @@ void Environment::GetSpecialFolderPath(SpecialFolder specialFolder, TChar* outPa
 
 	FSRef ref;
 	if (FSFindFolder(domain, type, false, &ref) != 0) {
-		LN_THROW(0, SystemException);
+		LN_THROW(0, RuntimeException);
 		return;
 	}
 
 	ByteBuffer buf(2048);
 	if (FSRefMakePath(&ref, reinterpret_cast<UInt8 *>(buf.GetData()), buf.GetSize()) != noErr) {
-		LN_THROW(0, SystemException);
+		LN_THROW(0, RuntimeException);
 		return;
 	}
 

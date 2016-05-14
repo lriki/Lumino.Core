@@ -329,17 +329,17 @@ public:
 };
 
 /**
-	@brief	システムAPIの呼び出しで予期しないエラーが発生した。
+	@brief	ランタイム機能の呼び出しで予期しないエラーが発生した。
 */
-class SystemException
+class RuntimeException
 	: public Exception
 {
 public:
-	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECLARE(SystemException);
+	LN_EXCEPTION_BASIC_CONSTRUCTOR_DECLARE(RuntimeException);
 
 public:
 	// override Exception
-	virtual Exception* Copy() const { return LN_NEW SystemException(*this); }
+	virtual Exception* Copy() const { return LN_NEW RuntimeException(*this); }
 };
 
 #ifdef LN_OS_WIN32

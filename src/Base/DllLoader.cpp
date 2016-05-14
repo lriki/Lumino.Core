@@ -85,6 +85,14 @@ void DllLoader::Load(const TCHAR* filePath)
 }
 
 //------------------------------------------------------------------------------
+bool DllLoader::TryLoad(const TCHAR* filePath)
+{
+	Unload();
+	m_module = LoadDLL(filePath);
+	return m_module != NULL;
+}
+
+//------------------------------------------------------------------------------
 void DllLoader::Unload()
 {
 	if (m_module != NULL)

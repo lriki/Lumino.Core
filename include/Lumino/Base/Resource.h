@@ -1,82 +1,34 @@
-﻿/**
-	@file	Resource.h
-*/
+﻿
 #pragma once
 #include <map>
 #include "String.h"
 
 LN_NAMESPACE_BEGIN
 
-/**
-	@brief	
-*/
-class ResourceManager
+namespace InternalResource
 {
-public:
+	extern const String UnknownError;
+	extern const String VerifyError;
+	extern const String ArgumentError;
+	extern const String InvalidOperationError;
+	extern const String NotImplementedError;
+	extern const String OutOfMemoryError;
+	extern const String OutOfRangeError;
+	extern const String KeyNotFoundError;
+	extern const String OverflowError;
+	extern const String IOError;
+	extern const String FileNotFoundError;
+	extern const String DirectoryNotFoundError;
+	extern const String InvalidFormatError;
+	extern const String EndOfStreamError;
+	extern const String EncodingError;
+	extern const String RuntimeError;
+	extern const String Win32Error;
+	extern const String ComError;
+	extern const String OpenGLError;
 
-	/**
-		@brief		指定したリソース名に対応する文字列リソースを取得します。
-		@return		文字列リソース。見つからない場合は空文字列を返します。
-	*/
-	const String& GetString(const String& name);
-
-	/**
-		@brief	指定したリソース名に対応する文字列リソースを追加します。
-	*/
-	void AddString(const String& name, const String& value);
-
-private:
-	std::map<String, String>	m_stringMap;
-};
-
-/**
-	@brief	
-*/
-class InternalResource
-{
-public:
-	static const String UnknownError;
-	static const String VerifyError;
-	static const String ArgumentError;
-	static const String InvalidOperationError;
-	static const String NotImplementedError;
-	static const String OutOfMemoryError;
-	static const String OutOfRangeError;
-	static const String KeyNotFoundError;
-	static const String OverflowError;
-	static const String IOError;
-	static const String FileNotFoundError;
-	static const String DirectoryNotFoundError;
-	static const String InvalidFormatError;
-	static const String EndOfStreamError;
-	static const String EncodingError;
-	static const String SystemError;
-	static const String Win32Error;
-	static const String ComError;
-
-	static const String OpenGLError;
-
-public:
-	static const String& GetString(const String& name);
-};
-
-/**
-	@brief	
-*/
-class Resources
-{
-public:
-
-	/**
-		@brief		指定したリソースファイルを規定のリソースとしてロードします。
-	*/
-	static void RegisterResource(const String& filePath);
-
-	/**
-		@brief		指定したリソース名に対応する文字列リソースを取得します。
-	*/
-	static const String& GetString(const String& name);
-	
+	extern const String& GetString(const String& name);
+	extern void SetString(const String& name, const String& value);
 };
 
 LN_NAMESPACE_END

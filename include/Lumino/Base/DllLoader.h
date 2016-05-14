@@ -44,8 +44,15 @@ public:
 	/**
 		@brief		指定したライブラリをロードします。
 		@param[in]	filePath	: ライブラリの名前またはパス
+		@exception	FileNotFoundException
 	*/
 	void Load(const TCHAR* filePath);
+
+	/**
+		@brief		指定したライブラリをロードします。
+		@param[in]	filePath	: ライブラリの名前またはパス
+	*/
+	bool TryLoad(const TCHAR* filePath);
 
 	/**
 		@brief		ロード済みのライブラリを解放します。
