@@ -48,8 +48,8 @@ public:
 		@param[in]	str		: 書き込む文字列
 		@param[in]	len		: 書き込む文字数 (-1 の場合は \0 まで)
 	*/
-	void Write(const TCHAR* str, int len = -1);
-	void Write(const String& str);
+	//void Write(const TCHAR* str, int len = -1);
+	//void Write(const String& str);
 
 	/**
 		@brief		文字を書き込みます。
@@ -76,7 +76,10 @@ public:
 	*/
 	void Write(float value);
 	void Write(double value);			/**< @copydoc Write(float) */
-	
+
+	template<typename... TArgs>
+	void Write(const StringRef& str, const TArgs&... args) { String s = String::Format(str, args...); WriteInternal(s.c_str(), s.GetLength()); }
+
 	/**
 		@brief		改行を書き込みます。
 	*/

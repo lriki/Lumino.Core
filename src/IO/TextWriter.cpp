@@ -84,30 +84,30 @@ void TextWriter::SetFormatLocale(const Locale& locale)
 	m_locale = locale;
 }
 
-//------------------------------------------------------------------------------
-void TextWriter::Write(const TCHAR* str, int len)
-{
-	WriteInternal(str, (len < 0) ? StringTraits::StrLen(str) : len);
-}
-
-//------------------------------------------------------------------------------
-void TextWriter::Write(const String& str)
-{
-	WriteInternal(str.c_str(), str.GetLength());
-}
-
-
-	/**
-		@brief		書式を指定して文字列を書き込みます。
-		@param[in]	str		: 書式指定文字列
-		@param[in]	...		: 引数リスト
-		@details	注意点等は String::Format() を参照してください。
-	*/
-//	void WriteFormat(const TCHAR* format, ...);
-//void TextWriter::WriteFormat(const TCHAR* format, ...)
+////------------------------------------------------------------------------------
+//void TextWriter::Write(const TCHAR* str, int len)
 //{
-//	LN_THROW(0, NotImplementedException);
+//	WriteInternal(str, (len < 0) ? StringTraits::StrLen(str) : len);
 //}
+//
+////------------------------------------------------------------------------------
+//void TextWriter::Write(const String& str)
+//{
+//	WriteInternal(str.c_str(), str.GetLength());
+//}
+//
+//
+//	/**
+//		@brief		書式を指定して文字列を書き込みます。
+//		@param[in]	str		: 書式指定文字列
+//		@param[in]	...		: 引数リスト
+//		@details	注意点等は String::Format() を参照してください。
+//	*/
+////	void WriteFormat(const TCHAR* format, ...);
+////void TextWriter::WriteFormat(const TCHAR* format, ...)
+////{
+////	LN_THROW(0, NotImplementedException);
+////}
 
 //------------------------------------------------------------------------------
 void TextWriter::Write(TCHAR ch)
