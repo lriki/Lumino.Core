@@ -1,5 +1,4 @@
 ﻿#include <TestConfig.h>
-using namespace Threading;
 
 class Test_Threading_EventFlag : public ::testing::Test
 {

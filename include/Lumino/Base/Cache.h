@@ -156,7 +156,7 @@ private:
 
 	CacheUnusedList*	m_cacheUnusedList;
 	CacheUsingMap		m_cacheUsingMap;
-	Threading::Mutex	m_mutex;
+	Mutex				m_mutex;
 };
 
 LN_NAMESPACE_END

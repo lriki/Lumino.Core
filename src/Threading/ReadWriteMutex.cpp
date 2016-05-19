@@ -3,8 +3,6 @@
 #include "../../include/Lumino/Threading/ReadWriteMutex.h"
 
 LN_NAMESPACE_BEGIN
-namespace Threading
-{
 
 #ifdef LN_THREAD_WIN32
 //==============================================================================
@@ -169,5 +167,4 @@ void ReadWriteMutex::UnlockWrite()
 }
 #endif
 
-} // namespace Threading
 LN_NAMESPACE_END

@@ -3,8 +3,6 @@
 #include "../../include/Lumino/Threading/Atomic.h"
 
 LN_NAMESPACE_BEGIN
-namespace Threading
-{
 
 #ifdef LN_THREAD_WIN32
 //==============================================================================
@@ -104,5 +102,4 @@ int32_t Atomic::Decrement()
 
 #endif
 
-} // namespace Threading
 LN_NAMESPACE_END

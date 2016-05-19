@@ -1,6 +1,5 @@
 ﻿#include <TestConfig.h>
 #include <atomic>
-using namespace ln::Threading;
 
 class Test_Threading_Atomic : public ::testing::Test
 {

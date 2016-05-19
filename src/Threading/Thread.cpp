@@ -16,8 +16,6 @@
 #include "../../include/Lumino/Threading/ThreadingExceptions.h"
 
 LN_NAMESPACE_BEGIN
-namespace Threading
-{
 
 #ifdef LN_THREAD_WIN32
 //==============================================================================
@@ -295,5 +293,4 @@ void DelegateThread::Execute()
 	}
 }
 
-} // namespace Threading
 LN_NAMESPACE_END

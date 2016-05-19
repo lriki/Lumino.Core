@@ -1,11 +1,7 @@
 ﻿
 #pragma once
 
-#include "../Base/NonCopyable.h"
-
 LN_NAMESPACE_BEGIN
-namespace Threading
-{
 
 /**
 	@page	Doc_Threading
@@ -33,7 +29,6 @@ namespace Threading
 	@endcode
  */
 class LUMINO_EXPORT Mutex
-    : public NonCopyable
 {
 public:
     Mutex();
@@ -48,6 +43,7 @@ public:
     void Unlock();
 
 private:
+	LN_DISALLOW_COPY_AND_ASSIGN(Mutex);
 #ifdef LN_THREAD_WIN32
     mutable CRITICAL_SECTION m_CriticalSection;
 #else
@@ -92,5 +88,4 @@ private:
     Mutex& m_Mutex;
 };
 
-} // namespace Threading
 LN_NAMESPACE_END

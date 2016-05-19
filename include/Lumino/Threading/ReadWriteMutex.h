@@ -1,11 +1,7 @@
 ﻿
 #pragma once
 
-#include "../Base/NonCopyable.h"
-
 LN_NAMESPACE_BEGIN
-namespace Threading
-{
 
 /**
 	@page	Doc_Threading
@@ -40,7 +36,6 @@ namespace Threading
 	@brief	複数の読み取りロックと、1つの書き込みロックを行う Mutex
 */
 class ReadWriteMutex
-	: public NonCopyable
 {
 public:
 	ReadWriteMutex();
@@ -69,6 +64,7 @@ public:
 	void UnlockWrite();
 
 private:
+	LN_DISALLOW_COPY_AND_ASSIGN(ReadWriteMutex);
 
 #ifdef LN_THREAD_WIN32
 	CRITICAL_SECTION    mReaderCountLock;
@@ -86,5 +82,4 @@ private:
 #endif
 };
 
-} // namespace Threading
 LN_NAMESPACE_END

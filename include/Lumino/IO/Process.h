@@ -219,8 +219,8 @@ private:
 	Delegate01<String>			m_outputDataReceivedCallback;
 	Delegate01<String>			m_errorDataReceivedCallback;
 #endif
-	Threading::DelegateThread	m_readStdOutputThread;
-	Threading::DelegateThread	m_readStdErrorThread;
+	DelegateThread				m_readStdOutputThread;
+	DelegateThread				m_readStdErrorThread;
 	int							m_exitCode;
 	bool						m_crashed;
 	bool						m_disposed;

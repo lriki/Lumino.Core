@@ -36,7 +36,7 @@ TEST_F(IntegrateTest_Threading_Task, Basic)
 	//Threading::Thread::Sleep(200);
 	while (g_value != level + 1);
 	ASSERT_EQ(level + 1, g_value);
-	Threading::Thread::Sleep(200);
+	Thread::Sleep(200);
 	for (int i = 0; i < level + 1; ++i)
 	{
 		ASSERT_EQ(true, tasks[i]->IsCompleted());

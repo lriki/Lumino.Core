@@ -64,7 +64,7 @@ private:
 	friend class ReflectionHelper;
 	detail::WeakRefInfo* RequestWeakRefInfo()
 	{
-		Threading::MutexScopedLock lock(m_weakRefInfoMutex);
+		MutexScopedLock lock(m_weakRefInfoMutex);
 		if (m_weakRefInfo == nullptr)
 		{
 			m_weakRefInfo = LN_NEW detail::WeakRefInfo();
@@ -73,7 +73,7 @@ private:
 		return m_weakRefInfo;
 	}
 	detail::WeakRefInfo*	m_weakRefInfo;
-	Threading::Mutex		m_weakRefInfoMutex;
+	Mutex					m_weakRefInfoMutex;
 };
 
 /**

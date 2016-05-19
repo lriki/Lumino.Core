@@ -406,7 +406,7 @@ void CacheManager::Finalize()
 //------------------------------------------------------------------------------
 void CacheManager::RegisterCacheObject(const CacheKey& key, ICacheObject* obj)
 {
-	Threading::MutexScopedLock lock(m_mutex);
+	MutexScopedLock lock(m_mutex);
 
 	ICacheObject::CacheObjectInfo& info = obj->GetCacheObjectInfo();
 
@@ -423,7 +423,7 @@ void CacheManager::RegisterCacheObject(const CacheKey& key, ICacheObject* obj)
 //------------------------------------------------------------------------------
 ICacheObject* CacheManager::FindObjectAddRef(const CacheKey& key)
 {
-	Threading::MutexScopedLock lock(m_mutex);
+	MutexScopedLock lock(m_mutex);
 
 	ICacheObject* obj = NULL;
 	if (!key.IsNull() && m_cacheUnusedList != NULL)
@@ -453,24 +453,11 @@ ICacheObject* CacheManager::FindObjectAddRef(const CacheKey& key)
 //------------------------------------------------------------------------------
 void CacheManager::ClearCache()
 {
-	Threading::MutexScopedLock lock(m_mutex);
+	MutexScopedLock lock(m_mutex);
 	if (m_cacheUnusedList != NULL) {	// Finalize() 済みチェック
 		m_cacheUnusedList->Clear();
 	}
 }
-
-//------------------------------------------------------------------------------
-//void CacheManager::clearStockList()
-//{
-//	Threading::ScopedLock lock(mMutex);
-//	mClearingCacheList = true;
-//	LN_FOREACH(ICacheObject* obj, mStockObjectArray)
-//	{
-//		obj->Release();
-//	}
-//	mStockObjectArray.clear();
-//	mClearingCacheList = false;
-//}
 
 //------------------------------------------------------------------------------
 void CacheManager::AddCacheUnusedList(ICacheObject* obj)
@@ -484,7 +471,7 @@ void CacheManager::AddCacheUnusedList(ICacheObject* obj)
 			その状態で MutexScopedLock が Unlock すると解放済みのオブジェクトを操作することになるので NG。
 			DeleteCachedObject() は排他処理したくないので、ブロックをひとつ下げて逃げる。
 		*/
-		Threading::MutexScopedLock lock(m_mutex);
+		MutexScopedLock lock(m_mutex);
 
 		if (m_cacheUnusedList != NULL)	// Finalize() 済みチェック
 		{

@@ -1,18 +1,13 @@
 ﻿
 #pragma once
-
 #include "../Base/Common.h"
-#include "../Base/NonCopyable.h"
 
 LN_NAMESPACE_BEGIN
-namespace Threading
-{
 	
 /**
 	@brief		スレッドセーフなインクリメント・デクリメントを行う整数変数のクラス
 */
 class LUMINO_EXPORT Atomic
-    : private NonCopyable
 {
 public:
 	Atomic( int32_t initialValue = 0 );
@@ -33,6 +28,7 @@ public:
     int32_t Decrement();
 
 private:
+	LN_DISALLOW_COPY_AND_ASSIGN(Atomic);
 #ifdef LN_THREAD_WIN32
     volatile long			mValue;
 #else
@@ -41,5 +37,4 @@ private:
 #endif
 };
 
-} // namespace Threading
 LN_NAMESPACE_END

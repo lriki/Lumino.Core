@@ -10,8 +10,6 @@
 #include "Array.h"
 #include "ByteBuffer.h"
 
-#include "../Threading/Atomic.h"
-
 LN_NAMESPACE_BEGIN
 class Locale;
 class Encoding;
@@ -741,7 +739,6 @@ public:
 	}
 public:
 	std::atomic<int>	m_refCount;
-	//Threading::Atomic		m_refCount;
 #else
 	inline bool IsShared() const { return (m_refCount > 1); }
 	inline void AddRef() { ++m_refCount; }

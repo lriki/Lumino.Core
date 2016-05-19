@@ -72,7 +72,7 @@ ReflectionObject::ReflectionObject()
 //------------------------------------------------------------------------------
 ReflectionObject::~ReflectionObject()
 {
-	Threading::MutexScopedLock lock(m_weakRefInfoMutex);
+	MutexScopedLock lock(m_weakRefInfoMutex);
 	if (m_weakRefInfo != nullptr)
 	{
 		m_weakRefInfo->Release();

@@ -52,8 +52,8 @@ public:
 
 
 protected:
-    Threading::Atomic		mReferenceCount;	///< 参照カウント
-	Threading::Atomic		m_refPtrReferenced;
+    Atomic		mReferenceCount;	///< 参照カウント	TODO: atomic<> の方が高速
+	Atomic		m_refPtrReferenced;
 
 };
 

@@ -3,8 +3,6 @@
 #include "../../include/Lumino/Threading/Mutex.h"
 
 LN_NAMESPACE_BEGIN
-namespace Threading
-{
 
 #ifdef LN_THREAD_WIN32
 //==============================================================================
@@ -63,5 +61,4 @@ void Mutex::Unlock()
 }
 #endif
 
-} // namespace Threading
 LN_NAMESPACE_END

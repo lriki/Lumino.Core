@@ -1,6 +1,5 @@
 ﻿
 #pragma once
-
 #include "../Base/Common.h"
 #include "../Base/NonCopyable.h"
 #include "../Base/Delegate.h"
@@ -9,8 +8,6 @@
 LN_NAMESPACE_BEGIN
 class Exception;
 
-namespace Threading
-{
 /**
 	@brief		スレッドクラスの基底クラス
 	@details	使い方
@@ -21,7 +18,6 @@ namespace Threading
 				④インスタンスを破棄します。
 */
 class LUMINO_EXPORT Thread
-    : private NonCopyable
 {
 public:
     Thread();
@@ -72,6 +68,7 @@ public:
 	static void Sleep(int msTime);
 
 private:
+	LN_DISALLOW_COPY_AND_ASSIGN(Thread);
 	void Reset();
 
 private:
@@ -135,5 +132,4 @@ private:
 #endif
 };
 
-} // namespace Threading
 LN_NAMESPACE_END

@@ -32,11 +32,11 @@ private:
 	~TaskScheduler();
 	void ExecuteThread();
 
-	Array<Threading::DelegateThread*>	m_threadList;
-	Queue<Task*>						m_taskQueue;
-	Semaphore							m_semaphore;
-	Threading::Mutex					m_taskQueueLock;
-	ConditionFlag						m_endRequested;
+	Array<DelegateThread*>	m_threadList;
+	Queue<Task*>			m_taskQueue;
+	Semaphore				m_semaphore;
+	Mutex					m_taskQueueLock;
+	ConditionFlag			m_endRequested;
 };
 
 } // namespace tr

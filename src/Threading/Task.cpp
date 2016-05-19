@@ -98,7 +98,7 @@ void Task::Execute()
 	}
 	catch (...)
 	{
-		m_exception = LN_NEW Threading::ThreadException();
+		m_exception = LN_NEW ThreadException();
 		m_status = TaskStatus::Faulted;
 	}
 	m_waiting.SetTrue();

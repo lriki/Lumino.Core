@@ -25,7 +25,7 @@ TaskScheduler::TaskScheduler(int threadCount)
 	m_threadList.Reserve(threadCount);
 	for (int i = 0; i < threadCount; ++i)
 	{
-		auto thr = LN_NEW Threading::DelegateThread();
+		auto thr = LN_NEW DelegateThread();
 		thr->Start(CreateDelegate(this, &TaskScheduler::ExecuteThread));
 		m_threadList.Add(thr);
 	}
@@ -58,7 +58,7 @@ void TaskScheduler::QueueTask(Task* task)
 {
 	LN_CHECK_ARG(task != nullptr);
 
-	Threading::MutexScopedLock lock(m_taskQueueLock);
+	MutexScopedLock lock(m_taskQueueLock);
 	m_taskQueue.Enqueue(task);
 	task->AddRef();
 
@@ -80,7 +80,7 @@ void TaskScheduler::ExecuteThread()
 		// ƒLƒ…[‚©‚ç1‚Âæ‚èo‚·
 		Task* task = nullptr;
 		{
-			Threading::MutexScopedLock lock(m_taskQueueLock);
+			MutexScopedLock lock(m_taskQueueLock);
 			m_taskQueue.Dequeue(&task);
 		}
 

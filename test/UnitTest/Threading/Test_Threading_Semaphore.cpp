@@ -15,7 +15,7 @@ TEST_F(IntegrateTest_Threading_Semaphore, Basic)
 	Semaphore sem(2, 2);
 
 	ConditionFlag flag(false);
-	Threading::DelegateThread thr1, thr2, thr3, thr4;
+	DelegateThread thr1, thr2, thr3, thr4;
 	
 	g_value = 0;
 	auto func = [&sem, &flag](){ sem.Lock(); g_value++; flag.Wait(); sem.Unlock(); };
@@ -25,7 +25,7 @@ TEST_F(IntegrateTest_Threading_Semaphore, Basic)
 	thr3.Start(Delegate<void()>(func));
 	thr4.Start(Delegate<void()>(func));
 
-	Threading::Thread::Sleep(100);
+	Thread::Sleep(100);
 
 	// この時点で2つはLock()で止まっている
 	ASSERT_EQ(2, g_value);
@@ -33,6 +33,6 @@ TEST_F(IntegrateTest_Threading_Semaphore, Basic)
 	// 先に flag.Wait() で待っているものを動かす→Unlock()にたどり着く
 	flag.SetTrue();
 
-	Threading::Thread::Sleep(100);
+	Thread::Sleep(100);
 	ASSERT_EQ(4, g_value);
 }
