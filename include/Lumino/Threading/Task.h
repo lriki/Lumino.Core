@@ -60,9 +60,9 @@ private:
 	~Task();
 
 	Delegate<void()>	m_action;
-	TaskStatus	m_status = TaskStatus::Created;
-	Exception*	m_exception = nullptr;
-	Threading::ConditionFlag	m_waiting;
+	TaskStatus		m_status = TaskStatus::Created;
+	Exception*		m_exception = nullptr;
+	ConditionFlag	m_waiting;
 };
 
 } // namespace tr

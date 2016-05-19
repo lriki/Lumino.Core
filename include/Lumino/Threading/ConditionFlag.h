@@ -1,18 +1,13 @@
 ﻿
 #pragma once
-
 #include "../Base/Common.h"
-#include "../Base/NonCopyable.h"
 
 LN_NAMESPACE_BEGIN
-namespace Threading
-{
 
 /**
 	@brief		待ち合わせ機能を持つスレッドセーフな bool 型変数のクラス
 */
 class LUMINO_EXPORT ConditionFlag
-    : private NonCopyable
 {
 public:
 	/// デフォルトコンストラクタ (初期値は false)
@@ -42,6 +37,7 @@ public:
     void Wait();
 
 private:
+	LN_DISALLOW_COPY_AND_ASSIGN(ConditionFlag);
 #ifdef LN_THREAD_WIN32
     HANDLE			mHandle;
 #else
@@ -51,5 +47,4 @@ private:
 #endif
 };
 
-} // namespace Threading
 LN_NAMESPACE_END

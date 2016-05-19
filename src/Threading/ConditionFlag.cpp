@@ -3,8 +3,6 @@
 #include "../../include/Lumino/Threading/ConditionFlag.h"
 
 LN_NAMESPACE_BEGIN
-namespace Threading
-{
 
 #ifdef LN_THREAD_WIN32
 //==============================================================================
@@ -193,5 +191,4 @@ void ConditionFlag::Wait()
 
 #endif
 
-} // namespace Threading
 LN_NAMESPACE_END
