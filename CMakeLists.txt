@@ -181,7 +181,7 @@ set(LN_SOURCES_Json
 
 set(LN_SOURCES_Threading
 	include/Lumino/Threading/Atomic.h
-	include/Lumino/Threading/EventFlag.h
+	include/Lumino/Threading/ConditionFlag.h
 	include/Lumino/Threading/Mutex.h
 	include/Lumino/Threading/ReadWriteMutex.h
 	include/Lumino/Threading/Semaphore.h
@@ -190,7 +190,7 @@ set(LN_SOURCES_Threading
 	include/Lumino/Threading/Thread.h
 	include/Lumino/Threading/ThreadingExceptions.h
 	src/Threading/Atomic.cpp
-	src/Threading/EventFlag.cpp
+	src/Threading/ConditionFlag.cpp
 	src/Threading/Mutex.cpp
 	src/Threading/ReadWriteMutex.cpp
 	src/Threading/Semaphore.cpp

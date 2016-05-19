@@ -11,18 +11,18 @@ namespace Threading
 /**
 	@brief		待ち合わせ機能を持つスレッドセーフな bool 型変数のクラス
 */
-class LUMINO_EXPORT EventFlag
+class LUMINO_EXPORT ConditionFlag
     : private NonCopyable
 {
 public:
 	/// デフォルトコンストラクタ (初期値は false)
-    EventFlag();
+	ConditionFlag();
 
 	/// コンストラクタ (初期値を指定する) 
-	explicit EventFlag(bool initFlag);
+	explicit ConditionFlag(bool initFlag);
 
 	/// デストラクタ
-	virtual ~EventFlag();
+	virtual ~ConditionFlag();
 
 public:
 

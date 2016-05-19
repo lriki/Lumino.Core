@@ -4,7 +4,7 @@
 #include "../Base/Common.h"
 #include "../Base/NonCopyable.h"
 #include "../Base/Delegate.h"
-#include "EventFlag.h"
+#include "ConditionFlag.h"
 
 LN_NAMESPACE_BEGIN
 class Exception;
@@ -75,8 +75,8 @@ private:
 	void Reset();
 
 private:
-	EventFlag	mFinished;
-	Exception*	mLastException;
+	ConditionFlag	mFinished;
+	Exception*		mLastException;
     
 #ifdef LN_THREAD_WIN32
     HANDLE			mThread;

@@ -1,10 +1,6 @@
-﻿/**
-	@file	FileManager.h
-*/
+﻿
 #pragma once
-
 #include "Common.h"
-#include "NonCopyable.h"
 
 LN_NAMESPACE_BEGIN
 
@@ -12,7 +8,6 @@ LN_NAMESPACE_BEGIN
 	@brief	DLL または 共有ライブラリをロードし、アクセスするためのクラスです。
 */
 class DllLoader
-	: public NonCopyable
 {
 public:
 
@@ -66,6 +61,7 @@ public:
 	void* GetProcAddress(const char* procName);
 
 private:
+	LN_DISALLOW_COPY_AND_ASSIGN(DllLoader);
 	void*	m_module;
 };
 

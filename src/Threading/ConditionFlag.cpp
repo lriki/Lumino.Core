@@ -1,6 +1,6 @@
 ﻿
 #include "../Internal.h"
-#include "../../include/Lumino/Threading/EventFlag.h"
+#include "../../include/Lumino/Threading/ConditionFlag.h"
 
 LN_NAMESPACE_BEGIN
 namespace Threading
@@ -8,17 +8,17 @@ namespace Threading
 
 #ifdef LN_THREAD_WIN32
 //==============================================================================
-// EventFlag (Win32)
+// ConditionFlag (Win32)
 //==============================================================================
 //------------------------------------------------------------------------------
-EventFlag::EventFlag()
+ConditionFlag::ConditionFlag()
 	: mHandle( NULL )
 {
     mHandle = CreateEvent( NULL, TRUE, FALSE, NULL );
 }
 
 //------------------------------------------------------------------------------
-EventFlag::EventFlag( bool initFlag )
+ConditionFlag::ConditionFlag( bool initFlag )
 	: mHandle( NULL )
 {
     BOOL t = ( initFlag ) ? TRUE : FALSE;
@@ -27,7 +27,7 @@ EventFlag::EventFlag( bool initFlag )
 }
 
 //------------------------------------------------------------------------------
-EventFlag::~EventFlag()
+ConditionFlag::~ConditionFlag()
 {
     if ( mHandle )
     {
@@ -37,7 +37,7 @@ EventFlag::~EventFlag()
 }
 
 //------------------------------------------------------------------------------
-void EventFlag::SetTrue()
+void ConditionFlag::SetTrue()
 {
     if ( mHandle )
     {
@@ -46,7 +46,7 @@ void EventFlag::SetTrue()
 }
 
 //------------------------------------------------------------------------------
-void EventFlag::SetFalse()
+void ConditionFlag::SetFalse()
 {
     if ( mHandle )
     {
@@ -55,7 +55,7 @@ void EventFlag::SetFalse()
 }
 
 //------------------------------------------------------------------------------
-bool EventFlag::IsTrue() const
+bool ConditionFlag::IsTrue() const
 {
     if ( mHandle )
     {
@@ -65,13 +65,13 @@ bool EventFlag::IsTrue() const
 }
 
 //------------------------------------------------------------------------------
-bool EventFlag::IsFalse() const
+bool ConditionFlag::IsFalse() const
 {
 	return !IsTrue();
 }
 
 //------------------------------------------------------------------------------
-void EventFlag::Wait()
+void ConditionFlag::Wait()
 {
     if ( mHandle )
     {
@@ -81,10 +81,10 @@ void EventFlag::Wait()
 
 #else
 //==============================================================================
-// EventFlag (pthread)
+// ConditionFlag (pthread)
 //==============================================================================
 //------------------------------------------------------------------------------
-EventFlag::EventFlag()
+ConditionFlag::ConditionFlag()
 {
 	pthread_mutex_init( &mMutex, NULL );
 	pthread_cond_init( &mWait, NULL );
@@ -92,7 +92,7 @@ EventFlag::EventFlag()
 }
 
 //------------------------------------------------------------------------------
-EventFlag::EventFlag( bool init_flag )
+ConditionFlag::ConditionFlag( bool init_flag )
 {
 	pthread_mutex_init( &mMutex, NULL );
 	pthread_cond_init( &mWait, NULL );
@@ -100,14 +100,14 @@ EventFlag::EventFlag( bool init_flag )
 }
 
 //------------------------------------------------------------------------------
-EventFlag::~EventFlag()
+ConditionFlag::~ConditionFlag()
 {
 	pthread_cond_destroy( &mWait );
 	pthread_mutex_destroy( &mMutex );
 }
 
 //------------------------------------------------------------------------------
-void EventFlag::SetTrue()
+void ConditionFlag::SetTrue()
 {
 	// ミューテックスをロックする
 	int r = pthread_mutex_lock( &mMutex );
@@ -137,7 +137,7 @@ void EventFlag::SetTrue()
 }
 
 //------------------------------------------------------------------------------
-void EventFlag::SetFalse()
+void ConditionFlag::SetFalse()
 {
 	pthread_mutex_lock( &mMutex );
 	mSignal = false;
@@ -145,7 +145,7 @@ void EventFlag::SetFalse()
 }
 
 //------------------------------------------------------------------------------
-bool EventFlag::IsTrue() const
+bool ConditionFlag::IsTrue() const
 {
 	pthread_mutex_lock( &mMutex );
 	bool b = mSignal;
@@ -154,13 +154,13 @@ bool EventFlag::IsTrue() const
 }
 
 //------------------------------------------------------------------------------
-bool EventFlag::IsFalse() const
+bool ConditionFlag::IsFalse() const
 {
 	return !IsTrue();
 }
 
 //------------------------------------------------------------------------------
-void EventFlag::Wait()
+void ConditionFlag::Wait()
 {
 	// ミューテックスをロックする
 	int r = pthread_mutex_lock( &mMutex );

@@ -18,7 +18,7 @@ TEST_F(Test_Thread, Basic)
 	{
 		int tar;
 		//int value;
-		//EventFlag inited;
+		//ConditionFlag inited;
 		volatile bool writed;
 		volatile bool runnning;
 

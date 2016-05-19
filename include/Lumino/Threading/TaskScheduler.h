@@ -36,7 +36,7 @@ private:
 	Queue<Task*>						m_taskQueue;
 	Semaphore							m_semaphore;
 	Threading::Mutex					m_taskQueueLock;
-	Threading::EventFlag				m_endRequested;
+	Threading::ConditionFlag			m_endRequested;
 };
 
 } // namespace tr

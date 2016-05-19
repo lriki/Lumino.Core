@@ -14,7 +14,7 @@ static volatile int g_value = 0;
 TEST_F(IntegrateTest_Threading_Task, Basic)
 {
 	g_value = 0;
-	Threading::EventFlag flag(false);
+	Threading::ConditionFlag flag(false);
 	auto func = [&flag](){ g_value++; flag.Wait(); };
 
 	int level = TaskScheduler::GetDefault()->GetMaxConcurrencyLevel();

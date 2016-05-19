@@ -3,7 +3,7 @@
 #include "../Base/Exception.h"
 #include "../Base/RefObject.h"
 #include "../Base/Delegate.h"
-#include "EventFlag.h"
+#include "ConditionFlag.h"
 
 LN_NAMESPACE_BEGIN
 namespace tr
@@ -62,7 +62,7 @@ private:
 	Delegate<void()>	m_action;
 	TaskStatus	m_status = TaskStatus::Created;
 	Exception*	m_exception = nullptr;
-	Threading::EventFlag	m_waiting;
+	Threading::ConditionFlag	m_waiting;
 };
 
 } // namespace tr

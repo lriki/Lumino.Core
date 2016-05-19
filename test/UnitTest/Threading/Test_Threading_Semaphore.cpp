@@ -14,7 +14,7 @@ TEST_F(IntegrateTest_Threading_Semaphore, Basic)
 {
 	Semaphore sem(2, 2);
 
-	Threading::EventFlag flag(false);
+	Threading::ConditionFlag flag(false);
 	Threading::DelegateThread thr1, thr2, thr3, thr4;
 	
 	g_value = 0;

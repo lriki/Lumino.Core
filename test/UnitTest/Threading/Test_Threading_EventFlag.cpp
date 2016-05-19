@@ -34,8 +34,8 @@ TEST_F(Test_Threading_EventFlag, Basic)
 			} while (mRunning.IsTrue());
 		}
 
-		EventFlag mInited;
-		EventFlag mRunning;
+		ConditionFlag mInited;
+		ConditionFlag mRunning;
 	};
 
 	gValue = 0;
@@ -55,9 +55,9 @@ TEST_F(Test_Threading_EventFlag, Basic)
 //---------------------------------------------------------------------
 TEST_F(Test_Threading_EventFlag, Basic2)
 {
-	EventFlag f1;
-	EventFlag f2(true);
-	EventFlag f3(false);
+	ConditionFlag f1;
+	ConditionFlag f2(true);
+	ConditionFlag f3(false);
 	ASSERT_FALSE(f1.IsTrue());
 	ASSERT_TRUE(f2.IsTrue());
 	ASSERT_FALSE(f3.IsTrue());
