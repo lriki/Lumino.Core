@@ -71,20 +71,6 @@ public:
 
 public:
 
-	// TODO: いらない
-	template<typename... TArgs>
-	static RefPtr<T> Create(TArgs... args)
-	{
-		return RefPtr<T>(LN_NEW T(args...), false);
-	}
-
-	// TODO: いらない
-	template<typename... TArgs>
-	static RefPtr<T> Construct(TArgs... args)
-	{
-		return RefPtr<T>(LN_NEW T(args...), false);
-	}
-
 	template<typename... TArgs>
 	static RefPtr<T> MakeRef(TArgs... args)
 	{
@@ -94,7 +80,7 @@ public:
     template<class T2>
     static RefPtr<T> StaticCast(const RefPtr<T2>& other)
     {
-        T* ptr = static_cast<T*>(other.GetObjectPtr());
+        T* ptr = static_cast<T*>(other.Get());
         return RefPtr<T>(ptr, true);
     }
 
@@ -183,12 +169,7 @@ public:
 	/**
 		@brief		管理対象オブジェクトへのポインタを取得する
 	*/
-    T* GetObjectPtr() const	{ return mPtr; }    //TODO: Getで十分かな
-
-	/**
-		@brief		管理対象オブジェクトへのポインタを取得する
-	*/
-	//T* GetObjectPtr() { return mPtr; }
+    T* Get() const	{ return mPtr; }
 
 public:
 
@@ -256,19 +237,19 @@ protected:
 template<typename T1, typename T2>
 bool operator==(const RefPtr<T1>& left, const RefPtr<T2>& right) LN_NOEXCEPT
 {
-	return (left.GetObjectPtr() == right.GetObjectPtr());
+	return (left.Get() == right.Get());
 }
 
 template<typename T>
 bool operator==(std::nullptr_t left, const RefPtr<T>& right) LN_NOEXCEPT
 {
-	return ((T*)0 == right.GetObjectPtr());
+	return ((T*)0 == right.Get());
 }
 
 template<typename T>
 bool operator==(const RefPtr<T>& left, std::nullptr_t right) LN_NOEXCEPT
 {
-	return (left.GetObjectPtr() == (T*)0);
+	return (left.Get() == (T*)0);
 }
 
 
@@ -276,19 +257,19 @@ bool operator==(const RefPtr<T>& left, std::nullptr_t right) LN_NOEXCEPT
 template<typename T1, typename T2>
 bool operator!=(const RefPtr<T1>& left, const RefPtr<T2>& right) LN_NOEXCEPT
 {
-	return (left.GetObjectPtr() != right.GetObjectPtr());
+	return (left.Get() != right.Get());
 }
 
 template<typename T>
 bool operator!=(std::nullptr_t left, const RefPtr<T>& right) LN_NOEXCEPT
 {
-	return ((T*)0 != right.GetObjectPtr());
+	return ((T*)0 != right.Get());
 }
 
 template<typename T>
 bool operator!=(const RefPtr<T>& left, std::nullptr_t right) LN_NOEXCEPT
 {
-	return (left.GetObjectPtr() != (T*)0);
+	return (left.Get() != (T*)0);
 }
 
 LN_NAMESPACE_END

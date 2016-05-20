@@ -876,7 +876,6 @@ GenericString<TChar> GenericString<TChar>::SPrintf(const GenericString<TChar>& f
 		TChar buf[MaxFormatLength + 1];
 		memset(buf, 0, sizeof(buf));
 		StringTraits::tvsnprintf_l(buf, MaxFormatLength + 1, format.c_str(), Locale::GetDefault().GetNativeLocale(), args2);
-		//StringTraits::VSPrintf(buf, MaxFormatLength + 1, format, args2);
 		va_end(args1);
 		va_end(args2);
 		return GenericString<TChar>(buf);
@@ -885,7 +884,6 @@ GenericString<TChar> GenericString<TChar>::SPrintf(const GenericString<TChar>& f
 	{
 		ByteBuffer buf(len + 1);
 		StringTraits::tvsnprintf_l((TChar*)buf.GetData(), len + 1, format.c_str(), Locale::GetDefault().GetNativeLocale(), args2);
-		//StringTraits::VSPrintf((TChar*)buf.GetData(), buf.GetSize(), format, args2);
 		va_end(args1);
 		va_end(args2);
 		return GenericString<TChar>((TChar*)buf.GetData());
@@ -905,7 +903,6 @@ GenericString<TChar> GenericString<TChar>::SPrintf(const TChar* format, ...)
 		TChar buf[MaxFormatLength + 1];
 		memset(buf, 0, sizeof(buf));
 		StringTraits::tvsnprintf_l(buf, MaxFormatLength + 1, format, Locale::GetDefault().GetNativeLocale(), args2);
-		//StringTraits::VSPrintf(buf, MaxFormatLength + 1, format, args2);	// TODO: tvsnprintf_l にする
 		va_end(args1);
 		va_end(args2);
 		return GenericString<TChar>(buf);
@@ -914,31 +911,11 @@ GenericString<TChar> GenericString<TChar>::SPrintf(const TChar* format, ...)
 	{
 		ByteBuffer buf((len + 1) * sizeof(TChar));
 		int ll = StringTraits::tvsnprintf_l((TChar*)buf.GetData(), len + 1, format, Locale::GetDefault().GetNativeLocale(), args2);
-		//StringTraits::VSPrintf((TChar*)buf.GetData(), buf.GetSize(), format, args2);
 		va_end(args1);
 		va_end(args2);
-
-		//std::basic_string<TChar, > str;
-		//str.assign((TChar*)buf.GetData());
 		return GenericString<TChar>((TChar*)buf.GetData(), len);
 	}
 }
-
-//template<typename TChar>
-//void GenericString<TChar>::Format(const TChar* format, ...)
-//{
-//	va_list args;
-//	va_start(args, format);
-//	try {
-//		StringTraits::FormatVAList(format, args, this);
-//		va_end(args);
-//	}
-//	catch (...) {
-//		va_end(args);
-//		throw;
-//	}
-//}
-
 
 //------------------------------------------------------------------------------
 template<typename TChar>

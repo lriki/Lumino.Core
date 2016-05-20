@@ -191,12 +191,12 @@ TEST_F(IntegrationTest_Reflection_ReflectionObject, Property)
 		tr::Property::SetPropertyValue(&t1, PropertyTest1::V4Property, p1);
 		ASSERT_EQ(p1, t1.m_v4);
 		tr::Variant v = tr::Property::GetPropertyValue(&t1, PropertyTest1::V4Property);
-		ASSERT_EQ(p1.GetObjectPtr(), tr::Variant::Cast<RefPtr<RefTest2>>(v));
+		ASSERT_EQ(p1.Get(), tr::Variant::Cast<RefPtr<RefTest2>>(v));
 
 		// アクセサメンバ関数
 		RefPtr<RefTest2> p2(LN_NEW RefTest2(), false);
 		t1.SetV4(p2);
-		ASSERT_EQ(p2.GetObjectPtr(), t1.GetV4());
+		ASSERT_EQ(p2.Get(), t1.GetV4());
 
 		// アクセサメンバ関数
 		t1.SetV4(nullptr);

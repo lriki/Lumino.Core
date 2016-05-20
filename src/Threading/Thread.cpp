@@ -70,10 +70,6 @@ Thread::~Thread()
 {
     if ( mThread )
     {
-		// TODO:
-        //printf( "< Thread::~Thread >\n" );
-        //printf( "スレッドが終了していません。wait() で待機します。\n" );
-        //printf( "もし応答が無くなった場合はスレッドが無限ループになっていないか確認してください。" );
         Wait();
     }
 
