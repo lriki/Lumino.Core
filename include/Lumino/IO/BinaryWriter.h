@@ -14,6 +14,7 @@ class Stream;
 	@brief	ストリームにバイナリデータを書き込むクラスです。
 */
 class BinaryWriter
+	: public RefObject
 {
 public:
 	BinaryWriter(Stream* stream);
