@@ -1,4 +1,5 @@
 ﻿#include <TestConfig.h>
+#include <Lumino/Xml/XmlReader.h>
 
 class Test_Xml_XmlReader : public ::testing::Test
 {
@@ -79,6 +80,13 @@ TEST_F(Test_Xml_XmlReader, User)
 // Element ノードのテスト
 TEST_F(Test_Xml_XmlReader, Element)
 {
+	// <Test> Read() の前に GetNodeType() すると None が返る。
+	{
+		String xml = _T("<test />");
+		XmlReader reader(xml);
+		ASSERT_EQ(XmlNodeType::None, reader.GetNodeType());
+	}
+
 	// ・空要素
 	{
 		String xml = _T("<test />");
@@ -87,8 +95,9 @@ TEST_F(Test_Xml_XmlReader, Element)
 		ASSERT_TRUE(reader.Read());
 		ASSERT_EQ(XmlNodeType::Element, reader.GetNodeType());
 		ASSERT_EQ(_T("test"), reader.GetName());
-		ASSERT_TRUE(reader.IsEmptyElement());			// 空要素である
-		ASSERT_FALSE(reader.Read());					// EOF
+		ASSERT_EQ(true, reader.IsEmptyElement());			// 空要素である
+		ASSERT_EQ(false, reader.Read());					// EOF
+		ASSERT_EQ(XmlNodeType::None, reader.GetNodeType());	// EOF の後は None
 	}
 
 	// ・End Element
@@ -99,14 +108,14 @@ TEST_F(Test_Xml_XmlReader, Element)
 		ASSERT_TRUE(reader.Read());
 		ASSERT_EQ(XmlNodeType::Element, reader.GetNodeType());
 		ASSERT_EQ(_T("test"), reader.GetName());
-		ASSERT_FALSE(reader.IsEmptyElement());			// 空要素ではない
+		ASSERT_EQ(false, reader.IsEmptyElement());			// 空要素ではない
 
 		ASSERT_TRUE(reader.Read());
 		ASSERT_EQ(XmlNodeType::EndElement, reader.GetNodeType());
 		ASSERT_EQ(_T("test"), reader.GetName());
-		ASSERT_FALSE(reader.IsEmptyElement());			// 空要素ではない
+		ASSERT_EQ(false, reader.IsEmptyElement());			// 空要素ではない
 
-		ASSERT_FALSE(reader.Read());					// EOF
+		ASSERT_EQ(false, reader.Read());					// EOF
 	}
 
 	// ・ネスト
@@ -125,6 +134,7 @@ TEST_F(Test_Xml_XmlReader, Element)
 		ASSERT_TRUE(reader.IsEmptyElement());
 
 		ASSERT_TRUE(reader.Read());
+		ASSERT_EQ(4, reader.m_textCache.GetCount());
 		ASSERT_EQ(XmlNodeType::EndElement, reader.GetNodeType());
 		ASSERT_EQ(_T("n1"), reader.GetName());
 		ASSERT_FALSE(reader.IsEmptyElement());			// EndElement は空要素扱いではない
@@ -264,6 +274,20 @@ TEST_F(Test_Xml_XmlReader, Attribute)
 		ASSERT_FALSE(reader.MoveToNextAttribute());		// 次は無い
 
 		ASSERT_FALSE(reader.Read());					// EOF
+	}
+
+	{
+		String xml = _T("<test v=\"a\"></test>");
+		XmlReader reader(xml);
+
+		ASSERT_EQ(true, reader.Read());
+		ASSERT_EQ(1, reader.GetAttributeCount());
+
+		reader.MoveToElement();
+		reader.Read();
+
+		ASSERT_EQ(XmlNodeType::EndElement, reader.GetNodeType());
+		ASSERT_EQ(_T("test"), reader.GetName());
 	}
 }
 
@@ -406,4 +430,20 @@ TEST_F(Test_Xml_XmlReader, SystemTest)
 		ASSERT_EQ(XmlNodeType::Whitespace, types[4]);
 		//ASSERT_EQ(XmlNodeType::EndElement, types[5]);	最後のは IsStartElement で消費されるので出てこない
 	}
+}
+
+//---------------------------------------------------------------------
+TEST_F(Test_Xml_XmlReader, Issues)
+{
+	String xml =
+		_T("<homepage>\n")
+		_T("  <page src=\"index.html\">\n")
+		_T("</homepage>");
+	XmlReader reader(xml);
+
+	while (reader.Read())
+	{
+		reader.GetNodeType();
+	}
+
 }

@@ -42,7 +42,8 @@ StringRef 使うことは無いかも。
 	この例を読み取ると m_textCache には "data12" が入っている。
 	この m_textCache のうちどこからどこまでが1つの文字列なのかは、各ノードが知っている。
 
-	m_nodes と m_textCache は Read() で次のノードを読み取りにいくときにクリアされる。
+
+	### 
 
 */
 
@@ -96,7 +97,9 @@ static const Entity ReservedEntities[ReservedEntitiesCount] =
 //------------------------------------------------------------------------------
 XmlReader::XmlReader()
 	: m_reader()
-	, m_currentElementNodePos(0)
+	, m_parsingState(ParsingState::ReadElement)
+	, m_currentElementNodePos(-1)
+	, m_currentPartialCount(0)
 	, m_line(1)
 	, m_col(1)
 	, m_stockElementCount(0)
@@ -105,24 +108,18 @@ XmlReader::XmlReader()
 
 //------------------------------------------------------------------------------
 XmlReader::XmlReader(const String& str)
-	: m_reader(LN_NEW StringReader(str), false)
-	, m_currentElementNodePos(0)
-	, m_line(1)
-	, m_col(1)
-	, m_stockElementCount(0)
+	: XmlReader()
 {
+	m_reader.Attach(LN_NEW StringReader(str), false);
 	m_nodes.Reserve(32);
 	m_textCache.Reserve(1024);
 }
 
 //------------------------------------------------------------------------------
 XmlReader::XmlReader(TextReader* textReader)
-	: m_reader(textReader, true)
-	, m_currentElementNodePos(0)
-	, m_line(1)
-	, m_col(1)
-	, m_stockElementCount(0)
+	: XmlReader()
 {
+	m_reader.Attach(textReader, true);
 	m_nodes.Reserve(32);
 	m_textCache.Reserve(1024);
 }
@@ -140,49 +137,90 @@ void XmlReader::InitializeReader(TextReader* reader)
 }
 
 //------------------------------------------------------------------------------
+// ※Read() 自体は属性ノードは返さない。
 bool XmlReader::Read()
 {
-	if (m_stockElementCount > 0)
+	while (true)
 	{
-		m_currentElementNodePos += m_currentNode->AttrCount;	// 属性ノードを読み飛ばす (と言っても現在は Text ノードのみこの if に入ってくるから実質意味は無いが)
-		m_currentElementNodePos++;								// 次のノードを指す
-		m_currentNode = &m_nodes[m_currentElementNodePos];
-		m_currentAttrCount = m_currentNode->AttrCount;
-		m_stockElementCount--;
-		return true;
+		switch (m_parsingState)
+		{
+			case ParsingState::ReadElement:
+			{
+				//if (m_stockElementCount > 0)
+				//{
+				//	m_currentElementNodePos += m_currentNode->AttrCount;	// 属性ノードを読み飛ばす (と言っても現在は Text ノードのみこの if に入ってくるから実質意味は無いが)
+				//	m_currentElementNodePos++;								// 次のノードを指す
+				//	m_currentNode = &m_nodes[m_currentElementNodePos];
+				//	m_currentAttrCount = m_currentNode->AttrCount;
+				//	m_stockElementCount--;
+				//	return true;
+				//}
+
+				//m_textCache.Clear();
+				//m_nodes.Clear();
+				//m_currentElementNodePos = 0;
+				//m_currentAttrCount = 0;
+				//m_currentNode = NULL;
+				//m_currentAttrIndex = -1;
+
+				int ch = m_reader->Peek();
+				if (ch < 0) { return false; }	// もう読み取れる文字が無い
+				if (ch == '<') {
+					if (!ParseElementInner()) { return false; }
+				}
+				else {
+					if (!ParseElementOuter()) { return false; }
+				}
+
+				//m_currentElementNodePos = 0;
+				//m_stockElementCount--;
+
+				m_currentNode = &m_nodes[m_currentElementNodePos];
+				m_currentAttrCount = m_currentNode->AttrCount;
+
+				return true;
+
+			}
+
+			case ParsingState::PopNode:
+			{
+				PopNode();
+				m_parsingState = ParsingState::ReadElement;	// TODO: ReadDocument とか作る？というか複数ドキュメントは無しだから End とかのほうがいいか。
+				continue;
+			}
+			case ParsingState::IterateAttributes:
+			{
+				MoveToElement();
+				m_parsingState = ParsingState::ReadElement;
+				continue;
+			}
+			case ParsingState::IteratePartialElements:
+			{
+				++m_currentElementNodePos;
+				if (m_currentElementNodePos >= m_stockElementCount)
+				{
+					m_currentElementNodePos = m_stockElementCount - m_currentPartialCount - 1;	//　一連の Text が始まる前の要素を指す (次は EndElement がくるはず)
+					m_nodes.Resize(m_currentElementNodePos+1);
+					m_stockElementCount = m_nodes.GetCount();	// TODO: m_stockElementCountは配列サイズで代用できないかな？
+					m_currentPartialCount = 0;
+					m_parsingState = ParsingState::ReadElement;
+					continue;
+				}
+				else
+				{
+					m_currentNode = &m_nodes[m_currentElementNodePos];
+					return true;
+				}
+			}
+		}
 	}
-
-	m_textCache.Clear();
-	m_nodes.Clear();
-	m_currentElementNodePos = 0;
-	m_currentAttrCount = 0;
-	m_currentNode = NULL;
-	m_currentAttrIndex = -1;
-
-
-
-	int ch = m_reader->Peek();
-	if (ch < 0) { return false; }	// もう読み取れる文字が無い
-	if (ch == '<') {
-		if (!ParseElementInner()) { return false; }
-	}
-	else  {
-		if (!ParseElementOuter()) { return false; }
-	}
-
-	m_currentElementNodePos = 0;
-	m_stockElementCount--;
-
-	m_currentNode = &m_nodes[m_currentElementNodePos];
-	m_currentAttrCount = m_currentNode->AttrCount;
-
-	return true;
 }
 
 //------------------------------------------------------------------------------
 XmlNodeType XmlReader::GetNodeType()  const
 {
-	if (m_nodes.IsEmpty()) {
+	if (m_currentNode == nullptr || m_nodes.IsEmpty())
+	{
 		return XmlNodeType::None;
 	}
 	return m_currentNode->Type;
@@ -293,6 +331,7 @@ bool XmlReader::MoveToElement()
 
 	m_currentAttrIndex = -1;
 	m_currentNode = &m_nodes[m_currentElementNodePos];
+	m_nodes.Resize(m_currentElementNodePos + 1);	// TODO: この辺の減らす処理もインデックス減らすだけにしたいが・・・
 	return true;
 }
 
@@ -344,6 +383,54 @@ String XmlReader::ReadString()
 }
 
 //------------------------------------------------------------------------------
+int XmlReader::PushNode(const NodeData& node)
+{
+	bool isLastPartial = (!m_nodes.IsEmpty() && m_nodes.GetLast().IsPartial);
+
+	m_nodes.Add(node);
+	int dataIdx = m_nodes.GetCount() - 1;
+	++m_stockElementCount;
+
+	if (isLastPartial)
+	{
+		// もし既にスタックのトップが partial なら、既に Text や Entity が入っているということ。
+		// 一連のテキストをパース中は、最初に見つかった要素を "現在のノード" にしたい。
+	}
+	else
+	{
+		++m_currentElementNodePos;
+	}
+
+	if (node.IsPartial)
+	{
+		++m_currentPartialCount;
+	}
+	return dataIdx;
+}
+
+//------------------------------------------------------------------------------
+void XmlReader::PopNode()
+{
+	m_textCache.Resize(m_textCache.GetCount() - m_nodes.GetLast().NameLen);
+
+
+	m_nodes.RemoveLast();
+	--m_stockElementCount;
+
+
+	--m_currentElementNodePos;
+	if (m_currentElementNodePos < 0)
+	{
+		m_currentNode = nullptr;
+	}
+	else
+	{
+		m_currentNode = &m_nodes[m_currentElementNodePos];
+	}
+}
+
+//------------------------------------------------------------------------------
+// タグの開始位置からの解析。reader は <aaa> のようなタグの < を指している。
 bool XmlReader::ParseElementInner()
 {
 	m_reader->Read();	// skip '<'
@@ -354,30 +441,30 @@ bool XmlReader::ParseElementInner()
 	bool isElementEnd = false;
 	bool isComment = false;
 	bool isDataStart = false;
-	if (m_reader->Peek() == '?')
+	if (m_reader->Peek() == '?')		// <?xxx>
 	{
 		isProcInst = true;
 		m_reader->Read();	// skip
 	}
-	else if (m_reader->Peek() == '!')
+	else if (m_reader->Peek() == '!')	// <!xxx>
 	{
 		isDocContent = true;
 		m_reader->Read();	// skip
 	}
-	else if (m_reader->Peek() == '/')
+	else if (m_reader->Peek() == '/')	// </xxx>
 	{
 		isElementEnd = true;
 		m_reader->Read();	// skip
 	}
 	if (isDocContent)
 	{
-		if (m_reader->Peek() == '-')
+		if (m_reader->Peek() == '-')	// <-- -->
 		{
 			isComment = true;
 			m_reader->Read();	// skip
 			m_reader->Read();	// skip
 		}
-		else if (m_reader->Peek() == '[')
+		else if (m_reader->Peek() == '[')	// <[ ]>
 		{
 			isDataStart = true;
 			m_reader->Read();	// skip
@@ -419,9 +506,13 @@ bool XmlReader::ParseElementInner()
 		ParseXmlDeclOrPI(namePos, nameLen, isXmlDecl);
 	}
 	// その他の要素
+	else if (isElementEnd)
+	{
+		if (!ParseEndElement(namePos, nameLen)) { return false; }
+	}
 	else
 	{
-		if (!ParseElement(namePos, nameLen, isElementEnd)) { return false; }
+		if (!ParseElement(namePos, nameLen)) { return false; }
 	}
 
 
@@ -446,7 +537,7 @@ bool XmlReader::ParseElementOuter()
 	int entityRefStart = 0;
 
 	bool tokenIsSpaceOnly = true;
-	int tokenStart = 0;
+	int tokenStart = m_textCache.GetCount();
 
 	for (;;)
 	{
@@ -491,16 +582,16 @@ bool XmlReader::ParseElementOuter()
 					data1.Type = (tokenIsSpaceOnly) ? XmlNodeType::Whitespace : XmlNodeType::Text;
 					data1.ValueStartPos = tokenStart;
 					data1.ValueLen = entityRefStart - tokenStart;
-					m_nodes.Add(data1);
-					++m_stockElementCount;
+					data1.IsPartial = true;
+					PushNode(data1);
 
 					// &～; の内部を1つの NodeData としてストックしておく
 					NodeData data2;
 					data2.Type = XmlNodeType::EntityReference;
 					data2.NameStartPos = entityRefStart + 1;
 					data2.NameLen = (m_textCache.GetCount() - entityRefStart) - 2;
-					m_nodes.Add(data2);
-					++m_stockElementCount;
+					data2.IsPartial = true;
+					PushNode(data2);
 
 					// 状態を元に戻す
 					tokenStart = m_textCache.GetCount();	// ; の次を指す
@@ -524,14 +615,17 @@ bool XmlReader::ParseElementOuter()
 		data1.Type = (tokenIsSpaceOnly) ? XmlNodeType::Whitespace : XmlNodeType::Text;
 		data1.ValueStartPos = tokenStart;
 		data1.ValueLen = m_textCache.GetCount() - tokenStart;
-		m_nodes.Add(data1);
-		++m_stockElementCount;
+		data1.IsPartial = true;
+		PushNode(data1);
 	}
-	else {
+	else
+	{
 		// ここにくるのは "...&book;" のように Entity 参照が終端で終わっているとき。
 		// この場合は Text ノードを作る必要は無い。
 	}
 
+	// 次からの Read() で、スタックに詰め込んだノードを順に出していく
+	m_parsingState = ParsingState::IteratePartialElements;
 	return true;
 }
 
@@ -582,9 +676,10 @@ bool XmlReader::ParseComment()
 	data1.Type = XmlNodeType::Comment;
 	data1.ValueStartPos = start;
 	data1.ValueLen = m_textCache.GetCount() - start;
-	m_nodes.Add(data1);
-	++m_stockElementCount;
+	PushNode(data1);
 
+	// 次回の Read() で、スタック (m_nodes) に積んである Comment を消してほしい
+	m_parsingState = ParsingState::PopNode;
 	return true;
 }
 
@@ -679,19 +774,17 @@ bool XmlReader::ParseXmlDeclOrPI(int nameStart, int nameLength, bool isXmlDecl)
 
 //------------------------------------------------------------------------------
 // STag			::=   	'<' Name ( S Attribute )* S? '>'
-//------------------------------------------------------------------------------
-bool XmlReader::ParseElement(int nameStart, int nameLength, bool isEnd)
+// 
+//		タグ名の部分は読み取り済みで、m_reader は要素名の次の空白を指している。
+//
+bool XmlReader::ParseElement(int nameStart, int nameLength)
 {
-	// m_reader は要素名の次の空白を指している
-
 	// NodeData 化してストック
 	NodeData data;
-	data.Type = (isEnd) ? XmlNodeType::EndElement : XmlNodeType::Element;
+	data.Type = XmlNodeType::Element;
 	data.NameStartPos = nameStart;
 	data.NameLen = nameLength;
-	m_nodes.Add(data);
-	int dataIdx = m_nodes.GetCount() - 1;
-	++m_stockElementCount;
+	int dataIdx = PushNode(data);
 
 	for (;;)
 	{
@@ -702,8 +795,13 @@ bool XmlReader::ParseElement(int nameStart, int nameLength, bool isEnd)
 		if (m_reader->Peek() == '/')
 		{
 			m_reader->Read();
-			if (m_reader->Read() == '>') {
+			if (m_reader->Read() == '>')
+			{
+				// <aaa /> のような子要素を持たないタグだった
 				m_nodes[dataIdx].IsEmptyElement = true;
+
+				// 次回の Read() で、スタック (m_nodes) に積んである EndElement を消してほしい
+				m_parsingState = ParsingState::PopNode;
 				break;
 			}
 			else {
@@ -717,11 +815,35 @@ bool XmlReader::ParseElement(int nameStart, int nameLength, bool isEnd)
 			break;
 		}
 
-		// 属性
+		// ここまできたら属性がある
 		if (!ParseAttribute()) { return false; }
 		m_nodes[dataIdx].AttrCount++;
+		m_parsingState = ParsingState::IterateAttributes;
 	}
 
+	return true;
+}
+
+//------------------------------------------------------------------------------
+// タグ名の部分は読み取り済みで、m_reader は要素名の次の空白を指している。
+bool XmlReader::ParseEndElement(int nameStart, int nameLength)
+{
+	// スタック (m_nodes) の先頭には StartElement があるはず。これを捨てて、EndElement にする。
+	m_currentNode = &m_nodes[m_currentElementNodePos];
+	m_currentNode->Init();
+	m_currentNode->Type = XmlNodeType::EndElement;
+	m_currentNode->NameStartPos = nameStart;
+	m_currentNode->NameLen = nameLength;
+
+	// 空白を飛ばして
+	SkipWhitespace();
+
+	// > を読んだら完了
+	if (m_reader->Peek() != '>') return false;
+	m_reader->Read();
+
+	// 次回の Read() で、スタック (m_nodes) に積んである EndElement を消してほしい
+	m_parsingState = ParsingState::PopNode;
 	return true;
 }
 

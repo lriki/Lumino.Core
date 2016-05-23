@@ -156,7 +156,51 @@ protected:
 	XmlReader();
 	void InitializeReader(TextReader* reader);
 
-private:
+LN_INTERNAL_ACCESS:
+
+	// 次の Read のメインループで行ってほしいこと
+	enum class ParsingState
+	{
+		ReadElement,
+		PopNode,
+		IterateAttributes,
+		IteratePartialElements,	// "a&xxx;b" のように ReferenceEntity が含まれる場合、[a][&xxx;][b] のように1度の Read() で 複数の Node をスタックに積む。次からの Read() では順に返していく。
+	};
+
+	struct NodeData
+	{
+		XmlNodeType	Type;
+		int			NameStartPos;
+		int			NameLen;
+		int			ValueStartPos;	///< m_textCache 上のバイトインデックス。-1 の場合は値が存在しない
+		int			ValueLen;		///< m_textCache 上のバイト数
+		int			AttrCount;		///< Element の場合に持つ子 Attribute の数
+		bool		IsSubData;		///< 他の要素の子であるか (Attribute)
+		bool		IsPartial;
+		bool		IsEmptyElement;	///< <a />　のような空要素であるか 
+
+		NodeData()
+		{
+			Init();
+		}
+
+		void Init()
+		{
+			Type = XmlNodeType::None;
+			NameStartPos = -1;
+			NameLen = 0;
+			ValueStartPos = -1;
+			ValueLen = 0;
+			AttrCount = 0;
+			IsSubData = false;
+			IsPartial = false;
+			IsEmptyElement = false;
+		}
+	};
+
+	int PushNode(const NodeData& node);
+	void PopNode();
+
 	bool ParseElementInner();	// '<' から始まる
 	bool ParseElementOuter();	// '<' 以外から始まる
 
@@ -165,7 +209,8 @@ private:
 	bool ParseName(int* startPos, int* length);
 
 	bool ParseXmlDeclOrPI(int nameStart, int nameLength, bool isXmlDecl);
-	bool ParseElement(int nameStart, int nameLength, bool isEnd);
+	bool ParseElement(int nameStart, int nameLength);
+	bool ParseEndElement(int nameStart, int nameLength);
 	bool ParseAttribute();
 
 	bool ParseSkipElement();
@@ -187,36 +232,18 @@ private:
 
 	void ExpandReservedEntities(TCHAR* text, int len);
 
-private:
-	struct NodeData
-	{
-		XmlNodeType	Type;
-		int			NameStartPos;
-		int			NameLen;
-		int			ValueStartPos;	///< m_textCache 上のバイトインデックス。-1 の場合は値が存在しない
-		int			ValueLen;		///< m_textCache 上のバイト数
-		int			AttrCount;		///< Element の場合に持つ子 Attribute の数
-		bool		IsSubData;		///< Attribute 等、他の要素の子であるか
-		bool		IsEmptyElement;	///< <a />　のような空要素であるか 
 
-		NodeData()
-			: Type(XmlNodeType::None)
-			, NameStartPos(-1)
-			, NameLen(0)
-			, ValueStartPos(-1)
-			, ValueLen(0)
-			, AttrCount(0)
-			, IsSubData(false)
-			, IsEmptyElement(false)
-		{}
-	};
 
 	RefPtr<TextReader>		m_reader;
 	Array<TCHAR>			m_textCache;
+	ParsingState			m_parsingState;
+
 	Array<NodeData>			m_nodes;
-	NodeData*				m_currentNode;
-	int						m_currentElementNodePos;
-	int						m_currentAttrIndex;		///< 属性ノードを指している場合、その属性インデックス。指していなければ -1
+	NodeData*				m_currentNode;				// 現在のノード (今回の Read() でユーザーに戻すノード) を指す (属性列挙中は属性ノードを指す)
+	int						m_currentElementNodePos;	// 現在の要素ノードを指す (m_nodes のインデックス。属性列挙中でも要素ノードを指す。指していなければ -1)
+	int						m_currentAttrIndex;			// 属性ノードを指している場合、その属性インデックス。指していなければ -1
+	int						m_currentPartialCount;
+
 	int						m_line;
 	int						m_col;
 	XmlError				m_errorInfo;

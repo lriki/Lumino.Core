@@ -70,7 +70,3 @@
 #include "Lumino/Threading/Thread.h"
 #include "Lumino/Threading/Task.h"
 #include "Lumino/Threading/TaskScheduler.h"
-
-#include "Lumino/Xml/XmlReader.h"
-#include "Lumino/Xml/XmlWriter.h"
-

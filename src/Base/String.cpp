@@ -828,7 +828,7 @@ GenericString<TChar> GenericString<TChar>::FromNativeCharString(const char* str,
 	return out;
 }
 template<typename TChar>
-GenericString<TChar> GenericString<TChar>::FromNativeWCharString(const wchar_t* str, int length)
+GenericString<TChar> GenericString<TChar>::FromNativeCharString(const wchar_t* str, int length)
 {
 	GenericString<TChar> out;
 	out.AssignCStr(str, (length < 0) ? StringTraits::StrLen(str) : length);

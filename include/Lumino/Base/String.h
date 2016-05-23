@@ -406,7 +406,7 @@ public:
 		@param[in]	length	: コピーする文字数 (省略した場合は終端 \0 まで)
 		@return		作成された文字列
 	*/
-	static GenericString FromNativeWCharString(const wchar_t* str, int length = -1);
+	static GenericString FromNativeCharString(const wchar_t* str, int length = -1);
 
 
 	/**

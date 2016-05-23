@@ -1,4 +1,5 @@
 #include <TestConfig.h>
+#include <Lumino/Xml/XmlWriter.h>
 
 class Test_Xml_XmlWriter : public ::testing::Test
 {

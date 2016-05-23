@@ -3,6 +3,7 @@
 #include <gtest/gtest.h>
 #include <memory>
 //#include <mbctype.h>
+#define LN_INTERNAL_ACCESS	public
 #include <LuminoCore.h>
 #include <Lumino/Testing/TestUtils.h>
 

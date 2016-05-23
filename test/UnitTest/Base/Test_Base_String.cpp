@@ -964,7 +964,7 @@ TEST_F(Test_Base_String, FromNativeCharString)
 //---------------------------------------------------------------------
 TEST_F(Test_Base_String, FromNativeWCharString)
 {
-	String str = String::FromNativeWCharString(L"abc");
+	String str = String::FromNativeCharString(L"abc");
 	ASSERT_EQ(_T("abc"), str);
 }
 
