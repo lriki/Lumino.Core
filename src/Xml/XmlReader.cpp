@@ -191,7 +191,10 @@ bool XmlReader::Read()
 			case ParsingState::IterateAttributes:
 			{
 				MoveToElement();
-				m_parsingState = ParsingState::ReadElement;
+				if (m_currentNode->IsEmptyElement)
+					m_parsingState = ParsingState::PopNode;	// 空タグなら先に pop が必要
+				else
+					m_parsingState = ParsingState::ReadElement;
 				continue;
 			}
 			case ParsingState::IteratePartialElements:
@@ -800,8 +803,16 @@ bool XmlReader::ParseElement(int nameStart, int nameLength)
 				// <aaa /> のような子要素を持たないタグだった
 				m_nodes[dataIdx].IsEmptyElement = true;
 
-				// 次回の Read() で、スタック (m_nodes) に積んである EndElement を消してほしい
-				m_parsingState = ParsingState::PopNode;
+				if (m_parsingState == ParsingState::IterateAttributes)
+				{
+					// IterateAttributes なら状態を維持する。
+					// 次の Read() では Attributs 解放 → 空タグ解放 → 次の読み取り と進める。
+				}
+				else
+				{
+					// 次回の Read() で、スタック (m_nodes) に積んである EndElement を消してほしい
+					m_parsingState = ParsingState::PopNode;
+				}
 				break;
 			}
 			else {
