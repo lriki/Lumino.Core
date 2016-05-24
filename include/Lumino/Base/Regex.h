@@ -45,12 +45,18 @@ public:
 		}
 	}
 
+	/** 
+		@brief	対象の文字列が、正規表現パターンで表現できているかを調べます。（完全一致）
+	*/
 	static bool Match(const StringRefT& input, const StringRefT& pattern, GenericMatchResult<TChar>* outResult = nullptr)
 	{
 		GenericRegex re(pattern);
 		return re.Search(input, outResult);
 	}
 
+	/**
+		@brief	文字列の中から、正規表現パターンに該当する文字列があるかを調べます。（検索, 部分一致）
+	*/
 	static bool Search(const StringRefT& input, const StringRefT& pattern, GenericMatchResult<TChar>* outResult = nullptr)
 	{
 		GenericRegex re(pattern);

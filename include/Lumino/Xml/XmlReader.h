@@ -218,11 +218,6 @@ LN_INTERNAL_ACCESS:
 	bool ParseEndElement(int nameStart, int nameLength);
 	bool ParseAttribute();
 
-	bool ParseSkipElement();
-	//bool ParseDocumentType();
-
-
-
 	bool IsTextChar(int ch);
 
 

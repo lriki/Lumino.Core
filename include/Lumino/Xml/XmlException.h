@@ -41,6 +41,7 @@ class XmlError
 {
 public:
 	XmlErrorCode errorCode = ParseError_NoError;
+	String filePath;
 	int line = 0;
 	int col = 0;
 	String message;
@@ -53,7 +54,7 @@ public:
 		errorCode = errorCode_;
 		line = line_;
 		col = col_;
-		message = String::Format(_T("({0}, {1}): {2}"), line, col, message_);
+		message = String::Format(_T("{3}({0}, {1}): {2}"), line, col, message_, filePath);
 	}
 	void AddError(XmlErrorCode errorCode_, int line_, int col_)	// TODO: 削除予定。エラーメッセージはちゃんとつけてあげよう。
 	{

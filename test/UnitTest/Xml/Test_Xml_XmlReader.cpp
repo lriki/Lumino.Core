@@ -435,15 +435,16 @@ TEST_F(Test_Xml_XmlReader, SystemTest)
 //---------------------------------------------------------------------
 TEST_F(Test_Xml_XmlReader, Issues)
 {
-	String xml =
-		_T("<homepage>\n")
-		_T("  <page src=\"index.html\">\n")
-		_T("</homepage>");
-	XmlReader reader(xml);
-
-	while (reader.Read())
 	{
-		reader.GetNodeType();
+		String xml = _T("<a b=\"c\" />");
+		XmlReader reader(xml);
+
+		reader.Read();
+		ASSERT_EQ(true, reader.IsEmptyElement());
 	}
+
+	XmlFileReader reader(LN_LOCALFILE("TestData/Issue1.xml"));
+
+	//while (reader.Read());
 
 }

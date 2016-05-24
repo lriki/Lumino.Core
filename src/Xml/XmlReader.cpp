@@ -323,6 +323,7 @@ StringRef XmlReader::GetStringFromCache(int pos, int len)
 //------------------------------------------------------------------------------
 StringRef XmlReader::GetNodeName(const NodeData& node)
 {
+	if (node.NameLen == 0) return StringRef();
 	return StringRef(&m_textCache[node.NameStartPos], node.NameLen);
 }
 
@@ -440,7 +441,8 @@ void XmlReader::PopNode()
 	m_textCache.Resize(m_textCache.GetCount() - m_nodes.GetLast().NameLen);
 
 
-	m_nodes.RemoveLast();
+	//m_nodes.RemoveLast();
+	m_nodes.Resize(m_currentElementNodePos);
 	--m_stockElementCount;
 
 
@@ -710,6 +712,17 @@ bool XmlReader::ParseComment()
 }
 
 //------------------------------------------------------------------------------
+/*
+	http://www.eplusx.net/translation/W3C/REC-xml11-20060816/#NT-Name
+	[4]   	NameStartChar	::=   	":" | [A-Z] | "_" | [a-z] | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF] | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D] | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]
+	[4a]   	NameChar		::=   	NameStartChar | "-" | "." | [0-9] | #xB7 | [#x0300-#x036F] | [#x203F-#x2040]
+	[5]   	Name			::=   	NameStartChar ( NameChar )*
+	[6]   	Names			::=   	Name ( #x20 Name )*
+	[7]   	Nmtoken			::=   	( NameChar )+
+	[8]   	Nmtokens		::=   	Nmtoken ( #x20 Nmtoken )*
+
+	Å¶ç°ÇÕasciiÇÃÇ›çlÇ¶ÇÈ
+*/
 bool XmlReader::ParseName(int* startPos, int* length)
 {
 	LN_ASSERT(startPos != NULL);
@@ -1133,12 +1146,13 @@ void XmlReader::ExpandReservedEntities(TCHAR* text, int len)
 //==============================================================================
 
 //------------------------------------------------------------------------------
-XmlFileReader::XmlFileReader(const PathName& filePath, Encoding* encoding )
+XmlFileReader::XmlFileReader(const PathName& filePath, Encoding* encoding)
 	: XmlReader()
 {
 	m_filePath = filePath.CanonicalizePath();
 	RefPtr<StreamReader> file(LN_NEW StreamReader(m_filePath, encoding), false);
 	InitializeReader(file);
+	m_errorInfo.filePath = filePath;
 }
 
 //------------------------------------------------------------------------------
