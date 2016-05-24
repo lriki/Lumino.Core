@@ -66,6 +66,8 @@ StringRef 使うことは無いかも。
 
 #include "../Internal.h"
 #include <Lumino/Base/StringTraits.h>
+#include <Lumino/Base/StringBuilder.h>
+#include <Lumino/Base/Resource.h>
 #include <Lumino/IO/PathName.h>
 #include <Lumino/IO/StringReader.h>
 #include <Lumino/IO/StreamReader.h>
@@ -140,83 +142,9 @@ void XmlReader::InitializeReader(TextReader* reader)
 // ※Read() 自体は属性ノードは返さない。
 bool XmlReader::Read()
 {
-	while (true)
-	{
-		switch (m_parsingState)
-		{
-			case ParsingState::ReadElement:
-			{
-				//if (m_stockElementCount > 0)
-				//{
-				//	m_currentElementNodePos += m_currentNode->AttrCount;	// 属性ノードを読み飛ばす (と言っても現在は Text ノードのみこの if に入ってくるから実質意味は無いが)
-				//	m_currentElementNodePos++;								// 次のノードを指す
-				//	m_currentNode = &m_nodes[m_currentElementNodePos];
-				//	m_currentAttrCount = m_currentNode->AttrCount;
-				//	m_stockElementCount--;
-				//	return true;
-				//}
-
-				//m_textCache.Clear();
-				//m_nodes.Clear();
-				//m_currentElementNodePos = 0;
-				//m_currentAttrCount = 0;
-				//m_currentNode = NULL;
-				//m_currentAttrIndex = -1;
-
-				int ch = m_reader->Peek();
-				if (ch < 0) { return false; }	// もう読み取れる文字が無い
-				if (ch == '<') {
-					if (!ParseElementInner()) { return false; }
-				}
-				else {
-					if (!ParseElementOuter()) { return false; }
-				}
-
-				//m_currentElementNodePos = 0;
-				//m_stockElementCount--;
-
-				m_currentNode = &m_nodes[m_currentElementNodePos];
-				m_currentAttrCount = m_currentNode->AttrCount;
-
-				return true;
-
-			}
-
-			case ParsingState::PopNode:
-			{
-				PopNode();
-				m_parsingState = ParsingState::ReadElement;	// TODO: ReadDocument とか作る？というか複数ドキュメントは無しだから End とかのほうがいいか。
-				continue;
-			}
-			case ParsingState::IterateAttributes:
-			{
-				MoveToElement();
-				if (m_currentNode->IsEmptyElement)
-					m_parsingState = ParsingState::PopNode;	// 空タグなら先に pop が必要
-				else
-					m_parsingState = ParsingState::ReadElement;
-				continue;
-			}
-			case ParsingState::IteratePartialElements:
-			{
-				++m_currentElementNodePos;
-				if (m_currentElementNodePos >= m_stockElementCount)
-				{
-					m_currentElementNodePos = m_stockElementCount - m_currentPartialCount - 1;	//　一連の Text が始まる前の要素を指す (次は EndElement がくるはず)
-					m_nodes.Resize(m_currentElementNodePos+1);
-					m_stockElementCount = m_nodes.GetCount();	// TODO: m_stockElementCountは配列サイズで代用できないかな？
-					m_currentPartialCount = 0;
-					m_parsingState = ParsingState::ReadElement;
-					continue;
-				}
-				else
-				{
-					m_currentNode = &m_nodes[m_currentElementNodePos];
-					return true;
-				}
-			}
-		}
-	}
+	bool r = ReadInternal();
+	LN_THROW(!m_errorInfo.HasError(), XmlException, m_errorInfo.message.c_str());
+	return r;
 }
 
 //------------------------------------------------------------------------------
@@ -385,6 +313,101 @@ String XmlReader::ReadString()
 	return result;
 }
 
+
+//------------------------------------------------------------------------------
+StringRef XmlReader::GetStringFromCache(int pos, int len)
+{
+	return StringRef(&m_textCache[pos], len);
+}
+
+//------------------------------------------------------------------------------
+StringRef XmlReader::GetNodeName(const NodeData& node)
+{
+	return StringRef(&m_textCache[node.NameStartPos], node.NameLen);
+}
+
+//------------------------------------------------------------------------------
+bool XmlReader::ReadInternal()
+{
+	while (true)
+	{
+		switch (m_parsingState)
+		{
+			case ParsingState::ReadElement:
+			{
+				//if (m_stockElementCount > 0)
+				//{
+				//	m_currentElementNodePos += m_currentNode->AttrCount;	// 属性ノードを読み飛ばす (と言っても現在は Text ノードのみこの if に入ってくるから実質意味は無いが)
+				//	m_currentElementNodePos++;								// 次のノードを指す
+				//	m_currentNode = &m_nodes[m_currentElementNodePos];
+				//	m_currentAttrCount = m_currentNode->AttrCount;
+				//	m_stockElementCount--;
+				//	return true;
+				//}
+
+				//m_textCache.Clear();
+				//m_nodes.Clear();
+				//m_currentElementNodePos = 0;
+				//m_currentAttrCount = 0;
+				//m_currentNode = NULL;
+				//m_currentAttrIndex = -1;
+
+				int ch = m_reader->Peek();
+				if (ch < 0) { return false; }	// もう読み取れる文字が無い
+				if (ch == '<') {
+					if (!ParseElementInner()) { return false; }
+				}
+				else {
+					if (!ParseElementOuter()) { return false; }
+				}
+
+				//m_currentElementNodePos = 0;
+				//m_stockElementCount--;
+
+				m_currentNode = &m_nodes[m_currentElementNodePos];
+				m_currentAttrCount = m_currentNode->AttrCount;
+
+				return true;
+
+			}
+
+			case ParsingState::PopNode:
+			{
+				PopNode();
+				m_parsingState = ParsingState::ReadElement;	// TODO: ReadDocument とか作る？というか複数ドキュメントは無しだから End とかのほうがいいか。
+				continue;
+			}
+			case ParsingState::IterateAttributes:
+			{
+				MoveToElement();
+				if (m_currentNode->IsEmptyElement)
+					m_parsingState = ParsingState::PopNode;	// 空タグなら先に pop が必要
+				else
+					m_parsingState = ParsingState::ReadElement;
+				continue;
+			}
+			case ParsingState::IteratePartialElements:
+			{
+				++m_currentElementNodePos;
+				if (m_currentElementNodePos >= m_stockElementCount)
+				{
+					m_currentElementNodePos = m_stockElementCount - m_currentPartialCount - 1;	//　一連の Text が始まる前の要素を指す (次は EndElement がくるはず)
+					m_nodes.Resize(m_currentElementNodePos+1);
+					m_stockElementCount = m_nodes.GetCount();	// TODO: m_stockElementCountは配列サイズで代用できないかな？
+					m_currentPartialCount = 0;
+					m_parsingState = ParsingState::ReadElement;
+					continue;
+				}
+				else
+				{
+					m_currentNode = &m_nodes[m_currentElementNodePos];
+					return true;
+				}
+			}
+		}
+	}
+}
+
 //------------------------------------------------------------------------------
 int XmlReader::PushNode(const NodeData& node)
 {
@@ -485,7 +508,7 @@ bool XmlReader::ParseElementInner()
 	if (!ParseName(&namePos, &nameLen)) { return false; }
 	if (nameLen == 0) {
 		// Error: 要素名が見つからなかった (< との間に空白を入れることはできない)
-		m_errorInfo.AddError(ParseError_ElementNameNotFount, m_line, m_col);
+		m_errorInfo.AddError(detail::ParseError_ElementNameNotFount, m_line, m_col);
 		return false;
 	}
 
@@ -652,7 +675,7 @@ bool XmlReader::ParseComment()
 			}
 			else {
 				// Error: コメント内部に連続する -- が見つかった
-				m_errorInfo.AddError(ParseError_CommentDoubleHyphen, m_line, m_col);
+				m_errorInfo.AddError(detail::ParseError_CommentDoubleHyphen, m_line, m_col);
 				return false;
 			}
 		}
@@ -756,7 +779,7 @@ bool XmlReader::ParseXmlDeclOrPI(int nameStart, int nameLength, bool isXmlDecl)
 			}
 			else {
 				// Error: 正常なタグ終端ではない
-				m_errorInfo.AddError(ParseError_ElementInvalidEmptyTagEnd, m_line, m_col);
+				m_errorInfo.AddError(detail::ParseError_ElementInvalidEmptyTagEnd, m_line, m_col);
 				return false;
 			}
 		}
@@ -817,7 +840,7 @@ bool XmlReader::ParseElement(int nameStart, int nameLength)
 			}
 			else {
 				// Error: 正常なタグ終端ではない
-				m_errorInfo.AddError(ParseError_ElementInvalidEmptyTagEnd, m_line, m_col);
+				m_errorInfo.AddError(detail::ParseError_ElementInvalidEmptyTagEnd, m_line, m_col);
 				return false;
 			}
 		}
@@ -839,6 +862,16 @@ bool XmlReader::ParseElement(int nameStart, int nameLength)
 // タグ名の部分は読み取り済みで、m_reader は要素名の次の空白を指している。
 bool XmlReader::ParseEndElement(int nameStart, int nameLength)
 {
+	NodeData* top = &m_nodes[m_currentElementNodePos];
+	if (GetNodeName(*top) != GetStringFromCache(nameStart, nameLength))
+	{
+		m_errorInfo.AddError(
+			detail::ParseError_TagMismatch, m_line, m_col,
+			String::Format(StringRef(InternalResource::GetString(InternalResource::Xml_TagMismatch)), GetNodeName(*top), GetStringFromCache(nameStart, nameLength)));
+		return false;
+	}
+
+
 	// スタック (m_nodes) の先頭には StartElement があるはず。これを捨てて、EndElement にする。
 	m_currentNode = &m_nodes[m_currentElementNodePos];
 	m_currentNode->Init();
@@ -875,7 +908,7 @@ bool XmlReader::ParseAttribute()
 	// =
 	if (m_reader->Peek() != '=') {
 		// Error: = が見つからなかった
-		m_errorInfo.AddError(ParseError_CommentDoubleHyphen, m_line, m_col);
+		m_errorInfo.AddError(detail::ParseError_CommentDoubleHyphen, m_line, m_col);
 		return false;
 	}
 	m_reader->Read();
@@ -886,7 +919,7 @@ bool XmlReader::ParseAttribute()
 	// "
 	if (m_reader->Peek() != '"') {
 		// Error: " が見つからなかった
-		m_errorInfo.AddError(ParseError_AttributeQuoteNotFount, m_line, m_col);
+		m_errorInfo.AddError(detail::ParseError_AttributeQuoteNotFount, m_line, m_col);
 		return false;
 	}
 	m_reader->Read();
@@ -905,7 +938,7 @@ bool XmlReader::ParseAttribute()
 	// "
 	if (ch != '"') {
 		// Error: " が見つからなかった
-		m_errorInfo.AddError(ParseError_AttributeQuoteNotFount, m_line, m_col);
+		m_errorInfo.AddError(detail::ParseError_AttributeQuoteNotFount, m_line, m_col);
 		return false;
 	}
 

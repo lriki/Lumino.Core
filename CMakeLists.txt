@@ -202,10 +202,11 @@ set(LN_SOURCES_Threading
 
 set(LN_SOURCES_Xml
 	include/Lumino/Xml/XmlDocument.h
-	include/Lumino/Xml/XmlError.h
+	include/Lumino/Xml/XmlException.h
 	include/Lumino/Xml/XmlReader.h
 	include/Lumino/Xml/XmlWriter.h
 	src/Xml/XmlDocument.cpp
+	src/Xml/XmlException.cpp
 	src/Xml/XmlReader.cpp
 	src/Xml/XmlWriter.cpp
 )

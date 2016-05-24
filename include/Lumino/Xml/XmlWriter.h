@@ -2,7 +2,7 @@
 #pragma once
 #include "../Base/Stack.h"
 #include "../IO/TextWriter.h"
-#include "XmlError.h"
+#include "XmlException.h"
 #include "XmlReader.h"	//TODO
 
 LN_NAMESPACE_BEGIN

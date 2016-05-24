@@ -30,7 +30,6 @@
 #include "Lumino/Base/Nullable.h"
 #include "Lumino/Base/ElapsedTimer.h"
 #include "Lumino/Base/SortedArray.h"
-#include "Lumino/Base/Thickness.h"
 #include "Lumino/Base/Collection.h"
 #include "Lumino/Base/Event.h"
 #include "Lumino/Base/Resource.h"

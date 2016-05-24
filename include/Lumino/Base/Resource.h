@@ -27,6 +27,10 @@ namespace InternalResource
 	extern const String ComError;
 	extern const String OpenGLError;
 
+	extern const String XmlException;
+	extern const String Xml_TagMismatch;
+
+
 	extern const String& GetString(const String& name);
 	extern void SetString(const String& name, const String& value);
 };

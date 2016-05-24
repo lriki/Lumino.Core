@@ -3,7 +3,7 @@
 #include "../IO/PathName.h"
 #include "../IO/TextReader.h"
 #include "../IO/MemoryStream.h"
-#include "XmlError.h"
+#include "XmlException.h"
 
 LN_NAMESPACE_BEGIN
 
@@ -198,6 +198,11 @@ LN_INTERNAL_ACCESS:
 		}
 	};
 
+	StringRef GetStringFromCache(int pos, int len);
+	StringRef GetNodeName(const NodeData& node);
+
+
+	bool ReadInternal();
 	int PushNode(const NodeData& node);
 	void PopNode();
 
@@ -246,7 +251,7 @@ LN_INTERNAL_ACCESS:
 
 	int						m_line;
 	int						m_col;
-	XmlError				m_errorInfo;
+	detail::XmlError		m_errorInfo;
 	int						m_stockElementCount;
 	String					m_tmpName;
 	String					m_tmpValue;

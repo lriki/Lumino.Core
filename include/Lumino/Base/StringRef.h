@@ -118,6 +118,13 @@ inline bool operator==(const TChar* left, const GenericStringRef<TChar>& right)
 	return right.Equals(left);
 }
 
+//------------------------------------------------------------------------------
+template<typename TChar>
+inline bool operator!=(const GenericStringRef<TChar>& left, const GenericStringRef<TChar>& right)
+{
+	return !right.Equals(left);
+}
+
 typedef GenericStringRef<TCHAR>		StringRef;
 typedef GenericStringRef<char>		StringRefA;
 typedef GenericStringRef<wchar_t>	StringRefW;

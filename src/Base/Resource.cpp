@@ -104,8 +104,10 @@ public:
 		SetString(InternalResource::RuntimeError, _T("ランタイム機能の呼び出しで予期しないエラーが発生しました。"));
 		SetString(InternalResource::Win32Error, _T("WindowsAPI の呼び出しでエラーが発生しました。"));
 		SetString(InternalResource::ComError, _T("COM の呼び出しでエラーが発生しました。"));
-
 		SetString(InternalResource::OpenGLError, _T("OpenGL の呼び出しでエラーが発生しました。"));
+
+		SetString(InternalResource::XmlException, _T("不正な XML フォーマットです。"));
+		SetString(InternalResource::Xml_TagMismatch, _T("開始タグ '{0}' と終了タグ '{1}' が対応していません。"));
 	}
 };
 
@@ -132,6 +134,9 @@ const String InternalResource::OverflowError(_T("OverflowError"));
 const String InternalResource::Win32Error(_T("Win32Error"));
 const String InternalResource::ComError(_T("ComError"));
 const String InternalResource::OpenGLError(_T("OpenGLError"));
+
+const String InternalResource::XmlException(_T("XmlException"));
+const String InternalResource::Xml_TagMismatch(_T("Xml_TagMismatch"));
 
 static InternalResourceSet g_internalResource;
 
