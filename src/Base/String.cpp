@@ -9,6 +9,7 @@
 #include <Lumino/Base/Locale.h>
 #include <Lumino/Base/Environment.h>
 #include <Lumino/Base/StringArray.h>
+#include <Lumino/IO/PathName.h>
 
 /*
 basic_string クラス
@@ -203,6 +204,13 @@ GenericString<TChar>::GenericString(int count, TChar ch)
 {
 	AssignTString(count, ch);
 }
+
+template<typename TChar>
+GenericString<TChar>::GenericString(const GenericPathName<TChar>& path)
+	: GenericString(path.GetString())
+{
+}
+
 //
 ////------------------------------------------------------------------------------
 //// YCHAR コンストラクタ系
@@ -261,6 +269,12 @@ GenericString<TChar>& GenericString<TChar>::operator=(const GenericString& right
 	return (*this);
 }
 template<typename TChar>
+GenericString<TChar>& GenericString<TChar>::operator=(const GenericStringRef<TChar>& right)
+{
+	AssignTString(right.GetBegin(), right.GetLength());
+	return (*this);
+}
+template<typename TChar>
 GenericString<TChar>& GenericString<TChar>::operator=(const std::basic_string<TChar>& right)
 {
 	AssignTString(right.c_str(), -1);
@@ -272,24 +286,10 @@ GenericString<TChar>& GenericString<TChar>::operator=(const TChar* right)
 	AssignTString(right, -1);
 	return (*this);
 }
-
 template<typename TChar>
-GenericString<TChar>& GenericString<TChar>::operator=(const GenericString<YCHAR>& right)
+GenericString<TChar>& GenericString<TChar>::operator=(const GenericPathName<TChar>& right)
 {
-	AssignCStr(right.c_str()); return (*this);
-	return (*this);
-}
-template<typename TChar>
-GenericString<TChar>& GenericString<TChar>::operator=(const std::basic_string<YCHAR>& right)
-{
-	AssignCStr(right.c_str()); return (*this);
-	return (*this);
-}
-template<typename TChar>
-GenericString<TChar>& GenericString<TChar>::operator=(const YCHAR* right)
-{
-	AssignCStr(right); return (*this);
-	return (*this);
+	return operator=(right.GetString());
 }
 
 //------------------------------------------------------------------------------

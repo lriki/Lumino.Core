@@ -171,20 +171,6 @@ TEST_F(Test_Base_String, Operators)
 		ASSERT_EQ("w", strA);
 		ASSERT_EQ(L"a", strW);
 	}
-	// <Test> operator= (GenericString・ASCII/Wide逆の型)
-	{
-		strA = strWSample;
-		strW = strASample;
-		ASSERT_EQ("w", strA);
-		ASSERT_EQ(L"a", strW);
-	}
-	// <Test> operator= (std::string・ASCII/Wide逆の型)
-	{
-		strA = strWStd;
-		strW = strAStd;
-		ASSERT_EQ("w", strA);
-		ASSERT_EQ(L"a", strW);
-	}
 	// <Test> operator= (NULL)
 	{
 		strA = ((char*)NULL);

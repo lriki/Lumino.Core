@@ -16,6 +16,7 @@ class Encoding;
 template<typename TChar> class GenericCharRef;
 template<typename TChar> class GenericStringRef;
 template<typename TChar> class GenericStringArray;
+template<typename TChar> class GenericPathName;
 
 namespace detail { template<typename TChar> class GenericStringCore; }
 namespace tr { class Variant; }
@@ -94,15 +95,16 @@ public:
 	GenericString(const TChar* str, int begin, int length);
 	GenericString(TChar ch);
 	GenericString(int count, TChar ch);
+	GenericString(const GenericPathName<TChar>& path);
+	
 
 	/// @name Operators
 	/// @{
 	GenericString& operator=(const GenericString& right);
+	GenericString& operator=(const GenericStringRef<TChar>& right);
 	GenericString& operator=(const std::basic_string<TChar>& right);
 	GenericString& operator=(const TChar* right);
-	GenericString& operator=(const GenericString<YCHAR>& right);
-	GenericString& operator=(const std::basic_string<YCHAR>& right);
-	GenericString& operator=(const YCHAR* right);
+	GenericString& operator=(const GenericPathName<TChar>& right);
 
 	GenericString& operator+=(const GenericString& right);
 	GenericString& operator+=(const TChar* ptr);

@@ -415,7 +415,7 @@ TEST_F(Test_Xml_XmlReader, SystemTest)
 		while (reader.Read())
 		{
 			types.Add(reader.GetNodeType());
-			if (reader.IsStartElement("test"))
+			if (reader.IsStartElement(_T("test")))
 			{
 				types.Add(reader.GetNodeType());
 				ASSERT_EQ(_T("  AAA  "), reader.ReadString());

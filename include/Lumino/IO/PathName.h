@@ -148,6 +148,8 @@ public:
 	/// パス文字列を返す
 	const GenericStringT& GetString() const { return m_path; }	// TODO: ToString()
 
+	GenericString<TCHAR> ToString() const;
+
 	/// パス文字列を返す (末尾に必ずセパレータをひとつ付加する)
 	const GenericString<TChar> GetStrEndSeparator() const;
 

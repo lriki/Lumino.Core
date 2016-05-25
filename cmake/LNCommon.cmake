@@ -70,17 +70,15 @@ function(ln_make_postfix_for_shared_lib outPostfix)
 		# Architecture.
 		# http://stackoverflow.com/questions/5334095/cmake-multiarchitecture-compilation
 		if (${CMAKE_EXE_LINKER_FLAGS} MATCHES "/machine:x64")	# /machine:x64
-			set(postfix "${postfix}x64")
+			set(postfix "${postfix}_x64")
 		else()
-			set(postfix "${postfix}x86")
+			set(postfix "${postfix}_x86")
 		endif()
 
 		# Unicode.
 		if (${LN_USE_UNICODE_CHAR_SET})
 			set(postfix "${postfix}u")
 		endif()
-
-		set(postfix "${postfix}_static")
 
 		# MSVC Runtime library.
 		if (LN_MSVC_LINK_MULTI_THREAD_STATIC_RUNTIME)

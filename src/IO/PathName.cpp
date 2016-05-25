@@ -126,6 +126,31 @@ GenericStringRef<TChar> GenericPathName<TChar>::GetExtension(bool withDot) const
 }
 
 //------------------------------------------------------------------------------
+#if defined(LN_UNICODE)
+template<>
+GenericString<TCHAR> GenericPathName<char>::ToString() const
+{
+	return GenericString<TCHAR>::FromNativeCharString(m_path.c_str(), m_path.GetLength());
+}
+template<>
+GenericString<TCHAR> GenericPathName<wchar_t>::ToString() const
+{
+	return m_path;
+}
+#else
+template<>
+GenericString<TCHAR> GenericPathName<char>::ToString() const
+{
+	return m_path;
+}
+template<>
+GenericString<TCHAR> GenericPathName<wchar_t>::ToString() const
+{
+	return GenericString<TCHAR>::FromNativeCharString(m_path.c_str(), m_path.GetLength());
+}
+#endif
+
+//------------------------------------------------------------------------------
 template<typename TChar>
 const GenericString<TChar> GenericPathName<TChar>::GetStrEndSeparator() const
 {

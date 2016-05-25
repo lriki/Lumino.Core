@@ -167,7 +167,7 @@ public:
 		void Init(const TEnum* values, int valuesCount, const char* argNames)
 		{
 			PairList& members = GetMemberList();
-			String names = argNames;
+			String names = String::FromNativeCharString(argNames);
 			Array<String> tokens = names.Split(_T(","));
 			for (int i = 0; i < valuesCount; ++i)
 			{
