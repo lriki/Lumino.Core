@@ -130,17 +130,17 @@ Locale::Locale()
 	, m_nativeName()
 {
 	GetNativeDefaultLocale(&m_nativeLocale, &m_nativeName);
-	StringA name = m_nativeName;
+	StringA name = m_nativeName.ToStringA();
 	m_stdLocale = std::locale(name.c_str());
 }
 
 //------------------------------------------------------------------------------
 Locale::Locale(const TCHAR* name)
 	: m_nativeLocale(0)
-	, m_nativeName(name)
+	, m_nativeName(StringW::FromNativeCharString(name))
 {
 	m_nativeLocale = CreateNativeLocale(m_nativeName.c_str());
-	StringA t = m_nativeName;
+	StringA t = m_nativeName.ToStringA();
 	m_stdLocale = std::locale(t.c_str());
 }
 

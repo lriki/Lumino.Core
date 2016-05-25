@@ -95,14 +95,6 @@ public:
 	GenericString(TChar ch);
 	GenericString(int count, TChar ch);
 
-	// YCHAR (対の文字型は AssignCStr で文字コード変換を行う)
-	GenericString(const GenericString<YCHAR>& str);
-	GenericString(const GenericString<YCHAR>& str, int length);
-	GenericString(const GenericString<YCHAR>& str, int begin, int length);
-	GenericString(const YCHAR* str);
-	GenericString(const YCHAR* str, int length);
-	GenericString(const YCHAR* str, int begin, int length);
-
 	/// @name Operators
 	/// @{
 	GenericString& operator=(const GenericString& right);
@@ -391,6 +383,9 @@ public:
 	bool		TryToUInt16(uint16_t* outValue, int base = 0) const;	///< @copydoc TryToInt8
 	bool		TryToUInt32(uint32_t* outValue, int base = 0) const;	///< @copydoc TryToInt8
 	bool		TryToUInt64(uint64_t* outValue, int base = 0) const;	///< @copydoc TryToInt8
+
+	GenericString<char>	ToStringA() const;
+	GenericString<wchar_t> ToStringW() const;
 
 	/**
 		@brief		指定した char 配列から文字列を作成します。

@@ -212,7 +212,7 @@ TEST_F(Test_Base_String, Operators)
 	// <Test> operator== (文字列ポインタ)
 	{
 		ASSERT_TRUE(strA == "a");
-		ASSERT_TRUE(strW == "w");
+		ASSERT_TRUE(strW == L"w");
 	}
 	// <Test> operator== (NULL)
 	{
@@ -234,7 +234,7 @@ TEST_F(Test_Base_String, Operators)
 	// <Test> operator!= (文字列ポインタ)
 	{
 		ASSERT_FALSE(strA != "a");
-		ASSERT_FALSE(strW != "w");
+		ASSERT_FALSE(strW != L"w");
 	}
 	// <Test> operator!= (NULL)
 	{
@@ -278,7 +278,7 @@ TEST_F(Test_Base_String, Operators)
 	strA = "a";
 	strW = L"w";
 	StringA strA2 = "A";
-	StringW strW2 = "W";
+	StringW strW2 = L"W";
 	// <Test> operator < (GenericString)
 	{
 		ASSERT_TRUE(strA2 < strA);
@@ -366,17 +366,18 @@ TEST_F(Test_Base_String, Operators)
 //---------------------------------------------------------------------
 TEST_F(Test_Base_String, XYChar)
 {
-	String str1("multi");
-	ASSERT_STREQ(_T("multi"), str1.c_str());
 
-	String str2(L"wide");
-	ASSERT_STREQ(_T("wide"), str2.c_str());
+	//String str1("multi");
+	//ASSERT_STREQ(_T("multi"), str1.c_str());
 
-	str1 = "multi";
-	ASSERT_STREQ(_T("multi"), str1.c_str());
+	////String str2(L"wide");
+	////ASSERT_STREQ(_T("wide"), str2.c_str());
 
-	str2 = L"wide";
-	ASSERT_STREQ(_T("wide"), str2.c_str());
+	//str1 = "multi";
+	//ASSERT_STREQ(_T("multi"), str1.c_str());
+
+	//str2 = L"wide";
+	//ASSERT_STREQ(_T("wide"), str2.c_str());
 }
 
 //---------------------------------------------------------------------

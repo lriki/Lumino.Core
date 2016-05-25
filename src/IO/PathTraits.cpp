@@ -850,7 +850,7 @@ GenericString<TChar> PathTraits::DiffPath(const TChar* path1, int len1, const TC
 	}
 	// 完全一致
 	if (i == slen1 && i == slen2) {
-		return GenericString<TChar>(_T("."));	// TODO: 共通文字列にしたい。メモリ確保したくない//::GetEmpty();
+		return GenericString<TChar>::FromNativeCharString(_T("."));	// TODO: 共通文字列にしたい。メモリ確保したくない//::GetEmpty();
 	}
 
 	// path1 の残りの部分からセパレータを探す。このセパレータの数が、戻る深さ(..) の数になる。

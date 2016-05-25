@@ -203,52 +203,52 @@ GenericString<TChar>::GenericString(int count, TChar ch)
 {
 	AssignTString(count, ch);
 }
-
-//------------------------------------------------------------------------------
-// YCHAR コンストラクタ系
-//------------------------------------------------------------------------------
-template<typename TChar>
-GenericString<TChar>::GenericString(const GenericString<YCHAR>& str)
-	: m_ref(nullptr)
-	, m_string(nullptr)
-{
-	AssignCStr(str.c_str());
-}
-template<typename TChar>
-GenericString<TChar>::GenericString(const GenericString<YCHAR>& str, int length)
-	: m_ref(nullptr)
-	, m_string(nullptr)
-{
-	AssignCStr(str.c_str(), length);
-}
-template<typename TChar>
-GenericString<TChar>::GenericString(const GenericString<YCHAR>& str, int begin, int length)
-	: m_ref(nullptr)
-	, m_string(nullptr)
-{
-	AssignCStr(str.c_str(), begin, length);
-}
-template<typename TChar>
-GenericString<TChar>::GenericString(const YCHAR* str)
-	: m_ref(nullptr)
-	, m_string(nullptr)
-{
-	AssignCStr(str);
-}
-template<typename TChar>
-GenericString<TChar>::GenericString(const YCHAR* str, int length)
-	: m_ref(nullptr)
-	, m_string(nullptr)
-{
-	AssignCStr(str, length);
-}
-template<typename TChar>
-GenericString<TChar>::GenericString(const YCHAR* str, int begin, int length)
-	: m_ref(nullptr)
-	, m_string(nullptr)
-{
-	AssignCStr(str, begin, length);
-}
+//
+////------------------------------------------------------------------------------
+//// YCHAR コンストラクタ系
+////------------------------------------------------------------------------------
+//template<typename TChar>
+//GenericString<TChar>::GenericString(const GenericString<YCHAR>& str)
+//	: m_ref(nullptr)
+//	, m_string(nullptr)
+//{
+//	AssignCStr(str.c_str());
+//}
+//template<typename TChar>
+//GenericString<TChar>::GenericString(const GenericString<YCHAR>& str, int length)
+//	: m_ref(nullptr)
+//	, m_string(nullptr)
+//{
+//	AssignCStr(str.c_str(), length);
+//}
+//template<typename TChar>
+//GenericString<TChar>::GenericString(const GenericString<YCHAR>& str, int begin, int length)
+//	: m_ref(nullptr)
+//	, m_string(nullptr)
+//{
+//	AssignCStr(str.c_str(), begin, length);
+//}
+//template<typename TChar>
+//GenericString<TChar>::GenericString(const YCHAR* str)
+//	: m_ref(nullptr)
+//	, m_string(nullptr)
+//{
+//	AssignCStr(str);
+//}
+//template<typename TChar>
+//GenericString<TChar>::GenericString(const YCHAR* str, int length)
+//	: m_ref(nullptr)
+//	, m_string(nullptr)
+//{
+//	AssignCStr(str, length);
+//}
+//template<typename TChar>
+//GenericString<TChar>::GenericString(const YCHAR* str, int begin, int length)
+//	: m_ref(nullptr)
+//	, m_string(nullptr)
+//{
+//	AssignCStr(str, begin, length);
+//}
 
 //------------------------------------------------------------------------------
 // operator=
@@ -818,6 +818,34 @@ template<typename TChar>
 bool GenericString<TChar>::TryToUInt64(uint64_t* outValue, int base) const { TRY_TO_INT_DEF(uint64_t, ToUInt64); }
 
 #undef TRY_TO_INT_DEF
+
+
+//------------------------------------------------------------------------------
+template<>
+GenericString<char>	GenericString<char>::ToStringA() const
+{
+	return *this;
+}
+template<>
+GenericString<char>	GenericString<wchar_t>::ToStringA() const
+{
+	GenericString<char> str;
+	str.AssignCStr(this->c_str());
+	return str;
+}
+
+//------------------------------------------------------------------------------
+GenericString<wchar_t> GenericString<char>::ToStringW() const
+{
+	GenericString<wchar_t> str;
+	str.AssignCStr(this->c_str());
+	return str;
+}
+template<>
+GenericString<wchar_t>	GenericString<wchar_t>::ToStringW() const
+{
+	return *this;
+}
 
 //------------------------------------------------------------------------------
 template<typename TChar>
