@@ -3,6 +3,8 @@
 cmake_minimum_required (VERSION 3.0.0)
 project (LuminoCore)
 
+include(cmake/LNCommon.cmake NO_POLICY_SCOPE)
+
 set(LN_LINK_LIBS "")
 set(LN_UNIT_TEST_LINK_LIBS "")
 set(LN_LIB_POSTFIX "")
@@ -284,68 +286,6 @@ set(LN_SOURCES
 set(LN_INCLUDE_DIRECTORIES
 	${PROJECT_SOURCE_DIR}/include)
 include_directories(${LN_INCLUDE_DIRECTORIES})
-
-#------------------------------------------------------------------------------
-# functions
-#------------------------------------------------------------------------------
-function(ln_make_postfix outPostfix)
-	if (WIN32)
-		#------------------------------------------------------
-		# Make static lib name.
-		#	{ProjectName}_{msvcVer}{Arch}_static_{Runtime}
-		#	e.g)	LuminoMath_msvc120x86_static_MTd.lib
-		if (MSVC_VERSION EQUAL 1400)
-			set(postfix "${postfix}_msvc80")
-		elseif (MSVC_VERSION EQUAL 1500)
-			set(postfix "${postfix}_msvc90")
-		elseif (MSVC_VERSION EQUAL 1600)
-			set(postfix "${postfix}_msvc100")
-		elseif (MSVC_VERSION EQUAL 1700)
-			set(postfix "${postfix}_msvc110")
-		elseif (MSVC_VERSION EQUAL 1800)
-			set(postfix "${postfix}_msvc120")
-		elseif (MSVC_VERSION EQUAL 1900)
-			set(postfix "${postfix}_msvc140")
-		endif()
-
-		# Architecture.
-		# http://stackoverflow.com/questions/5334095/cmake-multiarchitecture-compilation
-		if (${CMAKE_EXE_LINKER_FLAGS} MATCHES "/machine:x64")	# /machine:x64
-			set(postfix "${postfix}x64")
-		else()
-			set(postfix "${postfix}x86")
-		endif()
-
-		# Unicode.
-		if (${LN_USE_UNICODE_CHAR_SET})
-			set(postfix "${postfix}u")
-		endif()
-
-		set(postfix "${postfix}_static")
-
-		# MSVC Runtime library.
-		if (LN_MSVC_LINK_MULTI_THREAD_STATIC_RUNTIME)
-			set(postfix "${postfix}_MT")
-		else()
-			set(postfix "${postfix}_MD")
-		endif()
-
-		set(${outPostfix} ${postfix} PARENT_SCOPE)
-
-		# end   Make static lib name.
-		#------------------------------------------------------
-
-	elseif (APPLE)
-		set(${outPostfix} "" PARENT_SCOPE)
-
-	elseif (UNIX)
-		set(${outPostfix} "" PARENT_SCOPE)
-
-	else()
-		# Not support.
-	    message(FATAL_ERROR "No supported platform was detected.")
-	endif()
-endfunction()
 
 #------------------------------------------------------------------------------
 # Apply options
