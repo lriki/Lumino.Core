@@ -82,9 +82,9 @@ function(ln_make_postfix_for_shared_lib outPostfix)
 
 		# MSVC Runtime library.
 		if (LN_MSVC_LINK_MULTI_THREAD_STATIC_RUNTIME)
-			set(postfix "${postfix}_MT")
+			set(postfix "${postfix}MT")
 		else()
-			set(postfix "${postfix}_MD")
+			set(postfix "${postfix}MD")
 		endif()
 
 		set(${outPostfix} ${postfix} PARENT_SCOPE)
