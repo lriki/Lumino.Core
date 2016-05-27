@@ -17,7 +17,7 @@ template<typename TChar>
 class GenericStringRef
 {
 public:
-	GenericStringRef() : m_str(nullptr), m_pos(0), m_len(0) {}
+	GenericStringRef() : m_str(nullptr), m_pos(0), m_len(0), m_string(nullptr) {}
 	GenericStringRef(std::nullptr_t) : GenericStringRef(){}
 	GenericStringRef(const TChar* str)
 		: GenericStringRef()
@@ -105,9 +105,10 @@ public:
 	}
 
 private:
-	const TChar*	m_str;
-	int				m_pos;
-	int				m_len;
+	const TChar*						m_str;
+	int									m_pos;
+	int									m_len;
+	detail::GenericStringCore<TChar>*	m_string;
 };
 
 

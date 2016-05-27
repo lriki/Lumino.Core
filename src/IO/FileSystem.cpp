@@ -398,7 +398,7 @@ ByteBuffer FileSystem::ReadAllBytes(const wchar_t* filePath)
 {
 	FILE* fp;
 	errno_t err = _wfopen_s(&fp, filePath, L"rb");
-	LN_THROW(err == 0, FileNotFoundException);
+	LN_THROW(err == 0, FileNotFoundException, filePath);
 	size_t size = (size_t)GetFileSize(fp);
 
 	ByteBuffer buffer(size);

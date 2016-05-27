@@ -283,6 +283,9 @@ public:
 	*/
 	static PathNameT GetCurrentDirectory();
 
+	/** アプリケーションを開始した実行ファイルのパスを取得します。*/
+	static PathNameT GetExecutablePath();
+
 	/**
 		@brief		システムの特別なフォルダのパスを取得します。
 		@param[in]	specialFolder	: フォルダの種類

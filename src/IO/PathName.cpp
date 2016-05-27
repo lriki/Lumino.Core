@@ -328,6 +328,31 @@ GenericPathName<TChar> GenericPathName<TChar>::GetCurrentDirectory()
 }
 
 //------------------------------------------------------------------------------
+template<>
+GenericPathName<char> GenericPathName<char>::GetExecutablePath()
+{
+#if defined(LN_OS_WIN32)
+	char path[LN_MAX_PATH];
+	::GetModuleFileNameA(NULL, path, LN_MAX_PATH);
+	return GenericPathName<char>(path);
+#else
+	LN_NOTIMPLEMENTED();
+#endif
+}
+//------------------------------------------------------------------------------
+template<>
+GenericPathName<wchar_t> GenericPathName<wchar_t>::GetExecutablePath()
+{
+#if defined(LN_OS_WIN32)
+	wchar_t path[LN_MAX_PATH];
+	::GetModuleFileNameW(NULL, path, LN_MAX_PATH);
+	return GenericPathName<wchar_t>(path);
+#else
+	LN_NOTIMPLEMENTED();
+#endif
+}
+
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericPathName<TChar> GenericPathName<TChar>::GetSpecialFolderPath(SpecialFolder specialFolder, const TChar* childDir, SpecialFolderOption option)
 {
