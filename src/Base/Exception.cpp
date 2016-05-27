@@ -392,10 +392,10 @@ void Exception::SetMessage(const TCHAR* caption, const wchar_t* format, ...)
 }
 
 //------------------------------------------------------------------------------
-void Exception::AppendMessage(const char* message, int len)
+void Exception::AppendMessage(const char* message, size_t len)
 {
-	int curLen = _tcslen(m_message);
-	int remainLen = (MaxMessageBufferSize - curLen) - 2;	// -2 は "\r\0"
+	size_t curLen = _tcslen(m_message);
+	size_t remainLen = (MaxMessageBufferSize - curLen) - 2;	// -2 は "\r\0"
 	len = std::min(len, remainLen);
 
 	TCHAR* head = m_message + curLen;
@@ -411,10 +411,10 @@ void Exception::AppendMessage(const char* message, int len)
 }
 
 //------------------------------------------------------------------------------
-void Exception::AppendMessage(const wchar_t* message, int len)
+void Exception::AppendMessage(const wchar_t* message, size_t len)
 {
-	int curLen = _tcslen(m_message);
-	int remainLen = (MaxMessageBufferSize - curLen) - 2;	// -2 は "\r\0"
+	size_t curLen = _tcslen(m_message);
+	size_t remainLen = (MaxMessageBufferSize - curLen) - 2;	// -2 は "\r\0"
 	len = std::min(len, remainLen);
 
 	TCHAR* head = m_message + curLen;

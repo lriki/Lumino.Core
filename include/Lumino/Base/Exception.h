@@ -117,8 +117,8 @@ protected:
 	void SetMessage(const TCHAR* caption, const wchar_t* format, ...);
 
 private:
-	void AppendMessage(const char* message, int len);
-	void AppendMessage(const wchar_t* message, int len);
+	void AppendMessage(const char* message, size_t len);
+	void AppendMessage(const wchar_t* message, size_t len);
 
 private:
 	static const int MaxMessageBufferSize = 1024;

@@ -19,6 +19,17 @@
 
 LN_NAMESPACE_BEGIN
 
+template<typename TChar>
+size_t StringTraits::tcslen(const TChar* str)
+{
+	const TChar* s;
+	for (s = str; *s; ++s);
+	return (s - str);
+}
+template size_t StringTraits::tcslen<UTF8>(const UTF8* str);
+template size_t StringTraits::tcslen<UTF16>(const UTF16* str);
+template size_t StringTraits::tcslen<UTF32>(const UTF32* str);
+
 void StringTraits::tstrcpy(char* dst, int dstLen, const char* src)
 {
 	strcpy_s(dst, dstLen, src);
@@ -113,18 +124,6 @@ int StringTraits::tsnprintf_l(wchar_t* out, int charCount, const wchar_t* format
 	va_end(args);
 	return r;
 }
-
-//------------------------------------------------------------------------------
-template<typename TChar>
-size_t StringTraits::StrLen(const TChar* str)
-{
-	const TChar* s;
-	for (s = str; *s; ++s);
-	return (s - str);
-}
-template size_t StringTraits::StrLen<UTF8>(const UTF8* str);
-template size_t StringTraits::StrLen<UTF16>(const UTF16* str);
-template size_t StringTraits::StrLen<UTF32>(const UTF32* str);
 
 //------------------------------------------------------------------------------
 template<typename TChar>
@@ -267,10 +266,10 @@ int StringTraits::IndexOf(const TChar* str1, int str1Len, const TChar* str2, int
 		return -1;
 	}
 
-	str1Len = (str1Len < 0) ? ((int)StrLen(str1)) : str1Len;
+	str1Len = (str1Len < 0) ? ((int)tcslen(str1)) : str1Len;
 	if (str1Len <= startIndex) { return -1; }
 
-	str2Len = (str2Len < 0) ? ((int)StrLen(str2)) : str2Len;
+	str2Len = (str2Len < 0) ? ((int)tcslen(str2)) : str2Len;
 	if (str2Len <= 0) { return -1; }
 
 	const TChar* pos = str1 + startIndex;
@@ -312,8 +311,8 @@ int StringTraits::LastIndexOf(const TChar* str1, int str1Len, const TChar* str2,
 {
 	str1 = (str1 == NULL) ? LN_T(TChar, "") : str1;
 	str2 = (str2 == NULL) ? LN_T(TChar, "") : str2;
-	str1Len = static_cast<int>((str1Len < 0) ? StrLen(str1) : str1Len);
-	str2Len = static_cast<int>((str2Len < 0) ? StrLen(str2) : str2Len);
+	str1Len = static_cast<int>((str1Len < 0) ? tcslen(str1) : str1Len);
+	str2Len = static_cast<int>((str2Len < 0) ? tcslen(str2) : str2Len);
 	startIndex = (startIndex < 0) ? (str1Len-1) : startIndex;
 
 	// 検索対象文字列の長さが 0 の場合は特別な前提処理
@@ -386,8 +385,8 @@ int StringTraits::Compare(const TChar* str1, int str1Len, const TChar* str2, int
 	}
 
 	// 必要があれば文字数カウント
-	str1Len = (str1Len < 0) ? StrLen(str1) : str1Len;
-	str2Len = (str2Len < 0) ? StrLen(str2) : str2Len;
+	str1Len = (str1Len < 0) ? tcslen(str1) : str1Len;
+	str2Len = (str2Len < 0) ? tcslen(str2) : str2Len;
 	int minCount = std::min(str1Len, str2Len);
 	int maxCount = std::max(str1Len, str2Len);
 
@@ -553,8 +552,8 @@ template<typename TChar>
 bool StringTraits::EndsWith(const TChar* str1, int len1, const TChar* str2, int len2, CaseSensitivity cs)
 {
 	// 長さが -1 の場合は \0 までカウント
-	len1 = static_cast<int>((len1 < 0) ? StrLen(str1) : len1);
-	len2 = static_cast<int>((len2 < 0) ? StrLen(str2) : len2);
+	len1 = static_cast<int>((len1 < 0) ? tcslen(str1) : len1);
+	len2 = static_cast<int>((len2 < 0) ? tcslen(str2) : len2);
 
 	const TChar* p1 = str1 + len1;
 	const TChar* p2 = str2 + len2;
@@ -595,8 +594,8 @@ template bool StringTraits::EndsWith<wchar_t>(const wchar_t* str1, int len1, con
 template<typename TChar>
 int StringTraits::CountString(const TChar* str1, int str1Len, const TChar* str2, int str2Len, CaseSensitivity cs)
 {
-	str1Len = (str1Len < 0) ? ((int)StrLen(str1)) : str1Len;
-	str2Len = (str2Len < 0) ? ((int)StrLen(str2)) : str2Len;
+	str1Len = (str1Len < 0) ? ((int)tcslen(str1)) : str1Len;
+	str2Len = (str2Len < 0) ? ((int)tcslen(str2)) : str2Len;
 
 	int count = 0;
 	int i = 0;
@@ -618,7 +617,7 @@ GenericString<TChar> StringTraits::Left(const TChar* str, int count)
 		count = 0;
 	}
 
-	int len = (int)StrLen(str);
+	int len = (int)tcslen(str);
 	if (count >= len) {
 		return GenericString<TChar>(str);
 	}
@@ -635,7 +634,7 @@ GenericString<TChar> StringTraits::Right(const TChar* str, int count)
 		count = 0;
 	}
 
-	int len = (int)StrLen(str);
+	int len = (int)tcslen(str);
 	if (count >= len) {
 		return GenericString<TChar>(str);
 	}
@@ -648,7 +647,7 @@ template GenericString<wchar_t> StringTraits::Right<wchar_t>(const wchar_t* str,
 template<typename TChar>
 GenericString<TChar> StringTraits::Mid(const TChar* str, int start, int count)
 {
-	int len = (int)StrLen(str);
+	int len = (int)tcslen(str);
 
 	if (start < 0) {
 		start = 0;
@@ -806,7 +805,7 @@ static NumberConversionResult StrToNumInternal(
 	if (!(base == 0 || base == 2 || base == 8 || base == 10 || base == 16)) { return NumberConversionResult::ArgsError; }
 
 	const TChar* p = str;
-	const TChar* end = str + (len < 0 ? StringTraits::StrLen(str) : len);
+	const TChar* end = str + (len < 0 ? StringTraits::tcslen(str) : len);
 
 	// 空白をスキップ
 	while (StringTraits::IsSpace(*p)) { ++p; }
@@ -1091,7 +1090,7 @@ double StringTraits::ToDouble(const TChar* str, int len, const TChar** outEndPtr
 		return 0.0;
 	}
 
-	len = static_cast<int>((len < 0 ? StringTraits::StrLen(str) : len));
+	len = static_cast<int>((len < 0 ? StringTraits::tcslen(str) : len));
 	if (len >= 512) {
 		if (outResult != NULL) { *outResult = NumberConversionResult::ArgsError; }
 		return 0.0;

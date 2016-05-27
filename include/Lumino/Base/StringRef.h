@@ -25,7 +25,7 @@ public:
 		m_str = str;
 		if (m_str != nullptr)
 		{
-			m_len = StringTraits::StrLen(m_str);	// TODO: これ strlen じゃなくて templateの[N]で取ればもう少し高速化できそう
+			m_len = (int)StringTraits::tcslen(m_str);	// TODO: これ strlen じゃなくて templateの[N]で取ればもう少し高速化できそう
 		}
 	}
 	GenericStringRef(const GenericString<TChar>& str)
@@ -41,7 +41,7 @@ public:
 		if (begin != nullptr && end != nullptr && begin <= end)
 		{
 			m_str = begin;
-			m_len = end - begin;
+			m_len = (int)(end - begin);
 		}
 	}
 	GenericStringRef(const TChar* begin, int length)

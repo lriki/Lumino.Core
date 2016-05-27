@@ -54,7 +54,7 @@ template<typename TChar>
 void GenericStringBuilderCore<TChar>::Append(const TChar* str, int length)
 {
 	//if (str == NULL || length <= 0) { return; }	// コピーの必要無し
-	WriteInternal(str, (length < 0) ? StringTraits::StrLen(str) : length);
+	WriteInternal(str, (length < 0) ? StringTraits::tcslen(str) : length);
 }
 //------------------------------------------------------------------------------
 template<typename TChar>

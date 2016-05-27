@@ -208,7 +208,7 @@ GenericPathName<TChar> GenericPathName<TChar>::ChangeExtension(const TChar* newE
 	}
 
 	if (newExt != NULL) {
-		if (StringTraits::StrLen(newExt) != 0 && newExt[0] != '.') {
+		if (StringTraits::tcslen(newExt) != 0 && newExt[0] != '.') {
 			newPath += '.';
 		}
 		newPath += newExt;

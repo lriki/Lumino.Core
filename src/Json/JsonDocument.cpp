@@ -22,7 +22,7 @@ void JsonDocument::Parse(const TCHAR* text, int len)
 {
 	LN_CHECK_ARG(text != NULL);
 
-	StringReader textReader(String(text, (len < 0) ? StringTraits::StrLen(text) : len));
+	StringReader textReader(String(text, (len < 0) ? (int)StringTraits::tcslen(text) : len));
 	Parse(&textReader);
 }
 

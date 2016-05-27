@@ -14,9 +14,9 @@ TEST_F(Test_Base_StringUtils, StrLen)
 	UTF16 str_u16[] = { 'A', 'B', 'C', 0x00 };
 	UTF32 str_u32[] = { 'A', 'B', 'C', 0x00 };
 
-	ASSERT_EQ(3, StringTraits::StrLen(str_u8));
-	ASSERT_EQ(3, StringTraits::StrLen(str_u16));
-	ASSERT_EQ(3, StringTraits::StrLen(str_u32));
+	ASSERT_EQ(3, StringTraits::tcslen(str_u8));
+	ASSERT_EQ(3, StringTraits::tcslen(str_u16));
+	ASSERT_EQ(3, StringTraits::tcslen(str_u32));
 }
 
 //------------------------------------------------------------------------------

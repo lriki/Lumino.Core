@@ -83,7 +83,7 @@ public:
 		return GetGroup(0);
 	}
 	
-	int GetGroupCount() const { return m_matchResults.size(); }
+	int GetGroupCount() const { return (int)m_matchResults.size(); }
 	
 	// index=0 はマッチした全体を返す
 	StringRefT GetGroup(int index) const

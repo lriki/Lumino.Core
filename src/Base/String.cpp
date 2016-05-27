@@ -392,7 +392,7 @@ const TChar* GenericString<TChar>::c_str() const
 template<typename TChar>
 int GenericString<TChar>::GetLength() const
 {
-	return m_string->size();
+	return (int)m_string->size();
 }
 
 //------------------------------------------------------------------------------
@@ -420,7 +420,7 @@ void GenericString<TChar>::Append(const TChar* str, int len)
 		return;		// 空文字列なので何もしない
 	}
 	Realloc();	// 共有参照を切る
-	m_string->append(str, (len < 0) ? StringTraits::StrLen(str) : len);
+	m_string->append(str, (len < 0) ? StringTraits::tcslen(str) : len);
 	m_ref = m_string->c_str();
 }
 template<typename TChar>
@@ -660,14 +660,14 @@ template<typename TChar>
 int GenericString<TChar>::IndexOf(TChar ch, int startIndex, CaseSensitivity cs) const
 {
 	TChar str[2] = { ch, 0x00 };
-	return StringTraits::IndexOf(c_str(), GetLength(), str, StringTraits::StrLen(str), startIndex, cs);
+	return StringTraits::IndexOf(c_str(), GetLength(), str, (int)StringTraits::tcslen(str), startIndex, cs);
 }
 
 //------------------------------------------------------------------------------
 template<typename TChar>
 int GenericString<TChar>::LastIndexOf(const TChar* str, int startIndex, int count, CaseSensitivity cs) const
 {
-	return StringTraits::LastIndexOf(c_str(), GetLength(), str, StringTraits::StrLen(str), startIndex, count, cs);
+	return StringTraits::LastIndexOf(c_str(), GetLength(), str, StringTraits::tcslen(str), startIndex, count, cs);
 }
 template<typename TChar>
 int GenericString<TChar>::LastIndexOf(TChar ch, int startIndex, int count, CaseSensitivity cs) const
@@ -679,7 +679,7 @@ int GenericString<TChar>::LastIndexOf(TChar ch, int startIndex, int count, CaseS
 template<typename TChar>
 bool GenericString<TChar>::StartsWith(const TChar* str, CaseSensitivity cs) const
 {
-	return StringTraits::StartsWith(c_str(), GetLength(), str, StringTraits::StrLen(str), cs);
+	return StringTraits::StartsWith(c_str(), GetLength(), str, StringTraits::tcslen(str), cs);
 }
 template<typename TChar>
 bool GenericString<TChar>::StartsWith(TChar ch, CaseSensitivity cs ) const
@@ -691,7 +691,7 @@ bool GenericString<TChar>::StartsWith(TChar ch, CaseSensitivity cs ) const
 template<typename TChar>
 bool GenericString<TChar>::EndsWith(const TChar* str, CaseSensitivity cs) const
 {
-	return StringTraits::EndsWith(c_str(), GetLength(), str, StringTraits::StrLen(str), cs);
+	return StringTraits::EndsWith(c_str(), GetLength(), str, StringTraits::tcslen(str), cs);
 }
 template<typename TChar>
 bool GenericString<TChar>::EndsWith(TChar ch, CaseSensitivity cs) const
@@ -852,14 +852,14 @@ template<typename TChar>
 GenericString<TChar> GenericString<TChar>::FromNativeCharString(const char* str, int length)
 {
 	GenericString<TChar> out;
-	out.AssignCStr(str, (length < 0) ? StringTraits::StrLen(str) : length);
+	out.AssignCStr(str, (length < 0) ? StringTraits::tcslen(str) : length);
 	return out;
 }
 template<typename TChar>
 GenericString<TChar> GenericString<TChar>::FromNativeCharString(const wchar_t* str, int length)
 {
 	GenericString<TChar> out;
-	out.AssignCStr(str, (length < 0) ? StringTraits::StrLen(str) : length);
+	out.AssignCStr(str, (length < 0) ? StringTraits::tcslen(str) : length);
 	return out;
 }
 
@@ -966,7 +966,7 @@ void GenericString<TChar>::AssignTString(const TChar* str, int len)
 	else 
 	{
 		m_string = LN_NEW detail::GenericStringCore<TChar>();	// 参照カウントは 1
-		m_string->assign(str, (len < 0) ? StringTraits::StrLen(str) : len);
+		m_string->assign(str, (len < 0) ? StringTraits::tcslen(str) : len);
 	}
 	m_ref = m_string->c_str();
 }

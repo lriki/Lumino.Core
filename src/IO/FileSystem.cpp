@@ -497,7 +497,7 @@ void FileSystem::CreateDirectoryInternal(const TChar* path)
 	Array< GenericString<wchar_t> >	pathList;
 	GenericString<wchar_t> dir;
 
-	int i = StringTraits::StrLen(path) - 1;	// 一番後ろの文字の位置
+	int i = StringTraits::tcslen(path) - 1;	// 一番後ろの文字の位置
 	while (i >= 0)
 	{
 		dir.AssignCStr(path, 0, i + 1);

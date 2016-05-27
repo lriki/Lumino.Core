@@ -42,7 +42,7 @@ bool PathTraits::IsRootPath(const TChar* path)
 {
 #ifdef LN_OS_WIN32
 	// windows の場合
-	size_t len = StringTraits::StrLen(path);
+	size_t len = StringTraits::tcslen(path);
 	if (IsAbsolutePath(path) && len >= 2)
 	{
 		if (path[len - 1] == VolumeSeparatorChar) {
@@ -104,7 +104,7 @@ bool PathTraits::EndWithSeparator(const TChar* path, int len)
 {
 	LN_CHECK_ARG(path != nullptr);
 
-	len = (len < 0) ? StringTraits::StrLen(path) : len;
+	len = (len < 0) ? StringTraits::tcslen(path) : len;
 	if (len >= 1)
 	{
 		return IsSeparatorChar(path[len - 1]);
@@ -132,7 +132,7 @@ GenericString<TChar> PathTraits::GetDirectoryPath(const TChar* path)
 	*/
 
 	// 後ろから前に調べて、最初に \\ か / が見つかるところを探す
-	int pos = StringTraits::StrLen(path);
+	int pos = StringTraits::tcslen(path);
 	TChar lastSep = 0;
 	for ( ; pos >= 0; --pos ) {
 		if ( path[pos] == '\\' || path[pos] == '/' ) {
@@ -191,7 +191,7 @@ template GenericString<wchar_t> PathTraits::GetFileName(const wchar_t* path);
 template<typename TChar>
 const TChar* PathTraits::GetFileNameSub(const TChar* path)
 {
-	int len = StringTraits::StrLen(path);
+	int len = StringTraits::tcslen(path);
 	int pos = len - 1;
 
 	// 後ろから前に調べて、最初にセパレータが見つかるところを探す
@@ -220,7 +220,7 @@ void PathTraits::GetFileNameWithoutExtension(const TChar* path, TChar* outExt)
 	if (path == NULL) { return; }
 
 	const TChar* fileName = GetFileNameSub(path);
-	int len = StringTraits::StrLen(fileName);
+	int len = StringTraits::tcslen(fileName);
 	int i = StringTraits::LastIndexOf(fileName, len, LN_T(TChar, "."), 1, (len-1), len, CaseSensitivity::CaseSensitive);
 	if (i >= 0) {
 		StringTraits::StrNCpy(outExt, LN_MAX_PATH, fileName, i);
@@ -241,7 +241,7 @@ void PathTraits::GetExtension(const TChar* path, TChar* outExt)
 	if (path == NULL || outExt == NULL) { return; }
 
 	outExt[0] = 0x00;
-	int len = StringTraits::StrLen(path);
+	int len = StringTraits::tcslen(path);
 	for (int i = len; i >= 0; --i)
 	{
 		TChar ch = path[i];
@@ -269,7 +269,7 @@ Result PathTraits::GetExtension(const TChar* path, bool withDot, GenericStringRe
 	if (path == nullptr || outRef == nullptr) { return Result::ArgumentError; }
 	outRef->Attach(path, 0, 0);
 
-	int len = StringTraits::StrLen(path);
+	int len = StringTraits::tcslen(path);
 	for (int i = len; i >= 0; --i)
 	{
 		TChar ch = path[i];
@@ -592,7 +592,7 @@ template int PathTraits::CanonicalizePath(const wchar_t* srcPath, size_t srcLen,
 template<typename TChar>
 void PathTraits::CanonicalizePath(const TChar* srcPath, TChar* outPath)
 {
-	size_t srcLen = StringTraits::StrLen(srcPath);
+	size_t srcLen = StringTraits::tcslen(srcPath);
 	if (IsAbsolutePath(srcPath)) {
 		// 絶対パスであればそのまま出力してしまう
 		CanonicalizePath(srcPath, srcLen, outPath);

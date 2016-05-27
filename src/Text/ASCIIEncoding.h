@@ -20,7 +20,7 @@ public:
 	virtual Decoder* CreateDecoder() const { return LN_NEW ASCIIDecoder(); }
 	virtual Encoder* CreateEncoder() const { return LN_NEW ASCIIEncoder(); }
 	virtual byte_t* GetPreamble() const { return NULL; }
-	virtual int GetCharacterCount(const void* buffer, size_t bufferSize) const { return bufferSize; }
+	virtual int GetCharacterCount(const void* buffer, size_t bufferSize) const { return (int)bufferSize; }
 	virtual int GetLeadExtraLength(const void* buffer, size_t bufferSize) const { return 0; }
 
 private:

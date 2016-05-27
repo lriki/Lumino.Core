@@ -66,7 +66,7 @@ void JsonWriter::WriteEndArray()
 void JsonWriter::WritePropertyName(const TCHAR* str, int length)
 {
 	LN_CHECK_ARG(m_levelStack.GetCount() >= 1);
-	length = (length <= -1) ? StringTraits::StrLen(str) : 0;
+	length = (length <= -1) ? (int)StringTraits::tcslen(str) : 0;
 
 	AutoComplete(JsonToken::PropertyName);
 	OnKey(str, length);
@@ -107,7 +107,7 @@ void JsonWriter::WriteDouble(double value)
 void JsonWriter::WriteString(const TCHAR* str, int length)	// TODO: StringRef
 {
 	LN_CHECK_ARG(m_levelStack.GetCount() >= 1);
-	length = (length <= -1) ? StringTraits::StrLen(str) : 0;
+	length = (length <= -1) ? (int)StringTraits::tcslen(str) : 0;
 
 	AutoComplete(JsonToken::String);
 	OnString(str, length);

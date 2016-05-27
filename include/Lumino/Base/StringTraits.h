@@ -46,7 +46,7 @@ public:
 		@brief	NULL 終端文字列の長さを求めます。
 	*/
 	template<typename TChar>
-	static size_t StrLen(const TChar* str);
+	static size_t tcslen(const TChar* str);
 
 	/**
 		@brief	ASCII の小文字を大文字に変換します。
