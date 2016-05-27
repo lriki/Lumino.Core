@@ -168,7 +168,10 @@ GenericString<TChar>::GenericString(const StringRefT& str)
 	: m_ref(nullptr)
 	, m_string(nullptr)
 {
-	AssignTString(str.GetBegin(), str.GetLength());
+	if (str.m_string != nullptr)
+		Attach(str.m_string);
+	else
+		AssignTString(str.GetBegin(), str.GetLength());
 }
 template<typename TChar>
 GenericString<TChar>::GenericString(const TChar* str)

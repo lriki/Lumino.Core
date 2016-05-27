@@ -1,6 +1,7 @@
-﻿#include <TestConfig.h>
+﻿#define LN_INTERNAL_ACCESS public
+#include <TestConfig.h>
 
-class IntegrateTest_Base_StringRef : public ::testing::Test
+class Test_Base_StringRef : public ::testing::Test
 {
 protected:
 	virtual void SetUp() {}
@@ -10,7 +11,7 @@ protected:
 static int Func1(const StringRef& str) { return str.GetLength(); }
 
 //------------------------------------------------------------------------------
-TEST_F(IntegrateTest_Base_StringRef, Constructor)
+TEST_F(Test_Base_StringRef, Constructor)
 {
 	// <Test> 文字列リテラルと String でオーバーロードできること。
 	{
@@ -29,3 +30,13 @@ TEST_F(IntegrateTest_Base_StringRef, Constructor)
 		ASSERT_EQ(2, *v);
 	}
 }
+
+//------------------------------------------------------------------------------
+TEST_F(Test_Base_StringRef, StringAssign)
+{
+	String str1(_T("asd"));
+	StringRef ref(str1);
+	String str2(ref);
+	ASSERT_EQ(str1.GetCore(), str2.GetCore());
+}
+

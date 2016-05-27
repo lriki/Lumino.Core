@@ -7,8 +7,8 @@
 
 LN_NAMESPACE_BEGIN
 
-template<typename TChar>
-class GenericPathName;
+namespace detail { template<typename TChar> class GenericStringCore; }
+template<typename TChar> class GenericPathName;
 
 /**
 	@brief	ある文字列に対する部分文字列の参照を保持します。
@@ -33,7 +33,7 @@ public:
 	{
 		m_str = str.c_str();
 		m_len = str.GetLength();
-		// TODO: String に代入するときコピーされるの避けたい
+		m_string = str.GetCore();
 	}
 	GenericStringRef(const TChar* begin, const TChar* end)
 		: GenericStringRef()
@@ -109,6 +109,8 @@ private:
 	int									m_pos;
 	int									m_len;
 	detail::GenericStringCore<TChar>*	m_string;
+
+	template<typename T> friend class GenericString;
 };
 
 
