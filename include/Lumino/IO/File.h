@@ -86,4 +86,23 @@ private:
 	FileStreamPtr	m_fileStream;
 };
 
+class TemporaryFile
+	: public File
+{
+public:
+	TemporaryFile();
+	~TemporaryFile();
+
+	void Open();
+
+	/** デストラクタで一時ファイルを自動削除するかを指定します。*/
+	void SetAutoRemove(bool enabled) { m_autoRemove = enabled; }
+
+	/** デストラクタで一時ファイルを自動削除するかを確認します。*/
+	bool IsAutoRemove() const { return m_autoRemove; }
+
+private:
+	bool	m_autoRemove;
+};
+
 LN_NAMESPACE_END

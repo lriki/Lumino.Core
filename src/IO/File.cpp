@@ -111,4 +111,33 @@ void File::Flush()
 	m_fileStream->Flush();
 }
 
+
+//==============================================================================
+// File
+//==============================================================================
+
+//------------------------------------------------------------------------------
+TemporaryFile::TemporaryFile()
+	: File(PathName::GetUniqueFilePathInDirectory(PathName::GetSpecialFolderPath(SpecialFolder::Temporary), nullptr, nullptr))
+	, m_autoRemove(true)
+{
+}
+
+//------------------------------------------------------------------------------
+TemporaryFile::~TemporaryFile()
+{
+	Close();
+
+	if (m_autoRemove)
+	{
+		FileSystem::Delete(GetFilePath());
+	}
+}
+
+//------------------------------------------------------------------------------
+void TemporaryFile::Open()
+{
+	File::Open(FileOpenMode::ReadWrite | FileOpenMode::Truncate);
+}
+
 LN_NAMESPACE_END
