@@ -19,6 +19,7 @@ template<typename TChar> class GenericStringArray;
 template<typename TChar> class GenericPathName;
 
 namespace detail { template<typename TChar> class GenericStringCore; }
+namespace detail { class StringHelper; }
 namespace tr { class Variant; }
 
 
@@ -569,7 +570,8 @@ public:
 	*/
 	TChar* GetData();
 
-LN_INTERNAL_ACCESS:
+private:
+	friend class detail::StringHelper;
 	friend class tr::Variant;
 	template<typename T> friend class GenericCharRef;
 	template<typename T> friend class GenericStringRef;
@@ -756,6 +758,14 @@ public:
 
 	static GenericStringCore	m_sharedEmpty;
 };
+
+class StringHelper
+{
+public:
+	template<typename TChar>
+	static GenericStringCore<TChar>* GetStringCore(const GenericString<TChar>& str) { return str.m_string; }
+};
+
 } // namespace detail
 
 

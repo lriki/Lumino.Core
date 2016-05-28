@@ -37,6 +37,6 @@ TEST_F(Test_Base_StringRef, StringAssign)
 	String str1(_T("asd"));
 	StringRef ref(str1);
 	String str2(ref);
-	ASSERT_EQ(str1.GetCore(), str2.GetCore());
+	ASSERT_EQ(detail::StringHelper::GetStringCore(str1), detail::StringHelper::GetStringCore(str2));
 }
 

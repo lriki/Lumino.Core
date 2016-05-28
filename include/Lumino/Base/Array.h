@@ -200,6 +200,22 @@ public:
 		if (itr != m_data->m_vector.end()) { return itr - m_data->m_vector.begin(); }
 		return -1;
 	}
+	
+	/**
+		@brief		指定した条件と一致する最初のインデックスを返します。
+		@param[in]	pred		: 検索条件
+		@param[in]	startIndex	: 検索を開始するインデックス (省略した場合は先頭から)
+		@return		検索した要素が最初に現れた位置。見つからなかった場合は -1。
+	*/
+	template<typename TPred>
+	int IndexOf(TPred pred, int startIndex = 0) const
+	{
+		if (IsEmpty()) { return -1; }
+		CheckOutOfRange(startIndex);
+		const_iterator itr = std::find_if(m_data->m_vector.begin() + startIndex, m_data->m_vector.end(), pred);
+		if (itr != m_data->m_vector.end()) { return itr - m_data->m_vector.begin(); }
+		return -1;
+	}
 
 	/** 指定した要素と一致する最初の要素を検索し、その要素を指すポインタを返します。見つからなければ NULL を返します。*/
 	value_type* Find(const value_type& item) const
