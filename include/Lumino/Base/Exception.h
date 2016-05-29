@@ -342,7 +342,6 @@ public:
 	virtual Exception* Copy() const { return LN_NEW RuntimeException(*this); }
 };
 
-#ifdef LN_OS_WIN32
 /**
 	@brief	WindowsAPI のエラーを示す例外クラス (GetLastError())
 */
@@ -385,6 +384,5 @@ public:
 private:
 	uint32_t	m_HRESULT;
 };
-#endif
 
 LN_NAMESPACE_END

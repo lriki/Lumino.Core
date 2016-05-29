@@ -86,7 +86,7 @@ void Process::Start(const PathName& program, const String& args)
 		StringA utf8Path;
 		utf8Path.AssignCStr(program.c_str());
 
-        StringA utf8Args(args);
+        StringA utf8Args = args.ToStringA();
         Array<StringA> argList = utf8Args.Split(" ");
 		
 		char** argv = new char *[argList.GetCount() + 2];
@@ -135,7 +135,7 @@ bool Process::WaitForExit(int timeoutMSec)
 			}
 		}
 		
-		Threading::Thread::Sleep(1);
+        Thread::Sleep(1);
 		
 	} while(timeoutMSec == -1 || timer.GetElapsedTime() < timeoutMSec);
 	

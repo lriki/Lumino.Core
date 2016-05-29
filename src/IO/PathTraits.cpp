@@ -57,7 +57,7 @@ bool PathTraits::IsRootPath(const TChar* path)
 	return false;
 #else
 	// UNIX の場合、/ だけであるか
-	size_t len = StringTraits::StrLen(path);
+	size_t len = StringTraits::tcslen(path);
 	if (len == 1 && path[0] == '/') {
 		return true;
 	}

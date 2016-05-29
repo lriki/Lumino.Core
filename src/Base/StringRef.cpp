@@ -3,7 +3,6 @@
 		null か空かは区別できたほうがいい・・・と思う。
 		安全管理的には、null は null のままにして値が変なことを知れたほうがよい。
 */
-#pragma once
 #include "../Internal.h"
 #include <Lumino/Base/StringRef.h>
 #include <Lumino/IO/PathName.h>

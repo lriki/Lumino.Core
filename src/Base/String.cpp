@@ -838,6 +838,7 @@ GenericString<char>	GenericString<wchar_t>::ToStringA() const
 }
 
 //------------------------------------------------------------------------------
+template<>
 GenericString<wchar_t> GenericString<char>::ToStringW() const
 {
 	GenericString<wchar_t> str;

@@ -136,8 +136,12 @@ Locale::Locale()
 
 //------------------------------------------------------------------------------
 Locale::Locale(const TCHAR* name)
-	: m_nativeLocale(0)
+: m_nativeLocale(0)
+#if defined(LN_OS_WIN32)
 	, m_nativeName(StringW::FromNativeCharString(name))
+#else
+    , m_nativeName(StringA::FromNativeCharString(name))
+#endif
 {
 	m_nativeLocale = CreateNativeLocale(m_nativeName.c_str());
 	StringA t = m_nativeName.ToStringA();

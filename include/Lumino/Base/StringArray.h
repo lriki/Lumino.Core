@@ -46,7 +46,7 @@ public:
 
 	int IndexOf(const TChar* str, int startIndex = 0, CaseSensitivity cs = CaseSensitivity::CaseSensitive) const
 	{
-		int len = StringTraits::StrLen(str);
+		int len = StringTraits::tcslen(str);
 		for (int i = startIndex; i < ArrayType::GetCount(); ++i)
 		{
 			const StringType& item = ArrayType::GetAt(i);

@@ -505,7 +505,6 @@ LN_EXCEPTION_BASIC_CONSTRUCTOR_IMPLEMENT(EncodingException, InternalResource::En
 LN_EXCEPTION_BASIC_CONSTRUCTOR_IMPLEMENT(RuntimeException, InternalResource::RuntimeError);
 
 
-#ifdef LN_OS_WIN32
 //==============================================================================
 // Win32Exception
 //==============================================================================
@@ -515,10 +514,12 @@ Win32Exception::Win32Exception(uint32_t/*DWORD*/ dwLastError)
 	: m_dwLastErrorCode( dwLastError )
 {
 	// エラーメッセージ取得
-	memset(m_pFormatMessage, 0, sizeof(m_pFormatMessage));
+    memset(m_pFormatMessage, 0, sizeof(m_pFormatMessage));
+#ifdef LN_OS_WIN32
     :: FormatMessage(
 		FORMAT_MESSAGE_FROM_SYSTEM, NULL, m_dwLastErrorCode,
         0, m_pFormatMessage, sizeof(m_pFormatMessage)/sizeof(m_pFormatMessage[0]), NULL);
+#endif
 }
 
 //==============================================================================
@@ -541,6 +542,5 @@ Exception* COMException::Copy() const
 {
 	return LN_NEW COMException(*this);
 }
-#endif
 
 LN_NAMESPACE_END

@@ -522,7 +522,7 @@ TEST_F(Test_Base_String, IndexOf)
 TEST_F(Test_Base_String, LastIndexOf)
 {
 	{
-		String str = "abcdef";
+		String str = _T("abcdef");
 		ASSERT_EQ(3, str.LastIndexOf(_T("de")));
 		ASSERT_EQ(1, str.LastIndexOf(_T("bc"), 2));
 		ASSERT_EQ(-1, str.LastIndexOf(_T("cd"), 2));
@@ -531,8 +531,8 @@ TEST_F(Test_Base_String, LastIndexOf)
 	}
 	// .NET の System.String.LastIndexOf() と同様の動作
 	{
-		String str = "crazy azimuths";
-		String se = "";
+		String str = _T("crazy azimuths");
+		String se = _T("");
 		ASSERT_EQ(6, str.LastIndexOf(_T("az")));       // 6
 		ASSERT_EQ(2, str.LastIndexOf(_T("az"), 6));    // 2 ("crazy a")
 		ASSERT_EQ(6, str.LastIndexOf(_T("az"), 7));    // 6 ("crazy az")
