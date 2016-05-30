@@ -1,4 +1,4 @@
-
+﻿
 #pragma once
 #include <list>
 #include "../Base/Array.h"

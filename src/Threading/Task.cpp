@@ -1,4 +1,4 @@
-
+﻿
 #include <atomic>
 #include "../Internal.h"
 #include <Lumino/Threading/Task.h>

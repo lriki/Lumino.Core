@@ -1,4 +1,4 @@
-
+﻿
 #pragma once
 #include "../Base/Exception.h"
 #include "../Base/RefObject.h"
