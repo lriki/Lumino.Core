@@ -34,13 +34,13 @@ TaskScheduler::TaskScheduler(int threadCount)
 //------------------------------------------------------------------------------
 TaskScheduler::~TaskScheduler()
 {
-	m_endRequested.SetTrue();		// I—¹—v‹‚ðo‚µ‚ÄA
+	m_endRequested.SetTrue();		// çµ‚äº†è¦æ±‚ã‚’å‡ºã—ã¦ã€
 
-	for (auto& thr : m_threadList)	// ƒXƒŒƒbƒh‚Ì”‚¾‚¯ƒZƒ}ƒtƒH‘‚â‚µ‚Ä‘S•”‹N‚±‚µ‚ÄA
+	for (auto& thr : m_threadList)	// ã‚¹ãƒ¬ãƒƒãƒ‰ã®æ•°ã ã‘ã‚»ãƒžãƒ•ã‚©å¢—ã‚„ã—ã¦å…¨éƒ¨èµ·ã“ã—ã¦ã€
 	{
 		m_semaphore.Unlock();
 	}
-	for (auto& thr : m_threadList)	// ‘S•”I‚í‚é‚Ü‚Å‘Ò‚Â
+	for (auto& thr : m_threadList)	// å…¨éƒ¨çµ‚ã‚ã‚‹ã¾ã§å¾…ã¤
 	{
 		thr->Wait();
 		LN_SAFE_DELETE(thr);
@@ -62,7 +62,7 @@ void TaskScheduler::QueueTask(Task* task)
 	m_taskQueue.Enqueue(task);
 	task->AddRef();
 
-	m_semaphore.Unlock();	// ƒLƒ…[‚É“ü‚ê‚½‚Ì‚ÅŽæ‚èo‚µ‚½‚¢l‚Í‚Ç‚¤‚¼B
+	m_semaphore.Unlock();	// ã‚­ãƒ¥ãƒ¼ã«å…¥ã‚ŒãŸã®ã§å–ã‚Šå‡ºã—ãŸã„äººã¯ã©ã†ãžã€‚
 }
 
 //------------------------------------------------------------------------------
@@ -70,21 +70,21 @@ void TaskScheduler::ExecuteThread()
 {
 	while (true)
 	{
-		m_semaphore.Lock();	// ƒLƒ…[‚É‰½‚©’Ç‰Á‚³‚ê‚é‚Ü‚Å‘Ò‚ÂB‚Ü‚½‚ÍI—¹—v‹‚Ü‚ÅB
+		m_semaphore.Lock();	// ã‚­ãƒ¥ãƒ¼ã«ä½•ã‹è¿½åŠ ã•ã‚Œã‚‹ã¾ã§å¾…ã¤ã€‚ã¾ãŸã¯çµ‚äº†è¦æ±‚ã¾ã§ã€‚
 
-		// I—¹—v‹‚ª‚«‚Ä‚¢‚½‚ç‚¨‚µ‚Ü‚¢
+		// çµ‚äº†è¦æ±‚ãŒãã¦ã„ãŸã‚‰ãŠã—ã¾ã„
 		if (m_endRequested.IsTrue()) {
 			break;
 		}
 
-		// ƒLƒ…[‚©‚ç1‚ÂŽæ‚èo‚·
+		// ã‚­ãƒ¥ãƒ¼ã‹ã‚‰1ã¤å–ã‚Šå‡ºã™
 		Task* task = nullptr;
 		{
 			MutexScopedLock lock(m_taskQueueLock);
 			m_taskQueue.Dequeue(&task);
 		}
 
-		// ŽÀsBó‘Ô•Ï‰»‚Í“à•”‚Ås‚¤
+		// å®Ÿè¡Œã€‚çŠ¶æ…‹å¤‰åŒ–ã¯å†…éƒ¨ã§è¡Œã†
 		task->Execute();
 		task->Release();
 	}

@@ -21,15 +21,16 @@ class TaskScheduler
 public:
 	static TaskScheduler* GetDefault();
 
-	/** ‚±‚Ì TaskScheduler ‚ª“¯‚É•À—ñÀs‚Å‚«‚é Task ‚Ì”‚ğæ“¾‚µ‚Ü‚·B*/
+	/** ã“ã® TaskScheduler ãŒåŒæ™‚ã«ä¸¦åˆ—å®Ÿè¡Œã§ãã‚‹ Task ã®æ•°ã‚’å–å¾—ã—ã¾ã™ã€‚*/
 	int GetMaxConcurrencyLevel() const;
 
-LN_INTERNAL_ACCESS:
-	void QueueTask(Task* task);
-
 private:
+	friend class Task;
+	
 	TaskScheduler(int threadCount);
 	~TaskScheduler();
+	
+	void QueueTask(Task* task);
 	void ExecuteThread();
 
 	Array<DelegateThread*>	m_threadList;

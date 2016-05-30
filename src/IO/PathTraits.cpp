@@ -292,7 +292,8 @@ Result PathTraits::GetExtension(const TChar* path, bool withDot, GenericStringRe
 
 			break;	// "file." のようなパターン
 		}
-		if (ch == DirectorySeparatorChar || ch == AltDirectorySeparatorChar || ch == VolumeSeparatorChar) {
+		
+		if (IsSeparatorChar(ch)) {
 			break;		// . の前にセパレータが見つかった
 		}
 	}

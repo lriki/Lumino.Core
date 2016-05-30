@@ -31,6 +31,8 @@ TaskPtr Task::Run(const Delegate<void()>& action)
 //------------------------------------------------------------------------------
 Task::Task(const Delegate<void()>& action)
 	: m_action(action)
+	, m_status(TaskStatus::Created)
+	, m_exception(nullptr)
 	, m_waiting(false)
 {
 }
@@ -64,7 +66,7 @@ TaskStatus Task::GetStatus() const
 //------------------------------------------------------------------------------
 bool Task::IsCompleted() const
 {
-	//std::atomic_thread_fence(std::memory_order_acquire);
+	// TODO: メモリフェンス張ったほうがいい？
 	return m_status == TaskStatus::Completed;
 }
 
@@ -87,9 +89,7 @@ void Task::Execute()
 	try
 	{
 		m_action.Call();
-		//printf("a\n");
 		m_status = TaskStatus::Completed;
-		//std::atomic_thread_fence(std::memory_order_release);
 	}
 	catch (Exception& e)
 	{

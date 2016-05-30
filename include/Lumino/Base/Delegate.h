@@ -26,6 +26,7 @@ private:
 	class HolderBase
 	{
 	public:
+		virtual ~HolderBase() = default;
 		virtual TRet Call(TArgs... args) const = 0;
 		virtual bool Equals(const HolderBase* p) const = 0;
 		virtual HolderBase* Copy() const = 0;

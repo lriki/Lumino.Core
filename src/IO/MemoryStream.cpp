@@ -68,6 +68,7 @@ MemoryStream::MemoryStream(const void* buffer, size_t size, bool copy)
 MemoryStream::~MemoryStream()
 {
 	if (m_autoDelete) {
+		// TODO: AutoDelete は危険。void* にキャストして delete することになってしまう。
 		LN_SAFE_DELETE_ARRAY(m_fixedBuffer);
 	}
 }

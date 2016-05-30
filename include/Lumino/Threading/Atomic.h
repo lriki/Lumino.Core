@@ -10,7 +10,7 @@ LN_NAMESPACE_BEGIN
 class LUMINO_EXPORT Atomic
 {
 public:
-	Atomic( int32_t initialValue = 0 );
+	Atomic(int32_t initialValue = 0);
 	~Atomic();
 
 public:
@@ -30,10 +30,10 @@ public:
 private:
 	LN_DISALLOW_COPY_AND_ASSIGN(Atomic);
 #ifdef LN_THREAD_WIN32
-    volatile long			mValue;
+    volatile long			m_value;
 #else
-	volatile int32_t		mValue;
-    mutable pthread_mutex_t	mMutex;
+	volatile int32_t		m_value;
+    mutable pthread_mutex_t	m_mutex;
 #endif
 };
 

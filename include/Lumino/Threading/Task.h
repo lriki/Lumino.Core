@@ -13,15 +13,15 @@ typedef RefPtr<Task>	TaskPtr;
 
 enum class TaskStatus
 {
-	Created,	/**< Task ƒIƒuƒWƒFƒNƒg‚Í¶¬‚³‚ê‚Ä‚¢‚é‚ªAƒXƒPƒWƒ…[ƒ‰‚É’Ç‰Á‚³‚ê‚Ä‚¢‚È‚¢B*/
+	Created,	/**< Task ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¯ç”Ÿæˆã•ã‚Œã¦ã„ã‚‹ãŒã€ã‚¹ã‚±ã‚¸ãƒ¥ãƒ¼ãƒ©ã«è¿½åŠ ã•ã‚Œã¦ã„ãªã„ã€‚*/
 
-	Waiting,	/**< ƒXƒPƒWƒ…[ƒ‰‚É’Ç‰Á‚³‚êAÀs‚³‚ê‚é‚Ì‚ğ‘Ò‹@’†B*/
+	Waiting,	/**< ã‚¹ã‚±ã‚¸ãƒ¥ãƒ¼ãƒ©ã«è¿½åŠ ã•ã‚Œã€å®Ÿè¡Œã•ã‚Œã‚‹ã®ã‚’å¾…æ©Ÿä¸­ã€‚*/
 
-	Running,	/**< Às’†B*/
+	Running,	/**< å®Ÿè¡Œä¸­ã€‚*/
 
-	Completed,	/**< ˆ—‚Í³í‚ÉŠ®—¹‚µ‚½B*/
+	Completed,	/**< å‡¦ç†ã¯æ­£å¸¸ã«å®Œäº†ã—ãŸã€‚*/
 
-	Faulted,	/**< Às’†‚Éƒnƒ“ƒhƒ‹‚³‚ê‚È‚¢—áŠO‚ª”­¶‚µ‚ÄI—¹‚µ‚½B*/
+	Faulted,	/**< å®Ÿè¡Œä¸­ã«ãƒãƒ³ãƒ‰ãƒ«ã•ã‚Œãªã„ä¾‹å¤–ãŒç™ºç”Ÿã—ã¦çµ‚äº†ã—ãŸã€‚*/
 };
 
 /**
@@ -40,29 +40,29 @@ public:
 
 	void Wait();
 
-	/** ‚±‚Ì Task ‚ÌŒ»İ‚Ìó‘Ô‚ğæ“¾‚µ‚Ü‚·B*/
+	/** ã“ã® Task ã®ç¾åœ¨ã®çŠ¶æ…‹ã‚’å–å¾—ã—ã¾ã™ã€‚*/
 	TaskStatus GetStatus() const;
 
-	/** ‚±‚Ì Task ‚ªŠ®—¹‚µ‚½‚©‚Ç‚¤‚©‚ğŠm”F‚µ‚Ü‚·B*/
+	/** ã“ã® Task ãŒå®Œäº†ã—ãŸã‹ã©ã†ã‹ã‚’ç¢ºèªã—ã¾ã™ã€‚*/
 	bool IsCompleted() const;
 
-	/** Às’†‚Éƒnƒ“ƒhƒ‹‚³‚ê‚È‚¢—áŠO‚ª”­¶‚µ‚½‚±‚Æ‚ªŒ´ˆö‚Å Task ‚ªI—¹‚µ‚½‚©‚ğŠm”F‚µ‚Ü‚·B*/
+	/** å®Ÿè¡Œä¸­ã«ãƒãƒ³ãƒ‰ãƒ«ã•ã‚Œãªã„ä¾‹å¤–ãŒç™ºç”Ÿã—ãŸã“ã¨ãŒåŸå› ã§ Task ãŒçµ‚äº†ã—ãŸã‹ã‚’ç¢ºèªã—ã¾ã™ã€‚*/
 	bool IsFaulted() const;
 
-	/** Às’†‚É”­¶‚µƒnƒ“ƒhƒ‹‚³‚ê‚È‚©‚Á‚½—áŠO‚ğ•Ô‚µ‚Ü‚·B—áŠO‚ª”­¶‚µ‚Ä‚¢‚È‚¯‚ê‚Î nullptr ‚Å‚·B*/
+	/** å®Ÿè¡Œä¸­ã«ç™ºç”Ÿã—ãƒãƒ³ãƒ‰ãƒ«ã•ã‚Œãªã‹ã£ãŸä¾‹å¤–ã‚’è¿”ã—ã¾ã™ã€‚ä¾‹å¤–ãŒç™ºç”Ÿã—ã¦ã„ãªã‘ã‚Œã° nullptr ã§ã™ã€‚*/
 	Exception* GetException() const;
 
 LN_INTERNAL_ACCESS:
 	void Execute();
 
 private:
-	Task(const Delegate<void()>& action);	// ¡‚Í Run ‚©‚ç‚¾‚¯l‚¦‚é
+	Task(const Delegate<void()>& action);	// ä»Šã¯ Run ã‹ã‚‰ã ã‘è€ƒãˆã‚‹
 	~Task();
 
 	Delegate<void()>	m_action;
-	TaskStatus		m_status = TaskStatus::Created;
-	Exception*		m_exception = nullptr;
-	ConditionFlag	m_waiting;
+	TaskStatus			m_status;
+	Exception*			m_exception;
+	ConditionFlag		m_waiting;
 };
 
 } // namespace tr
