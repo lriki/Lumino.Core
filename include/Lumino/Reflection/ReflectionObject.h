@@ -18,7 +18,7 @@ namespace tr
 		friend class ln::tr::ReflectionHelper; \
 		static typeInfo							lnref_typeInfo; \
 		ln::tr::LocalValueHavingFlags			lnref_localValueHavingFlags; \
-		virtual typeInfo*						lnref_GetThisTypeInfo() const; \
+		virtual typeInfo*						lnref_GetThisTypeInfo() const override; \
 		static void*							lnref_bindingTypeInfo; \
 
 #define LN_TR_REFLECTION_TYPEINFO_IMPLEMENT_COMMON(typeInfo, classType, baseClassType) \
@@ -39,7 +39,14 @@ namespace tr
 class ReflectionObject
 	: public RefObject
 {
-	LN_TR_REFLECTION_TYPEINFO_DECLARE();
+private:    // declare LN_TR_REFLECTION_TYPEINFO_DECLARE();
+    template<typename T> friend class ln::RefPtr;
+    friend class ln::tr::ReflectionHelper;
+    static TypeInfo					lnref_typeInfo;
+    LocalValueHavingFlags			lnref_localValueHavingFlags;
+    virtual TypeInfo*				lnref_GetThisTypeInfo() const;
+    static void*					lnref_bindingTypeInfo;
+    
 public:
 	ReflectionObject();
 	virtual ~ReflectionObject();
