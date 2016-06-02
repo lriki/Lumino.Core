@@ -1,6 +1,6 @@
 ﻿
 #include "../Internal.h"
-#include "../../include/Lumino/Base/RefObject.h"
+#include <Lumino/Base/RefObject.h>
 
 LN_NAMESPACE_BEGIN
 
@@ -10,8 +10,7 @@ LN_NAMESPACE_BEGIN
 
 //------------------------------------------------------------------------------
 RefObject::RefObject()
-	: mReferenceCount(1)
-	, m_refPtrReferenced(0)
+	: m_referenceCount(1)
 {}
 
 //------------------------------------------------------------------------------
@@ -20,46 +19,25 @@ RefObject::~RefObject()
 }
 
 //------------------------------------------------------------------------------
-int32_t RefObject::GetRefCount() const
+int32_t RefObject::GetReferenceCount() const
 { 
-	return mReferenceCount.Get();
+	return m_referenceCount.Get();
 }
 
 //------------------------------------------------------------------------------
 int32_t RefObject::AddRef()
 {
-	return mReferenceCount.Increment();
+	return m_referenceCount.Increment();
 }
 
 //------------------------------------------------------------------------------
 int32_t RefObject::Release()
 {
-    int32_t count = mReferenceCount.Decrement();
-	if ( count <= 0 ) {
-		 delete this;
+    int32_t count = m_referenceCount.Decrement();
+	if (count <= 0) {
+		delete this;
 	}
     return count;
-}
-
-//------------------------------------------------------------------------------
-void RefObject::TryGCAddRef()
-{
-	//if (m_refPtrReferenced.Get() == 0)
-	{
-		m_refPtrReferenced.Increment();
-		if (m_refPtrReferenced.Get() == 1)
-		{
-			return;
-		}
-	}
-	AddRef();
-}
-
-//------------------------------------------------------------------------------
-void RefObject::GCRelease()
-{
-	m_refPtrReferenced.Decrement();
-	Release();
 }
 
 LN_NAMESPACE_END

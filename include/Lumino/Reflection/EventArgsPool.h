@@ -69,7 +69,7 @@ private:
 		{
 			for (auto e : (*list))
 			{
-				if (e->GetRefCount() == 1) {	// このリストからしか参照されていなければ返す
+				if (e->GetReferenceCount() == 1) {	// このリストからしか参照されていなければ返す
 					return e;
 				}
 			}
@@ -100,7 +100,7 @@ private:
 	{
 		LN_FOREACH(T a, pool)
 		{
-			if (a->GetRefCount() == 1) {
+			if (a->GetReferenceCount() == 1) {
 				return a;
 			}
 		}

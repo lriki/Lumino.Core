@@ -49,19 +49,19 @@ TEST_F(Test_Base_Cache, ObjectCount)
 	obj = dynamic_cast<CacheTest*>(manager->FindObjectAddRef(CacheKey(_T("obj1"))));
 	obj->Release();
 	ASSERT_EQ(obj1, obj);
-	ASSERT_EQ(1, obj->GetRefCount());
+	ASSERT_EQ(1, obj->GetReferenceCount());
 	obj = dynamic_cast<CacheTest*>(manager->FindObjectAddRef(CacheKey(_T("obj2"))));
 	obj->Release();
 	ASSERT_EQ(obj2, obj);
-	ASSERT_EQ(1, obj->GetRefCount());
+	ASSERT_EQ(1, obj->GetReferenceCount());
 	obj = dynamic_cast<CacheTest*>(manager->FindObjectAddRef(CacheKey(_T("obj3"))));
 	obj->Release();
 	ASSERT_EQ(obj3, obj);
-	ASSERT_EQ(1, obj->GetRefCount());
+	ASSERT_EQ(1, obj->GetReferenceCount());
 	obj = dynamic_cast<CacheTest*>(manager->FindObjectAddRef(CacheKey(_T("obj4"))));
 	obj->Release();
 	ASSERT_EQ(obj4, obj);
-	ASSERT_EQ(1, obj->GetRefCount());
+	ASSERT_EQ(1, obj->GetReferenceCount());
 
 	// 全部 Release。キャッシュに入る
 	obj1->Release();
@@ -73,10 +73,10 @@ TEST_F(Test_Base_Cache, ObjectCount)
 	ASSERT_EQ(NULL, obj);
 	obj = dynamic_cast<CacheTest*>(manager->FindObjectAddRef(CacheKey(_T("obj2"))));
 	ASSERT_EQ(obj2, obj);
-	ASSERT_EQ(1, obj->GetRefCount());
+	ASSERT_EQ(1, obj->GetReferenceCount());
 	obj = dynamic_cast<CacheTest*>(manager->FindObjectAddRef(CacheKey(_T("obj3"))));
 	ASSERT_EQ(obj3, obj);
-	ASSERT_EQ(1, obj->GetRefCount());
+	ASSERT_EQ(1, obj->GetReferenceCount());
 
 	// また Release。キャッシュに入る
 	obj2->Release();
@@ -90,7 +90,7 @@ TEST_F(Test_Base_Cache, ObjectCount)
 	obj = dynamic_cast<CacheTest*>(manager->FindObjectAddRef(CacheKey(_T("obj3"))));
 	ASSERT_EQ(obj3, obj);
 	obj->Release();
-	ASSERT_EQ(1, obj->GetRefCount());
+	ASSERT_EQ(1, obj->GetReferenceCount());
 
 	// また Release。キャッシュに入る
 	obj3->Release();
@@ -112,7 +112,7 @@ TEST_F(Test_Base_Cache, ObjectCount)
 
 	// カウントは戻っているはず
 	ASSERT_EQ(0, g_count);
-	ASSERT_EQ(1, manager->GetRefCount());
+	ASSERT_EQ(1, manager->GetReferenceCount());
 }
 
 //------------------------------------------------------------------------------

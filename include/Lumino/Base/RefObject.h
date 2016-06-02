@@ -29,42 +29,35 @@ class RefObject;
 	@brief	参照カウントを持つクラスの基底
 */
 class RefObject
-    : private NonCopyable
 {
-public:
-	RefObject();
 protected:
+	RefObject();
 	virtual ~RefObject();
 
 public:
 
-	/// 参照カウントの取得
-	virtual int32_t GetRefCount() const;
+	/** 参照カウントを取得します。*/
+	virtual int32_t GetReferenceCount() const;
 
-	/// 参照カウントをインクリメントする
+	/** 参照カウントをインクリメントします。*/
 	virtual int32_t AddRef();
 
-	/// 参照カウントをデクリメントする
+	/** 参照カウントをデクリメントします。*/
 	virtual int32_t Release();
 
-	void TryGCAddRef();
-	void GCRelease();
-
-
 protected:
-    Atomic		mReferenceCount;	///< 参照カウント	TODO: atomic<> の方が高速
-	Atomic		m_refPtrReferenced;
+    Atomic		m_referenceCount;	///< 参照カウント	TODO: atomic<> の方が高速
+
+private:
+	LN_DISALLOW_COPY_AND_ASSIGN(RefObject);
 
 };
 
-class RefPtrCore {};
-
 /**
 	@brief		RefObject 用 スマートポインタ
-	@attention	CArray や std::vector 等のコンテナへの格納は未チェック
 */
 template <class T>
-class RefPtr : public RefPtrCore
+class RefPtr
 {
 public:
 	typedef T* PtrType;
