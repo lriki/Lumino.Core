@@ -8,6 +8,8 @@
 # Exceprion Backtrace.
 #option(LN_EXCEPTION_BACKTRACE "In some unix environment there is a possibility that can not be compiled." ON)
 
+set(LN_ARCH "x86")	# default
+
 #------------------------------------------------------------------------------
 # Options
 #------------------------------------------------------------------------------
@@ -28,6 +30,14 @@ if (WIN32)
 				string(REGEX REPLACE "/MDd" "/MTd" ${flag} "${${flag}}")
 			endif()
 		endforeach()
+	endif()
+	
+	# Architecture.
+	# http://stackoverflow.com/questions/5334095/cmake-multiarchitecture-compilation
+	if (${CMAKE_EXE_LINKER_FLAGS} MATCHES "/machine:x64")	# /machine:x64
+		set(LN_ARCH "x64")
+	else()
+		set(LN_ARCH "x86")
 	endif()
 endif()
 
@@ -65,35 +75,47 @@ endmacro()
 
 #------------------------------------------------------------------------------
 function(ln_make_postfix_for_shared_lib outPostfix)
+	set(postfix "")
+	
 	if (WIN32)
 		
 		# Architecture.
 		# http://stackoverflow.com/questions/5334095/cmake-multiarchitecture-compilation
-		if (${CMAKE_EXE_LINKER_FLAGS} MATCHES "/machine:x64")	# /machine:x64
-			set(postfix "${postfix}_x64")
-		else()
-			set(postfix "${postfix}_x86")
-		endif()
+		#if (${CMAKE_EXE_LINKER_FLAGS} MATCHES "/machine:x64")	# /machine:x64
+		#	set(postfix "${postfix}_x64")
+		#else()
+		#	set(postfix "${postfix}_x86")
+		#endif()
 
 		# Unicode.
 		if (${LN_USE_UNICODE_CHAR_SET})
-			set(postfix "${postfix}u")
+			set(postfix "${postfix}U")
 		endif()
 
 		# MSVC Runtime library.
-		if (LN_MSVC_LINK_MULTI_THREAD_STATIC_RUNTIME)
-			set(postfix "${postfix}MT")
-		else()
-			set(postfix "${postfix}MD")
-		endif()
+		#if (LN_MSVC_LINK_MULTI_THREAD_STATIC_RUNTIME)
+		#	set(postfix "${postfix}MT")
+		#else()
+		#	set(postfix "${postfix}MD")
+		#endif()
 
 		set(${outPostfix} ${postfix} PARENT_SCOPE)
 
 	elseif (APPLE)
-		set(${outPostfix} "" PARENT_SCOPE)
+		# Unicode.
+		if (${LN_USE_UNICODE_CHAR_SET})
+			set(postfix "${postfix}U")
+		endif()
+		
+		set(${outPostfix} ${postfix} PARENT_SCOPE)
 
 	elseif (UNIX)
-		set(${outPostfix} "" PARENT_SCOPE)
+		# Unicode.
+		if (${LN_USE_UNICODE_CHAR_SET})
+			set(postfix "${postfix}U")
+		endif()
+		
+		set(${outPostfix} ${postfix} PARENT_SCOPE)
 
 	else()
 		# Not support.
