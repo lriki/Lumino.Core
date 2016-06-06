@@ -93,7 +93,7 @@ void MemoryStream::Initialize(const void* buffer, size_t size, bool copy)
 	if (copy)
 	{
 		m_fixedBuffer = LN_NEW byte_t[size];
-		memcpy(m_fixedBuffer, buffer, size);
+		memcpy_s(m_fixedBuffer, size, buffer, size);
 		m_fixedBufferSize = size;
 		m_autoDelete = true;
 	}
@@ -138,7 +138,7 @@ bool MemoryStream::CanWrite() const
 //------------------------------------------------------------------------------
 int64_t MemoryStream::GetLength() const
 {
-	if (m_fixedBuffer != NULL || m_constfixedBuffer != NULL){
+	if (m_fixedBuffer != NULL || m_constfixedBuffer != NULL) {
 		return m_fixedBufferSize;
 	}
 	else {
@@ -216,7 +216,8 @@ void MemoryStream::Write(const void* data, size_t byteCount)
 //------------------------------------------------------------------------------
 void MemoryStream::Seek(int64_t offset, SeekOrigin origin)
 {
-	m_seekPos = (size_t)FileSystem::CalcSeekPoint(m_seekPos, m_buffer.size(), offset, origin);
+	size_t s = (m_fixedBufferSize != 0) ? m_fixedBufferSize : m_buffer.size();
+	m_seekPos = (size_t)FileSystem::CalcSeekPoint(m_seekPos, s, offset, origin);
 }
 
 LN_NAMESPACE_END
