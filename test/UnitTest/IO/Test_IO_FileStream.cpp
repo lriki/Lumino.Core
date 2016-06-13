@@ -8,6 +8,21 @@ protected:
 };
 
 //------------------------------------------------------------------------------
+TEST_F(Test_IO_FileStream, GetFileSize)
+{
+	// <Test> ファイルサイズを取得できる。
+	{
+		ASSERT_EQ(1036, FileSystem::GetFileSize(LN_LOCALFILE("TestData/Text_SJIS_CRLF.txt")));
+	}
+
+	// <Test> ファイルが開かれていてもサイズを取得できる。
+	{
+		auto f = FileStream::Create(LN_LOCALFILE("TestData/Text_SJIS_CRLF.txt"), FileOpenMode::Write | FileOpenMode::Append);
+		ASSERT_EQ(1036, FileSystem::GetFileSize(LN_LOCALFILE("TestData/Text_SJIS_CRLF.txt")));
+	}
+}
+
+//------------------------------------------------------------------------------
 TEST_F(Test_IO_FileStream, Open)
 {
 	// Write

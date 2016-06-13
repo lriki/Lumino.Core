@@ -198,24 +198,11 @@ static void RemoveDirectoryImpl(LPCWSTR lpPathName)
 //------------------------------------------------------------------------------
 uint64_t FileSystem::GetFileSize(const TCHAR* filePath)
 {
-	LN_THROW( filePath != NULL, ArgumentException );
-
-	FILE* fp;
-	errno_t r = _tfopen_s( &fp, filePath, _T("r") );
-	LN_THROW( r == 0, FileNotFoundException );
-
-	uint64_t size = 0;
-	try
-	{
-		size = GetFileSize(fp);
-	}
-	catch (...)
-	{
-		fclose( fp );
-		throw;
-	}
-	fclose( fp );
-	return size;
+	LN_CHECK_ARG(filePath != nullptr);
+	struct _stat stat_buf;
+	int r = _tstat(filePath, &stat_buf);
+	LN_THROW(r == 0, FileNotFoundException);
+	return stat_buf.st_size;
 }
 
 //------------------------------------------------------------------------------

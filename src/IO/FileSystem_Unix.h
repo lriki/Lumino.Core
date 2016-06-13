@@ -16,10 +16,8 @@ LN_NAMESPACE_BEGIN
 		LN_THROW(0, IOException); \
 	}
 
-	//------------------------------------------------------------------------------
-	//
-	//------------------------------------------------------------------------------
-	static bool is_stat_writable(struct stat *st, const char *path)
+//------------------------------------------------------------------------------
+static bool is_stat_writable(struct stat *st, const char *path)
 {
 	// 制限なしに書き込み可であるか
 	if (st->st_mode & S_IWOTH)
@@ -168,24 +166,12 @@ void FileSystem::Delete(const wchar_t* filePath)
 //------------------------------------------------------------------------------
 uint64_t FileSystem::GetFileSize(const TCHAR* filePath)
 {
-	LN_THROW(filePath != NULL, ArgumentException);
-
-	FILE* fp;
-	errno_t r = _tfopen_s(&fp, filePath, _T("r"));
+	LN_CHECK_ARG(filePath != nullptr);
+	detail::GenericStaticallyLocalPath<char> localPath(filePath);
+	struct stat stat_buf;
+	int r = stat(localPath.c_str(), &stat_buf);
 	LN_THROW(r == 0, FileNotFoundException);
-
-	uint64_t size = 0;
-	try
-	{
-		size = GetFileSize(fp);
-	}
-	catch (...)
-	{
-		fclose(fp);
-		throw;
-	}
-	fclose(fp);
-	return size;
+	return stat_buf.st_size;
 }
 
 //------------------------------------------------------------------------------
