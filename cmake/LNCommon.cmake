@@ -8,7 +8,8 @@
 # Exceprion Backtrace.
 #option(LN_EXCEPTION_BACKTRACE "In some unix environment there is a possibility that can not be compiled." ON)
 
-set(LN_ARCH "x86")	# default
+set(LN_ARCH "x86")			# default
+set(LN_TARGET_ENV "MSVC12")	# default
 
 #------------------------------------------------------------------------------
 # Options
@@ -38,6 +39,21 @@ if (WIN32)
 		set(LN_ARCH "x64")
 	else()
 		set(LN_ARCH "x86")
+	endif()
+	
+	# MSVC version
+	if (MSVC_VERSION EQUAL 1400)
+		set(LN_TARGET_ENV "MSVC80")
+	elseif (MSVC_VERSION EQUAL 1500)
+		set(LN_TARGET_ENV "MSVC90")
+	elseif (MSVC_VERSION EQUAL 1600)
+		set(LN_TARGET_ENV "MSVC100")
+	elseif (MSVC_VERSION EQUAL 1700)
+		set(LN_TARGET_ENV "MSVC110")
+	elseif (MSVC_VERSION EQUAL 1800)
+		set(LN_TARGET_ENV "MSVC120")
+	elseif (MSVC_VERSION EQUAL 1900)
+		set(LN_TARGET_ENV "MSVC140")
 	endif()
 endif()
 
@@ -182,4 +198,13 @@ function(ln_make_postfix outPostfix)
 	    message(FATAL_ERROR "No supported platform was detected.")
 	endif()
 endfunction()
+
+#------------------------------------------------------------------------------
+function(ln_make_output_dir outPath)
+	set(${outPath} "${CMAKE_SOURCE_DIR}/lib/${LN_TARGET_ENV}/${LN_ARCH}" PARENT_SCOPE)
+endfunction()
+
+
+# make output dir path
+ln_make_output_dir(LN_LIB_OUTPUT_DIR)
 
