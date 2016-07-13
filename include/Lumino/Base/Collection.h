@@ -186,12 +186,13 @@ public:
 
 public:
 	class const_iterator
-		: public std::iterator<std::input_iterator_tag, T>
+		: public std::iterator<std::random_access_iterator_tag, T>
 	{
 	public:
 		const_iterator() : m_internalItr() {}
 		const_iterator(const const_iterator& obj) : m_internalItr(obj.m_internalItr) {}
 		const_iterator& operator = (const const_iterator& obj) { m_internalItr = obj.m_internalItr; return (*this); }
+		const_iterator& operator += (difference_type offset) { m_internalItr.operator+=(offset); return (*this); }
 
 		bool operator==(const const_iterator& right) const	{ return m_internalItr == right.m_internalItr; }
 		bool operator!=(const const_iterator& right) const	{ return m_internalItr != right.m_internalItr; }
@@ -203,7 +204,11 @@ public:
 		const_iterator& operator++()		{ ++m_internalItr; return (*this); }
 		const_iterator operator++(int)		{ const_iterator tmp = *this; ++(*this); return tmp; }
 
+		const_iterator& operator--() { --m_internalItr; return (*this); }
+		const_iterator operator--(int) { iterator tmp = *this; --(*this); return tmp; }
+
 		difference_type operator-(const const_iterator& right) const { return (m_internalItr - right.m_internalItr); }
+		const_iterator operator+(difference_type offset) const { return const_iterator(m_internalItr + offset); }
 
 	private:
 		friend class Collection;
@@ -212,12 +217,13 @@ public:
 	};
 
 	class iterator
-		: public std::iterator<std::input_iterator_tag, T>
+		: public std::iterator<std::random_access_iterator_tag, T>
 	{
 	public:
 		iterator() : m_internalItr() {}
 		iterator(const iterator& obj) : m_internalItr(obj.m_internalItr) {}
 		iterator& operator = (const iterator& obj) { m_internalItr = obj.m_internalItr; return (*this); }
+		iterator& operator += (difference_type offset) { m_internalItr.operator+=(offset); return (*this); }
 
 		bool operator==(const iterator& right) const		{ return m_internalItr == right.m_internalItr; }
 		bool operator!=(const iterator& right) const		{ return m_internalItr != right.m_internalItr; }
@@ -229,7 +235,11 @@ public:
 		iterator& operator++()				{ ++m_internalItr; return (*this); }
 		iterator operator++(int)			{ iterator tmp = *this; ++(*this); return tmp; }
 
-		difference_type operator-(const const_iterator& right) const { return (m_internalItr - right.m_internalItr); }
+		iterator& operator--() { --m_internalItr; return (*this); }
+		iterator operator--(int) { iterator tmp = *this; --(*this); return tmp; }
+
+		difference_type operator-(const iterator& right) const { return (m_internalItr - right.m_internalItr); }
+		iterator operator+(difference_type offset) const { return iterator(m_internalItr + offset); }
 
 	private:
 		friend class Collection;
