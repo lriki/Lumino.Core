@@ -33,6 +33,7 @@ void Property::NotifyPropertyChanged(ReflectionObject* target, const Property* p
 {
 	RefPtr<PropertyChangedEventArgs> e(g_eventArgsPool.Create<PropertyChangedEventArgs>(prop, newValue, oldValue, source), false);
 	target->OnPropertyChanged(e);
+	prop->m_metadata->CallPropertyChangedCallback(target, e);
 }
 
 //------------------------------------------------------------------------------

@@ -147,6 +147,42 @@ ReflectionArrayObject* Variant::GetReflectionArrayObject() const
 }
 
 //------------------------------------------------------------------------------
+bool Variant::Equals(const Variant& obj) const
+{
+	if (m_type != obj.m_type) return false;
+	switch (m_type)
+	{
+	case VariantType::Null:
+		return true;
+	case VariantType::Bool:
+		return m_bool == obj.m_bool;
+	case VariantType::Int32:
+		return m_int32 == obj.m_int32;
+	case VariantType::UInt32:
+		return m_uint32 == obj.m_uint32;
+	case VariantType::Float:
+		return m_float == obj.m_float;
+	case VariantType::Double:
+		return m_double == obj.m_double;
+	case VariantType::String:
+		return m_string == obj.m_string;
+	case VariantType::Enum:
+		return m_enum == obj.m_enum;
+	case VariantType::Struct:
+		if (m_structSize != obj.m_structSize) return false;
+		return memcmp(m_struct, obj.m_struct, m_structSize) != 0;
+	case VariantType::Object:
+		return m_object == obj.m_object;
+	case VariantType::ArrayObject:
+		return m_arrayObject == obj.m_arrayObject;
+	default:
+		LN_ASSERT(0);
+		break;
+	}
+	return false;
+}
+
+//------------------------------------------------------------------------------
 void Variant::Copy(const Variant& obj)
 {
 	Release();

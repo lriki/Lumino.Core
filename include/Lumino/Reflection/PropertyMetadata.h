@@ -22,20 +22,25 @@ LN_ENUM_FLAGS_DECLARE(PropertyOptions);
 */
 class PropertyMetadata
 {
-	// メンバ関数ポインタは void* に変換できない。そのためラップするクラスを用意している
+	// Delegate と同じ仕組み
 	class CallbackWrapper
 	{
 	public:
 		virtual ~CallbackWrapper() {}
+		virtual void Call(ReflectionObject* obj, PropertyChangedEventArgs* e) = 0;
 	};
 
-	template<typename TCallback>
+	template<typename TClass, typename TCallback>
 	class SimpleCallbackWrapper : public CallbackWrapper
 	{
 	public:
 		SimpleCallbackWrapper(TCallback callback) : m_callback(callback) {}
 		TCallback GetCallback() { return m_callback; }
 		TCallback m_callback;
+		virtual void Call(ReflectionObject* obj, PropertyChangedEventArgs* e) override
+		{
+			(static_cast<TClass*>(obj)->*m_callback)(e);
+		}
 	};
 
 public:
@@ -57,14 +62,14 @@ public:
 		: PropertyMetadata()
 	{
 		m_defaultValue = defaultValue;
-		m_propertyChangedCallback = LN_NEW SimpleCallbackWrapper< void(TOwnerClass::*)(PropertyChangedEventArgs*) >(propertyChanged);
+		m_propertyChangedCallback = LN_NEW SimpleCallbackWrapper<TOwnerClass, void(TOwnerClass::*)(PropertyChangedEventArgs*)>(propertyChanged);
 	}
 	template<typename TOwnerClass>
 	PropertyMetadata(const Variant& defaultValue, PropertyOptions options, void(TOwnerClass::*propertyChanged)(PropertyChangedEventArgs*))
 		: PropertyMetadata()
 	{
 		m_defaultValue = defaultValue;
-		m_propertyChangedCallback = LN_NEW SimpleCallbackWrapper< void(TOwnerClass::*)(PropertyChangedEventArgs*) >(propertyChanged);
+		m_propertyChangedCallback = LN_NEW SimpleCallbackWrapper<TOwnerClass, void(TOwnerClass::*)(PropertyChangedEventArgs*)>(propertyChanged);
 		m_options = options;
 	}
 	template<typename TOwnerClass>
@@ -72,7 +77,7 @@ public:
 		: PropertyMetadata()
 	{
 		m_defaultValue = defaultValue;
-		m_propertyChangedCallback = LN_NEW SimpleCallbackWrapper< void(TOwnerClass::*)(PropertyChangedEventArgs*) >(propertyChanged);
+		m_propertyChangedCallback = LN_NEW SimpleCallbackWrapper<TOwnerClass, void(TOwnerClass::*)(PropertyChangedEventArgs*)>(propertyChanged);
 		m_options = options;
 		//m_inheritanceKey = inheritanceKey;
 	}
@@ -84,11 +89,10 @@ public:
 
 public:
 	const Variant& GetDefaultValue() const { return m_defaultValue; }
-	template<typename TCallback>
-	TCallback GetPropertyChangedCallback()
+	void CallPropertyChangedCallback(ReflectionObject* obj, PropertyChangedEventArgs* e)
 	{
-		if (m_propertyChangedCallback == NULL) { return NULL; }
-		return static_cast< SimpleCallbackWrapper<TCallback>* >(m_propertyChangedCallback)->GetCallback();
+		if (m_propertyChangedCallback == nullptr) return;
+		return m_propertyChangedCallback->Call(obj, e);
 	}
 	PropertyOptions GetPropertyOptions() const { return m_options; }
 	Property* GetInheritanceTarget() const { return m_inheritanceTarget; }

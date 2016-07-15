@@ -53,11 +53,17 @@ private:
 
 };
 
+//namespace detail
+//{
+class RefPtrBase {};
+
+//} // namespace detail
+
 /**
 	@brief		RefObject 用 スマートポインタ
 */
 template <class T>
-class RefPtr
+class RefPtr : public /*detail::*/RefPtrBase
 {
 public:
 	typedef T* PtrType;

@@ -228,6 +228,7 @@ TEST_F(IntegrationTest_Reflection_Variant, Basic)
 		ASSERT_EQ(obj1.Get(), Variant::Cast<RefTest1*>(v1));
 		ASSERT_EQ(obj1.Get(), Variant::Cast<ReflectionObject*>(v1));
 		ASSERT_EQ(obj1.Get(), Variant::Cast<RefTest1*>(v2));
+		ASSERT_EQ(obj1, Variant::Cast<RefPtr<RefTest1>>(v2));
 	}
 	// <Test> ReflectionArrayObject 型
 	{

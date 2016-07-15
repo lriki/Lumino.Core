@@ -193,6 +193,7 @@ public:
 			Variant oldValue(*v);
 			m_setter(target, const_cast<TValue&>(value));
 			NotifyPropertyChanged(target, this, value, oldValue, source);
+
 		}
 		else
 		{

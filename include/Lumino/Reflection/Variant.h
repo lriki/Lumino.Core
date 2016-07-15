@@ -41,6 +41,7 @@ namespace detail
 	class KindPointer {};
 	class KindReflectionObject {};
 	class KindReflectionArrayObject {};
+	class KindRefPtr {};
 }
 
 /**
@@ -88,6 +89,7 @@ public:
 			std::enable_if<std::is_same<T, String>::value, detail::KindPrimitive>,
 			std::enable_if<std::is_base_of<Enum, T>::value, detail::KindEnum>,
 			std::enable_if<std::is_enum<T>::value, detail::KindEnum>,
+			std::enable_if<std::is_base_of<RefPtrBase, T>::value, detail::KindRefPtr>,
 			std::enable_if<std::is_class<std::remove_reference<T>>::value, detail::KindStruct>,		// 非POD構造体 or クラス実体 (remove_reference で、T=const Struct& に備える)
 			std::enable_if<std::is_pod<std::remove_reference<T>>::value, detail::KindStruct>,		// POD構造体
 			std::false_type>;
@@ -179,6 +181,13 @@ public:
 	//}
 
 	template<typename T>
+	Variant(const RefPtr<T>& value)
+		: Variant()
+	{
+		AccessorSelectorHelper<T*>::SetValue(this, value.Get());
+	}
+
+	template<typename T>
 	Variant(const T& value)
 		: Variant()
 	{
@@ -210,25 +219,6 @@ public:
 
 
 
-	
-
-
-	
-	
-	//template<bool condition, typename IfTrue, typename IfFalse>
-	//using conditional_t = typename std::conditional<condition, IfTrue, IfFalse>::type;
-
-	//template<typename T, typename std::enable_if<std::is_pointer<T>::value>::type*& = detail::enabler>
-	//static T Cast(const Variant& value)
-	//{
-	//	using typeKind = first_enabled_t<
-	//		std::enable_if<std::is_base_of<Enum, T>::value, detail::KindEnum>,
-	//		std::enable_if<std::is_base_of<ReflectionListObject, T>::value, detail::KindReflectionListObject>,
-	//		std::enable_if<std::is_base_of<ReflectionObject, T>::value, detail::KindReflectionObject>,
-	//		detail::KindPrimitive>;
-	//	return CastSelector<T, typeKind>::GetValue(value);
-	//}
-
 	/**
 		@brief		指定した Variant の値を指定した型にキャストする。
 		@code
@@ -238,36 +228,6 @@ public:
 	template<typename T>
 	static T Cast(const Variant& value)
 	{
-		//using bar = typename std::conditional < typename std::is_base_of<Enum, T>::value, EnumSubClass, PrimitiveTypeClass >;
-		//typedef
-		//	typename std::conditional <
-		//	std::is_base_of<Enum, T>::value,
-		//	EnumSubClass,
-		//	PrimitiveTypeClass >::type
-		//	bar;
-
-		//using typeKind = typename std::conditional <
-		//	std::is_base_of<Enum, T>::value,
-		//	detail::KindEnum,
-		//	detail::KindPrimitive >::type;
-
-		//using typeKind = first_enabled_t<
-		//	std::enable_if<std::is_base_of<Enum, T>::value, detail::KindEnum>,
-		//	std::enable_if<std::is_base_of<ReflectionListObject, T>::value, detail::KindReflectionListObject>,
-		//	std::enable_if<std::is_base_of<ReflectionObject, T>::value, detail::KindReflectionObject>,
-		//	detail::KindPrimitive>;
-
-		// ここで「GetValue が定義されていない」というエラーが表示される場合、T に Variant が扱えない型が指定されたことを意味する。
-		//return CastSelector<T, typeKind>::GetValue(value);
-
-		//template<typename T>
-		//using bar = first_enabled_t<
-		//	std::enable_if<typename std::is_base_of<Enum, T>::type, EnumSubClass>,
-		//	std::enable_if<typename std::is_base_of<ReflectionListObject, T>::type, ReflectionListObjectSubClass>,
-		//	std::enable_if<typename std::is_base_of<ReflectionObject, T>::type, ReflectionObjectSubClass>,
-		//	PrimitiveTypeClass>;
-		//return CastSelector<T, typename std::is_base_of<Enum, T>::type, typename std::is_base_of<RefPtrCore, T>::type >::GetValue(value);
-
 		return AccessorSelectorHelper<T>::GetValue(value);
 	}
 
@@ -357,6 +317,8 @@ private:
 public:
 	//bool operator == (const Variant& right) const;
 
+	bool Equals(const Variant& obj) const;
+
 private:
 	void Copy(const Variant& obj);
 	void Release();
@@ -425,6 +387,11 @@ template<typename T> struct Variant::AccessorSelector<T, detail::KindStruct>
 template<typename T> struct Variant::AccessorSelector<const T&, detail::KindStruct>	// const Struct& のような参照での get をサポートする
 {
 	static const T& GetValue(const Variant* v) { return *((T*)v->GetStruct()); }
+};
+template<typename T> struct Variant::AccessorSelector<T, detail::KindRefPtr>
+{
+	static void SetValue(Variant* v, T value) { v->SetReflectionObject(value); }
+	static T GetValue(const Variant* v) { return T(static_cast<typename T::PtrType>(v->GetReflectionObject())); }
 };
 
 } // namespace tr
