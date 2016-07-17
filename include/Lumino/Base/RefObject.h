@@ -206,7 +206,7 @@ public:
 
     /// convert
 	operator T*			() const { return static_cast<T*>(m_ptr); }
-    operator const T*	() const { return static_cast<T*>(m_ptr); }
+    //operator const T*	() const { return static_cast<T*>(m_ptr); }
 
 protected:
 	RefObject* m_ptr;
