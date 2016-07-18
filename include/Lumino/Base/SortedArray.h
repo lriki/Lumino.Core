@@ -34,6 +34,11 @@ public:
 		return (int)m_vector.size();
 	}
 
+	void Clear()
+	{
+		m_vector.clear();
+	}
+
 	/** 
 		@brief		指定したキーと値のペアを追加します。
 		@param[in]	key		: 要素のキー
