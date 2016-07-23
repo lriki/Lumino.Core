@@ -341,7 +341,7 @@ public:
 	GenericStringArray<TChar> Split(const TChar* delim, StringSplitOptions option = StringSplitOptions::None) const;
 
 	/**
-		@brief		文字列を構成するバイト数を取得する
+		@brief		文字列を構成するバイト数を取得する (終端 '\0' は含まない)
 	*/
 	int GetByteCount() const { return GetLength() * sizeof(TChar); }
 

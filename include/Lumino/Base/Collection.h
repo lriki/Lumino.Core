@@ -114,6 +114,23 @@ public:
 	/** 配列用のメモリを指定したサイズで確保します。*/
 	void Reserve(int size) { m_array.Reserve(size); }
 
+
+	/** 配列の要素数を変更します。*/
+	void Resize(int count)
+	{
+		LN_CHECK_ARG(count >= 0);
+
+		int d = GetCount() - count;
+		if (d > 0)
+		{
+			for (int i = GetCount() - 1; i >= count; --i)
+			{
+				RemoveItem(i);
+			}
+		}
+		m_array.Resize(count);
+	}
+
 	/** 指定した要素がこの配列内に存在するかどうかを判断します。*/
 	bool Contains(const T& item) const
 	{
@@ -248,12 +265,6 @@ public:
 	};
 
 protected:
-
-	void Resize(int count)
-	{
-		LN_THROW(m_array.IsEmpty(), NotImplementedException);	// TODO: いまのところ初期化用
-		m_array.Resize(count);
-	}
 
 	/** 指定したインデックスの位置に要素を挿入します。*/
 	virtual void InsertItem(int index, const value_type& item)
