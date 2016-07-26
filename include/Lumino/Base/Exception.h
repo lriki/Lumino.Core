@@ -52,6 +52,10 @@
 #if defined(LN_DO_CHECK_ASSERT)
 	#define LN_CHECK_ARG(expression)	assert(expression);
 	#define LN_CHECK_STATE(expression)	assert(expression);
+
+	#define LN_CHECKEQ_ARG(expression)		((expression) && detail::NotifyException(ln::ArgumentException(_T(#expression)), __FILE__, __LINE__))
+	#define LN_CHECKEQ_STATE(expression)	((expression) && detail::NotifyException(ln::InvalidOperationException(_T(#expression)), __FILE__, __LINE__))
+
 #elif defined(LN_DO_CHECK_THROW)
 	#define LN_CHECK_ARG(expression)	LN_THROW(expression, ::ln::ArgumentException, #expression);
 	#define LN_CHECK_STATE(expression)	LN_THROW(expression, ::ln::InvalidOperationException, #expression);
@@ -65,6 +69,21 @@
 #define LN_NOTIMPLEMENTED(...)	LN_THROW(0, ln::NotImplementedException, __VA_ARGS__);
 
 LN_NAMESPACE_BEGIN
+
+class Exception;
+
+namespace detail
+{
+
+template<class TException>
+inline bool NotifyException(TException& e, const char* file, int line)
+{
+	e.SetSourceLocationInfo(file, line);
+	throw e;
+	return true;	// TODO: ユーザーへ通知
+}
+
+} // namespace detail
 
 /**
 	@brief	例外ベースクラス

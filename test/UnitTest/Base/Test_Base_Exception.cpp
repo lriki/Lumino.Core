@@ -126,3 +126,28 @@ TEST_F(Test_Base_Exception, Basic)
 		ASSERT_TRUE(_tcsstr(e.GetMessage(), _T("testtest")) != NULL);
 	}
 }
+
+//---------------------------------------------------------------------
+TEST_F(Test_Base_Exception, AssertionMacros)
+{
+	int x = 0;
+
+	try
+	{
+		if (LN_CHECKEQ_ARG(x != 0)) {
+			x = 1;
+		}
+
+		if (LN_CHECKEQ_ARG(x == 0)) {
+			x = 1;
+		}
+		else {
+			x = 2;
+		}
+	}
+	catch (ArgumentException& e)
+	{
+	}
+
+	ASSERT_EQ(0, x);
+}
