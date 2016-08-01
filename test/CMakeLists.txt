@@ -57,6 +57,15 @@ set(LN_TEST_SOURCES
 	UnitTest/Xml/Test_Xml_XmlWriter.cpp
 	UnitTest/Reflection/Test_Reflection_ReflectionObject.cpp
 	UnitTest/Reflection/Test_Reflection_Variant.cpp
+	UnitTest/Math/Test_Math.cpp
+	UnitTest/Math/Test_Matrix.cpp
+	UnitTest/Math/Test_Plane.cpp
+	UnitTest/Math/Test_Quaternion.cpp
+	UnitTest/Math/Test_SQTTransform.cpp
+	UnitTest/Math/Test_Vector2.cpp
+	UnitTest/Math/Test_Vector3.cpp
+	UnitTest/Math/Test_Vector4.cpp
+	UnitTest/Math/Test_ViewFrustum.cpp
 )
 
 include_directories(
@@ -68,6 +77,7 @@ include_directories(
 )
 
 set(LN_TEST_LIBS LuminoCore_Static)
+list(APPEND LN_TEST_LIBS "LuminoMath")
 if (WIN32)
 elseif (APPLE)
 	list(APPEND LN_TEST_LIBS "pthread")	# for gtest.
@@ -81,3 +91,4 @@ add_definitions(-DGTEST_HAS_TR1_TUPLE=0)	# vs2012
 
 add_executable(LuminoCore_UnitTest ${LN_TEST_SOURCES})
 add_dependencies(LuminoCore_UnitTest LuminoCore_Static)
+add_dependencies(LuminoCore_UnitTest LuminoMath)

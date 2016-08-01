@@ -231,6 +231,38 @@ set(LN_SOURCES_Reflection
 	src/Reflection/Variant.cpp
 )
 
+set(LN_SOURCES_Math
+	include/LuminoMath.h
+	include/Lumino/Math/Quaternion.inl
+	include/Lumino/Math/Random.h
+	include/Lumino/Math/SQTTransform.h
+	include/Lumino/Math/Vector2.h
+	include/Lumino/Math/Vector2.inl
+	include/Lumino/Math/Vector3.h
+	include/Lumino/Math/Vector3.inl
+	include/Lumino/Math/Vector4.h
+	include/Lumino/Math/Vector4.inl
+	include/Lumino/Math/Common.h
+	include/Lumino/Math/MathUtils.h
+	include/Lumino/Math/Matrix.h
+	include/Lumino/Math/Matrix.inl
+	include/Lumino/Math/Plane.h
+	include/Lumino/Math/Plane.inl
+	include/Lumino/Math/Quaternion.h
+	include/Lumino/Math/Version.h
+	include/Lumino/Math/ViewFrustum.h
+	src/Math/Random.cpp
+	src/Math/SQTTransform.cpp
+	src/Math/Vector2.cpp
+	src/Math/Vector3.cpp
+	src/Math/Vector4.cpp
+	src/Math/MathUtils.cpp
+	src/Math/Matrix.cpp
+	src/Math/Plane.cpp
+	src/Math/Quaternion.cpp
+	src/Math/ViewFrustum.cpp
+)
+
 set(LN_SOURCES_Testing
 	src/Testing/TestUtils.cpp
 )
@@ -294,8 +326,6 @@ if (LN_USE_UNICODE_CHAR_SET)
 	add_definitions(-D_UNICODE)
 endif()
 
-find_package(OpenGL REQUIRED)
-
 if (WIN32)
 	if (LN_MSVC_LINK_MULTI_THREAD_STATIC_RUNTIME)
 		foreach (flag CMAKE_C_FLAGS CMAKE_C_FLAGS_DEBUG CMAKE_C_FLAGS_RELEASE CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE)
@@ -310,7 +340,7 @@ if (WIN32)
 
 	set(CMAKE_DEBUG_POSTFIX "d")
 	
-	add_definitions("/EHsc")	# VS2015, cmake で生成すると何故か消えてしまうので明示的に指定する
+	add_definitions("/EHsc")	# VS2015, cmake で生�Eすると何故か消えてしまぁE�Eで明示皁E��持E��すめE
 
 	# link librarys.
 	list(APPEND LN_LINK_LIBS "imagehlp.lib")
@@ -361,10 +391,17 @@ endif()
 
 #--------------------------------------
 # Static library.
+# Core
 add_library(${PROJECT_NAME}_Static STATIC ${LN_SOURCES})
 set_target_properties(${PROJECT_NAME}_Static PROPERTIES OUTPUT_NAME "${PROJECT_NAME}${LN_LIB_POSTFIX}")
 target_link_libraries(${PROJECT_NAME}_Static ${LN_LINK_LIBS})
 set_target_properties(${PROJECT_NAME}_Static PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${LN_LIB_OUTPUT_DIR}")
+
+# Math
+add_library(LuminoMath STATIC ${LN_SOURCES_Math})
+set_target_properties(LuminoMath PROPERTIES OUTPUT_NAME "LuminoMath${LN_LIB_POSTFIX}")
+target_link_libraries(LuminoMath ${LN_LINK_LIBS})
+set_target_properties(LuminoMath PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${LN_LIB_OUTPUT_DIR}")
 
 # Unit test.
 add_subdirectory(test)
