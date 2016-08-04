@@ -41,7 +41,7 @@ void JsonReader::Parse(const TCHAR* text, int len)
 //------------------------------------------------------------------------------
 void JsonReader::Parse(TextReader* textReader)
 {
-	LN_CHECK_ARG(textReader != NULL);
+	if (LN_CHECKEQ_ARG(textReader == nullptr)) return;
 
 	m_reader = textReader;
 

@@ -11,9 +11,9 @@ LN_NAMESPACE_BEGIN
 //------------------------------------------------------------------------------
 Semaphore::Semaphore(int initialCount, int maxCount)
 {
-	LN_CHECK_ARG(initialCount >= 0);
-	LN_CHECK_ARG(maxCount >= 1);
-	LN_CHECK_ARG(initialCount <= maxCount);
+	if (LN_CHECKEQ_ARG(initialCount < 0)) return;
+	if (LN_CHECKEQ_ARG(maxCount < 1)) return;
+	if (LN_CHECKEQ_ARG(initialCount > maxCount)) return;
 	m_handle = ::CreateSemaphore(NULL, initialCount, maxCount, NULL);
 }
 

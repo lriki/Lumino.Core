@@ -159,7 +159,7 @@ void ByteBuffer::Alloc(size_t size, bool zeroClear)
 //------------------------------------------------------------------------------
 void ByteBuffer::Alloc(const void* data, size_t size)
 {
-	LN_CHECK_ARG(data != nullptr);
+	if (LN_CHECKEQ_ARG(data == nullptr)) return;
 	Alloc(size, false);
 	memcpy_s(m_core->m_buffer, size, data, size);
 }

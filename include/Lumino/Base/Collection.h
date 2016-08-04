@@ -118,7 +118,7 @@ public:
 	/** 配列の要素数を変更します。*/
 	void Resize(int count)
 	{
-		LN_CHECK_ARG(count >= 0);
+		if (LN_CHECKEQ_ARG(count < 0)) return;
 
 		int d = GetCount() - count;
 		if (d > 0)

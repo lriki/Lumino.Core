@@ -60,8 +60,8 @@ TypeInfo::TypeInfo(
 //------------------------------------------------------------------------------
 void TypeInfo::RegisterProperty(Property* prop)
 {
-	LN_CHECK_ARG(!prop->m_registerd);
-	LN_CHECK_ARG(m_propertyList.GetCount() < 32);
+	if (LN_CHECKEQ_ARG(prop->m_registerd)) return;
+	if (LN_CHECKEQ_ARG(m_propertyList.GetCount() >= 32)) return;
 	prop->m_localIndex = m_propertyList.GetCount();
 	m_propertyList.Add(prop);
 	prop->m_registerd = true;
@@ -70,7 +70,7 @@ void TypeInfo::RegisterProperty(Property* prop)
 //------------------------------------------------------------------------------
 void TypeInfo::RegisterReflectionEvent(ReflectionEventInfo* ev)
 {
-	LN_CHECK_ARG(!ev->m_registerd);
+	if (LN_CHECKEQ_ARG(ev->m_registerd)) return;
 	m_routedEventList.Add(ev);
 	ev->m_registerd = true;
 }

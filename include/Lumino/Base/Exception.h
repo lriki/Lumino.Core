@@ -53,8 +53,9 @@
 	#define LN_CHECK_ARG(expression)	assert(expression);
 	#define LN_CHECK_STATE(expression)	assert(expression);
 
-	#define LN_CHECKEQ_ARG(expression)		((expression) && detail::NotifyException(ln::ArgumentException(_T(#expression)), __FILE__, __LINE__))
-	#define LN_CHECKEQ_STATE(expression)	((expression) && detail::NotifyException(ln::InvalidOperationException(_T(#expression)), __FILE__, __LINE__))
+	#define LN_CHECKEQ_ARG(expression)			((expression) && ::ln::detail::NotifyException(ln::ArgumentException(_T(#expression)), __FILE__, __LINE__))
+	#define LN_CHECKEQ_STATE(expression)		((expression) && ::ln::detail::NotifyException(ln::InvalidOperationException(_T(#expression)), __FILE__, __LINE__))
+	#define LN_CHECKEQ_OUTRANGE(value, begin, end)	((value < begin || end <= value) && ::ln::detail::NotifyException(ln::ArgumentException(_T(#value)), __FILE__, __LINE__))
 
 #elif defined(LN_DO_CHECK_THROW)
 	#define LN_CHECK_ARG(expression)	LN_THROW(expression, ::ln::ArgumentException, #expression);

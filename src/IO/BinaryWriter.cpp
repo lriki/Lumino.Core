@@ -11,9 +11,9 @@ LN_NAMESPACE_BEGIN
 
 //------------------------------------------------------------------------------
 BinaryWriter::BinaryWriter(Stream* stream)
-	: m_stream(NULL)
+	: m_stream(nullptr)
 {
-	LN_CHECK_ARG(stream != NULL);
+	if (LN_CHECKEQ_ARG(stream == nullptr)) return;
 	LN_REFOBJ_SET(m_stream, stream);
 }
 
