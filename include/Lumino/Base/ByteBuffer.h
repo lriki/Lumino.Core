@@ -163,6 +163,8 @@ public:
 	*/
 	void Release();
 
+	bool Equals(const ByteBuffer& buffer) const;
+
 public:
 
 	/**
