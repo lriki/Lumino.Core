@@ -166,7 +166,7 @@ void FileSystem::Delete(const wchar_t* filePath)
 //------------------------------------------------------------------------------
 uint64_t FileSystem::GetFileSize(const TCHAR* filePath)
 {
-	if (LN_CHECKEQ_ARG(filePath == nullptr)) return 0;
+	LN_CHECK_ARG(filePath != nullptr);
 	detail::GenericStaticallyLocalPath<char> localPath(filePath);
 	struct stat stat_buf;
 	int r = stat(localPath.c_str(), &stat_buf);

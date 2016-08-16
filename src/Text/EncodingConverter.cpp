@@ -154,9 +154,9 @@ void EncodingConverter::ConvertDecoderRemain(
 	void* dest_, size_t destByteCount, Encoder* destEncoder,
 	EncodingConversionResult* outResult)
 {
-	if (LN_CHECKEQ_ARG(srcDecoder == nullptr)) return;
-	if (LN_CHECKEQ_ARG(!srcDecoder->CanRemain())) return;
-	if (LN_CHECKEQ_ARG(destEncoder == nullptr)) return;
+	LN_CHECK_ARG(srcDecoder != nullptr);
+	LN_CHECK_ARG(srcDecoder->CanRemain());
+	LN_CHECK_ARG(destEncoder != nullptr);
 
 	const size_t BufferingElements = 512;
 	UTF16 utf16[BufferingElements];

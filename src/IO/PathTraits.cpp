@@ -102,7 +102,7 @@ template bool PathTraits::IsAbsolutePath<wchar_t>(const wchar_t* path, int len);
 template<typename TChar>
 bool PathTraits::EndWithSeparator(const TChar* path, int len)
 {
-	if (LN_CHECKEQ_ARG(path == nullptr)) return false;
+	LN_CHECK_ARG(path != nullptr);
 
 	len = (len < 0) ? StringTraits::tcslen(path) : len;
 	if (len >= 1)

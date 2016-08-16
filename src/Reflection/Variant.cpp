@@ -110,7 +110,7 @@ EnumValueType Variant::GetEnumValue() const
 }
 void Variant::SetStruct(const void* value, size_t size, const std::type_info& typeInfo)
 {
-	if (LN_CHECKEQ_ARG(size > sizeof(m_struct))) return;
+	LN_CHECK_ARG(size <= sizeof(m_struct));
 	m_type = VariantType::Struct;
 	memcpy(m_struct, value, size);
 	m_structSize = size;

@@ -306,8 +306,8 @@ bool GenericPathName<TChar>::ExistsFileInDirectory(const StringRefT& relPath) co
 template<typename TChar>
 GenericPathName<TChar> GenericPathName<TChar>::MakeRelative(const GenericPathName<TChar>& target) const
 {
-	if (LN_CHECKEQ_ARG(!IsAbsolute())) return GenericPathName<TChar>();
-	if (LN_CHECKEQ_ARG(!target.IsAbsolute())) return GenericPathName<TChar>();
+	LN_CHECK_ARG(IsAbsolute());
+	LN_CHECK_ARG(target.IsAbsolute());
 	GenericString<TChar> rel = PathTraits::DiffPath<TChar>(m_path.c_str(), m_path.GetLength(), target.m_path.c_str(), target.m_path.GetLength(), FileSystem::GetFileSystemCaseSensitivity());
 	return GenericPathName<TChar>(rel);
 }
@@ -358,7 +358,7 @@ template<typename TChar>
 GenericPathName<TChar> GenericPathName<TChar>::GetSpecialFolderPath(SpecialFolder specialFolder, const TChar* childDir, SpecialFolderOption option)
 {
 	if (childDir != NULL) {
-		if (LN_CHECKEQ_ARG(PathTraits::IsAbsolutePath(childDir))) return GenericPathName<TChar>();
+		LN_CHECK_ARG(!PathTraits::IsAbsolutePath(childDir));
 	}
 
 	TChar path[LN_MAX_PATH];

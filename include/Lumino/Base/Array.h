@@ -160,7 +160,7 @@ public:
 	/** 配列用のメモリを指定したサイズで確保します。*/
 	void Reserve(int count)
 	{
-		if (LN_CHECKEQ_ARG(count < 0)) return;
+		LN_CHECK_ARG(count >= 0);
 		CheckDetachShared();
 		m_data->m_vector.reserve(count);
 	}
@@ -168,7 +168,7 @@ public:
 	/** 配列の要素数を変更します。*/
 	void Resize(int count)
 	{
-		if (LN_CHECKEQ_ARG(count < 0)) return;
+		LN_CHECK_ARG(count >= 0);
 		CheckDetachShared();
 		m_data->m_vector.resize(count);
 	}
@@ -264,7 +264,7 @@ public:
 	/** 先頭要素の参照を返します。*/
 	reference GetFront()
 	{
-		if (LN_CHECKEQ_STATE(IsEmpty())) return m_data->m_vector.front();
+		LN_CHECK_STATE(!IsEmpty());
 		CheckDetachShared();
 		return m_data->m_vector.front();
 	}
@@ -272,14 +272,14 @@ public:
 	/** 先頭要素の参照を返します。*/
 	const_reference GetFront() const
 	{
-		if (LN_CHECKEQ_STATE(IsEmpty())) return m_data->m_vector.front();
+		LN_CHECK_STATE(!IsEmpty());
 		return m_data->m_vector.front();
 	}
 
 	/** 終端要素の参照を返します。*/
 	reference GetLast()
 	{
-		if (LN_CHECKEQ_STATE(IsEmpty())) return m_data->m_vector.back();
+		LN_CHECK_STATE(!IsEmpty());
 		CheckDetachShared();
 		return m_data->m_vector.back();
 	}
@@ -287,7 +287,7 @@ public:
 	/** 終端要素の参照を返します。*/
 	const_reference GetLast() const
 	{
-		if (LN_CHECKEQ_STATE(IsEmpty())) return m_data->m_vector.back();
+		LN_CHECK_STATE(!IsEmpty());
 		return m_data->m_vector.back();
 	}
 
