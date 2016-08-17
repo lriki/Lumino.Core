@@ -121,6 +121,8 @@ public:
 	*/
 	static Vector3 Normalize(const Vector3& vec);
 
+	static Vector3 SafeNormalize(const Vector3& vec);
+
 	/**
 		@brief		2つのベクトルの内積を計算します。
 		@param[in]	vec1	: 処理の基になるベクトル

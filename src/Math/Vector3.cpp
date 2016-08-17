@@ -107,6 +107,21 @@ Vector3 Vector3::Normalize(const Vector3& vec)
 }
 
 //------------------------------------------------------------------------------
+Vector3 Vector3::SafeNormalize(const Vector3& vec)
+{
+	float len = Asm::sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
+	if (len == 0.0)
+	{
+		return vec;
+	}
+	float t = 1.0f / len;
+	return Vector3(
+		vec.x * t,
+		vec.y * t,
+		vec.z * t);
+}
+
+//------------------------------------------------------------------------------
 // static
 //------------------------------------------------------------------------------
 float Vector3::Dot(const Vector3& vec1, const Vector3& vec2)
