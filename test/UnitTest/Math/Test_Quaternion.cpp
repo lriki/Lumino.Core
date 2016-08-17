@@ -101,8 +101,10 @@ TEST_F(Test_Quaternion, Basic)
 		Quaternion q5 = Quaternion::MakeFromRotationAxis(Vector3(1, 0, 0), 0.2f);
 		q5.Multiply(Quaternion::MakeFromRotationAxis(Vector3(0, 1, 0), 0.3f));
 		q5.Multiply(Quaternion::MakeFromRotationAxis(Vector3(0, 0, 1), 0.4f));
-		Vector3 r5 = q5.ToEulerAngles(RotationOrder::XYZ);
+		bool locked;
+		Vector3 r5 = q5.ToEulerAngles(RotationOrder::XYZ, &locked);
 		ASSERT_VEC3_NEAR(0.200000f, 0.300000f, 0.400000f, r5);
+		ASSERT_EQ(false, locked);	// ジンバルロックしない
 
 		// X → Y → Z
 		Quaternion q6;

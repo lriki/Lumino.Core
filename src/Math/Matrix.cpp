@@ -1033,15 +1033,15 @@ Vector3 Matrix::ToEulerAngles(RotationOrder order, bool* locked_) const
 	switch (order)
 	{
 		case RotationOrder::XYZ:
-			locked = EulerAnglesXYZ(*this, &xRot, &yRot, &zRot);
+			locked = !EulerAnglesXYZ(*this, &xRot, &yRot, &zRot);
 			break;
 		//case RotationOrder_XZY: break;
 		//case RotationOrder_YXZ: break;
 		case RotationOrder::YZX:
-			locked = EulerAnglesYZX(*this, &xRot, &yRot, &zRot);
+			locked = !EulerAnglesYZX(*this, &xRot, &yRot, &zRot);
 			break;
 		case RotationOrder::ZXY:
-			locked = EulerAnglesZXY(*this, &xRot, &yRot, &zRot);	// RotationYawPitchRoll
+			locked = !EulerAnglesZXY(*this, &xRot, &yRot, &zRot);	// RotationYawPitchRoll
 			break;
 		//case RotationOrder_ZYX: break;
 		default:

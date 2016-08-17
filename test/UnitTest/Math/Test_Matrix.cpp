@@ -271,7 +271,9 @@ TEST_F(Test_Matrix, Basic)
 
 		// XYZ
 		m = Matrix::MakeRotationEulerAngles(Vector3(0.5, 0.75, 1.0), RotationOrder::XYZ);
-		angles = m.ToEulerAngles(RotationOrder::XYZ);
+		bool locked;
+		angles = m.ToEulerAngles(RotationOrder::XYZ, &locked);
+		ASSERT_EQ(false, locked);	// ジンバルロックしない
 		ASSERT_VEC3_NEAR(0.5, 0.75, 1.0, angles);
 
 		// YZX
