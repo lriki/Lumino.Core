@@ -21,6 +21,12 @@
 #include "../../include/Lumino/Math/Matrix.h"
 #include "Asm.h"
 
+//#define USE_D3DX9MATH
+#ifdef USE_D3DX9MATH
+#include <d3dx9math.h>
+#pragma comment (lib, "d3dx9.lib")
+#endif
+
 LN_NAMESPACE_BEGIN
 
 //==============================================================================
@@ -1402,11 +1408,10 @@ Matrix Matrix::MakeInverse(const Matrix& mat)
 		}
 	}
 #endif
-#if 0
-	//D3DXMATRIX dxmout;
-	D3DXMatrixInverse((D3DXMATRIX*)out_, NULL, (D3DXMATRIX*)&mat_);
-	//return Matrix( *((Matrix*)&dxmout) );
-	//return Matrix();
+#ifdef USE_D3DX9MATH
+	Matrix out;
+	D3DXMatrixInverse((D3DXMATRIX*)&out, NULL, (D3DXMATRIX*)&mat);
+	return out;
 #endif
 #if 0
 	// http://www.cg.info.hiroshima-cu.ac.jp/~miyazaki/knowledge/tech23.html
@@ -1553,75 +1558,75 @@ Matrix Matrix::MakeLookAtRH(const Vector3& position, const Vector3& lookAt, cons
 //------------------------------------------------------------------------------
 // static
 //------------------------------------------------------------------------------
-Matrix Matrix::MakePerspectiveFovLH(float fovY, float aspect, float near, float far)
+Matrix Matrix::MakePerspectiveFovLH(float fovY, float aspect, float nearZ, float farZ)
 {
 	float h = 1.f / tanf(fovY * 0.5f);	// cot(fovY/2)
 	return Matrix(
 		h / aspect, 0.0f, 0.0f, 0.0f,
 		0.0f, h, 0.0f, 0.0f,
-		0.0f, 0.0f, far / (far - near), 1.0f,
-		0.0f, 0.0f, (-near * far) / (far - near), 0.0f);
+		0.0f, 0.0f, farZ / (farZ - nearZ), 1.0f,
+		0.0f, 0.0f, (-nearZ * farZ) / (farZ - nearZ), 0.0f);
 }
 
 //------------------------------------------------------------------------------
 // static
 //------------------------------------------------------------------------------
-Matrix Matrix::MakePerspectiveFovRH(float fovY, float aspect, float near, float far)
+Matrix Matrix::MakePerspectiveFovRH(float fovY, float aspect, float nearZ, float farZ)
 {
 	float h = 1.f / tanf(fovY * 0.5f);	// cot(fovY/2)
 	return Matrix(
 		h / aspect, 0.0f, 0.0f, 0.0f,
 		0.0f, h, 0.0f, 0.0f,
-		0.0f, 0.0f, far / (near - far), -1.0f,
-		0.0f, 0.0f, (near * far) / (near - far), 0.0f);
+		0.0f, 0.0f, farZ / (nearZ - farZ), -1.0f,
+		0.0f, 0.0f, (nearZ * farZ) / (nearZ - farZ), 0.0f);
 }
 
 //------------------------------------------------------------------------------
 // static
 //------------------------------------------------------------------------------
-Matrix Matrix::MakeOrthoLH(float width, float height, float near, float far)
+Matrix Matrix::MakeOrthoLH(float width, float height, float nearZ, float farZ)
 {
 	return Matrix(
 		2.0f / width, 0.0f, 0.0f, 0.0f,
 		0.0f, 2.0f / height, 0.0f, 0.0f,
-		0.0f, 0.0f, 1.0f / (far - near), 0.0f,
-		0.0f, 0.0f, near / (near - far), 1.0f);
+		0.0f, 0.0f, 1.0f / (farZ - nearZ), 0.0f,
+		0.0f, 0.0f, nearZ / (nearZ - farZ), 1.0f);
 }
 
 //------------------------------------------------------------------------------
 // static
 //------------------------------------------------------------------------------
-Matrix Matrix::MakeOrthoRH(float width, float height, float near, float far)
+Matrix Matrix::MakeOrthoRH(float width, float height, float nearZ, float farZ)
 {
 	return Matrix(
 		2.0f / width, 0.0f, 0.0f, 0.0f,
 		0.0f, 2.0f / height, 0.0f, 0.0f,
-		0.0f, 0.0f, 1.0f / (near - far), 0.0f,
-		0.0f, 0.0f, near / (near - far), 1.0f);
+		0.0f, 0.0f, 1.0f / (nearZ - farZ), 0.0f,
+		0.0f, 0.0f, nearZ / (nearZ - farZ), 1.0f);
 }
 
 //------------------------------------------------------------------------------
 // static
 //------------------------------------------------------------------------------
-Matrix Matrix::MakePerspective2DLH(float width, float height, float near, float far)
+Matrix Matrix::MakePerspective2DLH(float width, float height, float nearZ, float farZ)
 {
 	return Matrix(
 		2.0f / width, 0.0f, 0.0f, 0.0f,
 		0.0f, -2.0f / height, 0.0f, 0.0f,
-		0.0f, 0.0f, 1.0f / (far - near), 0.0f,
-		-1.0f, 1.0f, near / (near - far), 1.0f);
+		0.0f, 0.0f, 1.0f / (farZ - nearZ), 0.0f,
+		-1.0f, 1.0f, nearZ / (nearZ - farZ), 1.0f);
 }
 
 //------------------------------------------------------------------------------
 // static
 //------------------------------------------------------------------------------
-Matrix Matrix::MakePerspective2DRH(float width, float height, float near, float far)
+Matrix Matrix::MakePerspective2DRH(float width, float height, float nearZ, float farZ)
 {
 	return Matrix(
 		2.0f / width, 0.0f, 0.0f, 0.0f,
 		0.0f, -2.0f / height, 0.0f, 0.0f,
-		0.0f, 0.0f, 1.0f / (near - far), 0.0f,
-		-1.0f, 1.0f, near / (near - far), 1.0f);
+		0.0f, 0.0f, 1.0f / (nearZ - farZ), 0.0f,
+		-1.0f, 1.0f, nearZ / (nearZ - farZ), 1.0f);
 }
 
 //------------------------------------------------------------------------------
