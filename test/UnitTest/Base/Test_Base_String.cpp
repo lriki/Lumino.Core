@@ -667,6 +667,15 @@ TEST_F(Test_Base_String, Compare)
 		String str2("abcd");
 		ASSERT_TRUE(str1 < str2);
 	}
+
+	// <Test> StringRef との比較
+	{
+		String str1("abc");
+		StringRef str2(_T("abc"));
+		StringRef str3(_T(""));
+		ASSERT_EQ(true, str1 == str2);
+		ASSERT_EQ(false, str1 == str3);
+	}
 }
 
 //---------------------------------------------------------------------
