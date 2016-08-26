@@ -79,7 +79,7 @@ public:
 	}
 
 	/** 指定したインデックスの位置に要素を挿入します。*/
-	void Insert(int index, T& item)
+	void Insert(int index, const value_type& item)
 	{
 		InsertItem(index, item);
 	}

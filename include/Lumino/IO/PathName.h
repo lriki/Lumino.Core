@@ -334,6 +334,7 @@ public:
 	GenericStaticallyLocalPath(const GenericStringRef<wchar_t>& path);
 	
 	const TChar* c_str() const { return m_path.IsEmpty() ? m_static : m_path.c_str(); }
+	const GenericString<TChar>& GetPath() const { return m_path; }
 
 	bool IsStatic() const { return m_path.IsEmpty(); }
 
