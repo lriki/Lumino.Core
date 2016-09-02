@@ -66,6 +66,10 @@ set(LN_TEST_SOURCES
 	UnitTest/Math/Test_Vector3.cpp
 	UnitTest/Math/Test_Vector4.cpp
 	UnitTest/Math/Test_ViewFrustum.cpp
+	UnitTest/Fluorite/Test_Parser_CppLexer.cpp
+	#UnitTest/Fluorite/Test_Parser_Preprocessor.cpp
+	UnitTest/Fluorite/Test_Parser_RpnEvaluator.cpp
+	UnitTest/Fluorite/Test_Parser_RpnParser.cpp
 )
 
 include_directories(
@@ -78,6 +82,7 @@ include_directories(
 
 set(LN_TEST_LIBS LuminoCore_Static)
 list(APPEND LN_TEST_LIBS "LuminoMath")
+list(APPEND LN_TEST_LIBS "LuminoFluorite")
 if (WIN32)
 elseif (APPLE)
 	list(APPEND LN_TEST_LIBS "pthread")	# for gtest.
@@ -92,3 +97,4 @@ add_definitions(-DGTEST_HAS_TR1_TUPLE=0)	# vs2012
 add_executable(LuminoCore_UnitTest ${LN_TEST_SOURCES})
 add_dependencies(LuminoCore_UnitTest LuminoCore_Static)
 add_dependencies(LuminoCore_UnitTest LuminoMath)
+add_dependencies(LuminoCore_UnitTest LuminoFluorite)

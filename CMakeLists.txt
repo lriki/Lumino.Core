@@ -1,4 +1,4 @@
-# e.g.) $ cmake -DLN_EXCEPTION_BACKTRACE=OFF ..
+﻿# e.g.) $ cmake -DLN_EXCEPTION_BACKTRACE=OFF ..
 
 cmake_minimum_required (VERSION 3.0.0)
 project (LuminoCore)
@@ -263,6 +263,39 @@ set(LN_SOURCES_Math
 	src/Math/ViewFrustum.cpp
 )
 
+set(LN_SOURCES_Fluorite
+	src/Fluorite/UnitFile.h
+	src/Fluorite/CacheBuffer.h
+	src/Fluorite/Common.h
+	#src/Fluorite/Context.cpp
+	#src/Fluorite/Context.h
+	src/Fluorite/DiagnosticsManager.cpp
+	src/Fluorite/DiagnosticsManager.h
+	#src/Fluorite/EntityDatabase.cpp
+	#src/Fluorite/EntityDatabase.h
+	src/Fluorite/GenericParserTypedef.h
+	#src/Fluorite/IdentifierMap.h
+	src/Fluorite/Internal.h
+	#src/Fluorite/ObjectFactory.cpp
+	#src/Fluorite/ObjectFactory.h
+	src/Fluorite/ParserUtils.cpp
+	src/Fluorite/ParserUtils.h
+	src/Fluorite/Token.cpp
+	src/Fluorite/Token.h
+	src/Fluorite/TokenBuffer.cpp
+	src/Fluorite/TokenBuffer.h
+	src/Fluorite/TokenList.h
+	#src/Fluorite/UnitFile.cpp
+	src/Fluorite/Frontend/RpnParser.h
+	src/Fluorite/Frontend/Lexer.cpp
+	src/Fluorite/Frontend/Lexer.h
+	src/Fluorite/Frontend/RpnParser.cpp
+	src/Fluorite/Frontend/Cpp/CppLexer.cpp
+	src/Fluorite/Frontend/Cpp/CppLexer.h
+	#src/Fluorite/Frontend/Cpp/Preprocessor.cpp
+	#src/Fluorite/Frontend/Cpp/Preprocessor.h
+)
+
 set(LN_SOURCES_Testing
 	src/Testing/TestUtils.cpp
 )
@@ -340,7 +373,7 @@ if (WIN32)
 
 	set(CMAKE_DEBUG_POSTFIX "d")
 	
-	add_definitions("/EHsc")	# VS2015, cmake で生�Eすると何故か消えてしまぁE�Eで明示皁E��持E��すめE
+	add_definitions("/EHsc")	# VS2015, cmake
 
 	# link librarys.
 	list(APPEND LN_LINK_LIBS "imagehlp.lib")
@@ -402,6 +435,12 @@ add_library(LuminoMath STATIC ${LN_SOURCES_Math})
 set_target_properties(LuminoMath PROPERTIES OUTPUT_NAME "LuminoMath${LN_LIB_POSTFIX}")
 target_link_libraries(LuminoMath ${LN_LINK_LIBS})
 set_target_properties(LuminoMath PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${LN_LIB_OUTPUT_DIR}")
+
+# Fluorite
+add_library(LuminoFluorite STATIC ${LN_SOURCES_Fluorite})
+set_target_properties(LuminoFluorite PROPERTIES OUTPUT_NAME "LuminoFluorite${LN_LIB_POSTFIX}")
+target_link_libraries(LuminoFluorite ${LN_LINK_LIBS})
+set_target_properties(LuminoFluorite PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${LN_LIB_OUTPUT_DIR}")
 
 # Unit test.
 add_subdirectory(test)
