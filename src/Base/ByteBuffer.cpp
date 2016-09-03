@@ -248,12 +248,19 @@ bool ByteBuffer::Equals(const ByteBuffer& buffer) const
 }
 
 //------------------------------------------------------------------------------
-int ByteBuffer::Compare(const ByteBuffer& buf1, const void* buf2, size_t buf2Size)
+int ByteBuffer::Compare(const ByteBuffer& buf1, const void* buf2, size_t buf2Size, int count)
 {
-	if (buf1.GetSize() < buf2Size) { return -1; }
-	if (buf1.GetSize() > buf2Size) { return 1; }
-	if (buf1.GetSize() == 0) { return 0; }			// 両方 0
-	return memcmp(buf1.GetConstData(), buf2, buf1.GetSize());
+	if (count < 0)
+	{
+		if (buf1.GetSize() < buf2Size) return -1;
+		if (buf1.GetSize() > buf2Size) return 1;
+		if (buf1.GetSize() == 0) return 0;			// 両方 0
+	}
+	else
+	{
+		count = buf1.GetSize();
+	}
+	return memcmp(buf1.GetConstData(), buf2, count);
 }
 
 //------------------------------------------------------------------------------

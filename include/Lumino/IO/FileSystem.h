@@ -127,19 +127,27 @@ public:
 	static uint64_t GetFileSize(FILE* stream);
 
 	/// ファイルの内容をすべて読み込む (バイナリ形式)
-	static ByteBuffer ReadAllBytes(const char* filePath);
-	static ByteBuffer ReadAllBytes(const wchar_t* filePath);
+	static ByteBuffer ReadAllBytes(const StringRefA& filePath);
+	static ByteBuffer ReadAllBytes(const StringRefW& filePath);
 
-	/// ファイルの内容をすべて読み込み、文字列として返す
+	/// 
 	/// encoding 省略時は UTF8(BOM 無し)
-	static String ReadAllText(const TCHAR* filePath, const Encoding* encoding = NULL);
+	/**
+		@brief		ファイルの内容をすべて読み込み、文字列として返します。
+		@param[in]	filePath	: 読み込むファイルのパス
+		@param[in]	encoding	: ファイルのエンコーディング
+		@return		読み込んだ文字列
+		@details	encoding が nullptr である場合、UTF8 テキストとして読み込みます。
+					BOM の有無は自動判別します。
+	*/
+	static String ReadAllText(const StringRef& filePath, const Encoding* encoding = nullptr);
 
 	/// 配列の内容をバイナリファイルとして書き出す
 	static void WriteAllBytes(const TCHAR* filePath, const void* buffer, size_t size);
 
 	/// 文字列をテキストファイルとして書き出す
 	/// encoding 省略時は UTF8 (BOM 無し)
-	static void WriteAllText(const TCHAR* filePath, const String& str, const Encoding* encoding = NULL);
+	static void WriteAllText(const TCHAR* filePath, const String& str, const Encoding* encoding = nullptr);
 
 	
 	/**

@@ -172,7 +172,7 @@ public:
 		@return		負の値: buf1<buf2  0:buf1==buf2  正の値:buf1>buf2
 		@details	部分比較はできません。buf1.GetSize() と buf2Size が一致しなければ不一致となります。
 	*/
-	static int Compare(const ByteBuffer& buf1, const void* buf2, size_t buf2Size);
+	static int Compare(const ByteBuffer& buf1, const void* buf2, size_t buf2Size, int count = -1);
 
 public:
 	ByteBuffer& operator=(const ByteBuffer& right);

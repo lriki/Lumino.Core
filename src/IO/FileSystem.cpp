@@ -381,22 +381,24 @@ template void FileSystem::CopyDirectoryInternal<char>(const GenericStringRef<cha
 template void FileSystem::CopyDirectoryInternal<wchar_t>(const GenericStringRef<wchar_t>& srcPath, const GenericStringRef<wchar_t>& destPath, bool overwrite, bool recursive);
 
 //------------------------------------------------------------------------------
-ByteBuffer FileSystem::ReadAllBytes(const char* filePath)
+ByteBuffer FileSystem::ReadAllBytes(const StringRefA& filePath)
 {
+	detail::GenericStaticallyLocalPath<char> localPath(filePath);
 	FILE* fp;
-	errno_t err = fopen_s(&fp, filePath, "rb");
-	LN_THROW(err == 0, FileNotFoundException);
+	errno_t err = fopen_s(&fp, localPath.c_str(), "rb");
+	LN_THROW(err == 0, FileNotFoundException, localPath.c_str());
 	size_t size = (size_t)GetFileSize(fp);
 
 	ByteBuffer buffer(size);
 	fread(buffer.GetData(), 1, size, fp);
 	return buffer;
 }
-ByteBuffer FileSystem::ReadAllBytes(const wchar_t* filePath)
+ByteBuffer FileSystem::ReadAllBytes(const StringRefW& filePath)
 {
+	detail::GenericStaticallyLocalPath<wchar_t> localPath(filePath);
 	FILE* fp;
-	errno_t err = _wfopen_s(&fp, filePath, L"rb");
-	LN_THROW(err == 0, FileNotFoundException, filePath);
+	errno_t err = _wfopen_s(&fp, localPath.c_str(), L"rb");
+	LN_THROW(err == 0, FileNotFoundException, localPath.c_str());
 	size_t size = (size_t)GetFileSize(fp);
 
 	ByteBuffer buffer(size);
@@ -405,17 +407,20 @@ ByteBuffer FileSystem::ReadAllBytes(const wchar_t* filePath)
 }
 
 //------------------------------------------------------------------------------
-String FileSystem::ReadAllText(const TCHAR* filePath, const Encoding* encoding)
+String FileSystem::ReadAllText(const StringRef& filePath, const Encoding* encoding)
 {
-	// TODO: BOM
-	const ByteBuffer buffer(FileSystem::ReadAllBytes(filePath));
+	ByteBuffer buffer(FileSystem::ReadAllBytes(filePath));
+	if (encoding == nullptr)
+	{
+		Encoding* e = Encoding::GetEncoding(EncodingType::UTF8);
+		if (ByteBuffer::Compare(buffer, e->GetPreamble(), 3, 3) == 0)
+			encoding = e;
+		else
+			encoding = Encoding::GetUTF8Encoding();
+	}
+
 	String str;
-	if (encoding) {
-		str.ConvertFrom(buffer.GetData(), buffer.GetSize(), encoding);
-	}
-	else {
-		str.ConvertFrom(buffer.GetData(), buffer.GetSize(), Encoding::GetUTF8Encoding());
-	}
+	str.ConvertFrom(buffer.GetData(), buffer.GetSize(), encoding);
 	return str;
 }
 
@@ -434,9 +439,7 @@ void FileSystem::WriteAllText(const TCHAR* filePath, const String& str, const En
 	WriteAllBytes(filePath, buffer.GetData(), buffer.GetSize());
 }
 
-//----------------------------------------------------------------------
-//
-//----------------------------------------------------------------------
+//------------------------------------------------------------------------------
 int64_t FileSystem::CalcSeekPoint(int64_t curPoint, int64_t maxSize, int64_t offset, int origin)
 {
 	int64_t newPoint = curPoint;
