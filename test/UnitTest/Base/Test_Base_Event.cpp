@@ -1,4 +1,5 @@
 ﻿#include <TestConfig.h>
+#include <Lumino/Base/Event.h>
 
 #ifdef LN_CPP11
 

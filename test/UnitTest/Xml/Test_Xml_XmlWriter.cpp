@@ -1,4 +1,6 @@
 #include <TestConfig.h>
+#include <Lumino/IO/StreamWriter.h>
+#include <Lumino/IO/StringWriter.h>
 #include <Lumino/Xml/XmlWriter.h>
 
 class Test_Xml_XmlWriter : public ::testing::Test

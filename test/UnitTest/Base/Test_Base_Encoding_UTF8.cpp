@@ -1,4 +1,5 @@
 ﻿#include <TestConfig.h>
+#include <Lumino/Text/Encoding.h>
 
 class Test_Base_Encoding_UTF8 : public ::testing::Test
 {

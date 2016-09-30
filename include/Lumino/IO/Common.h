@@ -32,8 +32,6 @@ public:
 	//	return f2 | f1; \
 	//}
 
-#define LN_CONSTEXPR
-
 /** ファイルを開く際のアクセスモードを表します。*/
 LN_ENUM_FLAGS(FileOpenMode)
 {

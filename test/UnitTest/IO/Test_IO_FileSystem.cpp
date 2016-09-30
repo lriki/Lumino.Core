@@ -1,4 +1,5 @@
 ﻿#include <TestConfig.h>
+#include <Lumino/IO/FileSystem.h>
 
 class Test_IO_FileSystem : public ::testing::Test
 {

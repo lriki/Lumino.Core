@@ -1,4 +1,6 @@
 #include <TestConfig.h>
+#include <Lumino/IO/StringWriter.h>
+#include <Lumino/Json/JsonWriter.h>
 
 //==============================================================================
 // Test_Json_JsonWriter_Integrate

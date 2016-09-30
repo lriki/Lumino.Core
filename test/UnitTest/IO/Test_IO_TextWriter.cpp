@@ -1,4 +1,8 @@
 ﻿#include <TestConfig.h>
+#include <Lumino/IO/StreamWriter.h>
+#include <Lumino/IO/StringWriter.h>
+#include <Lumino/IO/FileSystem.h>
+#include <Lumino/IO/TextReader.h>
 
 class Test_IO_TextWriter : public ::testing::Test
 {

@@ -1,5 +1,6 @@
 ﻿#include <TestConfig.h>
-#include <Lumino/Base/Formatter.h>
+#include <Lumino/Base/StringBuilder.h>
+#include <Lumino/Base/Locale.h>
 
 namespace ln
 {

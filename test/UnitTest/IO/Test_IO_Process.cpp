@@ -1,4 +1,5 @@
 ﻿#include <TestConfig.h>
+#include <Lumino/IO/Process.h>
 
 class Test_IO_Process : public ::testing::Test
 {

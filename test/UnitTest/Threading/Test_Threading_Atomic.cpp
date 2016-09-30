@@ -1,4 +1,6 @@
 ﻿#include <TestConfig.h>
+#include <Lumino/Threading/Atomic.h>
+#include <Lumino/Threading/Thread.h>
 #include <atomic>
 
 class Test_Threading_Atomic : public ::testing::Test

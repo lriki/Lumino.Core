@@ -1,4 +1,5 @@
 ﻿#include <TestConfig.h>
+#include <Lumino/Base/Stack.h>
 #include <map>
 #include <set>
 #include <list>

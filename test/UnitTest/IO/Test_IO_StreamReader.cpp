@@ -1,4 +1,6 @@
 ﻿#include <TestConfig.h>
+#include <Lumino/IO/StreamReader.h>
+#include <Lumino/IO/MemoryStream.h>
 
 class Test_IO_StreamReader : public ::testing::Test
 {

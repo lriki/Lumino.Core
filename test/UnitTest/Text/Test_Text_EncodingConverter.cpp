@@ -1,4 +1,5 @@
 ﻿#include <TestConfig.h>
+#include <Lumino/Text/EncodingConverter.h>
 
 class Test_Text_EncodingConverter : public ::testing::Test
 {

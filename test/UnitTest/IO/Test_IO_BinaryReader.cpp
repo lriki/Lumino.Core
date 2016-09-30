@@ -1,4 +1,6 @@
 ﻿#include <TestConfig.h>
+#include <Lumino/IO/FileStream.h>
+#include <Lumino/IO/BinaryReader.h>
 
 class Test_IO_BinaryReader : public ::testing::Test
 {

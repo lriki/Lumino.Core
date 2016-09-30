@@ -1,4 +1,5 @@
 ﻿#include <TestConfig.h>
+#include <Lumino/IO/StreamReader.h>
 #include <Lumino/Xml/XmlReader.h>
 
 class Test_Xml_XmlReader : public ::testing::Test

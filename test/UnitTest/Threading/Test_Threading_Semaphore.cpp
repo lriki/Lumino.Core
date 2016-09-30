@@ -1,4 +1,6 @@
 ﻿#include <TestConfig.h>
+#include <Lumino/Threading/Semaphore.h>
+#include <Lumino/Threading/Thread.h>
 
 class IntegrateTest_Threading_Semaphore : public ::testing::Test
 {

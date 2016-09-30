@@ -1,4 +1,5 @@
 ﻿#include <TestConfig.h>
+#include <Lumino/Threading/Thread.h>
 
 class Test_Threading_EventFlag : public ::testing::Test
 {

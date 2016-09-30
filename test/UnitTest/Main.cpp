@@ -1,6 +1,18 @@
 ﻿
 #include <stdio.h>
 #include "gtest/gtest.h"
+#include "TestConfig.h"
+#include <Lumino/IO/FileSystem.h>
+
+PathName Test_GetTempFilePath(const TCHAR* fileName)
+{
+	PathName base(__FILE__);
+	PathName tempDir(base.GetParent(), _T("../../"));
+	tempDir.Append(_T("tmp"));
+	PathName path(tempDir, fileName);
+	FileSystem::CreateDirectory(path.GetParent());
+	return PathName(path.c_str());
+}
 
 GTEST_API_ int main(int argc, char **argv)
 {
@@ -38,11 +50,11 @@ GTEST_API_ int main(int argc, char **argv)
 #endif
 	setlocale(LC_ALL, "");
 
-#if 0	// 部分的にテストを実行したりする
+#if 1	// 部分的にテストを実行したりする
 	char* testArgs[] = {
 		argv[0],
 		//"--gtest_filter=Test_Text_EncodingDetector.*"
-		"--gtest_filter=Test_Base_Exception.AssertionMacros"
+		"--gtest_filter=Test_Base_SortedArray.*"
 	};
 	argc = sizeof(testArgs) / sizeof(char*);
 	testing::InitGoogleTest(&argc, (char**)testArgs);

@@ -222,4 +222,39 @@ inline typename COL_T::iterator& get_itr( any_itr_t any_itr_, COL_T& )
 } // namespace ForeachCore
 #endif
 
+
+namespace detail
+{
+	
+template<typename TString>
+struct StringCaseInsensitiveLess
+{
+	typename typedef TString::CharType CharType;
+
+	LN_CONSTEXPR bool operator()(const TString& left, const TString& right) const
+	{
+		return (left < right);
+	}
+	LN_CONSTEXPR bool operator()(const TString& left, const CharType* right) const
+	{
+		return left.Compare(right, -1, CaseSensitivity::CaseInsensitive) < 0;
+	}
+	LN_CONSTEXPR bool operator()(const CharType* left, const TString& right) const
+	{
+		return right.Compare(left, -1, CaseSensitivity::CaseInsensitive) > 0;
+	}
+};
+
+template<typename T>
+struct SortedArrayBasicLess
+{
+	template<typename TOtherKey>
+	LN_CONSTEXPR bool operator()(const T& left, const TOtherKey& right) const
+	{
+		return (left < right);
+	}
+};
+
+} // namespace detail
+
 LN_NAMESPACE_END

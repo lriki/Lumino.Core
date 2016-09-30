@@ -1,5 +1,6 @@
 ﻿#include <TestConfig.h>
 #include <functional>
+#include <Lumino/Base/Delegate.h>
 
 #ifdef LN_CPP11
 

@@ -1,4 +1,5 @@
 ﻿#include <TestConfig.h>
+#include <Lumino/Text/Encoding.h>
 
 class IntegrationTest_Base_String : public ::testing::Test
 {

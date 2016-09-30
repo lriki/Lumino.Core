@@ -1,4 +1,5 @@
 ﻿#include <TestConfig.h>
+#include <Lumino/Text/Encoding.h>
 
 class IntegrateTest_Text_EUCJPEncoding : public ::testing::Test
 {

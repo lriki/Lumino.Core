@@ -1,4 +1,5 @@
 ﻿#include <TestConfig.h>
+#include <Lumino/Base/Locale.h>
 
 class Test_Base_Locale : public ::testing::Test
 {

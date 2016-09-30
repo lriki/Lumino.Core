@@ -86,6 +86,12 @@
 // C++11 有効
 #define LN_CPP11
 
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+	#define LN_CONSTEXPR	constexpr
+#else
+	#define LN_CONSTEXPR
+#endif
+
 //------------------------------------------------------------------------------
 // defines
 

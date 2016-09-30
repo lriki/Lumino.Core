@@ -1,4 +1,6 @@
 ﻿#include <TestConfig.h>
+#include <Lumino/IO/FileSystem.h>
+#include <Lumino/Text/EncodingDetector.h>
 
 class Test_Text_EncodingDetector : public ::testing::Test
 {

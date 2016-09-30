@@ -1,5 +1,6 @@
 ﻿#define LN_INTERNAL_ACCESS public
 #include <TestConfig.h>
+#include <Lumino/Base/SortedArray.h>
 
 class Test_Base_StringRef : public ::testing::Test
 {

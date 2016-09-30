@@ -1,4 +1,9 @@
 #include <TestConfig.h>
+#include <Lumino/IO/FileSystem.h>
+#include <Lumino/IO/StreamReader.h>
+#include <Lumino/IO/StringReader.h>
+#include <Lumino/Text/Encoding.h>
+#include <Lumino/Json/JsonReader.h>
 
 class Test_Json_JsonReader : public ::testing::Test
 {

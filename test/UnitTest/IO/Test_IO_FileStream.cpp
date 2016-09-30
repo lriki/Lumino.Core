@@ -1,4 +1,6 @@
 ﻿#include <TestConfig.h>
+#include <Lumino/IO/FileSystem.h>
+#include <Lumino/IO/FileStream.h>
 
 class Test_IO_FileStream : public ::testing::Test
 {

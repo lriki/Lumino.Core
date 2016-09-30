@@ -1,4 +1,5 @@
 ﻿#include <TestConfig.h>
+#include <Lumino/Base/SortedArray.h>
 #include <map>
 
 class Test_Base_SortedArray : public ::testing::Test
@@ -191,3 +192,42 @@ TEST_F(Test_Base_SortedArray, iterator)
 		ASSERT_EQ(12, sum);
 	}
 }
+
+//------------------------------------------------------------------------------
+TEST_F(Test_Base_SortedArray, StringKey)
+{
+	SortedArray<String, int> ary1;
+	ary1.Add(_T("a"), 1);
+	ary1.Add(_T("aaa"), 2);
+	ary1.Add(_T("aa"), 3);
+	ary1.Add(_T("c"), 4);
+	ary1.Add(_T("b"), 5);
+	ASSERT_EQ(1, *ary1.Find(_T("a")));
+	ASSERT_EQ(2, *ary1.Find(_T("aaa")));
+	ASSERT_EQ(3, *ary1.Find(_T("aa")));
+	ASSERT_EQ(4, *ary1.Find(_T("c")));
+	ASSERT_EQ(5, *ary1.Find(_T("b")));
+}
+
+//------------------------------------------------------------------------------
+TEST_F(Test_Base_SortedArray, StringCaseInsensitiveLess)
+{
+	SortedArray<String, int, detail::StringCaseInsensitiveLess<String>> ary1;
+	ary1.Add(_T("a"), 1);
+	ary1.Add(_T("aaa"), 2);
+	ary1.Add(_T("aa"), 3);
+	ary1.Add(_T("c"), 4);
+	ary1.Add(_T("b"), 5);
+	ASSERT_EQ(1, *ary1.Find(_T("a")));
+	ASSERT_EQ(1, *ary1.Find(_T("A")));
+	ASSERT_EQ(2, *ary1.Find(_T("aaa")));
+	ASSERT_EQ(2, *ary1.Find(_T("aAa")));
+	ASSERT_EQ(2, *ary1.Find(_T("AAA")));
+	ASSERT_EQ(3, *ary1.Find(_T("aa")));
+	ASSERT_EQ(3, *ary1.Find(_T("AA")));
+	ASSERT_EQ(4, *ary1.Find(_T("c")));
+	ASSERT_EQ(4, *ary1.Find(_T("C")));
+	ASSERT_EQ(5, *ary1.Find(_T("b")));
+	ASSERT_EQ(5, *ary1.Find(_T("B")));
+}
+

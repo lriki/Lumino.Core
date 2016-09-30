@@ -1,4 +1,6 @@
 ﻿#include <TestConfig.h>
+#include <Lumino/IO/FileSystem.h>
+#include <Lumino/Text/Encoding.h>
 
 class Test_Text_DBCSEncoding : public ::testing::Test
 {

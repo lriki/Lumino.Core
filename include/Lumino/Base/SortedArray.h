@@ -1,9 +1,8 @@
-﻿/**
-	@file	SortedArray.h
-*/
+﻿
 #pragma once
 #include <vector>
 #include <algorithm>
+#include "Common.h"
 #include "Exception.h"
 #include "STLUtils.h"
 
@@ -14,7 +13,7 @@ LN_NAMESPACE_BEGIN
 	@details	このクラスの役割は std::map と似ていますが、より高速に検索及び要素のイテレートを行うことができます。
 				ただし、新しいキーを格納するたびに配列全体がソートされるため、キーの更新には時間がかかります。
 */
-template<typename TKey, typename TValue, typename TAllocator = STLAllocator< std::pair<TKey, TValue> > >
+template<typename TKey, typename TValue, typename TComparer = detail::SortedArrayBasicLess<TKey>, typename TAllocator = STLAllocator< std::pair<TKey, TValue> > >
 class SortedArray
 {
 public:
@@ -96,7 +95,8 @@ public:
 	bool ContainsKey(const TKey& key) const
 	{
 		int index = LowerBound(key);
-		if (index < GetCount() && m_vector[index].first == key) {
+		if (index < GetCount() && Equals(m_vector[index].first, key)/*m_vector[index].first == key*/)
+		{
 			return true;
 		}
 		return false;
@@ -109,7 +109,7 @@ public:
 	void SetValue(const TKey& key, const TValue& value)
 	{
 		int index = LowerBound(key);
-		if (index < GetCount() && m_vector[index].first == key)
+		if (index < GetCount() && Equals(m_vector[index].first, key)/*m_vector[index].first == key*/)
 		{
 			m_vector[index].second = value;
 		}
@@ -125,7 +125,7 @@ public:
 	const TValue& GetValue(const TKey& key) const
 	{
 		int index = LowerBound(key);
-		if (index < GetCount() && m_vector[index].first == key)
+		if (index < GetCount() && Equals(m_vector[index].first, key)/*m_vector[index].first == key*/)
 		{
 			return m_vector[index].second;
 		}
@@ -141,7 +141,7 @@ public:
 	bool TryGetValue(const TKey& key, TValue* value) const
 	{
 		int index = LowerBound(key);
-		if (index < GetCount() && m_vector[index].first == key)
+		if (index < GetCount() && Equals(m_vector[index].first, key)/*m_vector[index].first == key*/)
 		{
 			if (value != NULL) { *value = m_vector[index].second; }
 			return true;
@@ -156,7 +156,7 @@ public:
 	TValue& operator[](const TKey& key)
 	{
 		int index = LowerBound(key);
-		if (index < GetCount() && m_vector[index].first == key) {
+		if (index < GetCount() && Equals(m_vector[index].first, key)/*m_vector[index].first == key*/) {
 			
 		}
 		else {
@@ -179,7 +179,7 @@ public:
 	const TValue* Find(const TOtherKey& key) const
 	{
 		int index = LowerBound(key);
-		if (index < GetCount() && m_vector[index].first == key)
+		if (index < GetCount() && Equals(m_vector[index].first, key)/*m_vector[index].first == key*/)
 		{
 			return &m_vector[index].second;
 		}
@@ -190,7 +190,7 @@ public:
 	TValue* Find(const TOtherKey& key)
 	{
 		int index = LowerBound(key);
-		if (index < GetCount() && m_vector[index].first == key)
+		if (index < GetCount() && Equals(m_vector[index].first, key)/*m_vector[index].first == key*/)
 		{
 			return &m_vector[index].second;
 		}
@@ -213,6 +213,13 @@ public:
 private:
 
 	template<typename TOtherKey>
+	bool Equals(const TKey& left, const TOtherKey& right) const
+	{
+		return !m_comparer(left, right) && !m_comparer(right, left);
+	}
+
+
+	template<typename TOtherKey>
 	int LowerBound(const TOtherKey/*TKey*/& key) const
 	{
 		if (m_vector.empty()) { return GetCount(); }
@@ -227,7 +234,7 @@ private:
 			int count2 = count / 2;
 			int mid = first + count2;
 
-			if (pairs[mid].first < key) {
+			if (m_comparer(pairs[mid].first, key)/*pairs[mid].first < key*/) {
 				first = ++mid;
 				count -= count2 + 1;
 			}
@@ -240,6 +247,7 @@ private:
 
 private:
 	std::vector<Pair, TAllocator>	m_vector;
+	TComparer						m_comparer;
 };
 
 
