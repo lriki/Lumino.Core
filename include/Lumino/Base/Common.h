@@ -140,7 +140,6 @@
 #if defined(LN_OS_WIN32)
 	#define NOMINMAX
 	#include <windows.h>
-	#include <process.h>
 #else
 	#include <limits.h>		// for _PC_PATH_MAX (on Ubuntu)
 	#include <pthread.h>

@@ -2,6 +2,7 @@ set(LN_TEST_SOURCES
 	gtest/src/gtest-all.cc
 	UnitTest/Main.cpp
 	UnitTest/TestConfig.h
+	UnitTest/Base/Test_Base.cpp
 	UnitTest/Base/Test_Base_Array.cpp
 	UnitTest/Base/Test_Base_ByteBuffer.cpp
 	UnitTest/Base/Test_Base_Cache.cpp

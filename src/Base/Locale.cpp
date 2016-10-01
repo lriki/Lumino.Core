@@ -37,6 +37,9 @@
 */
 
 #include "../Internal.h"
+#if defined(LN_OS_WIN32)
+#include <windows.h>
+#endif
 #include <locale.h>
 #include <Lumino/Base/Locale.h>
 
@@ -47,7 +50,7 @@ LN_NAMESPACE_BEGIN
 //==============================================================================
 
 
-#ifdef LN_OS_WIN32
+#if defined(LN_OS_WIN32)
 //---------------------------------------------
 class ScopedLocaleRAII
 {

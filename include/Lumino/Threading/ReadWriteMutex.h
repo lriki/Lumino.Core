@@ -2,6 +2,7 @@
 #pragma once
 
 LN_NAMESPACE_BEGIN
+namespace detail { class ReadWriteMutexImpl; }
 
 /**
 	@page	Doc_Threading
@@ -65,21 +66,7 @@ public:
 
 private:
 	LN_DISALLOW_COPY_AND_ASSIGN(ReadWriteMutex);
-
-#ifdef LN_THREAD_WIN32
-	CRITICAL_SECTION    mReaderCountLock;
-	CRITICAL_SECTION    mWriterLock;
-	HANDLE              mNoReaders;		///< ReadLock() しているスレッドがひとつも無いか
-	int                 mReaderCount;
-#else
-	pthread_mutex_t     mLock;
-	pthread_cond_t      mRead;
-	pthread_cond_t      mWrite;
-	unsigned            mReaders;
-	unsigned            mWriters;
-	unsigned            mReadWaiters;
-	unsigned            mWriteWaiters;
-#endif
+	detail::ReadWriteMutexImpl*	m_impl;
 };
 
 LN_NAMESPACE_END

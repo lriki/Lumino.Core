@@ -1,5 +1,5 @@
 ﻿#include <TestConfig.h>
-#include <Lumino/Threading/Atomic.h>
+#include <Lumino/Threading/AtomicCounter.h>
 #include <Lumino/Threading/Thread.h>
 #include <atomic>
 

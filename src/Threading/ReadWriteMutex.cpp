@@ -1,170 +1,52 @@
 ﻿
 #include "../Internal.h"
-#include "../../include/Lumino/Threading/ReadWriteMutex.h"
+#if defined(LN_OS_WIN32)
+#include "ReadWriteMutex_Win32.h"
+#else
+#include "ReadWriteMutex_POSIX.h"
+#endif
+#include <Lumino/Threading/ReadWriteMutex.h>
 
 LN_NAMESPACE_BEGIN
 
-#ifdef LN_THREAD_WIN32
 //==============================================================================
-// ReadWriteMutex (Win32)
+// ReadWriteMutex
 //==============================================================================
+
 //------------------------------------------------------------------------------
 ReadWriteMutex::ReadWriteMutex()
-	: mNoReaders(NULL)
-	, mReaderCount(0)
 {
-	::InitializeCriticalSection(&mReaderCountLock);
-	::InitializeCriticalSection(&mWriterLock);
-
-	mNoReaders = ::CreateEvent(NULL, TRUE, TRUE, NULL);
+	m_impl = LN_NEW detail::ReadWriteMutexImpl();
 }
 
 //------------------------------------------------------------------------------
 ReadWriteMutex::~ReadWriteMutex()
 {
-	if (mNoReaders)
-	{
-		::CloseHandle(mNoReaders);
-		mNoReaders = NULL;
-	}
-	::DeleteCriticalSection(&mWriterLock);
-	::DeleteCriticalSection(&mReaderCountLock);
+	LN_SAFE_DELETE(m_impl);
 }
 
 //------------------------------------------------------------------------------
 void ReadWriteMutex::LockRead()
 {
-	::EnterCriticalSection(&mWriterLock);
-	::EnterCriticalSection(&mReaderCountLock);
-	mReaderCount++;
-	if (mReaderCount == 1)
-	{
-		// ReadLock スレッド数が 0 → 1 になった。
-		// ひとつ以上存在していることになる。
-		::ResetEvent(mNoReaders);
-	}
-	::LeaveCriticalSection(&mReaderCountLock);
-	::LeaveCriticalSection(&mWriterLock);
+	m_impl->LockRead();
 }
 
 //------------------------------------------------------------------------------
 void ReadWriteMutex::UnlockRead()
 {
-	::EnterCriticalSection(&mReaderCountLock);
-	if (mReaderCount > 0)
-	{
-		mReaderCount--;
-		if (mReaderCount == 0)
-		{
-			// ReadLock スレッド数が 1 → 0 になった。
-			// ReadLock しているスレッドは存在していない。
-			// もし WriteLock 待ちのスレッドがいれば、この時点で動き出す。
-			::SetEvent(mNoReaders);
-		}
-	}
-	::LeaveCriticalSection(&mReaderCountLock);
+	m_impl->UnlockRead();
 }
 
 //------------------------------------------------------------------------------
 void ReadWriteMutex::LockWrite()
 {
-	::EnterCriticalSection(&mWriterLock);
-	if (mReaderCount > 0)
-	{
-		// もしひとつ以上 ReadLock されていれば、ここで待つ。
-		::WaitForSingleObject(mNoReaders, INFINITE);
-	}
+	m_impl->LockWrite();
 }
 
 //------------------------------------------------------------------------------
 void ReadWriteMutex::UnlockWrite()
 {
-	::LeaveCriticalSection(&mWriterLock);
+	m_impl->UnlockWrite();
 }
-
-#else
-//==============================================================================
-// ReadWriteMutex (pthread)
-//==============================================================================
-
-//------------------------------------------------------------------------------
-ReadWriteMutex::ReadWriteMutex()
-	: mReaders          ( 0 )
-	, mWriters          ( 0 )
-	, mReadWaiters      ( 0 )
-	, mWriteWaiters     ( 0 )
-{
-	pthread_mutex_init( &mLock, NULL );
-	pthread_cond_init( &mRead, NULL );
-	pthread_cond_init( &mWrite, NULL );
-}
-
-//------------------------------------------------------------------------------
-ReadWriteMutex::~ReadWriteMutex()
-{
-	pthread_mutex_destroy( &mLock );
-	pthread_cond_destroy( &mRead );
-	pthread_cond_destroy( &mWrite );
-}
-
-//------------------------------------------------------------------------------
-void ReadWriteMutex::LockRead()
-{
-	pthread_mutex_lock( &mLock );
-	if ( mWriters || mWriteWaiters )
-	{
-		++mReadWaiters;
-		do {
-			pthread_cond_wait( &mRead, &mLock );
-		} while ( mWriters || mWriteWaiters );
-		--mReadWaiters;
-	}
-	++mReaders;
-	pthread_mutex_unlock( &mLock );
-}
-
-//------------------------------------------------------------------------------
-void ReadWriteMutex::UnlockRead()
-{
-	pthread_mutex_lock( &mLock );
-	--mReaders;
-	if ( mWriteWaiters ) {
-		pthread_cond_signal( &mWrite );
-	}
-	pthread_mutex_unlock( &mLock );
-}
-
-//------------------------------------------------------------------------------
-void ReadWriteMutex::LockWrite()
-{
-	pthread_mutex_lock( &mLock );
-	if ( mReaders || mWriters )
-	{
-		++mWriteWaiters;
-		do {
-			pthread_cond_wait( &mWrite, &mLock );
-		} while ( mReaders || mWriters );
-		--mWriteWaiters;
-	}
-	mWriters = 1;
-	pthread_mutex_unlock( &mLock );
-}
-
-//------------------------------------------------------------------------------
-void ReadWriteMutex::UnlockWrite()
-{
-	pthread_mutex_lock( &mLock );
-	mWriters = 0;
-	if ( mWriteWaiters )
-	{
-		pthread_cond_signal( &mWrite );
-	}
-	else if ( mReadWaiters )
-	{
-		pthread_cond_broadcast( &mRead );
-	}
-	pthread_mutex_unlock( &mLock );
-}
-#endif
 
 LN_NAMESPACE_END

@@ -2,6 +2,7 @@
 #pragma once
 
 LN_NAMESPACE_BEGIN
+namespace detail { class SemaphoreImpl; }
 
 /**
 	@brief	
@@ -25,16 +26,7 @@ public:
 
 private:
 	LN_DISALLOW_COPY_AND_ASSIGN(Semaphore);
-
-#if defined(LN_OS_WIN32)
-	HANDLE			m_handle;
-	int				m_maxCount;
-#else
-	int             m_value;
-	int             m_maxCount;
-	pthread_mutex_t m_mutex;
-	pthread_cond_t  m_condition;
-#endif
+	detail::SemaphoreImpl*	m_impl;
 };
 
 LN_NAMESPACE_END

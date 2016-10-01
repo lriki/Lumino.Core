@@ -1,8 +1,9 @@
 ﻿
 #pragma once
 
-#include <stdio.h>
+#define NOMINMAX
 #include <windows.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #pragma warning( push )

@@ -1,79 +1,78 @@
 ﻿
-/*
-	以前は Thread_Win32.cpp と Thread_Unix.cpp に分けていたが、
-	Cygwin では _beginthreadex
-*/
-
-#include <sstream>
-#include <iostream>
-
-#ifdef LN_THREAD_WIN32
-#include <process.h>
-#endif
-
 #include "../Internal.h"
-#include "../../include/Lumino/Threading/Thread.h"
-#include "../../include/Lumino/Threading/ThreadingExceptions.h"
+#if defined(LN_OS_WIN32)
+#include "Thread_Win32.h"
+#else
+#include "Thread_POSIX.h"
+#endif
+#include <Lumino/Threading/Thread.h>
+#include <Lumino/Threading/ThreadingExceptions.h>
 
 LN_NAMESPACE_BEGIN
 
-#ifdef LN_THREAD_WIN32
 //==============================================================================
-// Thread (Win32)
+// Thread
 //==============================================================================
-//------------------------------------------------------------------------------
-class Thread::internal_thr_execute
-{
-public:
-
-	static unsigned int __stdcall _execute_static( void* ptr )
-	{
-		Thread* obj = static_cast<Thread*>( ptr );
-
-		// 実行
-		try
-		{
-			obj->Execute();
-		}
-	    catch ( Exception& e )
-		{
-			obj->mLastException = e.Copy();
-		}
-		catch (...)
-		{
-			obj->mLastException = LN_NEW ThreadException();
-		}
-
-		// 終了フラグを立てる
-		obj->mFinished.SetTrue();
-		return 0;
-	}
-
-	static DWORD __stdcall _execute_static_winapi( void* ptr )
-	{
-		return _execute_static( ptr );
-	}
-};
 
 //------------------------------------------------------------------------------
 Thread::Thread()
-	: mFinished			( true )
-	, mLastException		( NULL )
-    , mThread				( NULL )
-    , mThreadID			( 0 )
-	, mUseCreateThreadAPI	( false )
+	: m_impl(nullptr)
+	, mFinished(true)
+	, mLastException(nullptr)
 {
 }
 
 //------------------------------------------------------------------------------
 Thread::~Thread()
 {
-    if ( mThread )
+    if (m_impl != nullptr)
     {
         Wait();
     }
+	LN_SAFE_DELETE(mLastException);
+}
 
-	LN_SAFE_DELETE( mLastException );
+//------------------------------------------------------------------------------
+void Thread::Start()
+{
+	Reset();
+	m_impl->Start();
+}
+
+//------------------------------------------------------------------------------
+void Thread::Wait()
+{
+	m_impl->Wait();
+
+	// スレッドで例外が発生していれば throw する
+	if (mLastException != nullptr)
+	{
+		throw *mLastException;
+	}
+}
+
+//------------------------------------------------------------------------------
+bool Thread::IsFinished()
+{
+	return mFinished.IsTrue();
+}
+
+//------------------------------------------------------------------------------
+intptr_t Thread::GetThreadId() const
+{ 
+    return m_impl->GetThreadId();
+}
+
+//------------------------------------------------------------------------------
+void Thread::Sleep(int milliseconds)
+{
+	detail::ThreadImpl::Sleep(milliseconds);
+}
+
+//------------------------------------------------------------------------------
+intptr_t Thread::GetCurrentThreadId()
+{
+    return detail::ThreadImpl::GetCurrentThreadId();
 }
 
 //------------------------------------------------------------------------------
@@ -81,186 +80,29 @@ void Thread::Reset()
 {
 	// 前のが終了していない場合は待つ
 	Wait();
-
-	LN_SAFE_DELETE( mLastException );
+	LN_SAFE_DELETE(mLastException);
 	mFinished.SetFalse();
 }
 
 //------------------------------------------------------------------------------
-void Thread::Start()
+void Thread::ExecuteInternal()
 {
-	Reset();
-
-	if ( mUseCreateThreadAPI )
+	try
 	{
-		//mThread = (HANDLE)(::AfxBeginThread(_thr_prx::_execute_static, this));
-
-		DWORD threadID;
-		mThread = CreateThread(
-			NULL, //セキュリティ属性
-			0, //スタックサイズ
-			internal_thr_execute::_execute_static_winapi, //スレッド関数
-			this, //スレッド関数に渡す引数
-			0, //作成オプション(0またはCREATE_SUSPENDED)
-			&threadID);//スレッドID
-		mThreadID = threadID;
-
-		// TODO :起動できなかった例外
-		// TODO :既に起動している例外
+		Execute();
 	}
-	else
+	catch (Exception& e)
 	{
-		mThread = reinterpret_cast< HANDLE >( _beginthreadex( NULL, 0, internal_thr_execute::_execute_static, this, 0, &mThreadID ) );
+		mLastException = e.Copy();
 	}
-}
-
-//------------------------------------------------------------------------------
-void Thread::Wait()
-{
-	if ( mThread )
+	catch (...)
 	{
-		//mFinished.Wait();
-		::WaitForSingleObject(mThread, INFINITE);
-
-		if (!mUseCreateThreadAPI)
-		{
-			::CloseHandle(mThread);
-		}
-		mThread = NULL;
-
-		// スレッドで例外が発生していれば throw する
-		if ( mLastException != NULL ) {
-			throw *mLastException;
-		}
+		mLastException = LN_NEW ThreadException();
 	}
 
-	mThreadID = 0;
+	// 終了フラグを立てる
+	mFinished.SetTrue();
 }
-
-//------------------------------------------------------------------------------
-bool Thread::IsFinished()
-{
-	return mFinished.IsTrue();
-}
-
-//------------------------------------------------------------------------------
-intptr_t Thread::GetThreadID() const
-{ 
-    return mThreadID;
-}
-
-//------------------------------------------------------------------------------
-intptr_t Thread::GetCurrentThreadID()
-{
-    return ::GetCurrentThreadId();
-}
-
-//------------------------------------------------------------------------------
-void Thread::Sleep(int msTime)
-{
-    ::Sleep(msTime);
-}
-#else
-//==============================================================================
-// Thread (pthread)
-//==============================================================================
-
-class Thread::internal_thr_execute
-{
-public:
-
-	static void* _execute_static( void* ptr )
-	{
-		Thread* obj = static_cast<Thread*>( ptr );
-		
-		// 実行
-		try
-		{
-			obj->Execute();
-		}
-	    catch ( Exception& e )
-		{
-			obj->mLastException = e.Copy();
-		}
-		catch (...)
-		{
-			obj->mLastException = LN_NEW ThreadException();
-		}
-
-		// 終了フラグを立てる
-		obj->mFinished.SetTrue();
-		return 0;
-	}
-};
-
-//------------------------------------------------------------------------------
-Thread::Thread()
-	: mFinished(false)
-	, mLastException(NULL)
-	, mThread(0)
-{
-}
-
-//------------------------------------------------------------------------------
-Thread::~Thread()
-{
-}
-
-//------------------------------------------------------------------------------
-void Thread::Start()
-{
-	// 前のが終了していない場合は待つ
-	Wait();
-
-	// 初期化
-	LN_SAFE_DELETE( mLastException );
-	mFinished.SetFalse();
-
-	// 開始
-	pthread_create( &mThread,  NULL, internal_thr_execute::_execute_static, this );
-}
-
-//------------------------------------------------------------------------------
-void Thread::Wait()
-{
-	if ( mThread )
-	{
-		// 待機
-		pthread_join(mThread, NULL);
-		mThread = 0;
-
-		// スレッドで例外が発生していれば throw する
-		if ( mLastException != NULL ) {
-			throw *mLastException;
-		}
-	}
-}
-
-//------------------------------------------------------------------------------
-bool Thread::IsFinished()
-{
-	return mFinished.IsTrue();
-}
-
-//------------------------------------------------------------------------------
-intptr_t Thread::GetThreadID() const
-{ 
-	return (intptr_t)(mThread);
-}
-
-//------------------------------------------------------------------------------
-intptr_t Thread::GetCurrentThreadID()
-{
-	return (intptr_t)(pthread_self());
-}
-
-//------------------------------------------------------------------------------
-void Thread::Sleep(int msTime)
-{
-     ::usleep( msTime * 1000 );
-}
-
-#endif
 
 //==============================================================================
 // DelegateThread

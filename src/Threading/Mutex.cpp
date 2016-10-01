@@ -1,64 +1,40 @@
 ﻿
 #include "../Internal.h"
-#include "../../include/Lumino/Threading/Mutex.h"
+#if defined(LN_OS_WIN32)
+#include "Mutex_Win32.h"
+#else
+#include "Mutex_POSIX.h"
+#endif
+#include <Lumino/Threading/Mutex.h>
 
 LN_NAMESPACE_BEGIN
 
-#ifdef LN_THREAD_WIN32
 //==============================================================================
-// Mutex (Win32)
+// Mutex
 //==============================================================================
+
 //------------------------------------------------------------------------------
 Mutex::Mutex()
 {
-    ::InitializeCriticalSection( &m_CriticalSection );
+	m_impl = LN_NEW detail::MutexImpl();
 }
 
 //------------------------------------------------------------------------------
 Mutex::~Mutex()
 {
-	::DeleteCriticalSection( &m_CriticalSection );
+	LN_SAFE_DELETE(m_impl);
 }
 
 //------------------------------------------------------------------------------
 void Mutex::Lock()
 {
-	::EnterCriticalSection( &m_CriticalSection );
+	m_impl->Lock();
 }
 
 //------------------------------------------------------------------------------
 void Mutex::Unlock()
 {
-	::LeaveCriticalSection( &m_CriticalSection );
+	m_impl->Unlock();
 }
-
-#else
-//==============================================================================
-// Mutex (pthread)
-//==============================================================================
-//------------------------------------------------------------------------------
-Mutex::Mutex()
-{
-	pthread_mutex_init( &mMutex, NULL );
-}
-
-//------------------------------------------------------------------------------
-Mutex::~Mutex()
-{
-	pthread_mutex_destroy( &mMutex );
-}
-
-//------------------------------------------------------------------------------
-void Mutex::Lock()
-{
-	pthread_mutex_lock( &mMutex );
-}
-
-//------------------------------------------------------------------------------
-void Mutex::Unlock()
-{
-	pthread_mutex_unlock( &mMutex );
-}
-#endif
 
 LN_NAMESPACE_END

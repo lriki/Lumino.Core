@@ -6,6 +6,7 @@
 #include "ConditionFlag.h"
 
 LN_NAMESPACE_BEGIN
+namespace detail { class ThreadImpl; }
 class Exception;
 
 /**
@@ -52,39 +53,31 @@ public:
 	/**
 		@brief	スレッド識別子の取得 (start() 後に呼ぶこと)
 	*/
-	intptr_t GetThreadID() const;
+	intptr_t GetThreadId() const;
 
 public:
 
 	/**
-		@brief	現在実行中のスレッドのIDを取得
+		@brief	指定した時間だけ現在のスレッドをスリープ
+		@param	milliseconds	: 待機時間 (ミリ秒)
 	*/
-	static intptr_t GetCurrentThreadID();
+	static void Sleep(int milliseconds);
 
 	/**
-		@brief	指定した時間だけ現在のスレッドをスリープ
-		@param	msTime	: 待機時間 (ミリ秒)
+		@brief	現在実行中のスレッドのIDを取得
 	*/
-	static void Sleep(int msTime);
+	static intptr_t GetCurrentThreadId();
 
 private:
 	LN_DISALLOW_COPY_AND_ASSIGN(Thread);
+
+	friend class detail::ThreadImpl;
+	void ExecuteInternal();
 	void Reset();
 
-private:
-	ConditionFlag	mFinished;
-	Exception*		mLastException;
-    
-#ifdef LN_THREAD_WIN32
-    HANDLE			mThread;
-	unsigned int	mThreadID;
-	bool			mUseCreateThreadAPI;
-#else
-	pthread_t		mThread;
-#endif
-
-	class internal_thr_execute;
-	friend class internal_thr_execute;
+	detail::ThreadImpl*	m_impl;
+	ConditionFlag		mFinished;
+	Exception*			mLastException;
 };
 
 

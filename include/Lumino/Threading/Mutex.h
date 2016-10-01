@@ -2,6 +2,7 @@
 #pragma once
 
 LN_NAMESPACE_BEGIN
+namespace detail { class MutexImpl; }
 
 /**
 	@page	Doc_Threading
@@ -33,22 +34,16 @@ class LUMINO_EXPORT Mutex
 public:
     Mutex();
     ~Mutex();
-
-public:
 	
-	/// ロック
+	/** ロック */
     void Lock();
 
-	/// アンロック
+	/** アンロック */
     void Unlock();
 
 private:
 	LN_DISALLOW_COPY_AND_ASSIGN(Mutex);
-#ifdef LN_THREAD_WIN32
-    mutable CRITICAL_SECTION m_CriticalSection;
-#else
-    pthread_mutex_t mMutex;
-#endif
+	detail::MutexImpl*	m_impl;
 };
 
 /**

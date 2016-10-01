@@ -1,6 +1,6 @@
 ﻿
 #include "../Internal.h"
-#include "../../include/Lumino/Threading/Atomic.h"
+#include "../../include/Lumino/Threading/AtomicCounter.h"
 
 LN_NAMESPACE_BEGIN
 

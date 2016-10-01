@@ -1,22 +1,22 @@
 ﻿#include "../Internal.h"
-#ifdef LN_OS_WIN32
+#if defined(LN_OS_WIN32)
+#include <windows.h>
 #else
-	#include <sys/time.h>
+#include <sys/time.h>
 #endif
 #include <Lumino/Base/ElapsedTimer.h>
 
 LN_NAMESPACE_BEGIN
 
-#ifdef LN_OS_WIN32
 //==============================================================================
 // ElapsedTimer
 //==============================================================================
 
 //------------------------------------------------------------------------------
 ElapsedTimer::ElapsedTimer()
+	: m_freq(0)
+	, m_start(0)
 {
-	memset(&mFreq, 0x00, sizeof(mFreq));
-	memset(&mBefore, 0x00, sizeof(mBefore));
 }
 
 //------------------------------------------------------------------------------
@@ -24,11 +24,16 @@ ElapsedTimer::~ElapsedTimer()
 {
 }
 
+#if defined(LN_OS_WIN32)
 //------------------------------------------------------------------------------
 void ElapsedTimer::Start()
 {
-	::QueryPerformanceFrequency(&mFreq);
-	::QueryPerformanceCounter(&mBefore);
+	LARGE_INTEGER freq;
+	LARGE_INTEGER counter;
+	::QueryPerformanceFrequency(&freq);
+	::QueryPerformanceCounter(&counter);
+	m_freq = counter.QuadPart;
+	m_start = counter.QuadPart;
 }
 
 //------------------------------------------------------------------------------
@@ -36,31 +41,17 @@ uint64_t ElapsedTimer::GetElapsedTime() const
 {
 	LARGE_INTEGER counter;
 	::QueryPerformanceCounter(&counter);
-	return (uint64_t)((counter.QuadPart - mBefore.QuadPart) * (1000) / mFreq.QuadPart);
+	return (uint64_t)((counter.QuadPart - m_start) * (1000) / m_freq);
 }
 //------------------------------------------------------------------------------
 uint64_t ElapsedTimer::GetElapsedTimeNS() const
 {
 	LARGE_INTEGER counter;
 	::QueryPerformanceCounter(&counter);
-	return (uint64_t)((counter.QuadPart - mBefore.QuadPart) * (1000 * 1000 * 1000) / mFreq.QuadPart);
+	return (uint64_t)((counter.QuadPart - m_start) * (1000 * 1000 * 1000) / m_freq);
 }
 
 #else
-//==============================================================================
-// ElapsedTimer
-//==============================================================================
-
-//------------------------------------------------------------------------------
-ElapsedTimer::ElapsedTimer()
-	: m_start(0)
-{
-}
-
-//------------------------------------------------------------------------------
-ElapsedTimer::~ElapsedTimer()
-{
-}
 
 //------------------------------------------------------------------------------
 void ElapsedTimer::Start()

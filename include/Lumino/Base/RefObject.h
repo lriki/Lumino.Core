@@ -1,7 +1,7 @@
 ﻿
 #pragma once
 #include "NonCopyable.h"
-#include "../Threading/Atomic.h"
+#include "../Threading/AtomicCounter.h"
 
 LN_NAMESPACE_BEGIN
 class RefObject;

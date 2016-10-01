@@ -1,11 +1,11 @@
-
+﻿
 #pragma once
 #include "Common.h"
 
 LN_NAMESPACE_BEGIN
 	
 /**
-	@brief	�o�ߎ��Ԃ𑪒肷�邽�߂̃N���X�ł��B
+	@brief	経過時間を測定するためのクラスです。
 */
 class ElapsedTimer
 {
@@ -13,24 +13,18 @@ public:
 	ElapsedTimer();
 	~ElapsedTimer();
 
-public:
-
-	/// �v���J�n
+	/** 計測開始 */
 	void Start();
 
-	/// �o�ߎ��Ԃ̎擾 (ms)
+	/** 経過時間の取得 (ms) */
 	uint64_t GetElapsedTime() const;
 
-	/// �o�ߎ��Ԃ̎擾 (ns)
+	/** 経過時間の取得 (ns) */
 	uint64_t GetElapsedTimeNS() const;
 
 private:
-#ifdef LN_OS_WIN32
-    LARGE_INTEGER   mFreq;
-    LARGE_INTEGER   mBefore;
-#else
-	uint64_t		m_start;	// (us)
-#endif
+	uint64_t		m_freq;
+	uint64_t		m_start;
 };
 
 LN_NAMESPACE_END

@@ -1,6 +1,7 @@
 ﻿
 #include "../Internal.h"
 #ifdef _WIN32
+	#include <windows.h>
 #else
 	#include <dlfcn.h>	// Ubuntu
 #endif
