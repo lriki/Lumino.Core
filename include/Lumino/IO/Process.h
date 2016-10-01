@@ -1,6 +1,4 @@
-﻿/**
-	@file	Process.h
-*/
+﻿
 #pragma once
 #include "../Base/Delegate.h"
 #include "../Threading/Thread.h"
@@ -9,6 +7,7 @@
 #include "StreamWriter.h"
 
 LN_NAMESPACE_BEGIN
+namespace detail { class ProcessImpl; }
 
 /**
 	@brief		外部プロセスを起動し、通信を行うクラスです。
@@ -190,13 +189,11 @@ public:
 	static int Execute(const PathName& program, const String& args = String(), String* outStdOutput = nullptr, String* outStdError = nullptr);
 
 private:
-	class InternalPipeStream;
-
-	void TryGetExitCode();
 	void Dispose();
 	void Thread_ReadStdOutput();
 	void Thread_ReadStdError();
 
+	detail::ProcessImpl*		m_impl;
 	PathName					m_workingDirectory;
 	bool						m_redirectStandardInput;
 	bool						m_redirectStandardOutput;
@@ -208,9 +205,6 @@ private:
 	RefPtr<StreamWriter>		m_standardInputWriter;
 	RefPtr<StreamReader>		m_standardOutputReader;
 	RefPtr<StreamReader>		m_standardErrorReader;
-	InternalPipeStream*			m_stdinPipeStream;
-	InternalPipeStream*			m_stdoutPipeStream;
-	InternalPipeStream*			m_stderrPipeStream;
 
 #ifdef LN_CPP11
 	Delegate<void(String)>		m_outputDataReceivedCallback;
@@ -221,20 +215,10 @@ private:
 #endif
 	DelegateThread				m_readStdOutputThread;
 	DelegateThread				m_readStdErrorThread;
-	int							m_exitCode;
-	bool						m_crashed;
-	bool						m_disposed;
 	bool						m_runningReadThread;
 	bool						m_runningErrorReadThread;
 
 #ifdef _WIN32
-	HANDLE					m_hInputRead;			// 標準出力の読み取り側 (子プロセス側)
-	HANDLE					m_hInputWrite;			// 標準出力の書き込み側 (このプロセス側)
-	HANDLE					m_hOutputRead;			// 標準出力の読み取り側 (このプロセス側)
-	HANDLE					m_hOutputWrite;			// 標準出力の書き込み側 (子プロセス側)
-	HANDLE					m_hErrorRead;			// 標準エラー出力の読み取り側 (このプロセス側)
-	HANDLE					m_hErrorWrite;			// 標準エラー出力の書き込み側 (子プロセス側)
-	PROCESS_INFORMATION		m_processInfo;
 #else
     pid_t   m_pid;
 #endif

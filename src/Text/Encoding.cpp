@@ -12,7 +12,7 @@
 #include "UTF32Encoding.h"
 #include "DBCSEncoding.h"
 #include "EUCJPEncoding.h"
-#ifdef LN_OS_WIN32
+#if defined(LN_OS_WIN32)
 #include "Win32CodePageEncoding.h"
 #endif
 

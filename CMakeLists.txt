@@ -47,6 +47,7 @@ set(LN_SOURCES_Base
 	include/Lumino/Base/Diff.h
 	include/Lumino/Base/DllLoader.h
 	include/Lumino/Base/ElapsedTimer.h
+	include/Lumino/Base/Enumerable.h
 	include/Lumino/Base/EnumExtension.h
 	include/Lumino/Base/Environment.h
 	include/Lumino/Base/Event.h
@@ -155,6 +156,8 @@ set(LN_SOURCES_IO
 	src/IO/PathName.cpp
 	src/IO/PathTraits.cpp
 	src/IO/Process.cpp
+	src/IO/Process_Unix.h
+	src/IO/Process_Win32.h
 	src/IO/StreamReader.cpp
 	src/IO/StreamWriter.cpp
 	src/IO/StringReader.cpp
@@ -313,10 +316,6 @@ set(LN_SOURCES_Testing
 #--------------------------------------
 # Platform source files.
 if (WIN32)
-	set(LN_SOURCES_IO
-		${LN_SOURCES_IO}
-		src/IO/Process_Win32.cpp)
-
 	set(LN_SOURCES_Text
 		${LN_SOURCES_Text}
 		src/Text/Win32CodePageEncoding.cpp
@@ -324,14 +323,8 @@ if (WIN32)
 	)
 
 elseif (APPLE)
-	set(LN_SOURCES_IO
-		${LN_SOURCES_IO}
-		src/IO/Process_Unix.cpp)
 
 elseif (UNIX)
-	set(LN_SOURCES_IO
-		${LN_SOURCES_IO}
-		src/IO/Process_Unix.cpp)
 
 endif()
 

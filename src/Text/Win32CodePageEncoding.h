@@ -1,4 +1,5 @@
 ﻿
+#define NOMINMAX
 #include <windows.h>
 #include "../../include/Lumino/Base/String.h"
 #include "../../include/Lumino/Text/Encoding.h"

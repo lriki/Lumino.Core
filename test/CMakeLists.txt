@@ -11,6 +11,7 @@ set(LN_TEST_SOURCES
 	UnitTest/Base/Test_Base_Encoding.cpp
 	UnitTest/Base/Test_Base_Encoding_UTF8.cpp
 	UnitTest/Base/Test_Base_Enum.cpp
+	UnitTest/Base/Test_Base_Enumerable.cpp
 	UnitTest/Base/Test_Base_Environment.cpp
 	UnitTest/Base/Test_Base_Event.cpp
 	UnitTest/Base/Test_Base_Exception.cpp

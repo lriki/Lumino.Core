@@ -1,5 +1,10 @@
 ﻿#include "../Internal.h"
 #include <Lumino/IO/Process.h>
+#if defined(LN_OS_WIN32)
+#include "Process_Win32.h"
+#else
+#include "Process_Unix.h"
+#endif
 
 LN_NAMESPACE_BEGIN
 
@@ -8,7 +13,8 @@ LN_NAMESPACE_BEGIN
 //==============================================================================
 //------------------------------------------------------------------------------
 Process::Process()
-	: m_workingDirectory()
+	: m_impl(LN_NEW detail::ProcessImpl())
+	, m_workingDirectory()
 	, m_redirectStandardInput(false)
 	, m_redirectStandardOutput(false)
 	, m_redirectStandardError(false)
@@ -19,20 +25,8 @@ Process::Process()
 	, m_standardInputWriter()
 	, m_standardOutputReader()
 	, m_standardErrorReader()
-	, m_stdinPipeStream(nullptr)
-	, m_stdoutPipeStream(nullptr)
-	, m_stderrPipeStream(nullptr)
-	, m_exitCode(0)
-	, m_crashed(false)
-	, m_disposed(false)
 	, m_runningReadThread(false)
 #ifdef LN_OS_WIN32
-	, m_hInputRead(nullptr)
-	, m_hInputWrite(nullptr)
-	, m_hOutputRead(nullptr)
-	, m_hOutputWrite(nullptr)
-	, m_hErrorRead(nullptr)
-	, m_hErrorWrite(nullptr)
 #else
     , m_pid(NULL)
 #endif
@@ -43,6 +37,7 @@ Process::Process()
 Process::~Process()
 {
 	Dispose();
+	LN_SAFE_DELETE(m_impl);
 }
 
 //------------------------------------------------------------------------------
@@ -96,8 +91,29 @@ void Process::SetErrorDataReceivedCallback(const Delegate01<String>& callback)
 #endif
 
 //------------------------------------------------------------------------------
+void Process::Start(const PathName& program, const String& args)
+{
+	detail::ProcessStartInfo si;
+	detail::ProcessStartResult result;
+	si.program = program;
+	si.args = args;
+	si.workingDirectory = m_workingDirectory;
+	si.redirectStandardInput = m_redirectStandardInput;
+	si.redirectStandardOutput = m_redirectStandardOutput;
+	si.redirectStandardError = m_redirectStandardError;
+	si.standardInputEncoding = m_standardInputEncoding;
+	si.standardOutputEncoding = m_standardOutputEncoding;
+	si.standardErrorEncoding = m_standardErrorEncoding;
+	m_impl->Start(si, &result);
+	m_standardInputWriter = result.standardInputWriter;
+	m_standardOutputReader = result.standardOutputReader;
+	m_standardErrorReader = result.standardErrorReader;
+}
+
+//------------------------------------------------------------------------------
 void Process::Start(const PathName& program, const StringArray& argsList)
 {
+	// コマンドライン引数を作る
 	String args;
 	for (int i = 0; i < argsList.GetCount(); ++i)
 	{
@@ -105,6 +121,7 @@ void Process::Start(const PathName& program, const StringArray& argsList)
 			args += _T(' ');
 		}
 
+		// スペースが含まれていれば引数を " で囲む
 		String tmp = argsList[i];
 		if (tmp.Contains(_T(' ')) || tmp.Contains(_T('\t')))
 		{
@@ -118,6 +135,12 @@ void Process::Start(const PathName& program, const StringArray& argsList)
 	}
 
 	Start(program, args);
+}
+
+//------------------------------------------------------------------------------
+bool Process::WaitForExit(int timeoutMSec)
+{
+	return m_impl->WaitForExit(timeoutMSec);
 }
 
 //------------------------------------------------------------------------------
@@ -161,8 +184,7 @@ int Process::Execute(const PathName& program, const String& args, String* outStd
 //------------------------------------------------------------------------------
 int Process::GetExitCode()
 {
-	TryGetExitCode();
-	return m_exitCode;
+	return m_impl->GetExitCode();
 }
 
 //------------------------------------------------------------------------------
@@ -191,6 +213,24 @@ void Process::BeginErrorReadLine()
 	m_readStdErrorThread.Start(LN_CreateDelegate(this, &Process::Thread_ReadStdError));
 #endif
 	m_runningErrorReadThread = true;
+}
+
+//------------------------------------------------------------------------------
+void Process::Dispose()
+{
+	m_impl->Dispose();
+
+	// 読み取りスレッドの終了を待つ
+	if (m_runningReadThread)
+	{
+		m_runningReadThread = false;
+		m_readStdOutputThread.Wait();
+	}
+	if (m_runningErrorReadThread)
+	{
+		m_runningErrorReadThread = false;
+		m_readStdErrorThread.Wait();
+	}
 }
 
 //------------------------------------------------------------------------------

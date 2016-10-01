@@ -1,10 +1,15 @@
 ﻿
 #include "../Internal.h"
+#if defined(LN_THREAD_WIN32)
+#include <windows.h>
+#else
+#include <pthread.h>
+#endif
 #include "../../include/Lumino/Threading/AtomicCounter.h"
 
 LN_NAMESPACE_BEGIN
 
-#ifdef LN_THREAD_WIN32
+#if defined(LN_THREAD_WIN32)
 //==============================================================================
 // Atomic (Win32)
 //==============================================================================

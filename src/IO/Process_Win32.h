@@ -1,9 +1,30 @@
 ﻿#include "../Internal.h"
-#include <Lumino/IO/Process.h>
+#include <windows.h>
 
 LN_NAMESPACE_BEGIN
+namespace detail {
 
-class Process::InternalPipeStream
+struct ProcessStartInfo
+{
+	PathName				program;
+	String					args;
+	PathName				workingDirectory;
+	bool					redirectStandardInput;
+	bool					redirectStandardOutput;
+	bool					redirectStandardError;
+	Encoding*				standardInputEncoding;
+	Encoding*				standardOutputEncoding;
+	Encoding*				standardErrorEncoding;
+};
+
+struct ProcessStartResult
+{
+	RefPtr<StreamWriter>	standardInputWriter;
+	RefPtr<StreamReader>	standardOutputReader;
+	RefPtr<StreamReader>	standardErrorReader;
+};
+
+class InternalPipeStream
 	: public Stream
 {
 public:
@@ -60,8 +81,60 @@ private:
 // Process
 //==============================================================================
 
+class ProcessImpl
+{
+public:
+	ProcessImpl();
+	~ProcessImpl();
+
+	void Start(const ProcessStartInfo& startInfo, ProcessStartResult* outResult);
+	bool WaitForExit(int timeoutMSec);
+	ProcessStatus GetState();
+	int GetExitCode();
+	void TryGetExitCode();
+	void Dispose();
+
+private:
+	HANDLE					m_hInputRead;			// 標準出力の読み取り側 (子プロセス側)
+	HANDLE					m_hInputWrite;			// 標準出力の書き込み側 (このプロセス側)
+	HANDLE					m_hOutputRead;			// 標準出力の読み取り側 (このプロセス側)
+	HANDLE					m_hOutputWrite;			// 標準出力の書き込み側 (子プロセス側)
+	HANDLE					m_hErrorRead;			// 標準エラー出力の読み取り側 (このプロセス側)
+	HANDLE					m_hErrorWrite;			// 標準エラー出力の書き込み側 (子プロセス側)
+	PROCESS_INFORMATION		m_processInfo;
+
+	InternalPipeStream*		m_stdinPipeStream;
+	InternalPipeStream*		m_stdoutPipeStream;
+	InternalPipeStream*		m_stderrPipeStream;
+	int						m_exitCode;
+	bool					m_crashed;
+	bool					m_disposed;
+};
+
 //------------------------------------------------------------------------------
-void Process::Start(const PathName& program, const String& args)
+ProcessImpl::ProcessImpl()
+	: m_hInputRead(nullptr)
+	, m_hInputWrite(nullptr)
+	, m_hOutputRead(nullptr)
+	, m_hOutputWrite(nullptr)
+	, m_hErrorRead(nullptr)
+	, m_hErrorWrite(nullptr)
+	, m_stdinPipeStream(nullptr)
+	, m_stdoutPipeStream(nullptr)
+	, m_stderrPipeStream(nullptr)
+	, m_exitCode(0)
+	, m_crashed(false)
+	, m_disposed(false)
+{
+}
+
+//------------------------------------------------------------------------------
+ProcessImpl::~ProcessImpl()
+{
+}
+
+//------------------------------------------------------------------------------
+void ProcessImpl::Start(const ProcessStartInfo& startInfo, ProcessStartResult* outResult)
 {
 	enum { R = 0, W = 1 };
 	BOOL bResult;
@@ -72,8 +145,13 @@ void Process::Start(const PathName& program, const String& args)
 	sa.lpSecurityDescriptor = NULL;
 	sa.bInheritHandle = TRUE;
 
+	/*
+		パイプの継承設定を行う理由	
+		http://www.ne.jp/asahi/hishidama/home/tech/c/windows/CreatePipe.html
+	*/
+
 	// 標準入力のパイプを作る
-	if (m_redirectStandardInput)
+	if (startInfo.redirectStandardInput)
 	{
 		HANDLE hPipe[2] = { 0, 0 };
 		bResult = ::CreatePipe(&hPipe[R], &hPipe[W], &sa, 0);
@@ -92,11 +170,11 @@ void Process::Start(const PathName& program, const String& args)
 
 		// 標準出力の Writer を作る
 		m_stdinPipeStream = LN_NEW InternalPipeStream(InternalPipeStream::WriteSide, m_hInputWrite);
-		m_standardInputWriter.Attach(LN_NEW StreamWriter(m_stdinPipeStream, m_standardInputEncoding));
+		outResult->standardInputWriter.Attach(LN_NEW StreamWriter(m_stdinPipeStream, startInfo.standardInputEncoding));
 	}
 
 	// 標準出力のパイプを作る
-	if (m_redirectStandardOutput)
+	if (startInfo.redirectStandardOutput)
 	{
 		HANDLE hPipe[2] = { 0, 0 };
 		bResult = ::CreatePipe(&hPipe[R], &hPipe[W], &sa, 0);
@@ -115,11 +193,11 @@ void Process::Start(const PathName& program, const String& args)
 
 		// 標準出力の Reader を作る
 		m_stdoutPipeStream = LN_NEW InternalPipeStream(InternalPipeStream::ReadSide, m_hOutputRead);
-		m_standardOutputReader.Attach(LN_NEW StreamReader(m_stdoutPipeStream, m_standardOutputEncoding));
+		outResult->standardOutputReader.Attach(LN_NEW StreamReader(m_stdoutPipeStream, startInfo.standardOutputEncoding));
 	}
 
 	// 標準エラー出力のパイプを作る
-	if (m_redirectStandardError)
+	if (startInfo.redirectStandardError)
 	{
 		HANDLE hPipe[2] = { 0, 0 };
 		bResult = ::CreatePipe(&hPipe[R], &hPipe[W], &sa, 0);
@@ -138,7 +216,7 @@ void Process::Start(const PathName& program, const String& args)
 
 		// 標準出力の Reader を作る
 		m_stderrPipeStream = LN_NEW InternalPipeStream(InternalPipeStream::ReadSide, m_hErrorRead);
-		m_standardErrorReader.Attach(LN_NEW StreamReader(m_stderrPipeStream, m_standardErrorEncoding));
+		outResult->standardErrorReader.Attach(LN_NEW StreamReader(m_stderrPipeStream, startInfo.standardErrorEncoding));
 	}
 
 	// 子プロセスの標準出力の出力先を↑で作ったパイプにする
@@ -152,16 +230,16 @@ void Process::Start(const PathName& program, const String& args)
 	si.wShowWindow = SW_HIDE;
 
 	// exe 名と引数を連結してコマンドライン文字列を作る
-	String cmdArgs = program.GetString();
-	if (!args.IsEmpty()) {
+	String cmdArgs = startInfo.program.GetString();
+	if (!startInfo.args.IsEmpty()) {
 		cmdArgs += _T(" ");
-		cmdArgs += args;
+		cmdArgs += startInfo.args;
 	}
 
 	// カレントディレクトリ
 	LPCTSTR pCurrentDirectory = NULL;
-	if (!m_workingDirectory.IsEmpty()) {
-		pCurrentDirectory = m_workingDirectory.c_str();
+	if (!startInfo.workingDirectory.IsEmpty()) {
+		pCurrentDirectory = startInfo.workingDirectory.c_str();
 	}
 
 	// 子プロセス開始
@@ -173,7 +251,7 @@ void Process::Start(const PathName& program, const String& args)
 	{
 		DWORD dwErr = ::GetLastError();
 		if (dwErr == ERROR_FILE_NOT_FOUND) {
-			LN_THROW(0, FileNotFoundException, program);
+			LN_THROW(0, FileNotFoundException, startInfo.program);
 		}
 		LN_THROW(0, Win32Exception, dwErr);
 	}
@@ -201,20 +279,20 @@ void Process::Start(const PathName& program, const String& args)
 }
 
 //------------------------------------------------------------------------------
-bool Process::WaitForExit(int timeoutMSec)
+bool ProcessImpl::WaitForExit(int timeoutMSec)
 {
 	if (m_processInfo.hProcess != NULL)
 	{
 		// TODO:ここでやるべき？とりあえず暫定。
-		if (m_standardOutputExternalStream != nullptr && m_stdoutPipeStream != nullptr)
-		{
-			byte_t buf[1024];
-			size_t size;
-			while ((size = m_stdoutPipeStream->Read(buf, 1024)) > 0)
-			{
-				m_standardOutputExternalStream->Write(buf, size);
-			}
-		}
+		//if (m_standardOutputExternalStream != nullptr && m_stdoutPipeStream != nullptr)
+		//{
+		//	byte_t buf[1024];
+		//	size_t size;
+		//	while ((size = m_stdoutPipeStream->Read(buf, 1024)) > 0)
+		//	{
+		//		m_standardOutputExternalStream->Write(buf, size);
+		//	}
+		//}
 
 
 
@@ -231,7 +309,7 @@ bool Process::WaitForExit(int timeoutMSec)
 }
 
 //------------------------------------------------------------------------------
-ProcessStatus Process::GetState()
+ProcessStatus ProcessImpl::GetState()
 {
 	if (::WaitForSingleObject(m_processInfo.hProcess, 0) == WAIT_OBJECT_0) {
 		return ProcessStatus::Running;
@@ -241,7 +319,14 @@ ProcessStatus Process::GetState()
 }
 
 //------------------------------------------------------------------------------
-void Process::TryGetExitCode()
+int ProcessImpl::GetExitCode()
+{
+	TryGetExitCode();
+	return m_exitCode;
+}
+
+//------------------------------------------------------------------------------
+void ProcessImpl::TryGetExitCode()
 {
 	if (m_processInfo.hProcess != NULL)
 	{
@@ -254,12 +339,12 @@ void Process::TryGetExitCode()
 		// クラッシュを確実に検出するのは難しい。
 		// 現実的な方法としては、GetExitCodeProcess() は未処理例外の例外コードを返すのでそれをチェックすること。
 		// https://social.msdn.microsoft.com/Forums/en-US/7e0746ab-d285-4061-9032-81400875243a/detecting-if-a-child-process-crashed
-		m_crashed = (m_exitCode >= 0x80000000 && m_exitCode < 0xD0000000);
+		m_crashed = (exitCode >= 0x80000000 && exitCode < 0xD0000000);
 	}
 }
 
 //------------------------------------------------------------------------------
-void Process::Dispose()
+void ProcessImpl::Dispose()
 {
 	if (!m_disposed)
 	{
@@ -280,22 +365,6 @@ void Process::Dispose()
 		// 書き込み側ハンドルは、WaitForSingleObject() の前でクローズしておく。
 		// こうしておかないと、子プロセスの ReadFile() がブロックし続けてしまい、
 		// スレッドが終了できなくなる。
-		//if (m_hInputWrite != NULL) {
-		//	::CloseHandle(m_hInputWrite);
-		//	m_hInputWrite = NULL;
-		//}
-
-		// 読み取りスレッドの終了を待つ
-		if (m_runningReadThread)
-		{
-			m_runningReadThread = false;
-			m_readStdOutputThread.Wait();
-		}
-		if (m_runningErrorReadThread)
-		{
-			m_runningErrorReadThread = false;
-			m_readStdErrorThread.Wait();
-		}
 
 		// パイプを閉じる
 		if (m_hInputWrite != NULL) {
@@ -328,4 +397,5 @@ void Process::Dispose()
 	}
 }
 
+} // namespace detail
 LN_NAMESPACE_END
