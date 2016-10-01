@@ -5,6 +5,10 @@
 #include <Lumino/IO/FileSystem.h>
 #include <Lumino/IO/PathName.h>
 #include <Lumino/IO/DirectoryUtils.h>
+#if defined(LN_OS_WIN32)
+#define NOMINMAX
+#include <windows.h>
+#endif
 
 LN_NAMESPACE_BEGIN
 
@@ -313,8 +317,12 @@ GenericPathName<TChar> GenericPathName<TChar>::MakeRelative(const GenericPathNam
 }
 
 //------------------------------------------------------------------------------
+#pragma push_macro("GetCurrentDirectory")
+#undef GetCurrentDirectory
 template<typename TChar>
-GenericPathName<TChar> GenericPathName<TChar>::GetCurrentDirectory()
+GenericPathName<TChar> GenericPathName<TChar>::GetCurrentDirectory() { return LN_AFX_FUNCNAME(GetCurrentDirectory)(); }
+template<typename TChar>
+GenericPathName<TChar> GenericPathName<TChar>::LN_AFX_FUNCNAME(GetCurrentDirectory)()
 {
 	static GenericPathName<TChar> path;
 
@@ -327,6 +335,7 @@ GenericPathName<TChar> GenericPathName<TChar>::GetCurrentDirectory()
 	}
 	return path;
 }
+#pragma pop_macro("GetCurrentDirectory")
 
 //------------------------------------------------------------------------------
 template<>

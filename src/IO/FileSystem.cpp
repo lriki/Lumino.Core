@@ -8,7 +8,7 @@
 #include <Lumino/IO/FileStream.h>
 #include <Lumino/IO/FileSystem.h>
 #include <Lumino/IO/PathName.h>
-#ifdef LN_OS_WIN32
+#if defined(LN_OS_WIN32)
 #include "FileSystem_Win32.h"
 #else
 #include "FileSystem_Unix.h"

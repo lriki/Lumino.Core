@@ -10,8 +10,9 @@ namespace detail {
 class ThreadImpl
 {
 public:
-	ThreadImpl()
-		: mThread(NULL)
+	ThreadImpl(Thread* owner)
+		: m_owner(owner)
+		, mThread(NULL)
 		, mThreadID(0)
 		//, mUseCreateThreadAPI(false)
 	{
@@ -82,6 +83,7 @@ private:
 	static unsigned __stdcall ThreadEntry(void* pThread);
 #endif
 
+	Thread*			m_owner;
 	HANDLE			mThread;
 	unsigned int	mThreadID;
 	//bool			mUseCreateThreadAPI;
@@ -94,8 +96,8 @@ DWORD WINAPI ThreadImpl::ThreadEntry(LPVOID pThread)
 unsigned __stdcall ThreadImpl::ThreadEntry(void* pThread)
 #endif
 {
-	Thread* thr = static_cast<Thread*>(pThread);
-	thr->ExecuteInternal();
+	ThreadImpl* thr = static_cast<ThreadImpl*>(pThread);
+	thr->m_owner->ExecuteInternal();
 	return 0;
 }
 

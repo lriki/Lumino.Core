@@ -16,7 +16,7 @@ LN_NAMESPACE_BEGIN
 
 //------------------------------------------------------------------------------
 Thread::Thread()
-	: m_impl(nullptr)
+	: m_impl(LN_NEW detail::ThreadImpl(this))
 	, mFinished(true)
 	, mLastException(nullptr)
 {

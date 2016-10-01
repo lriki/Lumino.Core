@@ -32,7 +32,7 @@ void ElapsedTimer::Start()
 	LARGE_INTEGER counter;
 	::QueryPerformanceFrequency(&freq);
 	::QueryPerformanceCounter(&counter);
-	m_freq = counter.QuadPart;
+	m_freq = freq.QuadPart;
 	m_start = counter.QuadPart;
 }
 

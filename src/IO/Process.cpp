@@ -26,6 +26,7 @@ Process::Process()
 	, m_standardOutputReader()
 	, m_standardErrorReader()
 	, m_runningReadThread(false)
+	, m_runningErrorReadThread(false)
 #ifdef LN_OS_WIN32
 #else
     , m_pid(NULL)

@@ -3,6 +3,11 @@
 #include <Lumino/IO/PathName.h>
 #include <Lumino/IO/DirectoryUtils.h>
 #include <Lumino/IO/PathTraits.h>
+#if defined(LN_OS_WIN32)
+#include "FileFinder_Win32.h"
+#else
+#include "FileFinder_UNIX.h"
+#endif
 
 LN_NAMESPACE_BEGIN
 	
@@ -11,8 +16,11 @@ LN_NAMESPACE_BEGIN
 //==============================================================================
 
 //------------------------------------------------------------------------------
+template<typename TChar>
+static size_t GetCurrentDirectoryInternal(TChar* outPath);
+
 template<>
-size_t DirectoryUtils::GetCurrentDirectory(char* outPath)
+static size_t GetCurrentDirectoryInternal(char* outPath)
 {
 #ifdef LN_OS_WIN32
 	return ::GetCurrentDirectoryA(LN_MAX_PATH, outPath);
@@ -21,7 +29,7 @@ size_t DirectoryUtils::GetCurrentDirectory(char* outPath)
 #endif
 }
 template<>
-size_t DirectoryUtils::GetCurrentDirectory(wchar_t* outPath)
+static size_t GetCurrentDirectoryInternal(wchar_t* outPath)
 {
 #ifdef LN_OS_WIN32
 	return ::GetCurrentDirectoryW(LN_MAX_PATH, outPath);
@@ -29,6 +37,21 @@ size_t DirectoryUtils::GetCurrentDirectory(wchar_t* outPath)
 	LN_THROW(0, NotImplementedException);
 #endif
 }
+
+#pragma push_macro("GetCurrentDirectory")
+#undef GetCurrentDirectory
+template<typename TChar>
+size_t DirectoryUtils::GetCurrentDirectory(TChar* outPath) { return LN_AFX_FUNCNAME(GetCurrentDirectory)(outPath); }
+template<typename TChar>
+size_t DirectoryUtils::LN_AFX_FUNCNAME(GetCurrentDirectory)(TChar* outPath)
+{
+	return GetCurrentDirectoryInternal(outPath);
+}
+template size_t DirectoryUtils::GetCurrentDirectory<char>(char* outPath);
+template size_t DirectoryUtils::LN_AFX_FUNCNAME(GetCurrentDirectory)<char>(char* outPath);
+template size_t DirectoryUtils::GetCurrentDirectory<wchar_t>(wchar_t* outPath);
+template size_t DirectoryUtils::LN_AFX_FUNCNAME(GetCurrentDirectory)<wchar_t>(wchar_t* outPath);
+#pragma pop_macro("GetCurrentDirectory")
 
 //------------------------------------------------------------------------------
 #ifdef _WIN32
@@ -90,222 +113,45 @@ Array<String> DirectoryUtils::GetFiles(const TCHAR* drPath, const TCHAR* pattern
 
 
 
-
-#if defined(LN_OS_WIN32)
 //==============================================================================
 // GenericFileFinder
 //==============================================================================
-//------------------------------------------------------------------------------
-template<typename TChar>
-static void MakePattern(const GenericStringRef<TChar>& path, TChar* pattern)
-{
-	int len = path.CopyTo(pattern, LN_MAX_PATH);
-	if (!PathTraits::IsSeparatorChar(pattern[len]))
-	{
-		LN_THROW(len < LN_MAX_PATH - 1, ArgumentException);
-		pattern[len] = '/';
-		len++;
-	}
-	LN_THROW(len < LN_MAX_PATH - 1, ArgumentException);
-	pattern[len] = '*';
-	len++;
-	pattern[len] = '\0';
-}
+
 
 //------------------------------------------------------------------------------
-GenericFileFinder<char>::GenericFileFinder(const GenericStringRef<char>& dirPath)
-	: GenericFileFinderBase(dirPath)
-	, m_fh(INVALID_HANDLE_VALUE)
-{
-	char pattern[LN_MAX_PATH];
-	MakePattern(dirPath, pattern);
-
-	m_fh = ::FindFirstFileA(pattern, &m_fd);
-	if (m_fh == INVALID_HANDLE_VALUE)
-	{
-		DWORD dwError = ::GetLastError();
-		if (dwError == ERROR_FILE_NOT_FOUND ||
-			dwError == ERROR_NO_MORE_FILES)
-		{
-			SetCurrentFileName((char*)NULL);
-		}
-		else
-		{
-			LN_THROW(0, Win32Exception, dwError);
-		}
-	}
-	else
-	{
-		SetCurrentFileName(m_fd.cFileName);
-		if (strcmp(m_fd.cFileName, ".") == 0 || strcmp(m_fd.cFileName, "..") == 0)
-		{
-			Next();
-		}
-	}
-}
-
-//------------------------------------------------------------------------------
-GenericFileFinder<char>::~GenericFileFinder()
-{
-	if (m_fh != INVALID_HANDLE_VALUE)
-	{
-		::FindClose(m_fh);
-	}
-}
-
-//------------------------------------------------------------------------------
-bool GenericFileFinder<char>::Next()
-{
-	do
-	{
-		if (::FindNextFileA(m_fh, &m_fd) != 0)
-		{
-			SetCurrentFileName(m_fd.cFileName);
-		}
-		else
-		{
-			m_fd.cFileName[0] = '\0';
-			SetCurrentFileName((char*)NULL);
-		}
-	} while (strcmp(m_fd.cFileName, ".") == 0 || strcmp(m_fd.cFileName, "..") == 0);
-
-	return !GetCurrent().IsEmpty();
-}
-
-
-//==============================================================================
-// GenericFileFinder
-//==============================================================================
-//------------------------------------------------------------------------------
-GenericFileFinder<wchar_t>::GenericFileFinder(const GenericStringRef<wchar_t>& dirPath)
-	: GenericFileFinderBase(dirPath)
-	, m_fh(INVALID_HANDLE_VALUE)
-{
-	wchar_t pattern[LN_MAX_PATH];
-	MakePattern(dirPath, pattern);
-
-	m_fh = ::FindFirstFileW(pattern, &m_fd);
-	if (m_fh == INVALID_HANDLE_VALUE)
-	{
-		DWORD dwError = ::GetLastError();
-		if (dwError == ERROR_FILE_NOT_FOUND ||
-			dwError == ERROR_NO_MORE_FILES)
-		{
-			SetCurrentFileName((wchar_t*)NULL);
-		}
-		else
-		{
-			LN_THROW(0, Win32Exception, dwError);
-		}
-	}
-	else
-	{
-		SetCurrentFileName(m_fd.cFileName);
-		if (wcscmp(m_fd.cFileName, L".") == 0 || wcscmp(m_fd.cFileName, L"..") == 0)
-		{
-			Next();
-		}
-	}
-}
-
-//------------------------------------------------------------------------------
-GenericFileFinder<wchar_t>::~GenericFileFinder()
-{
-	if (m_fh != INVALID_HANDLE_VALUE)
-	{
-		::FindClose(m_fh);
-	}
-}
-
-//------------------------------------------------------------------------------
-bool GenericFileFinder<wchar_t>::Next()
-{
-	do
-	{
-		if (::FindNextFileW(m_fh, &m_fd) != 0)
-		{
-			SetCurrentFileName(m_fd.cFileName);
-		}
-		else
-		{
-			m_fd.cFileName[0] = '\0';
-			SetCurrentFileName((wchar_t*)NULL);
-		}
-	} while (wcscmp(m_fd.cFileName, L".") == 0 || wcscmp(m_fd.cFileName, L"..") == 0);
-
-	return !GetCurrent().IsEmpty();
-}
-#elif defined(LN_OS_FAMILY_UNIX)
-
-
-
 template<typename TChar>
 GenericFileFinder<TChar>::GenericFileFinder(const GenericStringRef<TChar>& dirPath)
-	: GenericFileFinderBase<TChar>(dirPath)
+	: m_impl(LN_NEW detail::GenericFileFinderImpl<TChar>(dirPath))
 {
-	StringA t;
-	t.AssignCStr(GenericFileFinderBase<TChar>::m_dirPath.c_str());
-	Initializ(t.c_str());
 }
 
-//template<typename TChar>
-//GenericFileFinder<TChar>::GenericFileFinder(const GenericStringRef<char>& dirPath)
-//	: GenericFileFinderBase(dirPath)
-//{
-//	StringA t = dirPath;
-//	Initializ(t.c_str());
-//}
-//
-//template<typename TChar>
-//GenericFileFinder<TChar>::GenericFileFinder(const GenericStringRef<wchar_t>& dirPath)
-//	: GenericFileFinderBase(dirPath)
-//{
-//	StringA t = StringA::FromNativeWCharString(dirPath.GetBegin(), dirPath.GetLength());
-//	Initializ(t.c_str());
-//}
-
+//------------------------------------------------------------------------------
 template<typename TChar>
 GenericFileFinder<TChar>::~GenericFileFinder()
 {
-	if (m_dir != NULL)
-	{
-		closedir(m_dir);
-	}
+	LN_SAFE_DELETE(m_impl);
 }
 
+//------------------------------------------------------------------------------
 template<typename TChar>
-void GenericFileFinder<TChar>::Initializ(const char* dirPath)
+bool GenericFileFinder<TChar>::IsWorking() const
 {
-	m_dir = opendir(dirPath);
-	LN_THROW(m_dir != NULL, IOException, dirPath);
-
-	Next();
+	return m_impl->IsWorking();
 }
 
+//------------------------------------------------------------------------------
+template<typename TChar>
+const GenericPathName<TChar>& GenericFileFinder<TChar>::GetCurrent() const
+{
+	return m_impl->GetCurrent();
+}
+
+//------------------------------------------------------------------------------
 template<typename TChar>
 bool GenericFileFinder<TChar>::Next()
 {
-	struct dirent* entry;
-	do
-	{
-		entry = readdir(m_dir);
-		if (entry)
-		{
-			GenericFileFinderBase<TChar>::SetCurrentFileName(entry->d_name);
-		}
-		else
-		{
-			GenericFileFinderBase<TChar>::SetCurrentFileName((char*)NULL);
-            break;
-		}
-	} while (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0);
-
-	return !GenericFileFinderBase<TChar>::GetCurrent().IsEmpty();
+	return m_impl->Next();
 }
-
-
-
-#endif
 
 // テンプレートのインスタンス化
 template class GenericFileFinder<char>;

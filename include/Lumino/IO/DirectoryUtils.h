@@ -7,6 +7,7 @@
 #endif
 
 LN_NAMESPACE_BEGIN
+namespace detail { template<typename TChar> class GenericFileFinderImplBase; }
 
 /**
 	@brief	
@@ -15,6 +16,8 @@ class DirectoryUtils
 {
 public:
 
+	#pragma push_macro("GetCurrentDirectory")
+	#undef GetCurrentDirectory
 	/**
 		@brief		カレントディレクトリのパスを取得します。
 		@param[in]	outPath	: パス文字列を格納するバッファ (LN_MAX_PATH 文字数分のサイズが必要) 
@@ -22,6 +25,10 @@ public:
 	*/
 	template<typename TChar>
 	static size_t GetCurrentDirectory(TChar* outPath);
+
+	template<typename TChar>
+	static size_t LN_AFX_FUNCNAME(GetCurrentDirectory)(TChar* outPath);
+	#pragma pop_macro("GetCurrentDirectory")
 
 	/**
 		@brief		ディレクトリ内に含まれる全てのファイルのパスを取得します。
@@ -34,10 +41,34 @@ public:
 };
 
 
+/**
+	@brief	
+*/
 template<typename TChar>
-class GenericFileFinderBase
+class GenericFileFinder
 {
 public:
+	GenericFileFinder(const GenericStringRef<TChar>& dirPath);
+	~GenericFileFinder();
+	bool IsWorking() const;
+	const GenericPathName<TChar>& GetCurrent() const;
+	bool Next();
+
+private:
+	detail::GenericFileFinderImplBase<TChar>*	m_impl;
+};
+
+
+
+
+namespace detail {
+
+template<typename TChar>
+class GenericFileFinderImplBase
+{
+public:
+	virtual ~GenericFileFinderImplBase()
+	{}
 
 	bool IsWorking() const
 	{
@@ -49,12 +80,11 @@ public:
 		return m_combinedPath;
 	}
 
-protected:
-	GenericFileFinderBase(const GenericStringRef<TChar>& dirPath)
-		: m_dirPath(dirPath)
-	{}
+	virtual bool Next() = 0;
 
-	virtual ~GenericFileFinderBase()
+protected:
+	GenericFileFinderImplBase(const GenericStringRef<TChar>& dirPath)
+		: m_dirPath(dirPath)
 	{}
 
 	void SetCurrentFileName(const char* fileName)
@@ -77,86 +107,7 @@ protected:
 	GenericPathName<TChar>	m_combinedPath;
 };
 
-#if defined(LN_OS_WIN32)
-template<typename TChar>
-class GenericFileFinder
-	: public GenericFileFinderBase<TChar>
-{
-public:
-	GenericFileFinder(const GenericStringRef<TChar>& dirPath);
-	~GenericFileFinder();
-	bool Next();
-};
+} // namespace detail
 
-// for char
-template<>
-class GenericFileFinder<char>
-	: public GenericFileFinderBase<char>
-{
-public:
-	GenericFileFinder(const GenericStringRef<char>& dirPath);
-	~GenericFileFinder();
-	bool Next();
-
-private:
-	HANDLE				m_fh;
-	WIN32_FIND_DATAA	m_fd;
-};
-
-// for wchar_t
-template<>
-class GenericFileFinder<wchar_t>
-	: public GenericFileFinderBase<wchar_t>
-{
-public:
-	GenericFileFinder(const GenericStringRef<wchar_t>& path);
-	~GenericFileFinder();
-	bool Next();
-
-private:
-	HANDLE				m_fh;
-	WIN32_FIND_DATAW	m_fd;
-};
-#elif defined(LN_OS_FAMILY_UNIX)
-
-
-template<typename TChar>
-class GenericFileFinder
-	: public GenericFileFinderBase<TChar>
-{
-public:
-	GenericFileFinder(const GenericStringRef<TChar>& dirPath);
-	//GenericFileFinder(const GenericStringRef<char>& dirPath);
-	//GenericFileFinder(const GenericStringRef<wchar_t>& dirPath);
-	~GenericFileFinder();
-	bool Next();
-
-private:
-	void Initializ(const char* dirPath);
-
-	DIR*	m_dir;
-};
-
-#endif
-
-
-//template<typename TChar>
-//class GenericFileFinder
-//{
-//public:
-//	GenericFileFinder(const GenericStringRef<TChar>& path);
-//	~GenericFileFinder();
-//
-//	const TChar* Next();
-//
-//private:
-//#if defined(LN_OS_WIN32)
-//	HANDLE		m_fh;
-//	TChar		m_current[LN_MAX_PATH];
-//#else defined(LN_OS_FAMILY_UNIX)
-//	DIR*        _pDir
-//	TChar		m_current[LN_MAX_PATH];
-//#endif
-//};
 
 LN_NAMESPACE_END

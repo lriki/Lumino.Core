@@ -148,6 +148,8 @@ set(LN_SOURCES_IO
 	src/IO/Console.cpp
 	src/IO/DirectoryUtils.cpp
 	src/IO/File.cpp
+	src/IO/FileFinder_UNIX.h
+	src/IO/FileFinder_Win32.h
 	src/IO/FileStream.cpp
 	src/IO/FileSystem.cpp
 	src/IO/FileSystem_Unix.h

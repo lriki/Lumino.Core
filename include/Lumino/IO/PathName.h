@@ -277,11 +277,15 @@ public:
 	bool operator == (const PathNameT& path) const { return Equals(path); }
 
 public:
-	
+
+	#pragma push_macro("GetCurrentDirectory")
+	#undef GetCurrentDirectory
 	/**
 		@brief		カレントディレクトリのパスを取得します。
 	*/
 	static PathNameT GetCurrentDirectory();
+	static PathNameT LN_AFX_FUNCNAME(GetCurrentDirectory)();
+	#pragma pop_macro("GetCurrentDirectory")
 
 	/** アプリケーションを開始した実行ファイルのパスを取得します。*/
 	static PathNameT GetExecutablePath();
