@@ -97,6 +97,7 @@ public:
 	GenericString(TChar ch);
 	GenericString(int count, TChar ch);
 	GenericString(const GenericPathName<TChar>& path);
+	GenericString(GenericString&& str) LN_NOEXCEPT;
 	
 
 	/// @name Operators
@@ -106,6 +107,7 @@ public:
 	GenericString& operator=(const std::basic_string<TChar>& right);
 	GenericString& operator=(const TChar* right);
 	GenericString& operator=(const GenericPathName<TChar>& right);
+	GenericString& operator=(GenericString&& right) LN_NOEXCEPT;
 
 	GenericString& operator+=(const GenericString& right);
 	GenericString& operator+=(const TChar* ptr);
@@ -698,14 +700,24 @@ typedef GenericString<char>		StringA;
 typedef GenericString<wchar_t>	StringW;
 #endif
 
-namespace detail
-{
+namespace detail {
+
+#if defined(LN_DEBUG)
+extern int g_testGenericStringCoreAllocCount;
+#endif
+
 template<typename TChar>
 class GenericStringCore
 	: public std::basic_string<TChar, std::char_traits<TChar>, STLAllocator<TChar> >
 {
 public:
-	GenericStringCore() : m_refCount(1) {}
+	GenericStringCore()
+		: m_refCount(1)
+	{
+#if defined(LN_DEBUG)
+		++g_testGenericStringCoreAllocCount;
+#endif
+	}
 	~GenericStringCore() {}
 
 	static GenericStringCore* GetSharedEmpty() { return &m_sharedEmpty; }

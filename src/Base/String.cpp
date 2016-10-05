@@ -114,6 +114,18 @@ https://msdn.microsoft.com/ja-jp/library/c426s321.aspx
 
 LN_NAMESPACE_BEGIN
 
+//==============================================================================
+// GenericStringCore
+//==============================================================================
+namespace detail {
+
+#if defined(LN_DEBUG)
+// UnitTest 用の変数。とりあえず Atomic じゃなくていい。
+int g_testGenericStringCoreAllocCount = 0;
+#endif
+
+} // namespace detail
+
 template<typename TChar>
 typename detail::GenericStringCore<TChar> detail::GenericStringCore<TChar>::m_sharedEmpty;
 
@@ -214,6 +226,12 @@ GenericString<TChar>::GenericString(const GenericPathName<TChar>& path)
 {
 }
 
+template<typename TChar>
+GenericString<TChar>::GenericString(GenericString&& str) LN_NOEXCEPT
+{
+	*this = std::move(str);
+}
+
 //
 ////------------------------------------------------------------------------------
 //// YCHAR コンストラクタ系
@@ -293,6 +311,18 @@ template<typename TChar>
 GenericString<TChar>& GenericString<TChar>::operator=(const GenericPathName<TChar>& right)
 {
 	return operator=(right.GetString());
+}
+template<typename TChar>
+GenericString<TChar>& GenericString<TChar>::operator=(GenericString&& right) LN_NOEXCEPT
+{
+	if (this != &right)
+	{
+		m_ref = right.m_ref;
+		m_string = right.m_string;
+		right.m_ref = nullptr;
+		right.m_string = nullptr;
+	}
+	return *this;
 }
 
 //------------------------------------------------------------------------------

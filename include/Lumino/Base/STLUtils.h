@@ -223,6 +223,11 @@ inline typename COL_T::iterator& get_itr( any_itr_t any_itr_, COL_T& )
 #endif
 
 
+
+
+
+template<typename TChar> class GenericStringRef;
+
 namespace detail
 {
 	
@@ -230,11 +235,13 @@ template<typename TString>
 struct StringCaseInsensitiveLess
 {
 	typename typedef TString::CharType CharType;
+	typename typedef GenericStringRef<CharType> StringRef;
 
 	LN_CONSTEXPR bool operator()(const TString& left, const TString& right) const
 	{
-		return (left < right);
+		return left.Compare(right.c_str(), -1, CaseSensitivity::CaseInsensitive) < 0;
 	}
+	// String and char*
 	LN_CONSTEXPR bool operator()(const TString& left, const CharType* right) const
 	{
 		return left.Compare(right, -1, CaseSensitivity::CaseInsensitive) < 0;
@@ -242,6 +249,15 @@ struct StringCaseInsensitiveLess
 	LN_CONSTEXPR bool operator()(const CharType* left, const TString& right) const
 	{
 		return right.Compare(left, -1, CaseSensitivity::CaseInsensitive) > 0;
+	}
+	// String and StringRef
+	LN_CONSTEXPR bool operator()(const TString& left, const StringRef& right) const
+	{
+		return left.Compare(right.GetBegin(), -1, CaseSensitivity::CaseInsensitive) < 0;
+	}
+	LN_CONSTEXPR bool operator()(const StringRef& left, const TString& right) const
+	{
+		return right.Compare(left.GetBegin(), -1, CaseSensitivity::CaseInsensitive) > 0;
 	}
 };
 
