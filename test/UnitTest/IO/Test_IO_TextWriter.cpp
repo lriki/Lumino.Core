@@ -38,7 +38,7 @@ TEST_F(Test_IO_TextWriter, Write)
 		double v_double = 100;
 
 		StringWriter writer;
-		writer.Write(_T("abc"), 2);
+		writer.Write(_T("ab"));
 		writer.Write(String("def"));
 		writer.Write(_T('g'));
 		writer.Write(v_int16_t);

@@ -44,14 +44,6 @@ public:
 	void SetFormatLocale(const Locale& locale);
 
 	/**
-		@brief		文字列を書き込みます。
-		@param[in]	str		: 書き込む文字列
-		@param[in]	len		: 書き込む文字数 (-1 の場合は \0 まで)
-	*/
-	//void Write(const TCHAR* str, int len = -1);
-	//void Write(const String& str);
-
-	/**
 		@brief		文字を書き込みます。
 		@param[in]	ch		: 書き込む文字
 	*/

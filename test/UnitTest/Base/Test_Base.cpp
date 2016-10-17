@@ -13,5 +13,5 @@ TEST_F(Test_Base_ElapsedTimer, Basic)
 	timer.Start();
 	Thread::Sleep(100);
 	uint64_t t = timer.GetElapsedTimeNS();
-	ASSERT_EQ(true, t >= 100 * 1000 * 1000);
+	ASSERT_EQ(true, t >= 98 * 1000 * 1000);		// 微妙に早く終わることを考慮する
 }
