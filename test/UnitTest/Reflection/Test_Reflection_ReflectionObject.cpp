@@ -109,23 +109,25 @@ public:
 
 public:
 
-	void SetV1(int v) { return tr::Property::SetPropertyValueDirect<int>(this, V1Property, v); }
-	int GetV1() const { return tr::Property::GetPropertyValueDirect<int>(this, V1Property); }
+	void SetV1(int v) { m_v1 = v; }
+	int GetV1() const { return m_v1; }
 
-	void SetV2(RefTest1* v) { return tr::Property::SetPropertyValueDirect<RefTest1*>(this, V2Property, v); }
-	RefTest1* GetV2() const { return tr::Property::GetPropertyValueDirect<RefTest1*>(this, V2Property); }
+	void SetV2(RefTest1* v) { m_v2 = v; }
+	RefTest1* GetV2() const { return m_v2); }
 
-	void SetV3(const Point& v) { return tr::Property::SetPropertyValueDirect<Point>(this, V3Property, v); }
-	const Point& GetV3() const { return tr::Property::GetPropertyValueDirect<Point>(this, V3Property); }
+	void SetV3(const Point& v) { m_v3 = v; }
+	const Point& GetV3() const { return m_v3; }
 
-	void SetV4(RefTest2* v) { return tr::Property::SetPropertyValueDirect<RefPtr<RefTest2>>(this, V4Property, v); }
-	RefTest2* GetV4() const { return tr::Property::GetPropertyValueDirect<RefPtr<RefTest2>>(this, V4Property); }
+	void SetV4(RefTest2* v) { m_v4 = v; }
+	//RefTest2* GetV4() const { return m_v4; }	// TODO: できればコレがやりたいのだが・・・
+	RefTest2* GetV4() const { return m_v4.Get(); }
+	RefPtr<RefTest2> GetV4_2() const { return m_v4; }
 
 public:
-	int m_v1 = 0;
-	RefTest1* m_v2 = nullptr;
-	Point m_v3;
-	RefPtr<RefTest2> m_v4;
+	tr::Property2<int> m_v1 = 0;
+	tr::Property2<RefTest1*> m_v2 = nullptr;
+	tr::Property2<Point> m_v3;
+	tr::Property2<RefPtr<RefTest2>> m_v4;
 };
 LN_TR_REFLECTION_TYPEINFO_IMPLEMENT(PropertyTest1, tr::ReflectionObject);
 LN_TR_PROPERTY_IMPLEMENT(PropertyTest1, int, V1Property, "V1", m_v1, tr::PropertyMetadata());
@@ -172,8 +174,8 @@ TEST_F(IntegrationTest_Reflection_ReflectionObject, Property)
 		// SetPropertyValue/GetPropertyValue
 		Point pt1(1, 2);
 		tr::Property::SetPropertyValue(&t1, PropertyTest1::V3Property, pt1);
-		ASSERT_EQ(1, t1.m_v3.x);
-		ASSERT_EQ(2, t1.m_v3.y);
+		ASSERT_EQ(1, t1.m_v3.Get().x);
+		ASSERT_EQ(2, t1.m_v3.Get().y);
 		tr::Variant v = tr::Property::GetPropertyValue(&t1, PropertyTest1::V3Property);
 		ASSERT_EQ(1, tr::Variant::Cast<Point>(v).x);
 		ASSERT_EQ(2, tr::Variant::Cast<Point>(v).y);

@@ -417,6 +417,48 @@ public:
 		private: std::unique_ptr<PropertyInstanceData> instanceData_TextProperty = NULL;
 */
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+template<typename TValue>
+class Property2
+{
+public:
+	Property2()
+		: m_value()
+	{}
+
+	Property2(const TValue& value)
+		: m_value(value)
+	{}
+
+	~Property2()
+	{}
+
+	const TValue& Get() const { return m_value; }
+
+	Property2& operator = (const TValue& value) { m_value = value; }
+	operator const TValue&() const { return m_value; }
+
+private:
+	LN_DISALLOW_COPY_AND_ASSIGN(Property2);
+	TValue	m_value;
+};
+
 } // namespace tr
 LN_NAMESPACE_END
 
