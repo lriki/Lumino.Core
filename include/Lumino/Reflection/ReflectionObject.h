@@ -39,7 +39,8 @@ namespace tr
 class ReflectionObject
 	: public RefObject
 {
-private:    // declare LN_TR_REFLECTION_TYPEINFO_DECLARE();
+private:
+	// declare base TypeInfo
     template<typename T> friend class ln::RefPtr;
     friend class ln::tr::ReflectionHelper;
     static TypeInfo					lnref_typeInfo;

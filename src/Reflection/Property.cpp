@@ -14,9 +14,10 @@ namespace tr
 static EventArgsPool g_eventArgsPool;
 
 //------------------------------------------------------------------------------
-Property::Property(TypeInfo* ownerClassType, PropertyMetadata* metadata, bool stored)
+Property::Property(TypeInfo* ownerClassType, PropertyMetadata* metadata, size_t memberOffset, bool stored)
 	: m_ownerClassType(ownerClassType)
 	, m_metadata(metadata)
+	, m_memberOffset(memberOffset)
 	, m_stored(stored)
 	, m_registerd(false)
 {
@@ -29,9 +30,9 @@ Property::~Property()
 }
 
 //------------------------------------------------------------------------------
-void Property::NotifyPropertyChanged(ReflectionObject* target, const Property* prop, const Variant& newValue, const Variant& oldValue, PropertySetSource source)
+void Property::NotifyPropertyChanged(ReflectionObject* target, const Property* prop, PropertySetSource source)
 {
-	RefPtr<PropertyChangedEventArgs> e(g_eventArgsPool.Create<PropertyChangedEventArgs>(prop, newValue, oldValue, source), false);
+	RefPtr<PropertyChangedEventArgs> e(g_eventArgsPool.Create<PropertyChangedEventArgs>(prop, source), false);
 	target->OnPropertyChanged(e);
 	prop->m_metadata->CallPropertyChangedCallback(target, e);
 }

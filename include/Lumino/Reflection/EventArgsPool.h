@@ -44,11 +44,13 @@ public:
 	TEventArgs* Create(TArgs... args)
 	{
 		TEventArgs* e = static_cast<TEventArgs* >(Find(tr::TypeInfo::GetTypeInfo<TEventArgs>()));
-		if (e == NULL) {
+		if (e == nullptr)
+		{
 			e = LN_NEW TEventArgs(args...);
 			Register(e);
 		}
-		else {
+		else
+		{
 			e->~TEventArgs();
 			new (e)TEventArgs(args...);
 		}

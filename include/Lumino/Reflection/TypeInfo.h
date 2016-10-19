@@ -133,6 +133,7 @@ public:
 
 	void RegisterProperty(Property* prop);
 	Property* FindProperty(const String& name) const;
+	Property* FindProperty(size_t memberOffset) const;
 
 	void RegisterReflectionEvent(ReflectionEventInfo* ev);
 	bool InvokeReflectionEvent(ReflectionObject* target, const ReflectionEventInfo* ev, ReflectionEventArgs* e);

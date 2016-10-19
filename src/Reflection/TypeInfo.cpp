@@ -68,6 +68,18 @@ void TypeInfo::RegisterProperty(Property* prop)
 }
 
 //------------------------------------------------------------------------------
+Property* TypeInfo::FindProperty(size_t memberOffset) const
+{
+	for (Property* prop : m_propertyList)
+	{
+		if (prop->m_memberOffset == memberOffset)
+			return prop;
+	}
+	LN_CHECK_STATE(0);
+	return nullptr;
+}
+
+//------------------------------------------------------------------------------
 void TypeInfo::RegisterReflectionEvent(ReflectionEventInfo* ev)
 {
 	LN_CHECK_ARG(!ev->m_registerd);
