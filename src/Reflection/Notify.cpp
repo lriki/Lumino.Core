@@ -12,9 +12,9 @@ namespace tr
 //==============================================================================
 
 //------------------------------------------------------------------------------
-ReflectionEventInfo::ReflectionEventInfo(TypeInfo* ownerClass, const TCHAR* name/*const String& name*/, RaiseEventFunc raiseEvent)
-	: /*m_name(name)
-	, */m_raiseEvent(raiseEvent)
+ReflectionEventInfo::ReflectionEventInfo(TypeInfo* ownerClass, const TCHAR* name, RaiseEventFunc raiseEvent)
+	: m_name(name)
+	, m_raiseEvent(raiseEvent)
 	, m_registerd(false)
 {
 	ownerClass->RegisterReflectionEvent(this);

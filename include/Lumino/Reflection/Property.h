@@ -104,7 +104,7 @@ public:
 public:
 	TypedPropertyInfo(TypeInfo* ownerTypeInfo, const TCHAR* name, size_t memberOffset, PropertyMetadata* metadata)
 		: PropertyInfo(ownerTypeInfo, metadata, memberOffset, false)
-		//, m_name(name)
+		, m_name(name)
 		, m_setter(nullptr)
 		, m_getter(nullptr)
 	{}

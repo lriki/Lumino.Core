@@ -4,10 +4,6 @@
 #include "../Base/RefObject.h"
 #include "../Base/String.h"
 
-// TypeInfo の型名に String を使うかどうか
-// (TypeInfo はグローバル変数。VS2013 では std::string を TypeInfo のメンバに使ってしまうと、アプリ終了時に稀にヒープエラーが発生した)
-#define LN_TYPEINFO_USE_STRING	0
-
 LN_NAMESPACE_BEGIN
 namespace tr
 {
@@ -121,7 +117,7 @@ public:
 	/**
 		@brief	クラス名を取得します。
 	*/
-	const TCHAR* GetName() const;
+	const String& GetName() const;
 
 	void RegisterProperty(PropertyInfo* prop);
 	PropertyInfo* FindProperty(const String& name) const;
@@ -152,13 +148,8 @@ public:
 	void SetBindingTypeInfo(void* data);
 	static void* GetBindingTypeInfo(const ReflectionObject* obj);
 
-#if LN_TYPEINFO_USE_STRING
 	bool operator == (const TypeInfo& info) const { return m_name == info.m_name; }
 	bool operator < (const TypeInfo& info) const { return m_name < info.m_name; }
-#else
-	bool operator == (const TypeInfo& info) const { return _tcscmp(m_name, info.m_name) == 0; }
-	bool operator < (const TypeInfo& info) const { return _tcscmp(m_name, info.m_name) < 0; }
-#endif
 
 	intptr_t GetInternalGroup() const { return m_internalGroup; }
 
@@ -168,14 +159,8 @@ protected:
 private:
 	//typedef SortedArray<const RoutedEvent*, RoutedEventHandler*>	RoutedEventHandlerList;
 
-	TypeInfo*					m_baseClass;				// 継承元クラスを示す TypeInfo
-#if LN_TYPEINFO_USE_STRING
 	String						m_name;						// クラス名
-	//const std::basic_string<TCHAR>	m_name;						// クラス名
-#else
-	static const int MaxNameLength = 256;
-	TCHAR	m_name[MaxNameLength];
-#endif
+	TypeInfo*					m_baseClass;				// 継承元クラスを示す TypeInfo
 	Array<PropertyInfo*>		m_propertyList;				// この型のクラスがもつプロパティのリスト
 	Array<ReflectionEventInfo*>	m_routedEventList;			// この型のクラスがもつReflectionEventのリスト
 	BindingTypeInfoSetter		m_bindingTypeInfoSetter;

@@ -48,31 +48,18 @@ TypeInfo::TypeInfo(
 	HasLocalValueFlagsGetter getter,
 	BindingTypeInfoSetter bindingTypeInfoSetter,
 	BindingTypeInfoGetter bindingTypeInfoGetter)
-	: m_baseClass(baseClass)
-#if LN_TYPEINFO_USE_STRING
-	, m_name(className)
-#else
-#endif
+	: m_name(className)
+	, m_baseClass(baseClass)
 	, m_bindingTypeInfoSetter(bindingTypeInfoSetter)
 	, m_bindingTypeInfoGetter(bindingTypeInfoGetter)
 	, m_internalGroup(0)
 {
-#if LN_TYPEINFO_USE_STRING
-#else
-	int len = _tcslen(className);
-	assert(len < MaxNameLength + 1);
-	_tcscpy_s(m_name, MaxNameLength, className);
-#endif
 }
 
 //------------------------------------------------------------------------------
-const TCHAR* TypeInfo::GetName() const
+const String& TypeInfo::GetName() const
 {
-#if LN_TYPEINFO_USE_STRING
-	return m_name.c_str();
-#else
 	return m_name;
-#endif
 }
 
 //------------------------------------------------------------------------------

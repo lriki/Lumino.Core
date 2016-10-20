@@ -226,16 +226,29 @@ TEST_F(IntegrationTest_Reflection_ReflectionObject, Property)
 
 	// <Test> 構造体
 	{
-		// SetPropertyValue/GetPropertyValue
+		// set
 		Point pt1(1, 2);
 		tr::PropertyInfo::SetPropertyValue(&t1, PropertyTest1::V3Property, pt1);
 		ASSERT_EQ(1, t1.m_v3.Get().x);
 		ASSERT_EQ(2, t1.m_v3.Get().y);
+
+		// get
 		tr::Variant v = tr::PropertyInfo::GetPropertyValue(&t1, PropertyTest1::V3Property);
 		ASSERT_EQ(1, tr::Variant::Cast<Point>(v).x);
 		ASSERT_EQ(2, tr::Variant::Cast<Point>(v).y);
 
-		// アクセサメンバ関数
+		// set (Direct)
+		Point pt2(10, 20);
+		tr::PropertyInfo::SetPropertyValueDirect<Point>(&t1, PropertyTest1::V3Property, pt2);
+		ASSERT_EQ(10, t1.m_v3.Get().x);
+		ASSERT_EQ(20, t1.m_v3.Get().y);
+
+		// get (Direct)
+		tr::Variant v2 = tr::PropertyInfo::GetPropertyValueDirect<Point>(&t1, PropertyTest1::V3Property);
+		ASSERT_EQ(10, tr::Variant::Cast<Point>(v2).x);
+		ASSERT_EQ(20, tr::Variant::Cast<Point>(v2).y);
+
+		// setter/getter
 		t1.SetV3(Point(3, 4));
 		ASSERT_EQ(3, t1.GetV3().x);
 		ASSERT_EQ(4, t1.GetV3().y);
@@ -243,19 +256,30 @@ TEST_F(IntegrationTest_Reflection_ReflectionObject, Property)
 
 	// <Test> RefPtr
 	{
-		// SetPropertyValue/GetPropertyValue
+		// set
 		RefPtr<RefTest2> p1(LN_NEW RefTest2(), false);
 		tr::PropertyInfo::SetPropertyValue(&t1, PropertyTest1::V4Property, p1);
 		ASSERT_EQ(p1, t1.m_v4);
+
+		// get
 		tr::Variant v = tr::PropertyInfo::GetPropertyValue(&t1, PropertyTest1::V4Property);
 		ASSERT_EQ(p1.Get(), tr::Variant::Cast<RefPtr<RefTest2>>(v));
 
-		// アクセサメンバ関数
+		// set (Direct)
+		RefPtr<RefTest2> p12(LN_NEW RefTest2(), false);
+		tr::PropertyInfo::SetPropertyValueDirect<RefPtr<RefTest2>>(&t1, PropertyTest1::V4Property, p12);
+		ASSERT_EQ(p12, t1.m_v4);
+
+		// get (Direct)
+		tr::Variant v2 = tr::PropertyInfo::GetPropertyValueDirect<RefPtr<RefTest2>>(&t1, PropertyTest1::V4Property);
+		ASSERT_EQ(p12, tr::Variant::Cast<RefPtr<RefTest2>>(v2));
+
+		// setter/getter
 		RefPtr<RefTest2> p2(LN_NEW RefTest2(), false);
 		t1.SetV4(p2);
 		ASSERT_EQ(p2.Get(), t1.GetV4());
 
-		// アクセサメンバ関数
+		// setter/getter (nullptr)
 		t1.SetV4(nullptr);
 		ASSERT_EQ(nullptr, t1.GetV4());
 	}
