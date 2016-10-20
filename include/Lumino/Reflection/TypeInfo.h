@@ -4,40 +4,32 @@
 #include "../Base/RefObject.h"
 #include "../Base/String.h"
 
+// TypeInfo の型名に String を使うかどうか
+// (TypeInfo はグローバル変数。VS2013 では std::string を TypeInfo のメンバに使ってしまうと、アプリ終了時に稀にヒープエラーが発生した)
+#define LN_TYPEINFO_USE_STRING	0
+
 LN_NAMESPACE_BEGIN
 namespace tr
 {
 class TypeInfo;
 class ReflectionObject;
-class Property;
+class PropertyInfo;
 typedef uint32_t LocalValueHavingFlags;
 
 namespace detail
 {
 	// 1つの ReflectionObject に対して1つ作られる
-	struct WeakRefInfo
+	class WeakRefInfo final
 	{
+	public:
+
 		RefObject*			owner;
 		std::atomic<int>	weakRefCount;// = 1;	// GCC で使えなかった
+		//int	weakRefCount;
 
-		WeakRefInfo()
-			: owner(nullptr)
-			, weakRefCount(1)
-		{}
-
-		inline void AddRef()
-		{
-			weakRefCount.fetch_add(1, std::memory_order_relaxed);
-		}
-
-		inline void Release()
-		{
-			int before = weakRefCount.fetch_sub(1, std::memory_order_relaxed);
-			if (before <= 1)
-			{
-				delete this;
-			}
-		}
+		WeakRefInfo();
+		void AddRef();
+		void Release();
 	};
 }
 
@@ -129,11 +121,11 @@ public:
 	/**
 		@brief	クラス名を取得します。
 	*/
-	const String& GetName() const { return m_name; }
+	const TCHAR* GetName() const;
 
-	void RegisterProperty(Property* prop);
-	Property* FindProperty(const String& name) const;
-	Property* FindProperty(size_t memberOffset) const;
+	void RegisterProperty(PropertyInfo* prop);
+	PropertyInfo* FindProperty(const String& name) const;
+	PropertyInfo* FindProperty(size_t memberOffset) const;
 
 	void RegisterReflectionEvent(ReflectionEventInfo* ev);
 	bool InvokeReflectionEvent(ReflectionObject* target, const ReflectionEventInfo* ev, ReflectionEventArgs* e);
@@ -152,7 +144,6 @@ public:
 	//RoutedEventHandler* FindRoutedEventHandler(const RoutedEvent* ev) const;
 
 	TypeInfo* GetBaseClass() const { return m_baseClass; }
-	uint32_t* GetHasLocalValueFlags(ReflectionObject* obj) { return m_hasLocalValueFlagsGetter(obj); }
 
 	///// ベースクラスも含めた全てのプロパティを列挙する
 	//static void ForEachAllProperty(const TypeInfo* typeInfo, const std::function<void(Property*)>& callback);
@@ -161,8 +152,13 @@ public:
 	void SetBindingTypeInfo(void* data);
 	static void* GetBindingTypeInfo(const ReflectionObject* obj);
 
+#if LN_TYPEINFO_USE_STRING
 	bool operator == (const TypeInfo& info) const { return m_name == info.m_name; }
 	bool operator < (const TypeInfo& info) const { return m_name < info.m_name; }
+#else
+	bool operator == (const TypeInfo& info) const { return _tcscmp(m_name, info.m_name) == 0; }
+	bool operator < (const TypeInfo& info) const { return _tcscmp(m_name, info.m_name) < 0; }
+#endif
 
 	intptr_t GetInternalGroup() const { return m_internalGroup; }
 
@@ -172,11 +168,16 @@ protected:
 private:
 	//typedef SortedArray<const RoutedEvent*, RoutedEventHandler*>	RoutedEventHandlerList;
 
-	String						m_name;						// クラス名
 	TypeInfo*					m_baseClass;				// 継承元クラスを示す TypeInfo
-	Array<Property*>			m_propertyList;				// この型のクラスがもつプロパティのリスト
+#if LN_TYPEINFO_USE_STRING
+	String						m_name;						// クラス名
+	//const std::basic_string<TCHAR>	m_name;						// クラス名
+#else
+	static const int MaxNameLength = 256;
+	TCHAR	m_name[MaxNameLength];
+#endif
+	Array<PropertyInfo*>		m_propertyList;				// この型のクラスがもつプロパティのリスト
 	Array<ReflectionEventInfo*>	m_routedEventList;			// この型のクラスがもつReflectionEventのリスト
-	HasLocalValueFlagsGetter	m_hasLocalValueFlagsGetter;	// プロパティがローカル値を保持しているかを示すビットフラグを取得するコールバック。ローカル値を持たない場合はプロパティの値を親から継承する。
 	BindingTypeInfoSetter		m_bindingTypeInfoSetter;
 	BindingTypeInfoGetter		m_bindingTypeInfoGetter;
 

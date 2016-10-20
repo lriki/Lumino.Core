@@ -14,7 +14,7 @@ namespace tr
 static EventArgsPool g_eventArgsPool;
 
 //------------------------------------------------------------------------------
-Property::Property(TypeInfo* ownerClassType, PropertyMetadata* metadata, size_t memberOffset, bool stored)
+PropertyInfo::PropertyInfo(TypeInfo* ownerClassType, PropertyMetadata* metadata, size_t memberOffset, bool stored)
 	: m_ownerClassType(ownerClassType)
 	, m_metadata(metadata)
 	, m_memberOffset(memberOffset)
@@ -25,12 +25,12 @@ Property::Property(TypeInfo* ownerClassType, PropertyMetadata* metadata, size_t 
 }
 
 //------------------------------------------------------------------------------
-Property::~Property()
+PropertyInfo::~PropertyInfo()
 {
 }
 
 //------------------------------------------------------------------------------
-void Property::NotifyPropertyChanged(ReflectionObject* target, const Property* prop, PropertySetSource source)
+void PropertyInfo::NotifyPropertyChanged(ReflectionObject* target, const PropertyInfo* prop, PropertySetSource source)
 {
 	RefPtr<PropertyChangedEventArgs> e(g_eventArgsPool.Create<PropertyChangedEventArgs>(prop, source), false);
 	target->OnPropertyChanged(e);
@@ -38,13 +38,13 @@ void Property::NotifyPropertyChanged(ReflectionObject* target, const Property* p
 }
 
 //------------------------------------------------------------------------------
-void Property::SetPropertyValue(ReflectionObject* obj, const Property* prop, const Variant& value, PropertySetSource source)
+void PropertyInfo::SetPropertyValue(ReflectionObject* obj, const PropertyInfo* prop, const Variant& value, PropertySetSource source)
 {
 	obj->SetPropertyValueInternal(prop, value, false, source);
 }
 
 //------------------------------------------------------------------------------
-Variant Property::GetPropertyValue(ReflectionObject* obj, const Property* prop)
+Variant PropertyInfo::GetPropertyValue(ReflectionObject* obj, const PropertyInfo* prop)
 {
 	//if (prop->IsStored())
 	//{

@@ -36,8 +36,9 @@ ReflectionObject::~ReflectionObject()
 	MutexScopedLock lock(m_weakRefInfoMutex);
 	if (m_weakRefInfo != nullptr)
 	{
-		m_weakRefInfo->Release();
 		m_weakRefInfo->owner = nullptr;
+		m_weakRefInfo->Release();
+		m_weakRefInfo = nullptr;
 	}
 }
 
@@ -55,7 +56,7 @@ void ReflectionObject::OnPropertyChanged(PropertyChangedEventArgs* e)
 }
 
 //------------------------------------------------------------------------------
-void ReflectionObject::SetPropertyValueInternal(const Property* prop, const Variant& value, bool reset, PropertySetSource source)
+void ReflectionObject::SetPropertyValueInternal(const PropertyInfo* prop, const Variant& value, bool reset, PropertySetSource source)
 {
 	//if (prop->IsStored())
 	//{
@@ -92,6 +93,19 @@ void ReflectionObject::SetPropertyValueInternal(const Property* prop, const Vari
 
 	//SetPropertyValue(prop->GetName(), value);	// TODO: GetName じゃなくて、型情報も考慮するように。あるいは生ポインタ
 }
+
+//------------------------------------------------------------------------------
+detail::WeakRefInfo* ReflectionObject::RequestWeakRefInfo()
+{
+	MutexScopedLock lock(m_weakRefInfoMutex);
+	if (m_weakRefInfo == nullptr)
+	{
+		m_weakRefInfo = LN_NEW detail::WeakRefInfo();
+		m_weakRefInfo->owner = this;
+	}
+	return m_weakRefInfo;
+}
+
 
 //==============================================================================
 // ReflectionArrayObject

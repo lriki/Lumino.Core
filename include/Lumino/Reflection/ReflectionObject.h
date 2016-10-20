@@ -57,7 +57,7 @@ public:
 
 
 protected:
-	friend class Property;
+	friend class PropertyInfo;
 	void RaiseReflectionEvent(const ReflectionEventBase& ev, ReflectionEventArgs* args);
 	virtual void OnPropertyChanged(PropertyChangedEventArgs* e);
 
@@ -65,21 +65,13 @@ protected:
 	void RaiseDelegateEvent(DelegateEvent<TArgs...>& ev, TArgs... args) { ev.Raise(args...); }
 
 private:
-	void SetPropertyValueInternal(const Property* prop, const Variant& value, bool reset, PropertySetSource source);
+	void SetPropertyValueInternal(const PropertyInfo* prop, const Variant& value, bool reset, PropertySetSource source);
 
 	void*	m_userData;
 
 	friend class ReflectionHelper;
-	detail::WeakRefInfo* RequestWeakRefInfo()
-	{
-		MutexScopedLock lock(m_weakRefInfoMutex);
-		if (m_weakRefInfo == nullptr)
-		{
-			m_weakRefInfo = LN_NEW detail::WeakRefInfo();
-			m_weakRefInfo->owner = this;
-		}
-		return m_weakRefInfo;
-	}
+	detail::WeakRefInfo* RequestWeakRefInfo();
+
 	detail::WeakRefInfo*	m_weakRefInfo;
 	Mutex					m_weakRefInfoMutex;
 };
@@ -88,7 +80,7 @@ private:
 	@brief
 	@details
 		監視しているオブジェクトにアクセスする場合は IsAlive() と Resolve() を併用しないでください。
-		マルチスレッドプログラムで不正アクセスの可能性があります。
+		マルチスレッドプログラムで不正アクセスの危険があります。
 		次のコードは間違いです。
 		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		WeakRefPtr<MyClass> weak(obj);

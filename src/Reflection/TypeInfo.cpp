@@ -48,29 +48,45 @@ TypeInfo::TypeInfo(
 	HasLocalValueFlagsGetter getter,
 	BindingTypeInfoSetter bindingTypeInfoSetter,
 	BindingTypeInfoGetter bindingTypeInfoGetter)
-	: m_name(className)
-	, m_baseClass(baseClass)
-	, m_hasLocalValueFlagsGetter(getter)
+	: m_baseClass(baseClass)
+#if LN_TYPEINFO_USE_STRING
+	, m_name(className)
+#else
+#endif
 	, m_bindingTypeInfoSetter(bindingTypeInfoSetter)
 	, m_bindingTypeInfoGetter(bindingTypeInfoGetter)
 	, m_internalGroup(0)
 {
+#if LN_TYPEINFO_USE_STRING
+#else
+	int len = _tcslen(className);
+	assert(len < MaxNameLength + 1);
+	_tcscpy_s(m_name, MaxNameLength, className);
+#endif
 }
 
 //------------------------------------------------------------------------------
-void TypeInfo::RegisterProperty(Property* prop)
+const TCHAR* TypeInfo::GetName() const
+{
+#if LN_TYPEINFO_USE_STRING
+	return m_name.c_str();
+#else
+	return m_name;
+#endif
+}
+
+//------------------------------------------------------------------------------
+void TypeInfo::RegisterProperty(PropertyInfo* prop)
 {
 	LN_CHECK_ARG(!prop->m_registerd);
-	LN_CHECK_ARG(m_propertyList.GetCount() < 32);
-	prop->m_localIndex = m_propertyList.GetCount();
 	m_propertyList.Add(prop);
 	prop->m_registerd = true;
 }
 
 //------------------------------------------------------------------------------
-Property* TypeInfo::FindProperty(size_t memberOffset) const
+PropertyInfo* TypeInfo::FindProperty(size_t memberOffset) const
 {
-	for (Property* prop : m_propertyList)
+	for (PropertyInfo* prop : m_propertyList)
 	{
 		if (prop->m_memberOffset == memberOffset)
 			return prop;
@@ -120,6 +136,41 @@ void* TypeInfo::GetBindingTypeInfo(const ReflectionObject* obj)
 	TypeInfo* type = GetTypeInfo(obj);
 	return type->m_bindingTypeInfoGetter();
 }
+
+
+namespace detail
+{
+
+//==============================================================================
+// WeakRefInfo
+//==============================================================================
+
+//------------------------------------------------------------------------------
+WeakRefInfo::WeakRefInfo()
+	: owner(nullptr)
+	, weakRefCount(1)
+{}
+
+//------------------------------------------------------------------------------
+void WeakRefInfo::AddRef()
+{
+	weakRefCount.fetch_add(1, std::memory_order_relaxed);
+	//weakRefCount++;
+}
+
+//------------------------------------------------------------------------------
+void WeakRefInfo::Release()
+{
+	int before = weakRefCount.fetch_sub(1, std::memory_order_relaxed);
+	//int before = weakRefCount;
+	//weakRefCount--;
+	if (before <= 1)
+	{
+		delete this;
+	}
+}
+
+} // namespace detail
 
 } // namespace tr
 LN_NAMESPACE_END

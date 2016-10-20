@@ -21,7 +21,7 @@ public:
 	typedef void(*RaiseEventFunc)(ReflectionObject* target, ReflectionEventArgs* e);
 
 public:
-	ReflectionEventInfo(TypeInfo* ownerClass, const String& name, RaiseEventFunc raiseEvent);
+	ReflectionEventInfo(TypeInfo* ownerClass, const TCHAR* name/*const String& name*/, RaiseEventFunc raiseEvent);
 	~ReflectionEventInfo();
 
 	const String& GetName() const { return m_name; }

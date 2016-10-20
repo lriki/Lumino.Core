@@ -7,7 +7,7 @@
 LN_NAMESPACE_BEGIN
 namespace tr
 {
-class Property;
+class PropertyInfo;
 	
 /* プロパティの動作オプションです。*/
 LN_ENUM_FLAGS(PropertyOptions)
@@ -73,7 +73,7 @@ public:
 		m_options = options;
 	}
 	template<typename TOwnerClass>
-	PropertyMetadata(const Variant& defaultValue, PropertyOptions options, Property* inheritanceKey, void(TOwnerClass::*propertyChanged)(PropertyChangedEventArgs*))
+	PropertyMetadata(const Variant& defaultValue, PropertyOptions options, PropertyInfo* inheritanceKey, void(TOwnerClass::*propertyChanged)(PropertyChangedEventArgs*))
 		: PropertyMetadata()
 	{
 		m_defaultValue = defaultValue;
@@ -95,13 +95,13 @@ public:
 		return m_propertyChangedCallback->Call(obj, e);
 	}
 	PropertyOptions GetPropertyOptions() const { return m_options; }
-	Property* GetInheritanceTarget() const { return m_inheritanceTarget; }
+	PropertyInfo* GetInheritanceTarget() const { return m_inheritanceTarget; }
 
 private:
 	Variant					m_defaultValue;
 	CallbackWrapper*		m_propertyChangedCallback;
 	PropertyOptions			m_options;
-	Property*				m_inheritanceTarget;
+	PropertyInfo*			m_inheritanceTarget;
 };
 
 } // namespace tr

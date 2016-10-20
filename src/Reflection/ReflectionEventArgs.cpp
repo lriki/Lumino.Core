@@ -28,7 +28,7 @@ ReflectionEventArgs::~ReflectionEventArgs()
 LN_TR_REFLECTION_TYPEINFO_IMPLEMENT(PropertyChangedEventArgs, ReflectionEventArgs);
 
 //------------------------------------------------------------------------------
-PropertyChangedEventArgs::PropertyChangedEventArgs(const Property* prop, PropertySetSource cause_)
+PropertyChangedEventArgs::PropertyChangedEventArgs(const PropertyInfo* prop, PropertySetSource cause_)
 	: changedProperty(prop)
 	, cause(cause_)
 {

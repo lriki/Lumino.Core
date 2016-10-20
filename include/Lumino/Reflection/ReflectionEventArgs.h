@@ -30,11 +30,11 @@ class PropertyChangedEventArgs
 {
 	LN_TR_REFLECTION_TYPEINFO_DECLARE();
 public:
-	PropertyChangedEventArgs(const Property* prop, PropertySetSource cause);
+	PropertyChangedEventArgs(const PropertyInfo* prop, PropertySetSource cause);
 	virtual ~PropertyChangedEventArgs();
 
 public:
-	const Property*		changedProperty;
+	const PropertyInfo*		changedProperty;
 	PropertySetSource	cause;
 };
 
