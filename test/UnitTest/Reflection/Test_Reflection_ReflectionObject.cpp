@@ -109,20 +109,32 @@ TEST_F(IntegrationTest_Reflection_ReflectionObject, DelegateEvent)
 
 
 
-
-
-
+//
+//class Initier
+//{
+//public:
+//	Initier()
+//	{
+//		printf("Initier\n");
+//	}
+//};
+//
 
 
 //---------------------------------------------------------------------
-class PropertyTest1 : public tr::ReflectionObject
+class PropertyTest1
+	: public tr::ReflectionObject
+	, public tr::IPropertyChangedListener
 {
 	LN_TR_REFLECTION_TYPEINFO_DECLARE();
+	//Initier	_ini;
 public:
 	LN_TR_PROPERTY(int, V1Property);
 	LN_TR_PROPERTY(RefTest1*, V2Property);
 	LN_TR_PROPERTY(Point, V3Property);
 	LN_TR_PROPERTY(RefPtr<RefTest2>, V4Property);
+	LN_TR_PROPERTY(int, V5Property);
+	LN_TR_PROPERTY(int, V6Property);
 
 public:
 	PropertyTest1()
@@ -130,7 +142,15 @@ public:
 		, m_v2(this, nullptr)
 		, m_v3(this)
 		, m_v4(this)
+		, m_v5(this)
+		, m_v6(this)
 	{
+		//printf("PropertyTest1\n");
+		//InitializeProperties();
+		m_v1.AddListener(this);
+		m_v2.AddListener(this);
+		m_v3.AddListener(this);
+		m_v4.AddListener(this);
 	}
 
 	void SetV1(int v) { m_v1 = v; }
@@ -158,12 +178,19 @@ public:
 	tr::Property<Point> m_v3;
 	tr::Property<RefPtr<RefTest2>> m_v4;
 	const tr::PropertyInfo*	m_lastChangedProp;
+
+protected:
+	tr::Property<int> m_v5;	// proptected の確認
+private:
+	tr::Property<int> m_v6;	// private の確認
 };
 LN_TR_REFLECTION_TYPEINFO_IMPLEMENT(PropertyTest1, tr::ReflectionObject);
 LN_TR_PROPERTY_IMPLEMENT(PropertyTest1, int, V1Property, "V1", m_v1, tr::PropertyMetadata());
 LN_TR_PROPERTY_IMPLEMENT(PropertyTest1, RefTest1*, V2Property, "V2", m_v2, tr::PropertyMetadata());
 LN_TR_PROPERTY_IMPLEMENT(PropertyTest1, Point, V3Property, "V3", m_v3, tr::PropertyMetadata());
 LN_TR_PROPERTY_IMPLEMENT(PropertyTest1, RefPtr<RefTest2>, V4Property, "V4", m_v4, tr::PropertyMetadata());
+LN_TR_PROPERTY_IMPLEMENT(PropertyTest1, int, V5Property, "V5", m_v5, tr::PropertyMetadata());
+LN_TR_PROPERTY_IMPLEMENT(PropertyTest1, int, V6Property, "V6", m_v6, tr::PropertyMetadata());
 
 
 TEST_F(IntegrationTest_Reflection_ReflectionObject, Property)

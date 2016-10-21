@@ -35,7 +35,7 @@ public:
 
 public:
 	const PropertyInfo*		changedProperty;
-	PropertySetSource	cause;
+	PropertySetSource		cause;
 };
 
 } // namespace tr

@@ -20,6 +20,7 @@ namespace tr
 		ln::tr::LocalValueHavingFlags			lnref_localValueHavingFlags; \
 		virtual typeInfo*						lnref_GetThisTypeInfo() const override; \
 		static void*							lnref_bindingTypeInfo; \
+		inline void								InitializeProperties() { lnref_typeInfo.InitializeProperties(this); }
 
 #define LN_TR_REFLECTION_TYPEINFO_IMPLEMENT_COMMON(typeInfo, classType, baseClassType) \
 	typeInfo						classType::lnref_typeInfo(_T(#classType), ln::tr::ReflectionHelper::GetClassTypeInfo<baseClassType>(), &ln::tr::ReflectionHelper::GetLocalValueHavingFlags<classType>, &ln::tr::ReflectionHelper::SetBindingTypeInfo<classType>, &ln::tr::ReflectionHelper::GetBindingTypeInfo<classType>); \
@@ -31,6 +32,9 @@ namespace tr
 
 #define LN_TR_REFLECTION_TYPEINFO_IMPLEMENT(classType, baseClassType) \
 	LN_TR_REFLECTION_TYPEINFO_IMPLEMENT_COMMON(ln::tr::TypeInfo, classType, baseClassType)
+
+
+
 
 
 /**
@@ -59,7 +63,7 @@ public:
 protected:
 	friend class PropertyInfo;
 	void RaiseReflectionEvent(const ReflectionEventBase& ev, ReflectionEventArgs* args);
-	virtual void OnPropertyChanged(PropertyChangedEventArgs* e);
+	//virtual void OnPropertyChanged(PropertyChangedEventArgs* e);
 
 	template<typename... TArgs>
 	void RaiseDelegateEvent(DelegateEvent<TArgs...>& ev, TArgs... args) { ev.Raise(args...); }

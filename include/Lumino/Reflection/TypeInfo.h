@@ -153,6 +153,8 @@ public:
 
 	intptr_t GetInternalGroup() const { return m_internalGroup; }
 
+	void InitializeProperties(ReflectionObject* obj);
+
 protected:
 	void SetInternalGroup(intptr_t group) { m_internalGroup = group; }
 

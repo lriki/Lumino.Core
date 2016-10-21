@@ -48,12 +48,12 @@ void ReflectionObject::RaiseReflectionEvent(const ReflectionEventBase& ev, Refle
 	ev.Raise(args);
 }
 
-//------------------------------------------------------------------------------
-void ReflectionObject::OnPropertyChanged(PropertyChangedEventArgs* e)
-{
-	// e->Property を持つクラスのコールバックを呼び出す
-	//e->changedProperty->NotifyPropertyChange(this, e);
-}
+////------------------------------------------------------------------------------
+//void ReflectionObject::OnPropertyChanged(PropertyChangedEventArgs* e)
+//{
+//	// e->Property を持つクラスのコールバックを呼び出す
+//	//e->changedProperty->NotifyPropertyChange(this, e);
+//}
 
 //------------------------------------------------------------------------------
 void ReflectionObject::SetPropertyValueInternal(const PropertyInfo* prop, const Variant& value, bool reset, PropertySetSource source)

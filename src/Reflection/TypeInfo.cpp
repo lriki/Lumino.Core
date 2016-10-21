@@ -124,6 +124,14 @@ void* TypeInfo::GetBindingTypeInfo(const ReflectionObject* obj)
 	return type->m_bindingTypeInfoGetter();
 }
 
+//------------------------------------------------------------------------------
+void TypeInfo::InitializeProperties(ReflectionObject* obj)
+{
+	for (PropertyInfo* prop : m_propertyList)
+	{
+		prop->GetPropertyBase(obj)->m_owner = obj;
+	}
+}
 
 namespace detail
 {

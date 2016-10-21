@@ -9,15 +9,15 @@ namespace tr
 {
 
 //==============================================================================
-// Property
+// PropertyInfo
 //==============================================================================
 static EventArgsPool g_eventArgsPool;
 
 //------------------------------------------------------------------------------
-PropertyInfo::PropertyInfo(TypeInfo* ownerClassType, PropertyMetadata* metadata, size_t memberOffset, bool stored)
+PropertyInfo::PropertyInfo(TypeInfo* ownerClassType, PropertyMetadata* metadata, bool stored)
 	: m_ownerClassType(ownerClassType)
 	, m_metadata(metadata)
-	, m_memberOffset(memberOffset)
+	, m_memberOffset(0)
 	, m_stored(stored)
 	, m_registerd(false)
 {
@@ -33,7 +33,8 @@ PropertyInfo::~PropertyInfo()
 void PropertyInfo::NotifyPropertyChanged(ReflectionObject* target, const PropertyInfo* prop, PropertySetSource source)
 {
 	RefPtr<PropertyChangedEventArgs> e(g_eventArgsPool.Create<PropertyChangedEventArgs>(prop, source), false);
-	target->OnPropertyChanged(e);
+	//target->OnPropertyChanged(e);
+	prop->GetPropertyBase(target)->CallListener(e);
 	prop->m_metadata->CallPropertyChangedCallback(target, e);
 }
 
@@ -64,6 +65,15 @@ Variant PropertyInfo::GetPropertyValue(ReflectionObject* obj, const PropertyInfo
 	//	UpdateInheritanceProperty(const_cast<CoreObject*>(this), prop);
 		return prop->GetValue(obj);
 	//}
+}
+
+//==============================================================================
+// PropertyBase
+//==============================================================================
+//------------------------------------------------------------------------------
+void PropertyBase::CallListener(PropertyChangedEventArgs* e) const
+{
+	for (IPropertyChangedListener* listener : m_listeners) listener->OnPropertyChanged(e);
 }
 
 } // namespace tr
