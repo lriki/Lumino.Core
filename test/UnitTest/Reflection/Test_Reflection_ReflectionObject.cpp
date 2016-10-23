@@ -138,12 +138,12 @@ public:
 
 public:
 	PropertyTest1()
-		: m_v1(this, 0)
-		, m_v2(this, nullptr)
-		, m_v3(this)
-		, m_v4(this)
-		, m_v5(this)
-		, m_v6(this)
+		: m_v1(0)
+		, m_v2(nullptr)
+		, m_v3()
+		, m_v4()
+		, m_v5()
+		, m_v6()
 	{
 		//printf("PropertyTest1\n");
 		//InitializeProperties();

@@ -83,7 +83,7 @@ public:
 	template<typename TValue>
 	static PropertyRef<TValue> GetProperty(ReflectionObject* obj, const TypedPropertyInfo<TValue>* prop);
 
-	static void NotifyPropertyChanged(ReflectionObject* target, const PropertyInfo* prop, PropertySetSource source);
+	static void NotifyPropertyChanged(PropertyBase* target, const PropertyInfo* prop, PropertySetSource source);
 
 private:
 	friend class TypeInfo;
@@ -150,7 +150,7 @@ public:
 	{
 		LN_CHECK_STATE(m_setter != nullptr);
 		m_setter(target, const_cast<TValue&>(value));
-		NotifyPropertyChanged(target, this, source);
+		//NotifyPropertyChanged(target, this, source);
 	}
 	const TValue& GetValueDirect(const ReflectionObject* target) const
 	{
@@ -272,7 +272,7 @@ public:
 	}
 
 	template<class T, class C>
-	static std::size_t MemberOffsetOf(T(C::*pm)) LN_CONSTEXPR
+	static LN_CONSTEXPR std::size_t MemberOffsetOf(T(C::*pm))
 	{
 		return reinterpret_cast<std::size_t>(
 			&reinterpret_cast<const volatile char&>(((C*)0)->*pm)
@@ -316,8 +316,8 @@ protected:
 class PropertyBase
 {
 public:
-	PropertyBase(ReflectionObject* owner)
-		: m_owner(owner)
+	PropertyBase(/*ReflectionObject* owner*/)
+		//: m_owner(owner)
 	{
 	}
 
@@ -326,7 +326,7 @@ public:
 	void CallListener(PropertyChangedEventArgs* e) const;
 
 public:	// TODO
-	ReflectionObject*	m_owner;
+	//ReflectionObject*	m_owner;
 	Array<IPropertyChangedListener*>	m_listeners;
 };
 
@@ -340,8 +340,8 @@ class Property
 	: public PropertyBase
 {
 public:
-	Property(ReflectionObject* owner)
-		: PropertyBase(owner)
+	Property(/*ReflectionObject* owner*/)
+		: PropertyBase(/*owner*/)
 		, m_propId(nullptr)
 		, m_defaultValue()
 		, m_value()
@@ -349,8 +349,8 @@ public:
 	{
 	}
 
-	Property(ReflectionObject* owner, const TValue& value)
-		: PropertyBase(owner)
+	Property(/*ReflectionObject* owner, */const TValue& value)
+		: PropertyBase(/*owner*/)
 		, m_propId(nullptr)
 		, m_defaultValue(value)
 		, m_value(value)
@@ -367,7 +367,7 @@ public:
 		{
 			m_value = value;
 			m_valueSource = PropertySetSource::ByLocal;
-			PropertyInfo::NotifyPropertyChanged(m_owner, m_propId, m_valueSource);
+			PropertyInfo::NotifyPropertyChanged(this, m_propId, m_valueSource);
 		}
 	}
 
@@ -382,24 +382,26 @@ public:
 		if (m_value != m_defaultValue)
 		{
 			m_value = m_defaultValue;
-			PropertyInfo::NotifyPropertyChanged(m_owner, m_propId, m_valueSource);
+			PropertyInfo::NotifyPropertyChanged(this, m_propId, m_valueSource);
 		}
 	}
 
 	Property& operator = (const TValue& value) { Set(value); return *this; }
 	operator const TValue&() const { return m_value; }
 
+	const PropertyInfo* GetPropertyInfo() const { return m_propId; }
+
 private:
 	LN_DISALLOW_COPY_AND_ASSIGN(Property);
 
 	void TryInitialize()
 	{
-		if (m_propId == nullptr)
-		{
-			size_t offset = ((intptr_t)this) - ((intptr_t)m_owner);
-			TypeInfo* info = TypeInfo::GetTypeInfo(m_owner);
-			m_propId = info->FindProperty(offset);
-		}
+		//if (m_propId == nullptr)
+		//{
+		//	size_t offset = ((intptr_t)this) - ((intptr_t)m_owner);
+		//	TypeInfo* info = TypeInfo::GetTypeInfo(m_owner);
+		//	m_propId = info->FindProperty(offset);
+		//}
 	}
 
 	const PropertyInfo*	m_propId;
@@ -471,6 +473,17 @@ public:
 		auto ptr = m_propOwner.Resolve();
 		if (ptr != nullptr) return m_prop.ClearValue();
 	}
+
+	RefPtr<ReflectionObject> GetOwenr()
+	{
+		return m_propOwner.Resolve();
+	}
+
+	const PropertyInfo* GetPropertyInfo() const
+	{
+		return m_prop.GetPropertyInfo();
+	}
+
 
 private:
 	WeakRefPtr<ReflectionObject>	m_propOwner;

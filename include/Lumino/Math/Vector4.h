@@ -24,6 +24,9 @@ public:
 	float	w;		///< W 要素
 
 public:
+	static const Vector4   Zero;		///< Vector4(0, 0, 0, 0)
+
+public:
 
 	/**
 		@brief		すべての要素を 0.0 に設定してインスタンスを初期化します。
