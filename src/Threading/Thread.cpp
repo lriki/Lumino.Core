@@ -30,6 +30,7 @@ Thread::~Thread()
         Wait();
     }
 	LN_SAFE_DELETE(mLastException);
+	LN_SAFE_DELETE(m_impl);
 }
 
 //------------------------------------------------------------------------------

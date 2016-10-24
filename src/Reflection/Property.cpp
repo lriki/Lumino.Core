@@ -73,6 +73,11 @@ Variant PropertyInfo::GetPropertyValue(ReflectionObject* obj, const PropertyInfo
 //------------------------------------------------------------------------------
 void PropertyBase::CallListener(PropertyChangedEventArgs* e) const
 {
+	if (m_staticListenerOwner != nullptr && m_staticListener != nullptr)
+	{
+		 m_staticListener(m_staticListenerOwner, e);
+	}
+
 	for (IPropertyChangedListener* listener : m_listeners) listener->OnPropertyChanged(e);
 }
 

@@ -85,6 +85,14 @@ public:
 
 	static void NotifyPropertyChanged(PropertyBase* target, const PropertyInfo* prop, PropertySetSource source);
 
+
+
+	template<typename TValue>
+	static void SetPropertyValueDirect(tr::PropertyRef<TValue>& propRef, const TValue& value, PropertySetSource source = PropertySetSource::ByLocal);
+
+
+
+
 private:
 	friend class TypeInfo;
 	template<typename TValue> friend class TypedPropertyInitializer;
@@ -318,6 +326,8 @@ class PropertyBase
 public:
 	PropertyBase(/*ReflectionObject* owner*/)
 		//: m_owner(owner)
+		: m_staticListenerOwner(nullptr)
+		, m_staticListener(nullptr)
 	{
 	}
 
@@ -325,9 +335,20 @@ public:
 	void RemoveListener(IPropertyChangedListener* listener) { m_listeners.Remove(listener); }
 	void CallListener(PropertyChangedEventArgs* e) const;
 
+	// TODO: internal
+	typedef void(*OnPropertyChangedFunc)(ReflectionObject* obj, PropertyChangedEventArgs* e);
+	void SetStaticListener(ReflectionObject* owner, OnPropertyChangedFunc callback)
+	{
+		m_staticListenerOwner = owner;
+		m_staticListener = callback;
+	}
+
 public:	// TODO
 	//ReflectionObject*	m_owner;
 	Array<IPropertyChangedListener*>	m_listeners;
+
+	ReflectionObject*		m_staticListenerOwner;
+	OnPropertyChangedFunc	m_staticListener;
 };
 
 
@@ -363,12 +384,7 @@ public:
 	void Set(const TValue& value)
 	{
 		TryInitialize();
-		if (m_value != value)
-		{
-			m_value = value;
-			m_valueSource = PropertySetSource::ByLocal;
-			PropertyInfo::NotifyPropertyChanged(this, m_propId, m_valueSource);
-		}
+		SetInternal(value, PropertySetSource::ByLocal);
 	}
 
 	const TValue& Get() const { return m_value; }
@@ -404,12 +420,24 @@ private:
 		//}
 	}
 
+	void SetInternal(const TValue& value, PropertySetSource source)
+	{
+		TryInitialize();
+		if (m_value != value)
+		{
+			m_value = value;
+			m_valueSource = source;
+			PropertyInfo::NotifyPropertyChanged(this, m_propId, m_valueSource);
+		}
+	}
+
 	const PropertyInfo*	m_propId;
 	TValue				m_defaultValue;
 	TValue				m_value;
 	PropertySetSource	m_valueSource;
 
 	friend class PropertyHelper;
+	friend class PropertyInfo;
 };
 
 
@@ -484,6 +512,10 @@ public:
 		return m_prop.GetPropertyInfo();
 	}
 
+	Property<TValue>* GetProperty()
+	{
+		return &m_prop;
+	}
 
 private:
 	WeakRefPtr<ReflectionObject>	m_propOwner;
@@ -493,11 +525,20 @@ private:
 
 
 
+//------------------------------------------------------------------------------
 template<typename TValue>
 static PropertyRef<TValue> PropertyInfo::GetProperty(ReflectionObject* obj, const TypedPropertyInfo<TValue>* prop)
 {
 	return tr::PropertyRef<TValue>(obj, prop);
 }
+
+//------------------------------------------------------------------------------
+template<typename TValue>
+void PropertyInfo::SetPropertyValueDirect(tr::PropertyRef<TValue>& propRef, const TValue& value, PropertySetSource source)
+{
+	propRef.GetProperty()->SetInternal(value, source);
+}
+
 
 } // namespace tr
 LN_NAMESPACE_END
