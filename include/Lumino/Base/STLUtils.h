@@ -234,8 +234,8 @@ namespace detail
 template<typename TString>
 struct StringCaseInsensitiveLess
 {
-	typename typedef TString::CharType CharType;
-	typename typedef GenericStringRef<CharType> StringRef;
+	typedef typename TString::CharType CharType;
+	typedef typename GenericStringRef<CharType> StringRef;
 
 	LN_CONSTEXPR bool operator()(const TString& left, const TString& right) const
 	{

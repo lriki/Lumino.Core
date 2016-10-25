@@ -14,23 +14,14 @@
 LN_NAMESPACE_BEGIN
 namespace tr
 {
+class ReflectionObject;
 class IPropertyChangedListener;
 class PropertyBase;
-
-template<typename TValue>
-class Property;
-
-template<typename TValue>
-class TypedPropertyInfo;
-
-template<typename TValue>
-class WeakRefPtr;
-
-template<typename TValue>
-class PropertyRef;
-
-template<typename TValue>
-class TypedPropertyInitializer;
+template<typename TValue> class Property;
+template<typename TValue> class TypedPropertyInfo;
+template<typename TValue> class WeakRefPtr;
+template<typename TValue> class PropertyRef;
+template<typename TValue> class TypedPropertyInitializer;
 
 
 /**
@@ -527,7 +518,7 @@ private:
 
 //------------------------------------------------------------------------------
 template<typename TValue>
-static PropertyRef<TValue> PropertyInfo::GetProperty(ReflectionObject* obj, const TypedPropertyInfo<TValue>* prop)
+PropertyRef<TValue> PropertyInfo::GetProperty(ReflectionObject* obj, const TypedPropertyInfo<TValue>* prop)
 {
 	return tr::PropertyRef<TValue>(obj, prop);
 }

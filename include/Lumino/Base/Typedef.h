@@ -131,16 +131,16 @@ inline const wchar_t* LN_T_ChooseCW<wchar_t>(const char* /*c*/, const wchar_t* w
 
 
 template<typename TChar>
-inline const TChar LN_T_ChooseCW(const char c, const wchar_t w);
+inline TChar LN_T_ChooseCW(const char c, const wchar_t w);
 
 template<>
-inline const char LN_T_ChooseCW<char>(const char c, const wchar_t /*w*/)
+inline char LN_T_ChooseCW<char>(const char c, const wchar_t /*w*/)
 {
 	return c;
 }
 
 template<>
-inline const wchar_t LN_T_ChooseCW<wchar_t>(const char /*c*/, const wchar_t w)
+inline wchar_t LN_T_ChooseCW<wchar_t>(const char /*c*/, const wchar_t w)
 {
 	return w;
 }
