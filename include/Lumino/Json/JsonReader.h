@@ -267,7 +267,7 @@ private:
 	ParserState				m_currentState;
 	Token					m_currentToken;
 	String					m_value;
-	Array<TCHAR>			m_textCache;
+	List<TCHAR>				m_textCache;
 	Stack<ParserState>		m_stateStack;
 	JsonError2				m_error;
 

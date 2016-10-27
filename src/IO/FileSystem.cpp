@@ -495,7 +495,7 @@ CaseSensitivity FileSystem::GetFileSystemCaseSensitivity()
 template<typename TChar>
 void FileSystem::CreateDirectoryInternal(const TChar* path)
 {
-	Array< GenericString<wchar_t> >	pathList;
+	List< GenericString<wchar_t> >	pathList;
 	GenericString<wchar_t> dir;
 
 	int i = StringTraits::tcslen(path) - 1;	// 一番後ろの文字の位置

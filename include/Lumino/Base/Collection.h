@@ -1,6 +1,4 @@
-/**
-	@file	Collection.h
-*/
+
 #pragma once
 #include "Array.h"
 
@@ -21,7 +19,7 @@ struct CollectionTraits<T*>
 };
 
 /**
-	@brief		コレクションの基本クラスです。
+	@brief		コレクションの基本クラス
 	@details	Collection は、継承して独自のコレクションを定義することを想定した Array クラスのラッパーです。
 */
 template<typename T, typename TAllocator = STLAllocator<T> >
@@ -29,7 +27,7 @@ class Collection
 {
 	LN_DISALLOW_COPY_AND_ASSIGN(Collection);
 public:
-	typedef Array<T>							internal_array;
+	typedef List<T>							internal_array;
 	typedef typename internal_array::value_type			value_type;
 	typedef typename internal_array::difference_type	difference_type;
 	typedef typename internal_array::pointer			pointer;
@@ -303,7 +301,7 @@ protected:
 	//}
 
 private:
-	Array<T>	m_array;
+	List<T>	m_array;
 };
 
 LN_NAMESPACE_END

@@ -60,7 +60,7 @@ public:
 	}
 
 private:
-	typedef Array<ReflectionEventArgs*>					EventArgsList;
+	typedef List<ReflectionEventArgs*>					EventArgsList;
 	typedef SortedArray<tr::TypeInfo*, EventArgsList*>	EventArgsMap;
 	EventArgsMap	m_pool;
 
@@ -91,14 +91,9 @@ private:
 	}
 
 
-	//Array<MouseEventArgs*>	m_mouseEventArgsPool;
-
-
-
-
 
 	template<class T>
-	T FindFreeObject(const Array<T>& pool)
+	T FindFreeObject(const List<T>& pool)
 	{
 		LN_FOREACH(T a, pool)
 		{
@@ -108,9 +103,6 @@ private:
 		}
 		return NULL;
 	}
-
-	//Array<MouseEventArgs*>	m_mouseEventArgsPool;
-	//Array<KeyEventArgs*>	m_keyEventArgsPool;
 };
 
 } // namespace tr

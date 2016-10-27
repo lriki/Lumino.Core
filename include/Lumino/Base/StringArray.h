@@ -10,10 +10,10 @@ LN_NAMESPACE_BEGIN
 */
 template<typename TChar>
 class GenericStringArray
-	: public Array< GenericString<TChar> >
+	: public List< GenericString<TChar> >
 {
 public:
-	typedef Array< GenericString<TChar> >	ArrayType;
+	typedef List< GenericString<TChar> >	ArrayType;
 	typedef GenericString<TChar>			StringType;
 
 

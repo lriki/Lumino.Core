@@ -101,7 +101,7 @@ public:
 	}
 
 private:
-	Array< Delegate<void(TArgs*)> > m_handlerList;
+	List< Delegate<void(TArgs*)> > m_handlerList;
 
 	virtual void Raise(ReflectionEventArgs* e) const override
 	{
@@ -178,7 +178,7 @@ public:
 private:
 	friend class ReflectionObject;
 
-	Array<DelegateType> m_handlerList;
+	List<DelegateType> m_handlerList;
 
 	void Clear()
 	{

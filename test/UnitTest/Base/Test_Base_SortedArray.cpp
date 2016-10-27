@@ -249,7 +249,7 @@ TEST_F(Test_Base_SortedArray, Performance)
 	SortedArray<String, int> ary1;
 	SortedArray<std::basic_string<TCHAR>, int> ary2;
 	std::vector<std::basic_string<TCHAR>> index1;
-	Array<String> index2;
+	List<String> index2;
 	for (int i = 0; i < loop; ++i)
 	{
 		String str = String::Format(_T("{0}"), i);

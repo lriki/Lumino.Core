@@ -247,7 +247,7 @@ TEST_F(Test_Base_Array, IsEmpty)
 
 	// <Test> 配列が空かを確認する。
 	{
-		Array<int> a1;
+		List<int> a1;
 		ASSERT_TRUE(a1.IsEmpty());
 		a1.Add(1);
 		ASSERT_FALSE(a1.IsEmpty());
@@ -258,8 +258,8 @@ TEST_F(Test_Base_Array, IsEmpty)
 
 #if 0
 	String str = "";
-	Array<String> ary1;
-	Array<String> ary2;
+	List<String> ary1;
+	List<String> ary2;
 
 	printf("----\n");
 	for (int j = 0; j < 10; j++)
@@ -270,7 +270,7 @@ TEST_F(Test_Base_Array, IsEmpty)
 		for (int i = 0; i < 1000000; ++i)
 		{
 			ary1 = StringTraits::Split(str, _T(","));
-			Array<String> a11 = ary1;
+			List<String> a11 = ary1;
 		}
 		printf("t:%llu\n", timer.GetElapsedTime());
 	}
@@ -283,7 +283,7 @@ TEST_F(Test_Base_Array, IsEmpty)
 	//	for (int i = 0; i < 1000000; ++i)
 	//	{
 	//		ary2 = StringTraits::Split2(str, _T(","));
-	//		Array<String> a22 = ary2;
+	//		List<String> a22 = ary2;
 	//	}
 	//	printf("t:%llu\n", timer.GetElapsedTime());
 	//}
@@ -295,7 +295,7 @@ TEST_F(Test_Base_Array, GetCount)
 {
 	// <Test> 要素数を取得する。
 	{
-		Array<int> a1;
+		List<int> a1;
 		ASSERT_EQ(0, a1.GetCount());
 		a1.Add(1);
 		ASSERT_EQ(1, a1.GetCount());
@@ -319,7 +319,7 @@ TEST_F(Test_Base_Array, Add)
 {
 	// <Test> 要素を追加する。
 	{
-		Array<int> a1;
+		List<int> a1;
 		a1.Add(1);
 		a1.Add(2);
 		ASSERT_EQ(2, a1.GetCount());
@@ -328,7 +328,7 @@ TEST_F(Test_Base_Array, Add)
 	}
 	// <Test> 配列を末尾に結合する。
 	{
-		Array<String> a1, a2, a3;
+		List<String> a1, a2, a3;
 		a2.Add(_T("1")); a2.Add(_T("2"));
 		a3.Add(_T("3")); a3.Add(_T("4"));
 		a1.AddRange(a2); a1.AddRange(a3);
@@ -345,7 +345,7 @@ TEST_F(Test_Base_Array, Insert)
 {
 	// <Test> 要素を挿入する。
 	{
-		Array<int> a1;
+		List<int> a1;
 		a1.Add(1);
 		a1.Add(2);
 		a1.Insert(0, 3);
@@ -363,12 +363,12 @@ TEST_F(Test_Base_Array, Insert)
 TEST_F(Test_Base_Array, Remove)
 {
 	// ついでにコピーで元の配列が壊れないかも見てみる
-	Array<int> ary;
+	List<int> ary;
 	ary.Add(1); ary.Add(2); ary.Add(3); ary.Add(2);
 
 	// <Test> Remove
 	{
-		Array<int> a1 = ary;
+		List<int> a1 = ary;
 		a1.Remove(2);
 		ASSERT_EQ(3, a1.GetCount());
 		ASSERT_EQ(1, a1[0]);
@@ -377,7 +377,7 @@ TEST_F(Test_Base_Array, Remove)
 	}
 	// <Unit> ラムダ式で条件指定できること
 	{
-		Array<int> a1 = ary;
+		List<int> a1 = ary;
 		a1.Remove([](int v){ return v == 2; });
 		ASSERT_EQ(3, a1.GetCount());
 		ASSERT_EQ(1, a1[0]);
@@ -386,7 +386,7 @@ TEST_F(Test_Base_Array, Remove)
 	}
 	// <Test> RemoveAt
 	{
-		Array<int> a1 = ary;
+		List<int> a1 = ary;
 		a1.RemoveAt(2);
 		ASSERT_EQ(3, a1.GetCount());
 		ASSERT_EQ(1, a1[0]);
@@ -395,7 +395,7 @@ TEST_F(Test_Base_Array, Remove)
 	}
 	// <Test> RemoveAll
 	{
-		Array<int> a1 = ary;
+		List<int> a1 = ary;
 		a1.RemoveAll(2);
 		ASSERT_EQ(2, a1.GetCount());
 		ASSERT_EQ(1, a1[0]);
@@ -403,7 +403,7 @@ TEST_F(Test_Base_Array, Remove)
 	}
 	// <Test> RemoveAll (ラムダ式)
 	{
-		Array<int> a1 = ary;
+		List<int> a1 = ary;
         auto exp = [](int v) { return v == 2; };
 		a1.RemoveAll(exp);
 		ASSERT_EQ(2, a1.GetCount());
@@ -412,7 +412,7 @@ TEST_F(Test_Base_Array, Remove)
 	}
 	// <Test> RemoveLast
 	{
-		Array<int> a1 = ary;
+		List<int> a1 = ary;
 		a1.RemoveLast();
 		ASSERT_EQ(3, a1.GetCount());
 		ASSERT_EQ(1, a1[0]);
@@ -426,7 +426,7 @@ TEST_F(Test_Base_Array, Reserve)
 {
 	// <Test> Reserve
 	{
-		Array<int> a1;
+		List<int> a1;
 		a1.Reserve(2);
 		ASSERT_EQ(2, a1.GetCapacity());
 		a1.Add(1); a1.Add(2);
@@ -441,7 +441,7 @@ TEST_F(Test_Base_Array, Resize)
 {
 	// <Test> Resize
 	{
-		Array<int> a1;
+		List<int> a1;
 		a1.Add(1);
 		a1.Resize(2);
 		ASSERT_EQ(2, a1.GetCount());
@@ -462,7 +462,7 @@ TEST_F(Test_Base_Array, Contains)
 		PathNameA p1("LuminoCore/include/Lumino/Base/NonCopyable.h");
 		PathNameA p2("LuminoCore/include/Lumino/Base/NonCopyable.h");
 		PathNameA p3("LuminoCore/include/Lumino/Base/NonCopyable.c");
-		Array<PathNameA> pathes;
+		List<PathNameA> pathes;
 		pathes.Add(p1);
 		ASSERT_TRUE(pathes.Contains(p2));
 		ASSERT_FALSE(pathes.Contains(p3));
@@ -477,7 +477,7 @@ TEST_F(Test_Base_Array, Contains)
 		};
 		St s1 = { 10, 20 };
 		St s2 = { 30, 40 };
-		Array<St> ary = { s1, s2, { 50, 60 } };
+		List<St> ary = { s1, s2, { 50, 60 } };
 		ASSERT_TRUE(ary.Contains([](const St& s) { return s.a == 30; }));
 		ASSERT_TRUE(ary.Contains([](const St& s) { return s.b == 60; }));
 		ASSERT_FALSE(ary.Contains([](const St& s) { return s.a == 0; }));
@@ -489,7 +489,7 @@ TEST_F(Test_Base_Array, IndexOf)
 {
 	// <Test> IndexOf
 	{
-		Array<int> ary;
+		List<int> ary;
 		ary.Add(1); ary.Add(2); ary.Add(3); ary.Add(2);
 		ASSERT_EQ(1, ary.IndexOf(2));
 		ASSERT_EQ(1, ary.IndexOf(2, 1));
@@ -502,7 +502,7 @@ TEST_F(Test_Base_Array, IndexOf)
 TEST_F(Test_Base_Array, Find)
 {
 	{
-		Array<int> ary1 = { 1, 2, 3 };
+		List<int> ary1 = { 1, 2, 3 };
 		ASSERT_TRUE(ary1.Find(1) != nullptr);
 		ASSERT_TRUE(ary1.Find(1) != NULL);
 		ASSERT_EQ(2, *ary1.Find(2));
@@ -510,7 +510,7 @@ TEST_F(Test_Base_Array, Find)
 	}
 	{
 		struct St { int a; int b; };
-		Array<St> ary1 = { { 1, 2 }, { 3, 4 } };
+		List<St> ary1 = { { 1, 2 }, { 3, 4 } };
 		ASSERT_TRUE(ary1.Find([](const St& st) { return st.a == 1; }) != nullptr);
 		ASSERT_EQ(4, ary1.Find([](const St& st) { return st.a == 3; })->b);
 		ASSERT_EQ(nullptr, ary1.Find([](const St& st) { return st.a == 5; }));
@@ -522,12 +522,12 @@ TEST_F(Test_Base_Array, Front_Last)
 {
 	// <Test> GetFront, GetLast
 	{
-		Array<int> ary;
+		List<int> ary;
 		ary.Add(1); ary.Add(2); ary.Add(3); ary.Add(4);
 		ASSERT_EQ(1, ary.GetFront());
 		ASSERT_EQ(4, ary.GetLast());
 
-		const Array<int>& ary2 = ary;
+		const List<int>& ary2 = ary;
 		ASSERT_EQ(1, ary2.GetFront());
 		ASSERT_EQ(4, ary2.GetLast());
 	}
@@ -538,7 +538,7 @@ TEST_F(Test_Base_Array, Iterate)
 {
 	// <Test> 範囲 for で使用できる。
 	{
-		Array<int> a1;
+		List<int> a1;
 		a1.Add(1); a1.Add(10); a1.Add(100);
 		int r = 0;
 		for (auto v : a1) {
@@ -551,9 +551,9 @@ TEST_F(Test_Base_Array, Iterate)
 //------------------------------------------------------------------------------
 TEST_F(Test_Base_Array, Issue)
 {
-	Array<int> a1;
-	Array<int>::iterator itr = a1.begin();
-	Array<int>::iterator end = a1.end();
+	List<int> a1;
+	List<int>::iterator itr = a1.begin();
+	List<int>::iterator end = a1.end();
 	for (; itr != end; ++itr) {
 		(*itr);
 	}

@@ -163,16 +163,12 @@ private:
 
 	String						m_name;						// クラス名
 	TypeInfo*					m_baseClass;				// 継承元クラスを示す TypeInfo
-	Array<PropertyInfo*>		m_propertyList;				// この型のクラスがもつプロパティのリスト
-	Array<ReflectionEventInfo*>	m_routedEventList;			// この型のクラスがもつReflectionEventのリスト
+	List<PropertyInfo*>			m_propertyList;				// この型のクラスがもつプロパティのリスト
+	List<ReflectionEventInfo*>	m_routedEventList;			// この型のクラスがもつReflectionEventのリスト
 	BindingTypeInfoSetter		m_bindingTypeInfoSetter;
 	BindingTypeInfoGetter		m_bindingTypeInfoGetter;
 
 	intptr_t					m_internalGroup;
-
-	//Array<RoutedEvent*>		m_routedEventList;
-	//RoutedEventHandlerList	m_routedEventHandlerList;
-	//
 };
 
 //------------------------------------------------------------------------------

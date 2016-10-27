@@ -1,6 +1,4 @@
-﻿/**
-	@file	Array.h
-*/
+﻿
 #pragma once
 #include <vector>
 #include <algorithm>
@@ -10,12 +8,12 @@
 LN_NAMESPACE_BEGIN
 
 /**
-	@brief		動的配列のテンプレートクラスです。
+	@brief		動的配列のテンプレートクラス
 	@details	隣接するメモリ位置に要素を格納し、高速なランダムアクセスを行うことができます。
 				内部では、メモリ使用量を削減し、データの不必要なコピーを避けるためにコピーオンライト(COW)の共有を行います。
 */
 template<typename T, typename TAllocator = STLAllocator<T> >
-class Array
+class List
 {
 public:
 	typedef typename std::vector<T, TAllocator>		std_vector;
@@ -31,19 +29,19 @@ public:
 public:
 
 	/** 空の配列で新しい配列を作成します。*/
-	Array();
+	List();
 
 	/** 配列をコピーして新しい配列を作成します。*/
-	Array(const Array& ary);
+	List(const List& ary);
 
 	/** 別の配列からムーブして作成します。*/
-	Array(Array&& ary);
+	List(List&& ary);
 
 	/** 初期化子リストから作成します。*/
-	Array(std::initializer_list<T> list);
+	List(std::initializer_list<T> list);
 
 	/** デストラクタ */
-	~Array();
+	~List();
 
 public:
 
@@ -81,7 +79,7 @@ public:
 	}
 
 	/** 末尾に別の配列を連結します。*/
-	void AddRange(const Array<T>& items)
+	void AddRange(const List<T>& items)
 	{
 		CheckDetachShared();
 		m_data->m_vector.insert(m_data->m_vector.end(), items.m_data->m_vector.begin(), items.m_data->m_vector.end());
@@ -292,7 +290,7 @@ public:
 	}
 
 	/** 別の配列をこの配列に上書きコピーします。*/
-	void CopyFrom(const Array<T>& ary)
+	void CopyFrom(const List<T>& ary)
 	{
 		CheckDetachShared();
 		m_data->m_vector = ary.m_data->m_vector;
@@ -305,7 +303,7 @@ public:
 	}
 
 	/** 別の配列をこの配列に割り当てます。*/
-	Array& operator=(const Array& ary);
+	List& operator=(const List& ary);
 
 	/** 指定したインデックスにある要素への参照を取得します。*/
 	T& operator[] (int index);

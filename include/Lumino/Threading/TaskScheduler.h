@@ -33,7 +33,7 @@ private:
 	void QueueTask(Task* task);
 	void ExecuteThread();
 
-	Array<DelegateThread*>	m_threadList;
+	List<DelegateThread*>	m_threadList;
 	Queue<Task*>			m_taskQueue;
 	Semaphore				m_semaphore;
 	Mutex					m_taskQueueLock;

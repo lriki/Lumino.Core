@@ -412,7 +412,7 @@ TEST_F(Test_Xml_XmlReader, SystemTest)
 			_T("</root>");
 		XmlReader reader(xml);
 
-		Array<XmlNodeType> types;
+		List<XmlNodeType> types;
 		while (reader.Read())
 		{
 			types.Add(reader.GetNodeType());

@@ -154,7 +154,7 @@ TEST_F(Test_IO_FileSystem, ForEachFilesInDirectory)
 	FileSystem::WriteAllText(TEMPFILE("Test_IO_FileSystem/ForEachFilesInDirectory/file1"), _T("test"));
 	FileSystem::WriteAllText(TEMPFILE("Test_IO_FileSystem/ForEachFilesInDirectory/file2"), _T("test"));
 
-	Array<PathName> list;
+	List<PathName> list;
 	FileSystem::ForEachFilesInDirectory<TCHAR>(TEMPFILE("Test_IO_FileSystem/ForEachFilesInDirectory"), [&list](const PathName& path) { list.Add(path); });
 
 	ASSERT_EQ(4, list.GetCount());

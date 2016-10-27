@@ -22,7 +22,7 @@ TEST_F(IntegrateTest_Threading_Task, Basic)
 	int level = TaskScheduler::GetDefault()->GetMaxConcurrencyLevel();
 
 	// 同時実行可能な数+1だけ Task を作る
-	Array<TaskPtr> tasks;
+	List<TaskPtr> tasks;
 	for (int i = 0; i < level + 1; ++i)
 	{
 		tasks.Add(Task::Run(Delegate<void()>(func)));
@@ -50,7 +50,7 @@ TEST_F(IntegrateTest_Threading_Task, Basic2)
 {
 	for (int i = 0; i < 10; i++)
 	{
-		Array<int> ary;
+		List<int> ary;
 		int sum;
 		auto funcAdd = [&ary]() { ary.Add(1); };
 		auto funcItr = [&ary, &sum]() { for (int v : ary) { sum += v; } };

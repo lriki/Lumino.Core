@@ -12,7 +12,7 @@ TEST_F(Test_Base_STLUtils, Foreach)
 {
 	// 単純なイテレート
 	{
-		Array<String> ary1;
+		List<String> ary1;
 		ary1.Add(_T("a"));
 		ary1.Add(_T("b"));
 		ary1.Add(_T("c"));
@@ -26,7 +26,7 @@ TEST_F(Test_Base_STLUtils, Foreach)
 	}
 	// 内容の変更
 	{
-		Array<String> ary1;
+		List<String> ary1;
 		ary1.Add(_T("a"));
 		ary1.Add(_T("b"));
 
@@ -42,7 +42,7 @@ TEST_F(Test_Base_STLUtils, Foreach)
 	}
 	// break
 	{
-		Array<String> ary1;
+		List<String> ary1;
 		ary1.Add(_T("a"));
 		ary1.Add(_T("b"));
 		ary1.Add(_T("c"));
@@ -57,7 +57,7 @@ TEST_F(Test_Base_STLUtils, Foreach)
 	}
 	// continue
 	{
-		Array<String> ary1;
+		List<String> ary1;
 		ary1.Add(_T("a"));
 		ary1.Add(_T("b"));
 		ary1.Add(_T("c"));
@@ -75,12 +75,12 @@ TEST_F(Test_Base_STLUtils, Foreach)
 	}
 	// const
 	{
-		Array<String> ary1;
+		List<String> ary1;
 		ary1.Add(_T("a"));
 		ary1.Add(_T("b"));
 		ary1.Add(_T("c"));
 
-		const Array<String>& ary2 = ary1;
+		const List<String>& ary2 = ary1;
 
 		String result;
 		LN_FOREACH(const String& str, ary2)
@@ -92,11 +92,11 @@ TEST_F(Test_Base_STLUtils, Foreach)
 	// 2重ループ
 
 	{
-		Array<String> ary1;
+		List<String> ary1;
 		ary1.Add(_T("a"));
 		ary1.Add(_T("b"));
 		ary1.Add(_T("c"));
-		Array<String> ary2;
+		List<String> ary2;
 		ary2.Add(_T("d"));
 		ary2.Add(_T("e"));
 		ary2.Add(_T("f"));

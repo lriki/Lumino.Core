@@ -62,7 +62,7 @@ public:
 	}
 
 private:
-	Array<DelegateType> m_handlerList;
+	List<DelegateType> m_handlerList;
 };
 
 LN_NAMESPACE_END

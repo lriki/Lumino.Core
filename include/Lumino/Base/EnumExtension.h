@@ -157,8 +157,8 @@ public:
 	// LN_ENUM_DECLARE マクロが非常に長くなるのを避けるため、部分的にクラス化した
 
 		struct Pair { String name; TEnum value; };
-		typedef typename ::ln::Array<Pair> PairList;
-		typedef typename ::ln::Array<Pair>& PairListReference;
+		typedef typename ::ln::List<Pair> PairList;
+		typedef typename ::ln::List<Pair>& PairListReference;
 
 		static PairListReference GetMemberList()
 		{
@@ -168,7 +168,7 @@ public:
 		{
 			PairList& members = GetMemberList();
 			String names = String::FromNativeCharString(argNames);
-			Array<String> tokens = names.Split(_T(","));
+			List<String> tokens = names.Split(_T(","));
 			for (int i = 0; i < valuesCount; ++i)
 			{
 				Pair p;

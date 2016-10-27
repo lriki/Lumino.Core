@@ -336,7 +336,7 @@ public:
 
 public:	// TODO
 	//ReflectionObject*	m_owner;
-	Array<IPropertyChangedListener*>	m_listeners;
+	List<IPropertyChangedListener*>	m_listeners;
 
 	ReflectionObject*		m_staticListenerOwner;
 	OnPropertyChangedFunc	m_staticListener;

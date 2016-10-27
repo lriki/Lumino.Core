@@ -235,10 +235,10 @@ LN_INTERNAL_ACCESS:
 
 
 	RefPtr<TextReader>		m_reader;
-	Array<TCHAR>			m_textCache;
+	List<TCHAR>				m_textCache;
 	ParsingState			m_parsingState;
 
-	Array<NodeData>			m_nodes;
+	List<NodeData>			m_nodes;
 	NodeData*				m_currentNode;				// 現在のノード (今回の Read() でユーザーに戻すノード) を指す (属性列挙中は属性ノードを指す)
 	int						m_currentElementNodePos;	// 現在の要素ノードを指す (m_nodes のインデックス。属性列挙中でも要素ノードを指す。指していなければ -1)
 	int						m_currentAttrIndex;			// 属性ノードを指している場合、その属性インデックス。指していなければ -1

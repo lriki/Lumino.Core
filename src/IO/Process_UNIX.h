@@ -87,7 +87,7 @@ void Process::Start(const PathName& program, const String& args)
 		utf8Path.AssignCStr(program.c_str());
 
         StringA utf8Args = args.ToStringA();
-        Array<StringA> argList = utf8Args.Split(" ");
+		List<StringA> argList = utf8Args.Split(" ");
 		
 		char** argv = new char *[argList.GetCount() + 2];
         argv[0] = ::strdup(utf8Path.c_str());     // 書き込み可能なポインタを渡さなければならないので strdup
