@@ -148,12 +148,28 @@ public:
 	static Vector3 Min(const Vector3& vec1, const Vector3& vec2);
 
 	/**
+		@brief		指定された複数のベクトルの最小値で構成されるベクトルを返します。
+		@param[in]	vec1	: 処理の基になるベクトルの配列
+		@param[in]	count	: 処理の基になるベクトルの数
+		@return		最小値から作成されたベクトル
+	*/
+	static Vector3 Min(const Vector3* vectors, int count);
+
+	/**
 		@brief		2つのベクトルの最大値で構成されるベクトルを返します。
 		@param[in]	vec1	: 処理の基になるベクトル
 		@param[in]	vec2	: 処理の基になるベクトル
 		@return		最大値から作成されたベクトル
 	*/
 	static Vector3 Max(const Vector3& vec1, const Vector3& vec2);
+
+	/**
+		@brief		指定された複数のベクトルの最大値で構成されるベクトルを返します。
+		@param[in]	vec1	: 処理の基になるベクトルの配列
+		@param[in]	count	: 処理の基になるベクトルの数
+		@return		最大値から作成されたベクトル
+	*/
+	static Vector3 Max(const Vector3* vectors, int count);
 
 	/**
 		@brief		入射ベクトルと法線ベクトルから反射ベクトルを計算します。

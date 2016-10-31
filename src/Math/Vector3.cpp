@@ -141,8 +141,6 @@ Vector3 Vector3::Cross(const Vector3& vec1, const Vector3& vec2)
 }
 
 //------------------------------------------------------------------------------
-// static
-//------------------------------------------------------------------------------
 Vector3 Vector3::Min(const Vector3& vec1, const Vector3& vec2)
 {
 	return Vector3(
@@ -152,7 +150,17 @@ Vector3 Vector3::Min(const Vector3& vec1, const Vector3& vec2)
 }
 
 //------------------------------------------------------------------------------
-// static
+Vector3 Vector3::Min(const Vector3* vectors, int count)
+{
+	if (count <= 0) return Vector3::Zero;
+	Vector3 out = vectors[0];
+	for (int i = 1; i < count; ++i)
+	{
+		out = Min(out, vectors[i]);
+	}
+	return out;
+}
+
 //------------------------------------------------------------------------------
 Vector3 Vector3::Max(const Vector3& vec1, const Vector3& vec2)
 {
@@ -160,6 +168,18 @@ Vector3 Vector3::Max(const Vector3& vec1, const Vector3& vec2)
 		(vec1.x > vec2.x) ? vec1.x : vec2.x,
 		(vec1.y > vec2.y) ? vec1.y : vec2.y,
 		(vec1.z > vec2.z) ? vec1.z : vec2.z);
+}
+
+//------------------------------------------------------------------------------
+Vector3 Vector3::Max(const Vector3* vectors, int count)
+{
+	if (count <= 0) return Vector3::Zero;
+	Vector3 out = vectors[0];
+	for (int i = 1; i < count; ++i)
+	{
+		out = Max(out, vectors[i]);
+	}
+	return out;
 }
 
 //------------------------------------------------------------------------------
