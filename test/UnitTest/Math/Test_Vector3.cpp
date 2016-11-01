@@ -85,6 +85,20 @@ TEST_F(Test_Vector3, Basic)
 		ASSERT_VEC3_NEAR(0.267261, 0.534522, 0.801784, v1);
 		ASSERT_VEC3_NEAR(0.267261, 0.534522, 0.801784, v2);
 	}
+	// Vector3::Distance
+	{
+		Vector3 v1(1, 2, 3);
+		Vector3 v2(4, 5, 6);
+		ASSERT_NEAR((v2 - v1).GetLength(), Vector3::Distance(v1, v2), LN_FLOAT_THRESHOLD);
+		ASSERT_NEAR((v2 - v1).GetLength(), Vector3::Distance(v2, v1), LN_FLOAT_THRESHOLD);
+	}
+	// Vector3::DistanceSquared
+	{
+		Vector3 v1(1, 2, 3);
+		Vector3 v2(4, 5, 6);
+		ASSERT_NEAR((v2 - v1).GetLengthSquared(), Vector3::DistanceSquared(v1, v2), LN_FLOAT_THRESHOLD);
+		ASSERT_NEAR((v2 - v1).GetLengthSquared(), Vector3::DistanceSquared(v2, v1), LN_FLOAT_THRESHOLD);
+	}
 	// Vector3::Dot
 	{
 		Vector3 v1(5, 6, 7);

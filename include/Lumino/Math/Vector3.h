@@ -122,7 +122,23 @@ public:
 	static Vector3 Normalize(const Vector3& vec);
 
 	static Vector3 SafeNormalize(const Vector3& vec);
-
+	
+	/**
+		@brief		2つのベクトル間の距離を計算します。
+		@param[in]	vec1	: 処理の基になるベクトル
+		@param[in]	vec2	: 処理の基になるベクトル
+		@return		2つのベクトル間の距離
+	*/
+	static float Distance(const Vector3& vec1, const Vector3& vec2);
+	
+	/**
+		@brief		2つのベクトル間の距離の2乗を計算します。
+		@param[in]	vec1	: 処理の基になるベクトル
+		@param[in]	vec2	: 処理の基になるベクトル
+		@return		2つのベクトル間の距離の2乗
+	*/
+	static float DistanceSquared(const Vector3& vec1, const Vector3& vec2);
+	
 	/**
 		@brief		2つのベクトルの内積を計算します。
 		@param[in]	vec1	: 処理の基になるベクトル

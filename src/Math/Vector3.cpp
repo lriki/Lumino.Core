@@ -27,9 +27,7 @@ Vector3::Vector3(const Vector2& vec, float z_)
 	z = z_;
 }
 
-//-------------------------------------------------------------------------
-//
-//-------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 float Vector3::GetLength() const
 {
 	return Asm::sqrt(x * x + y * y + z * z);
@@ -119,6 +117,24 @@ Vector3 Vector3::SafeNormalize(const Vector3& vec)
 		vec.x * t,
 		vec.y * t,
 		vec.z * t);
+}
+
+//------------------------------------------------------------------------------
+float Vector3::Distance(const Vector3& vec1, const Vector3& vec2)
+{
+	float x = vec1.x - vec2.x;
+	float y = vec1.y - vec2.y;
+	float z = vec1.z - vec2.z;
+	return Asm::sqrt((x * x) + (y * y) + (z * z));
+}
+
+//------------------------------------------------------------------------------
+float Vector3::DistanceSquared(const Vector3& vec1, const Vector3& vec2)
+{
+	float x = vec1.x - vec2.x;
+	float y = vec1.y - vec2.y;
+	float z = vec1.z - vec2.z;
+	return (x * x) + (y * y) + (z * z);
 }
 
 //------------------------------------------------------------------------------
