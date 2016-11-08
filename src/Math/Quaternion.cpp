@@ -398,4 +398,62 @@ Quaternion Quaternion::Slerp(const Quaternion& qua1, const Quaternion& qua2, flo
 		(inverse * qua1.w) + (opposite * qua2.w));
 }
 
+//------------------------------------------------------------------------------
+Quaternion Quaternion::LookRotation(const Vector3& forward_, const Vector3& up_)
+{
+	Vector3 forward = Vector3::Normalize(forward_);
+	Vector3 right = Vector3::Normalize(Vector3::Cross(up_, forward));
+	Vector3 up = Vector3::Cross(forward, right);
+	float m00 = right.x;
+	float m01 = right.y;
+	float m02 = right.z;
+	float m10 = up.x;
+	float m11 = up.y;
+	float m12 = up.z;
+	float m20 = forward.x;
+	float m21 = forward.y;
+	float m22 = forward.z;
+
+	Quaternion quaternion;
+
+	float num8 = (m00 + m11) + m22;
+	if (num8 > 0.f)
+	{
+		float fd = sqrtf(num8 + 1.0f);
+		float hfd = 0.5f / fd;
+		quaternion.w = fd * 0.5f;
+		quaternion.x = (m12 - m21) * hfd;
+		quaternion.y = (m20 - m02) * hfd;
+		quaternion.z = (m01 - m10) * hfd;
+		return quaternion;
+	}
+	if ((m00 >= m11) && (m00 >= m22))
+	{
+		float fd = sqrtf(((1.0f + m00) - m11) - m22);
+		float hfd = 0.5f / fd;
+		quaternion.x = 0.5f * fd;
+		quaternion.y = (m01 + m10) * hfd;
+		quaternion.z = (m02 + m20) * hfd;
+		quaternion.w = (m12 - m21) * hfd;
+		return quaternion;
+	}
+	if (m11 > m22)
+	{
+		float fd = sqrtf(((1.0f + m11) - m00) - m22);
+		float hfd = 0.5f / fd;
+		quaternion.x = (m10 + m01) * hfd;
+		quaternion.y = 0.5f * fd;
+		quaternion.z = (m21 + m12) * hfd;
+		quaternion.w = (m20 - m02) * hfd;
+		return quaternion;
+	}
+	float fd = sqrtf(((1.0f + m22) - m00) - m11);
+	float hfd = 0.5f / fd;
+	quaternion.x = (m20 + m02) * hfd;
+	quaternion.y = (m21 + m12) * hfd;
+	quaternion.z = 0.5f * fd;
+	quaternion.w = (m01 - m10) * hfd;
+	return quaternion;
+}
+
 LN_NAMESPACE_END

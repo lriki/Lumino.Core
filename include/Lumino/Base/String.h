@@ -780,9 +780,16 @@ public:
 
 } // namespace detail
 
-
-
 LN_NAMESPACE_END
+
+
+namespace std {
+
+// for unordered_map key
+template <> struct hash<ln::StringA> { std::size_t operator () (const ln::StringA& key) const; };
+template <> struct hash<ln::StringW> { std::size_t operator () (const ln::StringW& key) const; };
+
+} // namespace std
 
 #include "StringTraits.h"
 #include "StringRef.h"

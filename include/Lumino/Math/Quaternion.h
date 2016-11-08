@@ -230,6 +230,14 @@ public:
 	*/
 	static Quaternion Slerp(const Quaternion& qua1, const Quaternion& qua2, float t);
 
+	/**
+		@brief		指定した方向を向くように回転するクオータニオンを作成します。
+		@param[in]	forward	: 向かせたい方向
+		@param[in]	up		: 上方向
+		@return		演算結果のクォータニオン
+	*/
+	static Quaternion LookRotation(const Vector3& forward, const Vector3& up = Vector3::UnitY);
+
 public:
 	
 	Quaternion& operator += (const Quaternion& v);

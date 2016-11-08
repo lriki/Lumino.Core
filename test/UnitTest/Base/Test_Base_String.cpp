@@ -1,4 +1,5 @@
 ﻿#include <TestConfig.h>
+#include <unordered_map>
 #include <Lumino/Text/Encoding.h>
 
 class IntegrationTest_Base_String : public ::testing::Test
@@ -963,6 +964,51 @@ TEST_F(Test_Base_String, FromNativeWCharString)
 {
 	String str = String::FromNativeCharString(L"abc");
 	ASSERT_EQ(_T("abc"), str);
+}
+
+//---------------------------------------------------------------------
+TEST_F(Test_Base_String, unordered_map)
+{
+	// <Test> unordered_map のキーにできること (char)
+	{
+		std::unordered_map<StringA, int> map1;
+		map1["key1"] = 1;
+		map1.insert(std::pair<StringA, int>("key2", 2));
+		ASSERT_EQ(1, map1["key1"]);
+		ASSERT_EQ(2, map1.find("key2")->second);
+
+		std::unordered_map<StringA, int> map2 =
+		{
+			{ "key1", 1 },
+			{ "key2", 2 },
+		};
+		ASSERT_EQ(1, map2["key1"]);
+		ASSERT_EQ(2, map2.find("key2")->second);
+	}
+	// <Test> unordered_map のキーにできること (wchar_t)
+	{
+		std::unordered_map<StringW, int> map1;
+		map1[L"key1"] = 1;
+		map1.insert(std::pair<StringW, int>(L"key2", 2));
+		ASSERT_EQ(1, map1[L"key1"]);
+		ASSERT_EQ(2, map1.find(L"key2")->second);
+
+		std::unordered_map<StringW, int> map2 =
+		{
+			{ L"key1", 1 },
+			{ L"key2", 2 },
+		};
+		ASSERT_EQ(1, map2[L"key1"]);
+		ASSERT_EQ(2, map2.find(L"key2")->second);
+	}
+	// <Test> std::hash の String の特殊化テスト
+	{
+		std::hash<ln::StringA> hash1;
+		ASSERT_NE(hash1(StringA("key1")), hash1(StringA("key2")));
+
+		std::hash<ln::StringW> hash2;
+		ASSERT_NE(hash2(StringW("key1")), hash2(StringW("key2")));
+	}
 }
 
 //---------------------------------------------------------------------

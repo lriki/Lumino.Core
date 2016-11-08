@@ -9,6 +9,7 @@
 #include <Lumino/Base/Locale.h>
 #include <Lumino/Base/Environment.h>
 #include <Lumino/Base/StringArray.h>
+#include <Lumino/Base/Hash.h>
 #include <Lumino/IO/PathName.h>
 
 /*
@@ -1087,3 +1088,19 @@ template class GenericString<char>;
 template class GenericString<wchar_t>;
 
 LN_NAMESPACE_END
+
+
+namespace std {
+
+// for unordered_map key
+std::size_t hash<ln::StringA>::operator () (const ln::StringA& key) const
+{
+	return ln::Hash::CalcHash(key.c_str(), key.GetLength());
+}
+
+std::size_t hash<ln::StringW>::operator () (const ln::StringW& key) const
+{
+	return ln::Hash::CalcHash(key.c_str(), key.GetLength());
+}
+
+} // namespace std

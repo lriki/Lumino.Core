@@ -53,7 +53,7 @@ public:
 	virtual void Seek(int64_t offset, SeekOrigin origin);
 	virtual void Flush() {}		// Write が直接メモリに書きこむので不要
 
-LN_INTERNAL_ACCESS:
+public:	// TODO: スタックでも使いたい
 	MemoryStream();
 	MemoryStream(void* buffer, size_t size);
 	MemoryStream(const void* buffer, size_t size, bool copy = false);
