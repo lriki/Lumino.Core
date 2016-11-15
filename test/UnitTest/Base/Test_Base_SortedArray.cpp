@@ -2,6 +2,7 @@
 #include <Lumino/Base/SortedArray.h>
 #include <Lumino/Base/ElapsedTimer.h>
 #include <map>
+#include <unordered_map>
 #include <random>
 
 class Test_Base_SortedArray : public ::testing::Test
@@ -32,15 +33,17 @@ TEST_F(Test_Base_SortedArray, Add)
 	}
 	
 #if 0
-	const int Count = 100000;
+	const int Count = 1000;
 	//String keys[Count];
-	std::map<int, int>		map1;
-	SortedArray<int, int>	sary1;
+	std::map<int, int>				map1;
+	std::unordered_map<int, int>	hashmap1;
+	SortedArray<int, int>			sary1;
 	for (int i = 0; i < Count; ++i)
 	{
 		//String key = String::Format(_T("key%d"), i);
 		//keys[i] = key;
 		map1[i] = i;
+		hashmap1[i] = i;
 		sary1.Add(i, i);
 	}
 	printf("map ----\n");
@@ -56,6 +59,18 @@ TEST_F(Test_Base_SortedArray, Add)
 		}
 		printf("t:%llu\n", timer.GetElapsedTimeNS());
 		//printf("sum:%d\n", sum);
+	}
+	printf("unordered_map ----\n");
+	for (int j = 0; j < 10; j++)
+	{
+		ElapsedTimer timer;
+		timer.Start();
+		int sum = 0;
+		for (int i = Count - 1; i >= 0; --i)
+		{
+			sum += hashmap1[i];
+		}
+		printf("t:%llu\n", timer.GetElapsedTimeNS());
 	}
 	printf("SortedArray ----\n");
 	for (int j = 0; j < 10; j++)
