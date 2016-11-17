@@ -22,6 +22,8 @@ public:
 	void Append(const TChar ch);
 	void Append(const TChar ch, int count);
 	void Append(const TChar* str, int length);
+	void Append(const TChar* str);
+	//void Append(const GenericString<TChar>& str);		// TODO: GenericString 側が UTF16/32 対応できるまで
 	void Append(const byte_t* buffer, int byteCount);
 	void Append(const ByteBuffer& buffer);
 

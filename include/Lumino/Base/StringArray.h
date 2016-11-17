@@ -52,7 +52,6 @@ public:
 			const StringType& item = ArrayType::GetAt(i);
 			if (StringTraits::Compare(item.c_str(), item.GetLength(), str, len, -1, cs) == 0)
 			{
-				std::map::find
 				return i;
 			}
 		}

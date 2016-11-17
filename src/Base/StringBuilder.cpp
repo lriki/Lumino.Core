@@ -56,6 +56,21 @@ void GenericStringBuilderCore<TChar>::Append(const TChar* str, int length)
 	//if (str == NULL || length <= 0) { return; }	// コピーの必要無し
 	WriteInternal(str, (length < 0) ? StringTraits::tcslen(str) : length);
 }
+
+//------------------------------------------------------------------------------
+template<typename TChar>
+void GenericStringBuilderCore<TChar>::Append(const TChar* str)
+{
+	WriteInternal(str, StringTraits::tcslen(str));
+}
+
+//------------------------------------------------------------------------------
+//template<typename TChar>
+//void GenericStringBuilderCore<TChar>::Append(const GenericString<TChar>& str)
+//{
+//	Append(str.c_str(), str.GetLength());
+//}
+//
 //------------------------------------------------------------------------------
 template<typename TChar>
 void GenericStringBuilderCore<TChar>::Append(const byte_t* buffer, int byteCount)

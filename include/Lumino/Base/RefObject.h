@@ -221,7 +221,7 @@ RefPtr<T>::RefPtr()
 
 //------------------------------------------------------------------------------
 template<typename T>
-RefPtr<T>::RefPtr(T* ptr, bool addRef = true)
+RefPtr<T>::RefPtr(T* ptr, bool addRef)
 	: m_ptr(ptr)
 {
 	if (addRef)

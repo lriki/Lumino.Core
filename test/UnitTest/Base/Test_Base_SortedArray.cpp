@@ -32,22 +32,65 @@ TEST_F(Test_Base_SortedArray, Add)
 			ArgumentException);
 	}
 	
-#if 0
-	const int Count = 1000;
+#if 1
+	struct Pair
+	{
+		int key;
+		int value;
+	};
+
+	const int TryCount = 100;
+	const int Count = 10;
 	//String keys[Count];
 	std::map<int, int>				map1;
 	std::unordered_map<int, int>	hashmap1;
 	SortedArray<int, int>			sary1;
+	List<Pair>						list1;
+
+	hashmap1.reserve(1000);
+
 	for (int i = 0; i < Count; ++i)
 	{
 		//String key = String::Format(_T("key%d"), i);
 		//keys[i] = key;
 		map1[i] = i;
-		hashmap1[i] = i;
-		sary1.Add(i, i);
+		list1.Add(Pair{i, i});
 	}
-	printf("map ----\n");
-	for (int j = 0; j < 10; j++)
+	printf("unordered_map insert ----\n");
+	{
+		ElapsedTimer timer;
+		timer.Start();
+		for (int i = 0; i < Count; ++i)
+		{
+			hashmap1[i] = i;
+		}
+		printf("t:%llu\n", timer.GetElapsedTimeNS());	// VS2015:73,552ns
+		// ※ clear や reserve してもあまり変わらない。
+	}
+	printf("unordered_map copy ----\n");
+	{
+		std::unordered_map<int, int>	hashmap2;
+		hashmap2.reserve(1000);
+		for (int j = 0; j < TryCount; j++)
+		{
+			ElapsedTimer timer;
+			timer.Start();
+			hashmap2 = hashmap1;
+			printf("t:%llu\n", timer.GetElapsedTimeNS());	// VS2015:82,675ns
+		}
+	}
+	printf("SortedArray insert ----\n");
+	{
+		ElapsedTimer timer;
+		timer.Start();
+		for (int i = 0; i < Count; ++i)
+		{
+			sary1.Add(i, i);
+		}
+		printf("t:%llu\n", timer.GetElapsedTimeNS());
+	}
+	printf("map find ----\n");
+	for (int j = 0; j < TryCount; j++)
 	{
 		ElapsedTimer timer;
 		timer.Start();
@@ -60,62 +103,78 @@ TEST_F(Test_Base_SortedArray, Add)
 		printf("t:%llu\n", timer.GetElapsedTimeNS());
 		//printf("sum:%d\n", sum);
 	}
-	printf("unordered_map ----\n");
-	for (int j = 0; j < 10; j++)
+	printf("unordered_map find ----\n");
 	{
 		ElapsedTimer timer;
 		timer.Start();
-		int sum = 0;
-		for (int i = Count - 1; i >= 0; --i)
+		for (int j = 0; j < TryCount; j++)
 		{
-			sum += hashmap1[i];
+			int sum = 0;
+			for (int i = Count - 1; i >= 0; --i)
+			{
+				sum += hashmap1[i];
+			}
+		}
+		printf("t:%llu\n", timer.GetElapsedTimeNS());		// VS2015:8,837ns
+	}
+	printf("SortedArray find ----\n");
+	{
+		ElapsedTimer timer;
+		timer.Start();
+		for (int j = 0; j < TryCount; j++)
+		{
+			int sum = 0;
+			for (int i = Count - 1; i >= 0; --i)
+			{
+				int v;
+				sary1.TryGetValue(i, &v);
+				sum += v;
+			}
 		}
 		printf("t:%llu\n", timer.GetElapsedTimeNS());
 	}
-	printf("SortedArray ----\n");
-	for (int j = 0; j < 10; j++)
+	printf("List find ----\n");
 	{
 		ElapsedTimer timer;
 		timer.Start();
-		int sum = 0;
-		//for (int i = 0; i < Count; ++i)
-		for (int i = Count - 1; i >= 0; --i)
+		for (int j = 0; j < TryCount; j++)
 		{
-			int v;
-			sary1.TryGetValue(i, &v);
-			sum += v;
+			int sum = 0;
+			for (int i = Count - 1; i >= 0; --i)
+			{
+				sum += list1.Find([i](const Pair& p) { return p.key == i; })->value;
+			}
 		}
 		printf("t:%llu\n", timer.GetElapsedTimeNS());
-		//printf("sum:%d\n", sum);
 	}
 
 
-	printf("map ----\n");
-	for (int j = 0; j < 10; j++)
-	{
-		ElapsedTimer timer;
-		timer.Start();
-		int sum = 0;
-		for (auto& pair : map1)
-		{
-			sum += pair.second;
-		}
-		printf("t:%llu\n", timer.GetElapsedTimeNS());
-		//printf("sum:%d\n", sum);
-	}
-	printf("SortedArray ----\n");
-	for (int j = 0; j < 10; j++)
-	{
-		ElapsedTimer timer;
-		timer.Start();
-		int sum = 0;
-		for (auto& pair : map1)
-		{
-			sum += pair.second;
-		}
-		printf("t:%llu\n", timer.GetElapsedTimeNS());
-		//printf("sum:%d\n", sum);
-	}
+	//printf("map ----\n");
+	//for (int j = 0; j < TryCount; j++)
+	//{
+	//	ElapsedTimer timer;
+	//	timer.Start();
+	//	int sum = 0;
+	//	for (auto& pair : map1)
+	//	{
+	//		sum += pair.second;
+	//	}
+	//	printf("t:%llu\n", timer.GetElapsedTimeNS());
+	//	//printf("sum:%d\n", sum);
+	//}
+	//printf("SortedArray ----\n");
+	//for (int j = 0; j < TryCount; j++)
+	//{
+	//	ElapsedTimer timer;
+	//	timer.Start();
+	//	int sum = 0;
+	//	for (auto& pair : map1)
+	//	{
+	//		sum += pair.second;
+	//	}
+	//	printf("t:%llu\n", timer.GetElapsedTimeNS());
+	//	//printf("sum:%d\n", sum);
+	//}
 #endif
 }
 

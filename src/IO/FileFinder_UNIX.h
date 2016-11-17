@@ -1,6 +1,5 @@
 
 #include "../Internal.h"
-#include <windows.h>
 
 LN_NAMESPACE_BEGIN
 namespace detail {
@@ -15,7 +14,7 @@ public:
 	{
 		StringA t;
 		t.AssignCStr(GenericFileFinderBase<TChar>::m_dirPath.c_str());
-		Initializ(t.c_str());
+		Initialize(t.c_str());
 	}
 
 	~GenericFileFinderImpl()
