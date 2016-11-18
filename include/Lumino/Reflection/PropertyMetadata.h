@@ -43,6 +43,8 @@ class PropertyMetadata
 	//	}
 	//};
 
+	using StaticPropertyChangedCallback = void(*)(ReflectionObject* obj);
+
 public:
 	PropertyMetadata()
 	{
@@ -52,11 +54,19 @@ public:
 		m_inheritanceTarget = NULL;
 	}
 
-	PropertyMetadata(const Variant& defaultValue)
+	//PropertyMetadata(const Variant& defaultValue)
+	//	: PropertyMetadata()
+	//{
+	//	m_defaultValue = defaultValue;
+	//}
+
+	PropertyMetadata(StaticPropertyChangedCallback callback)
 		: PropertyMetadata()
 	{
-		m_defaultValue = defaultValue;
+		m_staticPropertyChangedCallback = callback;
 	}
+	
+
 	//template<typename TOwnerClass>
 	//PropertyMetadata(const Variant& defaultValue, void(TOwnerClass::*propertyChanged)(PropertyChangedEventArgs*))
 	//	: PropertyMetadata()
@@ -97,11 +107,18 @@ public:
 	PropertyOptions GetPropertyOptions() const { return m_options; }
 	PropertyInfo* GetInheritanceTarget() const { return m_inheritanceTarget; }
 
+	void CallStaticPropertyChanged(ReflectionObject* obj) const
+	{
+		if (m_staticPropertyChangedCallback != nullptr)
+			m_staticPropertyChangedCallback(obj);
+	}
+
 private:
 	Variant					m_defaultValue;
 	//CallbackWrapper*		m_propertyChangedCallback;
 	PropertyOptions			m_options;
 	PropertyInfo*			m_inheritanceTarget;
+	StaticPropertyChangedCallback	m_staticPropertyChangedCallback;
 };
 
 } // namespace tr

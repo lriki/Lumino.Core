@@ -127,10 +127,12 @@ void* TypeInfo::GetBindingTypeInfo(const ReflectionObject* obj)
 //------------------------------------------------------------------------------
 void TypeInfo::InitializeProperties(ReflectionObject* obj)
 {
-	//for (PropertyInfo* prop : m_propertyList)
-	//{
-	//	prop->GetPropertyBase(obj)->m_owner = obj;
-	//}
+	for (PropertyInfo* info : m_propertyList)
+	{
+		PropertyBase* prop = info->GetPropertyBase(obj);
+		prop->m_owner = obj;
+		prop->m_propId = info;
+	}
 }
 
 namespace detail

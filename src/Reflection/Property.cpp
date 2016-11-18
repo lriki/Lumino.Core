@@ -16,7 +16,7 @@ static EventArgsPool g_eventArgsPool;
 //------------------------------------------------------------------------------
 PropertyInfo::PropertyInfo(TypeInfo* ownerClassType, PropertyMetadata* metadata, bool stored)
 	: m_ownerClassType(ownerClassType)
-	, m_metadata(metadata)
+	, m_metadata()
 	, m_memberOffset(0)
 	, m_stored(stored)
 	, m_registerd(false)
@@ -30,12 +30,21 @@ PropertyInfo::~PropertyInfo()
 }
 
 //------------------------------------------------------------------------------
-void PropertyInfo::NotifyPropertyChanged(PropertyBase* target, const PropertyInfo* prop, PropertySetSource source)
+void PropertyInfo::NotifyPropertyChanged(ReflectionObject* ownerObject, PropertyBase* target, const PropertyInfo* prop, PropertySetSource source)
 {
 	RefPtr<PropertyChangedEventArgs> e(g_eventArgsPool.Create<PropertyChangedEventArgs>(prop, source), false);
 	//target->OnPropertyChanged(e);
-	target->CallListener(e);
+	//target->CallListener(e);
 	//prop->m_metadata->CallPropertyChangedCallback(target, e);
+	if (ownerObject != nullptr && prop != nullptr)	// InitializeProperties ‚³‚ê‚Ä‚¢‚È‚¢‚Æ‚±‚ê‚ç‚ÍÝ’è‚³‚ê‚È‚¢
+	{
+		ownerObject->OnPropertyChanged(e);
+
+		if (!e->handled)
+		{
+			prop->GetMetadata().CallStaticPropertyChanged(ownerObject);
+		}
+	}
 }
 
 //------------------------------------------------------------------------------
@@ -71,15 +80,15 @@ Variant PropertyInfo::GetPropertyValue(ReflectionObject* obj, const PropertyInfo
 // PropertyBase
 //==============================================================================
 //------------------------------------------------------------------------------
-void PropertyBase::CallListener(PropertyChangedEventArgs* e) const
-{
-	if (m_staticListenerOwner != nullptr && m_staticListener != nullptr)
-	{
-		 m_staticListener(m_staticListenerOwner, e);
-	}
-
-	for (IPropertyChangedListener* listener : m_listeners) listener->OnPropertyChanged(e);
-}
+//void PropertyBase::CallListener(PropertyChangedEventArgs* e) const
+//{
+//	if (m_staticListenerOwner != nullptr && m_staticListener != nullptr)
+//	{
+//		 m_staticListener(m_staticListenerOwner, e);
+//	}
+//
+//	for (IPropertyChangedListener* listener : m_listeners) listener->OnPropertyChanged(e);
+//}
 
 } // namespace tr
 LN_NAMESPACE_END

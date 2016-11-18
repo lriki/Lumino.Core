@@ -63,7 +63,7 @@ public:
 protected:
 	friend class PropertyInfo;
 	void RaiseReflectionEvent(const ReflectionEventBase& ev, ReflectionEventArgs* args);
-	//virtual void OnPropertyChanged(PropertyChangedEventArgs* e);
+	virtual void OnPropertyChanged(PropertyChangedEventArgs* e);
 
 	template<typename... TArgs>
 	void RaiseDelegateEvent(DelegateEvent<TArgs...>& ev, TArgs... args) { ev.Raise(args...); }
