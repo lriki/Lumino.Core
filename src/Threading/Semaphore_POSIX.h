@@ -9,7 +9,7 @@ class SemaphoreImpl
 {
 public:
 	SemaphoreImpl(int initialCount, int maxCount)
-		: m_value(startCount)
+		: m_value(initialCount)
 		, m_maxCount(maxCount)
 	{
 		pthread_mutex_init(&m_mutex, 0);

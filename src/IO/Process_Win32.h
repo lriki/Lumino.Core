@@ -3,27 +3,7 @@
 
 LN_NAMESPACE_BEGIN
 namespace detail {
-
-struct ProcessStartInfo
-{
-	PathName				program;
-	String					args;
-	PathName				workingDirectory;
-	bool					redirectStandardInput;
-	bool					redirectStandardOutput;
-	bool					redirectStandardError;
-	Encoding*				standardInputEncoding;
-	Encoding*				standardOutputEncoding;
-	Encoding*				standardErrorEncoding;
-};
-
-struct ProcessStartResult
-{
-	RefPtr<StreamWriter>	standardInputWriter;
-	RefPtr<StreamReader>	standardOutputReader;
-	RefPtr<StreamReader>	standardErrorReader;
-};
-
+	
 class InternalPipeStream
 	: public Stream
 {
@@ -78,7 +58,7 @@ private:
 };
 
 //==============================================================================
-// Process
+// ProcessImpl
 //==============================================================================
 
 class ProcessImpl
@@ -146,7 +126,7 @@ void ProcessImpl::Start(const ProcessStartInfo& startInfo, ProcessStartResult* o
 	sa.bInheritHandle = TRUE;
 
 	/*
-		パイプの継承設定を行う理由	
+		パイプの継承設定を行う理由
 		http://www.ne.jp/asahi/hishidama/home/tech/c/windows/CreatePipe.html
 	*/
 

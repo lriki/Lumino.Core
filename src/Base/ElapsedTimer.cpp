@@ -70,6 +70,15 @@ uint64_t ElapsedTimer::GetElapsedTime() const
 	return (ct - m_start) / 1000;	// us 単位なので ms に変換する
 }
 
+//------------------------------------------------------------------------------
+uint64_t ElapsedTimer::GetElapsedTimeNS() const
+{
+	timeval t;
+	gettimeofday(&t, NULL);
+	uint64_t ct = (uint64_t)t.tv_sec * 1000000 + (uint64_t)t.tv_usec;
+	return (ct - m_start);
+}
+
 #endif
 
 LN_NAMESPACE_END

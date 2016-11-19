@@ -332,10 +332,10 @@ inline errno_t _wfopen_s(
 
 	char mbcsFilename[LN_MAX_PATH + 1];	// linux なら UTF8
 	char mbcsMode[LN_MAX_PATH + 1];	// linux なら UTF8
-	if (wcstombs(mbcsFilename, filename, LN_MAX_PATH) < 0) {
+	if (wcstombs(mbcsFilename, filename, LN_MAX_PATH) == (size_t)(-1)) {
 		return EINVAL;
 	}
-	if (wcstombs(mbcsMode, mode, LN_MAX_PATH) < 0) {
+	if (wcstombs(mbcsMode, mode, LN_MAX_PATH) == (size_t)(-1)) {
 		return EINVAL;
 	}
 

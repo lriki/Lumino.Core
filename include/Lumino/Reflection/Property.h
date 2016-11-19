@@ -5,6 +5,7 @@
 #include "../Base/RefObject.h"
 #include "../Base/String.h"
 #include "PropertyMetadata.h"
+#include "ReflectionObject.h"
 
 #define LN_MEMBER_OFFSETOF(type, member)  \
     (reinterpret_cast<std::size_t>(  \

@@ -1,6 +1,6 @@
 ﻿
 #include "../Internal.h"
-#include <windows.h>
+#include <Lumino/Threading/Thread.h>
 
 LN_NAMESPACE_BEGIN
 namespace detail {
@@ -8,8 +8,9 @@ namespace detail {
 class ThreadImpl
 {
 public:
-	ThreadImpl()
-		: mThread(0)
+	ThreadImpl(Thread* owner)
+		: m_owner(owner)
+		, mThread(0)
 	{
 	}
 
@@ -32,7 +33,7 @@ public:
 		}
 	}
 
-	intptr_t GetThreadID() const
+	intptr_t GetThreadId() const
 	{
 		return (intptr_t)(mThread);
 	}
@@ -50,27 +51,12 @@ public:
 private:
 	static void* ThreadEntry(void* ptr)
 	{
-		Thread* obj = static_cast<Thread*>(ptr);
-
-		// 実行
-		try
-		{
-			obj->Execute();
-		}
-		catch (Exception& e)
-		{
-			obj->mLastException = e.Copy();
-		}
-		catch (...)
-		{
-			obj->mLastException = LN_NEW ThreadException();
-		}
-
-		// 終了フラグを立てる
-		obj->mFinished.SetTrue();
+		ThreadImpl* obj = reinterpret_cast<ThreadImpl*>(ptr);
+		obj->m_owner->ExecuteInternal();
 		return 0;
 	}
 
+	Thread*			m_owner;
 	pthread_t		mThread;
 };
 

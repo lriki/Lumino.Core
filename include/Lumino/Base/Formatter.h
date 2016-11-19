@@ -109,8 +109,8 @@ class FormatListN : public FormatList<TChar>
 public:
 	template<typename... Args>
 	FormatListN(const Args&... args)
-		: FormatList<TChar>(&m_argsStore[0], N)
-		, m_argsStore LN_FORMAT_BRACED_INIT_WORKAROUND({ FormatArg<TChar>(args)... })	// この部分は → のように展開される {FormatArg(e1), FormatArg(e2), FormatArg(e3)} http://en.cppreference.com/w/cpp/language/parameter_pack
+		: m_argsStore LN_FORMAT_BRACED_INIT_WORKAROUND({ FormatArg<TChar>(args)... })	// この部分は → のように展開される {FormatArg(e1), FormatArg(e2), FormatArg(e3)} http://en.cppreference.com/w/cpp/language/parameter_pack
+		, FormatList<TChar>(&m_argsStore[0], N)
 	{
 		static_assert(sizeof...(args) == N, "Invalid args count.");
 	}

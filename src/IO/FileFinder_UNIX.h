@@ -1,10 +1,43 @@
 
 #include "../Internal.h"
+#include <Lumino/IO/DirectoryUtils.h>
 
 LN_NAMESPACE_BEGIN
 namespace detail {
+	
+	
+	template<typename TChar>
+	class GenericFileFinderImpl
+		: public GenericFileFinderImplBase<TChar>
+	{
+	public:
+		GenericFileFinderImpl(const GenericStringRef<TChar>& dirPath)
+			: GenericFileFinderImplBase<TChar>(dirPath)
+		{
+			assert(0);
+		}
+		
+		~GenericFileFinderImpl()
+		{
+			assert(0);
+		}
+		
+		void Initialize(const TChar* dirPath)
+		{
+			assert(0);
+		}
+		
+		virtual bool Next() override
+		{
+			assert(0);
+			return false;
+		}
+	};
+	
 
-class GenericFileFinderImpl
+
+template<>
+class GenericFileFinderImpl<char>
 	: public GenericFileFinderImplBase<char>
 {
 public:
@@ -13,7 +46,7 @@ public:
 		, m_dir(NULL)
 	{
 		StringA t;
-		t.AssignCStr(GenericFileFinderBase<TChar>::m_dirPath.c_str());
+		t.AssignCStr(GenericFileFinderImplBase<char>::m_dirPath.c_str());
 		Initialize(t.c_str());
 	}
 
@@ -41,16 +74,16 @@ public:
 			entry = readdir(m_dir);
 			if (entry)
 			{
-				GenericFileFinderBase<TChar>::SetCurrentFileName(entry->d_name);
+				GenericFileFinderImplBase<char>::SetCurrentFileName(entry->d_name);
 			}
 			else
 			{
-				GenericFileFinderBase<TChar>::SetCurrentFileName((char*)NULL);
+				GenericFileFinderImplBase<char>::SetCurrentFileName((char*)NULL);
 				break;
 			}
 		} while (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0);
 
-		return !GenericFileFinderBase<TChar>::GetCurrent().IsEmpty();
+		return !GenericFileFinderImplBase<char>::GetCurrent().IsEmpty();
 	}
 
 private:

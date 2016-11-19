@@ -220,8 +220,33 @@ private:
 
 #ifdef _WIN32
 #else
-    pid_t   m_pid;
+    pid_t   m_pid;	// TODO:PImplにしたのでいらないかも
 #endif
 };
+
+
+namespace detail {
+
+struct ProcessStartInfo
+{
+	PathName				program;
+	String					args;
+	PathName				workingDirectory;
+	bool					redirectStandardInput;
+	bool					redirectStandardOutput;
+	bool					redirectStandardError;
+	Encoding*				standardInputEncoding;
+	Encoding*				standardOutputEncoding;
+	Encoding*				standardErrorEncoding;
+};
+
+struct ProcessStartResult
+{
+	RefPtr<StreamWriter>	standardInputWriter;
+	RefPtr<StreamReader>	standardOutputReader;
+	RefPtr<StreamReader>	standardErrorReader;
+};
+	
+} // namespace detail
 
 LN_NAMESPACE_END
