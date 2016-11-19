@@ -344,13 +344,13 @@ public:
 public:	// TODO
 	
 	List<IPropertyChangedListener*>	m_listeners;
+	
+	// set from TypeInfo::InitializeProperties
+	ReflectionObject*		m_owner;
+	const PropertyInfo*		m_propId;
 
 	ReflectionObject*		m_staticListenerOwner;
 	OnPropertyChangedFunc	m_staticListener;
-
-	// set from TypeInfo::InitializeProperties
-	ReflectionObject*	m_owner;
-	const PropertyInfo*	m_propId;
 };
 
 

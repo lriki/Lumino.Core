@@ -14,8 +14,10 @@ LN_NAMESPACE_BEGIN
 
 //------------------------------------------------------------------------------
 ElapsedTimer::ElapsedTimer()
-	: m_freq(0)
-	, m_start(0)
+	: m_start(0)
+#if defined(LN_OS_WIN32)
+	, m_freq(0)
+#endif
 {
 }
 

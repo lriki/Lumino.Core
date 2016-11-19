@@ -23,8 +23,11 @@ public:
 	uint64_t GetElapsedTimeNS() const;
 
 private:
-	uint64_t		m_freq;
 	uint64_t		m_start;
+#if defined(LN_OS_WIN32)
+	uint64_t		m_freq;
+#endif
+
 };
 
 LN_NAMESPACE_END
