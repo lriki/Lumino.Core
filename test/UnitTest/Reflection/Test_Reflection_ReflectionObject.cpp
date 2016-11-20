@@ -119,12 +119,12 @@ class PropertyTest1
 {
 	LN_TR_REFLECTION_TYPEINFO_DECLARE();
 public:
-	LN_TR_PROPERTY2(int, V1);
-	LN_TR_PROPERTY2(RefTest1*, V2);
-	LN_TR_PROPERTY2(Point, V3);
-	LN_TR_PROPERTY2(RefPtr<RefTest2>, V4);
+	LN_TR_PROPERTY(int, V1);
+	LN_TR_PROPERTY(RefTest1*, V2);
+	LN_TR_PROPERTY(Point, V3);
+	LN_TR_PROPERTY(RefPtr<RefTest2>, V4);
 	tr::Property<int> V5;	// メタデータを持たないプロパティ
-	LN_TR_PROPERTY2(int, V6);
+	LN_TR_PROPERTY(int, V6);
 
 public:
 	PropertyTest1()
@@ -169,11 +169,11 @@ private:
 	}
 };
 LN_TR_REFLECTION_TYPEINFO_IMPLEMENT(PropertyTest1, tr::ReflectionObject);
-LN_TR_PROPERTY2_IMPLEMENT(PropertyTest1, int, V1, tr::PropertyMetadata());
-LN_TR_PROPERTY2_IMPLEMENT(PropertyTest1, RefTest1*, V2, tr::PropertyMetadata());
-LN_TR_PROPERTY2_IMPLEMENT(PropertyTest1, Point, V3, tr::PropertyMetadata());
-LN_TR_PROPERTY2_IMPLEMENT(PropertyTest1, RefPtr<RefTest2>, V4, tr::PropertyMetadata());
-LN_TR_PROPERTY2_IMPLEMENT(PropertyTest1, int, V6, tr::PropertyMetadata(PropertyTest1::V6Changed));
+LN_TR_PROPERTY_IMPLEMENT(PropertyTest1, int, V1, tr::PropertyMetadata());
+LN_TR_PROPERTY_IMPLEMENT(PropertyTest1, RefTest1*, V2, tr::PropertyMetadata());
+LN_TR_PROPERTY_IMPLEMENT(PropertyTest1, Point, V3, tr::PropertyMetadata());
+LN_TR_PROPERTY_IMPLEMENT(PropertyTest1, RefPtr<RefTest2>, V4, tr::PropertyMetadata());
+LN_TR_PROPERTY_IMPLEMENT(PropertyTest1, int, V6, tr::PropertyMetadata(PropertyTest1::V6Changed));
 
 //------------------------------------------------------------------------------
 TEST_F(Test_Reflection_Property, GetSet)
@@ -390,235 +390,3 @@ TEST_F(Test_Reflection_Property, NonMetadataProperty)
 }
 
 
-
-
-#if 0
-
-
-//
-//class Initier
-//{
-//public:
-//	Initier()
-//	{
-//		printf("Initier\n");
-//	}
-//};
-//
-
-
-//---------------------------------------------------------------------
-class PropertyTest1
-	: public tr::ReflectionObject
-	, public tr::IPropertyChangedListener
-{
-	LN_TR_REFLECTION_TYPEINFO_DECLARE();
-	//Initier	_ini;
-public:
-	LN_TR_PROPERTY2(int, V1Property);
-	LN_TR_PROPERTY2(RefTest1*, V2Property);
-	LN_TR_PROPERTY2(Point, V3Property);
-	LN_TR_PROPERTY2(RefPtr<RefTest2>, V4Property);
-	LN_TR_PROPERTY2(int, V5Property);
-	LN_TR_PROPERTY2(int, V6Property);
-
-public:
-	PropertyTest1()
-		: m_v1(0)
-		, m_v2(nullptr)
-		, m_v3()
-		, m_v4()
-		, m_v5()
-		, m_v6()
-	{
-		//printf("PropertyTest1\n");
-		//InitializeProperties();
-		m_v1.AddListener(this);
-		m_v2.AddListener(this);
-		m_v3.AddListener(this);
-		m_v4.AddListener(this);
-	}
-
-	void SetV1(int v) { m_v1 = v; }
-	int GetV1() const { return m_v1; }
-
-	void SetV2(RefTest1* v) { m_v2 = v; }
-	RefTest1* GetV2() const { return m_v2; }
-
-	void SetV3(const Point& v) { m_v3 = v; }
-	const Point& GetV3() const { return m_v3; }
-
-	void SetV4(RefTest2* v) { m_v4.Set(v); }
-	//RefTest2* GetV4() const { return m_v4; }	// TODO: できればコレがやりたいのだが・・・
-	RefTest2* GetV4() const { return m_v4.Get(); }
-	RefPtr<RefTest2> GetV4_2() const { return m_v4; }
-
-	virtual void OnPropertyChanged(tr::PropertyChangedEventArgs* e) override
-	{
-		m_lastChangedProp = e->changedProperty;
-	}
-
-public:
-	tr::Property<int> m_v1;
-	tr::Property<RefTest1*> m_v2;
-	tr::Property<Point> m_v3;
-	tr::Property<RefPtr<RefTest2>> m_v4;
-	const tr::PropertyInfo*	m_lastChangedProp;
-
-protected:
-	tr::Property<int> m_v5;	// proptected の確認
-private:
-	tr::Property<int> m_v6;	// private の確認
-};
-LN_TR_REFLECTION_TYPEINFO_IMPLEMENT(PropertyTest1, tr::ReflectionObject);
-LN_TR_PROPERTY_IMPLEMENT(PropertyTest1, int, V1Property, "V1", m_v1, tr::PropertyMetadata());
-LN_TR_PROPERTY_IMPLEMENT(PropertyTest1, RefTest1*, V2Property, "V2", m_v2, tr::PropertyMetadata());
-LN_TR_PROPERTY_IMPLEMENT(PropertyTest1, Point, V3Property, "V3", m_v3, tr::PropertyMetadata());
-LN_TR_PROPERTY_IMPLEMENT(PropertyTest1, RefPtr<RefTest2>, V4Property, "V4", m_v4, tr::PropertyMetadata());
-LN_TR_PROPERTY_IMPLEMENT(PropertyTest1, int, V5Property, "V5", m_v5, tr::PropertyMetadata());
-LN_TR_PROPERTY_IMPLEMENT(PropertyTest1, int, V6Property, "V6", m_v6, tr::PropertyMetadata());
-
-
-TEST_F(IntegrationTest_Reflection_ReflectionObject, Property)
-{
-	PropertyTest1 t1;
-
-	// <Test> 値型
-	{
-		// set
-		tr::PropertyInfo::SetPropertyValue(&t1, PropertyTest1::V1PropertyId, 100);
-		ASSERT_EQ(100, t1.m_v1);
-
-		// get
-		tr::Variant v1 = tr::PropertyInfo::GetPropertyValue(&t1, PropertyTest1::V1PropertyId);
-		ASSERT_EQ(100, tr::Variant::Cast<int>(v1));
-
-		// set (Direct)
-		tr::PropertyInfo::SetPropertyValueDirect<int>(&t1, PropertyTest1::V1PropertyId, 200);
-		ASSERT_EQ(200, t1.m_v1);
-
-		// get (Direct)
-		tr::Variant v2 = tr::PropertyInfo::GetPropertyValueDirect<int>(&t1, PropertyTest1::V1PropertyId);
-		ASSERT_EQ(200, tr::Variant::Cast<int>(v2));
-
-		// setter/getter
-		t1.SetV1(300);
-		ASSERT_EQ(300, t1.GetV1());
-	}
-
-	// <Test> ポインタ型
-	{
-		RefTest1 rt1;
-		RefTest1 rt2;
-
-		// set
-		tr::PropertyInfo::SetPropertyValue(&t1, PropertyTest1::V2PropertyId, &rt1);
-		ASSERT_EQ(&rt1, t1.m_v2);
-
-		// get
-		tr::Variant v1 = tr::PropertyInfo::GetPropertyValue(&t1, PropertyTest1::V2PropertyId);
-		ASSERT_EQ(&rt1, tr::Variant::Cast<RefTest1*>(v1));
-
-		// set (Direct)
-		tr::PropertyInfo::SetPropertyValueDirect<RefTest1*>(&t1, PropertyTest1::V2PropertyId, &rt2);
-		ASSERT_EQ(&rt2, t1.m_v2);
-
-		// get (Direct)
-		tr::Variant v2 = tr::PropertyInfo::GetPropertyValueDirect<RefTest1*>(&t1, PropertyTest1::V2PropertyId);
-		ASSERT_EQ(&rt2, tr::Variant::Cast<RefTest1*>(v2));
-
-		// setter/getter
-		RefTest1 rt3;
-		t1.SetV2(&rt3);
-		ASSERT_EQ(&rt3, t1.GetV2());
-
-		// setter/getter (nullptr)
-		t1.SetV2(nullptr);
-		ASSERT_EQ(nullptr, t1.GetV2());
-	}
-
-	// <Test> 構造体
-	{
-		// set
-		Point pt1(1, 2);
-		tr::PropertyInfo::SetPropertyValue(&t1, PropertyTest1::V3PropertyId, pt1);
-		ASSERT_EQ(1, t1.m_v3.Get().x);
-		ASSERT_EQ(2, t1.m_v3.Get().y);
-
-		// get
-		tr::Variant v = tr::PropertyInfo::GetPropertyValue(&t1, PropertyTest1::V3PropertyId);
-		ASSERT_EQ(1, tr::Variant::Cast<Point>(v).x);
-		ASSERT_EQ(2, tr::Variant::Cast<Point>(v).y);
-
-		// set (Direct)
-		Point pt2(10, 20);
-		tr::PropertyInfo::SetPropertyValueDirect<Point>(&t1, PropertyTest1::V3PropertyId, pt2);
-		ASSERT_EQ(10, t1.m_v3.Get().x);
-		ASSERT_EQ(20, t1.m_v3.Get().y);
-
-		// get (Direct)
-		tr::Variant v2 = tr::PropertyInfo::GetPropertyValueDirect<Point>(&t1, PropertyTest1::V3PropertyId);
-		ASSERT_EQ(10, tr::Variant::Cast<Point>(v2).x);
-		ASSERT_EQ(20, tr::Variant::Cast<Point>(v2).y);
-
-		// setter/getter
-		t1.SetV3(Point(3, 4));
-		ASSERT_EQ(3, t1.GetV3().x);
-		ASSERT_EQ(4, t1.GetV3().y);
-	}
-
-	// <Test> RefPtr
-	{
-		// set
-		RefPtr<RefTest2> p1(LN_NEW RefTest2(), false);
-		tr::PropertyInfo::SetPropertyValue(&t1, PropertyTest1::V4PropertyId, p1);
-		ASSERT_EQ(p1, t1.m_v4);
-
-		// get
-		tr::Variant v = tr::PropertyInfo::GetPropertyValue(&t1, PropertyTest1::V4PropertyId);
-		ASSERT_EQ(p1.Get(), tr::Variant::Cast<RefPtr<RefTest2>>(v));
-
-		// set (Direct)
-		RefPtr<RefTest2> p12(LN_NEW RefTest2(), false);
-		tr::PropertyInfo::SetPropertyValueDirect<RefPtr<RefTest2>>(&t1, PropertyTest1::V4PropertyId, p12);
-		ASSERT_EQ(p12, t1.m_v4);
-
-		// get (Direct)
-		tr::Variant v2 = tr::PropertyInfo::GetPropertyValueDirect<RefPtr<RefTest2>>(&t1, PropertyTest1::V4PropertyId);
-		ASSERT_EQ(p12, tr::Variant::Cast<RefPtr<RefTest2>>(v2));
-
-		// setter/getter
-		RefPtr<RefTest2> p2(LN_NEW RefTest2(), false);
-		t1.SetV4(p2);
-		ASSERT_EQ(p2.Get(), t1.GetV4());
-
-		// setter/getter (nullptr)
-		t1.SetV4(nullptr);
-		ASSERT_EQ(nullptr, t1.GetV4());
-	}
-
-	// <Test> OnPropertyChanged 通知
-	{
-		t1.SetV1(1);
-		ASSERT_EQ(PropertyTest1::V1PropertyId, t1.m_lastChangedProp);
-
-		tr::PropertyInfo::SetPropertyValue(&t1, PropertyTest1::V2PropertyId, nullptr);
-		ASSERT_EQ(PropertyTest1::V2PropertyId, t1.m_lastChangedProp);
-
-		tr::PropertyInfo::SetPropertyValueDirect<int>(&t1, PropertyTest1::V1PropertyId, 2);
-		ASSERT_EQ(PropertyTest1::V1PropertyId, t1.m_lastChangedProp);
-	}
-
-	// <Test> デフォルト値に戻す
-	{
-		t1.SetV1(1);
-		ASSERT_EQ(1, t1.GetV1());
-
-		auto ref = tr::PropertyInfo::GetProperty(&t1, PropertyTest1::V1PropertyId);
-		ref.ClearValue();
-
-		ASSERT_EQ(0, t1.GetV1());
-	}
-}
-
-#endif

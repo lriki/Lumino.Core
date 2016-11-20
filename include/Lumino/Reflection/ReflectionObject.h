@@ -16,6 +16,7 @@ namespace tr
 	private: \
 		template<typename T> friend class ln::RefPtr; \
 		friend class ln::tr::ReflectionHelper; \
+		friend class ln::tr::ReflectionObject; \
 		static typeInfo							lnref_typeInfo; \
 		ln::tr::LocalValueHavingFlags			lnref_localValueHavingFlags; \
 		virtual typeInfo*						lnref_GetThisTypeInfo() const override; \
@@ -78,6 +79,16 @@ private:
 
 	detail::WeakRefInfo*	m_weakRefInfo;
 	Mutex					m_weakRefInfoMutex;
+
+LN_INTERNAL_ACCESS:
+
+	template<class T, typename... TArgs>
+	static RefPtr<T> MakeRef(TArgs... args)
+	{
+		auto ptr = RefPtr<T>(LN_NEW T(), false);
+		ptr->Initialize(args...);
+		return ptr;
+	}
 };
 
 /**
