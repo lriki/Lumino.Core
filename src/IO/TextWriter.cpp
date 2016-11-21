@@ -171,6 +171,18 @@ void TextWriter::Write(double value)
 }
 
 //------------------------------------------------------------------------------
+void TextWriter::Write(const StringRef& str)
+{
+	WriteInternal(str.GetBegin(), str.GetLength());
+}
+
+//------------------------------------------------------------------------------
+void TextWriter::Write(const TCHAR* str, int length)
+{
+	WriteInternal(str, length);
+}
+
+//------------------------------------------------------------------------------
 void TextWriter::WriteLine()
 {
 	WriteInternal(m_newLine.c_str(), m_newLine.GetLength());

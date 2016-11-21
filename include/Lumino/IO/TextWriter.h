@@ -69,8 +69,12 @@ public:
 	void Write(float value);
 	void Write(double value);			/**< @copydoc Write(float) */
 
+
+	void Write(const StringRef& str);
+	void Write(const TCHAR* str, int length);
+
 	template<typename... TArgs>
-	void Write(const StringRef& str, const TArgs&... args) { String s = String::Format(str, args...); WriteInternal(s.c_str(), s.GetLength()); }
+	void WriteFormat(const StringRef& str, const TArgs&... args) { String s = String::Format(str, args...); WriteInternal(s.c_str(), s.GetLength()); }
 
 	/**
 		@brief		改行を書き込みます。
