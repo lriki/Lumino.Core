@@ -406,6 +406,14 @@ public:
 
 	const PropertyInfo* GetPropertyInfo() const { return m_propId; }
 
+LN_INTERNAL_ACCESS:
+	uint32_t GetHashCode() const
+	{
+		return
+			Hash::CalcHash(reinterpret_cast<const char*>(&m_value), sizeof(m_value)) +
+			Hash::CalcHash(reinterpret_cast<const char*>(&m_valueSource), sizeof(m_valueSource));
+	}
+
 private:
 	LN_DISALLOW_COPY_AND_ASSIGN(Property);
 
