@@ -266,7 +266,7 @@ Exception& Exception::SetSourceLocationInfo(const char* filePath, int fileLine)
 		return *this;
 	}
 #else
-	strcpy_s(m_sourceFilePath, filePath);
+	StringTraits::tstrcpy(m_sourceFilePath, sizeof(m_sourceFilePath) / sizeof(TCHAR), filePath);
 #endif
 
 	m_sourceFileLine = fileLine;

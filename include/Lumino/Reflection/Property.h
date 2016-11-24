@@ -4,6 +4,7 @@
 #include "Common.h"
 #include "../Base/RefObject.h"
 #include "../Base/String.h"
+#include "../Base/Hash.h"
 #include "PropertyMetadata.h"
 #include "ReflectionObject.h"
 
