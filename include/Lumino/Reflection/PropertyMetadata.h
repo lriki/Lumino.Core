@@ -52,6 +52,7 @@ public:
 		//m_propertyChangedCallback = NULL;
 		m_options = PropertyOptions::None;
 		m_inheritanceTarget = NULL;
+		m_staticPropertyChangedCallback = nullptr;
 	}
 
 	//PropertyMetadata(const Variant& defaultValue)
