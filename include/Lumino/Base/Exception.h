@@ -66,19 +66,72 @@
 //
 #define LN_NOTIMPLEMENTED(...)	LN_THROW(0, ln::NotImplementedException, __VA_ARGS__);
 
+
+// 式を評価し、結果が false であれば、後続のブロックを実行する
+
+/*
+	Use case:
+
+	int Func(int* ptr)
+	{
+		// 引数をチェックしてすぐ return する場合
+		LN_FAIL_CHECK_ARG(ptr != nullptr) return -1;
+
+		// メンバ変数をチェックしてすぐ return する場合
+		LN_FAIL_CHECK_STATE(m_state != 0) return -1;
+
+		// そのまま続行しても問題ないが、一応問題としてマークしておきたい場合
+		int len = printf();
+		LN_FAIL_CHECK_STATE(len != 0);
+
+		// 他の関数の戻り値のエラーチェック
+		FILE* fp = fopen();
+		LN_FAIL_CHECK_STATE(fp != NULL) return -1;
+
+		// 通過禁止
+		LN_FAIL_CHECK(0, InvalidFormatException);
+	}
+*/
+#if defined(LN_DO_CHECK_ASSERT)
+#define LN_FAIL_CHECK(expression, exception)		if ((!(expression)) && ln::detail::NotifyAssert([](){ assert(!#expression); }))
+#define LN_FAIL_CHECK_ARG(expression, ...)			if ((!(expression)) && ln::detail::NotifyAssert([](){ assert(!#expression); }))
+#define LN_FAIL_CHECK_STATE(expression, ...)		if ((!(expression)) && ln::detail::NotifyAssert([](){ assert(!#expression); }))
+#elif defined(LN_DO_CHECK_THROW)
+#define LN_FAIL_CHECK(expression, exception, ...)	if ((!(expression)) && ln::detail::NotifyException<exception>(__FILE__, __LINE__, __VA_ARGS__))
+#define LN_FAIL_CHECK_ARG(expression, ...)			if ((!(expression)) && ln::detail::NotifyException<::ln::ArgumentException>(__FILE__, __LINE__, __VA_ARGS__))
+#define LN_FAIL_CHECK_STATE(expression, ...)		if ((!(expression)) && ln::detail::NotifyException<::ln::InvalidOperationException>(__FILE__, __LINE__, __VA_ARGS__))
+#else
+#define LN_FAIL_CHECK(expression, exception)		if (!(expression))
+#define LN_FAIL_CHECK_ARG(expression, ...)			if (!(expression))
+#define LN_FAIL_CHECK_STATE(expression, ...)		if (!(expression))
+#endif
+
+
+
+
+
+
+
 LN_NAMESPACE_BEGIN
 
 class Exception;
 
 namespace detail
 {
-
-template<class TException>
-inline bool NotifyException(TException& e, const char* file, int line)
+template<typename TAssert>
+inline bool NotifyAssert(TAssert callback)
 {
+	callback();
+	return true;	// TODO: ユーザー通知
+}
+
+template<class TException, typename... TArgs>
+inline bool NotifyException(const char* file, int line, TArgs... args)
+{
+	TException e(args...);
 	e.SetSourceLocationInfo(file, line);
 	throw e;
-	return true;	// TODO: ユーザーへ通知
+	return true;	// TODO: ユーザー通知
 }
 
 } // namespace detail

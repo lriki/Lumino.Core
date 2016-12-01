@@ -32,7 +32,7 @@ TEST_F(Test_Base_SortedArray, Add)
 			ArgumentException);
 	}
 	
-#if 1
+#if 0
 	struct Pair
 	{
 		int key;
@@ -347,7 +347,7 @@ TEST_F(Test_Base_SortedArray, Performance)
 		{
 			s += table1[i];
 		}
-		mapTime1 = t.GetElapsedTimeNS();
+		mapTime1 = t.GetElapsed();
 	}
 
 	// map + String
@@ -360,7 +360,7 @@ TEST_F(Test_Base_SortedArray, Performance)
 		{
 			s += table2[i];
 		}
-		mapTime2 = t.GetElapsedTimeNS();
+		mapTime2 = t.GetElapsed();
 	}
 
 	// SortedArray + String
@@ -373,7 +373,7 @@ TEST_F(Test_Base_SortedArray, Performance)
 		{
 			s += *ary1.Find(i);
 		}
-		saTime = t.GetElapsedTimeNS();
+		saTime = t.GetElapsed();
 	}
 	// SortedArray + std::string
 	uint64_t saTime2;
@@ -385,7 +385,7 @@ TEST_F(Test_Base_SortedArray, Performance)
 		{
 			s += *ary2.Find(i);
 		}
-		saTime2 = t.GetElapsedTimeNS();
+		saTime2 = t.GetElapsed();
 	}
 
 	printf("mapTime1 %llu\n", mapTime1);

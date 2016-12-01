@@ -42,6 +42,9 @@ GTEST_API_ int main(int argc, char **argv)
 		return 0;
 	}
 
+	//int* a = nullptr;
+	//LN_FAIL_CHECK_ARG(a != nullptr);
+
 
 	printf("Running main()\n");
 	
@@ -50,7 +53,7 @@ GTEST_API_ int main(int argc, char **argv)
 #endif
 	setlocale(LC_ALL, "");
 
-#if 1	// 部分的にテストを実行したりする
+#if 0	// 部分的にテストを実行したりする
 	char* testArgs[] = {
 		argv[0],
 		//"--gtest_filter=Test_Text_EncodingDetector.*"
