@@ -13,6 +13,14 @@ LN_NAMESPACE_BEGIN
 //==============================================================================
 
 //------------------------------------------------------------------------------
+static uint64_t TicksToNanoseconds(uint64_t ticks, uint64_t freq) LN_NOEXCEPT
+{
+	UINT64 seconds = ticks / freq;
+	UINT64 nanoSeconds = (ticks - seconds * freq) * 1000000000 / freq;
+	return seconds * 1000000000 + nanoSeconds;
+}
+
+//------------------------------------------------------------------------------
 ElapsedTimer::ElapsedTimer()
 	: m_start(0)
 #if defined(LN_OS_WIN32)
@@ -39,18 +47,12 @@ void ElapsedTimer::Start()
 }
 
 //------------------------------------------------------------------------------
-uint64_t ElapsedTimer::GetElapsedTime() const
+uint64_t ElapsedTimer::GetElapsed() const LN_NOEXCEPT
 {
+	if (m_freq == 0) return 0;
 	LARGE_INTEGER counter;
 	::QueryPerformanceCounter(&counter);
-	return (uint64_t)((counter.QuadPart - m_start) * (1000) / m_freq);
-}
-//------------------------------------------------------------------------------
-uint64_t ElapsedTimer::GetElapsedTimeNS() const
-{
-	LARGE_INTEGER counter;
-	::QueryPerformanceCounter(&counter);
-	return (uint64_t)((counter.QuadPart - m_start) * (1000 * 1000 * 1000) / m_freq);
+	return TicksToNanoseconds(counter.QuadPart - m_start, m_freq);
 }
 
 #else
