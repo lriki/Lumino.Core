@@ -3,7 +3,7 @@
 #include "../IO/TextReader.h"
 #include "../IO/MemoryStream.h"
 #include "Common.h"
-#include "JsonError.h"
+#include "JsonDiagnostics.h"
 #include "JsonHandler.h"
 
 LN_NAMESPACE_BEGIN
