@@ -35,38 +35,38 @@ TEST_F(Test_IO_FileSystem, GetAttribute)
 	// <Test> ファイルを読み取り専用にする
 	// <Test> ファイルの読み取り専用を確認する
 	{
-		attr = FileSystem::GetAttribute(LOCALFILE("TestData/readonly.txt"));
+		attr = FileSystem::GetAttribute(LN_LOCALFILE("TestData/readonly.txt"));
 		attr |= FileAttribute::ReadOnly;
-		FileSystem::SetAttribute(LOCALFILE("TestData/readonly.txt"), attr);
+		FileSystem::SetAttribute(LN_LOCALFILE("TestData/readonly.txt"), attr);
 	}
 
 	// <Test> ファイルの読み取り専用を確認する
 	{
-		attr = FileSystem::GetAttribute(LOCALFILE("TestData/readonly.txt"));
+		attr = FileSystem::GetAttribute(LN_LOCALFILE("TestData/readonly.txt"));
 		ASSERT_EQ(FileAttribute::ReadOnly, attr);
 	}
 
 	// <Test> ファイルの読み取り専用を解除する
 	{
-		attr = FileSystem::GetAttribute(LOCALFILE("TestData/readonly.txt"));
+		attr = FileSystem::GetAttribute(LN_LOCALFILE("TestData/readonly.txt"));
 		attr &=~ FileAttribute::ReadOnly;
-		FileSystem::SetAttribute(LOCALFILE("TestData/readonly.txt"), attr);
+		FileSystem::SetAttribute(LN_LOCALFILE("TestData/readonly.txt"), attr);
 
 		// 確認
-		attr = FileSystem::GetAttribute(LOCALFILE("TestData/readonly.txt"));
+		attr = FileSystem::GetAttribute(LN_LOCALFILE("TestData/readonly.txt"));
 		ASSERT_EQ(FileAttribute::Normal, attr);
 	}
 
 	// <Test> ディレクトリ属性を確認する
 	{
-		attr = FileSystem::GetAttribute(LOCALFILE("TestData"));
+		attr = FileSystem::GetAttribute(LN_LOCALFILE("TestData"));
 		ASSERT_EQ(FileAttribute::Directory, attr);
 	}
 
 #ifdef LN_OS_WIN32
 #else
 	// 隠しファイル
-	attr = FileSystem::GetAttribute(LOCALFILE("TestData/.test"));
+	attr = FileSystem::GetAttribute(LN_LOCALFILE("TestData/.test"));
 	ASSERT_EQ(FileAttribute::Hidden, attr);
 #endif
 
@@ -86,8 +86,8 @@ TEST_F(Test_IO_FileSystem, GetAttribute)
 //------------------------------------------------------------------------------
 TEST_F(Test_IO_FileSystem, Copy_Delete)
 {
-	String src1 = LOCALFILE("TestData/test1.txt");
-	String src2 = LOCALFILE("TestData/test2.txt");
+	String src1 = LN_LOCALFILE("TestData/test1.txt");
+	String src2 = LN_LOCALFILE("TestData/test2.txt");
 	String dest = TEMPFILE("test_copy.txt");
 	uint64_t src1Size = FileSystem::GetFileSize(src1.c_str());
 	uint64_t src2Size = FileSystem::GetFileSize(src2.c_str());

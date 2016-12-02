@@ -10,6 +10,6 @@ protected:
 //------------------------------------------------------------------------------
 TEST_F(Test_IO_File, Open)
 {
-	File file1(LOCALFILE("TestData/test1.txt"));
+	File file1(LN_LOCALFILE("TestData/test1.txt"));
 	file1.Open(FileOpenMode::Read);
 }

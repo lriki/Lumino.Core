@@ -33,7 +33,7 @@ public:
 //---------------------------------------------------------------------
 TEST_F(Test_Json_JsonReader, Basic)
 {
-	String str = FileSystem::ReadAllText(LOCALFILE("TestData/ReaderTest1.txt"), Encoding::GetSystemMultiByteEncoding());
+	String str = FileSystem::ReadAllText(LN_LOCALFILE("TestData/ReaderTest1.txt"), Encoding::GetSystemMultiByteEncoding());
 	TestJsonHandler handler;
 	JsonReader reader(&handler);
 	reader.Parse(str);
@@ -111,7 +111,7 @@ TEST_F(Test_Json_JsonReader, Integrate)
 	// http://json.org/example.html
 	// <Integrate> オフィシャルページのサンプル1
 	{
-		StreamReader r(LOCALFILE(_T("TestData/JSONExample1.json")));
+		StreamReader r(LN_LOCALFILE(_T("TestData/JSONExample1.json")));
 		JsonReader2 jr(&r);
 		ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::StartObject, jr.GetTokenType());
 			ASSERT_EQ(true, jr.Read()); ASSERT_EQ(JsonToken::PropertyName, jr.GetTokenType()); ASSERT_EQ(_T("glossary"), jr.GetValue());
@@ -157,7 +157,7 @@ TEST_F(Test_Json_JsonReader, Integrate)
 	}
 	// <Integrate> オフィシャルページのサンプル2
 	{
-		StreamReader r(LOCALFILE(_T("TestData/JSONExample2.json")));
+		StreamReader r(LN_LOCALFILE(_T("TestData/JSONExample2.json")));
 		JsonReader2 jr(&r);
 		while (jr.Read());
 		ASSERT_EQ(JsonParseError2::NoError, jr.GetError().code);
@@ -165,7 +165,7 @@ TEST_F(Test_Json_JsonReader, Integrate)
 	}
 	// <Integrate> オフィシャルページのサンプル3
 	{
-		StreamReader r(LOCALFILE(_T("TestData/JSONExample3.json")));
+		StreamReader r(LN_LOCALFILE(_T("TestData/JSONExample3.json")));
 		JsonReader2 jr(&r);
 		while (jr.Read());
 		ASSERT_EQ(JsonParseError2::NoError, jr.GetError().code);
@@ -173,7 +173,7 @@ TEST_F(Test_Json_JsonReader, Integrate)
 	}
 	// <Integrate> オフィシャルページのサンプル4
 	{
-		StreamReader r(LOCALFILE(_T("TestData/JSONExample4.json")));
+		StreamReader r(LN_LOCALFILE(_T("TestData/JSONExample4.json")));
 		JsonReader2 jr(&r);
 		while (jr.Read());
 		ASSERT_EQ(JsonParseError2::NoError, jr.GetError().code);
@@ -181,7 +181,7 @@ TEST_F(Test_Json_JsonReader, Integrate)
 	}
 	// <Integrate> オフィシャルページのサンプル5
 	{
-		StreamReader r(LOCALFILE(_T("TestData/JSONExample5.json")));
+		StreamReader r(LN_LOCALFILE(_T("TestData/JSONExample5.json")));
 		JsonReader2 jr(&r);
 		while (jr.Read());
 		ASSERT_EQ(JsonParseError2::NoError, jr.GetError().code);

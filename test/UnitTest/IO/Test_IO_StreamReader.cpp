@@ -13,7 +13,7 @@ protected:
 TEST_F(Test_IO_StreamReader, ReadLine)
 {
 #if 0
-	StreamReader reader(LOCALFILE("TestData/Text_SJIS_CRLF.txt"), nullptr);
+	StreamReader reader(LN_LOCALFILE("TestData/Text_SJIS_CRLF.txt"), nullptr);
 	String str, line;
 	int count = 0;
 	while (reader.ReadLine(&line))
@@ -23,7 +23,7 @@ TEST_F(Test_IO_StreamReader, ReadLine)
 		count++;
 	}
 
-	ByteBuffer buf = FileSystem::ReadAllBytes(LOCALFILE("TestData/Text_UTF16LE_CRLF.txt"));
+	ByteBuffer buf = FileSystem::ReadAllBytes(LN_LOCALFILE("TestData/Text_UTF16LE_CRLF.txt"));
 	ASSERT_EQ(0, ByteBuffer::Compare(buf, str.c_str(), str.GetByteCount()));
 #endif
 

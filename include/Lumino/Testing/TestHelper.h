@@ -1,11 +1,10 @@
 ﻿#pragma once
-
 #include "../Base/String.h"
 #include "../IO/PathName.h"
 
 LN_NAMESPACE_BEGIN
 
-class TestUtils
+class TestHelper
 {
 public:
 	/// baseFilePath のファイルと同じディレクトリの fileName を指すパスを得る
@@ -24,15 +23,15 @@ public:
 };
 
 // __FILE__ のあるフォルダパス (PathName) を取得する
-#define LN_TEST_GET_DIR_PATH() TestUtils::GetDirPath(__FILE__)
+#define LN_TEST_GET_DIR_PATH() TestHelper::GetDirPath(__FILE__)
 
 // __FILE__ と同じフォルダのファイルパス (TCHAR) を取得する
-#define LN_LOCALFILE(fileName) TestUtils::GetFilePath(__FILE__, fileName).c_str()
+#define LN_LOCALFILE(fileName) TestHelper::GetFilePath(__FILE__, fileName).c_str()
 
 // __FILE__ と同じフォルダのファイルパス (char) を取得する
-#define LN_LOCALFILEA(fileName) TestUtils::GetFilePathA(__FILE__, fileName).c_str()
+#define LN_LOCALFILEA(fileName) TestHelper::GetFilePathA(__FILE__, fileName).c_str()
 
 // __FILE__ と同じフォルダのファイルパス (wchar_t) を取得する
-#define LN_LOCALFILEW(fileName) TestUtils::GetFilePathW(__FILE__, fileName).c_str()
+#define LN_LOCALFILEW(fileName) TestHelper::GetFilePathW(__FILE__, fileName).c_str()
 
 LN_NAMESPACE_END

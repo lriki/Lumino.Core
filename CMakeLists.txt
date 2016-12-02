@@ -275,7 +275,8 @@ set(LN_SOURCES_Math
 )
 
 set(LN_SOURCES_Testing
-	src/Testing/TestUtils.cpp
+	include/Lumino/Testing/TestHelper.h
+	src/Testing/TestHelper.cpp
 )
 
 #--------------------------------------

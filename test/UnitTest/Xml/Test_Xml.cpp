@@ -193,7 +193,7 @@ protected:
 //---------------------------------------------------------------------
 TEST_F(Test_Xml_XmlReader, User)
 {
-	StreamReader textReader(LOCALFILE("TestData/ReaderExample1.xml"));
+	StreamReader textReader(LN_LOCALFILE("TestData/ReaderExample1.xml"));
 	XmlReader reader(&textReader);	// TODO: XmlFileReader とか。
 
 	String output;
