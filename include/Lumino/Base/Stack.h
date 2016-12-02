@@ -1,16 +1,15 @@
 ﻿
 #pragma once
-
 #include <vector>
 #include "RefObject.h"
-#include "STLUtils.h"
+#include "StlHelper.h"
 
 LN_NAMESPACE_BEGIN
 
 /**
 	@brief	参照カウントを持つスタックのクラスです。
 */
-template<typename T, typename TAllocator = STLAllocator<T> >
+template<typename T, typename TAllocator = detail::StlAllocator<T> >
 class Stack : public RefObject
 {
 //public:

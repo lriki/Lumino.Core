@@ -3,7 +3,7 @@
 #include <vector>
 #include <algorithm>
 #include "Exception.h"
-#include "STLUtils.h"
+#include "StlHelper.h"
 
 LN_NAMESPACE_BEGIN
 
@@ -12,7 +12,7 @@ LN_NAMESPACE_BEGIN
 	@details	隣接するメモリ位置に要素を格納し、高速なランダムアクセスを行うことができます。
 				内部では、メモリ使用量を削減し、データの不必要なコピーを避けるためにコピーオンライト(COW)の共有を行います。
 */
-template<typename T, typename TAllocator = STLAllocator<T> >
+template<typename T, typename TAllocator = detail::StlAllocator<T> >
 class List
 {
 public:
@@ -104,7 +104,7 @@ public:
 	bool Remove(const value_type& item)
 	{
 		CheckDetachShared();
-		return STLUtils::Remove(m_data->m_vector, item);
+		return detail::StlHelper::Remove(m_data->m_vector, item);
 	}
 
 	/** 指定した条件に一致する最初の要素を削除します。(正常に削除された場合は true を返す。要素が見つからなければ false を返す)*/
@@ -136,7 +136,7 @@ public:
 	void RemoveAll(const value_type& item)
 	{
 		CheckDetachShared();
-		STLUtils::RemoveAll(m_data->m_vector, item);
+		detail::StlHelper::RemoveAll(m_data->m_vector, item);
 	}
 
 	/** 指定した条件に一致する全ての要素を削除します。*/
@@ -144,7 +144,7 @@ public:
 	void RemoveAll(TPred pred)
 	{
 		CheckDetachShared();
-		STLUtils::RemoveAll(m_data->m_vector, pred);
+		detail::StlHelper::RemoveAll(m_data->m_vector, pred);
 	}
 
 	/** 終端要素を削除します。*/

@@ -65,7 +65,7 @@ private:
 	template<typename T>
 	static GenericString<TChar> FormatImpl(const std::locale& locale, const GenericStringRef<TChar>& format, const GenericStringRef<TChar>& formatParam, const void* value)
 	{
-		using typeKind = STLUtils::first_enabled_t<
+		using typeKind = detail::StlHelper::first_enabled_t<
 			std::enable_if<std::is_arithmetic<T>::value,					detail::FormatArgType::KindArithmetic>,
 			std::enable_if<std::is_same<T, std::basic_string<TChar>>::value,detail::FormatArgType::KindString>,
 			std::enable_if<std::is_same<T, GenericString<TChar>>::value,	detail::FormatArgType::KindString>,

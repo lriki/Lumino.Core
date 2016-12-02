@@ -708,7 +708,7 @@ extern int g_testGenericStringCoreAllocCount;
 
 template<typename TChar>
 class GenericStringCore
-	: public std::basic_string<TChar, std::char_traits<TChar>, STLAllocator<TChar> >
+	: public std::basic_string<TChar, std::char_traits<TChar>, detail::StlAllocator<TChar> >
 {
 public:
 	GenericStringCore()

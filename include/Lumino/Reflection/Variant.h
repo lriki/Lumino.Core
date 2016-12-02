@@ -6,6 +6,7 @@
 #include "../Base/RefObject.h"
 #include "../Base/String.h"
 #include "../Base/EnumExtension.h"
+#include "../Base/StlHelper.h"
 
 LN_NAMESPACE_BEGIN
 namespace tr
@@ -77,12 +78,12 @@ public:
 
 	template<typename T, typename TKind> struct AccessorSelector {};
 
-
+	
 
 	// 値型または参照型用の AccessorSelectorHelper
 	template<typename T> struct AccessorSelectorHelper
 	{
-		using typeKind = STLUtils::first_enabled_t<
+		using typeKind = ::ln::detail::StlHelper::first_enabled_t<
 			std::enable_if<std::is_same<T, std::nullptr_t>::value, detail::KindPrimitive>,
 			std::enable_if<std::is_same<T, bool>::value, detail::KindPrimitive>,
 			std::enable_if<std::is_arithmetic<T>::value, detail::KindArithmetic>,
@@ -107,7 +108,7 @@ public:
 	// ポインタ型用の AccessorSelectorHelper
 	template<typename T> struct AccessorSelectorHelper<T*>
 	{
-		using typeKind = STLUtils::first_enabled_t<
+		using typeKind = ::ln::detail::StlHelper::first_enabled_t<
 			std::enable_if<std::is_base_of<ReflectionArrayObject, T>::value, detail::KindReflectionArrayObject>,
 			std::enable_if<std::is_base_of<ReflectionObject, T>::value, detail::KindReflectionObject>,
 			std::false_type>;

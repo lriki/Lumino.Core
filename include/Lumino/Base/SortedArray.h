@@ -4,7 +4,7 @@
 #include <algorithm>
 #include "Common.h"
 #include "Exception.h"
-#include "STLUtils.h"
+#include "StlHelper.h"
 
 LN_NAMESPACE_BEGIN
 
@@ -13,7 +13,7 @@ LN_NAMESPACE_BEGIN
 	@details	このクラスの役割は std::map と似ていますが、より高速に検索及び要素のイテレートを行うことができます。
 				ただし、新しいキーを格納するたびに配列全体がソートされるため、キーの更新には時間がかかります。
 */
-template<typename TKey, typename TValue, typename TComparer = detail::SortedArrayBasicLess<TKey>, typename TAllocator = STLAllocator< std::pair<TKey, TValue> > >
+template<typename TKey, typename TValue, typename TComparer = detail::SortedArrayBasicLess<TKey>, typename TAllocator = detail::StlAllocator< std::pair<TKey, TValue> > >
 class SortedArray
 {
 public:

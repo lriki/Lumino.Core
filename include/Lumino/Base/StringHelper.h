@@ -1,11 +1,8 @@
 ﻿
 #pragma once
-
 #include <ctype.h>
 #include <wctype.h>
 #include <string>
-//#include "String.h"
-#include "STLUtils.h"
 #include "Array.h"
 
 LN_NAMESPACE_BEGIN

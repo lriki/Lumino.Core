@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "../Base/Array.h"
+#include "../Base/StringRef.h"
 #include "PathName.h"
 
 #if defined(LN_OS_FAMILY_UNIX)

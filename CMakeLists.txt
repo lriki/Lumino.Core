@@ -64,7 +64,7 @@ set(LN_SOURCES_Base
 	include/Lumino/Base/Resource.h
 	include/Lumino/Base/SortedArray.h
 	include/Lumino/Base/Stack.h
-	include/Lumino/Base/STLUtils.h
+	include/Lumino/Base/StlHelper.h
 	include/Lumino/Base/String.h
 	include/Lumino/Base/StringArray.h
 	include/Lumino/Base/StringBuilder.h

@@ -22,7 +22,7 @@ struct CollectionTraits<T*>
 	@brief		コレクションの基本クラス
 	@details	Collection は、継承して独自のコレクションを定義することを想定した Array クラスのラッパーです。
 */
-template<typename T, typename TAllocator = STLAllocator<T> >
+template<typename T, typename TAllocator = detail::StlAllocator<T> >
 class Collection
 {
 	LN_DISALLOW_COPY_AND_ASSIGN(Collection);
