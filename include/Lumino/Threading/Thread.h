@@ -1,7 +1,6 @@
 ﻿
 #pragma once
 #include "../Base/Common.h"
-#include "../Base/NonCopyable.h"
 #include "../Base/Delegate.h"
 #include "ConditionFlag.h"
 

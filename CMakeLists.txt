@@ -58,9 +58,7 @@ set(LN_SOURCES_Base
 	include/Lumino/Base/Locale.h
 	include/Lumino/Base/Logger.h
 	include/Lumino/Base/Memory.h
-	include/Lumino/Base/NonCopyable.h
 	include/Lumino/Base/Nullable.h
-	include/Lumino/Base/Queue.h
 	include/Lumino/Base/RefObject.h
 	include/Lumino/Base/Regex.h
 	include/Lumino/Base/Resource.h

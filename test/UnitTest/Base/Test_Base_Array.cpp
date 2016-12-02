@@ -459,9 +459,9 @@ TEST_F(Test_Base_Array, Contains)
 {
 	// <Test> Contains
 	{
-		PathNameA p1("LuminoCore/include/Lumino/Base/NonCopyable.h");
-		PathNameA p2("LuminoCore/include/Lumino/Base/NonCopyable.h");
-		PathNameA p3("LuminoCore/include/Lumino/Base/NonCopyable.c");
+		PathNameA p1("LuminoCore/include/Lumino/Base/String.h");
+		PathNameA p2("LuminoCore/include/Lumino/Base/String.h");
+		PathNameA p3("LuminoCore/include/Lumino/Base/String.c");
 		List<PathNameA> pathes;
 		pathes.Add(p1);
 		ASSERT_TRUE(pathes.Contains(p2));

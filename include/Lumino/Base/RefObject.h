@@ -1,6 +1,5 @@
 ﻿
 #pragma once
-#include "NonCopyable.h"
 #include "../Threading/AtomicCounter.h"
 
 LN_NAMESPACE_BEGIN

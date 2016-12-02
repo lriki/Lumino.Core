@@ -21,7 +21,6 @@
 #include "Lumino/Base/Locale.h"
 #include "Lumino/Base/Logger.h"
 #include "Lumino/Base/Memory.h"
-#include "Lumino/Base/NonCopyable.h"
 #include "Lumino/Base/Delegate.h"
 #include "Lumino/Base/Stack.h"
 #include "Lumino/Base/Environment.h"
