@@ -1,7 +1,7 @@
 ﻿
 #pragma once
 #include <deque>
-#include "../Base/Array.h"
+#include "../Base/List.h"
 #include "ConditionFlag.h"
 #include "Mutex.h"
 #include "Semaphore.h"

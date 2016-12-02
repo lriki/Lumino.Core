@@ -1,6 +1,4 @@
-﻿/**
-	@file	ByteBuffer.h
-*/
+﻿
 #pragma once
 #include "Common.h"
 

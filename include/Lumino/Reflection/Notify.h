@@ -1,7 +1,7 @@
 
 #pragma once
 #include "Common.h"
-#include "../Base/Array.h"
+#include "../Base/List.h"
 #include "../Base/String.h"
 #include "../Base/Delegate.h"
 

@@ -7,7 +7,7 @@
 #include <string>
 #include <atomic>
 #include "Common.h"
-#include "Array.h"
+#include "List.h"
 #include "ByteBuffer.h"
 
 LN_NAMESPACE_BEGIN

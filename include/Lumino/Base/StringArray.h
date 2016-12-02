@@ -1,6 +1,6 @@
 ﻿
 #pragma once
-#include "Array.h"
+#include "List.h"
 #include "String.h"
 
 LN_NAMESPACE_BEGIN

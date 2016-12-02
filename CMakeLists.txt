@@ -35,8 +35,6 @@ option(LN_EXCEPTION_BACKTRACE "In some unix environment there is a possibility t
 #--------------------------------------
 # Source files.
 set(LN_SOURCES_Base
-	include/Lumino/Base/Array.h
-	include/Lumino/Base/Array.inl
 	include/Lumino/Base/ByteBuffer.h
 	include/Lumino/Base/Cache.h
 	include/Lumino/Base/Collection.h
@@ -55,6 +53,8 @@ set(LN_SOURCES_Base
 	include/Lumino/Base/Exception.h
 	include/Lumino/Base/Formatter.h
 	include/Lumino/Base/Hash.h
+	include/Lumino/Base/List.h
+	include/Lumino/Base/List.inl
 	include/Lumino/Base/Locale.h
 	include/Lumino/Base/Logger.h
 	include/Lumino/Base/Memory.h

@@ -3,7 +3,7 @@
 #include <ctype.h>
 #include <wctype.h>
 #include <string>
-#include "Array.h"
+#include "List.h"
 
 LN_NAMESPACE_BEGIN
 

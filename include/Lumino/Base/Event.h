@@ -1,6 +1,6 @@
 ﻿
 #pragma once
-#include "../Base/Array.h"
+#include "../Base/List.h"
 #include "../Base/Delegate.h"
 
 #ifdef LN_CPP11

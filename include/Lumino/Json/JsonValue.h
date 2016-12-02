@@ -1,7 +1,7 @@
 
 #pragma once
 #include "../Base/EnumExtension.h"
-#include "../Base/Array.h"
+#include "../Base/List.h"
 #include "../Base/String.h"
 
 LN_NAMESPACE_BEGIN
