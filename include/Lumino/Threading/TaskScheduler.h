@@ -2,15 +2,14 @@
 #pragma once
 #include <deque>
 #include "../Base/Array.h"
-#include "Task.h"
-#include "Thread.h"
+#include "ConditionFlag.h"
 #include "Mutex.h"
 #include "Semaphore.h"
 
 LN_NAMESPACE_BEGIN
-class Semaphore;
-namespace tr
-{
+class DelegateThread;
+namespace tr {
+class Task;
 
 /**
 	@brief	

@@ -1,4 +1,5 @@
 ﻿#include <TestConfig.h>
+#include <Lumino/Threading/Thread.h>
 #include <Lumino/Threading/Task.h>
 #include <Lumino/Threading/TaskScheduler.h>
 using namespace ln::tr;

@@ -1,5 +1,7 @@
 ﻿
 #include "../Internal.h"
+#include <Lumino/Threading/Thread.h>
+#include <Lumino/Threading/Task.h>
 #include <Lumino/Threading/TaskScheduler.h>
 
 LN_NAMESPACE_BEGIN
