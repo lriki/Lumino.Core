@@ -71,7 +71,7 @@ set(LN_SOURCES_Base
 	include/Lumino/Base/StringArray.h
 	include/Lumino/Base/StringBuilder.h
 	include/Lumino/Base/StringRef.h
-	include/Lumino/Base/StringTraits.h
+	include/Lumino/Base/StringHelper.h
 	include/Lumino/Base/Typedef.h
 	include/Lumino/Base/Version.h
 	src/Base/ByteBuffer.cpp
@@ -90,7 +90,7 @@ set(LN_SOURCES_Base
 	src/Base/String.cpp
 	src/Base/StringBuilder.cpp
 	src/Base/StringRef.cpp
-	src/Base/StringTraits.cpp
+	src/Base/StringHelper.cpp
 	src/Base/Version.cpp
 )
 
@@ -308,6 +308,8 @@ source_group("Reflection"	FILES ${LN_SOURCES_Reflection})
 source_group("Testing"		FILES ${LN_SOURCES_Testing})
 
 set(LN_SOURCES
+	include/LuminoCore.h
+	include/LuminoMath.h
 	${LN_SOURCES_Base}
 	${LN_SOURCES_Text}
 	${LN_SOURCES_IO}

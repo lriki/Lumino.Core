@@ -4,7 +4,7 @@
 #include <wctype.h>
 #include <Lumino/Base/RefObject.h>
 #include <Lumino/Base/String.h>
-#include <Lumino/Base/StringTraits.h>
+#include <Lumino/Base/StringHelper.h>
 #include <Lumino/Base/StringArray.h>
 
 // for ToDouble()
@@ -393,7 +393,7 @@ int StringTraits::Compare(const TChar* str1, int str1Len, const TChar* str2, int
 	// チェックする文字数
 	if (count < 0)
 	{
-		count = minCount;
+		count = maxCount;
 	}
 	else
 	{

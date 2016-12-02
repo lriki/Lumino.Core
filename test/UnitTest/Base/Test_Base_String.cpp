@@ -2,45 +2,6 @@
 #include <unordered_map>
 #include <Lumino/Text/Encoding.h>
 
-class IntegrationTest_Base_String : public ::testing::Test
-{
-protected:
-	virtual void SetUp() {}
-	virtual void TearDown() {}
-};
-
-//---------------------------------------------------------------------
-TEST_F(IntegrationTest_Base_String, Concat)
-{
-	// <Integration> 文字列を連結する
-	{
-		String str1 = _T("12");
-		String str2 = _T("56");
-		str1 = str1 + _T("34");
-		str1 += str2;
-		str1.Append(_T("78"));
-		ASSERT_EQ(_T("12345678"), str1);
-	}
-}
-
-//---------------------------------------------------------------------
-TEST_F(IntegrationTest_Base_String, Replace)
-{
-	// <Integration> 文字列を置換する
-	{
-		String str1 = _T("abcdcd");
-
-		// "ab" を "12" に置き換える
-		str1 = str1.Replace(_T("ab"), _T("12"));
-
-		// "cd" を "345" に置き換える
-		String from = _T("cd");
-		String to = _T("345");
-		str1 = str1.Replace(from, to);
-
-		ASSERT_EQ(_T("12345345"), str1);
-	}
-}
 
 
 class Test_Base_String : public ::testing::Test
@@ -74,7 +35,7 @@ static std::string GetTest2()
 }
 #endif
 
-//---------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_String, Constructor)
 {
 #if 0 // COW パフォーマンステスト
@@ -133,7 +94,7 @@ TEST_F(Test_Base_String, Constructor)
 
 }
 
-//---------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_String, Operators)
 {
 	std::string strAStd = "a";
@@ -351,7 +312,7 @@ TEST_F(Test_Base_String, Operators)
 	}
 }
 
-//---------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_String, XYChar)
 {
 
@@ -368,7 +329,7 @@ TEST_F(Test_Base_String, XYChar)
 	//ASSERT_STREQ(_T("wide"), str2.c_str());
 }
 
-//---------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_String, AssignCStr)
 {
 	// char、wchar_t の相互変換
@@ -435,7 +396,7 @@ TEST_F(Test_Base_String, AssignCStr)
 	//}
 }
 
-//---------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_String, SPrintf)
 {
 	// StringA Max 文字数チェック
@@ -482,7 +443,7 @@ TEST_F(Test_Base_String, SPrintf)
 	}
 }
 
-//---------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_String, ConvertTo)
 {
 	{
@@ -510,7 +471,7 @@ TEST_F(Test_Base_String, ConvertTo)
 	}
 }
 
-//---------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_String, IndexOf)
 {
 	String str1(_T("abcdef"));
@@ -520,7 +481,7 @@ TEST_F(Test_Base_String, IndexOf)
 	ASSERT_EQ(1, str1.IndexOf(String(_T("bcd"))));
 }
 
-//---------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_String, LastIndexOf)
 {
 	{
@@ -548,7 +509,7 @@ TEST_F(Test_Base_String, LastIndexOf)
 	}
 }
 
-//---------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_String, Trim)
 {
 	// 前後
@@ -595,7 +556,7 @@ TEST_F(Test_Base_String, Trim)
 	}
 }
 
-//---------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_String, Remove)
 {
 	String str1(_T("abcdef"));
@@ -608,11 +569,11 @@ TEST_F(Test_Base_String, Remove)
 	ASSERT_EQ(_T("abef"), str3);
 }
 
-//---------------------------------------------------------------------
-TEST_F(Test_Base_String, Unit_Replace)
+//------------------------------------------------------------------------------
+TEST_F(Test_Base_String, Replace)
 {
-	// <Unit> 部分一致を置換できること。
-	// <Unit> TCHAR* を渡せること。
+	// <Test> 部分一致を置換できること。
+	// <Test> TCHAR* を渡せること。
 	{
 		StringA str1("test");
 		StringA str2 = str1.Replace("es", "b");
@@ -620,19 +581,19 @@ TEST_F(Test_Base_String, Unit_Replace)
 		ASSERT_EQ('b', str2[1]);
 		ASSERT_EQ('t', str2[2]);
 	}
-	// <Unit> 全ての一致を置換できること。
+	// <Test> 全ての一致を置換できること。
 	{
 		String str1(_T("aaa"));
 		String str2 = str1.Replace(String(_T("a")), String(_T("b")));
 		ASSERT_EQ(_T("bbb"), str2);
 	}
-	// <Unit> String を渡せること。
+	// <Test> String を渡せること。
 	{
 		String str1(_T("a"));
 		String str2 = str1.Replace(String(_T("a")), String(_T("b")));
 		ASSERT_EQ(_T("b"), str2);
 	}
-	// <Unit> StringRef を渡せること。
+	// <Test> StringRef を渡せること。
 	{
 		String str1(_T("reabcdef"));
 		TCHAR buf1[] = _T("abc");
@@ -640,9 +601,23 @@ TEST_F(Test_Base_String, Unit_Replace)
 		String str2 = str1.Replace(StringRef(buf1, buf1 + 2), StringRef(buf2, buf2 + 2));
 		ASSERT_EQ(_T("redecdef"), str2);
 	}
+	// <Test> 文字列を置換する
+	{
+		String str1 = _T("abcdcd");
+
+		// "ab" を "12" に置き換える
+		str1 = str1.Replace(_T("ab"), _T("12"));
+
+		// "cd" を "345" に置き換える
+		String from = _T("cd");
+		String to = _T("345");
+		str1 = str1.Replace(from, to);
+
+		ASSERT_EQ(_T("12345345"), str1);
+	}
 }
 
-//---------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_String, Equals)
 {
 	// <Issue> 文字列の先頭が同じだけで一致判定にならないこと。
@@ -654,9 +629,14 @@ TEST_F(Test_Base_String, Equals)
 	}
 }
 
-//---------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_String, Compare)
 {
+	int a1 = strcmp("abc", "abcd");
+	int a2 = strcmp("bbb", "aaaa");
+	int a3 = strncmp("abc", "abcd", 4);
+	int a4 = strncmp("abcd", "abc", 4);
+
 	{
 		String str1("abc");
 		EXPECT_EQ(0, str1.Compare(_T("abc")));
@@ -672,36 +652,56 @@ TEST_F(Test_Base_String, Compare)
 
 	// <Test> StringRef との比較
 	{
-		String str1("abc");
-		StringRef str2(_T("abc"));
-		StringRef str3(_T(""));
-		ASSERT_EQ(true, str1 == str2);
-		ASSERT_EQ(false, str1 == str3);
+		ASSERT_EQ(true,  String(_T("abc")) == StringRef(_T("abc")));
+		ASSERT_EQ(false, String(_T("abcd")) == StringRef(_T("abc")));
+		ASSERT_EQ(false, String(_T("abc")) == StringRef(_T("abcd")));
+		ASSERT_EQ(false, String(_T("abc")) == StringRef(_T("a")));
+		ASSERT_EQ(false, String(_T("abc")) == StringRef(_T("ab")));
+		ASSERT_EQ(false, String(_T("a")) == StringRef(_T("abc")));
+		ASSERT_EQ(false, String(_T("ab")) == StringRef(_T("abc")));
+		ASSERT_EQ(false, String(_T("abc")) == StringRef(_T("")));
+		ASSERT_EQ(false, String(_T("")) == StringRef(_T("abc")));
+
+		ASSERT_EQ(true,  String(_T("abc")) == StringRef(_T("abcd"), 3));
+		ASSERT_EQ(false, String(_T("abcd")) == StringRef(_T("abcd"), 3));
+		ASSERT_EQ(false, String(_T("abc")) == StringRef(_T("abcd"), 4));
+		ASSERT_EQ(false, String(_T("abc")) == StringRef(_T("abcd"), 1));
+		ASSERT_EQ(false, String(_T("abc")) == StringRef(_T("abcd"), 2));
+		ASSERT_EQ(false, String(_T("a")) == StringRef(_T("abcd"), 3));
+		ASSERT_EQ(false, String(_T("ab")) == StringRef(_T("abcd"), 3));
+		ASSERT_EQ(false, String(_T("abc")) == StringRef(_T("abcd"), 0));
+		ASSERT_EQ(false, String(_T("")) == StringRef(_T("abcd"), 3));
+	}
+
+	// <Test> 比較
+	{
+		ASSERT_LE(0, StringTraits::Compare(_T("abcd"), 4, _T("abc"), 3, 4));	// 0 < result (1)
+		ASSERT_GT(0, StringTraits::Compare(_T("abc"), 3, _T("abcd"), 4, 4));	// result < 0 (-1)
 	}
 }
 
-//---------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_String, Left)
 {
 	String str1(_T("abcdef"));
 	ASSERT_EQ(_T("ab"), str1.Left(2));
 }
 
-//---------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_String, Right)
 {
 	String str1(_T("abcdef"));
 	ASSERT_EQ(_T("ef"), str1.Right(2));
 }
 
-//---------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_String, Mid)
 {
 	String str1(_T("abcdef"));
 	ASSERT_EQ(_T("cde"), str1.Mid(2, 3));
 }
 
-//---------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_String, Split)
 {
 	// 普通の分割
@@ -846,7 +846,7 @@ TEST_F(Test_Base_String, Split)
 	}
 }
 
-//---------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_String, NewLine)
 {
 #ifdef _WIN32
@@ -879,7 +879,7 @@ TEST_F(Test_Base_String, NewLine)
 #endif
 }
 
-//---------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_String, ToInt)
 {
 	// 実行できるか
@@ -899,7 +899,7 @@ TEST_F(Test_Base_String, ToInt)
 	ASSERT_THROW(String(_T("0xfffffffffffffffff")).ToInt8(), OverflowException);
 }
 
-//---------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_String, TryToInt)
 {
 	// 実行できるか
@@ -952,21 +952,21 @@ TEST_F(Test_Base_String, TryToInt)
 	ASSERT_FALSE(String(_T("0xfffffffffffffffff")).TryToInt8(&v));
 }
 
-//---------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_String, FromNativeCharString)
 {
 	String str = String::FromNativeCharString("abc");
 	ASSERT_EQ(_T("abc"), str);
 }
 
-//---------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_String, FromNativeWCharString)
 {
 	String str = String::FromNativeCharString(L"abc");
 	ASSERT_EQ(_T("abc"), str);
 }
 
-//---------------------------------------------------------------------
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_String, unordered_map)
 {
 	// <Test> unordered_map のキーにできること (char)
@@ -1011,7 +1011,21 @@ TEST_F(Test_Base_String, unordered_map)
 	}
 }
 
-//---------------------------------------------------------------------
+//------------------------------------------------------------------------------
+TEST_F(Test_Base_String, Concat)
+{
+	// <Integration> 文字列を連結する
+	{
+		String str1 = _T("12");
+		String str2 = _T("56");
+		str1 = str1 + _T("34");
+		str1 += str2;
+		str1.Append(_T("78"));
+		ASSERT_EQ(_T("12345678"), str1);
+	}
+}
+
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_String, Issue)
 {
 	// <Issue> 空文字列への += で、他の String の初期値が変わってしまう。
@@ -1023,3 +1037,6 @@ TEST_F(Test_Base_String, Issue)
 		ASSERT_EQ(_T("a"), s2);
 	}
 }
+
+
+

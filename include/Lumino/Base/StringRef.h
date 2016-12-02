@@ -1,9 +1,7 @@
-﻿/**
-	@file	StringRef.h
-*/
+﻿
 #pragma once
 #include <cstddef>
-#include "StringTraits.h"
+#include "StringHelper.h"
 
 LN_NAMESPACE_BEGIN
 

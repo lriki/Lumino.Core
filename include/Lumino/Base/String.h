@@ -791,5 +791,5 @@ template <> struct hash<ln::StringW> { std::size_t operator () (const ln::String
 
 } // namespace std
 
-#include "StringTraits.h"
+#include "StringHelper.h"
 #include "StringRef.h"

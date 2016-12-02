@@ -10,7 +10,7 @@
 #include <Lumino/Base/Environment.h>
 
 // linux
-#include <Lumino/Base/StringTraits.h>
+#include <Lumino/Base/StringHelper.h>
 #include <Lumino/IO/FileSystem.h>
 
 LN_NAMESPACE_BEGIN

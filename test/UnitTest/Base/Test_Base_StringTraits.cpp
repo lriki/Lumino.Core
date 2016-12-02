@@ -1,5 +1,7 @@
 ﻿#include <TestConfig.h>
 
+
+//==============================================================================
 class Test_Base_StringUtils : public ::testing::Test
 {
 protected:
@@ -70,7 +72,7 @@ TEST_F(Test_Base_StringUtils, IsSpace)
 }
 
 //------------------------------------------------------------------------------
-TEST_F(Test_Base_StringUtils, Unit_Compare)
+TEST_F(Test_Base_StringUtils, Compare)
 {
 	// <Test> 文字数指定無しの全体比較
 	{
@@ -349,7 +351,7 @@ TEST_F(Test_Base_StringUtils, ToInt32)
 	int32_t n;
 	const TCHAR* end;
 	NumberConversionResult r;
-	
+
 	// Min Overflow
 	n = StringTraits::ToInt32(_T("-2147483649"), -1, 0, &end, &r);
 	ASSERT_EQ(INT32_MIN, n);
@@ -488,7 +490,7 @@ TEST_F(Test_Base_StringUtils, ToUInt)
 
 	// 符号
 	ASSERT_EQ(-10, StringTraits::ToInt32(_T("-10")));
-	ASSERT_EQ( 10, StringTraits::ToInt32(_T("+10")));
+	ASSERT_EQ(10, StringTraits::ToInt32(_T("+10")));
 
 	// 前方に変な文字
 	str = _T("R1");
@@ -500,7 +502,7 @@ TEST_F(Test_Base_StringUtils, ToUInt)
 	str = _T("1R");
 	StringTraits::ToInt32(str, -1, 0, &end, &r);
 	ASSERT_EQ(NumberConversionResult::Success, r);
-	ASSERT_TRUE(str+1 == end);
+	ASSERT_TRUE(str + 1 == end);
 
 	// 文字数指定
 	ASSERT_EQ(12, StringTraits::ToInt32(_T("123"), 2));
@@ -560,3 +562,4 @@ TEST_F(Test_Base_StringUtils, ToDouble)
 	StringTraits::ToDouble(str, -1, &end, &r);
 	ASSERT_EQ(NumberConversionResult::Overflow, r);
 }
+

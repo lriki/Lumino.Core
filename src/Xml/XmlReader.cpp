@@ -65,7 +65,7 @@ StringRef 使うことは無いかも。
 // & lt;   エンティティ参照の間にスペースはNG
 
 #include "../Internal.h"
-#include <Lumino/Base/StringTraits.h>
+#include <Lumino/Base/StringHelper.h>
 #include <Lumino/Base/StringBuilder.h>
 #include <Lumino/Base/Resource.h>
 #include <Lumino/IO/PathName.h>

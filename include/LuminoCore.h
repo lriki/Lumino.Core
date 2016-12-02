@@ -10,7 +10,7 @@
 
 #include "Lumino/Base/String.h"
 #include "Lumino/Base/StringBuilder.h"
-#include "Lumino/Base/StringTraits.h"
+#include "Lumino/Base/StringHelper.h"
 #include "Lumino/Base/RefObject.h"
 #include "Lumino/Base/ByteBuffer.h"
 #include "Lumino/Base/STLUtils.h"

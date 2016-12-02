@@ -5,7 +5,7 @@
 #include <Lumino/Text/Encoding.h>
 #include <Lumino/Base/RefObject.h>
 #include <Lumino/Base/String.h>
-#include <Lumino/Base/StringTraits.h>
+#include <Lumino/Base/StringHelper.h>
 #include <Lumino/Base/Locale.h>
 #include <Lumino/Base/Environment.h>
 #include <Lumino/Base/StringArray.h>
@@ -360,7 +360,7 @@ GenericString<TChar>& GenericString<TChar>::operator+=(TChar ch)
 template<typename TChar>
 bool GenericString<TChar>::operator < (const GenericString& right) const
 {
-	return Compare(right.c_str(), -1, CaseSensitivity::CaseSensitive) < 0;
+	return Compare(right.c_str(), right.GetLength(), CaseSensitivity::CaseSensitive) < 0;
 }
 template<typename TChar>
 bool GenericString<TChar>::operator < (const GenericStringRef<TChar>& right) const
@@ -757,7 +757,7 @@ bool GenericString<TChar>::Equals(const TChar* str) const
 template<typename TChar>
 int GenericString<TChar>::Compare(const TChar* str, int count, CaseSensitivity cs) const
 {
-	return StringTraits::Compare(c_str(), GetLength(), str, count, -1, cs);
+	return StringTraits::Compare(c_str(), GetLength(), str, count, std::max(GetLength(), count), cs);
 }
 
 //------------------------------------------------------------------------------
