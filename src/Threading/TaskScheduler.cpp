@@ -59,7 +59,7 @@ void TaskScheduler::QueueTask(Task* task)
 	LN_CHECK_ARG(task != nullptr);
 
 	MutexScopedLock lock(m_taskQueueLock);
-	m_taskQueue.Enqueue(task);
+	m_taskQueue.push_back(task);
 	task->AddRef();
 
 	m_semaphore.Unlock();	// キューに入れたので取り出したい人はどうぞ。
@@ -81,7 +81,8 @@ void TaskScheduler::ExecuteThread()
 		Task* task = nullptr;
 		{
 			MutexScopedLock lock(m_taskQueueLock);
-			m_taskQueue.Dequeue(&task);
+			task = m_taskQueue.front();
+			m_taskQueue.pop_front();
 		}
 
 		// 実行。状態変化は内部で行う

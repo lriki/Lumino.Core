@@ -1,8 +1,7 @@
 ﻿
 #pragma once
-#include <list>
+#include <deque>
 #include "../Base/Array.h"
-#include "../Base/Queue.h"
 #include "Task.h"
 #include "Thread.h"
 #include "Mutex.h"
@@ -34,7 +33,7 @@ private:
 	void ExecuteThread();
 
 	List<DelegateThread*>	m_threadList;
-	Queue<Task*>			m_taskQueue;
+	std::deque<Task*>		m_taskQueue;
 	Semaphore				m_semaphore;
 	Mutex					m_taskQueueLock;
 	ConditionFlag			m_endRequested;
