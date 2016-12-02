@@ -6,6 +6,7 @@
 #include "XmlException.h"
 
 LN_NAMESPACE_BEGIN
+namespace tr {
 
 /** ノードの種類 */
 LN_ENUM(XmlNodeType)
@@ -279,4 +280,5 @@ private:
 	PathName	m_filePath;
 };
 
+} // namespace tr
 LN_NAMESPACE_END

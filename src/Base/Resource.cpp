@@ -2,6 +2,7 @@
 #include "../Internal.h"
 #include <Lumino/Xml/XmlReader.h>
 #include <Lumino/Base/Resource.h>
+using namespace ln::tr;
 
 LN_NAMESPACE_BEGIN
 

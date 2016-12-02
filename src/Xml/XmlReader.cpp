@@ -74,6 +74,7 @@ StringRef égÇ§Ç±Ç∆ÇÕñ≥Ç¢Ç©Ç‡ÅB
 #include <Lumino/Xml/XmlReader.h>
 
 LN_NAMESPACE_BEGIN
+namespace tr {
 
 //==============================================================================
 // XmlReader
@@ -1162,4 +1163,5 @@ XmlFileReader::~XmlFileReader()
 }
 
 
+} // namespace tr
 LN_NAMESPACE_END

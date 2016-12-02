@@ -4,6 +4,7 @@
 #include <Lumino/Xml/XmlException.h>
 
 LN_NAMESPACE_BEGIN
+namespace tr {
 
 //==============================================================================
 // XmlException
@@ -15,4 +16,5 @@ namespace detail
 
 } // namespace detail
 
+} // namespace tr
 LN_NAMESPACE_END

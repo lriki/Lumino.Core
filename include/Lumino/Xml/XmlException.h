@@ -3,6 +3,7 @@
 #include "../Base/String.h"
 
 LN_NAMESPACE_BEGIN
+namespace tr {
 
 /**
 	@brief	不正な XML フォーマットが入力された場合にスローされる例外です。
@@ -65,5 +66,5 @@ public:
 };
 
 } // namespace detail
-
+} // namespace tr
 LN_NAMESPACE_END

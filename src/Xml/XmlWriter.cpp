@@ -6,6 +6,7 @@
 #include <Lumino/Xml/XmlWriter.h>
 
 LN_NAMESPACE_BEGIN
+namespace tr {
 
 //==============================================================================
 // XmlWriter
@@ -378,4 +379,5 @@ String XmlStringWriter::ToString()
 	return m_stringWriter->ToString();
 }
 
+} // namespace tr
 LN_NAMESPACE_END

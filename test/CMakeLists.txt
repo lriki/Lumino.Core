@@ -54,8 +54,7 @@ set(LN_TEST_SOURCES
 	UnitTest/Threading/Test_Threading_Semaphore.cpp
 	UnitTest/Threading/Test_Threading_Task.cpp
 	UnitTest/Threading/Test_Threading_Thread.cpp
-	UnitTest/Xml/Test_Xml_XmlReader.cpp
-	UnitTest/Xml/Test_Xml_XmlWriter.cpp
+	UnitTest/Xml/Test_Xml.cpp
 	UnitTest/Reflection/Test_Reflection_ReflectionObject.cpp
 	UnitTest/Reflection/Test_Reflection_Variant.cpp
 	UnitTest/Math/Test_Math.cpp

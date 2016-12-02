@@ -7,6 +7,7 @@
 
 LN_NAMESPACE_BEGIN
 class StringWriter;
+namespace tr {
 
 /**
 	@brief		SAX スタイルの XML ライターです。
@@ -148,4 +149,5 @@ private:
 	StringWriter* m_stringWriter;
 };
 
+} // namespace tr
 LN_NAMESPACE_END
