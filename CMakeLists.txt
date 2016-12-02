@@ -168,7 +168,6 @@ set(LN_SOURCES_Json
 	include/Lumino/Json/Common.h
 	include/Lumino/Json/JsonDiagnostics.h
 	include/Lumino/Json/JsonDocument.h
-	include/Lumino/Json/JsonError.h
 	include/Lumino/Json/JsonHandler.h
 	include/Lumino/Json/JsonReader.h
 	include/Lumino/Json/JsonValue.h

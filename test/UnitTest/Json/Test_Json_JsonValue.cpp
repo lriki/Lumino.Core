@@ -1,5 +1,6 @@
 #include <TestConfig.h>
 #include <Lumino/Json/JsonValue.h>
+using namespace ln::tr;
 
 class Test_Json_JsonValue : public ::testing::Test
 {

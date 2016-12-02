@@ -4,6 +4,7 @@
 #include "../Base/String.h"
 
 LN_NAMESPACE_BEGIN
+namespace tr {
 
 /** JSON 解析のエラーコード */
 LN_ENUM(JsonParseError)
@@ -83,5 +84,6 @@ public:
 	String			message;
 };
 
+} // namespace tr
 LN_NAMESPACE_END
 

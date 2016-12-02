@@ -5,6 +5,7 @@
 #include <Lumino/Json/JsonReader.h>
 
 LN_NAMESPACE_BEGIN
+namespace tr {
 
 //==============================================================================
 // JsonReader
@@ -1161,4 +1162,5 @@ void JsonReader2::SetError(JsonParseError2 code, const String& message)
 	m_error.column = m_reader->GetColumnNumber();
 }
 
+} // namespace tr
 LN_NAMESPACE_END

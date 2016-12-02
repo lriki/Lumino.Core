@@ -7,6 +7,7 @@
 #include <Lumino/Json/JsonDocument.h>
 
 LN_NAMESPACE_BEGIN
+namespace tr {
 
 //==============================================================================
 // JsonDocument
@@ -35,4 +36,5 @@ void JsonDocument::Parse(TextReader* textReader)
 	handler.Build();
 }
 
+} // namespace tr
 LN_NAMESPACE_END

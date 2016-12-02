@@ -1,10 +1,10 @@
 
 #pragma once
-
 #include "../IO/TextReader.h"
 #include "JsonValue.h"
 
 LN_NAMESPACE_BEGIN
+namespace tr {
 
 /**
 	@brief	JSON データのルート要素です。
@@ -34,4 +34,5 @@ public:
 private:
 };
 
+} // namespace tr
 LN_NAMESPACE_END

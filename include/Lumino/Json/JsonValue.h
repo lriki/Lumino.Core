@@ -5,6 +5,7 @@
 #include "../Base/String.h"
 
 LN_NAMESPACE_BEGIN
+namespace tr {
 class JsonMember;
 
 /** Json ÇÃílÇÃå^Çé¶ÇµÇ‹Ç∑ÅB*/
@@ -154,4 +155,5 @@ public:
 	JsonValue	Value;
 };
 
+} // namespace tr
 LN_NAMESPACE_END

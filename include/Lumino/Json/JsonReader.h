@@ -7,6 +7,7 @@
 #include "JsonHandler.h"
 
 LN_NAMESPACE_BEGIN
+namespace tr {
 
 /**
 	@brief	SAX スタイルの JSON パーサです。
@@ -289,4 +290,5 @@ private:
 	void SetError(JsonParseError2 code, const String& message = String::GetEmpty());
 };
 
+} // namespace tr
 LN_NAMESPACE_END

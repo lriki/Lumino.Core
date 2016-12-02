@@ -3,6 +3,7 @@
 #include <Lumino/Json/JsonValue.h>
 
 LN_NAMESPACE_BEGIN
+namespace tr {
 
 //==============================================================================
 // JsonReader
@@ -230,4 +231,5 @@ void JsonValue::Detach()
 	m_type = JsonType::Null;
 }
 
+} // namespace tr
 LN_NAMESPACE_END

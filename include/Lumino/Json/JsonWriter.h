@@ -5,6 +5,7 @@
 #include "Common.h"
 
 LN_NAMESPACE_BEGIN
+namespace tr {
 
 /**
 	@brief	
@@ -63,4 +64,5 @@ private:
 	bool			m_isComplete;
 };
 
+} // namespace tr
 LN_NAMESPACE_END

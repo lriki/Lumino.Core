@@ -6,6 +6,7 @@
 #include "../IO/MemoryStream.h"
 
 LN_NAMESPACE_BEGIN
+namespace tr {
 class JsonDocument;
 class JsonValue;
 class JsonMember;
@@ -64,4 +65,5 @@ private:
 	Stack<size_t>	m_startIndexStack;
 };
 
+} // namespace tr
 LN_NAMESPACE_END

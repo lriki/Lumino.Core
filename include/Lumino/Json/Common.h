@@ -1,6 +1,7 @@
 #pragma once
 
 LN_NAMESPACE_BEGIN
+namespace tr {
 
 enum class JsonToken
 {
@@ -34,4 +35,5 @@ enum class JsonToken
 	String,
 };
 
+} // namespace tr
 LN_NAMESPACE_END

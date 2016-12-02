@@ -4,6 +4,7 @@
 #include <Lumino/Json/JsonWriter.h>
 
 LN_NAMESPACE_BEGIN
+namespace tr {
 
 //==============================================================================
 // JsonWriter
@@ -234,4 +235,5 @@ void JsonWriter::OnIndent(int level)
 	}
 }
 
+} // namespace tr
 LN_NAMESPACE_END
