@@ -8,7 +8,8 @@
 
 static int g_Value = 0;
 
-class Test_Base_Delegate_Unit : public ::testing::Test
+//==============================================================================
+class Test_Base_Delegate : public ::testing::Test
 {
 protected:
 	virtual void SetUp()
@@ -28,7 +29,8 @@ protected:
 	};
 };
 
-TEST_F(Test_Base_Delegate_Unit, Constructor)
+//------------------------------------------------------------------------------
+TEST_F(Test_Base_Delegate, Constructor)
 {
 	g_Value = 0;
 	Class1 t;
@@ -43,18 +45,24 @@ TEST_F(Test_Base_Delegate_Unit, Constructor)
 	d2();
 	ASSERT_EQ(10, t.m_value);
 
-	// ラムダ式
-	Delegate<void()> d3([&t]() { t.Func2(); });
+	// ラムダ式 (static)
+	Delegate<void()> d3([]() { g_Value++; });
 	d3();
+	ASSERT_EQ(2, g_Value);
+
+	// ラムダ式 (func object)
+	Delegate<void()> d4([&t]() { t.Func2(); });
+	d4();
 	ASSERT_EQ(20, t.m_value);
 
 	// コピー
-	Delegate<void()> d4 = d1;
-	d4();
-	ASSERT_EQ(2, g_Value);
+	Delegate<void()> d5 = d1;
+	d5();
+	ASSERT_EQ(3, g_Value);
 }
 
-TEST_F(Test_Base_Delegate_Unit, IsEmpty)
+//------------------------------------------------------------------------------
+TEST_F(Test_Base_Delegate, IsEmpty)
 {
 	Delegate<void()> d1;
 	ASSERT_TRUE(d1.IsEmpty());
@@ -63,7 +71,8 @@ TEST_F(Test_Base_Delegate_Unit, IsEmpty)
 	ASSERT_FALSE(d2.IsEmpty());
 }
 
-TEST_F(Test_Base_Delegate_Unit, Operator_Assign)
+//------------------------------------------------------------------------------
+TEST_F(Test_Base_Delegate, Operator_Assign)
 {
 	g_Value = 0;
 	Class1 t;
@@ -74,7 +83,13 @@ TEST_F(Test_Base_Delegate_Unit, Operator_Assign)
 	d1();
 	ASSERT_EQ(1, g_Value);
 
-	// ラムダ式
+	// ラムダ式 (static)
+	Delegate<void()> d2;
+	d2 = []() { g_Value++; };
+	d2();
+	ASSERT_EQ(2, g_Value);
+
+	// ラムダ式 (func object)
 	Delegate<void()> d3;
 	d3 = [&t]() { t.Func2(); };
 	d3();
@@ -84,10 +99,11 @@ TEST_F(Test_Base_Delegate_Unit, Operator_Assign)
 	Delegate<void()> d4;
 	d4 = d1;
 	d4();
-	ASSERT_EQ(2, g_Value);
+	ASSERT_EQ(3, g_Value);
 }
 
-TEST_F(Test_Base_Delegate_Unit, Operator_Eq)
+//------------------------------------------------------------------------------
+TEST_F(Test_Base_Delegate, Operator_Eq)
 {
 	Class1 class1, class2;
 	Delegate<void()> d1(&class1, &Class1::Func2);
@@ -104,7 +120,8 @@ TEST_F(Test_Base_Delegate_Unit, Operator_Eq)
 }
 
 
-TEST_F(Test_Base_Delegate_Unit, CreateDelegate)
+//------------------------------------------------------------------------------
+TEST_F(Test_Base_Delegate, CreateDelegate)
 {
 	g_Value = 0;
 	Class1 t;

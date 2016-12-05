@@ -120,10 +120,11 @@ public:
 	{}
 
 	/** static 関数用のコンストラクタ */
-	Delegate(TRet(*func)(TArgs...))
-		: m_holder(LN_NEW StaticHolder(func))
-		, m_type(HolderType::Static)
-	{}
+	//explicit Delegate(TRet(*func)(TArgs...))
+	//	: m_holder(LN_NEW StaticHolder(func))
+	//	, m_type(HolderType::Static)
+	//{}
+
 
 	/** メンバ関数用のコンストラクタ */
 	template < typename T >
@@ -132,18 +133,11 @@ public:
 		, m_type(HolderType::Member)
 	{}
 
-	/** ラムダ式・関数オブジェクト用のコンストラクタ */
+	/** static 関数用・ラムダ式用のコンストラクタ */
 	Delegate(const std::function<TRet(TArgs...)>& func)
 		: m_holder(LN_NEW FuncObjHolder(func))
 		, m_type(HolderType::FuncObj)
 	{}
-
-	/** ラムダ式・関数オブジェクト用のコンストラクタ */
-	//template < typename T >
-	//Delegate(const T& func)
-	//	: m_holder(LN_NEW FuncObjHolder(func))
-	//	, m_type(HolderType::FuncObj)
-	//{}
 
 	/** コピーコンストラクタ */
 	Delegate(const Delegate& d)
@@ -204,13 +198,13 @@ public:
 	}
 
 	/** static 関数を割り当てます。*/
-	Delegate& operator = (TRet(*func)(TArgs...))
-	{
-		Detach();
-		m_holder = LN_NEW StaticHolder(func);
-		m_type = HolderType::Static;
-		return *this;
-	}
+	//Delegate& operator = (TRet(*func)(TArgs...))
+	//{
+	//	Detach();
+	//	m_holder = LN_NEW StaticHolder(func);
+	//	m_type = HolderType::Static;
+	//	return *this;
+	//}
 
 	/** ラムダ式・関数オブジェクトを割り当てます。*/
 	Delegate& operator = (const std::function<TRet(TArgs...)>& func)
