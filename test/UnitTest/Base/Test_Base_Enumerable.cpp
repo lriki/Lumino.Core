@@ -42,12 +42,31 @@ TEST_F(Test_Base_Enumerable, Basic)
 	}
 
 	{
+		List<int> list = { 1, 2, 3, 4, 5 };
+		auto e = tr::MakeEnumerator::from(list.begin(), list.end());
+		e = e.Where([](int v) { return v % 2 == 0; });
+		for (auto i : e)
+		{
+			//printf("%d\n", i);
+		}
+	}
+	{
 		List<int> list1 = { 1, 2, 3, 4, 5 };
 		List<int> list2 = { 6, 7, 8, 9, 0 };
 		//auto e1 = tr::MakeEnumerator::from(list1.begin(), list1.end());
 		//auto e2 = ;
-		auto e = tr::MakeEnumerator::from(list1.begin(), list1.end()).Join(tr::MakeEnumerator::from(list2.begin(), list2.end()));
+		auto e = tr::MakeEnumerator::from(list1.begin(), list1.end());
+		e = e.Join(tr::MakeEnumerator::from(list2.begin(), list2.end()));
 		for (auto i : e)
+		{
+			//printf("%d\n", i);
+		}
+	}
+	{
+		List<int> list = { 1, 2, 3, 4, 5 };
+		auto e = tr::MakeEnumerator::from(list.begin(), list.end());
+		auto e2 = e.Select([](int v) { return v % 2 == 0; });
+		for (auto i : e2)
 		{
 			printf("%d\n", i);
 		}

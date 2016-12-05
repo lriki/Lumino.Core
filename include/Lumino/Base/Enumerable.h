@@ -59,7 +59,7 @@ protected:
 
 
 template<typename T>
-using StreamProviderPtr = std::unique_ptr<StreamProvider<T>>;
+using StreamProviderPtr = std::shared_ptr<StreamProvider<T>>;
 
 
 
@@ -244,6 +244,7 @@ StreamProvider<T>::end() {
 
 
 
+//==============================================================================
 template<typename T, typename Itr>
 class IteratorProvider : public StreamProvider<T>
 {
@@ -280,7 +281,7 @@ template<typename T, typename Predicate>
 class Filter : public StreamProvider<T> {
 
 public:
-	Filter(StreamProviderPtr<T>& source, const Predicate& predicate/*Predicate&& predicate*/)
+	Filter(const StreamProviderPtr<T>& source, const Predicate& predicate/*Predicate&& predicate*/)
 		: source_(std::move(source)), predicate_(predicate) {}
 
 	T* Get() override {
@@ -314,16 +315,16 @@ public:
 	template<typename Iterator>
 	Concatenate(Iterator begin, Iterator end) : sources_(begin, end) {}
 
-	Concatenate(StreamProviderPtr<T>& first, StreamProviderPtr<T>& second) {
-		sources_.push_back(std::move(first));
-		sources_.push_back(std::move(second));
+	Concatenate(const StreamProviderPtr<T>& first, const StreamProviderPtr<T>& second)
+	{
+		sources_.push_back(first);
+		sources_.push_back(second);
 	}
 
-	T* Get() override {
-		return current_;
-	}
+	T* Get() override { return current_; }
 
-	bool AdvanceImpl() override {
+	bool AdvanceImpl() override
+	{
 		while (!sources_.empty()) {
 			auto& provider = sources_.front();
 			if (provider->Advance()) {
@@ -346,7 +347,33 @@ private:
 
 };
 
+//==============================================================================
+template<typename T, typename Transform, typename In>
+class Map : public StreamProvider<T> {
 
+public:
+	Map(StreamProviderPtr<In> source, Transform transform)
+		: source_(std::move(source)), transform_(transform) {}
+
+	T* Get() override {
+		return &current_;
+	}
+
+	bool AdvanceImpl() override {
+		if (source_->Advance()) {
+			current_ = transform_(*source_->Get());
+			return true;
+		}
+		current_ = nullptr;
+		return false;
+	}
+
+private:
+	StreamProviderPtr<In> source_;
+	Transform transform_;
+	T current_;
+
+};
 
 /**
 	@brief		
@@ -386,16 +413,32 @@ public:
 		return *this;
 	}
 
+	template<typename TTransform, typename TResult = std::result_of_t<TTransform(T&&)>>
+	Enumerator<TResult> Select(TTransform transform)
+	{
+		Enumerator<TResult> e(std::make_shared<Map<TResult, TTransform, T>>(m_source, transform));
+		//e.m_source = (LN_NEW Map<TResult, TTransform, T>(m_source, transform));
+		return e;
+	}
 
 	Enumerator(Enumerator<T>&& other)	// vs2013 default ‚É‚Å‚«‚È‚¢
 		: m_source(std::move(other.m_source))
-	{
-	}
+	{}
 
-private:
+	Enumerator(const Enumerator<T>& other) = default;
+
+	Enumerator<T>& operator= (const Enumerator<T>& other) = default;
+
+
+	Enumerator()
+	{}
+
+
 	Enumerator(StreamProviderPtr<T> source)
 		: m_source(std::move(source))
 	{}
+	
+private:
 
 	StreamProviderPtr<T> m_source;
 };
