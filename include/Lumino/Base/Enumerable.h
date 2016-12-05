@@ -6,20 +6,6 @@
 LN_NAMESPACE_BEGIN
 namespace tr {
 
-
-//template<template<typename...> class Provider,
-//	typename T,
-//	typename... TemplateArgs,
-//	typename... ConstructorArgs>
-//	StreamProviderPtr<T> make_stream_provider(ConstructorArgs&&... args) {
-//	return StreamProviderPtr<T>(
-//		new Provider<T, TemplateArgs...>(
-//		std::forward<ConstructorArgs>(args)...));
-//}
-//
-
-
-
 template<typename Itr>
 using IteratorType = typename std::iterator_traits<Itr>::value_type;
 
