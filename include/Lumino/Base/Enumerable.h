@@ -1,6 +1,7 @@
 
 #pragma once
 #include <iterator>
+#include <list>
 
 LN_NAMESPACE_BEGIN
 namespace tr {
@@ -30,6 +31,7 @@ template<typename T>
 struct StreamProvider
 {
 public:
+	virtual ~StreamProvider() = default;
 	struct Iterator;
 
 	virtual T* Get() = 0;
@@ -53,6 +55,7 @@ public:
 protected:
 	virtual bool AdvanceImpl() = 0;
 };
+
 
 
 template<typename T>
@@ -88,15 +91,15 @@ private:
 	static Iterator iterating(StreamProvider<T>* source, std::shared_ptr<T> value);
 	static Iterator end(StreamProvider<T>* source);
 
-	Iterator(StreamProvider<T>* source, State state, std::shared_ptr<T> value);
+	Iterator(StreamProvider<T>* source, State state, /*std::shared_ptr<T>*/T* value);
 
 	void update_initial();
 	void check_consumed(const std::string& op) const;
 
 	StreamProvider<T>* source_;
 	State state_;
-	std::shared_ptr<T> current_;
-
+	//std::shared_ptr<T> current_;
+	T* current_ = nullptr;
 };
 
 template<typename T>
@@ -120,7 +123,7 @@ StreamProvider<T>::Iterator::end(StreamProvider<T>* source) {
 
 template<typename T>
 StreamProvider<T>::Iterator::Iterator(StreamProvider<T>* source, State state,
-	std::shared_ptr<T> value)
+	/*std::shared_ptr<T>*/T* value)
 	: source_(source), state_(state), current_(value) {}
 
 template<typename T>
@@ -134,12 +137,13 @@ typename StreamProvider<T>::Iterator&
 StreamProvider<T>::Iterator::operator++() {
 	update_initial();
 	check_consumed("prefix increment");
-	if (source_->advance()) {
-		current_ = source_->get();
+	if (source_->Advance()) {
+		current_ = source_->Get();
 	}
 	else {
 		state_ = State::End;
-		current_.reset();
+		//current_.reset();
+		current_ = nullptr;
 	}
 	return *this;
 }
@@ -193,12 +197,13 @@ bool StreamProvider<T>::Iterator::operator!= (Iterator& other) {
 template<typename T>
 void StreamProvider<T>::Iterator::update_initial() {
 	if (state_ == State::Initial) {
-		if (source_->advance()) {
-			current_ = source_->get();
+		if (source_->Advance()) {
+			current_ = source_->Get();
 			state_ = State::Iterating;
 		}
 		else {
-			current_.reset();
+			//current_.reset();
+			current_ = nullptr;
 			state_ = State::End;
 		}
 	}
@@ -207,8 +212,32 @@ void StreamProvider<T>::Iterator::update_initial() {
 template<typename T>
 void StreamProvider<T>::Iterator::check_consumed(const std::string& op) const {
 	if (state_ == State::Consumed) {
-		throw stream::ConsumedIteratorException(op);
+		assert(0);
+		//throw stream::ConsumedIteratorException(op);
 	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+template<typename T>
+typename StreamProvider<T>::Iterator
+StreamProvider<T>::begin() {
+	return Iterator::begin(this);
+}
+
+template<typename T>
+typename StreamProvider<T>::Iterator
+StreamProvider<T>::end() {
+	return Iterator::end(this);
 }
 
 
@@ -224,10 +253,10 @@ public:
 
 	virtual T* Get() override
 	{
-		return *current_;
+		return &(*current_);
 	}
 
-	bool advance_impl() override
+	bool AdvanceImpl() override
 	{
 		if (first_) {
 			first_ = false;
@@ -246,6 +275,79 @@ private:
 
 
 
+//==============================================================================
+template<typename T, typename Predicate>
+class Filter : public StreamProvider<T> {
+
+public:
+	Filter(StreamProviderPtr<T>& source, const Predicate& predicate/*Predicate&& predicate*/)
+		: source_(std::move(source)), predicate_(predicate) {}
+
+	T* Get() override {
+		return current_;
+	}
+
+	bool AdvanceImpl() override {
+		while (source_->Advance()) {
+			current_ = source_->Get();
+			if (predicate_(*current_)) {
+				return true;
+			}
+		}
+		current_ = nullptr;
+		return false;
+	}
+
+private:
+	StreamProviderPtr<T> source_;
+	Predicate predicate_;
+	T* current_ = nullptr;
+};
+
+
+
+//==============================================================================
+template<typename T>
+class Concatenate : public StreamProvider<T> {
+
+public:
+	template<typename Iterator>
+	Concatenate(Iterator begin, Iterator end) : sources_(begin, end) {}
+
+	Concatenate(StreamProviderPtr<T>& first, StreamProviderPtr<T>& second) {
+		sources_.push_back(std::move(first));
+		sources_.push_back(std::move(second));
+	}
+
+	T* Get() override {
+		return current_;
+	}
+
+	bool AdvanceImpl() override {
+		while (!sources_.empty()) {
+			auto& provider = sources_.front();
+			if (provider->Advance()) {
+				current_ = provider->Get();
+				return true;
+			}
+			sources_.pop_front();
+		}
+		current_ = nullptr;
+		return false;
+	}
+
+	void concat(StreamProviderPtr<T>&& source) {
+		sources_.push_back(std::move(source));
+	}
+
+private:
+	std::list<StreamProviderPtr<T>> sources_;
+	T* current_;
+
+};
+
+
+
 /**
 	@brief		
 */
@@ -255,16 +357,46 @@ class Enumerator
 public:
 	using iterator = typename StreamProvider<T>::Iterator;
 	
-	iterator begin() { return source_->begin(); }
+	iterator begin() { return m_source->begin(); }
 
-	iterator end() { return source_->end(); }
+	iterator end() { return m_source->end(); }
 
 	template<typename Iterator>
 	Enumerator(Iterator begin, Iterator end)
-		: m_source(make_stream_provider<provider::Iterator, T, Iterator>(begin, end))
+		: m_source(StreamProviderPtr<T>( LN_NEW IteratorProvider<T, Iterator>(begin, end)))
 	{}
 
+	
+	//template<typename TPredicate>
+	//Enumerator<T> Where(TPredicate pred)
+	//{
+	//	return Enumerator<T>(new Filter(m_source, pred));
+	//}
+
+	template<typename TPredicate>
+	Enumerator<T>& Where(TPredicate pred)
+	{
+		m_source.reset(LN_NEW Filter<T, TPredicate>(m_source, pred));
+		return *this;
+	}
+
+	Enumerator<T>& Join(Enumerator<T>&& tail)
+	{
+		m_source.reset(LN_NEW Concatenate<T>(m_source, tail.m_source));
+		return *this;
+	}
+
+
+	Enumerator(Enumerator<T>&& other)	// vs2013 default ‚É‚Å‚«‚È‚¢
+		: m_source(std::move(other.m_source))
+	{
+	}
+
 private:
+	Enumerator(StreamProviderPtr<T> source)
+		: m_source(std::move(source))
+	{}
+
 	StreamProviderPtr<T> m_source;
 };
 
@@ -276,8 +408,16 @@ class MakeEnumerator
 public:
 
 	template<typename Iterator>
-	static Enumerator<IteratorType<Iterator>> from(Iterator begin, Iterator end);
+	static Enumerator<IteratorType<Iterator>> from(Iterator begin, Iterator end)
+	{
+		return Enumerator<IteratorType<Iterator>>(begin, end);
+	}
 };
+
+namespace q
+{
+
+}
 
 } // namespace tr
 LN_NAMESPACE_END

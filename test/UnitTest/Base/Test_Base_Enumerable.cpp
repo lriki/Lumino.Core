@@ -8,4 +8,54 @@ class Test_Base_Enumerable : public ::testing::Test
 //------------------------------------------------------------------------------
 TEST_F(Test_Base_Enumerable, Basic)
 {
+	//{
+	//	List<int> list = {1, 2, 3};
+	//	tr::Enumerator<int> e(list.begin(), list.end());
+	//	for (auto i : e)
+	//	{
+	//		printf("%d\n", i);
+	//	}
+	//	printf("e1\n");
+	//}
+	//printf("e\n");
+
+
+	//{
+	//	List<int> list = { 1, 2, 3, 4, 5 };
+	//	tr::Enumerator<int> e(list.begin(), list.end());
+	//	e.Where([](int v) { return v % 2 == 0; });
+	//	for (auto i : e)
+	//	{
+	//		printf("%d\n", i);
+	//	}
+	//	printf("e1\n");
+	//}
+	//printf("e\n");
+
+	{
+		List<int> list = { 1, 2, 3, 4, 5 };
+		auto e = tr::MakeEnumerator::from(list.begin(), list.end());
+		for (auto i : e)
+		{
+			//printf("%d\n", i);
+		}
+	}
+
+	{
+		List<int> list1 = { 1, 2, 3, 4, 5 };
+		List<int> list2 = { 6, 7, 8, 9, 0 };
+		//auto e1 = tr::MakeEnumerator::from(list1.begin(), list1.end());
+		//auto e2 = ;
+		auto e = tr::MakeEnumerator::from(list1.begin(), list1.end()).Join(tr::MakeEnumerator::from(list2.begin(), list2.end()));
+		for (auto i : e)
+		{
+			printf("%d\n", i);
+		}
+	}
+
+	/*
+		Where (フィルタ)
+		Join
+		Select (map・変換)
+	*/
 }
