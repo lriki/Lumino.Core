@@ -157,7 +157,7 @@ public:
 		@brief	例外の詳細メッセージを取得します。
 	*/
 	const TCHAR* GetMessage() const;
-	virtual const TCHAR* LN_AFX_FUNCNAME(GetMessage)() const;
+	const TCHAR* LN_AFX_FUNCNAME(GetMessage)() const;
 #pragma pop_macro("GetMessage")
 
 	/**
