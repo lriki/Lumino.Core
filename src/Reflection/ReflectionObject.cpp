@@ -18,6 +18,37 @@ namespace tr
 {
 
 //==============================================================================
+// ReflectionHelper
+//==============================================================================
+//------------------------------------------------------------------------------
+void ReflectionHelper::AddGCObject(ReflectionObject* obj, ReflectionObject* child)
+{
+	if (obj == nullptr || child == nullptr) return;
+	obj->m_gcList.Add(child);
+}
+
+//------------------------------------------------------------------------------
+void ReflectionHelper::RemoveGCObject(ReflectionObject* obj, ReflectionObject* child)
+{
+	if (obj == nullptr || child == nullptr) return;
+	obj->m_gcList.Remove(child);
+}
+
+//------------------------------------------------------------------------------
+void ReflectionHelper::GCObjects(ReflectionObject* obj)
+{
+	if (obj == nullptr) return;
+	obj->m_gcList.RemoveAll([](RefPtr<ReflectionObject>& obj) { return IsGCReady(obj); });
+}
+
+//------------------------------------------------------------------------------
+bool ReflectionHelper::IsGCReady(ReflectionObject* obj)
+{
+	if (obj == nullptr) return false;
+	return obj->m_autoGC && obj->GetReferenceCount() == 1;
+}
+
+//==============================================================================
 // ReflectionObject
 //==============================================================================
 ln::tr::TypeInfo				ReflectionObject::lnref_typeInfo(_T("ReflectionObject"), nullptr, nullptr, nullptr, nullptr);
@@ -27,6 +58,7 @@ ln::tr::TypeInfo*				ReflectionObject::lnref_GetThisTypeInfo() const { return &l
 ReflectionObject::ReflectionObject()
 	: m_userData(nullptr)
 	, m_weakRefInfo(nullptr)
+	, m_autoGC(true)
 {
 }
 

@@ -109,7 +109,7 @@ public:
 
 	/** 指定した条件に一致する最初の要素を削除します。(正常に削除された場合は true を返す。要素が見つからなければ false を返す)*/
 	template<typename TPred>
-	bool Remove(TPred pred)		// TODO: RemoveIf のほうがいいかもしれない。T が RefPtr<int> で、Remove(1) とかするとこっちのオーバーロードが呼ばれてエラーになる
+	bool RemoveIf(TPred pred)
 	{
 		CheckDetachShared();
 		auto itr = m_data->m_vector.begin();

@@ -1,6 +1,7 @@
 ﻿
 #pragma once
 #include <atomic>
+#include <list>
 #include "../Threading/Mutex.h"
 #include "../Base/Common.h"
 #include "../Base/RefObject.h"
@@ -79,6 +80,9 @@ private:
 
 	detail::WeakRefInfo*	m_weakRefInfo;
 	Mutex					m_weakRefInfoMutex;
+
+	List<RefPtr<ReflectionObject>>	m_gcList;
+	bool							m_autoGC;
 
 LN_INTERNAL_ACCESS:
 

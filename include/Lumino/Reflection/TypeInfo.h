@@ -77,6 +77,11 @@ public:
 		}
 		return static_cast<TData*>(obj->m_animationData);
 	}
+
+	static void AddGCObject(ReflectionObject* obj, ReflectionObject* child);
+	static void RemoveGCObject(ReflectionObject* obj, ReflectionObject* child);
+	static void GCObjects(ReflectionObject* obj);
+	static bool IsGCReady(ReflectionObject* obj);
 };
 
 /**

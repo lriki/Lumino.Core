@@ -378,7 +378,7 @@ TEST_F(Test_Base_Array, Remove)
 	// <Unit> ラムダ式で条件指定できること
 	{
 		List<int> a1 = ary;
-		a1.Remove([](int v){ return v == 2; });
+		a1.RemoveIf([](int v){ return v == 2; });
 		ASSERT_EQ(3, a1.GetCount());
 		ASSERT_EQ(1, a1[0]);
 		ASSERT_EQ(3, a1[1]);
