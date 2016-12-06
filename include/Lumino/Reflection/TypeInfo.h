@@ -82,6 +82,12 @@ public:
 	static void RemoveGCObject(ReflectionObject* obj, ReflectionObject* child);
 	static void GCObjects(ReflectionObject* obj);
 	static bool IsGCReady(ReflectionObject* obj);
+
+	template<class TList>
+	inline static void GCObjectList(TList* list)
+	{
+		list->RemoveAll([](typename TList::value_type& obj) { return IsGCReady(obj); });
+	}
 };
 
 /**
