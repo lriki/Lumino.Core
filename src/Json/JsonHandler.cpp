@@ -194,10 +194,12 @@ void JsonDOMHandler::BuildValue(BinaryReader* reader, JsonValue* v)
 //------------------------------------------------------------------------------
 void JsonDOMHandler::BuildMember(BinaryReader* reader, JsonMember* m)
 {
-	LN_ASSERT(reader->ReadUInt8() == (0x80 | JsonType::String));	// 種別は必ず Key であるはず
+	//LN_ASSERT(reader->ReadUInt8() == (0x80 | JsonType::String));	// 種別は必ず Key であるはず
 
 	// キー文字列
 	uint8_t type = reader->ReadUInt8();
+	assert(type == (0x80 | JsonType::String));	// 種別は必ず Key であるはず
+
 	int len = reader->ReadInt32();
 	m->Name = String((TCHAR*)m_valueRawData.GetBuffer((size_t)m_valueRawData.GetPosition()), len);	// 生メモリから文字列を生成
 	m_valueRawData.Seek(len * sizeof(TCHAR), SeekOrigin_Current);							// 直接メモリを読んだので自分で進める

@@ -62,7 +62,8 @@ set(LN_SOURCES_Base
 	include/Lumino/Base/RefObject.h
 	include/Lumino/Base/Regex.h
 	include/Lumino/Base/Resource.h
-	include/Lumino/Base/SortedArray.h
+	include/Lumino/Base/Resource.h
+	include/Lumino/Base/Serialization.h
 	include/Lumino/Base/Stack.h
 	include/Lumino/Base/StlHelper.h
 	include/Lumino/Base/String.h
@@ -85,6 +86,7 @@ set(LN_SOURCES_Base
 	src/Base/Memory.cpp
 	src/Base/RefObject.cpp
 	src/Base/Resource.cpp
+	src/Base/Serialization.cpp
 	src/Base/String.cpp
 	src/Base/StringBuilder.cpp
 	src/Base/StringRef.cpp

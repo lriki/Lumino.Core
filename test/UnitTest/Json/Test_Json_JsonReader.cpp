@@ -99,7 +99,35 @@ TEST_F(Test_Json_JsonReader, Basic2)
 	{
 		JsonReader2 reader(_T("[10]"));
 		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::StartArray, reader.GetTokenType());
-		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::Double, reader.GetTokenType()); ASSERT_EQ(_T("10"), reader.GetValue());
+		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::Int32, reader.GetTokenType()); ASSERT_EQ(_T("10"), reader.GetValue());
+		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::EndArray, reader.GetTokenType());
+		ASSERT_EQ(false, reader.Read());
+	}
+}
+
+//---------------------------------------------------------------------
+TEST_F(Test_Json_JsonReader, GetValue)
+{
+	// <Test> Bool ‚Ì’l‚ÌŽæ“¾
+	{
+		JsonReader2 reader(_T("[true,false]"));
+		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::StartArray, reader.GetTokenType());
+		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::Boolean, reader.GetTokenType()); ASSERT_EQ(true, reader.GetBoolValue());
+		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::Boolean, reader.GetTokenType()); ASSERT_EQ(false, reader.GetBoolValue());
+		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::EndArray, reader.GetTokenType());
+		ASSERT_EQ(false, reader.Read());
+	}
+	// <Test> Int32 ‚Æ Int64 ‚Æ Double ‚Ì‹æ•Ê
+	// <Test> Int32 ‚Æ Int64 ‚Æ Double ‚Ì’l‚ÌŽæ“¾
+	{
+		JsonReader2 reader(_T("[-2147483648,2147483647,-2147483649,2147483648,1.0,-1.0]"));
+		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::StartArray, reader.GetTokenType());
+		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::Int32, reader.GetTokenType()); ASSERT_EQ(-2147483648, reader.GetInt32Value());
+		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::Int32, reader.GetTokenType()); ASSERT_EQ(2147483647, reader.GetInt32Value());
+		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::Int64, reader.GetTokenType()); ASSERT_EQ(-2147483649LL, reader.GetInt64Value());
+		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::Int64, reader.GetTokenType()); ASSERT_EQ(2147483648LL, reader.GetInt64Value());
+		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::Double, reader.GetTokenType()); ASSERT_EQ(1.0, reader.GetDoubleValue());
+		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::Double, reader.GetTokenType()); ASSERT_EQ(-1.0, reader.GetDoubleValue());
 		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::EndArray, reader.GetTokenType());
 		ASSERT_EQ(false, reader.Read());
 	}

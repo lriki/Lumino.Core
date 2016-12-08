@@ -140,8 +140,8 @@ private:
 		bool		m_bool;
 		double		m_double;
 		String*		m_string;
-		ValueList*	m_valueList;
-		MemberList*	m_memberList;
+		ValueList*	m_valueList;	// on array
+		MemberList*	m_memberList;	// on object
 	};
 };
 

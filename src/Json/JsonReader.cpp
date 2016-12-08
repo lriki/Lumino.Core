@@ -551,6 +551,40 @@ const String& JsonReader2::GetValue() const
 }
 
 //------------------------------------------------------------------------------
+const String& JsonReader2::GetPropertyName() const
+{
+	return m_currentState.propertyName;
+}
+
+//------------------------------------------------------------------------------
+bool JsonReader2::GetBoolValue() const
+{
+	LN_FAIL_CHECK_STATE(m_currentToken.type == JsonToken::Boolean) return false;
+	return m_valueData.m_bool;
+}
+
+//------------------------------------------------------------------------------
+int32_t JsonReader2::GetInt32Value() const
+{
+	LN_FAIL_CHECK_STATE(m_currentToken.type == JsonToken::Int32) return 0;
+	return m_valueData.m_int32;
+}
+
+//------------------------------------------------------------------------------
+int64_t JsonReader2::GetInt64Value() const
+{
+	LN_FAIL_CHECK_STATE(m_currentToken.type == JsonToken::Int64) return 0;
+	return m_valueData.m_int64;
+}
+
+//------------------------------------------------------------------------------
+double JsonReader2::GetDoubleValue() const
+{
+	LN_FAIL_CHECK_STATE(m_currentToken.type == JsonToken::Double) return 0;
+	return m_valueData.m_double;
+}
+
+//------------------------------------------------------------------------------
 const JsonError2& JsonReader2::GetError() const
 {
 	return m_error;
@@ -709,6 +743,7 @@ bool JsonReader2::ParseTrue()
 		m_reader->Read() == 'u' &&
 		m_reader->Read() == 'e')
 	{
+		m_valueData.m_bool = true;
 		return SetToken(JsonToken::Boolean, _T("true"), 4);
 	}
 	else
@@ -728,6 +763,7 @@ bool JsonReader2::ParseFalse()
 		m_reader->Read() == 's' &&
 		m_reader->Read() == 'e')
 	{
+		m_valueData.m_bool = false;
 		return SetToken(JsonToken::Boolean, _T("false"), 5);
 	}
 	else
@@ -743,6 +779,7 @@ bool JsonReader2::ParseNumber()
 {
 	// 数値として使える文字を m_textCache に入れていく
 	int len = 0;
+	bool isDecimal = false;
 	TCHAR ch;
 	while (true)
 	{
@@ -755,6 +792,9 @@ bool JsonReader2::ParseNumber()
 			m_textCache.Add(ch);
 			++len;
 			m_reader->Read();	// ここで1つ進める
+
+			// 小数か？
+			if (!isDecimal) isDecimal = (ch == '.');
 		}
 		else {
 			break;				// 一致しなければポインタは進めない
@@ -767,25 +807,60 @@ bool JsonReader2::ParseNumber()
 		return false;
 	}
 
-	const TCHAR* str = &m_textCache[0];
-	NumberConversionResult result;
-	const TCHAR* endptr = NULL;
-	double value = StringTraits::ToDouble(str, len, &endptr, &result);
-
-	if ((endptr - str) != len)	// 正常に変換できていれば、読み取った文字数が全て消費されるはず
+	if (isDecimal)
 	{
-		// Error: 構文が正しくない
-		SetError(JsonParseError2::InvalidNumber);
-		return false;
-	}
-	if (result == NumberConversionResult::Overflow)
-	{
-		// Error: オーバーフローが発生した
-		SetError(JsonParseError2::NumberOverflow);
-		return false;
-	}
+		const TCHAR* str = &m_textCache[0];
+		const TCHAR* endptr = nullptr;
+		NumberConversionResult result;
+		double value = StringTraits::ToDouble(str, len, &endptr, &result);
 
-	return SetToken(JsonToken::Double, str, len);
+		if ((endptr - str) != len)	// 正常に変換できていれば、読み取った文字数が全て消費されるはず
+		{
+			// Error: 構文が正しくない
+			SetError(JsonParseError2::InvalidNumber);
+			return false;
+		}
+		if (result == NumberConversionResult::Overflow)
+		{
+			// Error: オーバーフローが発生した
+			SetError(JsonParseError2::NumberOverflow);
+			return false;
+		}
+
+		m_valueData.m_double = value;
+		return SetToken(JsonToken::Double, str, len);
+	}
+	else
+	{
+		const TCHAR* str = &m_textCache[0];
+		const TCHAR* endptr = nullptr;
+		NumberConversionResult result;
+		int64_t value = StringTraits::ToInt64(str, len, 0, &endptr, &result);
+
+		if ((endptr - str) != len)	// 正常に変換できていれば、読み取った文字数が全て消費されるはず
+		{
+			// Error: 構文が正しくない
+			SetError(JsonParseError2::InvalidNumber);
+			return false;
+		}
+		if (result == NumberConversionResult::Overflow)
+		{
+			// Error: オーバーフローが発生した
+			SetError(JsonParseError2::NumberOverflow);
+			return false;
+		}
+
+		if (INT32_MIN <= value && value <= INT32_MAX)
+		{
+			m_valueData.m_int32 = (int32_t)value;
+			return SetToken(JsonToken::Int32, str, len);
+		}
+		else
+		{
+			m_valueData.m_int64 = value;
+			return SetToken(JsonToken::Int64, str, len);
+		}
+	}
 
 #if 0
 
@@ -1085,58 +1160,60 @@ bool JsonReader2::SetToken(JsonToken newToken, const TCHAR* value, int valueLen)
 
 	switch (m_currentToken.type)
 	{
-	//case State::Start:
-	//	break;
-	case JsonToken::StartObject:
-		m_currentState.state = State::ObjectStart;
-		PushState();
-		m_currentState.containerType = ContainerType::Object;
-		break;
-	case JsonToken::EndObject:
-		if (m_currentState.state == State::ObjectStart ||
-			m_currentState.state == State::PostValue)
-		{
-			PopState();
+		//case State::Start:
+		//	break;
+		case JsonToken::StartObject:
+			m_currentState.state = State::ObjectStart;
+			PushState();
+			m_currentState.containerType = ContainerType::Object;
+			break;
+		case JsonToken::EndObject:
+			if (m_currentState.state == State::ObjectStart ||
+				m_currentState.state == State::PostValue)
+			{
+				PopState();
+				m_currentState.state = State::PostValue;
+			}
+			else
+			{
+				SetError(JsonParseError2::InvalidObjectClosing);
+				return false;
+			}
+			break;
+		case JsonToken::StartArray:
+			m_currentState.state = State::ArrayStart;
+			PushState();
+			m_currentState.containerType = ContainerType::Array;
+			break;
+		case JsonToken::EndArray:
+			// ↓ EndObject と同じ処理だから関数化してもいいかも。Json.NET では ValidateEnd()
+			if (m_currentState.state == State::ArrayStart ||
+				m_currentState.state == State::PostValue)
+			{
+				PopState();
+				m_currentState.state = State::PostValue;
+			}
+			else
+			{
+				SetError(JsonParseError2::ArrayInvalidClosing);
+				return false;
+			}
+			break;
+		case JsonToken::PropertyName:
+			m_currentState.state = State::Property;	// : まで読んでいる。次は値がほしい
+			m_currentState.propertyName = m_value;
+			break;
+		case JsonToken::Int32:
+		case JsonToken::Int64:
+		case JsonToken::Double:
+		case JsonToken::Null:
+		case JsonToken::Boolean:
+		case JsonToken::String:
 			m_currentState.state = State::PostValue;
-		}
-		else
-		{
-			SetError(JsonParseError2::InvalidObjectClosing);
+			break;
+		default:
+			SetError(JsonParseError2::UnexpectedToken);
 			return false;
-		}
-		break;
-	case JsonToken::StartArray:
-		m_currentState.state = State::ArrayStart;
-		PushState();
-		m_currentState.containerType = ContainerType::Array;
-		break;
-	case JsonToken::EndArray:
-		// ↓ EndObject と同じ処理だから関数化してもいいかも。Json.NET では ValidateEnd()
-		if (m_currentState.state == State::ArrayStart ||
-			m_currentState.state == State::PostValue)
-		{
-			PopState();
-			m_currentState.state = State::PostValue;
-		}
-		else
-		{
-			SetError(JsonParseError2::ArrayInvalidClosing);
-			return false;
-		}
-		break;
-	case JsonToken::PropertyName:
-		m_currentState.state = State::Property;	// : まで読んでいる。次は値がほしい
-		m_currentState.propertyName = m_value;
-		break;
-	case JsonToken::Double:
-	case JsonToken::Null:
-	case JsonToken::Boolean:
-	case JsonToken::String:
-		m_currentState.state = State::PostValue;
-		break;
-	default:
-		SetError(JsonParseError2::UnexpectedToken);
-		return false;
 	}
 	return true;
 }

@@ -22,6 +22,12 @@ enum class JsonToken
 	/** オブジェクトのプロパティの名前 */
 	PropertyName,
 
+	/** 数値型 (Int32) */
+	Int32,
+
+	/** 数値型 (Int64) */
+	Int64,
+
 	/** 数値型 (double) */
 	Double,
 
@@ -33,6 +39,12 @@ enum class JsonToken
 
 	/** 文字列値 */
 	String,
+};
+
+enum class JsonParseResult
+{
+	Success = 0,
+	Error = 1,
 };
 
 } // namespace tr

@@ -213,7 +213,20 @@ public:
 	*/
 	const String& GetValue() const;
 
+	const String& GetPropertyName() const;
+
+	/** 現在のノードが Bool である場合、パース結果の bool 値を取得できます。*/
+	bool GetBoolValue() const;
+	/** 現在のノードが Int32 である場合、パース結果の int32_t 値を取得できます。*/
+	int32_t GetInt32Value() const;
+	/** 現在のノードが Int64 である場合、パース結果の int64_t 値を取得できます。*/
+	int64_t GetInt64Value() const;
+	/** 現在のノードが Double である場合、パース結果の double 値を取得できます。*/
+	double GetDoubleValue() const;
+
+
 	const JsonError2& GetError() const;
+
 
 	void ReadAsStartObject();
 	void ReadAsEndObject();
@@ -261,6 +274,15 @@ private:
 		String				propertyName;
 		ContainerType		containerType = ContainerType::None;	// 現在解析中のブロックの種類
 	};
+
+	union 
+	{
+		bool	m_bool;
+		int32_t	m_int32;
+		int64_t	m_int64;
+		double	m_double;
+
+	} m_valueData;
 
 	//RefPtr<TextReader>		m_reader;
 	RefPtr<detail::PositioningTextReader>	m_reader;

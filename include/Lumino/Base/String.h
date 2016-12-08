@@ -776,6 +776,9 @@ class StringHelper
 public:
 	template<typename TChar>
 	static GenericStringCore<TChar>* GetStringCore(const GenericString<TChar>& str) { return str.m_string; }
+
+	template<typename TChar>
+	static void AttachStringCore(String* str, GenericStringCore<TChar>* core) { str->Attach(core); }
 };
 
 } // namespace detail
