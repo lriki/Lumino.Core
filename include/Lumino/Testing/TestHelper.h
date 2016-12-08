@@ -20,6 +20,9 @@ public:
 
 	/// 2 つの配列をバイト単位で比較する
 	static bool CheckArrays(const void* ary1, const void* ary2, size_t count);
+
+	// 2 つのファイル内容が一致するか確認する
+	static bool EqualFiles(const PathName& filePath1, const PathName& filePath2);
 };
 
 // __FILE__ のあるフォルダパス (PathName) を取得する

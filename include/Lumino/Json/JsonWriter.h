@@ -66,10 +66,11 @@ private:
 private:
 	struct Level
 	{
-		Level(bool inArray) : valueCount(0), inArray(inArray), justSawKey(false) {}
-		int		valueCount;	///< 現在のネストレベルに含まれている値の数。=配列の要素数またはオブジェクトのメンバ数
-		bool	inArray;	///< true なら配列、false ならオブジェクト
+		Level(bool inArray) : valueCount(0), inArray(inArray), justSawKey(false), justSawContainerEnd(false){}
+		int		valueCount;				// 現在のネストレベルに含まれている値の数。=配列の要素数またはオブジェクトのメンバ数
+		bool	inArray;				// true なら配列、false ならオブジェクト
 		bool	justSawKey;
+		bool	justSawContainerEnd;	// for indent
 	};
 
 	JsonFormatting	m_formatting;

@@ -41,8 +41,10 @@ void JsonWriter::WriteEndObject()
 	m_levelStack.Pop();
 	OnEndObject();
 
-	if (!m_levelStack.IsEmpty()) {	// ルート要素のクローズに備える
+	if (!m_levelStack.IsEmpty())	// ルート要素のクローズに備える
+	{
 		m_levelStack.GetTop().valueCount++;
+		m_levelStack.GetTop().justSawContainerEnd = true;
 	}
 }
 
@@ -60,9 +62,11 @@ void JsonWriter::WriteEndArray()
 	LN_CHECK_ARG(m_levelStack.GetCount() >= 2);
 	LN_CHECK_ARG(m_levelStack.GetTop().inArray);
 
+	AutoComplete(JsonToken::EndArray);
 	m_levelStack.Pop();
 	OnEndArray();
 	m_levelStack.GetTop().valueCount++;
+	m_levelStack.GetTop().justSawContainerEnd = true;
 }
 
 //------------------------------------------------------------------------------
@@ -157,7 +161,7 @@ void JsonWriter::AutoComplete(JsonToken token)
 	{
 		Level& level = m_levelStack.GetTop();
 
-		if (token != JsonToken::EndObject)
+		if (token != JsonToken::EndObject && token != JsonToken::EndArray)
 		{
 			if (level.justSawKey) {
 				OnPrefix(PrefixType_Key, level.valueCount);
@@ -191,7 +195,7 @@ void JsonWriter::AutoComplete(JsonToken token)
 						m_textWriter->Write(' ');
 					}
 				}
-				else if (token == JsonToken::EndObject)
+				else if (token == JsonToken::EndObject || (token == JsonToken::EndArray && level.justSawContainerEnd))
 				{
 					m_textWriter->WriteLine();
 					for (int i = 0; i < m_levelStack.GetCount() - 1; i++)
@@ -204,6 +208,7 @@ void JsonWriter::AutoComplete(JsonToken token)
 		}
 
 		level.justSawKey = false;
+		level.justSawContainerEnd = false;
 	}
 }
 

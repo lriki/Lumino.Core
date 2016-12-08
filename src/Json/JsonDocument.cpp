@@ -45,8 +45,9 @@ void JsonDocument::Parse(TextReader* textReader)
 // JsonElement2
 //==============================================================================
 //------------------------------------------------------------------------------
-JsonElement2::JsonElement2()
-	: m_type(JsonValueType::Null)
+JsonElement2::JsonElement2(JsonDocument2* owner)
+	: m_ownerDoc(owner)
+	, m_type(JsonValueType::Null)
 {
 }
 
@@ -61,8 +62,8 @@ JsonElement2::~JsonElement2()
 //==============================================================================
 //------------------------------------------------------------------------------
 JsonValue2::JsonValue2(JsonDocument2* ownerDoc)
+	: JsonElement2(ownerDoc)
 {
-	SetOwnerDocument(ownerDoc);
 }
 
 //------------------------------------------------------------------------------
@@ -214,10 +215,11 @@ void JsonValue2::OnSave(JsonWriter* writer)
 			writer->WriteString(m_stringCore->c_str(), m_stringCore->length());
 			break;
 		default:
-			LN_FAIL_CHECK_STATE(0);
+			LN_FAIL_CHECK_STATE(0) return;
 			break;
 	}
 }
+
 
 
 //==============================================================================
@@ -225,14 +227,111 @@ void JsonValue2::OnSave(JsonWriter* writer)
 //==============================================================================
 
 //------------------------------------------------------------------------------
-JsonObject2::JsonObject2(JsonDocument2* ownerDoc)
+JsonArray2::JsonArray2(JsonDocument2* ownerDoc)
+	: JsonElement2(ownerDoc)
 {
-	SetOwnerDocument(ownerDoc);
+}
+
+//------------------------------------------------------------------------------
+JsonArray2::~JsonArray2()
+{
+}
+
+//------------------------------------------------------------------------------
+void JsonArray2::AddBool(bool value)
+{
+	auto ptr = GetOwnerDocument()->NewElement<JsonValue2>();
+	ptr->SetBool(value);
+	m_itemList.Add(ptr);
+}
+
+//------------------------------------------------------------------------------
+void JsonArray2::AddInt32(int32_t value)
+{
+	auto ptr = GetOwnerDocument()->NewElement<JsonValue2>();
+	ptr->SetInt64(value);
+	m_itemList.Add(ptr);
+}
+
+//------------------------------------------------------------------------------
+void JsonArray2::AddInt64(int64_t value)
+{
+	auto ptr = GetOwnerDocument()->NewElement<JsonValue2>();
+	ptr->SetInt64(value);
+	m_itemList.Add(ptr);
+}
+
+//------------------------------------------------------------------------------
+void JsonArray2::AddFloat(float value)
+{
+	auto ptr = GetOwnerDocument()->NewElement<JsonValue2>();
+	ptr->SetFloat(value);
+	m_itemList.Add(ptr);
+}
+
+//------------------------------------------------------------------------------
+void JsonArray2::AddDouble(double value)
+{
+	auto ptr = GetOwnerDocument()->NewElement<JsonValue2>();
+	ptr->SetDouble(value);
+	m_itemList.Add(ptr);
+}
+
+//------------------------------------------------------------------------------
+void JsonArray2::AddString(const StringRef& value)
+{
+	auto ptr = GetOwnerDocument()->NewElement<JsonValue2>();
+	ptr->SetString(value);
+	m_itemList.Add(ptr);
+}
+
+//------------------------------------------------------------------------------
+JsonArray2* JsonArray2::AddArray()
+{
+	auto ptr = GetOwnerDocument()->NewElement<JsonArray2>();
+	m_itemList.Add(ptr);
+	return ptr;
+}
+
+//------------------------------------------------------------------------------
+JsonObject2* JsonArray2::AddObject()
+{
+	auto ptr = GetOwnerDocument()->NewElement<JsonObject2>();
+	m_itemList.Add(ptr);
+	return ptr;
+}
+
+//------------------------------------------------------------------------------
+void JsonArray2::OnSave(JsonWriter* writer)
+{
+	LN_FAIL_CHECK_ARG(writer != nullptr) return;
+	writer->WriteStartArray();
+	for (JsonElement2* item : m_itemList)
+	{
+		item->Save(writer);
+	}
+	writer->WriteEndArray();
+}
+
+//==============================================================================
+// JsonObject2
+//==============================================================================
+
+//------------------------------------------------------------------------------
+JsonObject2::JsonObject2(JsonDocument2* ownerDoc)
+	: JsonElement2(ownerDoc)
+{
 }
 
 //------------------------------------------------------------------------------
 JsonObject2::~JsonObject2()
 {
+}
+
+//------------------------------------------------------------------------------
+void JsonObject2::AddMemberNull(const StringRef& name)
+{
+	GetValue(name)->SetNull();
 }
 
 //------------------------------------------------------------------------------
@@ -272,9 +371,29 @@ void JsonObject2::AddMemberString(const StringRef& name, const StringRef& value)
 }
 
 //------------------------------------------------------------------------------
+JsonArray2* JsonObject2::AddMemberArray(const StringRef& name)
+{
+	Member* m = m_memberList.Find([name](const Member& m) { return m.name == name; });
+	if (m == nullptr || m->value->GetType() != JsonValueType::Array)
+	{
+		auto* ptr = GetOwnerDocument()->NewElement<JsonArray2>();
+		m_memberList.Add({ name, ptr });
+		return ptr;
+	}
+	return static_cast<JsonArray2*>(m->value);
+}
+
+//------------------------------------------------------------------------------
 JsonObject2* JsonObject2::AddMemberObject(const StringRef& name)
 {
-	return GetObject(name);
+	Member* m = m_memberList.Find([name](const Member& m) { return m.name == name; });
+	if (m == nullptr || m->value->GetType() != JsonValueType::Object)
+	{
+		auto* ptr = GetOwnerDocument()->NewElement<JsonObject2>();
+		m_memberList.Add({ name, ptr });
+		return ptr;
+	}
+	return static_cast<JsonObject2*>(m->value);
 }
 
 //------------------------------------------------------------------------------
@@ -311,24 +430,11 @@ JsonValue2* JsonObject2::GetValue(const StringRef& name)
 	Member* m = m_memberList.Find([name](const Member& m) { return m.name == name; });
 	if (m == nullptr || !IsValueType(m->value->GetType()))
 	{
-		JsonValue2* ptr = GetOwnerDocument()->NewElement<JsonValue2>();
+		auto* ptr = GetOwnerDocument()->NewElement<JsonValue2>();
 		m_memberList.Add({ name, ptr });
 		return ptr;
 	}
 	return static_cast<JsonValue2*>(m->value);
-}
-
-//------------------------------------------------------------------------------
-JsonObject2* JsonObject2::GetObject(const StringRef& name)
-{
-	Member* m = m_memberList.Find([name](const Member& m) { return m.name == name; });
-	if (m == nullptr || m->value->GetType() != JsonValueType::Object)
-	{
-		JsonObject2* ptr = GetOwnerDocument()->NewElement<JsonObject2>();
-		m_memberList.Add({ name, ptr });
-		return ptr;
-	}
-	return static_cast<JsonObject2*>(m->value);
 }
 
 

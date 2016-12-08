@@ -68,12 +68,11 @@ public:
 	JsonValueType GetType() const { return m_type; }
 
 protected:
-	JsonElement2();
+	JsonElement2(JsonDocument2* owner);
 	virtual ~JsonElement2();
 	virtual void OnSave(JsonWriter* writer) = 0;
 
 LN_INTERNAL_ACCESS:
-	void SetOwnerDocument(JsonDocument2* owner) { m_ownerDoc = owner; }
 	JsonDocument2* GetOwnerDocument() const { return m_ownerDoc; }
 	void SetType(JsonValueType type) { m_type = type; }
 	void Save(JsonWriter* writer) { OnSave(writer); }
@@ -135,6 +134,26 @@ class JsonArray2
 	: public JsonElement2
 {
 public:
+
+	void AddNull();
+	void AddBool(bool value);
+	void AddInt32(int32_t value);
+	void AddInt64(int64_t value);
+	void AddFloat(float value);
+	void AddDouble(double value);
+	void AddString(const StringRef& value);
+
+	JsonArray2* AddArray();
+	JsonObject2* AddObject();
+
+private:
+	JsonArray2(JsonDocument2* ownerDoc);
+	virtual ~JsonArray2();
+	virtual void OnSave(JsonWriter* writer) override;
+
+	List<JsonElement2*>	m_itemList;
+
+	friend class JsonDocument2;
 };
 
 /**
@@ -145,6 +164,7 @@ class JsonObject2
 {
 public:
 
+	void AddMemberNull(const StringRef& name);
 	void AddMemberBool(const StringRef& name, bool value);
 	void AddMemberInt32(const StringRef& name, int32_t value);
 	void AddMemberInt64(const StringRef& name, int64_t value);
@@ -152,6 +172,7 @@ public:
 	void AddMemberDouble(const StringRef& name, double value);
 	void AddMemberString(const StringRef& name, const StringRef& value);
 
+	JsonArray2* AddMemberArray(const StringRef& name);
 	JsonObject2* AddMemberObject(const StringRef& name);
 
 protected:
@@ -165,7 +186,6 @@ LN_INTERNAL_ACCESS:
 
 private:
 	JsonValue2* GetValue(const StringRef& name);
-	JsonObject2* GetObject(const StringRef& name);
 
 	struct Member
 	{

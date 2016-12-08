@@ -242,7 +242,7 @@ void ByteBuffer::Release()
 //------------------------------------------------------------------------------
 bool ByteBuffer::Equals(const ByteBuffer& buffer) const
 {
-	if (m_core != buffer.m_core) return false;
+	//if (m_core != buffer.m_core) return false;
 	if (Compare(*this, buffer.GetConstData(), buffer.GetSize()) != 0) return false;
 	return true;
 }
@@ -250,7 +250,7 @@ bool ByteBuffer::Equals(const ByteBuffer& buffer) const
 //------------------------------------------------------------------------------
 int ByteBuffer::Compare(const ByteBuffer& buf1, const void* buf2, size_t buf2Size, int count)
 {
-	if (count < 0)
+	if (count >= 0)
 	{
 		if (buf1.GetSize() < buf2Size) return -1;
 		if (buf1.GetSize() > buf2Size) return 1;

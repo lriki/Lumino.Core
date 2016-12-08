@@ -35,9 +35,26 @@ TEST_F(Test_Json_JsonDocument, Save)
 	doc.AddMemberFloat("f", 1.0f);
 	doc.AddMemberDouble("dbl", 1.0);
 	doc.AddMemberString("str", _T("test"));
+
+	auto* ary = doc.AddMemberArray("ary");
+	ary->AddBool(true);
+	ary->AddInt32(200);
+
 	auto* obj = doc.AddMemberObject("obj");
 	obj->AddMemberInt32("i32_2", 100);
+
+	auto* aryary = doc.AddMemberArray("aryary");
+	aryary->AddArray()->AddInt32(111);
+	aryary->AddArray()->AddInt32(222);
+
+	auto* objary = doc.AddMemberArray("objary");
+	objary->AddObject()->AddMemberInt32("int32", 300);
+	objary->AddObject()->AddMemberString("str1", "test2");
+
 	doc.Save(TEMPFILE("json.txt"));
+
+	ASSERT_TRUE(TestHelper::EqualFiles(TEMPFILE("json.txt"), LN_LOCALFILE("TestData/Test_Json_JsonDocument_Save1.json")));
+
 }
 
 
