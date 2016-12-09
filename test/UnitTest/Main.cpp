@@ -57,7 +57,7 @@ GTEST_API_ int main(int argc, char **argv)
 	char* testArgs[] = {
 		argv[0],
 		//"--gtest_filter=Test_Text_EncodingDetector.*"
-		"--gtest_filter=Test_Json_JsonDocument.Load"
+		"--gtest_filter=Test_Serialization.Load"
 	};
 	argc = sizeof(testArgs) / sizeof(char*);
 	testing::InitGoogleTest(&argc, (char**)testArgs);

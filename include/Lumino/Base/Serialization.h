@@ -1,5 +1,6 @@
 
 #pragma once
+#include "String.h"
 
 LN_NAMESPACE_BEGIN
 namespace tr {
@@ -43,8 +44,15 @@ class ISerializeObjectElement
 {
 public:
 
-	virtual void SetValueInt32(const TCHAR* name, int32_t value) = 0;
-	virtual void SetValueDouble(const TCHAR* name, int32_t value) = 0;
+	virtual void SetValueInt32(const StringRef& name, int32_t value) = 0;
+	//virtual void SetValueDouble(const StringRef& name, int32_t value) = 0;
+
+	virtual ISerializeObjectElement* AddObject(const StringRef& name) = 0;
+
+
+	virtual bool TryGetValueInt32(const StringRef& name, int32_t* outValue) = 0;
+
+	virtual bool TryGetObject(const StringRef& name, ISerializeObjectElement** outValue) = 0;
 };
 
 /**
@@ -55,6 +63,16 @@ class ISerializeArrayElement
 public:
 
 };
+
+/**
+	@brief
+*/
+class ISerializationeStore
+{
+public:
+	virtual ISerializeObjectElement* GetRootObject() = 0;
+};
+
 
 /**
 	@brief
@@ -70,11 +88,18 @@ public:
 	//	return *self;
 	//}
 
-	template<class T>
-	void Serialze(T* obj)
+	Archive(ISerializationeStore* stream, ArchiveMode mode)
+		: m_mode(mode)
+		, m_stream(stream)
 	{
-		obj->lnsl_SerializeImpl(*this);
+		m_currentObject = m_stream->GetRootObject();
 	}
+
+	//template<class T>
+	//void Serialze(T* obj)
+	//{
+	//	obj->lnsl_SerializeImpl(*this);
+	//}
 
 	template<class TRef>
 	Archive& operator & (const NameValuePair<TRef>& nvp)
@@ -87,18 +112,18 @@ private:
 
 	template<typename T> void Process(const TCHAR* name, T && value)
 	{
-		//switch (mode)
-		//{
-		//case ArchiveMode::Save:
-		//	ProcessWrite(std::forward<T>(value));
-		//	break;
-		//case ArchiveMode::Load:
-		//	ProcessRead(std::forward<T>(value));
-		//	break;
-		//default:
-		//	assert(0);
-		//	break;
-		//}
+		switch (m_mode)
+		{
+		case ArchiveMode::Save:
+			ProcessWrite(name, value);
+			break;
+		case ArchiveMode::Load:
+			ProcessRead(name, value);
+			break;
+		default:
+			assert(0);
+			break;
+		}
 	}
 
 	template<typename T>
@@ -110,25 +135,55 @@ private:
 	template<typename T>
 	void ProcessRead(const TCHAR* name, T && value)
 	{
+		ReadValue(name, value);
 	}
 
 	//void WriteValue(const TCHAR* name, SerializableObject* obj);
-	void WriteValue(const TCHAR* name, bool value);
-	void WriteValue(const TCHAR* name, int8_t value);
-	void WriteValue(const TCHAR* name, int16_t value);
-	void WriteValue(const TCHAR* name, int32_t value);
-	void WriteValue(const TCHAR* name, int64_t value);
-	void WriteValue(const TCHAR* name, uint8_t value);
-	void WriteValue(const TCHAR* name, uint16_t value);
-	void WriteValue(const TCHAR* name, uint32_t value);
-	void WriteValue(const TCHAR* name, uint64_t value);
-	void WriteValue(const TCHAR* name, float value);
-	void WriteValue(const TCHAR* name, double value);
-	template<typename T> void WriteValue(const TCHAR* name, T && obj);	 // non]intrusive Object
+	void WriteValue(const StringRef& name, bool value);
+	void WriteValue(const StringRef& name, int8_t value);
+	void WriteValue(const StringRef& name, int16_t value);
+	void WriteValue(const StringRef& name, int32_t value) { m_currentObject->SetValueInt32(name, value); }
+	void WriteValue(const StringRef& name, int64_t value);
+	void WriteValue(const StringRef& name, uint8_t value);
+	void WriteValue(const StringRef& name, uint16_t value);
+	void WriteValue(const StringRef& name, uint32_t value);
+	void WriteValue(const StringRef& name, uint64_t value);
+	void WriteValue(const StringRef& name, float value);
+	void WriteValue(const StringRef& name, double value);
+	template<typename T> void WriteValue(const StringRef& name, T & obj)	 // non]intrusive Object
+	{
+		auto* old = m_currentObject;
+		m_currentObject = m_currentObject->AddObject(name);
+		obj.lnsl_SerializeImpl(*this);
+		m_currentObject = old;
+	}
 
+
+	void ReadValue(const StringRef& name, bool& value);
+	void ReadValue(const StringRef& name, int8_t& value);
+	void ReadValue(const StringRef& name, int16_t& value);
+	void ReadValue(const StringRef& name, int32_t& value) { m_currentObject->TryGetValueInt32(name, &value); }
+	void ReadValue(const StringRef& name, int64_t value);
+	void ReadValue(const StringRef& name, uint8_t& value);
+	void ReadValue(const StringRef& name, uint16_t& value);
+	void ReadValue(const StringRef& name, uint32_t& value);
+	void ReadValue(const StringRef& name, uint64_t& value);
+	void ReadValue(const StringRef& name, float& value);
+	void ReadValue(const StringRef& name, double& value);
+	template<typename T> void ReadValue(const StringRef& name, T & obj)	 // non]intrusive Object
+	{
+		ISerializeObjectElement* so;
+		if (!m_currentObject->TryGetObject(name, &so)) return;
+
+		auto* old = m_currentObject;
+		m_currentObject = so;
+		obj.lnsl_SerializeImpl(*this);
+		m_currentObject = old;
+	}
 
 	ArchiveMode					m_mode;
-//	ISerializeSourceElement*	m_currentObject;
+	ISerializationeStore*		m_stream;
+	ISerializeObjectElement*	m_currentObject;
 };
 
 } // namespace tr

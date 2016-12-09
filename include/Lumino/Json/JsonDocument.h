@@ -1,5 +1,6 @@
 ﻿
 #pragma once
+#include "../Base/Serialization.h"
 #include "../IO/TextReader.h"
 #include "Common.h"
 #include "JsonValue.h"
@@ -11,6 +12,7 @@ class JsonReader2;
 class JsonElement2;
 class JsonObject2;
 class JsonDocument2;
+namespace detail { class JsonElementCache; }
 
 /**
 	@brief	JSON データのルート要素です。
@@ -96,6 +98,7 @@ private:
 	JsonValueType	m_type;
 
 	friend class JsonObject2;
+	friend class detail::JsonElementCache;
 };
 
 /**
@@ -177,6 +180,7 @@ private:
 */
 class JsonObject2
 	: public JsonElement2
+	, public ISerializeObjectElement
 {
 public:
 
@@ -191,11 +195,19 @@ public:
 	JsonArray2* AddMemberArray(const StringRef& name);
 	JsonObject2* AddMemberObject(const StringRef& name);
 
+	JsonElement2* Find(const StringRef& name);
+
 protected:
 	JsonObject2(JsonDocument2* ownerDoc);
 	virtual ~JsonObject2();
 	virtual void OnSave(JsonWriter* writer) override;
 	virtual JsonParseResult OnLoad(JsonReader2* reader) override;
+
+	// ISerializeObjectElement interface
+	virtual void SetValueInt32(const StringRef& name, int32_t value) override;
+	virtual ISerializeObjectElement* AddObject(const StringRef& name) override;
+	virtual bool TryGetValueInt32(const StringRef& name, int32_t* outValue) override;
+	virtual bool TryGetObject(const StringRef& name, ISerializeObjectElement** outValue) override;
 
 LN_INTERNAL_ACCESS:
 	void Finalize() { m_memberList.Clear(); }
@@ -221,7 +233,8 @@ class JsonElementCache
 {
 public:
 	void Initialize();
-	void* Alloc(size_t size);
+	void Finalize();
+	JsonElement2* Alloc(size_t size);
 
 private:
 	static const size_t BufferSize = 2048;
@@ -232,6 +245,7 @@ private:
 		size_t		used;
 	};
 	List<BufferInfo>	m_buffers;
+	List<JsonElement2*>	m_elements;
 };
 
 } // namespace detail
@@ -242,6 +256,7 @@ private:
 */
 class JsonDocument2
 	: public JsonObject2
+	, public ISerializationeStore
 {
 public:
 	JsonDocument2();
@@ -268,11 +283,14 @@ public:
 
 	void Load(const StringRef& filePath);
 
+protected:
+	virtual ISerializeObjectElement* GetRootObject() override;
+
 LN_INTERNAL_ACCESS:
 	template<class T>
 	T* NewElement()
 	{
-		T* buf = reinterpret_cast<T*>(m_cache.Alloc(sizeof(T)));
+		T* buf = static_cast<T*>(m_cache.Alloc(sizeof(T)));
 		new (buf)T(this);
 		return buf;
 	}

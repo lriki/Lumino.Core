@@ -12,7 +12,7 @@ public:
 		ar & tr::MakeNVP("value1", m_value1);
 	}
 
-private:
+public:
 	int		m_value1 = 100;
 };
 
@@ -25,12 +25,29 @@ protected:
 };
 
 //------------------------------------------------------------------------------
-TEST_F(Test_Serialization, Basic)
+TEST_F(Test_Serialization, Save)
 {
-	//TestObject1 t1;
-	//tr::JsonDocument doc;
-	//tr::Archive ar(&doc);
+	TestObject1 t1;
+	tr::JsonDocument2 doc;
+	tr::Archive ar(&doc, tr::ArchiveMode::Save);
+
+	ar & tr::MakeNVP("obj1", t1);
+	doc.Save(TEMPFILE("json3.txt"));
 }
 
 
+
+//------------------------------------------------------------------------------
+TEST_F(Test_Serialization, Load)
+{
+	TestObject1 t1;
+	tr::JsonDocument2 doc;
+	doc.Load(TEMPFILE("json3.txt"));
+	tr::Archive ar(&doc, tr::ArchiveMode::Load);
+
+	t1.m_value1 = 1;
+	ar & tr::MakeNVP("obj1", t1);
+
+	printf("");
+}
 

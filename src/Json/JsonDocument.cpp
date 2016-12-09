@@ -333,6 +333,7 @@ JsonParseResult JsonValue2::OnLoad(JsonReader2* reader)
 JsonArray2::JsonArray2(JsonDocument2* ownerDoc)
 	: JsonElement2(ownerDoc)
 {
+	SetType(JsonValueType::Array);
 }
 
 //------------------------------------------------------------------------------
@@ -445,6 +446,7 @@ JsonParseResult JsonArray2::OnLoad(JsonReader2* reader)
 JsonObject2::JsonObject2(JsonDocument2* ownerDoc)
 	: JsonElement2(ownerDoc)
 {
+	SetType(JsonValueType::Object);
 }
 
 //------------------------------------------------------------------------------
@@ -521,6 +523,14 @@ JsonObject2* JsonObject2::AddMemberObject(const StringRef& name)
 }
 
 //------------------------------------------------------------------------------
+JsonElement2* JsonObject2::Find(const StringRef& name)
+{
+	Member* m = m_memberList.Find([name](const Member& m) { return m.name == name; });
+	if (m == nullptr) return nullptr;
+	return m->value;
+}
+
+//------------------------------------------------------------------------------
 void JsonObject2::OnSave(JsonWriter* writer)
 {
 	LN_FAIL_CHECK_ARG(writer != nullptr) return;
@@ -575,6 +585,25 @@ JsonValue2* JsonObject2::GetValue(const StringRef& name)
 	return static_cast<JsonValue2*>(m->value);
 }
 
+//------------------------------------------------------------------------------
+void JsonObject2::SetValueInt32(const StringRef& name, int32_t value) { AddMemberInt32(name, value); }
+ISerializeObjectElement* JsonObject2::AddObject(const StringRef& name)  { return AddMemberObject(name); }
+bool JsonObject2::TryGetValueInt32(const StringRef& name, int32_t* outValue)
+{
+	auto* v = Find(name);
+	if (v == nullptr) return false;
+	if (v->GetType() != JsonValueType::Int32) return false;
+	*outValue = static_cast<JsonValue2*>(v)->GetInt32();
+	return true;
+}
+bool JsonObject2::TryGetObject(const StringRef& name, ISerializeObjectElement** outValue)
+{
+	auto* v = Find(name);
+	if (v == nullptr) return false;
+	if (v->GetType() != JsonValueType::Object) return false;
+	*outValue = static_cast<JsonObject2*>(v);
+	return true;
+}
 
 //==============================================================================
 // JsonElementCache
@@ -588,10 +617,21 @@ void JsonElementCache::Initialize()
 	info.buffer.Resize(2048);
 	info.used = 0;
 	m_buffers.Add(info);
+
+	m_elements.Reserve(256);
 }
 
 //------------------------------------------------------------------------------
-void* JsonElementCache::Alloc(size_t size)
+void JsonElementCache::Finalize()
+{
+	for (JsonElement2* e : m_elements)
+	{
+		e->~JsonElement2();
+	}
+}
+
+//------------------------------------------------------------------------------
+JsonElement2* JsonElementCache::Alloc(size_t size)
 {
 	LN_FAIL_CHECK_ARG(size <= BufferSize) return nullptr;
 
@@ -605,8 +645,9 @@ void* JsonElementCache::Alloc(size_t size)
 		cur = &m_buffers.GetLast();
 	}
 
-	void* buf = cur->buffer.GetData() + cur->used;
+	JsonElement2* buf = reinterpret_cast<JsonElement2*>(cur->buffer.GetData() + cur->used);
 	cur->used += size;
+	m_elements.Add(buf);
 	return buf;
 }
 
@@ -628,6 +669,8 @@ JsonDocument2::~JsonDocument2()
 {
 	// m_cache 削除前にクリアする必要がある
 	Finalize();
+
+	m_cache.Finalize();
 }
 
 ////------------------------------------------------------------------------------
@@ -678,6 +721,9 @@ void JsonDocument2::Load(const StringRef& filePath)
 
 	JsonElement2::Load(&jr);
 }
+
+//------------------------------------------------------------------------------
+ISerializeObjectElement* JsonDocument2::GetRootObject() { return this; }
 
 } // namespace tr
 LN_NAMESPACE_END
