@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 LN_NAMESPACE_BEGIN
 namespace tr {
@@ -7,37 +7,40 @@ enum class JsonToken
 {
 	None = 0,
 
-	/** ƒIƒuƒWƒFƒNƒg’è‹`‚ÌŠJn ('{') */
+	/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå®šç¾©ã®é–‹å§‹ ('{') */
 	StartObject,
 
-	/** ƒIƒuƒWƒFƒNƒg’è‹`‚ÌI—¹ ('}') */
+	/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå®šç¾©ã®çµ‚äº† ('}') */
 	EndObject,
 
-	/** ”z—ñ’è‹`‚ÌŠJn ('[') */
+	/** é…åˆ—å®šç¾©ã®é–‹å§‹ ('[') */
 	StartArray,
 
-	/** ”z—ñ’è‹`‚ÌI—¹ (']') */
+	/** é…åˆ—å®šç¾©ã®çµ‚äº† (']') */
 	EndArray,
 
-	/** ƒIƒuƒWƒFƒNƒg‚ÌƒvƒƒpƒeƒB‚Ì–¼‘O */
+	/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®åå‰ */
 	PropertyName,
 
-	/** ”’lŒ^ (Int32) */
+	/** æ•°å€¤å‹ (Int32) */
 	Int32,
 
-	/** ”’lŒ^ (Int64) */
+	/** æ•°å€¤å‹ (Int64) */
 	Int64,
 
-	/** ”’lŒ^ (double) */
+	/** æ•°å€¤å‹ (float) */
+	Float,
+
+	/** æ•°å€¤å‹ (double) */
 	Double,
 
-	/** "null" ’l */
+	/** "null" å€¤ */
 	Null,
 
-	/** ^‹U’l ("true" ‚Ü‚½‚Í "false"BGetValue() ‚Å’l‚ğŠm”F‚·‚é‚±‚Æ) */
+	/** çœŸå½å€¤ ("true" ã¾ãŸã¯ "false"ã€‚GetValue() ã§å€¤ã‚’ç¢ºèªã™ã‚‹ã“ã¨) */
 	Boolean,
 
-	/** •¶š—ñ’l */
+	/** æ–‡å­—åˆ—å€¤ */
 	String,
 };
 

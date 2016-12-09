@@ -1,16 +1,19 @@
-
+ï»¿
 #pragma once
 #include "../IO/TextReader.h"
+#include "Common.h"
 #include "JsonValue.h"
 
 LN_NAMESPACE_BEGIN
 namespace tr {
 class JsonWriter;
+class JsonReader2;
+class JsonElement2;
 class JsonObject2;
 class JsonDocument2;
 
 /**
-	@brief	JSON ƒf[ƒ^‚Ìƒ‹[ƒg—v‘f‚Å‚·B
+	@brief	JSON ãƒ‡ãƒ¼ã‚¿ã®ãƒ«ãƒ¼ãƒˆè¦ç´ ã§ã™ã€‚
 */
 class JsonDocument
 	: public JsonValue
@@ -18,17 +21,17 @@ class JsonDocument
 public:
 
 	/*
-		@brief	w’è‚µ‚½ JSON Œ`®•¶š—ñ‚ğ‰ğÍ‚µAƒhƒLƒ…ƒƒ“ƒg‚ğ\’z‚µ‚Ü‚·B
+		@brief	æŒ‡å®šã—ãŸ JSON å½¢å¼æ–‡å­—åˆ—ã‚’è§£æã—ã€ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’æ§‹ç¯‰ã—ã¾ã™ã€‚
 	*/
 	void Parse(const String& text);
 
 	/*
-		@brief	w’è‚µ‚½ JSON Œ`®•¶š—ñ‚ğ‰ğÍ‚µAƒhƒLƒ…ƒƒ“ƒg‚ğ\’z‚µ‚Ü‚·B
+		@brief	æŒ‡å®šã—ãŸ JSON å½¢å¼æ–‡å­—åˆ—ã‚’è§£æã—ã€ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’æ§‹ç¯‰ã—ã¾ã™ã€‚
 	*/
 	void Parse(const TCHAR* text, int len = -1);
 
 	/*
-		@brief	w’è‚µ‚½ TextReader ‚©‚ç JSON Œ`®•¶š—ñ‚ğ‰ğÍ‚µAƒhƒLƒ…ƒƒ“ƒg‚ğ\’z‚µ‚Ü‚·B
+		@brief	æŒ‡å®šã—ãŸ TextReader ã‹ã‚‰ JSON å½¢å¼æ–‡å­—åˆ—ã‚’è§£æã—ã€ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’æ§‹ç¯‰ã—ã¾ã™ã€‚
 	*/
 	void Parse(TextReader* textReader);
 
@@ -42,7 +45,7 @@ private:
 
 
 
-/** Json ‚Ì’l‚ÌŒ^‚ğ¦‚µ‚Ü‚·B*/
+/** Json ã®å€¤ã®å‹ã‚’ç¤ºã—ã¾ã™ã€‚*/
 enum class JsonValueType
 {
 	Null,
@@ -56,7 +59,16 @@ enum class JsonValueType
 	Object,
 };
 
+namespace detail {
+class JsonHelper
+{
+public:
+	static bool IsValueType(JsonToken type);
+	static bool IsValueType(JsonValueType type);
+	static JsonParseResult LoadElement(JsonDocument2* doc, JsonReader2* reader, JsonElement2** outElement);
 
+};
+} // namespace detail
 
 /**
 	@brief	
@@ -71,11 +83,13 @@ protected:
 	JsonElement2(JsonDocument2* owner);
 	virtual ~JsonElement2();
 	virtual void OnSave(JsonWriter* writer) = 0;
+	virtual JsonParseResult OnLoad(JsonReader2* reader) = 0;
 
 LN_INTERNAL_ACCESS:
 	JsonDocument2* GetOwnerDocument() const { return m_ownerDoc; }
 	void SetType(JsonValueType type) { m_type = type; }
 	void Save(JsonWriter* writer) { OnSave(writer); }
+	JsonParseResult Load(JsonReader2* reader) { return OnLoad(reader); }
 
 private:
 	JsonDocument2*	m_ownerDoc;
@@ -113,6 +127,7 @@ private:
 	void CheckRelease();
 
 	virtual void OnSave(JsonWriter* writer) override;
+	virtual JsonParseResult OnLoad(JsonReader2* reader) override;
 
 	union
 	{
@@ -150,6 +165,7 @@ private:
 	JsonArray2(JsonDocument2* ownerDoc);
 	virtual ~JsonArray2();
 	virtual void OnSave(JsonWriter* writer) override;
+	virtual JsonParseResult OnLoad(JsonReader2* reader) override;
 
 	List<JsonElement2*>	m_itemList;
 
@@ -179,9 +195,9 @@ protected:
 	JsonObject2(JsonDocument2* ownerDoc);
 	virtual ~JsonObject2();
 	virtual void OnSave(JsonWriter* writer) override;
+	virtual JsonParseResult OnLoad(JsonReader2* reader) override;
 
 LN_INTERNAL_ACCESS:
-	static bool IsValueType(JsonValueType type);
 	void Finalize() { m_memberList.Clear(); }
 
 private:
@@ -222,7 +238,7 @@ private:
 
 
 /**
-	@brief	JSON ƒf[ƒ^‚Ìƒ‹[ƒg—v‘f‚Å‚·B
+	@brief	JSON ãƒ‡ãƒ¼ã‚¿ã®ãƒ«ãƒ¼ãƒˆè¦ç´ ã§ã™ã€‚
 */
 class JsonDocument2
 	: public JsonObject2
@@ -232,23 +248,25 @@ public:
 	virtual ~JsonDocument2();
 
 	///*
-	//	@brief	w’è‚µ‚½ JSON Œ`®•¶š—ñ‚ğ‰ğÍ‚µAƒhƒLƒ…ƒƒ“ƒg‚ğ\’z‚µ‚Ü‚·B
+	//	@brief	æŒ‡å®šã—ãŸ JSON å½¢å¼æ–‡å­—åˆ—ã‚’è§£æã—ã€ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’æ§‹ç¯‰ã—ã¾ã™ã€‚
 	//*/
 	//void Parse(const String& text);
 
 	///*
-	//	@brief	w’è‚µ‚½ JSON Œ`®•¶š—ñ‚ğ‰ğÍ‚µAƒhƒLƒ…ƒƒ“ƒg‚ğ\’z‚µ‚Ü‚·B
+	//	@brief	æŒ‡å®šã—ãŸ JSON å½¢å¼æ–‡å­—åˆ—ã‚’è§£æã—ã€ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’æ§‹ç¯‰ã—ã¾ã™ã€‚
 	//*/
 	//void Parse(const TCHAR* text, int len = -1);
 
 	///*
-	//	@brief	w’è‚µ‚½ TextReader ‚©‚ç JSON Œ`®•¶š—ñ‚ğ‰ğÍ‚µAƒhƒLƒ…ƒƒ“ƒg‚ğ\’z‚µ‚Ü‚·B
+	//	@brief	æŒ‡å®šã—ãŸ TextReader ã‹ã‚‰ JSON å½¢å¼æ–‡å­—åˆ—ã‚’è§£æã—ã€ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’æ§‹ç¯‰ã—ã¾ã™ã€‚
 	//*/
 	//void Parse(TextReader* textReader);
 
 	//void Load();
 
 	void Save(const StringRef& filePath);
+
+	void Load(const StringRef& filePath);
 
 LN_INTERNAL_ACCESS:
 	template<class T>

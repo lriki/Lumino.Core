@@ -1,4 +1,4 @@
-#include <TestConfig.h>
+﻿#include <TestConfig.h>
 #include <Lumino/Json/JsonDocument.h>
 
 class Test_Json_JsonDocument : public ::testing::Test
@@ -57,4 +57,11 @@ TEST_F(Test_Json_JsonDocument, Save)
 
 }
 
+//---------------------------------------------------------------------
+TEST_F(Test_Json_JsonDocument, Load)
+{
+	tr::JsonDocument2 doc;
+	doc.Load(LN_LOCALFILE("TestData/Test_Json_JsonDocument_Save1.json"));
+	doc.Save(TEMPFILE("json2.txt"));
+}
 

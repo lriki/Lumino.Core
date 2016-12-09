@@ -2,6 +2,7 @@
 #include "../Internal.h"
 #include <Lumino/Base/String.h>
 #include <Lumino/IO/StringReader.h>
+#include <Lumino/IO/StreamReader.h>
 #include <Lumino/IO/StreamWriter.h>
 #include <Lumino/Json/JsonHandler.h>
 #include <Lumino/Json/JsonReader.h>
@@ -40,6 +41,74 @@ void JsonDocument::Parse(TextReader* textReader)
 
 
 
+//==============================================================================
+// JsonHelper
+//==============================================================================
+namespace detail {
+
+//------------------------------------------------------------------------------
+bool JsonHelper::IsValueType(JsonToken type)
+{
+	return
+		type == JsonToken::Null ||
+		type == JsonToken::Boolean ||
+		type == JsonToken::Int32 ||
+		type == JsonToken::Int64 ||
+		type == JsonToken::Float ||
+		type == JsonToken::Double ||
+		type == JsonToken::String;
+}
+
+//------------------------------------------------------------------------------
+bool JsonHelper::IsValueType(JsonValueType type)
+{
+	return
+		type == JsonValueType::Null ||
+		type == JsonValueType::Bool ||
+		type == JsonValueType::Int32 ||
+		type == JsonValueType::Int64 ||
+		type == JsonValueType::Float ||
+		type == JsonValueType::Double ||
+		type == JsonValueType::String;
+}
+
+//------------------------------------------------------------------------------
+JsonParseResult JsonHelper::LoadElement(JsonDocument2* doc, JsonReader2* reader, JsonElement2** outElement)
+{
+	LN_FAIL_CHECK_ARG(doc != nullptr) return JsonParseResult::Error;
+	LN_FAIL_CHECK_ARG(reader != nullptr) return JsonParseResult::Error;
+	LN_FAIL_CHECK_ARG(outElement != nullptr) return JsonParseResult::Error;
+
+	JsonToken type = reader->GetTokenType();
+	if (type == JsonToken::StartObject)
+	{
+		auto* value = doc->NewElement<JsonObject2>();
+		JsonParseResult result = value->Load(reader);
+		if (result != JsonParseResult::Success) return result;
+		*outElement = value;
+	}
+	else if (type == JsonToken::StartArray)
+	{
+		auto* value = doc->NewElement<JsonArray2>();
+		JsonParseResult result = value->Load(reader);
+		if (result != JsonParseResult::Success) return result;
+		*outElement = value;
+	}
+	else if (detail::JsonHelper::IsValueType(type))
+	{
+		auto* value = doc->NewElement<JsonValue2>();
+		JsonParseResult result = value->Load(reader);
+		if (result != JsonParseResult::Success) return result;
+		*outElement = value;
+	}
+	else
+	{
+		LN_FAIL_CHECK(0, InvalidFormatException) return JsonParseResult::Error;
+	}
+	return JsonParseResult::Success;
+}
+
+} // namespace detail
 
 //==============================================================================
 // JsonElement2
@@ -220,6 +289,40 @@ void JsonValue2::OnSave(JsonWriter* writer)
 	}
 }
 
+//------------------------------------------------------------------------------
+JsonParseResult JsonValue2::OnLoad(JsonReader2* reader)
+{
+	LN_FAIL_CHECK_ARG(reader != nullptr) return JsonParseResult::Error;
+
+	switch (reader->GetTokenType())
+	{
+		case JsonToken::Int32:
+			SetInt32(reader->GetInt32Value());
+			break;
+		case JsonToken::Int64:
+			SetInt64(reader->GetInt64Value());
+			break;
+		case JsonToken::Float:
+			SetFloat(reader->GetFloatValue());
+			break;
+		case JsonToken::Double:
+			SetDouble(reader->GetDoubleValue());
+			break;
+		case JsonToken::Null:
+			SetNull();
+			break;
+		case JsonToken::Boolean:
+			SetBool(reader->GetBoolValue());
+			break;
+		case JsonToken::String:
+			SetString(reader->GetValue());
+			break;
+		default:
+			LN_FAIL_CHECK(0, InvalidFormatException) return JsonParseResult::Error;
+			break;
+	}
+	return JsonParseResult::Success;
+}
 
 
 //==============================================================================
@@ -311,6 +414,27 @@ void JsonArray2::OnSave(JsonWriter* writer)
 		item->Save(writer);
 	}
 	writer->WriteEndArray();
+}
+
+//------------------------------------------------------------------------------
+JsonParseResult JsonArray2::OnLoad(JsonReader2* reader)
+{
+	LN_FAIL_CHECK_ARG(reader != nullptr) return JsonParseResult::Error;
+
+	// この時点で reader は StartArray('[') を指している
+
+	while (reader->Read())
+	{
+		if (reader->GetTokenType() == JsonToken::EndArray) return JsonParseResult::Success;	// end scope
+
+		// member value
+		JsonElement2* element;
+		JsonParseResult result = detail::JsonHelper::LoadElement(GetOwnerDocument(), reader, &element);
+		if (result != JsonParseResult::Success) return result;
+		m_itemList.Add(element);
+	}
+
+	return JsonParseResult::Success;
 }
 
 //==============================================================================
@@ -413,22 +537,36 @@ void JsonObject2::OnSave(JsonWriter* writer)
 }
 
 //------------------------------------------------------------------------------
-bool JsonObject2::IsValueType(JsonValueType type)
+JsonParseResult JsonObject2::OnLoad(JsonReader2* reader)
 {
-	return
-		type == JsonValueType::Bool ||
-		type == JsonValueType::Int32 ||
-		type == JsonValueType::Int64 ||
-		type == JsonValueType::Float ||
-		type == JsonValueType::Double ||
-		type == JsonValueType::String;
+	LN_FAIL_CHECK_ARG(reader != nullptr) return JsonParseResult::Error;
+
+	// この時点で reader は StartObject('{') を指している
+
+	while (reader->Read())
+	{
+		if (reader->GetTokenType() == JsonToken::EndObject) return JsonParseResult::Success;	// end scope
+
+		// member name
+		if (reader->GetTokenType() != JsonToken::PropertyName) return JsonParseResult::Error;
+		String name = reader->GetValue();
+
+		// member value
+		if (!reader->Read()) return JsonParseResult::Error;
+		JsonElement2* element;
+		JsonParseResult result = detail::JsonHelper::LoadElement(GetOwnerDocument(), reader, &element);
+		if (result != JsonParseResult::Success) return result;
+		m_memberList.Add({ name, element });
+	}
+
+	return JsonParseResult::Success;
 }
 
 //------------------------------------------------------------------------------
 JsonValue2* JsonObject2::GetValue(const StringRef& name)
 {
 	Member* m = m_memberList.Find([name](const Member& m) { return m.name == name; });
-	if (m == nullptr || !IsValueType(m->value->GetType()))
+	if (m == nullptr || !detail::JsonHelper::IsValueType(m->value->GetType()))
 	{
 		auto* ptr = GetOwnerDocument()->NewElement<JsonValue2>();
 		m_memberList.Add({ name, ptr });
@@ -524,6 +662,21 @@ void JsonDocument2::Save(const StringRef& filePath)
 	StreamWriter w(filePath);
 	JsonWriter jw(&w);
 	JsonElement2::Save(&jw);
+}
+
+//------------------------------------------------------------------------------
+void JsonDocument2::Load(const StringRef& filePath)
+{
+	StreamReader r(filePath.GetBegin());	// TODO: end
+	JsonReader2 jr(&r);
+
+	bool result = jr.Read();
+	LN_FAIL_CHECK(result, InvalidFormatException) return;
+
+	JsonToken type = jr.GetTokenType();
+	LN_FAIL_CHECK(type == JsonToken::StartObject, InvalidFormatException) return;
+
+	JsonElement2::Load(&jr);
 }
 
 } // namespace tr

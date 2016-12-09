@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 #include "../IO/TextReader.h"
 #include "../IO/MemoryStream.h"
@@ -10,7 +10,7 @@ LN_NAMESPACE_BEGIN
 namespace tr {
 
 /**
-	@brief	SAX ƒXƒ^ƒCƒ‹‚Ì JSON ƒp[ƒT‚Å‚·B
+	@brief	SAX ã‚¹ã‚¿ã‚¤ãƒ«ã® JSON ãƒ‘ãƒ¼ã‚µã§ã™ã€‚
 	@note	RFC 4627
 			https://www.ietf.org/rfc/rfc4627.txt
 */
@@ -43,7 +43,7 @@ private:
 	JsonHandler*	m_handler;
 	TextReader*		m_reader;
 	MemoryStream	m_tmpStream;
-	int				m_currentCharCount;	// ƒGƒ‰[•\¦—p
+	int				m_currentCharCount;	// ã‚¨ãƒ©ãƒ¼è¡¨ç¤ºç”¨
 };
 
 
@@ -85,7 +85,7 @@ public:
 		return c;
 	}
 
-	// TODO: ReadLine ‚Æ ReadToEnd ‚Í Read ‚ğÀ‘•‚·‚ê‚Îg‚¦‚é‚æ‚¤‚É‚·‚é‚×‚«
+	// TODO: ReadLine ã¨ ReadToEnd ã¯ Read ã‚’å®Ÿè£…ã™ã‚Œã°ä½¿ãˆã‚‹ã‚ˆã†ã«ã™ã‚‹ã¹ã
 	virtual bool ReadLine(String* line) override
 	{
 		LN_THROW(0, NotImplementedException);
@@ -195,33 +195,35 @@ public:
 public:
 	
 	/**
-		@brief		Ÿ‚Ìƒm[ƒh“Ç‚İæ‚è‚Ü‚·B
-		@return		³í‚É“Ç‚İæ‚ç‚ê‚½ê‡‚Í trueB‚»‚êˆÈã“Ç‚İæ‚éƒm[ƒh‚ª‘¶İ‚µ‚È‚¢ê‡‚Í falseB
+		@brief		æ¬¡ã®ãƒãƒ¼ãƒ‰èª­ã¿å–ã‚Šã¾ã™ã€‚
+		@return		æ­£å¸¸ã«èª­ã¿å–ã‚‰ã‚ŒãŸå ´åˆã¯ trueã€‚ãã‚Œä»¥ä¸Šèª­ã¿å–ã‚‹ãƒãƒ¼ãƒ‰ãŒå­˜åœ¨ã—ãªã„å ´åˆã¯ falseã€‚
 	*/
 	bool Read();
 
 	bool TryRead();
 
 	/**
-		@brief		Œ»İ‚Ìƒm[ƒh‚Ìí—Ş‚ğæ“¾‚µ‚Ü‚·B
+		@brief		ç¾åœ¨ã®ãƒãƒ¼ãƒ‰ã®ç¨®é¡ã‚’å–å¾—ã—ã¾ã™ã€‚
 	*/
 	JsonToken GetTokenType() const;
 
 	/**
-		@brief		Œ»İ‚Ìƒm[ƒh‚Ì’l (•¶š—ñŒ`®) ‚ğæ“¾‚µ‚Ü‚·B
-		@details	’l‚ª–³‚¢ê‡‚Í‹ó•¶š—ñ‚ğ•Ô‚µ‚Ü‚·B
+		@brief		ç¾åœ¨ã®ãƒãƒ¼ãƒ‰ã®å€¤ (æ–‡å­—åˆ—å½¢å¼) ã‚’å–å¾—ã—ã¾ã™ã€‚
+		@details	å€¤ãŒç„¡ã„å ´åˆã¯ç©ºæ–‡å­—åˆ—ã‚’è¿”ã—ã¾ã™ã€‚
 	*/
 	const String& GetValue() const;
 
 	const String& GetPropertyName() const;
 
-	/** Œ»İ‚Ìƒm[ƒh‚ª Bool ‚Å‚ ‚éê‡Aƒp[ƒXŒ‹‰Ê‚Ì bool ’l‚ğæ“¾‚Å‚«‚Ü‚·B*/
+	/** ç¾åœ¨ã®ãƒãƒ¼ãƒ‰ãŒ Bool ã§ã‚ã‚‹å ´åˆã€ãƒ‘ãƒ¼ã‚¹çµæœã® bool å€¤ã‚’å–å¾—ã§ãã¾ã™ã€‚*/
 	bool GetBoolValue() const;
-	/** Œ»İ‚Ìƒm[ƒh‚ª Int32 ‚Å‚ ‚éê‡Aƒp[ƒXŒ‹‰Ê‚Ì int32_t ’l‚ğæ“¾‚Å‚«‚Ü‚·B*/
+	/** ç¾åœ¨ã®ãƒãƒ¼ãƒ‰ãŒ Int32 ã§ã‚ã‚‹å ´åˆã€ãƒ‘ãƒ¼ã‚¹çµæœã® int32_t å€¤ã‚’å–å¾—ã§ãã¾ã™ã€‚*/
 	int32_t GetInt32Value() const;
-	/** Œ»İ‚Ìƒm[ƒh‚ª Int64 ‚Å‚ ‚éê‡Aƒp[ƒXŒ‹‰Ê‚Ì int64_t ’l‚ğæ“¾‚Å‚«‚Ü‚·B*/
+	/** ç¾åœ¨ã®ãƒãƒ¼ãƒ‰ãŒ Int64 ã§ã‚ã‚‹å ´åˆã€ãƒ‘ãƒ¼ã‚¹çµæœã® int64_t å€¤ã‚’å–å¾—ã§ãã¾ã™ã€‚*/
 	int64_t GetInt64Value() const;
-	/** Œ»İ‚Ìƒm[ƒh‚ª Double ‚Å‚ ‚éê‡Aƒp[ƒXŒ‹‰Ê‚Ì double ’l‚ğæ“¾‚Å‚«‚Ü‚·B*/
+	/** ç¾åœ¨ã®ãƒãƒ¼ãƒ‰ãŒ Float ã§ã‚ã‚‹å ´åˆã€ãƒ‘ãƒ¼ã‚¹çµæœã® float å€¤ã‚’å–å¾—ã§ãã¾ã™ã€‚*/
+	float GetFloatValue() const;
+	/** ç¾åœ¨ã®ãƒãƒ¼ãƒ‰ãŒ Double ã§ã‚ã‚‹å ´åˆã€ãƒ‘ãƒ¼ã‚¹çµæœã® double å€¤ã‚’å–å¾—ã§ãã¾ã™ã€‚*/
 	double GetDoubleValue() const;
 
 
@@ -246,8 +248,8 @@ private:
 	enum class State
 	{
 		Start,
-		ObjectStart,	// { ‚ÌŸ‚Ìó‘ÔBŸ‚Í } ‚Å‚à—Ç‚¢B
-		Object,			// , ‚ÌŸ‚Ìó‘ÔBŸ‚Í } ‚Å‚Íƒ_ƒB
+		ObjectStart,	// { ã®æ¬¡ã®çŠ¶æ…‹ã€‚æ¬¡ã¯ } ã§ã‚‚è‰¯ã„ã€‚
+		Object,			// , ã®æ¬¡ã®çŠ¶æ…‹ã€‚æ¬¡ã¯ } ã§ã¯ãƒ€ãƒ¡ã€‚
 		ArrayStart,
 		Array,
 		Property,
@@ -264,15 +266,15 @@ private:
 	struct Token
 	{
 		JsonToken	type;
-		//int			valuePos;	// m_textCache ã‚ÌƒCƒ“ƒfƒbƒNƒX
-		//int			valueLen;	// m_textCache ã‚ÌƒCƒ“ƒfƒbƒNƒX
+		//int			valuePos;	// m_textCache ä¸Šã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
+		//int			valueLen;	// m_textCache ä¸Šã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
 	};
 
 	struct ParserState
 	{
 		State				state = State::Start;
 		String				propertyName;
-		ContainerType		containerType = ContainerType::None;	// Œ»İ‰ğÍ’†‚ÌƒuƒƒbƒN‚Ìí—Ş
+		ContainerType		containerType = ContainerType::None;	// ç¾åœ¨è§£æä¸­ã®ãƒ–ãƒ­ãƒƒã‚¯ã®ç¨®é¡
 	};
 
 	union 
@@ -280,6 +282,7 @@ private:
 		bool	m_bool;
 		int32_t	m_int32;
 		int64_t	m_int64;
+		float	m_float;
 		double	m_double;
 
 	} m_valueData;

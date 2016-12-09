@@ -578,6 +578,13 @@ int64_t JsonReader2::GetInt64Value() const
 }
 
 //------------------------------------------------------------------------------
+float JsonReader2::GetFloatValue() const
+{
+	LN_FAIL_CHECK_STATE(m_currentToken.type == JsonToken::Float) return 0;
+	return m_valueData.m_float;
+}
+
+//------------------------------------------------------------------------------
 double JsonReader2::GetDoubleValue() const
 {
 	LN_FAIL_CHECK_STATE(m_currentToken.type == JsonToken::Double) return 0;
@@ -827,8 +834,16 @@ bool JsonReader2::ParseNumber()
 			return false;
 		}
 
-		m_valueData.m_double = value;
-		return SetToken(JsonToken::Double, str, len);
+		if (FLT_MIN <= value && value <= FLT_MAX)
+		{
+			m_valueData.m_float = (float)value;
+			return SetToken(JsonToken::Float, str, len);
+		}
+		else
+		{
+			m_valueData.m_double = value;
+			return SetToken(JsonToken::Double, str, len);
+		}
 	}
 	else
 	{
@@ -1205,6 +1220,7 @@ bool JsonReader2::SetToken(JsonToken newToken, const TCHAR* value, int valueLen)
 			break;
 		case JsonToken::Int32:
 		case JsonToken::Int64:
+		case JsonToken::Float:
 		case JsonToken::Double:
 		case JsonToken::Null:
 		case JsonToken::Boolean:
