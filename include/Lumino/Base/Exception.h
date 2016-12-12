@@ -96,16 +96,19 @@
 #define LN_FAIL_CHECK(expression, exception)		if ((!(expression)) && ln::detail::NotifyAssert([](){ assert(!#expression); }))
 #define LN_FAIL_CHECK_ARG(expression, ...)			if ((!(expression)) && ln::detail::NotifyAssert([](){ assert(!#expression); }))
 #define LN_FAIL_CHECK_STATE(expression, ...)		if ((!(expression)) && ln::detail::NotifyAssert([](){ assert(!#expression); }))
+#define LN_FAIL_CHECK_FORMAT(expression, ...)		if ((!(expression)) && ln::detail::NotifyAssert([](){ assert(!#expression); }))
 #define LN_UNREACHABLE()							assert(0);
 #elif defined(LN_DO_CHECK_THROW)
 #define LN_FAIL_CHECK(expression, exception, ...)	if ((!(expression)) && ln::detail::NotifyException<exception>(__FILE__, __LINE__, __VA_ARGS__))
 #define LN_FAIL_CHECK_ARG(expression, ...)			if ((!(expression)) && ln::detail::NotifyException<::ln::ArgumentException>(__FILE__, __LINE__, __VA_ARGS__))
 #define LN_FAIL_CHECK_STATE(expression, ...)		if ((!(expression)) && ln::detail::NotifyException<::ln::InvalidOperationException>(__FILE__, __LINE__, __VA_ARGS__))
+#define LN_FAIL_CHECK_FORMAT(expression, ...)		if ((!(expression)) && ln::detail::NotifyException<::ln::InvalidFormatException>(__FILE__, __LINE__, __VA_ARGS__))
 #define LN_UNREACHABLE()							ln::detail::NotifyException<::ln::InvalidOperationException>(__FILE__, __LINE__);
 #else
 #define LN_FAIL_CHECK(expression, exception)		if (!(expression))
 #define LN_FAIL_CHECK_ARG(expression, ...)			if (!(expression))
 #define LN_FAIL_CHECK_STATE(expression, ...)		if (!(expression))
+#define LN_FAIL_CHECK_FORMAT(expression, ...)		if (!(expression))
 #define LN_UNREACHABLE()							
 #endif
 

@@ -9,7 +9,7 @@ public:
 
 	void lnsl_SerializeImpl(tr::Archive& ar)
 	{
-		ar & tr::MakeNVP("value1", m_value1);
+		ar & tr::MakeNVP(_T("value1"), m_value1);
 	}
 
 public:
@@ -31,7 +31,7 @@ TEST_F(Test_Serialization, Save)
 	tr::JsonDocument2 doc;
 	tr::Archive ar(&doc, tr::ArchiveMode::Save);
 
-	ar & tr::MakeNVP("obj1", t1);
+	ar & tr::MakeNVP(_T("obj1"), t1);
 	doc.Save(TEMPFILE("json3.txt"));
 }
 
@@ -46,7 +46,7 @@ TEST_F(Test_Serialization, Load)
 	tr::Archive ar(&doc, tr::ArchiveMode::Load);
 
 	t1.m_value1 = 1;
-	ar & tr::MakeNVP("obj1", t1);
+	ar & tr::MakeNVP(_T("obj1"), t1);
 
 	printf("");
 }

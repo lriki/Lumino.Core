@@ -28,28 +28,28 @@ TEST_F(Test_Json_JsonDocument, Basic)
 TEST_F(Test_Json_JsonDocument, Save)
 {
 	tr::JsonDocument2 doc;
-	doc.AddMemberBool("b1", true);
-	doc.AddMemberBool("b2", false);
-	doc.AddMemberInt32("i32", 1);
-	doc.AddMemberInt64("i64", 2147483648LL);
-	doc.AddMemberFloat("f", 1.0f);
-	doc.AddMemberDouble("dbl", 1.0);
-	doc.AddMemberString("str", _T("test"));
+	doc.AddMemberBool(_T("b1"), true);
+	doc.AddMemberBool(_T("b2"), false);
+	doc.AddMemberInt32(_T("i32"), 1);
+	doc.AddMemberInt64(_T("i64"), 2147483648LL);
+	doc.AddMemberFloat(_T("f"), 1.0f);
+	doc.AddMemberDouble(_T("dbl"), 1.0);
+	doc.AddMemberString(_T("str"), _T("test"));
 
-	auto* ary = doc.AddMemberArray("ary");
+	auto* ary = doc.AddMemberArray(_T("ary"));
 	ary->AddBool(true);
 	ary->AddInt32(200);
 
-	auto* obj = doc.AddMemberObject("obj");
-	obj->AddMemberInt32("i32_2", 100);
+	auto* obj = doc.AddMemberObject(_T("obj"));
+	obj->AddMemberInt32(_T("i32_2"), 100);
 
-	auto* aryary = doc.AddMemberArray("aryary");
+	auto* aryary = doc.AddMemberArray(_T("aryary"));
 	aryary->AddArray()->AddInt32(111);
 	aryary->AddArray()->AddInt32(222);
 
-	auto* objary = doc.AddMemberArray("objary");
-	objary->AddObject()->AddMemberInt32("int32", 300);
-	objary->AddObject()->AddMemberString("str1", "test2");
+	auto* objary = doc.AddMemberArray(_T("objary"));
+	objary->AddObject()->AddMemberInt32(_T("int32"), 300);
+	objary->AddObject()->AddMemberString(_T("str1"), _T("test2"));
 
 	doc.Save(TEMPFILE("json.txt"));
 
