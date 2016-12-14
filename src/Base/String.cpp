@@ -316,7 +316,7 @@ GenericString<TChar>& GenericString<TChar>::operator=(const GenericPathName<TCha
 template<typename TChar>
 GenericString<TChar>& GenericString<TChar>::operator=(GenericString&& right) LN_NOEXCEPT
 {
-	if (this != &right)
+	if (m_string != right.m_string)
 	{
 		m_ref = right.m_ref;
 		m_string = right.m_string;
@@ -978,6 +978,14 @@ GenericString<TChar> GenericString<TChar>::SPrintf(const TChar* format, ...)
 		va_end(args2);
 		return GenericString<TChar>((TChar*)buf.GetData(), len);
 	}
+}
+
+//------------------------------------------------------------------------------
+template<typename TChar>
+void GenericString<TChar>::Detach()
+{
+	LN_SAFE_RELEASE(m_string);
+	m_ref = nullptr;
 }
 
 //------------------------------------------------------------------------------

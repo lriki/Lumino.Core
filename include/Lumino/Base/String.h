@@ -578,6 +578,7 @@ private:
 	template<typename T> friend class GenericCharRef;
 	template<typename T> friend class GenericStringRef;
 	
+	void Detach() LN_NOEXCEPT;
 	void Attach(detail::GenericStringCore<TChar>* core);
 	void AssignTString(const TChar* str, int len);
 	void AssignTString(int count, TChar ch);
