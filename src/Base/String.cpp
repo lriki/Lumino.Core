@@ -982,7 +982,7 @@ GenericString<TChar> GenericString<TChar>::SPrintf(const TChar* format, ...)
 
 //------------------------------------------------------------------------------
 template<typename TChar>
-void GenericString<TChar>::Detach()
+void GenericString<TChar>::Detach() LN_NOEXCEPT
 {
 	LN_SAFE_RELEASE(m_string);
 	m_ref = nullptr;
