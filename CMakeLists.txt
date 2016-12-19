@@ -310,6 +310,8 @@ source_group("Testing"		FILES ${LN_SOURCES_Testing})
 set(LN_SOURCES
 	include/LuminoCore.h
 	include/LuminoMath.h
+	src/LuminoCore.PCH.cpp
+	src/LuminoCore.PCH.h
 	${LN_SOURCES_Base}
 	${LN_SOURCES_Text}
 	${LN_SOURCES_IO}
@@ -402,6 +404,7 @@ add_library(${PROJECT_NAME}_Static STATIC ${LN_SOURCES})
 set_target_properties(${PROJECT_NAME}_Static PROPERTIES OUTPUT_NAME "${PROJECT_NAME}${LN_LIB_POSTFIX}")
 target_link_libraries(${PROJECT_NAME}_Static ${LN_LINK_LIBS})
 set_target_properties(${PROJECT_NAME}_Static PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${LN_LIB_OUTPUT_DIR}")
+ln_add_pch(${PROJECT_NAME}_Static "LuminoCore.PCH.h" "src/LuminoCore.PCH.cpp")
 
 # Math
 add_library(LuminoMath STATIC ${LN_SOURCES_Math})
