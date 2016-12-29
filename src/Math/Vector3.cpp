@@ -120,6 +120,21 @@ Vector3 Vector3::SafeNormalize(const Vector3& vec)
 }
 
 //------------------------------------------------------------------------------
+Vector3 Vector3::SafeNormalize(const Vector3& vec, const Vector3& alt)
+{
+	float len = Asm::sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
+	if (len == 0.0)
+	{
+		return alt;
+	}
+	float t = 1.0f / len;
+	return Vector3(
+		vec.x * t,
+		vec.y * t,
+		vec.z * t);
+}
+
+//------------------------------------------------------------------------------
 float Vector3::Distance(const Vector3& vec1, const Vector3& vec2)
 {
 	float x = vec1.x - vec2.x;

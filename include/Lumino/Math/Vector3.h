@@ -122,6 +122,7 @@ public:
 	static Vector3 Normalize(const Vector3& vec);
 
 	static Vector3 SafeNormalize(const Vector3& vec);
+	static Vector3 SafeNormalize(const Vector3& vec, const Vector3& alt);
 	
 	/**
 		@brief		2つのベクトル間の距離を計算します。
