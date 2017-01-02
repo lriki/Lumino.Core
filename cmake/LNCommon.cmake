@@ -212,7 +212,6 @@ function(ln_add_pch project_name header_file_name source_file_path)
 			"/Yu\"${header_file_name}\" /FI\"${header_file_name}\""	# use PCH, ForcedIncludeFiles
 		)
 		
-		
 		# get source files from project (referred LLVM)
 		get_property(source_files TARGET ${project_name} PROPERTY SOURCES)
 		foreach (file ${source_files})
@@ -226,6 +225,18 @@ function(ln_add_pch project_name header_file_name source_file_path)
 		#set_target_properties(${project_name} PROPERTIES COMPILE_FLAGS ${ln_compile_flags})			
 		#get_target_property(compile_defs ${project_name} COMPILE_FLAGS)
 		#message(${compile_defs})
+	endif()
+endfunction()
+
+#------------------------------------------------------------------------------
+function(ln_add_pch2 project_name header_file_name source_file_path)
+	if (MSVC)
+		set(LN_LOCAL_COMPILE_FLAGS
+			"${CMAKE_CXX_FLAGS} /Yu\"${header_file_name}\" /FI\"${header_file_name}\""	# use PCH, ForcedIncludeFiles
+		)
+		SET_TARGET_PROPERTIES(${project_name} PROPERTIES COMPILE_FLAGS ${LN_LOCAL_COMPILE_FLAGS})
+		
+		set_source_files_properties(${source_file_path} PROPERTIES COMPILE_FLAGS "/Yc\"${header_file_name}\"")	# create PCH
 	endif()
 endfunction()
 
