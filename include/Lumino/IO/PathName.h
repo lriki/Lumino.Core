@@ -5,6 +5,9 @@
 #include "Common.h"
 #include "PathTraits.h"
 
+#pragma push_macro("CreateDirectory")
+#undef CreateDirectory
+
 LN_NAMESPACE_BEGIN
 
 /**
@@ -276,6 +279,13 @@ public:
 	/// @overload Equals
 	bool operator == (const PathNameT& path) const { return Equals(path); }
 
+	/**
+		このパスが示すディレクトリを作成します。
+		@details	このパスへの全てのディレクトリを作成します。既に存在する場合は作成しません。
+	*/
+	void CreateDirectory() const;
+	void LN_AFX_FUNCNAME(CreateDirectory)() const;
+
 public:
 
 	#pragma push_macro("GetCurrentDirectory")
@@ -370,3 +380,5 @@ struct Formatter<TChar, detail::FormatArgType::KindString, GenericPathName<TChar
 };
 
 LN_NAMESPACE_END
+
+#pragma pop_macro("CreateDirectory")

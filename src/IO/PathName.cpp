@@ -10,6 +10,7 @@
 #include <windows.h>
 #endif
 
+
 LN_NAMESPACE_BEGIN
 
 //==============================================================================
@@ -317,6 +318,18 @@ GenericPathName<TChar> GenericPathName<TChar>::MakeRelative(const GenericPathNam
 }
 
 //------------------------------------------------------------------------------
+#pragma push_macro("CreateDirectory")
+#undef CreateDirectory
+template<typename TChar>
+void GenericPathName<TChar>::CreateDirectory() const { LN_AFX_FUNCNAME(CreateDirectory)(); }
+template<typename TChar>
+void GenericPathName<TChar>::LN_AFX_FUNCNAME(CreateDirectory)() const
+{
+	FileSystem::CreateDirectory(m_path.c_str());
+}
+#pragma pop_macro("CreateDirectory")
+
+//------------------------------------------------------------------------------
 #pragma push_macro("GetCurrentDirectory")
 #undef GetCurrentDirectory
 template<typename TChar>
@@ -506,3 +519,6 @@ template class GenericStaticallyLocalPath<wchar_t>;
 } // namespace detail
 
 LN_NAMESPACE_END
+
+#pragma pop_macro("CreateDirectory")
+
