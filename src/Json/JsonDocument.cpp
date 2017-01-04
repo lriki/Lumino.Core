@@ -587,6 +587,7 @@ JsonValue2* JsonObject2::GetValue(const StringRef& name)
 
 //------------------------------------------------------------------------------
 void JsonObject2::SetValueInt32(const StringRef& name, int32_t value) { AddMemberInt32(name, value); }
+void JsonObject2::SetValueString(const StringRef& name, const String& value) { AddMemberString(name, value); }
 ISerializeObjectElement* JsonObject2::AddObject(const StringRef& name)  { return AddMemberObject(name); }
 bool JsonObject2::TryGetValueInt32(const StringRef& name, int32_t* outValue)
 {
@@ -594,6 +595,14 @@ bool JsonObject2::TryGetValueInt32(const StringRef& name, int32_t* outValue)
 	if (v == nullptr) return false;
 	if (v->GetType() != JsonValueType::Int32) return false;
 	*outValue = static_cast<JsonValue2*>(v)->GetInt32();
+	return true;
+}
+bool JsonObject2::TryGetValueString(const StringRef& name, String* outValue)
+{
+	auto* v = Find(name);
+	if (v == nullptr) return false;
+	if (v->GetType() != JsonValueType::String) return false;
+	*outValue = static_cast<JsonValue2*>(v)->GetString();
 	return true;
 }
 bool JsonObject2::TryGetObject(const StringRef& name, ISerializeObjectElement** outValue)

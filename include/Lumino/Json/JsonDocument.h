@@ -205,8 +205,10 @@ protected:
 
 	// ISerializeObjectElement interface
 	virtual void SetValueInt32(const StringRef& name, int32_t value) override;
+	virtual void SetValueString(const StringRef& name, const String& value) override;
 	virtual ISerializeObjectElement* AddObject(const StringRef& name) override;
 	virtual bool TryGetValueInt32(const StringRef& name, int32_t* outValue) override;
+	virtual bool TryGetValueString(const StringRef& name, String* outValue) override;
 	virtual bool TryGetObject(const StringRef& name, ISerializeObjectElement** outValue) override;
 
 LN_INTERNAL_ACCESS:

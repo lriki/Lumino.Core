@@ -46,11 +46,13 @@ public:
 
 	virtual void SetValueInt32(const StringRef& name, int32_t value) = 0;
 	//virtual void SetValueDouble(const StringRef& name, int32_t value) = 0;
+	virtual void SetValueString(const StringRef& name, const String& value) = 0;
 
 	virtual ISerializeObjectElement* AddObject(const StringRef& name) = 0;
 
 
 	virtual bool TryGetValueInt32(const StringRef& name, int32_t* outValue) = 0;
+	virtual bool TryGetValueString(const StringRef& name, String* outValue) = 0;
 
 	virtual bool TryGetObject(const StringRef& name, ISerializeObjectElement** outValue) = 0;
 };
@@ -150,6 +152,7 @@ private:
 	void WriteValue(const StringRef& name, uint64_t value);
 	void WriteValue(const StringRef& name, float value);
 	void WriteValue(const StringRef& name, double value);
+	void WriteValue(const StringRef& name, String& value) { m_currentObject->SetValueString(name, value); }
 	template<typename T> void WriteValue(const StringRef& name, T & obj)	 // nonÅ]intrusive Object
 	{
 		auto* old = m_currentObject;
@@ -162,7 +165,7 @@ private:
 	void ReadValue(const StringRef& name, bool& value);
 	void ReadValue(const StringRef& name, int8_t& value);
 	void ReadValue(const StringRef& name, int16_t& value);
-	void ReadValue(const StringRef& name, int32_t& value) { m_currentObject->TryGetValueInt32(name, &value); }
+	void ReadValue(const StringRef& name, int32_t& value) { m_currentObject->TryGetValueInt32(name, &value); }	// TODO: Error
 	void ReadValue(const StringRef& name, int64_t value);
 	void ReadValue(const StringRef& name, uint8_t& value);
 	void ReadValue(const StringRef& name, uint16_t& value);
@@ -170,6 +173,7 @@ private:
 	void ReadValue(const StringRef& name, uint64_t& value);
 	void ReadValue(const StringRef& name, float& value);
 	void ReadValue(const StringRef& name, double& value);
+	void ReadValue(const StringRef& name, String& value) { m_currentObject->TryGetValueString(name, &value); }	// TODO: Error
 	template<typename T> void ReadValue(const StringRef& name, T & obj)	 // nonÅ]intrusive Object
 	{
 		ISerializeObjectElement* so;
