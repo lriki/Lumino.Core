@@ -834,7 +834,7 @@ bool JsonReader2::ParseNumber()
 			return false;
 		}
 
-		if (FLT_MIN <= value && value <= FLT_MAX)
+		if (-FLT_MAX <= value && value <= FLT_MAX)
 		{
 			m_valueData.m_float = (float)value;
 			return SetToken(JsonToken::Float, str, len);

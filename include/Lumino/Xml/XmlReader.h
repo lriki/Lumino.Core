@@ -1,5 +1,6 @@
 ﻿
 #pragma once
+#include "../Base/StringBuilder.h"
 #include "../IO/PathName.h"
 #include "../IO/TextReader.h"
 #include "../IO/MemoryStream.h"
@@ -231,7 +232,7 @@ LN_INTERNAL_ACCESS:
 
 	bool IsAlphaNum(int ch);
 
-	void ExpandReservedEntities(TCHAR* text, int len);
+	static void ExpandReservedEntities(const TCHAR* text, int len, StringBuilder* outBuilder);
 
 
 
@@ -250,7 +251,9 @@ LN_INTERNAL_ACCESS:
 	detail::XmlError		m_errorInfo;
 	int						m_stockElementCount;
 	String					m_tmpName;
-	String					m_tmpValue;
+	//String					m_tmpValue;
+	StringBuilder			m_valueCacheBuilder;
+	String					m_valueCache;
 	int						m_currentAttrCount;		///< 現在のノードの属性数
 };
 

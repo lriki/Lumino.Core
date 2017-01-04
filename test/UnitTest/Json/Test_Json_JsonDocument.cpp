@@ -51,7 +51,7 @@ TEST_F(Test_Json_JsonDocument, Save)
 	objary->AddObject()->AddMemberInt32(_T("int32"), 300);
 	objary->AddObject()->AddMemberString(_T("str1"), _T("test2"));
 
-	doc.Save(TEMPFILE("json.txt"));
+	doc.Save(TEMPFILE("json.txt"), tr::JsonFormatting::Indented);
 
 	ASSERT_TRUE(TestHelper::EqualFiles(TEMPFILE("json.txt"), LN_LOCALFILE("TestData/Test_Json_JsonDocument_Save1.json")));
 
@@ -62,6 +62,6 @@ TEST_F(Test_Json_JsonDocument, Load)
 {
 	tr::JsonDocument2 doc;
 	doc.Load(LN_LOCALFILE("TestData/Test_Json_JsonDocument_Save1.json"));
-	doc.Save(TEMPFILE("json2.txt"));
+	doc.Save(TEMPFILE("json2.txt"), tr::JsonFormatting::Indented);
 }
 

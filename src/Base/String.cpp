@@ -757,7 +757,7 @@ bool GenericString<TChar>::Equals(const TChar* str) const
 template<typename TChar>
 int GenericString<TChar>::Compare(const TChar* str, int count, CaseSensitivity cs) const
 {
-	return StringTraits::Compare(c_str(), GetLength(), str, count, std::max(GetLength(), count), cs);
+	return StringTraits::Compare(c_str(), GetLength(), str, count, -1/*std::max(GetLength(), count)*/, cs);
 }
 
 //------------------------------------------------------------------------------

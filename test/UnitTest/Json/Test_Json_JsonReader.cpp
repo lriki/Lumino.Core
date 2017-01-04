@@ -126,8 +126,8 @@ TEST_F(Test_Json_JsonReader, GetValue)
 		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::Int32, reader.GetTokenType()); ASSERT_EQ(2147483647, reader.GetInt32Value());
 		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::Int64, reader.GetTokenType()); ASSERT_EQ(-2147483649LL, reader.GetInt64Value());
 		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::Int64, reader.GetTokenType()); ASSERT_EQ(2147483648LL, reader.GetInt64Value());
-		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::Double, reader.GetTokenType()); ASSERT_EQ(1.0, reader.GetDoubleValue());
-		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::Double, reader.GetTokenType()); ASSERT_EQ(-1.0, reader.GetDoubleValue());
+		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::Float, reader.GetTokenType()); ASSERT_EQ(1.0, reader.GetFloatValue());
+		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::Float, reader.GetTokenType()); ASSERT_EQ(-1.0, reader.GetFloatValue());
 		ASSERT_EQ(true, reader.Read()); ASSERT_EQ(JsonToken::EndArray, reader.GetTokenType());
 		ASSERT_EQ(false, reader.Read());
 	}

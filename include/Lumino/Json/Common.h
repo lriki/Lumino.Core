@@ -50,5 +50,12 @@ enum class JsonParseResult
 	Error = 1,
 };
 
+
+enum class JsonFormatting
+{
+	None = 0,
+	Indented = 1,
+};
+
 } // namespace tr
 LN_NAMESPACE_END

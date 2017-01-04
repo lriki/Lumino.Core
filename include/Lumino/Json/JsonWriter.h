@@ -7,12 +7,6 @@
 LN_NAMESPACE_BEGIN
 namespace tr {
 
-enum class JsonFormatting
-{
-	None = 0,
-	Indented = 1,
-};
-
 /**
 	@brief	
 */
@@ -23,6 +17,7 @@ public:
 	virtual ~JsonWriter();
 
 public:
+	void SetFormatting(JsonFormatting formatting);
 	void WriteStartObject();
 	void WriteEndObject();
 	void WriteStartArray();
@@ -58,7 +53,7 @@ protected:
 	void OnFloat(float value);
 	void OnDouble(double value);
 	void OnString(const TCHAR* str, int length);
-	void OnIndent(int level);
+	//void OnIndent(int level);
 
 private:
 	void AutoComplete(JsonToken token);

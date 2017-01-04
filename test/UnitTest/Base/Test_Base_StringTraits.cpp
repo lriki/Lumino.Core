@@ -120,6 +120,21 @@ TEST_F(Test_Base_StringUtils, Compare)
 		ASSERT_EQ(true, StringTraits::Compare("aaa", -1, "aaa", -1, -1, CaseSensitivity::CaseInsensitive) == 0);
 		ASSERT_EQ(true, StringTraits::Compare("aaa", -1, "AAA", -1, -1, CaseSensitivity::CaseInsensitive) == 0);
 	}
+
+	// <Test> 空文字列の比較
+	{
+		ASSERT_EQ(true, StringTraits::Compare("", -1, "", -1, 0) == 0);
+		ASSERT_EQ(true, StringTraits::Compare("", 0, "", 0, 0) == 0);
+		ASSERT_EQ(true, StringTraits::Compare("", -1, "a", -1, 0) == 0);
+		ASSERT_EQ(true, StringTraits::Compare("a", -1, "", -1, 0) == 0);
+		ASSERT_EQ(true, StringTraits::Compare("", 0, "a", 1, 0) == 0);
+		ASSERT_EQ(true, StringTraits::Compare("a", 1, "", 0, 0) == 0);
+
+		ASSERT_EQ(true, StringTraits::Compare("", -1, "a", -1, 1) < 0);
+		ASSERT_EQ(true, StringTraits::Compare("a", -1, "", -1, 1) > 0);
+		ASSERT_EQ(true, StringTraits::Compare("", 0, "a", 1, 1) < 0);
+		ASSERT_EQ(true, StringTraits::Compare("a", 1, "", 0, 1) > 0);
+	}
 }
 
 //------------------------------------------------------------------------------

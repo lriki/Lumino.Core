@@ -37,12 +37,12 @@ enum class RotationOrder
 /** 錐台の各面 */
 enum class FrustumPlane
 {
-	Near	= 0,
-	Far		= 1,
-	Left	= 2,
-	Right	= 3,
-	Top		= 4,
-	Bottom	= 5,
+	Left	= 0,
+	Right	= 1,
+	Top		= 2,
+	Bottom	= 3,
+	Near	= 4,
+	Far		= 5,
 };
 
 LN_NAMESPACE_END

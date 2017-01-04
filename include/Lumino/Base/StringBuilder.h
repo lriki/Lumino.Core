@@ -49,9 +49,10 @@ class GenericStringBuilder
 public:
 	GenericString<TChar> ToString() const
 	{
-		return GenericString<TChar>(
+		m_cache.AssignCStr(
 			(const TChar*)GenericStringBuilderCore<TChar>::m_buffer.GetConstData(),
 			GenericStringBuilderCore<TChar>::m_bufferUsed / sizeof(TChar));
+		return m_cache;
 	}
 
 	//void Append(const GenericString<TChar>& str)
@@ -64,6 +65,9 @@ public:
 	void AppendFormat(const Locale& locale, const GenericStringRef<TChar>& format, const TArgs&... args);
 
 	void AppendFormatInternal(const Locale& locale, const GenericStringRef<TChar>& format, typename detail::FormatList<TChar>* args);
+
+private:
+	mutable GenericString<TChar>	m_cache;
 };
 
 

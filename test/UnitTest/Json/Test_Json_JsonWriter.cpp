@@ -4,9 +4,7 @@
 using namespace ln::tr;
 
 //==============================================================================
-// Test_Json_JsonWriter_Integrate
-//==============================================================================
-class Test_Json_JsonWriter_Integrate : public ::testing::Test
+class Test_Json_JsonWriter : public ::testing::Test
 {
 protected:
 	virtual void SetUp() {}
@@ -14,7 +12,7 @@ protected:
 };
 
 //------------------------------------------------------------------------------
-TEST_F(Test_Json_JsonWriter_Integrate, Example)
+TEST_F(Test_Json_JsonWriter, Example)
 {
 	StringWriter s;
 	JsonWriter writer(&s);
@@ -43,3 +41,39 @@ TEST_F(Test_Json_JsonWriter_Integrate, Example)
 		_T("{\"hello\":\"world\",\"t\":true,\"f\":false,\"n\":null,\"i\":123.000000,\"pi\":3.141600,\"a\":[0.000000,1.000000,2.000000,3.000000]}"),
 		s.ToString());
 }
+
+//------------------------------------------------------------------------------
+TEST_F(Test_Json_JsonWriter, Formatting)
+{
+	// <Test> デフォルトではフォーマットされない
+	{
+		StringWriter s;
+		JsonWriter writer(&s);
+
+		writer.WriteStartObject();
+		writer.WritePropertyName(_T("hello"));
+		writer.WriteString(_T("world"));
+		writer.WriteEndObject();
+
+		ASSERT_EQ(
+			_T("{\"hello\":\"world\"}"),
+			s.ToString());
+	}
+	// <Test> フォーマット有効
+	{
+		StringWriter s;
+		s.SetNewLine(_T("\n"));
+		JsonWriter writer(&s);
+		writer.SetFormatting(JsonFormatting::Indented);
+
+		writer.WriteStartObject();
+		writer.WritePropertyName(_T("hello"));
+		writer.WriteString(_T("world"));
+		writer.WriteEndObject();
+
+		ASSERT_EQ(
+			_T("{\n  \"hello\": \"world\"\n}"),
+			s.ToString());
+	}
+}
+

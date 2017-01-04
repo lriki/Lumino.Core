@@ -700,10 +700,11 @@ JsonDocument2::~JsonDocument2()
 
 
 //------------------------------------------------------------------------------
-void JsonDocument2::Save(const StringRef& filePath)
+void JsonDocument2::Save(const StringRef& filePath, JsonFormatting formatting)
 {
 	StreamWriter w(filePath);
 	JsonWriter jw(&w);
+	jw.SetFormatting(formatting);
 	JsonElement2::Save(&jw);
 }
 

@@ -19,7 +19,6 @@ set(LN_TEST_SOURCES
 	UnitTest/Base/Test_Base_Locale.cpp
 	UnitTest/Base/Test_Base_Regex.cpp
 	UnitTest/Base/Test_Base_Resource.cpp
-	UnitTest/Base/Test_Base_SortedArray.cpp
 	UnitTest/Base/Test_Base_String.cpp
 	UnitTest/Base/Test_Base_StringArray.cpp
 	UnitTest/Base/Test_Base_StringRef.cpp

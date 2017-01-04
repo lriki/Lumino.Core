@@ -279,7 +279,7 @@ public:
 
 	//void Load();
 
-	void Save(const StringRef& filePath);
+	void Save(const StringRef& filePath, JsonFormatting formatting = JsonFormatting::None);
 
 	void Load(const StringRef& filePath);
 

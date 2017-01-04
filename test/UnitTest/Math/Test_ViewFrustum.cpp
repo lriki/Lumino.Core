@@ -31,24 +31,10 @@ TEST_F(Test_ViewFrustum, Basic)
 		ASSERT_PLANE_NEAR(-1.000000, 0.000000, 0.000000, -320.000000, v3.GetPlane(FrustumPlane::Right));
 		ASSERT_PLANE_NEAR(0.000000, 1.000000, 0.000000, -239.999985, v3.GetPlane(FrustumPlane::Top));
 		ASSERT_PLANE_NEAR(-0.000000, -1.000000, -0.000000, -239.999985, v3.GetPlane(FrustumPlane::Bottom));
-		//for (int i = 0; i < 6; i++)
-		//	v3.GetPlane((FrustumPlane)i).Print();
-
-		Vector3 points[8];
-		v3.GetCornerPoints(points);
-		ASSERT_VEC3_NEAR(320.000000, 239.999985, 0.000000, points[0]);
-		ASSERT_VEC3_NEAR(-320.000000, 239.999985, 0.000000, points[1]);
-		ASSERT_VEC3_NEAR(-320.000000, -239.999985, 0.000000, points[2]);
-		ASSERT_VEC3_NEAR(320.000000, -239.999985, 0.000000, points[3]);
-		ASSERT_VEC3_NEAR(320.000000, 239.999985, 1000.000000, points[4]);
-		ASSERT_VEC3_NEAR(-320.000000, 239.999985, 1000.000000, points[5]);
-		ASSERT_VEC3_NEAR(-320.000000, -239.999985, 1000.000000, points[6]);
-		ASSERT_VEC3_NEAR(320.000000, -239.999985, 1000.000000, points[7]);
-		//for (int i = 0; i < 8; i++)
-		//	points[i].Print();
 	}
 }
 
+//------------------------------------------------------------------------------
 TEST_F(Test_ViewFrustum, Intersects)
 {
 	Matrix proj1 = Matrix::MakePerspectiveFovLH(Math::PI / 4, 640.0f / 480.0f, 1, 1000);
@@ -79,9 +65,6 @@ TEST_F(Test_ViewFrustum, Intersects)
 		vp *= Matrix::MakeOrthoLH(640, 480, 0, 1000);
 		ViewFrustum vf(vp);
 
-		Vector3 points[8];
-		vf.GetCornerPoints(points);
-
 		ASSERT_TRUE(vf.Intersects(Vector3(0, 0, 0)));
 		ASSERT_TRUE(vf.Intersects(Vector3(1, 0, 0)));
 		ASSERT_FALSE(vf.Intersects(Vector3(-1, 0, 0)));
@@ -98,5 +81,38 @@ TEST_F(Test_ViewFrustum, Intersects)
 		ASSERT_FALSE(vf.Intersects(Vector3(0, 0, -1)));
 		ASSERT_TRUE(vf.Intersects(Vector3(0, 0, 999)));
 		ASSERT_FALSE(vf.Intersects(Vector3(0, 0, 1001)));
+	}
+}
+
+//------------------------------------------------------------------------------
+TEST_F(Test_ViewFrustum, GetCornerPoints)
+{
+	// <Test> ç∂éËånÇÃ PerspectiveFov
+	{
+		ViewFrustum vf(Matrix::MakeLookAtLH(Vector3(0, 0, 0), Vector3(0, 0, 1), Vector3(0, 1, 0)) * Matrix::MakePerspectiveFovLH(Math::PI / 4, 640.0f / 480.0f, 1, 1000));
+		Vector3 points[8];
+		vf.GetCornerPoints(points);
+		ASSERT_VEC3_NEAR(-0.552284837, 0.414213598, 1.00000000, points[0]);
+		ASSERT_VEC3_NEAR(-0.552284837, -0.414213598, 1.00000000, points[1]);
+		ASSERT_VEC3_NEAR(0.552284837, -0.414213598, 1.00000000, points[2]);
+		ASSERT_VEC3_NEAR(0.552284837, 0.414213598, 1.00000000, points[3]);
+		ASSERT_VEC3_NEAR(-552.324890, 414.243622, 1000.07251, points[4]);
+		ASSERT_VEC3_NEAR(-552.324890, -414.243622, 1000.07251, points[5]);
+		ASSERT_VEC3_NEAR(552.324890, -414.243622, 1000.07251, points[6]);
+		ASSERT_VEC3_NEAR(552.324890, 414.243622, 1000.07251, points[7]);
+	}
+	// <Test> ç∂éËånÇÃ Ortho
+	{
+		ViewFrustum vf(Matrix::MakeLookAtLH(Vector3(0, 0, 0), Vector3(0, 0, 1), Vector3(0, 1, 0)) * Matrix::MakeOrthoLH(640, 480, 0, 1000));
+		Vector3 points[8];
+		vf.GetCornerPoints(points);
+		ASSERT_VEC3_NEAR(-320.000000, 239.999985, 0.000000, points[0]);
+		ASSERT_VEC3_NEAR(-320.000000, -239.999985, 0.000000, points[1]);
+		ASSERT_VEC3_NEAR(320.000000, -239.999985, 0.000000, points[2]);
+		ASSERT_VEC3_NEAR(320.000000, 239.999985, 0.000000, points[3]);
+		ASSERT_VEC3_NEAR(-320.000000, 239.999985, 1000.000000, points[4]);
+		ASSERT_VEC3_NEAR(-320.000000, -239.999985, 1000.000000, points[5]);
+		ASSERT_VEC3_NEAR(320.000000, -239.999985, 1000.000000, points[6]);
+		ASSERT_VEC3_NEAR(320.000000, 239.999985, 1000.000000, points[7]);
 	}
 }

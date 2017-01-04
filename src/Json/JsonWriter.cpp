@@ -11,7 +11,7 @@ namespace tr {
 //==============================================================================
 //------------------------------------------------------------------------------
 JsonWriter::JsonWriter(TextWriter* textWriter)
-	: m_formatting(JsonFormatting::Indented)
+	: m_formatting(JsonFormatting::None)
 	, m_textWriter(textWriter)
 {
 	LN_CHECK_ARG(m_textWriter != nullptr);
@@ -21,6 +21,12 @@ JsonWriter::JsonWriter(TextWriter* textWriter)
 //------------------------------------------------------------------------------
 JsonWriter::~JsonWriter()
 {
+}
+
+//------------------------------------------------------------------------------
+void JsonWriter::SetFormatting(JsonFormatting formatting)
+{
+	m_formatting = formatting;
 }
 
 //------------------------------------------------------------------------------
@@ -181,7 +187,7 @@ void JsonWriter::AutoComplete(JsonToken token)
 		{
 			if (level.justSawKey)
 			{
-				m_textWriter->Write(' ');	// : after space
+				m_textWriter->Write(_T(' '));	// : after space
 			}
 
 			if (!level.justSawKey)
@@ -191,8 +197,8 @@ void JsonWriter::AutoComplete(JsonToken token)
 					m_textWriter->WriteLine();
 					for (int i = 0; i < m_levelStack.GetCount(); i++)
 					{
-						m_textWriter->Write(' ');
-						m_textWriter->Write(' ');
+						m_textWriter->Write(_T(' '));
+						m_textWriter->Write(_T(' '));
 					}
 				}
 				else if (token == JsonToken::EndObject || (token == JsonToken::EndArray && level.justSawContainerEnd))
@@ -200,8 +206,8 @@ void JsonWriter::AutoComplete(JsonToken token)
 					m_textWriter->WriteLine();
 					for (int i = 0; i < m_levelStack.GetCount() - 1; i++)
 					{
-						m_textWriter->Write(' ');
-						m_textWriter->Write(' ');
+						m_textWriter->Write(_T(' '));
+						m_textWriter->Write(_T(' '));
 					}
 				}
 			}
@@ -305,15 +311,15 @@ void JsonWriter::OnString(const TCHAR* str, int length)
 }
 
 //------------------------------------------------------------------------------
-void JsonWriter::OnIndent(int level)
-{
-	m_textWriter->WriteLine();
-	while (level > 0)
-	{
-		m_textWriter->Write(_T(' '));
-		--level;
-	}
-}
+//void JsonWriter::OnIndent(int level)
+//{
+//	m_textWriter->WriteLine();
+//	while (level > 0)
+//	{
+//		m_textWriter->Write(_T(' '));
+//		--level;
+//	}
+//}
 
 } // namespace tr
 LN_NAMESPACE_END

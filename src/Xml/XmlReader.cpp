@@ -161,12 +161,14 @@ XmlNodeType XmlReader::GetNodeType()  const
 //------------------------------------------------------------------------------
 const String& XmlReader::GetName()
 {
-	if (m_nodes.IsEmpty()) {
+	if (m_nodes.IsEmpty())
+	{
 		m_tmpName.SetEmpty();
 	}
 	else
 	{
-		if (m_currentNode->NameStartPos == -1 || m_currentNode->NameLen == 0) {
+		if (m_currentNode->NameStartPos == -1 || m_currentNode->NameLen == 0)
+		{
 			m_tmpName.SetEmpty();	// Node はあるけど名前が無かった
 		}
 		else
@@ -181,24 +183,24 @@ const String& XmlReader::GetName()
 //------------------------------------------------------------------------------
 const String& XmlReader::GetValue()
 {
-	if (m_nodes.IsEmpty()) {
-		m_tmpValue.SetEmpty();
+	if (m_nodes.IsEmpty())
+	{
+		m_valueCache.SetEmpty();
 	}
 	else
 	{
-		if (m_currentNode->ValueStartPos == -1 || m_currentNode->ValueLen == 0) {
-			m_tmpValue.SetEmpty();	// Node はあるけど値が無かった
+		if (m_currentNode->ValueStartPos == -1 || m_currentNode->ValueLen == 0)
+		{
+			m_valueCache.SetEmpty();	// Node はあるけど値が無かった
 		}
 		else
 		{
-			const TCHAR* name = &m_textCache[m_currentNode->ValueStartPos];
-			m_tmpValue.AssignCStr(name, m_currentNode->ValueLen);
-
 			// 定義済み Entity を展開する
-			ExpandReservedEntities(m_tmpValue.GetData(), m_tmpValue.GetLength());
+			ExpandReservedEntities(&m_textCache[m_currentNode->ValueStartPos], m_currentNode->ValueLen, &m_valueCacheBuilder);
+			m_valueCache = m_valueCacheBuilder.ToString();
 		}
 	}
-	return m_tmpValue;
+	return m_valueCache;
 }
 
 //------------------------------------------------------------------------------
@@ -1096,18 +1098,12 @@ bool XmlReader::IsAlphaNum(int ch)
 }
 
 //------------------------------------------------------------------------------
-// text は len+1 の領域があること (終端に \0 を格納する)
-//------------------------------------------------------------------------------
-void XmlReader::ExpandReservedEntities(TCHAR* text, int len)
+void XmlReader::ExpandReservedEntities(const TCHAR* text, int len, StringBuilder* outBuilder)
 {
-	/*
-		予約済み Entity は全て 1 文字。
-		展開した後にバッファが増えることは無い。
-	*/
+	outBuilder->Clear();
 
-	TCHAR* rp = text;	// read pointer
-	TCHAR* wp = text;	// write pointer
-	TCHAR* end = text + len;
+	const TCHAR* rp = text;	// read pointer
+	const TCHAR* end = text + len;
 	while (rp < end)
 	{
 		if (*rp == '&')
@@ -1118,28 +1114,24 @@ void XmlReader::ExpandReservedEntities(TCHAR* text, int len)
 				if (StringTraits::StrNCmp(rp + 1, ReservedEntities[i].Pattern, ReservedEntities[i].Length) == 0 &&
 					*(rp + ReservedEntities[i].Length + 1) == ';')
 				{
-					*wp = ReservedEntities[i].Value;
-					++wp;
-					rp += ReservedEntities[i].Length + 2;
+					outBuilder->Append(ReservedEntities[i].Value);
+					rp += ReservedEntities[i].Length + 2;	// +2 は & と ; の分
 					break;
 				}
 			}
 			// 予約済み Entity ではなかった
 			if (i == ReservedEntitiesCount)
 			{
-				*wp = *rp;
+				outBuilder->Append(*rp);
 				++rp;
-				++wp;
 			}
 		}
 		else
 		{
-			*wp = *rp;
+			outBuilder->Append(*rp);
 			++rp;
-			++wp;
 		}
 	}
-	*wp = '\0';
 }
 
 //==============================================================================

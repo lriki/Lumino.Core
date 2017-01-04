@@ -6,6 +6,7 @@
 #include <Lumino/Base/ElapsedTimer.h>
 #include <Lumino/Threading/Thread.h>
 
+#ifdef LN_MEASURE_PREF
 //==============================================================================
 class Test_Measurement : public ::testing::Test
 {
@@ -121,7 +122,7 @@ TEST_F(Test_Measurement, Basic)
 	}
 }
 
-
+#endif
 
 
 
