@@ -1,9 +1,10 @@
 ﻿
 #include <math.h>
+#include <cmath>
 #include "../../include/Lumino/Math/Vector3.h"
 #include "../../include/Lumino/Math/Vector4.h"
 #include "../../include/Lumino/Math/Matrix.h"
-#include "../../include/Lumino/Math/Ray.h"
+#include "../../include/Lumino/Math/Geometries.h"
 #include "../../include/Lumino/Math/Plane.h"
 #include "Asm.h"
 
@@ -107,7 +108,7 @@ bool Plane::Intersects(const Vector3& start, const Vector3& end, Vector3* point)
 bool Plane::Intersects(const Ray& ray, Vector3* point) const
 {
 	float dot = Vector3::Dot(Normal, ray.direction);
-	if (abs(dot) > 0.0001f)
+	if (std::abs(dot) > 0.0001f)
 	{
 		if (point != nullptr)
 		{

@@ -508,9 +508,10 @@ void GenericString<TChar>::AssignCStr(const wchar_t* str, int begin, int length,
 	//LN_THROW(str != nullptr, ArgumentException);	// std::string の assign は nullptr が渡されたときの動作は未定義。VS2013 では制御が返ってこなくなった
 
 	if (length <= -1) {
-		length = INT_MAX;
+		length = (int)wcslen(str);
+		//length = INT_MAX;
 	}
-	int len = std::min((int)wcslen(str), length) * sizeof(wchar_t);
+	int len = length * sizeof(wchar_t);
 
 	// サイズ 0 なら空文字列にするだけ
 	if (len == 0) {
