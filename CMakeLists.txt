@@ -246,6 +246,7 @@ set(LN_SOURCES_Reflection
 
 set(LN_SOURCES_Math
 	include/LuminoMath.h
+	include/Lumino/Math/Geometries.h
 	include/Lumino/Math/Quaternion.inl
 	include/Lumino/Math/Random.h
 	include/Lumino/Math/SQTTransform.h
@@ -264,6 +265,7 @@ set(LN_SOURCES_Math
 	include/Lumino/Math/Quaternion.h
 	include/Lumino/Math/Version.h
 	include/Lumino/Math/ViewFrustum.h
+	src/Math/Geometries.cpp
 	src/Math/Random.cpp
 	src/Math/SQTTransform.cpp
 	src/Math/Vector2.cpp

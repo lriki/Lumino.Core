@@ -10,6 +10,7 @@
 #include "Lumino/Math/Matrix.h"
 #include "Lumino/Math/Quaternion.h"
 #include "Lumino/Math/SQTTransform.h"
+#include "Lumino/Math/Ray.h"
 #include "Lumino/Math/Plane.h"
 #include "Lumino/Math/ViewFrustum.h"
 #include "Lumino/Math/Random.h"

@@ -3,6 +3,7 @@
 #include "../../include/Lumino/Math/Vector3.h"
 #include "../../include/Lumino/Math/Vector4.h"
 #include "../../include/Lumino/Math/Matrix.h"
+#include "../../include/Lumino/Math/Ray.h"
 #include "../../include/Lumino/Math/Plane.h"
 #include "Asm.h"
 
@@ -30,6 +31,12 @@ Plane::Plane(float a, float b, float c, float d)
 Plane::Plane(const Vector3& normal, float d)
 	: Normal(normal)
 	, D(d)
+{
+}
+
+//------------------------------------------------------------------------------
+Plane::Plane(const Vector3& normal)
+	: Plane(Vector3::Zero, normal)
 {
 }
 
@@ -94,6 +101,23 @@ bool Plane::Intersects(const Vector3& start, const Vector3& end, Vector3* point)
 		(*point) = start - (t * direction);
 	}
 	return true;
+}
+
+//------------------------------------------------------------------------------
+bool Plane::Intersects(const Ray& ray, Vector3* point) const
+{
+	float dot = Vector3::Dot(Normal, ray.direction);
+	if (abs(dot) > 0.0001f)
+	{
+		if (point != nullptr)
+		{
+			float t = (D + Vector3::Dot(Normal, ray.origin)) / dot;
+			//if (t >= 0) return true;	// 表面側なら +、裏面なら -
+			(*point) = ray.origin - (t * ray.direction);
+		}
+		return true;
+	}
+	return false;
 }
 
 //------------------------------------------------------------------------------

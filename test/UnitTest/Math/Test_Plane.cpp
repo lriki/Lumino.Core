@@ -1,4 +1,4 @@
-#include "Common.h"
+Ôªø#include "Common.h"
 
 class Test_Plane : public ::testing::Test
 {
@@ -10,7 +10,7 @@ protected:
 //------------------------------------------------------------------------------
 TEST_F(Test_Plane, Basic)
 {
-	// ÉRÉìÉXÉgÉâÉNÉ^
+	// „Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø
 	{
 		Plane pl1;
 		ASSERT_PLANE_NEAR(0, 0, 0, 0, pl1);
@@ -21,8 +21,8 @@ TEST_F(Test_Plane, Basic)
 		Plane pl4(Vector3(1, 2, 3), Vector3(4, 5, 6), Vector3(-7, -8, -9));
 		ASSERT_PLANE_NEAR(-0.408248, 0.816497, -0.408248, -0.000000, pl4);
 
-		// pl5 ÇÃåãâ ÇÕ (0, 1, 0)
-		// Ç¬Ç‹ÇËÅAç∂éËç¿ïWånÇ©âEéËç¿ïWånÇ©Ç≈ÅAê≥ñ Ç™éûåvâÒÇËÇ©îΩéûåvâÒÇËÇ©Ç™ïœÇÌÇÈÅB
+		// pl5 „ÅÆÁµêÊûú„ÅØ (0, 1, 0)
+		// „Å§„Åæ„Çä„ÄÅÂ∑¶ÊâãÂ∫ßÊ®ôÁ≥ª„ÅãÂè≥ÊâãÂ∫ßÊ®ôÁ≥ª„Åã„Åß„ÄÅÊ≠£Èù¢„ÅåÊôÇË®àÂõû„Çä„ÅãÂèçÊôÇË®àÂõû„Çä„Åã„ÅåÂ§â„Çè„Çã„ÄÇ
 		Plane pl5(Vector3(0, 0, 0), Vector3(0, 0, 1), Vector3(1, 0, 0));
 		ASSERT_PLANE_NEAR(0, 1, 0, 0, pl5);
 	}
@@ -35,13 +35,13 @@ TEST_F(Test_Plane, Basic)
 	// this->CheckInside
 	{
 		Plane pl1(Vector3(0, 0, 0), Vector3(0, 1, 0));
-		ASSERT_FALSE(pl1.CheckInside(Vector3(0, 10, 0)));	// è„ÇÃï˚
-		ASSERT_TRUE(pl1.CheckInside(Vector3(0, -10, 0)));	// â∫ÇÃï˚
+		ASSERT_FALSE(pl1.CheckInside(Vector3(0, 10, 0)));	// ‰∏ä„ÅÆÊñπ
+		ASSERT_TRUE(pl1.CheckInside(Vector3(0, -10, 0)));	// ‰∏ã„ÅÆÊñπ
 
-		ASSERT_FALSE(pl1.CheckInside(Vector3(0, 10, 0), 5));	// è„ÇÃï˚
-		ASSERT_TRUE(pl1.CheckInside(Vector3(0, -10, 0), 5));	// â∫ÇÃï˚
-		ASSERT_TRUE(pl1.CheckInside(Vector3(0, -10, 0), 15));	// íÜêSÇÕì‡ë§ÅBè„Ç™è≠ÇµÇÕÇ›èoÇƒÇÈ
-		ASSERT_TRUE(pl1.CheckInside(Vector3(0, 10, 0), 15));	// íÜêSÇÕäOë§ÅBâ∫Ç™è≠ÇµÇﬂÇËçûÇÒÇ≈ÇÈ
+		ASSERT_FALSE(pl1.CheckInside(Vector3(0, 10, 0), 5));	// ‰∏ä„ÅÆÊñπ
+		ASSERT_TRUE(pl1.CheckInside(Vector3(0, -10, 0), 5));	// ‰∏ã„ÅÆÊñπ
+		ASSERT_TRUE(pl1.CheckInside(Vector3(0, -10, 0), 15));	// ‰∏≠ÂøÉ„ÅØÂÜÖÂÅ¥„ÄÇ‰∏ä„ÅåÂ∞ë„Åó„ÅØ„ÅøÂá∫„Å¶„Çã
+		ASSERT_TRUE(pl1.CheckInside(Vector3(0, 10, 0), 15));	// ‰∏≠ÂøÉ„ÅØÂ§ñÂÅ¥„ÄÇ‰∏ã„ÅåÂ∞ë„Åó„ÇÅ„ÇäËæº„Çì„Åß„Çã
 	}
 	// this->Intersects
 	{
@@ -57,12 +57,26 @@ TEST_F(Test_Plane, Basic)
 		ASSERT_TRUE(r);
 		ASSERT_VEC3_NEAR(-7.184465, -4.368931, -8.737862, v6);
 		
-		// ïΩçsÇ»ê¸ï™
+		// Âπ≥Ë°å„Å™Á∑öÂàÜ
 		Plane pl2(Vector3(0, 0, 0), Vector3(0, 1, 0));
 		Vector3 start(1, 1, 1);
 		Vector3 end(2, 1, 2);
 		r = pl2.Intersects(start, end, &v6);
 		ASSERT_FALSE(r);
+	}
+	// this->Intersects
+	{
+		Plane pl1(Vector3(2, 3, 4), Vector3::UnitX);
+
+		Vector3 v;
+		bool r;
+		ASSERT_EQ(true, pl1.Intersects(Ray(Vector3(0, 0, 0), Vector3(1, 0, 0)), &v));	// Áõ¥Ë°å
+		ASSERT_VEC3_NEAR(2, 0, 0, v);
+		ASSERT_EQ(false, pl1.Intersects(Ray(Vector3(0, 0, 0), Vector3(0, 1, 0)), &v));	// Âπ≥Ë°å
+		ASSERT_EQ(false, pl1.Intersects(Ray(Vector3(0, 0, 0), Vector3(0, 0, 1)), &v));	// Âπ≥Ë°å
+
+		ASSERT_EQ(true, pl1.Intersects(Ray(Vector3(0, 0, 1), Vector3::Normalize(1, 0, -1)), &v));
+		ASSERT_VEC3_NEAR(2, 0, -1, v);
 	}
 	// this->Transform
 	{
@@ -185,7 +199,7 @@ TEST_F(Test_Plane, Basic)
 
 	D3DXPlaneIntersectLine
 	D3DXPlaneTransform
-	Å~D3DXPlaneTransformArray
+	√óD3DXPlaneTransformArray
 	*/
 #endif
 }

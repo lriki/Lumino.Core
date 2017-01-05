@@ -186,6 +186,19 @@ TEST_F(Test_Vector3, Basic)
 		ASSERT_VEC3_NEAR(338.864197, 234.753510, 1.160729, v);
 		v = Vector3::Unproject(v1, m, 0, 0, 640, 480);
 		ASSERT_VEC3_NEAR(1.590889, -1.387909, -2.265153, v);
+
+		Matrix m2 =
+			Matrix::MakeLookAtLH(Vector3(0, 0, 0), Vector3(0, 0, 10), Vector3(0, 1, 0)) *
+			Matrix::MakePerspectiveFovLH(Math::PI / 3, 640.0f / 480.0f, 1.0f, 1000.0f);
+
+		v = Vector3::Unproject(Vector3(320, 240, 0), m2, 0, 0, 640, 480);
+		ASSERT_VEC3_NEAR(0, 0, 1.0f, v);
+		v = Vector3::Unproject(Vector3(320, 240, 1), m2, 0, 0, 640, 480);
+		ASSERT_VEC3_NEAR(0, 0, 1000.01288f, v);
+		v = Vector3::Unproject(Vector3(0, 0, 0), m2, 0, 0, 640, 480);
+		ASSERT_VEC3_NEAR(-0.769800305, 0.577350199, 1.0f, v);
+		v = Vector3::Unproject(Vector3(640, 0, 0), m2, 0, 0, 640, 480);
+		ASSERT_VEC3_NEAR(0.769800305, 0.577350199, 1.0f, v);
 	}
 	// assign operator
 	{

@@ -1,4 +1,4 @@
-
+ï»¿
 #ifndef LUMINO_MATH_PLANE_H
 #define LUMINO_MATH_PLANE_H
 
@@ -6,143 +6,154 @@
 #include "Vector3.h"
 
 LN_NAMESPACE_BEGIN
+class Ray;
 
 /**
-	@brief		•½–Ê‚ğ’è‹`‚µ‚Ü‚·B
+	@brief		å¹³é¢ã‚’å®šç¾©ã—ã¾ã™ã€‚
 */
 class LUMINO_EXPORT Plane
 {
 public:
 
-	Vector3	Normal;		///< Plane ‚Ì–@ü ƒxƒNƒgƒ‹
-	float	D;			///< Œ´“_‚©‚ç‚Ì–@ü‚É‰ˆ‚Á‚½ Plane ‚Ì‹——£
+	Vector3	Normal;		///< Plane ã®æ³•ç·š ãƒ™ã‚¯ãƒˆãƒ«
+	float	D;			///< åŸç‚¹ã‹ã‚‰ã®æ³•ç·šã«æ²¿ã£ãŸ Plane ã®è·é›¢
 
 public:
 
 	/**
-		@brief		Še—v‘f‚É 0.0 ‚ğİ’è‚µ‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‚ğ‰Šú‰»‚µ‚Ü‚·B
+		@brief		å„è¦ç´ ã« 0.0 ã‚’è¨­å®šã—ã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’åˆæœŸåŒ–ã—ã¾ã™ã€‚
 	*/
 	Plane();
 
 	/**
-		@brief		Še—v‘f‚ğw’è‚µ‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‚ğ‰Šú‰»‚µ‚Ü‚·B
-		@param[in]	a	: –@ü‚Ì X ¬•ª
-		@param[in]	b	: –@ü‚Ì Y ¬•ª
-		@param[in]	c	: –@ü‚Ì Z ¬•ª
-		@param[in]	d	: Œ´“_‚©‚ç‚Ì–@ü‚É‰ˆ‚Á‚½ Plane ‚Ì‹——£
+		@brief		å„è¦ç´ ã‚’æŒ‡å®šã—ã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’åˆæœŸåŒ–ã—ã¾ã™ã€‚
+		@param[in]	a	: æ³•ç·šã® X æˆåˆ†
+		@param[in]	b	: æ³•ç·šã® Y æˆåˆ†
+		@param[in]	c	: æ³•ç·šã® Z æˆåˆ†
+		@param[in]	d	: åŸç‚¹ã‹ã‚‰ã®æ³•ç·šã«æ²¿ã£ãŸ Plane ã®è·é›¢
 	*/
 	Plane(float a, float b, float c, float d);
 
 	Plane(const Vector3& normal, float d);
+
+	Plane(const Vector3& normal);
 	
 	/**
-		@brief		•½–Êã‚Ì1“_‚Æ–@ü‚ğw’è‚µ‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‚ğ‰Šú‰»‚µ‚Ü‚·B
-		@param[in]	point	: •½–Êã‚Ì“_
-		@param[in]	normal	: –@ü (³‹K‰»Ï‚İ‚Å‚ ‚é‚±‚Æ)
+		@brief		å¹³é¢ä¸Šã®1ç‚¹ã¨æ³•ç·šã‚’æŒ‡å®šã—ã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’åˆæœŸåŒ–ã—ã¾ã™ã€‚
+		@param[in]	point	: å¹³é¢ä¸Šã®ç‚¹
+		@param[in]	normal	: æ³•ç·š (æ­£è¦åŒ–æ¸ˆã¿ã§ã‚ã‚‹ã“ã¨)
 	*/
 	Plane(const Vector3& point, const Vector3& normal);
 
 	/**
-		@brief		•½–Êã‚Ì3“_‚ğw’è‚µ‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‚ğ‰Šú‰»‚µ‚Ü‚·B
-		@param[in]	point1	: •½–Êã‚Ì“_1
-		@param[in]	point2	: •½–Êã‚Ì“_2
-		@param[in]	point3	: •½–Êã‚Ì“_3
+		@brief		å¹³é¢ä¸Šã®3ç‚¹ã‚’æŒ‡å®šã—ã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’åˆæœŸåŒ–ã—ã¾ã™ã€‚
+		@param[in]	point1	: å¹³é¢ä¸Šã®ç‚¹1
+		@param[in]	point2	: å¹³é¢ä¸Šã®ç‚¹2
+		@param[in]	point3	: å¹³é¢ä¸Šã®ç‚¹3
 	*/
 	Plane(const Vector3& point1, const Vector3& point2, const Vector3& point3);
 
 public:
 
 	/**
-		@brief		‚±‚Ì•½–Ê‚ğ³‹K‰»‚µ‚Ü‚·B
-		@details	–Ê–@ü Normal ‚ğ³‹K‰»‚µA‚»‚ê‚Ég—p‚µ‚½ŒW”‚ğ D ‚É‚à“K—p‚µ‚Ü‚·B
+		@brief		ã“ã®å¹³é¢ã‚’æ­£è¦åŒ–ã—ã¾ã™ã€‚
+		@details	é¢æ³•ç·š Normal ã‚’æ­£è¦åŒ–ã—ã€ãã‚Œã«ä½¿ç”¨ã—ãŸä¿‚æ•°ã‚’ D ã«ã‚‚é©ç”¨ã—ã¾ã™ã€‚
 	*/
 	void Normalize();
 
 	/**
-		@brief		“_‚ª‚±‚Ì•½–Ê‚Ì— ‘¤‚É‚ ‚é‚©‚ğ”»’è‚µ‚Ü‚·B“_‚ª–Êã‚É‚ ‚éê‡‚Í•\‘¤‚Æ”»’è‚µ‚Ü‚·B
-		@param[in]	point	: ”»’è‚·‚é“_‚ÌÀ•W
-		@return		true ‚Ìê‡A— ‘¤‚É‚ ‚é
-		@details	–Ê‚Í–@ü‚ªL‚Ñ‚Ä‚¢‚é•û‚ª•\‘¤‚Å‚·B
+		@brief		ç‚¹ãŒã“ã®å¹³é¢ã®è£å´ã«ã‚ã‚‹ã‹ã‚’åˆ¤å®šã—ã¾ã™ã€‚ç‚¹ãŒé¢ä¸Šã«ã‚ã‚‹å ´åˆã¯è¡¨å´ã¨åˆ¤å®šã—ã¾ã™ã€‚
+		@param[in]	point	: åˆ¤å®šã™ã‚‹ç‚¹ã®åº§æ¨™
+		@return		true ã®å ´åˆã€è£å´ã«ã‚ã‚‹
+		@details	é¢ã¯æ³•ç·šãŒä¼¸ã³ã¦ã„ã‚‹æ–¹ãŒè¡¨å´ã§ã™ã€‚
 	*/
 	bool CheckInside(const Vector3& point) const;
 
 	/**
-		@brief		“_‚ª‚±‚Ì•½–Ê‚Ì— ‘¤‚É‚ ‚é‚©‚ğ”»’è‚µ‚Ü‚·B“_‚ª–Êã‚É‚ ‚éê‡‚à— ‘¤‚Æ”»’è‚µ‚Ü‚·B
-		@param[in]	point	: ”»’è‚·‚é“_‚ÌÀ•W
-		@return		true ‚Ìê‡A— ‘¤‚É‚ ‚é
+		@brief		ç‚¹ãŒã“ã®å¹³é¢ã®è£å´ã«ã‚ã‚‹ã‹ã‚’åˆ¤å®šã—ã¾ã™ã€‚ç‚¹ãŒé¢ä¸Šã«ã‚ã‚‹å ´åˆã‚‚è£å´ã¨åˆ¤å®šã—ã¾ã™ã€‚
+		@param[in]	point	: åˆ¤å®šã™ã‚‹ç‚¹ã®åº§æ¨™
+		@return		true ã®å ´åˆã€è£å´ã«ã‚ã‚‹
 	*/
 	bool CheckInsideLower(const Vector3& point) const;
 
 	/**
-		@brief		‹…‚ª‚±‚Ì•½–Ê‚Ì— ‘¤‚É‚ ‚é‚©‚ğ”»’è‚µ‚Ü‚·B
-		@param[in]	point	: ‹…‚Ì’†SÀ•W
-		@param[in]	radius	: ‹…‚Ì”¼Œa
-		@return		true ‚Ìê‡A— ‘¤‚É‚ ‚é (ÚG‚µ‚Ä‚¢‚éê‡‚à true)
-		@details	–Ê‚Í–@ü‚ªL‚Ñ‚Ä‚¢‚é•û‚ª•\‘¤‚Å‚·B
+		@brief		çƒãŒã“ã®å¹³é¢ã®è£å´ã«ã‚ã‚‹ã‹ã‚’åˆ¤å®šã—ã¾ã™ã€‚
+		@param[in]	point	: çƒã®ä¸­å¿ƒåº§æ¨™
+		@param[in]	radius	: çƒã®åŠå¾„
+		@return		true ã®å ´åˆã€è£å´ã«ã‚ã‚‹ (æ¥è§¦ã—ã¦ã„ã‚‹å ´åˆã‚‚ true)
+		@details	é¢ã¯æ³•ç·šãŒä¼¸ã³ã¦ã„ã‚‹æ–¹ãŒè¡¨å´ã§ã™ã€‚
 	*/
 	bool CheckInside(const Vector3& point, float radius) const;
 
 	/**
-		@brief		‚±‚Ì•½–Ê‚Æü•ª‚ªŒğ·‚·‚é‚©‚ğ”»’è‚µ‚Ü‚·B
-		@param[in]	start	: ü•ª‚Ìn“_
-		@param[in]	end		: ü•ª‚ÌI“_
-		@param[in]	point	: Œğ“_‚ÌÀ•W‚ğŠi”[‚·‚éƒxƒNƒgƒ‹‚Ìƒ|ƒCƒ“ƒ^
-		@return		Œğ·‚·‚éê‡‚Í trueA•½s‚Èê‡‚Í false
+		@brief		ã“ã®å¹³é¢ã¨ç·šåˆ†ãŒäº¤å·®ã™ã‚‹ã‹ã‚’åˆ¤å®šã—ã¾ã™ã€‚
+		@param[in]	start	: ç·šåˆ†ã®å§‹ç‚¹
+		@param[in]	end		: ç·šåˆ†ã®çµ‚ç‚¹
+		@param[in]	point	: äº¤ç‚¹ã®åº§æ¨™ã‚’æ ¼ç´ã™ã‚‹ãƒ™ã‚¯ãƒˆãƒ«ã®ãƒã‚¤ãƒ³ã‚¿
+		@return		äº¤å·®ã™ã‚‹å ´åˆã¯ trueã€å¹³è¡Œãªå ´åˆã¯ false
 	*/
-	bool Intersects(const Vector3& start, const Vector3& end, Vector3* point) const;
+	bool Intersects(const Vector3& start, const Vector3& end, Vector3* point = nullptr) const;
 
 	/**
-		@brief		w’è‚³‚ê‚½s—ñ‚ğg—p‚µ‚Ä‚±‚Ì•½–Ê‚ğÀ•W•ÏŠ·‚µ‚Ü‚·B
-		@param[in]	mat		: ˆ—‚ÌŠî‚É‚È‚és—ñ
-		@return		•ÏŠ·‚³‚ê‚½•½–Ê
+		@brief		ã“ã®å¹³é¢ã¨ãƒ¬ã‚¤ãŒäº¤å·®ã™ã‚‹ã‹ã‚’åˆ¤å®šã—ã¾ã™ã€‚
+		@param[in]	ray		: ãƒ¬ã‚¤
+		@param[in]	point	: äº¤ç‚¹ã®åº§æ¨™ã‚’æ ¼ç´ã™ã‚‹ãƒ™ã‚¯ãƒˆãƒ«ã®ãƒã‚¤ãƒ³ã‚¿
+		@return		äº¤å·®ã™ã‚‹å ´åˆã¯ trueã€å¹³è¡Œãªå ´åˆã¯ false
+	*/
+	bool Intersects(const Ray& ray, Vector3* point = nullptr) const;
+
+	/**
+		@brief		æŒ‡å®šã•ã‚ŒãŸè¡Œåˆ—ã‚’ä½¿ç”¨ã—ã¦ã“ã®å¹³é¢ã‚’åº§æ¨™å¤‰æ›ã—ã¾ã™ã€‚
+		@param[in]	mat		: å‡¦ç†ã®åŸºã«ãªã‚‹è¡Œåˆ—
+		@return		å¤‰æ›ã•ã‚ŒãŸå¹³é¢
 	*/
 	void Transform(const Matrix& mat);
 
 	/**
-		@brief		ƒfƒoƒbƒO—p‚É•¶š—ñ‚ğ•W€o—Í‚µ‚Ü‚·B
-		@param[in]	format	: ‘®w’è•¶š—ñ
-		@param[in]	stream	: o—ÍæƒXƒgƒŠ[ƒ€
-		@details	format ‚ª NULL ‚Ìê‡A‘®‚Í "%f, %f, %f, %f\n" ‚ğg—p‚µ‚Ü‚·B
+		@brief		ãƒ‡ãƒãƒƒã‚°ç”¨ã«æ–‡å­—åˆ—ã‚’æ¨™æº–å‡ºåŠ›ã—ã¾ã™ã€‚
+		@param[in]	format	: æ›¸å¼æŒ‡å®šæ–‡å­—åˆ—
+		@param[in]	stream	: å‡ºåŠ›å…ˆã‚¹ãƒˆãƒªãƒ¼ãƒ 
+		@details	format ãŒ NULL ã®å ´åˆã€æ›¸å¼ã¯ "%f, %f, %f, %f\n" ã‚’ä½¿ç”¨ã—ã¾ã™ã€‚
 	*/
 	void Print(const char* format = NULL, FILE* stream = NULL) const;
 
 public:
 
 	/**
-		@brief		³‹K‰»‚µ‚½•½–Ê‚ğ•Ô‚µ‚Ü‚·B
-		@param[in]	plane	: ˆ—‚ÌŠî‚É‚È‚é•½–Ê
-		@return		³‹K‰»‚³‚ê‚½•½–Ê
-		@details	–Ê–@ü Normal ‚ğ³‹K‰»‚µA‚»‚ê‚Ég—p‚µ‚½ŒW”‚ğ D ‚É‚à“K—p‚µ‚Ü‚·B
+		@brief		æ­£è¦åŒ–ã—ãŸå¹³é¢ã‚’è¿”ã—ã¾ã™ã€‚
+		@param[in]	plane	: å‡¦ç†ã®åŸºã«ãªã‚‹å¹³é¢
+		@return		æ­£è¦åŒ–ã•ã‚ŒãŸå¹³é¢
+		@details	é¢æ³•ç·š Normal ã‚’æ­£è¦åŒ–ã—ã€ãã‚Œã«ä½¿ç”¨ã—ãŸä¿‚æ•°ã‚’ D ã«ã‚‚é©ç”¨ã—ã¾ã™ã€‚
 	*/
 	static Plane Normalize(const Plane& plane);
 
 	/**
-		@brief		•½–Ê‚Æ 4D ƒxƒNƒgƒ‹‚Ì“àÏ‚ğŒvZ‚µ‚Ü‚·B
-		@param[in]	plane	: ˆ—‚ÌŠî‚É‚È‚é•½–Ê
-		@param[in]	vec		: ˆ—‚ÌŠî‚É‚È‚éƒxƒNƒgƒ‹
+		@brief		å¹³é¢ã¨ 4D ãƒ™ã‚¯ãƒˆãƒ«ã®å†…ç©ã‚’è¨ˆç®—ã—ã¾ã™ã€‚
+		@param[in]	plane	: å‡¦ç†ã®åŸºã«ãªã‚‹å¹³é¢
+		@param[in]	vec		: å‡¦ç†ã®åŸºã«ãªã‚‹ãƒ™ã‚¯ãƒˆãƒ«
 	*/
 	static float Dot(const Plane& plane, const Vector4& vec);
 
 	/**
-		@brief		•½–Ê‚Æ 3D ƒxƒNƒgƒ‹‚Ì“àÏ‚ğŒvZ‚µ‚Ü‚·B(ƒxƒNƒgƒ‹‚Ì W ‚ğ 1.0 ‚Æ‚µ‚ÄŒvZ‚·‚é)
-		@param[in]	plane	: ˆ—‚ÌŠî‚É‚È‚é•½–Ê
-		@param[in]	vec		: ˆ—‚ÌŠî‚É‚È‚éƒxƒNƒgƒ‹
-		@note		–ß‚è’l‚ª³‚Ì’l‚Å‚ ‚éê‡A“_‚Í•½–Ê‚Ì•\‘¤‚É‚È‚è‚Ü‚·B
+		@brief		å¹³é¢ã¨ 3D ãƒ™ã‚¯ãƒˆãƒ«ã®å†…ç©ã‚’è¨ˆç®—ã—ã¾ã™ã€‚(ãƒ™ã‚¯ãƒˆãƒ«ã® W ã‚’ 1.0 ã¨ã—ã¦è¨ˆç®—ã™ã‚‹)
+		@param[in]	plane	: å‡¦ç†ã®åŸºã«ãªã‚‹å¹³é¢
+		@param[in]	vec		: å‡¦ç†ã®åŸºã«ãªã‚‹ãƒ™ã‚¯ãƒˆãƒ«
+		@note		æˆ»ã‚Šå€¤ãŒæ­£ã®å€¤ã§ã‚ã‚‹å ´åˆã€ç‚¹ã¯å¹³é¢ã®è¡¨å´ã«ãªã‚Šã¾ã™ã€‚
 	*/
 	static float DotCoord(const Plane& plane, const Vector3& vec);
 
 	/**
-		@brief		•½–Ê‚Æ 3D ƒxƒNƒgƒ‹‚Ì“àÏ‚ğŒvZ‚µ‚Ü‚·B(ƒxƒNƒgƒ‹‚Ì W ‚ğ 0.0 ‚Æ‚µ‚ÄŒvZ‚·‚é)
-		@param[in]	plane	: ˆ—‚ÌŠî‚É‚È‚é•½–Ê
-		@param[in]	vec		: ˆ—‚ÌŠî‚É‚È‚éƒxƒNƒgƒ‹
+		@brief		å¹³é¢ã¨ 3D ãƒ™ã‚¯ãƒˆãƒ«ã®å†…ç©ã‚’è¨ˆç®—ã—ã¾ã™ã€‚(ãƒ™ã‚¯ãƒˆãƒ«ã® W ã‚’ 0.0 ã¨ã—ã¦è¨ˆç®—ã™ã‚‹)
+		@param[in]	plane	: å‡¦ç†ã®åŸºã«ãªã‚‹å¹³é¢
+		@param[in]	vec		: å‡¦ç†ã®åŸºã«ãªã‚‹ãƒ™ã‚¯ãƒˆãƒ«
 	*/
 	static float DotNormal(const Plane& plane, const Vector3& vec);
 
 	/**
-		@brief		w’è‚³‚ê‚½s—ñ‚ğg—p‚µ‚Ä•½–Ê‚ğÀ•W•ÏŠ·‚µ‚Ü‚·B
-		@param[in]	plane	: ˆ—‚ÌŠî‚É‚È‚é•½–Ê
-		@param[in]	mat		: ˆ—‚ÌŠî‚É‚È‚és—ñ
-		@return		•ÏŠ·‚³‚ê‚½•½–Ê
+		@brief		æŒ‡å®šã•ã‚ŒãŸè¡Œåˆ—ã‚’ä½¿ç”¨ã—ã¦å¹³é¢ã‚’åº§æ¨™å¤‰æ›ã—ã¾ã™ã€‚
+		@param[in]	plane	: å‡¦ç†ã®åŸºã«ãªã‚‹å¹³é¢
+		@param[in]	mat		: å‡¦ç†ã®åŸºã«ãªã‚‹è¡Œåˆ—
+		@return		å¤‰æ›ã•ã‚ŒãŸå¹³é¢
 	*/
 	static Plane Transform(const Plane& plane, const Matrix& mat);
 
