@@ -52,6 +52,8 @@ public:
 	/** 最小値と最大値を指定してボックスを作成します。*/
 	Box(const Vector3& min, const Vector3& max);
 
+	/** 境界の最小値と最大値を取得します。*/
+	void GetMinMax(Vector3* outMin, Vector3* outMax) const;
 };
 
 /**

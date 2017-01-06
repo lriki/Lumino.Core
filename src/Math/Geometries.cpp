@@ -56,6 +56,26 @@ Box::Box(const Vector3& min, const Vector3& max)
 	center.z = min.z + (depth / 2);
 }
 
+//------------------------------------------------------------------------------
+void Box::GetMinMax(Vector3* outMin, Vector3* outMax) const
+{
+	float hw = width / 2;
+	float hh = height / 2;
+	float hd = depth / 2;
+
+	if (outMin != nullptr)
+	{
+		outMin->x = center.x - hw;
+		outMin->y = center.y - hh;
+		outMin->z = center.z - hd;
+	}
+	if (outMax != nullptr)
+	{
+		outMax->x = center.x + hw;
+		outMax->y = center.y + hh;
+		outMax->z = center.z + hd;
+	}
+}
 
 //==============================================================================
 // OrientedBox
