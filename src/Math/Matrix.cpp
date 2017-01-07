@@ -943,7 +943,7 @@ static bool EulerAnglesXYZ(const Matrix& mat, float* xRot, float* yRot, float* z
 	if (mat.m[0][2] > 1.0f - Threshold || mat.m[0][2] < -1.0f + Threshold)	// ジンバルロック判定
 	{
 		*xRot = 0.0f;
-		*yRot = (mat.m[0][2] < 0 ? Math::PIOver2 : -Math::PIOver2);
+		*yRot = (mat.m[0][2] < 0 ? Math::PIDiv2 : -Math::PIDiv2);
 		*zRot = -atan2f(-mat.m[1][0], mat.m[1][1]);
 		return false;
 	}
@@ -954,7 +954,7 @@ static bool EulerAnglesXYZ(const Matrix& mat, float* xRot, float* yRot, float* z
 	if (Math::IsNaN(*xRot))	// ジンバルロック判定
 	{
 		*xRot = 0.0f;
-		*yRot = (mat.m[0][2] < 0 ? Math::PIOver2 : -Math::PIOver2);
+		*yRot = (mat.m[0][2] < 0 ? Math::PIDiv2 : -Math::PIDiv2);
 		*zRot = -atan2f(-mat.m[1][0], mat.m[1][1]);
 		return false;
 	}
@@ -975,7 +975,7 @@ static bool EulerAnglesYZX(const Matrix& mat, float* xRot, float* yRot, float* z
 	{
 		*xRot = -atan2f(-mat.m[2][1], mat.m[2][2]);
 		*yRot = 0.0f;
-		*zRot = (mat.m[1][0] < 0 ? Math::PIOver2 : -Math::PIOver2);
+		*zRot = (mat.m[1][0] < 0 ? Math::PIDiv2 : -Math::PIDiv2);
 		return false;
 	}
 
@@ -986,7 +986,7 @@ static bool EulerAnglesYZX(const Matrix& mat, float* xRot, float* yRot, float* z
 	{
 		*xRot = -atan2f(-mat.m[2][1], mat.m[2][2]);
 		*yRot = 0.0f;
-		*zRot = (mat.m[1][0] < 0 ? Math::PIOver2 : -Math::PIOver2);
+		*zRot = (mat.m[1][0] < 0 ? Math::PIDiv2 : -Math::PIDiv2);
 		return false;
 	}
 
@@ -1005,7 +1005,7 @@ static bool EulerAnglesZXY(const Matrix& mat, float* xRot, float* yRot, float* z
 
 	if (mat.m[2][1] > 1.0f - Threshold || mat.m[2][1]  < -1.0f + Threshold)	// ジンバルロック判定
 	{
-		*xRot = (mat.m[2][1] < 0 ? Math::PIOver2 : -Math::PIOver2);
+		*xRot = (mat.m[2][1] < 0 ? Math::PIDiv2 : -Math::PIDiv2);
 		*yRot = (float)atan2f(-mat.m[0][2], mat.m[0][0]);
 		*zRot = 0.0f;
 		return false;
@@ -1016,7 +1016,7 @@ static bool EulerAnglesZXY(const Matrix& mat, float* xRot, float* yRot, float* z
 
 	if (Math::IsNaN(*zRot))	// ジンバルロック判定
 	{
-		*xRot = (mat.m[2][1] < 0 ? Math::PIOver2 : -Math::PIOver2);
+		*xRot = (mat.m[2][1] < 0 ? Math::PIDiv2 : -Math::PIDiv2);
 		*yRot = (float)atan2f(-mat.m[0][2], mat.m[0][0]);
 		*zRot = 0.0f;
 		return false;

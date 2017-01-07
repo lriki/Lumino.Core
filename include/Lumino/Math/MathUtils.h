@@ -14,7 +14,8 @@ class LUMINO_EXPORT Math
 public:
 
 	static const float PI;			///< 円周率	(3.14159265...)
-	static const float PIOver2;		///< 円周率 / 2
+	static const float PI2;			///< 円周率 * 2	(3.14159265...)
+	static const float PIDiv2;		///< 円周率 / 2
 
 public:
 
@@ -32,6 +33,8 @@ public:
 
 	/// 指定値以上の最小の 2 のべき乗数を返します。
 	static unsigned int NextPow2(unsigned int value);
+
+	static void SinCos(float value, float* outSin, float* outCos);
 
 	/// 誤差を考慮し、浮動小数点の比較を行います。
 	static bool EqualsFloat(float value1, float value2);
