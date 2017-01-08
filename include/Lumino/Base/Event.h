@@ -33,12 +33,15 @@ public:
 
 	void Raise(TArgs... args)
 	{
-		int count = m_handlerList.GetCount();
-		for (int i = 0; i < count - 1; ++i)
+		if (!IsEmpty())
 		{
-			m_handlerList[i].Call(args...);
+			int count = m_handlerList.GetCount();
+			for (int i = 0; i < count - 1; ++i)
+			{
+				m_handlerList[i].Call(args...);
+			}
+			return m_handlerList[count - 1].Call(args...);	// 戻り値を戻すのは最後の1つ。(.NET の動作)
 		}
-		return m_handlerList[count - 1].Call(args...);	// 戻り値を戻すのは最後の1つ。(.NET の動作)
 	}
 
 	bool IsEmpty() const
