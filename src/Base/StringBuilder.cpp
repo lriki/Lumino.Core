@@ -160,4 +160,7 @@ template class GenericStringBuilderCore<wchar_t>;
 template class GenericStringBuilderCore<UTF32>;
 #endif
 
+
+
+
 LN_NAMESPACE_END

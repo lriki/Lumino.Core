@@ -180,7 +180,7 @@ public:
 	/**
 		@brief		空文字列を設定する
 	*/
-	void SetEmpty();
+	void Clear();
 
 	/**
 		@brief		部分文字列を取得する

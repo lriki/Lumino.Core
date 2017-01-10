@@ -164,13 +164,13 @@ const String& XmlReader::GetName()
 {
 	if (m_nodes.IsEmpty())
 	{
-		m_tmpName.SetEmpty();
+		m_tmpName.Clear();
 	}
 	else
 	{
 		if (m_currentNode->NameStartPos == -1 || m_currentNode->NameLen == 0)
 		{
-			m_tmpName.SetEmpty();	// Node はあるけど名前が無かった
+			m_tmpName.Clear();	// Node はあるけど名前が無かった
 		}
 		else
 		{
@@ -186,13 +186,13 @@ const String& XmlReader::GetValue()
 {
 	if (m_nodes.IsEmpty())
 	{
-		m_valueCache.SetEmpty();
+		m_valueCache.Clear();
 	}
 	else
 	{
 		if (m_currentNode->ValueStartPos == -1 || m_currentNode->ValueLen == 0)
 		{
-			m_valueCache.SetEmpty();	// Node はあるけど値が無かった
+			m_valueCache.Clear();	// Node はあるけど値が無かった
 		}
 		else
 		{

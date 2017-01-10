@@ -120,7 +120,7 @@ public:
 	void Append(const PathNameT& path) { Append(path.m_path.c_str()); }
 
 	/// 空文字列を設定する
-	void SetEmpty() { m_path.SetEmpty(); }	// TODO: Clear
+	void Clear() { m_path.Clear(); }
 
 	/// パス文字列の中から拡張子を含むファイル名の部分を返す (空パスの場合は空文字列を返す)
 	GenericStringT GetFileName() const { return PathTraits::GetFileName(m_path.c_str()); }

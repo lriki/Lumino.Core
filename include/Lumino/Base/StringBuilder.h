@@ -18,6 +18,7 @@ public:
 	~GenericStringBuilderCore();
 
 public:
+	bool IsEmpty() const { return m_bufferUsed == 0; }
 	void Clear();
 	void Append(const TChar ch);
 	void Append(const TChar ch, int count);
@@ -26,6 +27,10 @@ public:
 	//void Append(const GenericString<TChar>& str);		// TODO: GenericString 側が UTF16/32 対応できるまで
 	void Append(const byte_t* buffer, int byteCount);
 	void Append(const ByteBuffer& buffer);
+	void Append(const GenericStringRef<TChar>& str)
+	{
+		Append(str.GetBegin(), str.GetLength());
+	}
 
 	void Replace(int start, int length, const TChar* str, int strLength);
 
@@ -47,6 +52,7 @@ class GenericStringBuilder
 	: public GenericStringBuilderCore<TChar>
 {
 public:
+
 	GenericString<TChar> ToString() const
 	{
 		m_cache.AssignCStr(

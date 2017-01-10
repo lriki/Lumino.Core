@@ -181,6 +181,14 @@
 #endif
 
 //----------------------------------------------------------------------
+// Binding / Refrection
+#define LN_CLASS(...)
+#define LN_STRUCT(...)
+#define LN_ENUM_(...)
+#define LN_FUNCTION(...)
+#define LN_PROPERTY(...)
+
+//----------------------------------------------------------------------
 // Base include
 
 #include <string.h>

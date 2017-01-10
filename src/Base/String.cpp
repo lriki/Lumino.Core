@@ -468,7 +468,7 @@ template<typename TChar>
 void GenericString<TChar>::AssignCStr(const char* str, int begin, int length, bool* outUsedDefaultChar)
 {
 	if (str == nullptr) {
-		SetEmpty();
+		Clear();
 		return;
 	}
 	//LN_THROW(str != nullptr, ArgumentException);	// std::string の assign は nullptr が渡されたときの動作は未定義。VS2013 では制御が返ってこなくなった
@@ -480,7 +480,7 @@ void GenericString<TChar>::AssignCStr(const char* str, int begin, int length, bo
 
 	// サイズ 0 なら空文字列にするだけ
 	if (len == 0) {
-		SetEmpty();
+		Clear();
 	}
 	else {
 		ConvertFrom(str + begin, len, Encoding::GetSystemMultiByteEncoding());
@@ -502,7 +502,7 @@ template<typename TChar>
 void GenericString<TChar>::AssignCStr(const wchar_t* str, int begin, int length, bool* outUsedDefaultChar)
 {
 	if (str == nullptr) {
-		SetEmpty();
+		Clear();
 		return;
 	}
 	//LN_THROW(str != nullptr, ArgumentException);	// std::string の assign は nullptr が渡されたときの動作は未定義。VS2013 では制御が返ってこなくなった
@@ -515,7 +515,7 @@ void GenericString<TChar>::AssignCStr(const wchar_t* str, int begin, int length,
 
 	// サイズ 0 なら空文字列にするだけ
 	if (len == 0) {
-		SetEmpty();
+		Clear();
 	}
 	else {
 		ConvertFrom(str + begin, len, Encoding::GetWideCharEncoding());
@@ -579,7 +579,7 @@ ByteBuffer GenericString<TChar>::ConvertTo(const Encoding* encoding, bool* outUs
 
 //------------------------------------------------------------------------------
 template<typename TChar>
-void GenericString<TChar>::SetEmpty()
+void GenericString<TChar>::Clear()
 {
 	Attach(detail::GenericStringCore<TChar>::GetSharedEmpty());
 }
