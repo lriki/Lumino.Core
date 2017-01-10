@@ -135,7 +135,8 @@ XmlReader::~XmlReader()
 //------------------------------------------------------------------------------
 void XmlReader::InitializeReader(TextReader* reader)
 {
-	LN_CHECK_STATE(m_reader == nullptr);
+	LN_FAIL_CHECK_ARG(reader != nullptr) return;
+	LN_FAIL_CHECK_STATE(m_reader == nullptr) return;
 	m_reader = reader;
 }
 
@@ -144,7 +145,7 @@ void XmlReader::InitializeReader(TextReader* reader)
 bool XmlReader::Read()
 {
 	bool r = ReadInternal();
-	LN_THROW(!m_errorInfo.HasError(), XmlException, m_errorInfo.message.c_str());
+	LN_FAIL_CHECK(!m_errorInfo.HasError(), XmlException, m_errorInfo.message.c_str()) return false;
 	return r;
 }
 
@@ -259,13 +260,14 @@ bool XmlReader::MoveToNextAttribute()
 //------------------------------------------------------------------------------
 bool XmlReader::MoveToElement()
 {
-	if (m_currentNode == NULL || m_currentNode->Type != XmlNodeType::Attribute) {
+	if (m_currentNode == nullptr || m_currentNode->Type != XmlNodeType::Attribute)
+	{
+		// 現在位置が Attribute でなければ何もする必要は無い
 		return false;
 	}
 
 	m_currentAttrIndex = -1;
 	m_currentNode = &m_nodes[m_currentElementNodePos];
-	m_nodes.Resize(m_currentElementNodePos + 1);	// TODO: この辺の減らす処理もインデックス減らすだけにしたいが・・・
 	return true;
 }
 
@@ -300,7 +302,7 @@ String XmlReader::ReadString()
 			return String::GetEmpty();
 		}
 		else if (!Read()) {
-			LN_THROW(0, InvalidOperationException);
+			return String::GetEmpty();
 		}
 		if (GetNodeType() == XmlNodeType::EndElement) {
 			return String::GetEmpty();
@@ -383,11 +385,17 @@ bool XmlReader::ReadInternal()
 			}
 			case ParsingState::IterateAttributes:
 			{
+				// IterateAttributes 中に Read() されたら、次の Element を読みに行く
+
 				MoveToElement();
 				if (m_currentNode->IsEmptyElement)
 					m_parsingState = ParsingState::PopNode;	// 空タグなら先に pop が必要
 				else
 					m_parsingState = ParsingState::ReadElement;
+
+				// Attribute を破棄
+				m_nodes.Resize(m_currentElementNodePos + 1);	// TODO: この辺の減らす処理もインデックス減らすだけにしたいが・・・
+
 				continue;
 			}
 			case ParsingState::IteratePartialElements:
@@ -776,9 +784,10 @@ bool XmlReader::ParseXmlDeclOrPI(int nameStart, int nameLength, bool isXmlDecl)
 	data.Type = (isXmlDecl) ? XmlNodeType::XmlDeclaration : XmlNodeType::ProcessingInstruction;
 	data.NameStartPos = nameStart;	// m_textCache 上の名前のある位置
 	data.NameLen = nameLength;		// m_textCache 上の名前の長さ
-	m_nodes.Add(data);
-	int dataIdx = m_nodes.GetCount() - 1;
-	++m_stockElementCount;
+	//m_nodes.Add(data);
+	//int dataIdx = m_nodes.GetCount() - 1;
+	//++m_stockElementCount;
+	PushNode(data);
 
 	// 空白*
 	SkipWhitespace();

@@ -622,10 +622,28 @@ TEST_F(Test_Xml_XmlReader, Issues)
 
 		reader.Read();
 		ASSERT_EQ(true, reader.IsEmptyElement());
+
+
+	}
+	{
+		XmlFileReader reader(LN_LOCALFILE("TestData/Issue1.xml"));
 	}
 
-	XmlFileReader reader(LN_LOCALFILE("TestData/Issue1.xml"));
+	// <Issue> "<?xml" があると Read() に失敗する
+	// <Issue> Read() 後、GetNodeType() で XmlNodeType::Attribute が返されてしまうことがある
+	{
+		XmlFileReader reader(LN_LOCALFILE("TestData/Issue2.xml"));
+		String str;
+		while (reader.Read())
+		{
+			if (reader.GetNodeType() == XmlNodeType::Element ||
+				reader.GetNodeType() == XmlNodeType::EndElement ||
+				reader.GetNodeType() == XmlNodeType::Attribute)		// Attribute は Read() ではカレントにならないはず。なのでこの条件があっても、str に "Name" とかは現れない
+			{
+				str += reader.GetName() + _T(".") + reader.GetValue() + _T(".");
+			}
+		}
 
-	//while (reader.Read());
-
+		ASSERT_EQ(_T("Manager..Project..Branch..Project..Project..Branch..Project..ModifiedCommitList..Manager.."), str);
+	}
 }
