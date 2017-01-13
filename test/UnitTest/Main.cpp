@@ -42,10 +42,6 @@ GTEST_API_ int main(int argc, char **argv)
 		return 0;
 	}
 
-	//int* a = nullptr;
-	//LN_FAIL_CHECK_ARG(a != nullptr);
-
-
 	printf("Running main()\n");
 	
 #ifdef _WIN32
@@ -56,7 +52,7 @@ GTEST_API_ int main(int argc, char **argv)
 #if 1	// 部分的にテストを実行したりする
 	char* testArgs[] = {
 		argv[0],
-		"--gtest_filter=Test_Xml_XmlReader.*"
+		"--gtest_filter=Test_Base_Enumerable.*"
 	};
 	argc = sizeof(testArgs) / sizeof(char*);
 	testing::InitGoogleTest(&argc, (char**)testArgs);

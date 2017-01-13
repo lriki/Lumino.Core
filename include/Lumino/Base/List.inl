@@ -31,6 +31,13 @@ List<T, TAllocator>::List(std::initializer_list<T> list)
 	m_data->m_vector.assign(list.begin(), list.end());
 }
 
+template <typename T, typename TAllocator> template <class TIter>
+List<T, TAllocator>::List(TIter begin, TIter end)
+{
+	m_data = LN_NEW ArrayData(1);
+	m_data->m_vector.assign<TIter>(begin, end);
+}
+
 //------------------------------------------------------------------------------
 template<typename T, typename TAllocator>
 List<T, TAllocator>::~List()

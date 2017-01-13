@@ -40,6 +40,9 @@ public:
 	/** 初期化子リストから作成します。*/
 	List(std::initializer_list<T> list);
 
+	template <class TIter>
+	List(TIter begin, TIter end);
+
 	/** デストラクタ */
 	~List();
 
@@ -319,6 +322,8 @@ public:
 	const_iterator	begin() const	{ return m_data->m_vector.begin(); }
 	iterator		end()			{ CheckDetachShared(); return m_data->m_vector.end(); }
 	const_iterator	end() const		{ return m_data->m_vector.end(); }
+	const_iterator	cbegin() const	{ return m_data->m_vector.cbegin(); }
+	const_iterator	cend() const	{ return m_data->m_vector.cend(); }
 	iterator		erase(iterator pos) { CheckDetachShared(); return m_data->m_vector.erase(pos); }
 	iterator		erase(iterator begin, iterator end) { CheckDetachShared(); return m_data->m_vector.erase(begin, end); }
 
