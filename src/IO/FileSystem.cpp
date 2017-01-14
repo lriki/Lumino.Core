@@ -436,7 +436,7 @@ void FileSystem::WriteAllText(const TCHAR* filePath, const String& str, const En
 {
 	encoding = (encoding == NULL) ? Encoding::GetUTF8Encoding() : encoding;
 	const ByteBuffer buffer(str.ConvertTo(encoding));
-	WriteAllBytes(filePath, buffer.GetData(), buffer.GetSize());
+	WriteAllBytes(filePath, buffer.GetConstData(), buffer.GetSize());
 }
 
 //------------------------------------------------------------------------------
