@@ -416,14 +416,14 @@ TEST_F(Test_Base_String, SPrintf)
 #endif
 	}
 
-#ifdef LN_MSVC
-	// 可変長実引数への指定は保障外だが、一応動くか見ておく。ちなみに GCC ではコンパイルエラーになる。
-	{
-		String str1(_T("str1"));
-		String str2 = String::SPrintf(_T("[%s]"), str1);
-		ASSERT_EQ(_T("[str1]"), str2);
-	}
-#endif
+//#ifdef LN_MSVC
+//	// 可変長実引数への指定は保障外だが、一応動くか見ておく。ちなみに GCC ではコンパイルエラーになる。
+//	{
+//		String str1(_T("str1"));
+//		String str2 = String::SPrintf(_T("[%s]"), str1);
+//		ASSERT_EQ(_T("[str1]"), str2);
+//	}
+//#endif
 
 	// StringW Max 文字数チェック
 	{
@@ -582,10 +582,12 @@ TEST_F(Test_Base_String, Replace)
 		ASSERT_EQ('t', str2[2]);
 	}
 	// <Test> 全ての一致を置換できること。
+	// <Test> 破壊的変更にならないこと。
 	{
 		String str1(_T("aaa"));
 		String str2 = str1.Replace(String(_T("a")), String(_T("b")));
 		ASSERT_EQ(_T("bbb"), str2);
+		ASSERT_EQ("aaa", str1);
 	}
 	// <Test> String を渡せること。
 	{

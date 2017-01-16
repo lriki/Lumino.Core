@@ -141,7 +141,6 @@ template<typename TChar>
 GenericString<TChar>::GenericString()
 	: m_string(detail::GenericStringCore<TChar>::GetSharedEmpty())
 {
-	m_ref = m_string->c_str();
 }
 
 //------------------------------------------------------------------------------
@@ -156,30 +155,25 @@ GenericString<TChar>::~GenericString()
 //------------------------------------------------------------------------------
 template<typename TChar>
 GenericString<TChar>::GenericString(const GenericString& str)
-	: m_ref(nullptr)
-	, m_string(nullptr)
+	: m_string(nullptr)
 {
 	Attach(str.m_string);
-	m_ref = m_string->c_str();
 }
 template<typename TChar>
 GenericString<TChar>::GenericString(const GenericString& str, int length)
-	: m_ref(nullptr)
-	, m_string(nullptr)
+	: m_string(nullptr)
 {
 	AssignTString(str.m_string->c_str(), length);
 }
 template<typename TChar>
 GenericString<TChar>::GenericString(const GenericString& str, int begin, int length)
-	: m_ref(nullptr)
-	, m_string(nullptr)
+	: m_string(nullptr)
 {
 	AssignTString(str.m_string->c_str() + begin, length);	// str+begin にしないと、暗黙的コンストラクタの呼び出しが発生してしまう
 }
 template<typename TChar>
 GenericString<TChar>::GenericString(const StringRefT& str)
-	: m_ref(nullptr)
-	, m_string(nullptr)
+	: m_string(nullptr)
 {
 	if (str.m_string != nullptr)
 		Attach(str.m_string);
@@ -188,22 +182,19 @@ GenericString<TChar>::GenericString(const StringRefT& str)
 }
 template<typename TChar>
 GenericString<TChar>::GenericString(const TChar* str)
-	: m_ref(nullptr)
-	, m_string(nullptr)
+	: m_string(nullptr)
 {
 	AssignTString(str, -1);
 }
 template<typename TChar>
 GenericString<TChar>::GenericString(const TChar* str, int length)
-	: m_ref(nullptr)
-	, m_string(nullptr)
+	: m_string(nullptr)
 {
 	AssignTString(str, length);
 }
 template<typename TChar>
 GenericString<TChar>::GenericString(const TChar* str, int begin, int length)
-	: m_ref(nullptr)
-	, m_string(nullptr)
+	: m_string(nullptr)
 {
 	AssignTString(str + begin, length);
 }
@@ -215,8 +206,7 @@ GenericString<TChar>::GenericString(TChar ch)
 
 template<typename TChar>
 GenericString<TChar>::GenericString(int count, TChar ch)
-	: m_ref(nullptr)
-	, m_string(nullptr)
+	: m_string(nullptr)
 {
 	AssignTString(count, ch);
 }
@@ -287,7 +277,6 @@ template<typename TChar>
 GenericString<TChar>& GenericString<TChar>::operator=(const GenericString& right)
 {
 	Attach(right.m_string);
-	m_ref = m_string->c_str();
 	return (*this);
 }
 template<typename TChar>
@@ -318,9 +307,7 @@ GenericString<TChar>& GenericString<TChar>::operator=(GenericString&& right) LN_
 {
 	if (m_string != right.m_string)
 	{
-		m_ref = right.m_ref;
 		m_string = right.m_string;
-		right.m_ref = nullptr;
 		right.m_string = nullptr;
 	}
 	return *this;
@@ -455,7 +442,6 @@ void GenericString<TChar>::Append(const TChar* str, int len)
 	}
 	Realloc();	// 共有参照を切る
 	m_string->append(str, (len < 0) ? StringTraits::tcslen(str) : len);
-	m_ref = m_string->c_str();
 }
 template<typename TChar>
 void GenericString<TChar>::Append(TChar ch)
@@ -648,7 +634,8 @@ GenericString<TChar> GenericString<TChar>::Remove(TChar ch, CaseSensitivity cs) 
 template<typename TChar>
 GenericString<TChar> GenericString<TChar>::Replace(const StringRefT& from, const StringRefT& to) const
 {
-	GenericString<TChar> newStr(*this);
+	GenericString<TChar> newStr;
+	newStr.AssignTString(c_str(), GetLength());
 	if (newStr.IsEmpty()) {
 		// 空文字列なら処理を行う必要は無い。というか、SharedEmpty に対して replace とかしてはいけない。
 		return newStr;
@@ -986,7 +973,6 @@ template<typename TChar>
 void GenericString<TChar>::Detach() LN_NOEXCEPT
 {
 	LN_SAFE_RELEASE(m_string);
-	m_ref = nullptr;
 }
 
 //------------------------------------------------------------------------------
@@ -994,7 +980,6 @@ template<typename TChar>
 void GenericString<TChar>::Attach(detail::GenericStringCore<TChar>* core)
 {
 	LN_REFOBJ_SET(m_string, core);
-	m_ref = m_string->c_str();
 }
 
 //------------------------------------------------------------------------------
@@ -1012,7 +997,6 @@ void GenericString<TChar>::AssignTString(const TChar* str, int len)
 		m_string = LN_NEW detail::GenericStringCore<TChar>();	// 参照カウントは 1
 		m_string->assign(str, (len < 0) ? StringTraits::tcslen(str) : len);
 	}
-	m_ref = m_string->c_str();
 }
 
 //------------------------------------------------------------------------------
@@ -1030,7 +1014,6 @@ void GenericString<TChar>::AssignTString(int count, TChar ch)
 		m_string = LN_NEW detail::GenericStringCore<TChar>();	// 参照カウントは 1
 		m_string->assign((size_t)count, ch);
 	}
-	m_ref = m_string->c_str();
 }
 
 //------------------------------------------------------------------------------
@@ -1044,7 +1027,6 @@ void GenericString<TChar>::Realloc()
 		detail::GenericStringCore<TChar>* old = m_string;
 		m_string = LN_NEW detail::GenericStringCore<TChar>();	// 参照カウントは 1
 		m_string->assign(old->c_str());
-		m_ref = m_string->c_str();
 		LN_SAFE_RELEASE(old);
 	}
 	else {

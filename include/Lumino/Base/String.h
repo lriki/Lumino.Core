@@ -589,7 +589,6 @@ private:
 	Encoding* GetThisTypeEncoding() const;
 	detail::GenericStringCore<TChar>* GetCore() const { return m_string; }
 
-	const TChar* m_ref;		///< 可変長の実引数にされることに備え、クラス先頭のメンバは m_string->c_str() を指しておく
 	detail::GenericStringCore<TChar>*	m_string;
 
 #ifdef LN_GenericString_Extensions

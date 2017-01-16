@@ -185,7 +185,7 @@
 #define LN_CLASS(...)
 #define LN_STRUCT(...)
 #define LN_ENUM_(...)
-#define LN_VARIABLE(...)
+#define LN_FIELD(...)
 #define LN_FUNCTION(...)
 #define LN_PROPERTY(...)
 

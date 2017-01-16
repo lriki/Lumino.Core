@@ -15,13 +15,22 @@ class Matrix;
 /**
 	@brief	3次元のベクトルを定義します。
 */
+LN_STRUCT()
 class LUMINO_EXPORT Vector3
 {
 public:
 
-	float	x;		///< X 要素
-	float	y;		///< Y 要素
-	float	z;		///< Z 要素
+	/** X 要素 */
+	LN_FIELD()
+	float	x;
+
+	/** Y 要素 */
+	LN_FIELD()
+	float	y;
+
+	/** Z 要素 */
+	LN_FIELD()
+	float	z;
 
 public:
 
@@ -63,17 +72,20 @@ public:
 	/**
 		@brief		ベクトルの長さを返します。
 	*/
+	LN_FUNCTION()
 	float GetLength() const;
 
 	/**
 		@brief		ベクトルの長さの 2 乗を返します。
 	*/
+	LN_FUNCTION()
 	float GetLengthSquared() const;
 
 	/**
 		@brief		このベクトルを正規化します。
 		@details	ベクトルの長さが 0 の場合は正規化を行いません。
 	*/
+	LN_FUNCTION()
     void Normalize();
 
 	/**
@@ -81,6 +93,7 @@ public:
 		@param[in]	minVec	: 最小値
 		@param[in]	maxVec	: 最大値
 	*/
+	LN_FUNCTION()
 	void Clamp(const Vector3& minVec, const Vector3& maxVec);
 
 	/**
