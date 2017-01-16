@@ -72,20 +72,20 @@ public:
 	/**
 		@brief		ベクトルの長さを返します。
 	*/
-	LN_FUNCTION()
+	LN_METHOD()
 	float GetLength() const;
 
 	/**
 		@brief		ベクトルの長さの 2 乗を返します。
 	*/
-	LN_FUNCTION()
+	LN_METHOD()
 	float GetLengthSquared() const;
 
 	/**
 		@brief		このベクトルを正規化します。
 		@details	ベクトルの長さが 0 の場合は正規化を行いません。
 	*/
-	LN_FUNCTION()
+	LN_METHOD()
     void Normalize();
 
 	/**
@@ -93,7 +93,7 @@ public:
 		@param[in]	minVec	: 最小値
 		@param[in]	maxVec	: 最大値
 	*/
-	LN_FUNCTION()
+	LN_METHOD()
 	void Clamp(const Vector3& minVec, const Vector3& maxVec);
 
 	/**

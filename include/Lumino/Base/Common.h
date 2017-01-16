@@ -186,7 +186,7 @@
 #define LN_STRUCT(...)
 #define LN_ENUM_(...)
 #define LN_FIELD(...)
-#define LN_FUNCTION(...)
+#define LN_METHOD(...)
 #define LN_PROPERTY(...)
 
 //----------------------------------------------------------------------
