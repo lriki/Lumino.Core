@@ -417,6 +417,14 @@ public:
 		return *this;
 	}
 
+	template<typename TContainer>
+	Enumerator<T>& Join(TContainer&& container)
+	{
+		Enumerator<T> othor(container.begin(), container.end());
+		m_source.reset(LN_NEW detail::JoinProvider<T>(m_source, othor.m_source));
+		return *this;
+	}
+
 	template<typename TTransform, typename TResult = std::result_of_t<TTransform(T&&)>>
 	Enumerator<TResult> Select(TTransform transform)
 	{
@@ -463,6 +471,12 @@ public:
 	static Enumerator<typename Iterator::value_type> from(Iterator begin, Iterator end)
 	{
 		return Enumerator<typename Iterator::value_type>(begin, end);
+	}
+
+	template<typename TContainer>
+	static Enumerator<typename TContainer::value_type> from(const TContainer& container)
+	{
+		return Enumerator<typename TContainer::value_type>(container.begin(), container.end());
 	}
 };
 
