@@ -434,8 +434,13 @@ void FileSystem::WriteAllBytes(const TCHAR* filePath, const void* buffer, size_t
 //------------------------------------------------------------------------------
 void FileSystem::WriteAllText(const TCHAR* filePath, const String& str, const Encoding* encoding)
 {
-	encoding = (encoding == NULL) ? Encoding::GetUTF8Encoding() : encoding;
-	const ByteBuffer buffer(str.ConvertTo(encoding));
+	encoding = (encoding == nullptr) ? Encoding::GetUTF8Encoding() : encoding;
+
+	EncodingConversionResult result;
+	EncodingConversionOptions options;
+	options.NullTerminated = false;
+	ByteBuffer buffer = Encoding::Convert(str.c_str(), str.GetByteCount(), Encoding::GetTCharEncoding(), encoding, options, &result);
+	
 	WriteAllBytes(filePath, buffer.GetConstData(), buffer.GetSize());
 }
 

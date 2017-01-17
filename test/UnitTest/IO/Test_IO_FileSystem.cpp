@@ -167,3 +167,11 @@ TEST_F(Test_IO_FileSystem, ForEachFilesInDirectory)
 	ASSERT_EQ(true, list[3].IsAbsolute());
 	ASSERT_EQ(_T("file2"), list[3].GetFileName());
 }
+
+//------------------------------------------------------------------------------
+TEST_F(Test_IO_FileSystem, WriteAllText)
+{
+	String text = _T("abc");
+	FileSystem::WriteAllText(TEMPFILE("Test_IO_FileSystem/WriteAllText1"), text);
+	ASSERT_EQ(true, TestHelper::EqualFiles(TEMPFILE("Test_IO_FileSystem/WriteAllText1"), LN_LOCALFILE("TestData/WriteAllText1.txt")));
+}

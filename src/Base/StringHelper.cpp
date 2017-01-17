@@ -139,7 +139,7 @@ template UTF32 StringTraits::ToUpper<UTF32>(UTF32 ch);
 template<typename TChar>
 bool StringTraits::IsSpace(TChar ch)
 {
-	return isspace((int)ch) != 0;
+	return isspace((uint8_t)ch) != 0;
 }
 template bool StringTraits::IsSpace(UTF8 ch);
 template bool StringTraits::IsSpace(UTF16 ch);
