@@ -129,11 +129,27 @@ int StringTraits::tsnprintf_l(wchar_t* out, int charCount, const wchar_t* format
 template<typename TChar>
 TChar StringTraits::ToUpper(TChar ch)
 {
-	return (TChar)toupper((int)ch);
+	if ('a' <= ch && ch <= 'z')
+		return 'A' + (ch - 'a');
+	return ch;
 }
+template char StringTraits::ToUpper<char>(char ch);
 template UTF8 StringTraits::ToUpper<UTF8>(UTF8 ch);
 template UTF16 StringTraits::ToUpper<UTF16>(UTF16 ch);
 template UTF32 StringTraits::ToUpper<UTF32>(UTF32 ch);
+
+//------------------------------------------------------------------------------
+template<typename TChar>
+TChar StringTraits::ToLower(TChar ch)
+{
+	if ('A' <= ch && ch <= 'Z')
+		return 'a' + (ch - 'A');
+	return ch;
+}
+template char StringTraits::ToLower<char>(char ch);
+template UTF8 StringTraits::ToLower<UTF8>(UTF8 ch);
+template UTF16 StringTraits::ToLower<UTF16>(UTF16 ch);
+template UTF32 StringTraits::ToLower<UTF32>(UTF32 ch);
 
 //------------------------------------------------------------------------------
 template<typename TChar>

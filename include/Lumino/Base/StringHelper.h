@@ -45,11 +45,13 @@ public:
 	template<typename TChar>
 	static size_t tcslen(const TChar* str);
 
-	/**
-		@brief	ASCII の小文字を大文字に変換します。
-	*/
+	/** ASCII の小文字を大文字に変換します。(ロケールの影響を受けません) */
 	template<typename TChar>
 	static TChar ToUpper(TChar ch);
+
+	/** ASCII の大文字を小文字に変換します。(ロケールの影響を受けません) */
+	template<typename TChar>
+	static TChar ToLower(TChar ch);
 
 	/**
 		@brief		文字が空白文字であるかを確認します。

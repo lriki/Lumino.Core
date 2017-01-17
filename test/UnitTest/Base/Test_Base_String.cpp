@@ -1028,6 +1028,20 @@ TEST_F(Test_Base_String, Concat)
 }
 
 //------------------------------------------------------------------------------
+TEST_F(Test_Base_String, ToUpper)
+{
+	String str1 = _T("AbCd");
+	ASSERT_EQ(_T("ABCD"), str1.ToUpper());
+}
+
+//------------------------------------------------------------------------------
+TEST_F(Test_Base_String, ToLower)
+{
+	String str1 = _T("AbCd");
+	ASSERT_EQ(_T("abcd"), str1.ToLower());
+}
+
+//------------------------------------------------------------------------------
 TEST_F(Test_Base_String, Issue)
 {
 	// <Issue> 空文字列への += で、他の String の初期値が変わってしまう。

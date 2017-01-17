@@ -347,6 +347,12 @@ public:
 	*/
 	int GetByteCount() const { return GetLength() * sizeof(TChar); }
 
+	/** 小文字を大文字に変換します。(ロケールの影響を受けません) */
+	GenericString<TChar> ToUpper() const;
+
+	/** 大文字を小文字に変換します。(ロケールの影響を受けません) */
+	GenericString<TChar> ToLower() const;
+
 	/**
 		@brief		この文字列を整数値に変換します。
 		@param[in]	base		: 基数 (0、2、8、10、16 のいずれかであること)

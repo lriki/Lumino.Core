@@ -178,7 +178,7 @@ void UTF8Encoding::UTF8Encoder::ConvertFromUTF16(const UTF16* input, size_t inpu
 
 	const UTF16* srcPos = input;
 	const UTF16* srcEnd = input + inputElementSize;
-	UTF8* dstPos = output;
+	UTF8* dstPos = (UTF8*)output;
 	UTF8* dstEnd = dstPos + outputByteSize;
 
 	while (srcPos < srcEnd)

@@ -777,6 +777,24 @@ GenericStringArray<TChar> GenericString<TChar>::Split(const TChar* delim, String
 }
 
 //------------------------------------------------------------------------------
+template<typename TChar>
+GenericString<TChar> GenericString<TChar>::ToUpper() const
+{
+	GenericString<TChar> newStr(c_str(), GetLength());
+	std::transform(newStr.m_string->begin(), newStr.m_string->end(), newStr.m_string->begin(), StringTraits::ToUpper<TChar>);
+	return newStr;
+}
+
+//------------------------------------------------------------------------------
+template<typename TChar>
+GenericString<TChar> GenericString<TChar>::ToLower() const
+{
+	GenericString<TChar> newStr(c_str(), GetLength());
+	std::transform(newStr.m_string->begin(), newStr.m_string->end(), newStr.m_string->begin(), StringTraits::ToLower<TChar>);
+	return newStr;
+}
+
+//------------------------------------------------------------------------------
 #define TO_INT_DEF(type, func) \
 	const TChar* str; \
 	const TChar* end; \
