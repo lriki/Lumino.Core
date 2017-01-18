@@ -77,7 +77,13 @@ class GenericMatchResult
 {
 public:
 	typedef GenericStringRef<TChar>	StringRefT;
-	
+
+	/** マッチ範囲の先頭インデックスを返します。*/
+	int GetIndex() const { return static_cast<int>(m_matchResults.position()); }
+
+	/** マッチ範囲の文字数を返します。*/
+	int GetLength() const { return static_cast<int>(m_matchResults.length()); }
+
 	StringRefT GetValue() const
 	{
 		return GetGroup(0);
