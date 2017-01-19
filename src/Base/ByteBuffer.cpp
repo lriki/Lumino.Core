@@ -250,11 +250,13 @@ bool ByteBuffer::Equals(const ByteBuffer& buffer) const
 //------------------------------------------------------------------------------
 int ByteBuffer::Compare(const ByteBuffer& buf1, const void* buf2, size_t buf2Size, int count)
 {
+	// TODO: いろいろだめ。
 	if (count >= 0)
 	{
-		if (buf1.GetSize() < buf2Size) return -1;
-		if (buf1.GetSize() > buf2Size) return 1;
-		if (buf1.GetSize() == 0) return 0;			// 両方 0
+		if (buf1.GetSize() < count) return -1;
+		if (buf2Size < count) return 1;
+		//if (buf1.GetSize() > count) return 1;
+		//if (buf1.GetSize() == 0) return 0;			// 両方 0
 	}
 	else
 	{

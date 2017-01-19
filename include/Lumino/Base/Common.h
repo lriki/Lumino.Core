@@ -207,15 +207,15 @@ template<typename BaseType = char>	// GCC では GenericString 内部に定義�
 class GenericStringTraits
 {
 public:
-	typedef char	XCHAR;
-	typedef wchar_t	YCHAR;
+	typedef char	XCHAR;	// this
+	typedef wchar_t	YCHAR;	// other
 };
 template<>
 class GenericStringTraits<wchar_t>
 {
 public:
-	typedef wchar_t	XCHAR;
-	typedef char	YCHAR;
+	typedef wchar_t	XCHAR;	// this
+	typedef char	YCHAR;	// other
 };
 
 /** 大文字と小文字の区別指定 */

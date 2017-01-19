@@ -223,10 +223,41 @@ GenericString<TChar>::GenericString(GenericString&& str) LN_NOEXCEPT
 	*this = std::move(str);
 }
 
-//
-////------------------------------------------------------------------------------
-//// YCHAR コンストラクタ系
-////------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------
+// YCHAR コンストラクタ系
+//------------------------------------------------------------------------------
+template<typename TChar>
+GenericString<TChar>::GenericString(const GenericString<YCHAR>& str)
+	: m_string(nullptr)
+{
+	AssignCStr(str.c_str(), str.GetLength());
+}
+template<typename TChar>
+GenericString<TChar>::GenericString(const GenericString<YCHAR>& str, int length)
+	: m_string(nullptr)
+{
+	AssignCStr(str.c_str(), length);
+}
+template<typename TChar>
+GenericString<TChar>::GenericString(const GenericString<YCHAR>& str, int begin, int length)
+	: m_string(nullptr)
+{
+	AssignCStr(str.c_str(), begin, length);
+}
+template<typename TChar>
+GenericString<TChar>::GenericString(const YCHAR* str)
+	: m_string(nullptr)
+{
+	AssignCStr(str);
+}
+template<typename TChar>
+GenericString<TChar>::GenericString(const YCHAR* str, int length)
+	: m_string(nullptr)
+{
+	AssignCStr(str, length);
+}
+
 //template<typename TChar>
 //GenericString<TChar>::GenericString(const GenericString<YCHAR>& str)
 //	: m_ref(nullptr)
@@ -791,6 +822,16 @@ GenericString<TChar> GenericString<TChar>::ToLower() const
 {
 	GenericString<TChar> newStr(c_str(), GetLength());
 	std::transform(newStr.m_string->begin(), newStr.m_string->end(), newStr.m_string->begin(), StringTraits::ToLower<TChar>);
+	return newStr;
+}
+
+//------------------------------------------------------------------------------
+template<typename TChar>
+GenericString<TChar> GenericString<TChar>::ToTitleCase() const
+{
+	GenericString<TChar> newStr(c_str(), GetLength());
+	std::transform(newStr.m_string->begin(), newStr.m_string->end(), newStr.m_string->begin(), StringTraits::ToLower<TChar>);
+	if (newStr.m_string->size() > 0) (*newStr.m_string)[0] = StringTraits::ToUpper<TChar>((*newStr.m_string)[0]);
 	return newStr;
 }
 

@@ -55,6 +55,7 @@ public:
 		m_len = path.GetString().GetLength();
 	}
 
+
 	GenericStringRef(GenericStringRef const&) = default;
 	//GenericStringRef(GenericStringRef&&) = default;	// VS2013 がムーブコンストラクタの default を生成しないのでとりあえず無しで。http://stackoverflow.com/questions/24573963/move-constructor-invalid-type-for-defaulted-constructor-vs-2013
 	GenericStringRef& operator =(GenericStringRef const&) = default;

@@ -53,6 +53,10 @@ public:
 	template<typename TChar>
 	static TChar ToLower(TChar ch);
 
+	///** 先頭の ASCII 文字を大文字、以降を小文字に変換します。(ロケールの影響を受けません) */
+	//template<typename TChar>
+	//static TChar ToTitleCase(TChar ch);
+	
 	/**
 		@brief		文字が空白文字であるかを確認します。
 		@details	標準空白類文字 ： 水平タブ（'\t'）、改行（'\n'）、垂直タブ（'\v'）、書式送り（'\f'）、復帰（'\r'）、空白（' '）

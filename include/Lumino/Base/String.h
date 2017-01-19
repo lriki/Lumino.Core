@@ -98,6 +98,13 @@ public:
 	GenericString(int count, TChar ch);
 	GenericString(const GenericPathName<TChar>& path);
 	GenericString(GenericString&& str) LN_NOEXCEPT;
+
+	// other char code convertion
+	explicit GenericString(const GenericString<YCHAR>& str);
+	explicit GenericString(const GenericString<YCHAR>& str, int length);
+	explicit GenericString(const GenericString<YCHAR>& str, int begin, int length);
+	explicit GenericString(const YCHAR* str);
+	explicit GenericString(const YCHAR* str, int length);
 	
 
 	/// @name Operators
@@ -352,6 +359,9 @@ public:
 
 	/** 大文字を小文字に変換します。(ロケールの影響を受けません) */
 	GenericString<TChar> ToLower() const;
+
+	/** 先頭の文字を大文字、以降を小文字に変換します。(ロケールの影響を受けません) */
+	GenericString<TChar> ToTitleCase() const;
 
 	/**
 		@brief		この文字列を整数値に変換します。

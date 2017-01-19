@@ -587,7 +587,7 @@ TEST_F(Test_Base_String, Replace)
 		String str1(_T("aaa"));
 		String str2 = str1.Replace(String(_T("a")), String(_T("b")));
 		ASSERT_EQ(_T("bbb"), str2);
-		ASSERT_EQ("aaa", str1);
+		ASSERT_EQ(_T("aaa"), str1);
 	}
 	// <Test> String を渡せること。
 	{
