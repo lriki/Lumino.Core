@@ -115,6 +115,9 @@
 #ifndef LN_PROTECTED_INTERNAL_ACCESS
 	#define LN_PROTECTED_INTERNAL_ACCESS	protected
 #endif
+#ifndef LN_CONSTRUCT_ACCESS
+	#define LN_CONSTRUCT_ACCESS				protected
+#endif
 
 #ifdef LN_UNICODE
 	#define LN_AFX_FUNCNAME(name) name##W

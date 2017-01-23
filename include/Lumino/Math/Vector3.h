@@ -125,6 +125,7 @@ public:
 		@param[in]	z		: 処理の基になるベクトルの Z 要素
 		@return		正規化されたベクトル
 	*/
+	LN_METHOD()
 	static Vector3 Normalize(float x, float y, float z);
 
 	/**
@@ -132,6 +133,7 @@ public:
 		@param[in]	vec		: 処理の基になるベクトル
 		@return		正規化されたベクトル
 	*/
+	LN_METHOD()
 	static Vector3 Normalize(const Vector3& vec);
 
 	static Vector3 SafeNormalize(const Vector3& vec);
